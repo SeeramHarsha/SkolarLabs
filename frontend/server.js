@@ -63,7 +63,7 @@ const server = http.createServer((req, res) => {
   let pathname;
   try { pathname = decodeURIComponent(new URL(req.url, 'http://x').pathname); } catch (e) { return send(req, res, 400, Buffer.from('Bad request'), MIME['.txt'], 'no-store', '.txt'); }
 
-  if (pathname === '/healthz') return send(req, res, problem ? 503 : 200, Buffer.from(problem ? 'problem: ' + problem : 'ok'), MIME['.txt'], 'no-store', '.txt');
+  if (pathname === '/status' || pathname === '/healthz') return send(req, res, problem ? 503 : 200, Buffer.from(problem ? 'problem: ' + problem : 'ok'), MIME['.txt'], 'no-store', '.txt');
   if (pathname === '/config.js') return send(req, res, 200, Buffer.from(CONFIG_JS), MIME['.js'], 'no-store', '.js');
   if (pathname === '/') pathname = '/index.html';
 

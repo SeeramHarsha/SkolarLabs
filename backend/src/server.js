@@ -36,7 +36,7 @@ function createApp() {
   app.use(helmet({ hsts: config.production ? undefined : false }));
 
   app.get('/', (req, res) => res.json({ service: 'skolar-analytics-backend', ready: state.ready }));
-  app.get('/healthz', async (req, res) => {
+  app.get(['/status', '/healthz'], async (req, res) => {
     if (!state.ready) return res.status(503).json({ ok: false, problem: problemText() });
     try { await db.ping(); res.json({ ok: true }); } catch (e) { res.status(503).json({ ok: false, problem: 'Cannot reach the database.' }); }
   });

@@ -36,7 +36,7 @@ export ADMIN_EMAIL="you@yourschool.org"
 export ADMIN_PASSWORD='a long password of your own (10+ characters)'
 bash deploy/deploy-backend.sh
 ```
-It prints the backend address, for example `https://skolar-backend-xxxxx-el.a.run.app`. Check `<address>/healthz` shows `{"ok":true}`.
+It prints the backend address, for example `https://skolar-backend-xxxxx-el.a.run.app`. Check `<address>/status` shows `{"ok":true}`.
 
 ### 3. Frontend
 ```bash
@@ -60,7 +60,7 @@ Cloud Run → **Create service** → **Continuously deploy from a repository** �
 - then set the backend's `FRONTEND_ORIGINS` to the frontend's address. Every push to the branch redeploys.
 
 ### If Cloud Run says "container failed to start and listen on the port"
-The services now always start and listen, and tell you what is wrong. Open the service address with **/healthz** added:
+The services now always start and listen, and tell you what is wrong. Open the service address with **/status** added:
 - backend: `{"ok":false,"problem":"Not configured: MONGODB_URI is not set, JWT_SECRET is not set."}` means those variables or secrets are missing. Add them: Cloud Run → service → *Edit & deploy new revision* → *Variables & Secrets* (the full list is in `backend/.env.example`).
 - backend: `"problem":"Cannot reach the database: …"` means MongoDB refused the connection. Check Atlas *Network Access* (`0.0.0.0/0`), the user name, and that the password is written with `%40` for `@` in `MONGODB_URI`.
 - frontend: `problem: API_URL is not set` means add the variable `API_URL` = the backend's address.

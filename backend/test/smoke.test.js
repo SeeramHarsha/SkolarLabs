@@ -28,7 +28,7 @@ const payload = (sec) => ({ device: { school: 'Test School', label: 'Smart class
 
 let dev;
 test('health and sign in', async () => {
-  assert.equal((await call('/healthz')).status, 200);
+  assert.equal((await call('/status')).status, 200);
   assert.equal((await call('/api/overview', { auth: false })).status, 401);
   assert.equal((await call('/api/auth/login', { method: 'POST', body: { email: 'admin@test.org', password: 'wrong password!!' } })).status, 401);
   const r = await call('/api/auth/login', { method: 'POST', body: { email: 'admin@test.org', password: 'correct horse battery' } });
@@ -139,7 +139,7 @@ test('a misconfigured or database-less server still starts and listens (Cloud Ru
     const child = spawn(process.execPath, [path.join(__dirname, '..', 'src', 'server.js')], { env: { PATH: process.env.PATH, NODE_ENV: 'production', PORT: String(port), ...env }, stdio: 'ignore' });
     try {
       let r = null;
-      for (let i = 0; i < 40 && !r; i++) { try { r = await fetch('http://127.0.0.1:' + port + '/healthz'); } catch (e) { await new Promise((x) => setTimeout(x, 250)); } }
+      for (let i = 0; i < 40 && !r; i++) { try { r = await fetch('http://127.0.0.1:' + port + '/status'); } catch (e) { await new Promise((x) => setTimeout(x, 250)); } }
       assert.ok(r, 'the server must be listening');
       return { status: r.status, body: await r.json(), api: await fetch('http://127.0.0.1:' + port + '/api/overview') };
     } finally { child.kill(); }

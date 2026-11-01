@@ -46,7 +46,7 @@ gcloud run deploy "$SERVICE" --source backend --region "$REGION" --allow-unauthe
 URL="$(gcloud run services describe "$SERVICE" --region "$REGION" --format='value(status.url)')"
 echo
 echo "5/5  Backend is live:  $URL"
-echo "  Health check:   $URL/healthz"
+echo "  Health check:   $URL/status"
 echo "  Next: deploy the frontend with   API_URL=$URL bash deploy/deploy-frontend.sh"
 echo "  Device enrollment key (for the apps; keep private):"
 echo "      gcloud secrets versions access latest --secret=skolar-enroll-key"

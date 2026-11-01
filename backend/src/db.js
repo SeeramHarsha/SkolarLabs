@@ -19,7 +19,8 @@ async function connect(uri, dbName) {
   await client.connect();
   db = client.db(dbName);
   await Promise.all([
-    db.collection('devices').createIndexes([{ key: { school: 1 } }, { key: { lastSeen: -1 } }, { key: { platform: 1 } }]),
+    db.collection('devices').createIndexes([{ key: { school: 1 } }, { key: { lastSeen: -1 } }, { key: { platform: 1 } },
+      { key: { clientId: 1 }, unique: true, partialFilterExpression: { clientId: { $type: 'string' } } }]),
     db.collection('usage_daily').createIndexes([
       { key: { date: 1, school: 1 } }, { key: { deviceId: 1, date: 1 } }, { key: { date: 1, cls: 1 } }, { key: { page: 1, date: 1 } }]),
     db.collection('chapters').createIndexes([{ key: { deviceId: 1 } }, { key: { page: 1 } }]),

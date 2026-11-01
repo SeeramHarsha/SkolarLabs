@@ -160,3 +160,18 @@ test('the first request after a cold start waits for the database instead of fai
   assert.ok(Date.now() - t0 >= 500, 'the request was held until the database was ready');
   assert.equal(state.ready, true);
 });
+
+test('registering the same screen twice (same clientId + secret) never creates a second screen', async () => {
+  const body = (extra) => ({ school: 'Idempotent School', label: 'Panel', platform: 'android', classes: [8], kind: 'classroom', expiry: '2099-01-01', ...extra });
+  const clientId = '123e4567-e89b-42d3-a456-426614174000', token = 'a'.repeat(64);
+  const post = (b) => call('/api/v1/devices/register', { method: 'POST', headers: { 'x-enroll-key': 'enroll-secret' }, auth: false, body: b });
+  const first = await post(body({ clientId, token }));
+  assert.equal(first.status, 201);
+  const second = await Promise.all([post(body({ clientId, token })), post(body({ clientId, token }))]);            // a page that left + a retry, at the same moment
+  for (const r of second) { assert.equal(r.status === 200 || r.status === 201, true); assert.equal(r.json.deviceId, first.json.deviceId); }
+  const count = (await call('/api/devices?school=Idempotent%20School')).json.devices.length;
+  assert.equal(count, 1);
+  assert.equal((await post(body({ clientId, token: 'b'.repeat(64) }))).status, 409);                         // someone else claiming that screen
+  const H = { authorization: 'Bearer ' + first.json.deviceId + '.' + token };                           // the app's own secret is the device token
+  assert.equal((await call('/api/v1/ingest', { method: 'POST', headers: H, auth: false, body: payload(30) })).status, 200);
+});

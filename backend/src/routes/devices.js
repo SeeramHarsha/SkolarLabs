@@ -54,11 +54,23 @@ router.post('/devices/register', registerLimit, async (req, res) => {
     if (!safeEqual(req.get('x-enroll-key') || '', config.enrollKey)) return res.status(401).json({ error: 'Wrong enrollment key.' });
     const meta = cleanMeta(req.body);
     meta.school = await canonicalSchool(meta.school);
+    // The app may invent its own id + secret BEFORE registering. Then a repeated registration (a page left before the answer came
+    // back, a retry after a dropped connection) returns the SAME screen instead of creating another one.
+    const clientId = /^[0-9a-f-]{36}$/.test(String((req.body && req.body.clientId) || '')) ? req.body.clientId : null;
+    const clientToken = /^[0-9a-f]{64}$/.test(String((req.body && req.body.token) || '')) ? req.body.token : null;
+    const token = clientToken || crypto.randomBytes(32).toString('hex');
     const deviceId = crypto.randomUUID();
-    const token = crypto.randomBytes(32).toString('hex');
     const now = new Date();
-    await db.get().collection('devices').insertOne({ _id: deviceId, ...meta, tokenHash: sha256(token), registeredAt: now, lastSeen: now, revoked: false });
-    res.status(201).json({ deviceId, token });
+    const devices = db.get().collection('devices');
+    try {
+      await devices.insertOne({ _id: deviceId, ...(clientId ? { clientId } : {}), ...meta, tokenHash: sha256(token), registeredAt: now, lastSeen: now, revoked: false });
+      return res.status(201).json({ deviceId, token });
+    } catch (e) {
+      if (!(e && e.code === 11000 && clientId)) throw e;
+      const ex = await devices.findOne({ clientId });
+      if (ex && clientToken && !ex.revoked && safeEqual(sha256(clientToken), ex.tokenHash)) return res.status(200).json({ deviceId: ex._id, token });   // same screen again
+      return res.status(409).json({ error: 'This screen is already registered.' });
+    }
   } catch (e) { console.error('register', e); res.status(500).json({ error: 'Could not register the device.' }); }
 });
 

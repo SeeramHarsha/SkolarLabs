@@ -11,6 +11,7 @@ before(async () => {
   Object.assign(process.env, { MONGODB_URI: mongod.getUri(), MONGODB_DB: 'test', JWT_SECRET: 'x'.repeat(40), ENROLL_KEY: 'enroll-secret', ADMIN_EMAIL: 'admin@test.org', ADMIN_PASSWORD: 'correct horse battery', PORT: '0', FRONTEND_ORIGINS: 'https://dash.example.org' });
   const { start } = require('../src/server');
   server = await start();
+  await server.ready;
   base = 'http://127.0.0.1:' + server.address().port;
 });
 after(async () => { server.close(); await require('../src/db').close(); await mongod.stop(); });
@@ -130,4 +131,21 @@ test('browsers: only the dashboard\x27s own address may call the dashboard API; 
   assert.equal(r.status, 204); assert.equal(r.headers.get('access-control-allow-origin'), '*');
   assert.equal((await fetch(base + '/')).status, 200);
   assert.equal((await fetch(base + '/does-not-exist')).status, 404);
+});
+
+test('a misconfigured or database-less server still starts and listens (Cloud Run needs that) and says what is wrong', async () => {
+  const { spawn } = require('node:child_process'), path = require('node:path');
+  const run = async (env, port) => {
+    const child = spawn(process.execPath, [path.join(__dirname, '..', 'src', 'server.js')], { env: { PATH: process.env.PATH, NODE_ENV: 'production', PORT: String(port), ...env }, stdio: 'ignore' });
+    try {
+      let r = null;
+      for (let i = 0; i < 40 && !r; i++) { try { r = await fetch('http://127.0.0.1:' + port + '/healthz'); } catch (e) { await new Promise((x) => setTimeout(x, 250)); } }
+      assert.ok(r, 'the server must be listening');
+      return { status: r.status, body: await r.json(), api: await fetch('http://127.0.0.1:' + port + '/api/overview') };
+    } finally { child.kill(); }
+  };
+  let r = await run({}, 18771);                                                       // nothing configured at all
+  assert.equal(r.status, 503); assert.match(r.body.problem, /MONGODB_URI is not set/); assert.equal(r.api.status, 503);
+  r = await run({ MONGODB_URI: 'mongodb://127.0.0.1:1/?serverSelectionTimeoutMS=500', JWT_SECRET: 'j'.repeat(40) }, 18772);   // database unreachable
+  assert.equal(r.status, 503); assert.match(r.body.problem, /Cannot reach the database|Starting up/);
 });

@@ -59,6 +59,14 @@ Cloud Run → **Create service** → **Continuously deploy from a repository** �
 - frontend: build type **Dockerfile**, source location `/frontend/Dockerfile`; environment variable `API_URL` = the backend address.
 - then set the backend's `FRONTEND_ORIGINS` to the frontend's address. Every push to the branch redeploys.
 
+### If Cloud Run says "container failed to start and listen on the port"
+The services now always start and listen, and tell you what is wrong. Open the service address with **/healthz** added:
+- backend: `{"ok":false,"problem":"Not configured: MONGODB_URI is not set, JWT_SECRET is not set."}` means those variables or secrets are missing. Add them: Cloud Run → service → *Edit & deploy new revision* → *Variables & Secrets* (the full list is in `backend/.env.example`).
+- backend: `"problem":"Cannot reach the database: …"` means MongoDB refused the connection. Check Atlas *Network Access* (`0.0.0.0/0`), the user name, and that the password is written with `%40` for `@` in `MONGODB_URI`.
+- frontend: `problem: API_URL is not set` means add the variable `API_URL` = the backend's address.
+
+If it still fails, the revision's **Logs** tab shows the exact message. Make sure each service was built from the right folder: the **backend** service from `/backend/Dockerfile`, the **frontend** service from `/frontend/Dockerfile`, never the repository root.
+
 ### Custom address (optional)
 Cloud Run → service → **Manage custom domains**. If you put the dashboard on `https://analytics.yourschool.org`, redeploy the frontend script with `EXTRA_ORIGINS=https://analytics.yourschool.org` so the backend allows it.
 

@@ -4,9 +4,12 @@ const crypto = require('crypto');
 const env = process.env;
 const production = env.NODE_ENV === 'production';
 
+// Settings that must exist in production. A missing one does NOT stop the server from starting (Cloud Run would then only say
+// "failed to start and listen on PORT"); instead the server starts, answers /healthz with the problem, and refuses API calls.
+const problems = [];
 function need(name) {
   if (env[name]) return env[name];
-  if (production) { console.error(`Missing required setting ${name}.`); process.exit(1); }
+  if (production) problems.push(`${name} is not set`);
   return null;
 }
 
@@ -14,6 +17,7 @@ const list = (v) => String(v || '').split(',').map((s) => s.trim().replace(/\/+$
 
 const config = {
   production,
+  problems,
   port: env.PORT !== undefined && env.PORT !== '' ? Number(env.PORT) : 8080,        // Cloud Run sets PORT
   mongoUri: need('MONGODB_URI') || 'mongodb://127.0.0.1:27017',
   dbName: env.MONGODB_DB || 'skolar',

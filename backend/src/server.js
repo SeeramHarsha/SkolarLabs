@@ -5,6 +5,11 @@ const config = require('./config');
 const db = require('./db');
 const auth = require('./auth');
 
+/** What the server can say about itself without a password: used by /healthz and by the 503 answers. */
+const state = { ready: false, dbError: null, attempts: 0 };
+
+const problemText = () => (config.problems.length ? 'Not configured: ' + config.problems.join(', ') + '.' : state.dbError ? 'Cannot reach the database: ' + state.dbError : 'Starting up.');
+
 /**
  * CORS.
  *  - /api/v1  (the apps: Windows, Linux, Android): any origin may call it. It never uses cookies, only the device's own token,
@@ -30,13 +35,17 @@ function createApp() {
   app.disable('x-powered-by');
   app.use(helmet({ hsts: config.production ? undefined : false }));
 
-  app.get('/', (req, res) => res.json({ service: 'skolar-analytics-backend', ok: true }));
-  app.get('/healthz', async (req, res) => { try { await db.ping(); res.json({ ok: true }); } catch (e) { res.status(503).json({ ok: false }); } });
-
-  app.use('/api', cors, express.json({ limit: '1mb' }), (err, req, res, next) => {
-    if (err) return res.status(err.status === 413 ? 413 : 400).json({ error: err.status === 413 ? 'That request is too large.' : 'The request is not valid JSON.' });
-    next();
+  app.get('/', (req, res) => res.json({ service: 'skolar-analytics-backend', ready: state.ready }));
+  app.get('/healthz', async (req, res) => {
+    if (!state.ready) return res.status(503).json({ ok: false, problem: problemText() });
+    try { await db.ping(); res.json({ ok: true }); } catch (e) { res.status(503).json({ ok: false, problem: 'Cannot reach the database.' }); }
   });
+
+  app.use('/api', cors, (req, res, next) => (state.ready ? next() : res.set('Retry-After', '5').status(503).json({ error: 'The server is not ready. ' + problemText() })),
+    express.json({ limit: '1mb' }), (err, req, res, next) => {
+      if (err) return res.status(err.status === 413 ? 413 : 400).json({ error: err.status === 413 ? 'That request is too large.' : 'The request is not valid JSON.' });
+      next();
+    });
 
   app.use('/api/v1', require('./routes/devices'));
   app.use('/api', (req, res, next) => { res.set('Cache-Control', 'no-store'); next(); }, require('./routes/admin'));
@@ -44,16 +53,36 @@ function createApp() {
   return app;
 }
 
+/** Connects to MongoDB in the background, retrying, so the web server is already listening (Cloud Run needs that). */
+async function connectLoop() {
+  if (config.problems.length) { console.error('NOT CONNECTING TO THE DATABASE. ' + problemText()); return; }
+  for (;;) {
+    state.attempts++;
+    try {
+      await db.connect(config.mongoUri, config.dbName);
+      await auth.bootstrapAdmin();
+      state.ready = true; state.dbError = null;
+      console.log('Database connected.');
+      if (config.production && !config.frontendOrigins.length) console.warn('FRONTEND_ORIGINS is not set: browsers will not be able to use the dashboard API.');
+      return;
+    } catch (e) {
+      state.dbError = String(e.message || e).replace(/mongodb(\+srv)?:\/\/\S+/gi, '<link hidden>').slice(0, 200);
+      console.error(`Database connection failed (try ${state.attempts}): ${state.dbError}`);
+      try { await db.close(); } catch (x) { /* nothing to close */ }
+      await new Promise((r) => setTimeout(r, Math.min(30000, 2000 * state.attempts)));
+    }
+  }
+}
+
 async function start() {
-  await db.connect(config.mongoUri, config.dbName);
-  await auth.bootstrapAdmin();
-  if (config.production && !config.frontendOrigins.length) console.warn('FRONTEND_ORIGINS is not set: browsers will not be able to use the dashboard API.');
   const app = createApp();
-  const server = app.listen(config.port, () => console.log(`SkolAR Analytics API listening on :${config.port}`));
+  const server = await new Promise((resolve) => { const s = app.listen(config.port, () => { console.log(`SkolAR Analytics API listening on :${config.port}`); resolve(s); }); });
+  server.ready = new Promise((resolve) => { const t = setInterval(() => { if (state.ready) { clearInterval(t); resolve(); } }, 50); });
+  connectLoop();
   const stop = async () => { server.close(); await db.close(); process.exit(0); };
   process.on('SIGTERM', stop); process.on('SIGINT', stop);
   return server;
 }
 
 if (require.main === module) start().catch((e) => { console.error('Could not start:', e.message); process.exit(1); });
-module.exports = { createApp, start };
+module.exports = { createApp, start, state };

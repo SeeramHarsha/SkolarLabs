@@ -15,14 +15,19 @@ const PORT = Number(process.env.PORT) || 8080;
 const PUBLIC = path.join(__dirname, 'public');
 const production = process.env.NODE_ENV === 'production';
 
+// A wrong or missing API_URL must not stop the server from starting (Cloud Run would only say "failed to start and listen on PORT").
+// It starts anyway, logs the problem, and /healthz reports it.
 let API_URL = String(process.env.API_URL || '').trim().replace(/\/+$/, '');
+let problem = null;
 if (!API_URL) {
-  if (production) { console.error('Missing required setting API_URL (the address of the backend).'); process.exit(1); }
-  API_URL = 'http://localhost:8081';
+  if (production) problem = 'API_URL is not set (the address of the backend)'; else API_URL = 'http://localhost:8081';
 }
-let apiOrigin;
-try { const u = new URL(API_URL); if (!/^https?:$/.test(u.protocol)) throw new Error('bad protocol'); apiOrigin = u.origin; }
-catch (e) { console.error('API_URL is not a valid web address: ' + API_URL); process.exit(1); }
+let apiOrigin = null;
+if (API_URL) {
+  try { const u = new URL(API_URL); if (!/^https?:$/.test(u.protocol)) throw new Error('bad protocol'); apiOrigin = u.origin; }
+  catch (e) { problem = 'API_URL is not a valid web address: ' + API_URL; API_URL = ''; }
+}
+if (problem) console.error('PROBLEM: ' + problem);
 
 const MIME = { '.html': 'text/html; charset=utf-8', '.js': 'text/javascript; charset=utf-8', '.css': 'text/css; charset=utf-8', '.json': 'application/json',
   '.png': 'image/png', '.svg': 'image/svg+xml', '.woff2': 'font/woff2', '.ico': 'image/x-icon', '.txt': 'text/plain; charset=utf-8' };
@@ -33,7 +38,7 @@ const CONFIG_JS = `window.SKOLAR_CONFIG = ${JSON.stringify({ apiBase: API_URL })
 function securityHeaders(req) {
   const h = {
     // the page may only talk to itself and to the backend
-    'Content-Security-Policy': `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self' ${apiOrigin}; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'`,
+    'Content-Security-Policy': `default-src 'self'; script-src 'self'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self'; connect-src 'self'${apiOrigin ? ' ' + apiOrigin : ''}; object-src 'none'; frame-ancestors 'none'; base-uri 'self'; form-action 'self'`,
     'X-Content-Type-Options': 'nosniff', 'X-Frame-Options': 'DENY', 'Referrer-Policy': 'no-referrer',
     'Permissions-Policy': 'camera=(), microphone=(), geolocation=()', 'Cross-Origin-Opener-Policy': 'same-origin',
   };
@@ -58,7 +63,7 @@ const server = http.createServer((req, res) => {
   let pathname;
   try { pathname = decodeURIComponent(new URL(req.url, 'http://x').pathname); } catch (e) { return send(req, res, 400, Buffer.from('Bad request'), MIME['.txt'], 'no-store', '.txt'); }
 
-  if (pathname === '/healthz') return send(req, res, 200, Buffer.from('ok'), MIME['.txt'], 'no-store', '.txt');
+  if (pathname === '/healthz') return send(req, res, problem ? 503 : 200, Buffer.from(problem ? 'problem: ' + problem : 'ok'), MIME['.txt'], 'no-store', '.txt');
   if (pathname === '/config.js') return send(req, res, 200, Buffer.from(CONFIG_JS), MIME['.js'], 'no-store', '.js');
   if (pathname === '/') pathname = '/index.html';
 

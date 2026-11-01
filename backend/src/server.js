@@ -8,6 +8,18 @@ const auth = require('./auth');
 /** What the server can say about itself without a password: used by /healthz and by the 503 answers. */
 const state = { ready: false, dbError: null, attempts: 0 };
 
+/**
+ * Waits (holding the request open) until the database is connected, up to `ms`. On Cloud Run the CPU is throttled between requests,
+ * so a connection started in the background can stall; keeping the first request open after a cold start gives it the CPU it needs.
+ * With a setting missing there is nothing to wait for.
+ */
+async function waitReady(ms) {
+  if (config.problems.length) return false;
+  const end = Date.now() + ms;
+  while (!state.ready && Date.now() < end) await new Promise((r) => setTimeout(r, 100));
+  return state.ready;
+}
+
 const problemText = () => (config.problems.length ? 'Not configured: ' + config.problems.join(', ') + '.' : state.dbError ? 'Cannot reach the database: ' + state.dbError : 'Starting up.');
 
 /**
@@ -37,11 +49,11 @@ function createApp() {
 
   app.get('/', (req, res) => res.json({ service: 'skolar-analytics-backend', ready: state.ready }));
   app.get(['/status', '/healthz'], async (req, res) => {
-    if (!state.ready) return res.status(503).json({ ok: false, problem: problemText() });
+    if (!(await waitReady(Math.min(8000, config.readyWaitMs)))) return res.status(503).json({ ok: false, problem: problemText() });
     try { await db.ping(); res.json({ ok: true }); } catch (e) { res.status(503).json({ ok: false, problem: 'Cannot reach the database.' }); }
   });
 
-  app.use('/api', cors, (req, res, next) => (state.ready ? next() : res.set('Retry-After', '5').status(503).json({ error: 'The server is not ready. ' + problemText() })),
+  app.use('/api', cors, async (req, res, next) => ((await waitReady(config.readyWaitMs)) ? next() : res.set('Retry-After', '5').status(503).json({ error: 'The server is not ready. ' + problemText() })),
     express.json({ limit: '1mb' }), (err, req, res, next) => {
       if (err) return res.status(err.status === 413 ? 413 : 400).json({ error: err.status === 413 ? 'That request is too large.' : 'The request is not valid JSON.' });
       next();

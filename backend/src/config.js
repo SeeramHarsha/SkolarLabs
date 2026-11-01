@@ -33,6 +33,8 @@ const config = {
   adminPassword: env.ADMIN_PASSWORD || null,
   // 'online now' = synced within this many minutes
   onlineMinutes: Number(env.ONLINE_MINUTES) || 15,
+  // how long the first request after a cold start may wait for the database connection
+  readyWaitMs: env.READY_WAIT_MS !== undefined ? Number(env.READY_WAIT_MS) : 20000,
 };
 
 module.exports = config;

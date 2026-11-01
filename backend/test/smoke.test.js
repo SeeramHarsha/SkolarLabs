@@ -136,7 +136,7 @@ test('browsers: only the dashboard\x27s own address may call the dashboard API; 
 test('a misconfigured or database-less server still starts and listens (Cloud Run needs that) and says what is wrong', async () => {
   const { spawn } = require('node:child_process'), path = require('node:path');
   const run = async (env, port) => {
-    const child = spawn(process.execPath, [path.join(__dirname, '..', 'src', 'server.js')], { env: { PATH: process.env.PATH, NODE_ENV: 'production', PORT: String(port), ...env }, stdio: 'ignore' });
+    const child = spawn(process.execPath, [path.join(__dirname, '..', 'src', 'server.js')], { env: { PATH: process.env.PATH, NODE_ENV: 'production', PORT: String(port), READY_WAIT_MS: '500', ...env }, stdio: 'ignore' });
     try {
       let r = null;
       for (let i = 0; i < 40 && !r; i++) { try { r = await fetch('http://127.0.0.1:' + port + '/status'); } catch (e) { await new Promise((x) => setTimeout(x, 250)); } }
@@ -148,4 +148,15 @@ test('a misconfigured or database-less server still starts and listens (Cloud Ru
   assert.equal(r.status, 503); assert.match(r.body.problem, /MONGODB_URI is not set/); assert.equal(r.api.status, 503);
   r = await run({ MONGODB_URI: 'mongodb://127.0.0.1:1/?serverSelectionTimeoutMS=500', JWT_SECRET: 'j'.repeat(40) }, 18772);   // database unreachable
   assert.equal(r.status, 503); assert.match(r.body.problem, /Cannot reach the database|Starting up/);
+});
+
+test('the first request after a cold start waits for the database instead of failing', async () => {
+  const { state } = require('../src/server');
+  state.ready = false;                                                    // pretend the server has just woken up
+  setTimeout(() => { state.ready = true; }, 700);                         // ...and the database connects a moment later
+  const t0 = Date.now();
+  const r = await fetch(base + '/api/auth/me');
+  assert.equal(r.status, 401);                                            // it reached the real handler (not a 503 "not ready")
+  assert.ok(Date.now() - t0 >= 500, 'the request was held until the database was ready');
+  assert.equal(state.ready, true);
 });

@@ -1,4 +1,4 @@
-# SkolAR Analytics backend
+# Botclub Labs Analytics backend
 
 Express + MongoDB API. Deploy with `bash ../deploy/deploy-backend.sh` (see the root README).
 

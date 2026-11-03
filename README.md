@@ -1,6 +1,6 @@
-# SkolAR Labs Analytics
+# Botclub Labs Analytics
 
-How the SkolAR Labs apps (Windows, Android, Linux) are used: hours of learning, schools, screens, classes and chapters, curriculum progress per school, who is online, and whose access is about to end.
+How the Botclub Labs apps (Windows, Android, Linux) are used: hours of learning, schools, screens, classes and chapters, curriculum progress per school, who is online, and whose access is about to end.
 
 Two services, deployed **separately** on Google Cloud Run, with **MongoDB Atlas** as the database:
 

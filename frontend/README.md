@@ -1,4 +1,4 @@
-# SkolAR Analytics frontend
+# Botclub Labs Analytics frontend
 
 The web dashboard. No build step and no npm packages: `server.js` is a small static server for the files in `public/`.
 

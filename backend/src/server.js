@@ -88,7 +88,7 @@ async function connectLoop() {
 
 async function start() {
   const app = createApp();
-  const server = await new Promise((resolve) => { const s = app.listen(config.port, () => { console.log(`SkolAR Analytics API listening on :${config.port}`); resolve(s); }); });
+  const server = await new Promise((resolve) => { const s = app.listen(config.port, () => { console.log(`Botclub Labs Analytics API listening on :${config.port}`); resolve(s); }); });
   server.ready = new Promise((resolve) => { const t = setInterval(() => { if (state.ready) { clearInterval(t); resolve(); } }, 50); });
   connectLoop();
   const stop = async () => { server.close(); await db.close(); process.exit(0); };

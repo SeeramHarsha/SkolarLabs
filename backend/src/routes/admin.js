@@ -41,7 +41,7 @@ const csvCell = (v) => { let s = String(v == null ? '' : v); if (/^[=+\-@\t\r]/.
 router.get('/export.csv', wrap(async (req, res) => {
   const rows = await Q.exportRows(req.user, req.query);
   const head = ['date', 'school', 'screen', 'device_id', 'platform', 'type', 'class', 'chapter', 'active_minutes'];
-  res.set({ 'Content-Type': 'text/csv; charset=utf-8', 'Content-Disposition': 'attachment; filename="skolar-usage.csv"', 'Cache-Control': 'no-store' });
+  res.set({ 'Content-Type': 'text/csv; charset=utf-8', 'Content-Disposition': 'attachment; filename="botclub-usage.csv"', 'Cache-Control': 'no-store' });
   res.send('﻿' + [head, ...rows].map((r) => r.map(csvCell).join(',')).join('\r\n') + '\r\n');
 }));
 

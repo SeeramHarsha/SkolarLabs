@@ -88,7 +88,7 @@
       api('/auth/login', { method: 'POST', body: { email: email.value, password: pass.value } }).then(function (j) { setToken(j.token); return start(j.user); })
         .catch(function (x) { err.textContent = (x instanceof TypeError ? 'Cannot reach the server. Check the API address in config.js.' : x.message); btn.disabled = false; });
     } }, h('label', { class: 'field' }, h('span', { text: 'Email' }), email), h('label', { class: 'field' }, h('span', { text: 'Password' }), pass), btn, err);
-    $app.replaceChildren(h('div', { class: 'login' }, h('div', { class: 'card' }, h('img', { src: 'logo.png', alt: '' }), h('h1', { text: 'SkolAR Labs Analytics' }), h('p', { text: 'Sign in to see how the app is being used.' }), form)));
+    $app.replaceChildren(h('div', { class: 'login' }, h('div', { class: 'card' }, h('img', { src: 'logo.png', alt: '' }), h('h1', { text: 'Botclub Labs Analytics' }), h('p', { text: 'Sign in to see how the app is being used.' }), form)));
     email.focus();
   }
 
@@ -97,7 +97,7 @@
   function shell(active, title, subtitle, withFilters) {
     killCharts();
     var side = h('aside', { class: 'side' },
-      h('div', { class: 'brand' }, h('img', { src: 'logo.png', alt: '' }), h('div', null, h('b', { text: 'SkolAR Labs' }), h('small', { text: 'Usage analytics' }))),
+      h('div', { class: 'brand' }, h('img', { src: 'logo.png', alt: '' }), h('div', null, h('b', { text: 'Botclub Labs' }), h('small', { text: 'Usage analytics' }))),
       h('nav', { class: 'nav' }, NAV.concat(S.user.role === 'admin' ? [['#/users', 'users', 'Logins']] : []).map(function (n) {
         return h('a', { href: n[0], class: n[1] === active ? 'on' : '', onclick: function () { side.classList.remove('open'); } }, icon(n[1]), n[2]); })),
       h('div', { class: 'me' }, h('b', { text: S.user.email }), (S.user.role === 'admin' ? 'Admin' : 'Viewer' + (S.user.schools.length ? ' · ' + S.user.schools.length + ' school(s)' : '')), h('br'),
@@ -133,7 +133,7 @@
       var b = e.currentTarget; b.disabled = true;
       fetch(API + '/api/export.csv' + qs(opt.school ? { school: opt.school } : {}), { headers: { Authorization: 'Bearer ' + token() } })
         .then(function (r) { if (!r.ok) throw new Error('Export failed.'); return r.blob(); })
-        .then(function (blob) { var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'skolar-usage.csv'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000); })
+        .then(function (blob) { var a = document.createElement('a'); a.href = URL.createObjectURL(blob); a.download = 'botclub-usage.csv'; document.body.appendChild(a); a.click(); a.remove(); setTimeout(function () { URL.revokeObjectURL(a.href); }, 2000); })
         .catch(function (x) { toast(x.message); }).then(function () { b.disabled = false; }); } }));
     return bar;
   }
@@ -159,7 +159,7 @@
 
   // ------------------------------------------------------------------ views
   function viewOverview() {
-    var main = shell('overview', 'Overview', 'How the SkolAR Labs app is being used', true); loading(main);
+    var main = shell('overview', 'Overview', 'How the Botclub Labs app is being used', true); loading(main);
     api('/overview' + qs()).then(function (d) {
       main.querySelector('.loading').remove(); var k = d.kpis || {};
       main.appendChild(h('div', { class: 'kpis' },

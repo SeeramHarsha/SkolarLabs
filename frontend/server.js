@@ -1,6 +1,6 @@
 'use strict';
 /**
- * SkolAR Labs Analytics - web dashboard (frontend).
+ * Botclub Labs Analytics - web dashboard (frontend).
  * A tiny static file server with no dependencies. It serves public/ and one generated file, /config.js, which tells the page
  * where the backend API lives (set with the API_URL environment variable when you deploy, so one image works everywhere).
  *
@@ -77,5 +77,5 @@ const server = http.createServer((req, res) => {
   });
 });
 
-server.listen(PORT, () => console.log(`SkolAR Analytics dashboard on :${PORT}  (backend: ${API_URL})`));
+server.listen(PORT, () => console.log(`Botclub Labs Analytics dashboard on :${PORT}  (backend: ${API_URL})`));
 process.on('SIGTERM', () => server.close(() => process.exit(0)));

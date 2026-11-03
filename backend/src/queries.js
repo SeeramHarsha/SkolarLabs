@@ -10,7 +10,7 @@ const today = () => dayStr(new Date());
 
 /** from / to / school / cls / platform from the query string, cleaned. A viewer's school list always applies. */
 function filters(user, q) {
-  let to = DATE_RE.test(q.to) ? q.to : today();
+  let to = DATE_RE.test(q.to) ? q.to : addDays(today(), 1);      // +1 day: a screen's dates are its LOCAL days, which can be one ahead of UTC
   let from = DATE_RE.test(q.from) ? q.from : addDays(to, -29);
   if (from > to) [from, to] = [to, from];
   if (addDays(from, 400) < to) from = addDays(to, -400);

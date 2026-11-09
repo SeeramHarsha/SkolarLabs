@@ -1,0 +1,1487 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 6 · Chapter 7 — Temperature and its Measurement | Botclub Labs</title>
+<link href="../../vendor/fonts/fonts.css" rel="stylesheet">
+<style>
+:root{
+  --navy-1:#0f2640; --navy-2:#1a3a5c; --navy-3:#234a73;
+  --accent:#2f8fe0; --accent-2:#5cc8ff;
+  --bg:#eef2f8; --surface-0:#ffffff; --surface-1:#f6f9fc; --surface-2:#eef2f8;
+  --border:#dbe4f0; --border-strong:#c2d1e5;
+  --text-1:#132a44; --text-2:#4c6178; --text-3:#8195ab;
+  --f-red:#d9432b; --f-blue:#2f8fe0; --f-green:#1f9d55; --f-yellow:#d9a017;
+  --radius:14px; --radius-sm:9px;
+  --fs-xs:clamp(10px,0.62vw,12px); --fs-sm:clamp(11px,0.72vw,13.5px);
+  --fs-md:clamp(12.5px,0.85vw,15px); --fs-lg:clamp(15px,1.15vw,19px);
+  --fs-xl:clamp(18px,1.5vw,25px);
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:22px; --sp-6:30px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{ font-family:'Poppins',system-ui,sans-serif; background:var(--bg); color:var(--text-1); overflow:hidden; }
+button, input, select{font-family:inherit;}
+
+.app{height:100vh; display:flex; flex-direction:column; min-height:0;}
+.topbar{
+  flex:0 0 auto; background:linear-gradient(120deg, var(--navy-1) 0%, var(--navy-2) 55%, var(--navy-3) 100%);
+  color:#fff; padding:clamp(9px,1vh,16px) clamp(14px,1.6vw,28px);
+  display:flex; align-items:center; gap:var(--sp-4); box-shadow:0 2px 10px rgba(15,38,64,0.25); z-index:5;
+}
+.topbar .brand-badge{
+  width:clamp(32px,2.4vw,40px); height:clamp(32px,2.4vw,40px); border-radius:10px; background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center;
+  font-size:clamp(15px,1.3vw,20px); flex:0 0 auto;
+}
+.topbar .chip{
+  display:inline-block; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.28);
+  border-radius:6px; padding:2px 9px; font-size:var(--fs-xs); letter-spacing:0.06em; text-transform:uppercase; font-weight:600; margin-bottom:3px;
+}
+.topbar h1{font-size:var(--fs-lg); font-weight:600; line-height:1.2; white-space:nowrap;}
+.topbar .spacer{flex:1;}
+.topbar .legend{display:flex; gap:14px; font-size:var(--fs-xs); color:rgba(255,255,255,0.85); align-items:center;}
+.topbar .legend span{display:inline-flex; align-items:center; gap:5px;}
+.topbar .legend i{width:12px; height:4px; border-radius:2px; display:inline-block;}
+
+.body-wrap{flex:1; display:flex; min-height:0; overflow:hidden;}
+.sidenav{
+  flex:0 0 clamp(170px,13.5vw,230px); background:var(--surface-0); border-right:1px solid var(--border);
+  overflow-y:auto; padding:var(--sp-2); display:flex; flex-direction:column; gap:4px;
+}
+.nav-item{
+  display:flex; align-items:center; gap:8px; text-align:left; width:100%;
+  border:1px solid var(--border); background:var(--surface-1); border-radius:var(--radius-sm); padding:7px 10px; cursor:pointer; transition:all .15s ease;
+}
+.nav-item:hover{background:var(--surface-2); border-color:var(--border-strong);}
+.nav-item.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.nav-item .n-num{font-size:var(--fs-xs); font-weight:700; color:var(--accent); flex:0 0 auto; min-width:26px;}
+.nav-item.active .n-num{color:var(--accent-2);}
+.nav-item .n-title{font-size:var(--fs-sm); font-weight:600; line-height:1.25;}
+
+.content{flex:1; min-width:0; display:flex; flex-direction:column; overflow:hidden;}
+.panel-head{flex:0 0 auto; padding:var(--sp-3) var(--sp-5); border-bottom:1px solid var(--border); background:var(--surface-0); display:flex; align-items:baseline; gap:12px;}
+.panel-badge{background:var(--navy-2); color:#fff; font-size:var(--fs-xs); font-weight:700; padding:3px 10px; border-radius:6px;}
+.panel-head h2{font-size:var(--fs-lg); font-weight:600; color:var(--text-1);}
+.panel-head p{font-size:var(--fs-sm); color:var(--text-2); flex:1; text-align:right;}
+.panel-body{flex:1; min-height:0; overflow:hidden; padding:var(--sp-3) var(--sp-5); display:flex;}
+
+.lab-view{flex:1; display:flex; gap:var(--sp-4); min-height:0; min-width:0;}
+.lab-canvas-wrap{flex:7 1 0; min-width:0; min-height:0; background:#fff; border:1px solid var(--border); border-radius:var(--radius); position:relative; overflow:hidden;}
+.lab-canvas-wrap canvas{width:100%; height:100%; display:block;}
+.lab-side{flex:3 1 0; min-width:230px; display:flex; flex-direction:column; gap:var(--sp-3); min-height:0; overflow-y:auto; padding-right:2px;}
+.side-sub{display:flex; flex-direction:column; gap:var(--sp-3);}
+
+.control-group{background:var(--surface-0); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 12px;}
+.control-group label{font-size:var(--fs-sm); font-weight:600; color:var(--text-1); display:flex; justify-content:space-between;}
+.control-group label .val{color:var(--accent); font-weight:700;}
+.control-group input[type=range]{width:100%; margin-top:7px; accent-color:var(--navy-2); cursor:pointer;}
+.toggle-group{display:flex; gap:6px; margin-top:7px; flex-wrap:wrap;}
+.toggle-btn{flex:1; min-width:56px; padding:7px 5px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:600; cursor:pointer; text-align:center; color:var(--text-2);}
+.toggle-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.toggle-btn.small{font-size:10.5px; padding:6px 3px;}
+.toggle-btn.play{background:var(--f-green); border-color:var(--f-green); color:#fff;}
+.toggle-btn.navy{background:var(--navy-2); border-color:var(--navy-2); color:#fff; width:100%; margin-top:9px;}
+.toggle-btn:disabled{opacity:.5; cursor:not-allowed;}
+.chip-btn{display:inline-flex; align-items:center; gap:5px; padding:6px 11px; margin:3px 3px 0 0; border:1px solid var(--border-strong); background:var(--surface-1); border-radius:18px; cursor:pointer; font-size:var(--fs-sm); font-weight:600; color:var(--text-2);}
+.chip-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.chip-btn.ok{border-color:var(--f-green);} .chip-btn.bad{border-color:var(--f-red);}
+.chip-wrap{display:flex; flex-wrap:wrap; margin-top:3px;}
+
+.role-row{display:flex; align-items:center; gap:8px; margin-top:7px; font-size:var(--fs-sm); font-weight:600;}
+.role-row .rdot{width:10px; height:10px; border-radius:50%; flex:0 0 auto; display:inline-block;}
+.role-row .rname{width:70px; flex:0 0 auto; color:var(--text-2);}
+.role-row select{flex:1; min-width:0; padding:6px 7px; border:1px solid var(--border-strong); border-radius:7px; font-size:var(--fs-sm); background:var(--surface-1); color:var(--text-1); cursor:pointer;}
+
+.step-row{display:flex; gap:5px;}
+.step-pill{flex:1; padding:6px 4px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:10.5px; font-weight:700; color:var(--text-3); cursor:pointer;}
+.step-pill.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.step-pill.done{border-color:var(--f-green); color:var(--f-green);}
+.step-pill.active.done{color:#fff;}
+.opt-btn{display:block; width:100%; text-align:left; margin-top:6px; padding:7px 9px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:500; color:var(--text-1); cursor:pointer; line-height:1.3;}
+.opt-btn:disabled{opacity:.55; cursor:not-allowed;}
+.opt-btn.active{border-color:var(--navy-2); background:#e3ecf7; font-weight:600;}
+.var-row{display:flex; align-items:center; gap:6px; margin-top:7px;}
+.var-row .vname{flex:0 0 88px; font-size:var(--fs-sm); font-weight:600;}
+.var-row .toggle-group{margin-top:0; flex:1;}
+
+.result-cards{display:grid; grid-template-columns:1fr 1fr; gap:6px;}
+.result-cards.three{grid-template-columns:1fr 1fr 1fr;}
+.rcard{background:var(--surface-0); border:1px solid var(--border); border-radius:9px; padding:7px 9px;}
+.rcard .rlabel{font-size:9.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--text-3); font-weight:600;}
+.rcard .rval{font-size:var(--fs-md); font-weight:700; color:var(--text-1); margin-top:1px;}
+.rcard.wide{grid-column:1/-1;}
+.hint{font-size:var(--fs-xs); color:var(--text-3); margin-top:6px; line-height:1.4;}
+.fb{font-size:var(--fs-xs); font-weight:600; margin-top:6px; padding:5px 8px; border-radius:7px;}
+.fb.ok{background:#e4f7ec; color:#1f6b3d;}
+.fb.bad{background:#fdece7; color:#a4331c;}
+.fb.warn{background:#fdf4dc; color:#8a6410;}
+.log{width:100%; border-collapse:collapse; font-size:10.5px; margin-top:4px;}
+.log th{text-align:left; color:var(--text-3); font-weight:600; text-transform:uppercase; font-size:9px; letter-spacing:.04em; padding:3px 4px; border-bottom:1px solid var(--border);}
+.log td{padding:4px; border-bottom:1px solid var(--surface-2); color:var(--text-2);}
+.log td.r-ok{color:var(--f-green); font-weight:700;} .log td.r-bad{color:var(--f-red); font-weight:700;} .log td.r-warn{color:var(--f-yellow); font-weight:700;}
+.log td.g{color:var(--f-green);font-weight:700;} .log td.b{color:var(--f-blue);font-weight:700;} .log td.rd{color:var(--f-red);font-weight:700;}
+.qa-input{width:100%; margin-top:7px; padding:8px 10px; border:1px solid var(--border-strong); border-radius:8px; font-size:var(--fs-sm); color:var(--text-1); background:var(--surface-1);}
+.qa-input:focus{outline:none; border-color:var(--accent); background:#fff;}
+.nav-item .n-num{line-height:1.15; text-align:center;}
+.hidden{display:none !important;}
+
+@media (max-width:1000px) and (orientation:portrait), (max-width:1000px) and (min-height:601px){
+  .body-wrap{flex-direction:column;}
+  .sidenav{flex:0 0 auto; width:100%; height:auto; flex-direction:row; overflow-x:auto; overflow-y:hidden; border-right:none; border-bottom:1px solid var(--border); padding:6px;}
+  .nav-item{flex:0 0 auto; width:150px;}
+  .panel-body{overflow-y:auto;}
+  .lab-view{flex-direction:column;}
+  .lab-canvas-wrap{min-height:320px;}
+  .lab-side{min-width:0;}
+  .content{overflow-y:auto;}
+  .topbar .legend{display:none;}
+  .topbar h1{white-space:normal;}
+}
+::-webkit-scrollbar{width:7px; height:7px;}
+::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand-badge">🌡️</div>
+    <div>
+      <div class="chip">Grade 6 · Ch 7</div>
+      <h1>Temperature and its Measurement</h1>
+    </div>
+    <div class="spacer"></div>
+    <div class="legend">
+      <span><i style="background:var(--f-yellow)"></i>What you do · eye line</span>
+      <span><i style="background:var(--f-red)"></i>Hot · thermometer liquid · max</span>
+      <span><i style="background:var(--f-blue)"></i>Cold · water · min</span>
+      <span><i style="background:var(--f-green)"></i>Correct reading · result</span>
+    </div>
+  </div>
+  <div class="body-wrap">
+    <nav class="sidenav" id="sideNav"></nav>
+    <main class="content">
+      <div class="panel-head">
+        <div class="panel-badge" id="panelBadge">5.1</div>
+        <h2 id="panelTitle">Select an activity</h2>
+        <p id="panelDesc"></p>
+      </div>
+      <div class="panel-body" id="panelBody"></div>
+    </main>
+  </div>
+</div>
+
+<script>
+
+/* =========================================================================
+   GRADE 6 — CHAPTER 7: TEMPERATURE AND ITS MEASUREMENT
+   Activities 7.1–7.7. Every scene runs on a continuous animation loop:
+   sliders and buttons only set a TARGET; hands, thermometers and people
+   glide or settle there on springs. Skin and thermometer bulbs warm and
+   cool by Newton's law (dT/dt = (T_surroundings − T)/τ), digital sensors
+   beep when the rise slows below 0.1 °C per 16 s, water heats with
+   m·c·ΔT and then stays at its boiling point while it boils away
+   (2260 J/g), crushed ice stays at 0 °C while it melts (334 J/g), and
+   eye-level mistakes shift the reading by parallax.
+   Colour rule: red = hot · thermometer liquid · max, blue = cold · water ·
+   min, yellow = what you do · eye line, green = correct reading · result.
+   ========================================================================= */
+const COL = {red:'#d9432b', blue:'#2f8fe0', green:'#1f9d55', yellow:'#d9a017', ink:'#132a44', muted:'#4c6178', mid:'#8195ab', navy:'#1a3a5c'};
+
+/* ---------------------------------------------------------------------
+   0. CANVAS HELPERS
+   --------------------------------------------------------------------- */
+function fitCanvas(canvas){
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  const r = canvas.parentElement.getBoundingClientRect();
+  const w = Math.max(200, r.width), h = Math.max(160, r.height);
+  if(canvas._w!==w || canvas._h!==h || canvas._dpr!==dpr){
+    canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr);
+    canvas.style.width = w+'px'; canvas.style.height = h+'px';
+    canvas._w=w; canvas._h=h; canvas._dpr=dpr;
+  }
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, w, h};
+}
+function line(ctx,x1,y1,x2,y2,color,width,dash){
+  ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=width||2;
+  if(dash) ctx.setLineDash(dash); else ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); ctx.restore();
+}
+function arrowHead(ctx,x,y,ang,color,size){
+  size=size||7; ctx.save(); ctx.fillStyle=color; ctx.translate(x,y); ctx.rotate(ang);
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-size,size*0.42); ctx.lineTo(-size,-size*0.42); ctx.closePath(); ctx.fill(); ctx.restore();
+}
+function vec(ctx,x1,y1,x2,y2,color,width){ line(ctx,x1,y1,x2,y2,color,width||2.6); arrowHead(ctx,x2,y2,Math.atan2(y2-y1,x2-x1),color,7); }
+function dimArrow(ctx,x,y1,y2,color){ line(ctx,x,y1,x,y2,color,1.6); arrowHead(ctx,x,y1,-Math.PI/2,color,5); arrowHead(ctx,x,y2,Math.PI/2,color,5); }
+function textAt(ctx,txt,x,y,opts){
+  opts=opts||{}; ctx.save();
+  ctx.font=(opts.weight||500)+' '+(opts.size||12)+'px Poppins, sans-serif';
+  ctx.fillStyle=opts.color||COL.ink; ctx.textAlign=opts.align||'left'; ctx.textBaseline=opts.baseline||'alphabetic';
+  if(opts.alpha!==undefined) ctx.globalAlpha=opts.alpha;
+  ctx.fillText(txt,x,y); ctx.restore();
+}
+function rect(ctx,x,y,w,h,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw===undefined?2.2:lw; if(fill){ctx.fillStyle=fill; ctx.fillRect(x,y,w,h);} if(lw!==0){ctx.strokeStyle=stroke; ctx.strokeRect(x,y,w,h);} ctx.restore(); }
+function circ(ctx,x,y,r,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw||2.2; ctx.beginPath(); ctx.arc(x,y,Math.max(0.1,r),0,Math.PI*2); if(fill){ctx.fillStyle=fill; ctx.fill();} ctx.strokeStyle=stroke; ctx.stroke(); ctx.restore(); }
+function rrect(ctx,x,y,w,h,r){ r=Math.min(r,w/2,h/2); ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function fmt(x,d){ if(!isFinite(x)) return '—'; d=d===undefined?2:d; return Number(x.toFixed(d)).toString(); }
+function gauss(){ return (Math.random()+Math.random()+Math.random()+Math.random()-2)*1.2247; }
+function hexRgb(h){ const n=parseInt(h.slice(1),16); return [n>>16&255, n>>8&255, n&255]; }
+function mixCol(a,b,t){ const A=hexRgb(a),B=hexRgb(b); t=clamp(t,0,1); return 'rgb('+A.map((v,i)=>Math.round(lerp(v,B[i],t))).join(',')+')'; }
+function rampCol(stops,x){ // stops: [[pos,hex],...]
+  if(x<=stops[0][0]) return mixCol(stops[0][1],stops[0][1],0);
+  for(let i=1;i<stops.length;i++){ if(x<=stops[i][0]){ const a=stops[i-1],b=stops[i]; return mixCol(a[1],b[1],(x-a[0])/(b[0]-a[0])); } }
+  const l=stops[stops.length-1][1]; return mixCol(l,l,0);
+}
+function thermo(ctx,x,top,bot,frac,outline,liquid){
+  const br=8;
+  ctx.save(); ctx.lineWidth=2; ctx.strokeStyle=outline; ctx.fillStyle='#fff';
+  rrect(ctx,x-5,top,10,bot-top+2,5); ctx.fill(); ctx.stroke(); ctx.restore();
+  const lh=(bot-top-5)*clamp(frac,0,1);
+  ctx.save(); ctx.fillStyle=liquid; ctx.fillRect(x-2.2,bot-lh,4.4,lh+6); ctx.restore();
+  circ(ctx,x,bot+br,br,outline,'#fff',2); circ(ctx,x,bot+br,br-3.2,liquid,liquid,1);
+  for(let i=0;i<=4;i++){ const yy=top+5+(bot-top-5)*i/4; line(ctx,x+5,yy,x+9,yy,outline,1.1); }
+}
+function flame(ctx,cx,baseY,width,inten,t){
+  const n=5;
+  for(let i=0;i<n;i++){
+    const fx=cx-width/2+width*(i+0.5)/n;
+    const hh=(6+inten*32)*(0.78+0.22*Math.sin(t*13+i*1.7));
+    const sway=Math.sin(t*9+i*2.1)*3;
+    ctx.save(); ctx.lineJoin='round';
+    ctx.strokeStyle=COL.red; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(fx-7,baseY); ctx.quadraticCurveTo(fx-7,baseY-hh*0.55,fx+sway,baseY-hh); ctx.quadraticCurveTo(fx+7,baseY-hh*0.55,fx+7,baseY); ctx.stroke();
+    ctx.strokeStyle=COL.yellow; ctx.lineWidth=1.6;
+    ctx.beginPath(); ctx.moveTo(fx-3.5,baseY); ctx.quadraticCurveTo(fx-3,baseY-hh*0.35,fx+sway*0.5,baseY-hh*0.55); ctx.quadraticCurveTo(fx+3,baseY-hh*0.35,fx+3.5,baseY); ctx.stroke();
+    ctx.restore();
+  }
+}
+
+/* ---------------------------------------------------------------------
+   0b. ANIMATION ENGINE
+   --------------------------------------------------------------------- */
+let activeStops = [];
+function stopAllLoops(){ activeStops.forEach(s=>{ try{ s(); }catch(e){} }); activeStops=[]; }
+function animLoop(tick){
+  let last = performance.now();
+  let raf;
+  function frame(now){
+    const dt = Math.max(0, Math.min(0.04, (now-last)/1000));
+    last = now;
+    tick(dt);
+    raf = requestAnimationFrame(frame);
+  }
+  raf = requestAnimationFrame(frame);
+  const stop = ()=>cancelAnimationFrame(raf);
+  activeStops.push(stop);
+  return stop;
+}
+/** Exponential ease — frame-rate independent, always smooth. */
+function approach(cur,tgt,rate,dt){ return cur + (tgt-cur)*(1-Math.exp(-rate*dt)); }
+/** Spring-damper — gives natural overshoot and settle. */
+function springTo(state,target,k,damping,dt){
+  const acc = (target-state.x)*k - state.v*damping;
+  state.v += acc*dt;
+  state.x += state.v*dt;
+  return state.x;
+}
+function toggleWire(btns,cb){
+  btns.forEach(b=>b.onclick=()=>{ btns.forEach(x=>x.classList.remove('active')); b.classList.add('active'); cb(b); });
+}
+
+
+
+/* ---------------------------------------------------------------------
+   0c. SHARED HELPERS — virtual stage, Q→A banner, stick figures,
+       cat, cups, particles (all line diagrams, all animated)
+   --------------------------------------------------------------------- */
+function rng(seed){ let s=(seed>>>0)||1; return ()=>{ s=(Math.imul(s,1664525)+1013904223)>>>0; return s/4294967296; }; }
+function smooth01(a,b,x){ const t=clamp((x-a)/(b-a),0,1); return t*t*(3-2*t); }
+function angDiff(a,b){ return Math.atan2(Math.sin(a-b),Math.cos(a-b)); }
+function ease(x){ x=clamp(x,0,1); return x<0.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2; }
+function spr(x){ return {x:x||0,v:0}; }
+function fitFont(ctx,txt,maxW,size,weight){
+  let s=size; ctx.font=weight+' '+s+'px Poppins, sans-serif';
+  while(s>9 && ctx.measureText(txt).width>maxW){ s-=0.5; ctx.font=weight+' '+s+'px Poppins, sans-serif'; }
+  return s;
+}
+/* every scene draws on an 800 × 470 virtual stage, fitted into the canvas */
+const VW=800, VH=520, BANNER=46;
+function stage(ctx,w,h){
+  const s=Math.min(w/VW,(h-BANNER-6)/VH), ox=(w-VW*s)/2, oy=BANNER+Math.max(0,(h-BANNER-VH*s)/2);
+  ctx.translate(ox,oy); ctx.scale(s,s); return s;
+}
+/* stick figure — feet on (x,y), height s. angles from straight-down, + = toward +x */
+function stick(ctx,x,y,s,o){
+  o=o||{}; const c=o.col||COL.ink, W=o.lw||Math.max(2,s*0.02);
+  const th=0.25*s, sh=0.25*s, ua=0.17*s, fa=0.16*s;
+  const LL=o.legL||[-0.12,-0.02], LR=o.legR||[0.12,0.02];
+  const drop=Math.max(Math.cos(LL[0])*th+Math.cos(LL[1])*sh, Math.cos(LR[0])*th+Math.cos(LR[1])*sh);
+  const hip=[x+(o.dx||0), y-drop];
+  const lean=o.lean||0;
+  const neck=[hip[0]+Math.sin(lean)*0.34*s, hip[1]-Math.cos(lean)*0.34*s];
+  const hd=[neck[0]+Math.sin(lean+(o.nod||0))*0.11*s, neck[1]-Math.cos(lean+(o.nod||0))*0.11*s];
+  ctx.save(); ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle=c; ctx.lineWidth=W;
+  const limb=(p,a,l1,l2)=>{ const k=[p[0]+Math.sin(a[0])*l1,p[1]+Math.cos(a[0])*l1], e=[k[0]+Math.sin(a[1])*l2,k[1]+Math.cos(a[1])*l2];
+    ctx.beginPath(); ctx.moveTo(p[0],p[1]); ctx.lineTo(k[0],k[1]); ctx.lineTo(e[0],e[1]); ctx.stroke(); return e; };
+  const fL=limb(hip,LL,th,sh), fR=limb(hip,LR,th,sh);
+  ctx.beginPath(); ctx.moveTo(hip[0],hip[1]); ctx.lineTo(neck[0],neck[1]); ctx.stroke();
+  const sho=[lerp(hip[0],neck[0],0.92),lerp(hip[1],neck[1],0.92)];
+  const hL=limb(sho,o.armL||[-0.25,-0.1],ua,fa), hR=limb(sho,o.armR||[0.25,0.1],ua,fa);
+  ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(hd[0],hd[1],0.075*s,0,Math.PI*2); ctx.fill(); ctx.stroke();
+  const f=o.face===undefined?1:o.face;
+  if(f){ const ex=hd[0]+f*0.025*s, ey=hd[1]-0.012*s;
+    ctx.fillStyle=c; ctx.beginPath(); ctx.arc(ex,ey,Math.max(1.2,s*0.008),0,7); ctx.arc(ex+f*0.03*s,ey,Math.max(1.2,s*0.008),0,7); ctx.fill();
+    ctx.lineWidth=Math.max(1.2,W*0.6); ctx.beginPath();
+    const my=hd[1]+0.03*s, mood=o.mood===undefined?1:o.mood;
+    ctx.moveTo(ex-0.005*s*f,my); ctx.quadraticCurveTo(ex+f*0.015*s,my+mood*0.02*s,ex+f*0.04*s,my); ctx.stroke(); }
+  ctx.restore();
+  return {hip,neck,head:hd,handL:hL,handR:hR,footL:fL,footR:fR};
+}
+/* simple particle list: gravity-driven drops / crumbs / splash */
+function parts(){ return []; }
+function stepParts(P,dt,g,floorY,bounce){
+  for(const p of P){ p.vy+=(p.g===undefined?g:p.g)*dt; p.x+=p.vx*dt; p.y+=p.vy*dt; p.life-=dt;
+    if(floorY!==undefined && p.y>floorY){ if(bounce){ p.y=floorY; p.vy*=-bounce; p.vx*=0.7; } else p.life=0; } }
+  for(let i=P.length-1;i>=0;i--) if(P[i].life<=0) P.splice(i,1);
+}
+function splash(P,x,y,n,col,sp){ for(let i=0;i<n;i++){ const a=-Math.PI*(0.15+0.7*Math.random()); const v=(sp||120)*(0.5+Math.random()); P.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,life:0.5+Math.random()*0.4,r:1.5+Math.random()*2,c:col}); } }
+function drawParts(ctx,P,col){ ctx.save(); for(const p of P){ ctx.globalAlpha=clamp(p.life*2,0,1); ctx.fillStyle=p.c||col; ctx.beginPath(); ctx.arc(p.x,p.y,p.r||2.5,0,7); ctx.fill(); } ctx.restore(); }
+/* speech bubble */
+function bubble(ctx,x,y,txt,col,size,alpha){
+  if(alpha!==undefined && alpha<=0.01) return;
+  ctx.save(); if(alpha!==undefined) ctx.globalAlpha=clamp(alpha,0,1);
+  ctx.font='700 '+(size||15)+'px Poppins, sans-serif'; const tw=ctx.measureText(txt).width, hh=(size||15)*1.9;
+  rrect(ctx,x-tw/2-12,y-hh,tw+24,hh,hh/2); ctx.fillStyle='#fff'; ctx.fill(); ctx.lineWidth=2; ctx.strokeStyle=col; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x-6,y-1); ctx.lineTo(x,y+9); ctx.lineTo(x+6,y-1); ctx.fillStyle='#fff'; ctx.fill();
+  ctx.beginPath(); ctx.moveTo(x-6,y); ctx.lineTo(x,y+9); ctx.lineTo(x+6,y); ctx.stroke();
+  textAt(ctx,txt,x,y-hh*0.33,{align:'center',size:size||15,weight:700,color:col}); ctx.restore();
+}
+function ground(ctx,x0,x1,y){ line(ctx,x0,y,x1,y,COL.ink,2); ctx.save(); ctx.strokeStyle='#c2d1e5'; ctx.lineWidth=1.2; ctx.beginPath(); for(let x=x0+6;x<x1;x+=16){ ctx.moveTo(x,y+2); ctx.lineTo(x-8,y+10); } ctx.stroke(); ctx.restore(); }
+function tableTop(ctx,x0,x1,y,legs){ ctx.save(); ctx.lineWidth=2.2; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; rrect(ctx,x0,y,x1-x0,12,3); ctx.fill(); ctx.stroke();
+  if(legs){ line(ctx,x0+22,y+12,x0+22,y+legs,COL.ink,2.4); line(ctx,x1-22,y+12,x1-22,y+legs,COL.ink,2.4); } ctx.restore(); }
+function meterV(ctx,x,y,w,h,frac,col,label){ // vertical bar meter, y = top
+  ctx.save(); rrect(ctx,x,y,w,h,5); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=1.6; ctx.stroke();
+  const f=clamp(frac,0,1); ctx.save(); rrect(ctx,x,y,w,h,5); ctx.clip(); ctx.fillStyle=col; ctx.globalAlpha=0.85; ctx.fillRect(x,y+h*(1-f),w,h*f); ctx.restore();
+  if(label) textAt(ctx,label,x+w/2,y+h+16,{align:'center',size:12,weight:700,color:col});
+  ctx.restore();
+}
+/* line-drawn cup/mug; (cx,by) = bottom centre */
+function mug(ctx,cx,by,wTop,wBot,hgt,level,fill,t){
+  ctx.save(); ctx.lineJoin='round';
+  const yT=by-hgt;
+  if(level>0){ const ly=by-hgt*clamp(level,0,1), f=(by-ly)/hgt, wl=lerp(wBot,wTop,f);
+    ctx.beginPath(); ctx.moveTo(cx-wBot/2+3,by-3); ctx.lineTo(cx-wl/2+3,ly); ctx.lineTo(cx+wl/2-3,ly); ctx.lineTo(cx+wBot/2-3,by-3); ctx.closePath(); ctx.fillStyle=fill; ctx.fill();
+    ctx.beginPath(); ctx.ellipse(cx,ly,wl/2-3,5,0,0,7); ctx.strokeStyle='rgba(19,42,68,0.35)'; ctx.lineWidth=1.2; ctx.stroke(); }
+  ctx.strokeStyle=COL.ink; ctx.lineWidth=2.6;
+  ctx.beginPath(); ctx.moveTo(cx-wTop/2,yT); ctx.lineTo(cx-wBot/2,by); ctx.lineTo(cx+wBot/2,by); ctx.lineTo(cx+wTop/2,yT); ctx.stroke();
+  ctx.beginPath(); ctx.ellipse(cx,yT,wTop/2,7,0,0,7); ctx.stroke();
+  const hx=cx+lerp(wBot,wTop,0.55)/2;
+  ctx.beginPath(); ctx.moveTo(hx-2,yT+hgt*0.2); ctx.bezierCurveTo(hx+46,yT+hgt*0.12,hx+46,yT+hgt*0.72,hx-6,yT+hgt*0.74); ctx.stroke();
+  ctx.restore();
+}
+function steam(ctx,cx,y,wid,inten,t){
+  if(inten<=0.02) return;
+  ctx.save(); ctx.strokeStyle=COL.mid; ctx.lineWidth=2; ctx.lineCap='round';
+  for(let i=0;i<3;i++){ const x0=cx+(i-1)*wid*0.28, ph=(t*0.7+i*0.33)%1; ctx.globalAlpha=clamp(inten,0,1)*(1-ph)*0.9;
+    ctx.beginPath(); for(let k=0;k<=12;k++){ const yy=y-ph*30-k*6, xx=x0+Math.sin(k*0.6+t*3+i)*6; if(k) ctx.lineTo(xx,yy); else ctx.moveTo(xx,yy); } ctx.stroke(); }
+  ctx.restore();
+}
+/* thermometer with a scale, value in °C; (x,top,bot) */
+function thermoScale(ctx,x,top,bot,T,T0,T1,marks,safe){
+  const f=(T-T0)/(T1-T0);
+  if(safe!==undefined){ const ys=bot-(bot-top-5)*(safe-T0)/(T1-T0); line(ctx,x-18,ys,x+26,ys,COL.green,2,[5,3]); }
+  thermo(ctx,x,top,bot,f,COL.ink,COL.red);
+  marks.forEach(m=>{ const yy=bot-(bot-top-5)*(m-T0)/(T1-T0); textAt(ctx,m+'°',x+13,yy+4,{size:11,weight:600,color:COL.muted}); });
+}
+/* tiny x–y chart; pts = [[x,y],...] in data coords */
+function miniChart(ctx,x,y,w,h,xr,yr,series,o){
+  o=o||{}; ctx.save(); rrect(ctx,x,y,w,h,8); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle='#dbe4f0'; ctx.lineWidth=1.2; ctx.stroke();
+  const px=v=>x+34+(w-44)*(v-xr[0])/(xr[1]-xr[0]), py=v=>y+h-24-(h-36)*(v-yr[0])/(yr[1]-yr[0]);
+  line(ctx,px(xr[0]),py(yr[0]),px(xr[1]),py(yr[0]),COL.mid,1.2); line(ctx,px(xr[0]),py(yr[0]),px(xr[0]),py(yr[1]),COL.mid,1.2);
+  if(o.band){ ctx.fillStyle='rgba(31,157,85,0.1)'; const a=py(o.band[1]), b=py(o.band[0]); ctx.fillRect(px(xr[0]),a,px(xr[1])-px(xr[0]),b-a); }
+  (o.yt||[]).forEach(v=>textAt(ctx,String(v),px(xr[0])-5,py(v)+4,{align:'right',size:10,color:COL.muted}));
+  (o.xt||[]).forEach(v=>textAt(ctx,String(v),px(v),py(yr[0])+14,{align:'center',size:10,color:COL.muted}));
+  if(o.xl) textAt(ctx,o.xl,px(xr[1]),py(yr[0])+14,{align:'right',size:10,weight:600,color:COL.muted});
+  if(o.yl) textAt(ctx,o.yl,x+8,y+14,{size:10,weight:600,color:COL.muted});
+  series.forEach(s=>{ if(s.pts.length<2) return; ctx.strokeStyle=s.col; ctx.lineWidth=s.lw||2.2; if(s.dash) ctx.setLineDash(s.dash); else ctx.setLineDash([]);
+    ctx.beginPath(); s.pts.forEach((p,i)=>{ const X=px(clamp(p[0],xr[0],xr[1])), Y=py(clamp(p[1],yr[0],yr[1])); if(i) ctx.lineTo(X,Y); else ctx.moveTo(X,Y); }); ctx.stroke(); });
+  ctx.setLineDash([]); ctx.restore(); return {px,py};
+}
+
+
+/* ---------------------------------------------------------------------
+   SHARED ACTIVITY SHELL
+   scene = { q, html, cards, tail, wire($), tick(dt,ctx,t,$), found(), fb() }
+   q is the textbook's question; found() returns the answer once the
+   scene has actually produced it — it then springs into the banner.
+   --------------------------------------------------------------------- */
+function card(id,l,col){ return `<div class="rcard"><div class="rlabel">${l}</div><div class="rval" id="${id}"${col?` style="color:${col}"`:''}>—</div></div>`; }
+function setv($,id,v){ const e=$('#'+id); if(e&&e.textContent!==v) e.textContent=v; }
+function setFb($,f){ const e=$('#fb'); if(!e) return; const c=f?'fb '+f[0]:'fb hidden', tx=f?f[1]:''; if(e.className!==c) e.className=c; if(e.textContent!==tx) e.textContent=tx; }
+function optList(id,opts){ return `<div id="${id}">${opts.map((o,i)=>`<button class="opt-btn" data-i="${i}">${o}</button>`).join('')}</div>`; }
+function wireOpts(wrap,id,cb){ const bs=[...wrap.querySelectorAll('#'+id+' .opt-btn')]; bs.forEach(b=>b.onclick=()=>{ if(b.disabled) return; bs.forEach(x=>x.classList.toggle('active',x===b)); cb(+b.dataset.i); }); return bs; }
+function chipList(id,opts,act){ return `<div class="chip-wrap" id="${id}">${opts.map((o,i)=>`<button class="chip-btn${i===act?' active':''}" data-i="${i}">${o}</button>`).join('')}</div>`; }
+function wireChips(wrap,id,cb){ const bs=[...wrap.querySelectorAll('#'+id+' .chip-btn')]; bs.forEach(b=>b.onclick=()=>{ if(b.disabled) return; bs.forEach(x=>x.classList.toggle('active',x===b)); cb(+b.dataset.i); }); return bs; }
+function setActive(bs,i){ bs.forEach((b,k)=>b.classList.toggle('active',k===i)); }
+function slider(id,label,min,max,step,val){ return `<div class="control-group"><label>${label} <span class="val" id="${id}V"></span></label><input type="range" id="${id}" min="${min}" max="${max}" step="${step}" value="${val}"></div>`; }
+function logTable(id,heads){ return `<table class="log"><thead><tr>${heads.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody id="${id}"></tbody></table>`; }
+/* rows: [[cell | {t,c}] ...]; only rewritten when it changes */
+function setLog($,id,rows){
+  const e=$('#'+id); if(!e) return;
+  const html=rows.map(r=>'<tr>'+r.map(c=>typeof c==='object'?`<td class="${c.c||''}">${c.t}</td>`:`<td>${c}</td>`).join('')+'</tr>').join('');
+  if(e._h!==html){ e._h=html; e.innerHTML=html; }
+}
+function foundBanner(ctx,w,q,ans,pop,t){
+  ctx.save();
+  ctx.fillStyle='#f6f9fc'; ctx.fillRect(0,0,w,BANNER-2); line(ctx,0,BANNER-2,w,BANNER-2,'#dbe4f0',1);
+  const p=clamp(pop.x,0,1.25), got=!!ans;
+  const r=12*(got?0.8+0.2*p:1), cx=24, cy=BANNER/2-1;
+  circ(ctx,cx,cy,r,got?COL.green:COL.mid,got?COL.green:'#fff',1.8);
+  textAt(ctx,got?'✓':'?',cx,cy+5,{align:'center',size:13,weight:700,color:got?'#fff':COL.mid});
+  const txt=got?ans:q, mw=w-60; const s=fitFont(ctx,txt,mw,14.5,got?700:600);
+  ctx.globalAlpha=got?clamp(0.3+0.7*p,0,1):1;
+  textAt(ctx,txt,44,cy+5,{size:s,weight:got?700:600,color:got?'#1f6b3d':COL.muted});
+  ctx.restore();
+}
+function buildScene(factory){
+  const wrap=labShell(), S=factory(wrap);
+  wrap.querySelector('.lab-side').innerHTML = S.html+`
+    <div class="control-group"><div class="result-cards">${S.cards||''}</div><div class="fb hidden" id="fb"></div></div>`+(S.tail||'');
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), pop=spr(0);
+  S.wire($);
+  let t=0, lastAns='';
+  animLoop(dt=>{
+    t+=dt;
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    ctx.save(); ctx.beginPath(); ctx.rect(0,BANNER,w,h-BANNER); ctx.clip(); stage(ctx,w,h); S.tick(dt,ctx,t,$); ctx.restore();
+    const ans=S.found?S.found()||'':'';
+    if(ans!==lastAns){ lastAns=ans; pop.x=0; pop.v=0; }
+    springTo(pop,ans?1:0,170,11,dt);
+    foundBanner(ctx,w,S.q||'',ans,pop,t);
+    setFb($,S.fb?S.fb():null);
+  });
+  return wrap;
+}
+/* scene backdrop helpers */
+function sky(ctx,y1,top,bot){ const g=ctx.createLinearGradient(0,0,0,y1); g.addColorStop(0,top||'#e3f1fd'); g.addColorStop(1,bot||'#f7fbff'); ctx.fillStyle=g; ctx.fillRect(-400,-200,1600,y1+200); }
+function soilBand(ctx,x0,x1,y,h,col){ ctx.save(); ctx.fillStyle=col||'#f4ead8'; ctx.fillRect(x0,y,x1-x0,h); ctx.restore(); ground(ctx,x0,x1,y); }
+function cloud(ctx,x,y,s,col){ ctx.save(); ctx.strokeStyle=col||'#c2d1e5'; ctx.fillStyle='#fff'; ctx.lineWidth=2; ctx.beginPath();
+  ctx.arc(x,y,s*0.5,Math.PI*0.5,Math.PI*1.5); ctx.arc(x+s*0.55,y-s*0.35,s*0.6,Math.PI,Math.PI*1.95); ctx.arc(x+s*1.2,y,s*0.5,Math.PI*1.5,Math.PI*0.5); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore(); }
+function sunIcon(ctx,x,y,r,t){ circ(ctx,x,y,r,COL.yellow,'#fff6d6',2.4); for(let k=0;k<10;k++){ const a=k/10*6.283+t*0.2; line(ctx,x+Math.cos(a)*(r+5),y+Math.sin(a)*(r+5),x+Math.cos(a)*(r+13),y+Math.sin(a)*(r+13),COL.yellow,2); } }
+/* magnifier lens: draws contents via fn() clipped into a circle */
+function lens(ctx,cx,cy,r,fn,col,label){
+  ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,r,0,7); ctx.fillStyle='#fff'; ctx.fill(); ctx.clip(); fn(); ctx.restore();
+  circ(ctx,cx,cy,r,col||COL.ink,null,3); const a=0.78; line(ctx,cx+Math.cos(a)*r,cy+Math.sin(a)*r,cx+Math.cos(a)*(r+30),cy+Math.sin(a)*(r+30),col||COL.ink,7);
+  if(label) textAt(ctx,label,cx,cy-r-8,{align:'center',size:12,weight:700,color:col||COL.ink});
+}
+
+/* ---------------------------------------------------------------------
+   0d. CHAPTER-7 KIT — thermometers (lab, digital), beaker, burner,
+       bubbles, ice, side-view head, arms + hands, hops, sounds
+   --------------------------------------------------------------------- */
+function rgba(h,a){ const c=h[0]==='#'?hexRgb(h):h.match(/[\d.]+/g).map(Number); return 'rgba('+c[0]+','+c[1]+','+c[2]+','+a+')'; }
+function glow(ctx,x,y,r,col,a){ const g=ctx.createRadialGradient(x,y,0,x,y,r); g.addColorStop(0,rgba(col,a)); g.addColorStop(1,rgba(col,0)); ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,y,r,0,7); ctx.fill(); }
+const T_RAMP=[[-10,'#2f8fe0'],[15,'#5aa6e6'],[28,'#8195ab'],[45,'#d9a017'],[100,'#d9432b']];
+function tempCol(T){ return rampCol(T_RAMP,T); }
+function tag(ctx,txt,x,y,col,o){ o=o||{}; const s=o.size||12; ctx.save(); ctx.font='700 '+s+'px Poppins, sans-serif'; const w=ctx.measureText(txt).width+12;
+  rrect(ctx,x-w/2,y-s*0.95,w,s*1.5,5); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=col; ctx.lineWidth=1.5; ctx.stroke();
+  textAt(ctx,txt,x,y+s*0.12,{align:'center',size:s,weight:700,color:col}); ctx.restore(); }
+function fmtT(T,d){ d=d===undefined?1:d; if(Math.abs(T)<0.5*Math.pow(10,-d)) T=0; return (T<0?'−':'')+Math.abs(T).toFixed(d===undefined?1:d)+' °C'; }
+
+/* Vertical liquid-in-glass thermometer. (x, top) = top of the tube, bot = top of
+   the bulb. Scale lo…hi sits between bot−pad and top+pad. Returns yOf(T).
+   o: lo, hi, minor, major, w, bulbL, bulbR, pad, fs, labels, liq, ticks(false),
+   chamber (expansion bulge at top), crack 0..1, hl:[v0,v1] highlight band */
+function thermoV(ctx,x,top,bot,T,o){
+  o=o||{}; const lo=o.lo===undefined?-10:o.lo, hi=o.hi===undefined?110:o.hi, minor=o.minor||1, major=o.major||10;
+  const w=o.w||16, bL=o.bulbL||30, bR=o.bulbR||7, pad=o.pad===undefined?14:o.pad, liq=o.liq||COL.red;
+  const ppd=(bot-top-2*pad)/(hi-lo), yOf=v=>bot-pad-(v-lo)*ppd;
+  ctx.save(); ctx.lineJoin='round';
+  /* glass */
+  ctx.fillStyle='#fff'; ctx.strokeStyle=COL.ink; ctx.lineWidth=o.lw||2;
+  rrect(ctx,x-w/2,top,w,bot-top+3,w/2); ctx.fill(); ctx.stroke();
+  if(o.hl){ ctx.fillStyle=rgba(COL.yellow,0.18); const a=yOf(o.hl[1]), b=yOf(o.hl[0]); ctx.fillRect(x-w/2-2,a,w+4+(o.labels===false?0:34),b-a); }
+  /* liquid column: below lo it retreats into the bulb, above hi it fills the tube */
+  const yc=clamp(yOf(T),top+5,bot+bL*0.6);
+  ctx.fillStyle=liq; ctx.fillRect(x-1.9*(o.cw||1),yc,3.8*(o.cw||1),bot+4-yc);
+  if(o.chamber && yc<=top+6){ ctx.beginPath(); ctx.arc(x,top+5,w*0.3,0,7); ctx.fill(); }
+  /* bulb */
+  rrect(ctx,x-bR,bot,2*bR,bL,bR); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.stroke();
+  rrect(ctx,x-bR+2.6,bot+2.6,2*bR-5.2,bL-5.2,bR-2.6); ctx.fillStyle=liq; ctx.fill();
+  /* scale */
+  if(o.ticks!==false){
+    const n=Math.round((hi-lo)/minor), dense=ppd*minor<2.4;
+    ctx.strokeStyle=COL.ink; ctx.lineWidth=o.tw||1.1;
+    for(let i=0;i<=n;i++){ const v=lo+i*minor, y=yOf(v);
+      if(o.clip && (y<o.clip[0]-20||y>o.clip[1]+20)) continue;
+      const big=Math.abs(v/major-Math.round(v/major))<1e-6, mid=!big&&Math.abs(v/(major/2)-Math.round(v/(major/2)))<1e-6;
+      if(dense&&!big&&!mid) continue;
+      const L=big?(o.bigL||12):mid?(o.midL||8):(o.minL||5);
+      ctx.beginPath(); ctx.moveTo(x+w/2-3,y); ctx.lineTo(x+w/2+L-3,y); ctx.stroke();
+      if(big&&o.labels!==false) textAt(ctx,(v<-1e-9?'−':'')+fmt(Math.abs(v),2),x+w/2+L+2,y+(o.fs||11)*0.36,{size:o.fs||11,weight:600,color:COL.muted}); }
+    if(o.unit!==false) textAt(ctx,'°C',x+w/2+4,top+pad*0.5,{size:(o.fs||11),weight:700,color:COL.muted});
+  }
+  if(o.crack>0){ ctx.strokeStyle=COL.red; ctx.lineWidth=1.6; ctx.globalAlpha=clamp(o.crack,0,1);
+    ctx.beginPath(); ctx.moveTo(x-w/2,top+22); ctx.lineTo(x-2,top+30); ctx.lineTo(x+3,top+24); ctx.lineTo(x+w/2,top+34); ctx.moveTo(x-2,top+30); ctx.lineTo(x-4,top+42); ctx.stroke(); }
+  ctx.restore();
+  return {yOf,ppd,yc,bulb:[x,bot+bL/2]};
+}
+
+/* Digital clinical thermometer: tip at (x,y), body runs along angle ang
+   (0 = to the right). s = length in px. txt = display text. */
+function digiThermo(ctx,x,y,ang,s,txt,o){
+  o=o||{}; const k=s/220;
+  ctx.save(); ctx.translate(x,y); ctx.rotate(ang); ctx.scale(k,k); ctx.lineJoin='round'; ctx.lineCap='round';
+  ctx.lineWidth=2.4/k*0.9; ctx.strokeStyle=COL.ink;
+  /* metal sensor tip + probe */
+  ctx.fillStyle='#eef2f8'; rrect(ctx,0,-5,46,10,5); ctx.fill(); ctx.stroke();
+  /* body */
+  ctx.fillStyle='#fff'; ctx.beginPath(); ctx.moveTo(44,-7); ctx.lineTo(96,-16); ctx.lineTo(206,-20); ctx.quadraticCurveTo(222,-20,222,0); ctx.quadraticCurveTo(222,20,206,20); ctx.lineTo(96,16); ctx.lineTo(44,7); ctx.closePath(); ctx.fill(); ctx.stroke();
+  /* display window */
+  const lit=o.lit===undefined?1:o.lit;
+  ctx.fillStyle=o.flash?'#d8f5e3':'#eef6ee'; rrect(ctx,104,-12,72,24,4); ctx.fill(); ctx.stroke();
+  /* button */
+  ctx.fillStyle=o.press?COL.yellow:'#fff'; ctx.beginPath(); ctx.arc(196,0,7*(o.press?0.85:1),0,7); ctx.fill(); ctx.stroke();
+  ctx.restore();
+  /* text drawn upright-ish: keep it readable when the thermometer is rotated */
+  if(txt && lit>0.05){ ctx.save(); ctx.translate(x,y); ctx.rotate(ang); ctx.scale(k,k); ctx.translate(140,0);
+    if(Math.cos(ang)<0) ctx.rotate(Math.PI);
+    ctx.globalAlpha=lit; textAt(ctx,txt,0,6,{align:'center',size:15,weight:700,color:o.col||COL.green}); ctx.restore(); }
+  if(o.flash){ ctx.save(); const c=[x+Math.cos(ang)*140*k,y+Math.sin(ang)*140*k]; ctx.globalAlpha=0.6*o.flash; circ(ctx,c[0],c[1],50*k+24*(1-o.flash),COL.green,null,2); ctx.restore(); }
+}
+
+/* Straight-walled beaker (cx, top, bot, w). Returns the inner box. */
+function beakerDraw(ctx,cx,top,bot,w,o){ o=o||{}; const x0=cx-w/2, x1=cx+w/2;
+  ctx.save(); ctx.lineJoin='round'; ctx.lineWidth=3; ctx.strokeStyle=COL.ink;
+  ctx.beginPath(); ctx.moveTo(x0-8,top-4); ctx.lineTo(x0,top+8); ctx.lineTo(x0,bot-10); ctx.quadraticCurveTo(x0,bot,x0+10,bot); ctx.lineTo(x1-10,bot); ctx.quadraticCurveTo(x1,bot,x1,bot-10); ctx.lineTo(x1,top); ctx.lineTo(x1+4,top-4); ctx.stroke();
+  if(o.grad){ for(let i=1;i<=o.grad;i++){ const y=bot-(bot-top)*i/(o.grad+1); line(ctx,x0+6,y,x0+(i%2?14:22),y,COL.mid,1.3); } }
+  ctx.restore(); return {x0,x1,top,bot};
+}
+/* water inside a beaker with a slightly wavy surface */
+function beakerWater(ctx,b,ly,col,t,amp){ amp=amp||0; ctx.save();
+  ctx.beginPath(); ctx.moveTo(b.x0+1.5,ly); for(let x=b.x0+1.5;x<=b.x1-1.5;x+=6) ctx.lineTo(x,ly+Math.sin(x*0.07+t*5)*amp);
+  ctx.lineTo(b.x1-1.5,b.bot-8); ctx.quadraticCurveTo(b.x1-1.5,b.bot-1.5,b.x1-10,b.bot-1.5); ctx.lineTo(b.x0+10,b.bot-1.5); ctx.quadraticCurveTo(b.x0+1.5,b.bot-1.5,b.x0+1.5,b.bot-8); ctx.closePath();
+  ctx.fillStyle=rgba(col,0.18); ctx.fill();
+  ctx.beginPath(); for(let x=b.x0+1.5;x<=b.x1-1.5;x+=6){ const yy=ly+Math.sin(x*0.07+t*5)*amp; x===b.x0+1.5?ctx.moveTo(x,yy):ctx.lineTo(x,yy); }
+  ctx.strokeStyle=col; ctx.lineWidth=2; ctx.stroke(); ctx.restore(); }
+
+/* Bunsen burner standing on y; inten 0..1 */
+function flameOne(ctx,x,y,w,h,t,col,inner){
+  if(h<1) return; const f=1+0.08*Math.sin(t*23)+0.05*Math.sin(t*37+1), sway=Math.sin(t*7.3)*w*0.12, H=h*f;
+  ctx.save(); ctx.lineJoin='round';
+  glow(ctx,x,y-H*0.45,H*0.9,col||COL.yellow,0.22);
+  ctx.beginPath(); ctx.moveTo(x-w/2,y); ctx.bezierCurveTo(x-w*0.62,y-H*0.45,x-w*0.1+sway,y-H*0.75,x+sway,y-H); ctx.bezierCurveTo(x+w*0.1+sway,y-H*0.75,x+w*0.62,y-H*0.45,x+w/2,y); ctx.quadraticCurveTo(x,y+w*0.3,x-w/2,y);
+  ctx.fillStyle=rgba(col||COL.yellow,0.18); ctx.fill(); ctx.strokeStyle=col||COL.yellow; ctx.lineWidth=2.4; ctx.stroke();
+  const ic=inner||COL.blue; ctx.beginPath(); ctx.moveTo(x-w*0.22,y); ctx.bezierCurveTo(x-w*0.28,y-H*0.25,x-w*0.05+sway*0.5,y-H*0.38,x+sway*0.5,y-H*0.46); ctx.bezierCurveTo(x+w*0.05+sway*0.5,y-H*0.38,x+w*0.28,y-H*0.25,x+w*0.22,y); ctx.closePath();
+  ctx.strokeStyle=ic; ctx.lineWidth=1.8; ctx.stroke(); ctx.restore();
+}
+function burnerDraw(ctx,x,y,inten,t){
+  ctx.save(); ctx.lineJoin='round'; ctx.lineWidth=2.4; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff';
+  ctx.beginPath(); ctx.moveTo(x-34,y); ctx.lineTo(x-26,y-12); ctx.lineTo(x+26,y-12); ctx.lineTo(x+34,y); ctx.closePath(); ctx.fill(); ctx.stroke();
+  rect(ctx,x-7,y-74,14,62,COL.ink,'#fff',2.4); rect(ctx,x-10,y-36,20,10,COL.ink,'#fff',2);
+  line(ctx,x+26,y-6,x+60,y-6,COL.ink,5); line(ctx,x+26,y-6,x+60,y-6,'#fff',2);
+  ctx.restore();
+  if(inten>0.02) flameOne(ctx,x,y-74,14+10*inten,20+44*inten,t,COL.yellow,COL.blue);
+}
+function tripod(ctx,cx,top,baseY,w){ ctx.save(); ctx.lineCap='round';
+  line(ctx,cx-w/2-6,top,cx+w/2+6,top,COL.ink,4);
+  line(ctx,cx-w/2,top,cx-w/2-22,baseY,COL.ink,3.4); line(ctx,cx+w/2,top,cx+w/2+22,baseY,COL.ink,3.4);
+  ctx.restore(); }
+function gauze(ctx,cx,y,w){ ctx.save(); rect(ctx,cx-w/2,y-3,w,6,COL.ink,'#fff',1.8); for(let x=cx-w/2+4;x<cx+w/2;x+=6) line(ctx,x,y-3,x+3,y+3,COL.mid,1); ctx.restore(); }
+/* retort stand with a clamp holding something at (cx, cy) */
+function standDraw(ctx,rodX,baseY,cx,cy){ ctx.save();
+  rect(ctx,rodX-40,baseY-8,80,8,COL.ink,'#fff',2.2); line(ctx,rodX,baseY-8,rodX,cy-60,COL.ink,4);
+  line(ctx,rodX,cy,cx,cy,COL.ink,3.4); rect(ctx,cx-8,cy-7,16,14,COL.ink,'#fff',2.2); circ(ctx,rodX,cy,5,COL.ink,'#fff',2);
+  ctx.restore(); }
+
+/* bubbles rising in a liquid */
+function bubAdd(B,x,y,r){ B.push({x,y,r:r||2+Math.random()*2.5,vx:0,ph:Math.random()*6}); }
+function bubStep(B,dt,surf){ for(const b of B){ b.r=Math.min(b.r+dt*2.2,7); b.y-=(40+b.r*16)*dt; b.ph+=dt*9; b.x+=Math.sin(b.ph)*0.5; }
+  for(let i=B.length-1;i>=0;i--) if(B[i].y<surf(B[i].x)) B.splice(i,1); }
+function bubDraw(ctx,B,col){ ctx.save(); ctx.strokeStyle=col||COL.blue; ctx.lineWidth=1.4; ctx.fillStyle='#fff'; for(const b of B){ ctx.beginPath(); ctx.arc(b.x,b.y,b.r,0,7); ctx.fill(); ctx.stroke(); } ctx.restore(); }
+
+/* a crushed-ice piece / ice cube, (x,y) centre, s size, a angle, m melt 0..1 */
+function iceDraw(ctx,x,y,s,a,m){ const k=1-0.75*clamp(m||0,0,1); if(k<0.28) return; s*=k;
+  ctx.save(); ctx.translate(x,y); ctx.rotate(a); rrect(ctx,-s/2,-s/2,s,s,s*0.22*(1+m)); ctx.fillStyle='#f3f9ff'; ctx.fill(); ctx.strokeStyle=COL.blue; ctx.lineWidth=1.8; ctx.stroke();
+  line(ctx,-s*0.25,-s*0.22,s*0.05,-s*0.3,'#a9cdf0',1.4); ctx.restore(); }
+
+/* side-view head facing right; (x,y) = head centre, s = head height.
+   o.mouth 0..1 opens the jaw, o.hair 0..3, o.grey, o.kid. Returns geometry. */
+function headPath(ctx,x,y,s,m,cont){ const P=(a,b)=>[x+a*s,y+b*s], jaw=m*0.07;
+  const p=[P(0.33,-0.30),P(0.38,-0.10),P(0.48,0.06),P(0.40,0.12),P(0.41,0.19),P(0.36,0.215),P(0.41,0.24+jaw),P(0.36,0.37+jaw),P(0.14,0.44+jaw*0.6),P(0.05,0.46)];
+  if(!cont) ctx.beginPath(); ctx.moveTo(x+0.05*s,y+0.46*s);
+  ctx.bezierCurveTo(x-0.30*s,y+0.42*s,x-0.46*s,y+0.05*s,x-0.38*s,y-0.22*s);
+  ctx.bezierCurveTo(x-0.30*s,y-0.52*s,x+0.20*s,y-0.56*s,p[0][0],p[0][1]);
+  ctx.quadraticCurveTo(p[1][0]+0.02*s,p[1][1]-0.1*s,p[1][0],p[1][1]); ctx.lineTo(p[2][0],p[2][1]); ctx.lineTo(p[3][0],p[3][1]);
+  ctx.quadraticCurveTo(p[4][0]+0.02*s,p[4][1]-0.03*s,p[4][0],p[4][1]); ctx.lineTo(p[5][0],p[5][1]); ctx.lineTo(p[6][0],p[6][1]);
+  ctx.quadraticCurveTo(p[7][0]+0.04*s,p[7][1],p[7][0],p[7][1]); ctx.quadraticCurveTo(p[8][0]+0.1*s,p[8][1],p[8][0],p[8][1]); ctx.lineTo(p[9][0],p[9][1]); ctx.closePath();
+  return {mouth:P(0.38,0.215+jaw*0.5), eye:P(0.25,-0.06), ear:P(-0.02,0.04)}; }
+function headSide(ctx,x,y,s,o){ o=o||{}; const m=clamp(o.mouth||0,0,1);
+  ctx.save(); ctx.lineJoin='round'; ctx.lineCap='round';
+  /* neck + shoulders */
+  ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.fillStyle='#fff';
+  ctx.beginPath(); ctx.moveTo(x-0.12*s,y+0.38*s); ctx.lineTo(x-0.14*s,y+0.62*s); ctx.quadraticCurveTo(x-0.55*s,y+0.68*s,x-0.62*s,y+0.95*s); ctx.lineTo(x+0.62*s,y+0.95*s); ctx.quadraticCurveTo(x+0.5*s,y+0.7*s,x+0.16*s,y+0.62*s); ctx.lineTo(x+0.14*s,y+0.42*s); ctx.closePath(); ctx.fill(); ctx.stroke();
+  if(m>0.05){ ctx.save(); ctx.beginPath(); ctx.moveTo(x+0.36*s,y+0.215*s); ctx.lineTo(x+0.42*s,y+0.19*s); ctx.lineTo(x+0.42*s,y+(0.24+m*0.07)*s); ctx.closePath(); ctx.fillStyle='#5b3040'; ctx.fill(); ctx.restore(); }
+  const g=headPath(ctx,x,y,s,m); ctx.fillStyle=o.flush?mixCol('#ffffff','#ffd9d0',o.flush):'#fff'; ctx.fill(); ctx.stroke();
+  /* hair */
+  const hc=o.grey?'#b9c3cf':COL.ink; ctx.strokeStyle=hc; ctx.lineWidth=2.6;
+  ctx.beginPath(); ctx.moveTo(x-0.40*s,y-0.02*s); ctx.bezierCurveTo(x-0.46*s,y-0.5*s,x+0.2*s,y-0.62*s,x+0.34*s,y-0.26*s);
+  if(o.hair===1){ ctx.moveTo(x-0.40*s,y-0.02*s); ctx.quadraticCurveTo(x-0.5*s,y+0.3*s,x-0.30*s,y+0.5*s); }
+  if(o.hair===2){ ctx.moveTo(x-0.40*s,y-0.1*s); ctx.quadraticCurveTo(x-0.66*s,y-0.1*s,x-0.58*s,y+0.2*s); }
+  ctx.stroke(); ctx.fillStyle=rgba(o.grey?'#b9c3cf':'#132a44',0.12); ctx.beginPath(); ctx.moveTo(x-0.40*s,y-0.02*s); ctx.bezierCurveTo(x-0.46*s,y-0.5*s,x+0.2*s,y-0.62*s,x+0.34*s,y-0.26*s); ctx.quadraticCurveTo(x,y-0.36*s,x-0.40*s,y-0.02*s); ctx.fill();
+  /* eye, brow, ear */
+  ctx.fillStyle=COL.ink; ctx.strokeStyle=COL.ink; ctx.lineWidth=2;
+  if(o.shut){ ctx.beginPath(); ctx.moveTo(g.eye[0]-0.035*s,g.eye[1]); ctx.quadraticCurveTo(g.eye[0],g.eye[1]+0.02*s,g.eye[0]+0.035*s,g.eye[1]); ctx.stroke(); }
+  else { ctx.beginPath(); ctx.arc(g.eye[0],g.eye[1],Math.max(2,0.022*s),0,7); ctx.fill(); }
+  ctx.beginPath(); ctx.moveTo(g.eye[0]-0.05*s,g.eye[1]-0.06*s); ctx.quadraticCurveTo(g.eye[0],g.eye[1]-0.09*s,g.eye[0]+0.06*s,g.eye[1]-0.06*s); ctx.stroke();
+  ctx.beginPath(); ctx.ellipse(g.ear[0],g.ear[1],0.05*s,0.08*s,0,0,7); ctx.stroke(); ctx.beginPath(); ctx.arc(g.ear[0]+0.01*s,g.ear[1],0.025*s,1.8,4.6); ctx.stroke();
+  if(o.sweat){ ctx.globalAlpha=clamp(o.sweat,0,1); ctx.fillStyle=COL.blue; ctx.beginPath(); ctx.ellipse(x+0.22*s,y-0.24*s,0.018*s,0.03*s,0,0,7); ctx.fill(); }
+  ctx.restore(); return g; }
+
+/* An arm hanging from the shoulder (sx,sy) to the wrist (wx,wy), elbow bends
+   outward (side = ±1), hand continues along the forearm. s = hand length. */
+function armTo(ctx,sx,sy,wx,wy,L1,L2,side,s,o){ o=o||{};
+  const dx=wx-sx, dy=wy-sy, d=clamp(Math.hypot(dx,dy),Math.abs(L1-L2)+1,L1+L2-0.5), a=Math.atan2(dy,dx);
+  const c=Math.acos(clamp((L1*L1+d*d-L2*L2)/(2*L1*d),-1,1)), ea=a+side*c;
+  const ex=sx+Math.cos(ea)*L1, ey=sy+Math.sin(ea)*L1, fa=Math.atan2(wy-ey,wx-ex);
+  ctx.save(); ctx.lineCap='round'; ctx.lineJoin='round';
+  ctx.strokeStyle=COL.ink; ctx.lineWidth=s*0.46; ctx.beginPath(); ctx.moveTo(sx,sy); ctx.lineTo(ex,ey); ctx.lineTo(wx,wy); ctx.stroke();
+  ctx.strokeStyle=o.skin||'#fff'; ctx.lineWidth=s*0.46-4.6; ctx.stroke();
+  if(o.sleeve){ ctx.strokeStyle=COL.ink; ctx.lineWidth=s*0.6; ctx.beginPath(); ctx.moveTo(sx,sy); ctx.lineTo(lerp(sx,ex,0.7),lerp(sy,ey,0.7)); ctx.stroke(); ctx.strokeStyle=o.sleeve; ctx.lineWidth=s*0.6-4.6; ctx.stroke(); }
+  ctx.restore();
+  handDown(ctx,wx,wy,fa-Math.PI/2,s,o); return {ex,ey,fa};
+}
+/* hand: wrist at (x,y), pointing along +y rotated by ang; s = length */
+function handDown(ctx,x,y,ang,s,o){ o=o||{}; ctx.save(); ctx.translate(x,y); ctx.rotate(ang); const k=s/100; ctx.scale(k,k);
+  ctx.lineJoin='round'; ctx.lineCap='round'; ctx.strokeStyle=COL.ink; ctx.fillStyle=o.skin||'#fff'; ctx.lineWidth=2.4/k;
+  ctx.beginPath(); ctx.moveTo(-20,0); ctx.lineTo(-23,46); ctx.quadraticCurveTo(-22,98,-8,100); ctx.lineTo(10,100); ctx.quadraticCurveTo(24,98,23,46); ctx.lineTo(20,0); ctx.closePath(); ctx.fill(); ctx.stroke();
+  ctx.lineWidth=1.6/k; for(let i=-1;i<=1;i++){ ctx.beginPath(); ctx.moveTo(i*9,62); ctx.lineTo(i*9,96); ctx.stroke(); }
+  ctx.lineWidth=2.4/k; ctx.beginPath(); ctx.moveTo(o.thumb||-23,22); ctx.quadraticCurveTo(-38*(o.flip||1),40,-30*(o.flip||1),62); ctx.stroke();
+  ctx.restore(); }
+
+/* a wavy arrow: heat leaving / arriving */
+function heatWave(ctx,x,y,len,ang,col,t,a,amp){ if(a<=0.02) return; amp=amp||4; ctx.save(); ctx.globalAlpha=clamp(a,0,1); ctx.translate(x,y); ctx.rotate(ang);
+  ctx.strokeStyle=col; ctx.lineWidth=2.2; ctx.lineCap='round'; ctx.beginPath();
+  for(let s=0;s<=len-6;s+=2){ const yy=Math.sin(s*0.35-t*9)*amp; s?ctx.lineTo(s,yy):ctx.moveTo(s,yy); } ctx.stroke(); arrowHead(ctx,len,0,0,col,7); ctx.restore(); }
+
+/* hop: projectile arc from (x,y) to target over time T (g in px/s²) */
+function hopNew(x,y){ return {x,y,x0:x,y0:y,x1:x,y1:y,t:1,T:1,vy0:0,g:2400,sq:spr(0)}; }
+function hopTo(h,x1,y1,delay){ h.x0=h.x;h.y0=h.y;h.x1=x1;h.y1=y1; const d=Math.hypot(x1-h.x,y1-h.y); h.T=0.42+d/1400; h.t=-(delay||0); h.vy0=(y1-h.y-0.5*h.g*h.T*h.T)/h.T; }
+function hopStep(h,dt){
+  if(h.t<h.T){ h.t+=dt; const t=clamp(h.t,0,h.T); h.x=lerp(h.x0,h.x1,t/h.T); h.y=h.y0+h.vy0*t+0.5*h.g*t*t; if(h.t>=h.T){ h.x=h.x1; h.y=h.y1; h.sq.v-=4.5; } }
+  springTo(h.sq,0,260,9,dt); return h.t>=0&&h.t<h.T;
+}
+/* a 2-D point that follows a queue of waypoints on springs (lift → carry → lower) */
+function mover(x,y){ return {x:spr(x),y:spr(y),q:[]}; }
+function moverGo(m,pts){ m.q=pts.slice(); }
+function moverStep(m,dt,k,c){ k=k||70; c=c||15; const tg=m.q[0]; if(!tg) return true;
+  springTo(m.x,tg[0],k,c,dt); springTo(m.y,tg[1],k,c,dt);
+  if(Math.hypot(m.x.x-tg[0],m.y.x-tg[1])<(m.q.length>1?10:0.6)&&(m.q.length>1||Math.hypot(m.x.v,m.y.v)<6)) m.q.shift();
+  return !m.q.length; }
+function eyeSide(ctx,x,y,s,flip){
+  ctx.save(); ctx.translate(x,y); ctx.scale((flip?-1:1)*s/40,s/40); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2*40/s; ctx.lineJoin='round';
+  ctx.beginPath(); ctx.moveTo(-34,0); ctx.quadraticCurveTo(-12,-24,8,0); ctx.quadraticCurveTo(-12,24,-34,0); ctx.fillStyle='#fff'; ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.ellipse(-2,0,6,10,0,0,7); ctx.fillStyle=COL.ink; ctx.fill();
+  ctx.beginPath(); ctx.moveTo(-36,-14); ctx.quadraticCurveTo(-14,-34,8,-12); ctx.stroke();
+  ctx.restore(); }
+/* clock face showing elapsed simulated time */
+function clockDraw(ctx,x,y,r,sec,lab){ circ(ctx,x,y,r,COL.ink,'#fff',2.2);
+  const m=sec/60; line(ctx,x,y,x+Math.sin(m/60*6.283)*r*0.5,y-Math.cos(m/60*6.283)*r*0.5,COL.ink,2.6); line(ctx,x,y,x+Math.sin(m*6.283)*r*0.8,y-Math.cos(m*6.283)*r*0.8,COL.ink,1.6);
+  for(let i=0;i<12;i++){ const a=i/12*6.283; line(ctx,x+Math.sin(a)*r*0.82,y-Math.cos(a)*r*0.82,x+Math.sin(a)*r*0.95,y-Math.cos(a)*r*0.95,COL.mid,1.2); }
+  if(lab) textAt(ctx,lab,x,y+r+15,{align:'center',size:12,weight:700,color:COL.muted}); }
+function mmss(s){ s=Math.max(0,Math.round(s)); return Math.floor(s/60)+' min '+String(s%60).padStart(2,'0')+' s'; }
+/* sounds */
+let _sfx=null; function sfxCtx(){ try{ if(!_sfx&&typeof AudioContext!=='undefined') _sfx=new AudioContext(); }catch(e){} return _sfx; }
+function beep(freq,dur,gain){ const a=sfxCtx(); if(!a) return; try{ const o=a.createOscillator(), g=a.createGain(); o.type='square'; o.frequency.value=freq||2800; g.gain.value=gain||0.03; o.connect(g); g.connect(a.destination); o.start(); o.stop(a.currentTime+(dur||0.12)); }catch(e){} }
+
+/* =====================================================================
+   7.1  LET US INVESTIGATE — can we trust touch?
+   Each hand's skin temperature follows Newton's law of cooling:
+     dTs/dt = (T_water − Ts)/25 s + (34 °C − Ts)/60 s   (blood keeps warming it)
+   After 1–2 min in A (45 °C) the right hand's skin sits near 42 °C; in C
+   (6 °C) the left hand's skin drops to ≈15 °C. What we FEEL is the heat
+   flow, ∝ (T_water − Ts): in B (28 °C) heat leaves the right hand (feels
+   cool) and enters the left hand (feels warm) — same water, two answers.
+   Time runs 10× fast (6 s on screen = 1 min).
+   ===================================================================== */
+function buildA1(){ return buildScene(wrap=>{
+  const S={q:'Right hand in warm A, left in ice-cold C… then both in tap water B. What will each hand feel?'};
+  const BX=[150,400,650], WL=362, TOP=330, BOT=468, TW=200, BW=158, SPEED=10;
+  const TW_={A:45,B:28,C:6}; let showTh=false, predR=-1, predL=-1, phase='air', soak=0, inB=0, obs=null, ripples=[], best=null;
+  const hands=[{n:'Right hand',sh:[176,-40],rest:[180,190],side:-1,Ts:33,in:-1,m:null,F:0},{n:'Left hand',sh:[624,-40],rest:[620,190],side:1,Ts:33,in:-1,m:null,F:0}];
+  hands.forEach(h=>h.m=mover(h.rest[0],h.rest[1]));
+  const ice=[0,1,2,3,4].map(i=>({x:BX[2]-62+i*30,dx:spr(0),a:i*0.7,ph:i*1.3}));
+  const T=i=>[TW_.A,TW_.B,TW_.C][i];
+  const feel=F=>F>16?['feels HOT',COL.red]:F>2.5?['feels warm',COL.red]:F<-16?['feels COLD',COL.blue]:F<-2.5?['feels cool',COL.blue]:['feels neither',COL.muted];
+  const word=F=>F>2.5?'warm':F<-2.5?'cool':'same';
+  S.html=`
+    <div class="control-group"><label>Predict — right hand (from A) in B feels…</label>${chipList('pR',['Warm','Cool','No change'],-1)}
+      <label style="margin-top:8px">Left hand (from C) in B feels…</label>${chipList('pL',['Warm','Cool','No change'],-1)}</div>
+    <div class="control-group"><label>Do it</label>
+      <button class="toggle-btn navy" id="b1">① Right hand → A, left hand → C</button>
+      <button class="toggle-btn navy" id="b2" disabled>② Both hands → B</button>
+      <button class="toggle-btn" id="b3" style="width:100%;margin-top:6px">Take hands out</button></div>
+    ${slider('sA','A · warm water',35,50,1,45)}${slider('sB','B · tap water',20,34,1,28)}${slider('sC','C · ice-cold water',2,15,1,6)}
+    <div class="control-group"><label>Thermometers in the water</label>${chipList('th',['Hide','Show'],0)}</div>`;
+  S.cards=card('cR','Right hand',COL.red)+card('cL','Left hand',COL.blue)+card('cS','Time in A and C')+card('cB','Water B really is',COL.green);
+  let $g;
+  const go=(h,i)=>{ const x=BX[i]+(i===1?(h===hands[0]?-50:50):0), cur=[h.m.x.x,h.m.y.x];
+    moverGo(h.m,[[cur[0],Math.min(cur[1],205)],[x,205],[x,WL-18]]); };
+  S.wire=$=>{ $g=$;
+    wireChips(wrap,'pR',i=>predR=i); wireChips(wrap,'pL',i=>predL=i);
+    wireChips(wrap,'th',i=>showTh=!!i);
+    $('#b1').onclick=()=>{ go(hands[0],0); go(hands[1],2); phase='AC'; soak=0; inB=0; obs=null; };
+    $('#b2').onclick=()=>{ go(hands[0],1); go(hands[1],1); phase='B'; inB=0; obs=null; best=null; };
+    $('#b3').onclick=()=>{ hands.forEach(h=>{ const c=[h.m.x.x,h.m.y.x]; moverGo(h.m,[[c[0],205],h.rest]); }); phase='air'; };
+    for(const [id,k] of [['sA','A'],['sB','B'],['sC','C']]){ const f=()=>{ TW_[k]=+$('#'+id).value; $('#'+id+'V').textContent=TW_[k]+' °C'; }; $('#'+id).oninput=f; f(); }
+  };
+  S.tick=(dt,ctx,t,$)=>{
+    const sdt=dt*SPEED;
+    /* table + basins (back) */
+    tableTop(ctx,20,780,BOT,0);
+    for(let i=0;i<3;i++){ const x=BX[i];
+      ctx.save(); ctx.beginPath(); ctx.moveTo(x-TW/2,TOP); ctx.lineTo(x-BW/2,BOT); ctx.lineTo(x+BW/2,BOT); ctx.lineTo(x+TW/2,TOP); ctx.closePath(); ctx.fillStyle='#fff'; ctx.fill(); ctx.restore();
+      steam(ctx,x,TOP-6,TW*0.5,(T(i)-36)/12,t+i);
+      if(i===2){ /* cold mist sinking over C */ ctx.save(); ctx.strokeStyle=rgba(COL.blue,0.35*clamp((14-T(2))/10,0,1)); ctx.lineWidth=1.6; for(let k=0;k<3;k++){ const ph=(t*0.3+k/3)%1, y=TOP-22+ph*18; ctx.beginPath(); for(let s=-60;s<=60;s+=6) ctx.lineTo(x+s,y+Math.sin(s*0.1+t*2+k)*3); ctx.stroke(); } ctx.restore(); }
+    }
+    /* hands: move, warm/cool, sense */
+    hands.forEach((h,hi)=>{ moverStep(h.m,dt,60,14); const wx=h.m.x.x, wy=h.m.y.x;
+      h.in=-1; for(let i=0;i<3;i++) if(Math.abs(wx-BX[i])<TW/2-10 && wy+60>WL) h.in=i;
+      const was=h._in; if(was!==h.in){ ripples.push({x:wx,t:0}); h._in=h.in; }
+      const Tw=h.in>=0?T(h.in):28;
+      h.Ts+=sdt*((Tw-h.Ts)/(h.in>=0?25:300)+(34-h.Ts)/60);
+      h.F=h.in>=0?Tw-h.Ts:0;
+      armTo(ctx,h.sh[0],h.sh[1],wx,wy,215,200,h.side,82,{sleeve:'#e3ecf7'});
+    });
+    /* ice cubes bob in C and are pushed aside by the hand */
+    ice.forEach((c,i)=>{ const hx=hands[1].in===2?hands[1].m.x.x:-999; const push=Math.abs(c.x-hx)<44?Math.sign(c.x-hx||1)*(46-Math.abs(c.x-hx)):0;
+      springTo(c.dx,push,30,6,dt); const melt=clamp((T(2)-4)/12,0,0.8);
+      iceDraw(ctx,clamp(c.x+c.dx.x,BX[2]-84,BX[2]+84),WL+2+Math.sin(t*2+c.ph)*2,20,c.a+Math.sin(t+c.ph)*0.15,melt); });
+    /* water (in front of the hands) + basin outline */
+    for(let i=0;i<3;i++){ const x=BX[i], f=(WL-TOP)/(BOT-TOP), hw=lerp(TW,BW,f)/2, col=tempCol(T(i));
+      ctx.save(); ctx.beginPath(); ctx.moveTo(x-hw,WL); for(let s=-hw;s<=hw;s+=8) ctx.lineTo(x+s,WL+Math.sin(s*0.08+t*3+i)*1.5); ctx.lineTo(x+BW/2,BOT); ctx.lineTo(x-BW/2,BOT); ctx.closePath(); ctx.fillStyle=rgba(col,0.2); ctx.fill();
+      ctx.strokeStyle=col; ctx.lineWidth=2.2; ctx.beginPath(); for(let s=-hw;s<=hw;s+=8) ctx.lineTo(x+s,WL+Math.sin(s*0.08+t*3+i)*1.5); ctx.stroke(); ctx.restore();
+      ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=3; ctx.lineJoin='round'; ctx.beginPath(); ctx.moveTo(x-TW/2-6,TOP); ctx.lineTo(x-BW/2,BOT); ctx.lineTo(x+BW/2,BOT); ctx.lineTo(x+TW/2+6,TOP); ctx.stroke(); ctx.restore();
+      circ(ctx,x,BOT-34,15,COL.ink,'#fff',2.2); textAt(ctx,'ABC'[i],x,BOT-28,{align:'center',size:16,weight:700});
+      if(showTh){ const tx=x+TW/2-30; const r=thermoV(ctx,tx,TOP-120,WL+40,T(i),{lo:0,hi:60,minor:2,major:10,w:9,bulbL:18,bulbR:5,pad:8,fs:9,minL:3,midL:5,bigL:7});
+        tag(ctx,T(i)+' °C',tx,TOP-130,COL.green,{size:12}); }
+    }
+    ripples.forEach(r=>{ r.t+=dt; const a=1-r.t/1.2; if(a<=0) return; ctx.save(); ctx.globalAlpha=a; ctx.strokeStyle=COL.blue; ctx.lineWidth=1.6; ctx.beginPath(); ctx.ellipse(r.x,WL+2,10+r.t*60,3+r.t*8,0,0,7); ctx.stroke(); ctx.restore(); });
+    ripples=ripples.filter(r=>r.t<1.2);
+    /* heat-flow arrows + "feels" tags */
+    hands.forEach(h=>{ if(h.in<0) return; const wx=h.m.x.x, y=WL+28, a=clamp(Math.abs(h.F)/8,0,1);
+      for(const s of [-1,1]){ if(h.F>0) heatWave(ctx,wx+s*62,y,34,s>0?Math.PI:0,COL.red,t,a,3); else heatWave(ctx,wx+s*28,y,34,s>0?0:Math.PI,COL.blue,t,a,3); }
+      const f=feel(h.F), bx=h.in===1?wx+(h===hands[0]?-60:60):wx; bubble(ctx,bx,WL-120,f[0],f[1],15,1); });
+    /* hand labels + skin temperature */
+    hands.forEach((h,i)=>{ const x=i?710:90; textAt(ctx,h.n,x,40,{align:'center',size:14,weight:700,color:i?COL.blue:COL.red});
+      textAt(ctx,'skin '+h.Ts.toFixed(1)+' °C',x,60,{align:'center',size:13,weight:600,color:tempCol(h.Ts)}); });
+    /* soak clock */
+    const bothAC=hands[0].in===0&&hands[1].in===2; if(bothAC) soak+=sdt;
+    clockDraw(ctx,400,62,26,soak,'in A and C: '+mmss(soak));
+    /* observation in B: keep the strongest feeling in the first seconds */
+    const bothB=hands[0].in===1&&hands[1].in===1;
+    if(bothB){ inB+=sdt; if(!best&&inB>0.5) best=[hands[0].F,hands[1].F]; if(inB>6) obs=best; }
+    $g('#b2').disabled=!(hands[0].in===0||hands[1].in===2||phase==='AC');
+    setv($,'cR',hands[0].in>=0?feel(hands[0].F)[0]:'in the air');
+    setv($,'cL',hands[1].in>=0?feel(hands[1].F)[0]:'in the air');
+    setv($,'cS',mmss(soak));
+    setv($,'cB',TW_.B+' °C (for both hands)');
+  };
+  S.found=()=>{ if(!obs) return ''; const r=word(obs[0]), l=word(obs[1]);
+    if(r==='cool'&&l==='warm') return 'The same water B felt cool to the right hand and warm to the left — touch cannot be relied upon.';
+    return 'In B the right hand felt '+r+', the left hand '+l+' — soak longer in A and C to see the trick clearly.'; };
+  S.fb=()=>{ if(predR<0||predL<0) return ['warn','First predict what each hand will feel in B.'];
+    if(!obs) return phase==='AC'&&soak<60?['warn','Keep both hands in A and C for 1–2 minutes.']:null;
+    const r=word(obs[0]), l=word(obs[1]), pr=['warm','cool','same'][predR], pl=['warm','cool','same'][predL];
+    if(r===pr&&l===pl) return ['ok','Your predictions matched the observation.'];
+    return ['warn','Observation differs from your prediction: right felt '+r+', left felt '+l+'.']; };
+  return S;
+}); }
+
+/* =====================================================================
+   7.2  LET US MEASURE — body temperature with a digital clinical thermometer
+   The metal tip is a heat sensor that warms by Newton's law,
+     dT/dt = (T_site − T)/τ,  τ = 12 s under the tongue, 30 s in the armpit
+   (armpit site ≈ 0.7 °C below the body). The thermometer beeps when the
+   reading rises by less than 0.03 °C in 16 s — about 70 s under the tongue,
+   2½ min in the armpit. Time runs 6× fast. Ten healthy people, ten
+   slightly different "normal" temperatures (36.3–37.3 °C).
+   ===================================================================== */
+function buildA2(){ return buildScene(wrap=>{
+  const S={q:'Is the "normal" temperature of every healthy person exactly 37.0 °C?'};
+  const PEOPLE=[['Lambok',12,36.8,0],['Phiban',15,36.6,1],['Kloi',12,37.1,1],['Onestar',11,36.9,0],['Shemphang',12,37.2,0],
+    ['Bandarisha',12,36.5,1],['Iba',11,36.7,2],['Wanda',13,37.0,1],['Grandpa',68,36.3,3],['Little Rida',3,37.3,2]];
+  const SPEED=6, HX=235, HY=225;
+  let who=0, site=0, unit=0, st='idle', washT=0, resetT=0, beepT=0, Ts=27, hist=[], disp=null, held=null, rec=[], mouth=spr(0), press=0, splash=[], lastBeep=0, warn='', tr=[], tIn=0;
+  const pos=mover(500,440), ang=spr(0), hs=spr(1);
+  const person=()=>PEOPLE[who], hsz=()=>{ const a=person()[1]; return a<6?190:a<14?236:250; };
+  const mouthPt=()=>{ const s=hsz()*hs.x; return [HX+0.38*s,HY+0.215*s]; };
+  const toF=c=>c*9/5+32, show=c=>unit?toF(c).toFixed(1)+' °F':c.toFixed(1)+' °C';
+  const REST=[500,452,0], WASH=[652,300,-0.3], READ=[520,392,0];
+  const target=()=>{ if(st==='wash') return [[WASH[0],WASH[1]],WASH[2]];
+    if(st==='in'||st==='done'||st==='going'){ if(site===0){ const m=mouthPt(); return [[m[0]-34,m[1]+2],0.06]; } return [[HX+70,HY+hsz()*0.84],-0.25]; }
+    if(st==='out') return [[READ[0],READ[1]],READ[2]]; return [[REST[0],REST[1]],REST[2]]; };
+  S.html=`
+    <div class="control-group"><label>Person</label>${chipList('pp',PEOPLE.map(p=>p[0]),0)}</div>
+    <div class="control-group"><label>Place the tip</label>${chipList('st',['Under the tongue','In the armpit'],0)}
+      <label style="margin-top:8px">Display unit</label>${chipList('un',['°C','°F'],0)}</div>
+    <div class="control-group"><label>Steps</label>
+      <button class="toggle-btn navy" id="s1">① Wash the tip</button>
+      <button class="toggle-btn navy" id="s2">② Press reset</button>
+      <button class="toggle-btn navy" id="s3">③ Place it & wait for the beep</button>
+      <button class="toggle-btn navy" id="s4">④ Take out & read</button>
+      <button class="toggle-btn play" id="s5" style="width:100%;margin-top:9px">⑤ Record in Table 7.1</button></div>`;
+  S.cards=card('cD','Display',COL.green)+card('cP','Person')+card('cA','Average so far',COL.green)+card('cR','Lowest – highest');
+  S.tail=`<div class="control-group"><label>Table 7.1 · Body temperatures</label>${logTable('tL',['S. no.','Name','Temp (°C)','°F'])}</div>`;
+  let $g, chP;
+  const enable=()=>{ const d=(id,v)=>{ $g('#'+id).disabled=!v; };
+    d('s1',st==='idle'||st==='rec'); d('s2',st==='washed'); d('s3',st==='armed'); d('s4',st==='done'||st==='in'); d('s5',st==='out'&&held!==null&&!rec.some(r=>r[0]===who)); };
+  S.wire=$=>{ $g=$;
+    chP=wireChips(wrap,'pp',i=>{ if(st==='in'||st==='going') return; who=i; hs.x=0.6; st='idle'; disp=null; held=null; });
+    wireChips(wrap,'st',i=>{ if(st==='in'||st==='going') return; site=i; });
+    wireChips(wrap,'un',i=>unit=i);
+    $('#s1').onclick=()=>{ st='wash'; washT=0; const p=target(); moverGo(pos,[[pos.x.x,Math.min(pos.y.x,360)],p[0]]); };
+    $('#s2').onclick=()=>{ resetT=0; press=1; st='armed'; disp='888.8'; held=null; hist=[]; };
+    $('#s3').onclick=()=>{ st='going'; hist=[]; tr=[]; tIn=0; const p=target(); moverGo(pos,[[p[0][0]+60,p[0][1]-10],[p[0][0]+40,p[0][1]],p[0]]); };
+    $('#s4').onclick=()=>{ if(st==='in'){ warn='Taken out before the beep — that reading is too low.'; held=Math.floor(Ts*10)/10; }
+      st='out'; moverGo(pos,[[pos.x.x+70,pos.y.x],[READ[0],READ[1]]]); };
+    $('#s5').onclick=()=>{ rec.push([who,held]); st='rec'; warn=''; disp=null; held=null;
+      const nx=PEOPLE.findIndex((p,i)=>!rec.some(r=>r[0]===i)); if(nx>=0){ who=nx; setActive(chP,nx); hs.x=0.6; } };
+    enable();
+  };
+  S.tick=(dt,ctx,t,$)=>{
+    const sdt=dt*SPEED, P=person(), s=hsz();
+    springTo(hs,1,90,12,dt);
+    /* thermometer motion */
+    moverStep(pos,dt,55,13); const tg=target(); springTo(ang,tg[1],60,13,dt);
+    const tip=[pos.x.x,pos.y.x];
+    const atSite=(st==='going'||st==='in'||st==='done') && pos.q.length===0;
+    if(st==='going'&&atSite){ st='in'; }
+    if(st==='wash'){ washT+=dt; if(pos.q.length===0&&washT>2.6){ st='washed'; moverGo(pos,[[REST[0],REST[1]]]); } }
+    /* sensor physics */
+    const Tsite=site===0?P[2]:P[2]-0.7, tau=site===0?12:30;
+    const Tenv=(st==='in'||st==='done')?Tsite:(st==='wash'&&pos.q.length===0)?25:27;
+    Ts+=sdt*(Tenv-Ts)/(st==='in'||st==='done'?tau:40);
+    if(st==='armed'){ resetT+=dt; if(resetT>0.9) disp=null; }
+    if(st==='in'){ hist.push([t*SPEED,Ts]); while(hist.length&&hist[0][0]<t*SPEED-16) hist.shift();
+      const rise=hist.length>1?Ts-hist[0][1]:1; if(Ts>34&&hist.length>1&&t*SPEED-hist[0][0]>15.5&&rise<0.03){ st='done'; held=Math.round(Ts*10)/10; beepT=0; } }
+    if(st==='done'){ beepT+=dt; if(beepT-lastBeep>0.35&&beepT<1.6){ beep(3100,0.09); lastBeep=beepT; } } else lastBeep=-1;
+    press=approach(press,0,6,dt);
+    const shown=st==='armed'&&disp?disp:(st==='in'?(Ts<32?'Lo':(Math.floor(Ts*10)/10).toFixed(1)):(held!==null?(unit?toF(held):held).toFixed(1):(st==='armed'?'Lo':'')));
+    const blink=st==='in'?(0.5+0.5*Math.sign(Math.sin(t*8))):1;
+    /* sink + tap */
+    ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=3; ctx.lineJoin='round';
+    ctx.beginPath(); ctx.moveTo(810,118); ctx.lineTo(668,118); ctx.quadraticCurveTo(650,118,650,138); ctx.lineTo(650,150); ctx.stroke();
+    line(ctx,640,150,660,150,COL.ink,3); line(ctx,700,104,700,118,COL.ink,3); line(ctx,688,104,712,104,COL.ink,4);
+    ctx.beginPath(); ctx.moveTo(560,410); ctx.quadraticCurveTo(570,478,650,478); ctx.quadraticCurveTo(730,478,740,410); ctx.closePath(); ctx.fillStyle='#fff'; ctx.fill(); ctx.stroke(); ctx.restore();
+    textAt(ctx,'soap',600,398,{size:11,weight:600,color:COL.muted}); rrect(ctx,580,402,40,8,3); ctx.save(); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.6; ctx.stroke(); ctx.restore();
+    const flowing=st==='wash'&&pos.q.length===0&&washT<2.6;
+    if(flowing){ ctx.save(); ctx.strokeStyle=COL.blue; ctx.lineWidth=2; for(let k=-1;k<=1;k++){ ctx.beginPath(); for(let y=152;y<470;y+=6){ const xx=650+k*3+Math.sin(y*0.15+t*20+k)*1.2; if(y>tip[1]-6&&y<tip[1]+8) continue; y===152?ctx.moveTo(xx,y):ctx.lineTo(xx,y); } ctx.stroke(); } ctx.restore();
+      if(Math.random()<0.6) splash.push({x:650,y:tip[1]-4,vx:(Math.random()-0.5)*160,vy:-60-Math.random()*80,life:0.5,r:2,c:COL.blue}); }
+    stepParts(splash,dt,600,470); drawParts(ctx,splash,COL.blue);
+    /* head */
+    const open=st==='going'&&site===0&&Math.hypot(tip[0]-mouthPt()[0],tip[1]-mouthPt()[1])<120;
+    springTo(mouth,open?1:0,120,12,dt);
+    const g=headSide(ctx,HX,HY,s*hs.x,{mouth:mouth.x,grey:P[1]>60,hair:P[3],shut:st==='in'||st==='done'});
+    textAt(ctx,P[0]+' · '+P[1]+' y',HX,HY-s*0.62,{align:'center',size:15,weight:700,color:COL.navy});
+    /* thermometer — hidden where it is inside the mouth */
+    ctx.save(); if(st==='in'||st==='done'||st==='going'){ if(site===0){ ctx.beginPath(); ctx.rect(-500,-500,1800,1600); headPath(ctx,HX,HY,s*hs.x,mouth.x,true); ctx.clip('evenodd'); } }
+    digiThermo(ctx,tip[0],tip[1],ang.x,230,shown==='Lo'||shown==='888.8'||st==='in'?shown:(shown?shown:''),{flash:st==='done'?clamp(1-beepT/1.6,0,1):0,press:press>0.3,lit:st==='in'?blink:1});
+    ctx.restore();
+    /* lips over the probe, or the arm over it */
+    if(site===1&&(st==='in'||st==='done')){ armTo(ctx,HX-30,HY+s*0.72,HX+40,HY+s*1.18,90,90,1,60,{sleeve:'#e3ecf7'}); }
+    /* the hand holding the far end (never the tip) */
+    const gx=tip[0]+Math.cos(ang.x)*200, gy=tip[1]+Math.sin(ang.x)*200;
+    if(!(st==='in'||st==='done'||st==='going')) armTo(ctx,900,640,gx+6,gy+18,170,160,-1,58,{sleeve:'#fdf4dc'});
+    /* soap bubbles on the tip while washing */
+    if(flowing){ for(let k=0;k<5;k++){ const a=t*3+k*1.3; circ(ctx,tip[0]+14+Math.cos(a)*16,tip[1]+Math.sin(a)*9,3+k%2*2,COL.blue,'#fff',1.2); } }
+    /* big display read-out once taken out */
+    if(st==='out'||st==='rec'&&held!==null){ const k=clamp(pos.q.length?0:1,0,1); ctx.save(); ctx.globalAlpha=k;
+      rrect(ctx,470,200,250,100,14); ctx.fillStyle='#eef6ee'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.stroke();
+      textAt(ctx,held!==null?show(held):'—',595,266,{align:'center',size:38,weight:700,color:COL.green});
+      textAt(ctx,'display (zoomed)',595,320,{align:'center',size:12,weight:600,color:COL.muted}); line(ctx,520,300,tip[0]+130,tip[1]-12,COL.mid,1.2,[4,4]); ctx.restore(); }
+    /* waiting clock */
+    if(st==='in'||st==='done'){ const el=hist.length?hist[hist.length-1][0]-0:0; textAt(ctx,st==='done'?'beep! ✓':'waiting for the beep…',682,168,{align:'center',size:16,weight:700,color:st==='done'?COL.green:COL.yellow});
+      /* live trace of the sensor */
+      miniChart(ctx,575,182,215,150,[0,60],[30,38],[{pts:tr,col:COL.red}],{yt:[30,34,38],xt:[0,30,60],xl:'s',yl:'°C',band:[Tsite-0.1,Tsite+0.1]}); }
+    if(st==='in') tr.push([(tIn+=sdt),Ts]);
+    /* dot plot of everyone measured */
+    const X=v=>470+(v-35.8)/(37.8-35.8)*300;
+    line(ctx,470,70,770,70,COL.mid,1.4); [36,36.5,37,37.5].forEach(v=>{ line(ctx,X(v),66,X(v),74,COL.mid,1.2); textAt(ctx,v.toFixed(1),X(v),88,{align:'center',size:10,color:COL.muted}); });
+    line(ctx,X(37),30,X(37),74,COL.green,2,[5,3]); textAt(ctx,'37.0 °C',X(37)+4,32,{size:11,weight:700,color:COL.green});
+    const cnt={}; rec.forEach(r=>{ const k=r[1].toFixed(1); cnt[k]=(cnt[k]||0)+1; const yy=70-cnt[k]*11; circ(ctx,X(r[1]),yy,4.5,COL.red,COL.red,1); });
+    if(rec.length){ const av=rec.reduce((a,r)=>a+r[1],0)/rec.length; arrowHead(ctx,X(av),78,-Math.PI/2,COL.navy,8); textAt(ctx,'average',X(av),104,{align:'center',size:10,weight:700,color:COL.navy}); }
+    /* cards, table */
+    enable();
+    setv($,'cD',shown?(shown==='Lo'||shown==='888.8'?shown:(st==='in'?shown+' °C':shown+(unit?' °F':' °C'))):'off');
+    setv($,'cP',P[0]+' ('+(site?'armpit':'mouth')+')');
+    const av=rec.length?rec.reduce((a,r)=>a+r[1],0)/rec.length:null;
+    setv($,'cA',av===null?'—':av.toFixed(2)+' °C');
+    setv($,'cR',rec.length?Math.min(...rec.map(r=>r[1])).toFixed(1)+' – '+Math.max(...rec.map(r=>r[1])).toFixed(1)+' °C':'—');
+    setLog($,'tL',rec.map((r,i)=>[i+1,PEOPLE[r[0]][0],{t:r[1].toFixed(1),c:Math.abs(r[1]-37)<0.05?'g':''},toF(r[1]).toFixed(1)]));
+  };
+  S.found=()=>{ if(rec.length<5) return ''; const v=rec.map(r=>r[1]); const av=v.reduce((a,b)=>a+b,0)/v.length;
+    return 'No — healthy people read '+Math.min(...v).toFixed(1)+'–'+Math.max(...v).toFixed(1)+' °C. 37.0 °C is only the average (yours: '+av.toFixed(1)+' °C).'; };
+  S.fb=()=>{ if(warn) return ['bad',warn];
+    if(st==='idle') return ['warn','Wash the tip with soap and water first — keep the display out of the water.'];
+    if(st==='washed') return ['warn','Press reset before using it.'];
+    if(site===1&&st==='out'&&held!==null) return ['ok','Armpit readings are about 0.5–1 °C lower than the body temperature.'];
+    if(rec.length&&rec.length<5&&st==='rec') return ['ok','Recorded. Wash the tip again and measure the next person.'];
+    return null; };
+  return S;
+}); }
+
+/* =====================================================================
+   7.3  LET US OBSERVE — the range of a laboratory thermometer
+   A lens slides along the glass so the marks can be read up close. The bulb
+   sits in a test liquid; the bulb warms by Newton's law (τ ≈ 2 s) and the
+   column follows. Below the lowest mark the column hides in the bulb; above
+   the highest mark it fills the tube, and far beyond it the glass cracks —
+   the range is how far the scale goes, nothing beyond it can be read.
+   ===================================================================== */
+function buildA3(){ return buildScene(wrap=>{
+  const S={q:'What is the lowest and the highest temperature this thermometer can measure?'};
+  const TH=[{n:'Lab thermometer (Fig. 7.3a)',lo:-10,hi:110,minor:1,major:10},{n:'Lab thermometer B',lo:-5,hi:50,minor:0.5,major:5},{n:'Room thermometer',lo:-30,hi:50,minor:1,major:10}];
+  const LIQ=[['Ice + salt',-18],['Melting ice',0],['Tap water',27],['Hot water',70],['Boiling water',100],['Hot oil',170]];
+  const X=200, TOP=24, BOT=398, LX=560, LY=250, LR=168, Z=5;
+  let th=0, liq=2, Tb=27, look=spr(BOT-60), lookT=BOT-60, found={}, hold={lo:0,hi:0}, crack=0, bub=[], used={};
+  const cfg=()=>TH[th];
+  const yOf=v=>{ const c=cfg(), pad=14; return BOT-pad-(v-c.lo)*(BOT-TOP-2*pad)/(c.hi-c.lo); };
+  S.html=`
+    <div class="control-group"><label>Thermometer</label>${chipList('tc',TH.map(c=>c.n),0)}</div>
+    ${slider('lk','Move the lens along the scale',0,1,0.005,0.2)}
+    <div class="control-group"><div class="toggle-group"><button class="toggle-btn" id="fl">⬇ Find the lowest mark</button><button class="toggle-btn" id="fh">⬆ Find the highest mark</button></div></div>
+    <div class="control-group"><label>Dip the bulb in</label>${chipList('lq',LIQ.map(l=>l[0]),2)}</div>`;
+  S.cards=card('cL','Lowest mark',COL.blue)+card('cH','Highest mark',COL.red)+card('cG','Range',COL.green)+card('cB','Bulb in');
+  let $g;
+  const setLook=f=>{ lookT=lerp(BOT+18,TOP+6,f); };
+  S.wire=$=>{ $g=$;
+    wireChips(wrap,'tc',i=>{ th=i; crack=0; hold={lo:0,hi:0}; });
+    wireChips(wrap,'lq',i=>{ liq=i; used[i]=1; });
+    $('#lk').oninput=()=>setLook(+$('#lk').value); setLook(0.2);
+    $('#fl').onclick=()=>{ lookT=yOf(cfg().lo); $('#lk').value=(BOT+18-lookT)/(BOT+18-TOP-6); };
+    $('#fh').onclick=()=>{ lookT=yOf(cfg().hi); $('#lk').value=(BOT+18-lookT)/(BOT+18-TOP-6); };
+  };
+  S.tick=(dt,ctx,t,$)=>{
+    const c=cfg(), Tl=LIQ[liq][1];
+    Tb=approach(Tb,Tl,0.5,dt);
+    if(Tb>c.hi+12) crack=Math.min(1,crack+dt*0.8);
+    springTo(look,lookT,40,11,dt);
+    /* stand */
+    standDraw(ctx,70,488,X,70);
+    /* beaker with the test liquid */
+    const b=beakerDraw(ctx,X,360,488,130), ly=392, col=Tl>=150?COL.yellow:tempCol(Tl);
+    if(Tl>=99){ if(Math.random()<dt*30) bubAdd(bub,X-50+Math.random()*100,484); }
+    bubStep(bub,dt,()=>ly); bubDraw(ctx,bub,col);
+    beakerWater(ctx,b,ly,col,t,Tl>=99?2:0.6);
+    if(Tl<=0) for(let i=0;i<6;i++) iceDraw(ctx,X-48+i*19,ly+6+Math.sin(t*2+i)*1.5+(i%2)*10,16,i*0.8,Tl<0?0:0.15);
+    rect(ctx,X-82,488,164,16,COL.ink,'#fff',2.2); if(Tl>=60){ const a=clamp((Tl-40)/80,0,1); ctx.save(); ctx.globalAlpha=a; for(let k=0;k<5;k++) line(ctx,X-60+k*30,492,X-48+k*30,500,COL.red,2.4); ctx.restore(); } textAt(ctx,'hot plate',X+92,502,{size:10,weight:600,color:COL.muted});
+    if(Tl>=99) steam(ctx,X,360,90,1,t);
+    /* the thermometer itself */
+    ctx.save(); const shake=crack>0&&crack<1?Math.sin(t*60)*1.2:0; ctx.translate(shake,0);
+    const r=thermoV(ctx,X,TOP,BOT,Tb,{lo:c.lo,hi:c.hi,minor:c.minor,major:c.major,w:16,bulbL:34,bulbR:7,chamber:true,crack,fs:10,hl:found[th+'lo']&&found[th+'hi']?[c.lo,c.hi]:null});
+    ctx.restore();
+    /* off-scale warnings */
+    if(Tb<c.lo-1) tag(ctx,'below the lowest mark — cannot be read',X+30,BOT+60,COL.blue,{size:12});
+    if(Tb>c.hi+1) tag(ctx,crack>0.2?'cracking! far beyond the range':'above the highest mark — cannot be read',X+120,TOP+64,COL.red,{size:12});
+    /* the lens */
+    const ly0=look.x, ppd=(BOT-TOP-28)/(c.hi-c.lo);
+    lensView(ctx,LX,LY,LR,X,ly0,()=>{
+      ctx.save(); ctx.translate(LX-30,0);
+      thermoV(ctx,0,LY+(TOP-ly0)*Z,LY+(BOT-ly0)*Z,Tb,{lo:c.lo,hi:c.hi,minor:c.minor,major:c.major,w:44,bulbL:34*Z,bulbR:30,pad:14*Z,fs:20,bigL:34,midL:24,minL:13,tw:2,lw:3,cw:4,clip:[LY-LR,LY+LR],chamber:true,crack});
+      ctx.restore();
+      line(ctx,LX-LR,LY,LX+LR,LY,COL.yellow,1.6,[6,5]);
+    });
+    /* which mark is under the lens centre? */
+    const vAt=c.lo+(BOT-14-ly0)/ppd, onLo=Math.abs(vAt-c.lo)<0.6*c.minor+0.3, onHi=Math.abs(vAt-c.hi)<0.6*c.minor+0.3;
+    hold.lo=onLo?hold.lo+dt:0; hold.hi=onHi?hold.hi+dt:0;
+    if(hold.lo>0.5) found[th+'lo']=1; if(hold.hi>0.5) found[th+'hi']=1;
+    textAt(ctx,vAt<c.lo-0.5?'bulb':vAt>c.hi+0.5?'top of tube':'lens on ≈ '+fmt(Math.round(vAt/c.minor)*c.minor,1)+' °C',LX,LY+LR+30,{align:'center',size:13,weight:700,color:COL.ink});
+    if(onLo||onHi) tag(ctx,onLo?'lowest mark':'highest mark',LX,LY-LR-14,onLo?COL.blue:COL.red,{size:13});
+    const sg=v=>(v<0?'−':'')+Math.abs(v)+' °C';
+    setv($,'cL',found[th+'lo']?sg(c.lo):'?'); setv($,'cH',found[th+'hi']?sg(c.hi):'?');
+    setv($,'cG',found[th+'lo']&&found[th+'hi']?sg(c.lo)+' to '+sg(c.hi):'—');
+    setv($,'cB',LIQ[liq][0]+' ('+sg(Tl)+')');
+  };
+  S.found=()=>found['0lo']&&found['0hi']?'Its range is −10 °C to 110 °C — it cannot measure anything colder or hotter.':'';
+  S.fb=()=>{ const c=cfg(), Tl=LIQ[liq][1];
+    if(Tl<c.lo) return ['warn','The liquid is colder than '+c.lo+' °C — the column has gone into the bulb. Out of range!'];
+    if(Tl>c.hi) return ['bad','The liquid is hotter than '+c.hi+' °C — beyond the range; the glass can break.'];
+    if(!(found[th+'lo']&&found[th+'hi'])) return ['warn','Move the lens to both ends of the scale and hold it there.'];
+    return null; };
+  return S;
+}); }
+/* magnifying lens: small ring at (sx,sy) on the object, big view at (cx,cy) */
+function lensView(ctx,cx,cy,R,sx,sy,draw){
+  const d=Math.hypot(cx-sx,cy-sy)||1, a=Math.atan2(cy-sy,cx-sx), s=Math.asin(clamp((R-8)/d,-1,1));
+  ctx.save(); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.2; ctx.setLineDash([4,4]);
+  [1,-1].forEach(k=>{ const b=a+k*(Math.PI/2+s); ctx.beginPath(); ctx.moveTo(sx+Math.cos(b)*14,sy+Math.sin(b)*14); ctx.lineTo(cx+Math.cos(b)*R,cy+Math.sin(b)*R); ctx.stroke(); });
+  ctx.restore(); circ(ctx,sx,sy,14,COL.yellow,null,2.4);
+  ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill(); ctx.clip(); draw(); ctx.restore();
+  circ(ctx,cx,cy,R,COL.ink,null,3.2); circ(ctx,cx,cy,R+4,COL.mid,null,1);
+}
+
+/* =====================================================================
+   7.4  LET US OBSERVE AND CALCULATE — the smallest value it can read
+   A close-up camera follows the liquid column (spring-damped). "Count" sends
+   a pointer hopping tick by tick between two big marks; the smallest
+   value = (difference between big marks) ÷ (number of divisions).
+   Fig. 7.3b: 10 °C ÷ 10 = 1 °C. The column top only lands exactly on a mark
+   when the temperature is a whole number of divisions (e.g. 22.5 °C needs a
+   0.5 °C thermometer — Exercise 10).
+   ===================================================================== */
+function buildA4(){ return buildScene(wrap=>{
+  const S={q:'How much temperature does one small division of this thermometer show?'};
+  const TH=[{n:'Fig. 7.3b (lab)',lo:-10,hi:110,minor:1,major:10,T0:16,smin:-10,smax:110},{n:'Lab — 2 °C marks',lo:-10,hi:110,minor:2,major:10,T0:24,smin:-10,smax:110},
+    {n:'Lab — 0.5 °C marks',lo:-10,hi:110,minor:0.5,major:10,T0:22.5,smin:-10,smax:110},{n:'Clinical scale',lo:35,hi:42,minor:0.1,major:1,T0:37.3,smin:35,smax:42}];
+  const CX=400, CY=270, VIEW=[60,500];
+  let th=0, T=16, Tc=16, cam=spr(16), cnt=null, done={}, ptr=spr(0), sq=spr(0), pops=[];
+  const c=()=>TH[th], ppd=()=>300/c().major;
+  const yC=v=>CY-(v-cam.x)*ppd();
+  const rd=()=>{ const m=c().minor; return Math.round(Tc/m)*m; };
+  S.html=`
+    <div class="control-group"><label>Thermometer</label>${chipList('tc',TH.map(x=>x.n),0)}</div>
+    ${slider('tS','Temperature of the liquid',-10,110,0.1,16)}
+    <div class="control-group"><button class="toggle-btn navy" id="ct" style="margin-top:0">👆 Count the small divisions</button>
+      <div class="toggle-group"><button class="toggle-btn" id="q10">Set 22.5 °C</button><button class="toggle-btn" id="q11">Set 27.5 °C</button></div></div>`;
+  S.cards=card('cM','Big marks differ by')+card('cN','Divisions between',COL.yellow)+card('cO','One division =',COL.green)+card('cR','Reading',COL.red);
+  let $g;
+  const setT=v=>{ const x=c(); T=clamp(v,x.smin,x.smax); $g('#tS').value=T; $g('#tSV').textContent=fmtT(T); };
+  S.wire=$=>{ $g=$;
+    wireChips(wrap,'tc',i=>{ th=i; cnt=null; const x=c(); $('#tS').min=x.smin; $('#tS').max=x.smax; $('#tS').step=x.minor<0.5?0.01:0.1; setT(x.T0); Tc=T; cam.x=T; cam.v=0; });
+    $('#tS').oninput=()=>setT(+$('#tS').value);
+    $('#ct').onclick=()=>{ const x=c(), b0=clamp(Math.floor(Tc/x.major)*x.major,x.lo,x.hi-x.major); cnt={b0,n:Math.round(x.major/x.minor),k:0,tk:0,end:false}; ptr.x=yC(b0); pops=[]; };
+    $('#q10').onclick=()=>setT(22.5); $('#q11').onclick=()=>setT(27.5);
+    setT(16);
+  };
+  S.tick=(dt,ctx,t,$)=>{
+    const x=c();
+    Tc=approach(Tc,T,2.2,dt);
+    springTo(cam,cnt?cnt.b0+x.major/2:Tc,30,10,dt);
+    /* small full-size thermometer: where are we looking? */
+    const win=(VIEW[1]-VIEW[0])/ppd()/2;
+    thermoV(ctx,70,30,430,Tc,{lo:x.lo,hi:x.hi,minor:x.minor,major:x.major===1?1:x.major*2,w:12,bulbL:26,bulbR:6,fs:9,minL:0,midL:3,bigL:6,hl:[cam.x-win,cam.x+win]});
+    const fy=v=>430-14-(v-x.lo)*(430-30-28)/(x.hi-x.lo);
+    line(ctx,110,fy(cam.x+win),CX-120,VIEW[0]+10,COL.yellow,1.2,[4,4]); line(ctx,110,fy(cam.x-win),CX-120,VIEW[1]-10,COL.yellow,1.2,[4,4]);
+    /* close-up */
+    ctx.save(); rrect(ctx,CX-120,VIEW[0],300,VIEW[1]-VIEW[0],16); ctx.fillStyle='#fff'; ctx.fill(); ctx.clip();
+    const bot=CY+(cam.x-x.lo)*ppd(), top=bot-(x.hi-x.lo)*ppd();
+    thermoV(ctx,CX,top,bot,Tc,{lo:x.lo,hi:x.hi,minor:x.minor,major:x.major,w:54,pad:0,bulbL:60,bulbR:30,fs:20,bigL:34,midL:24,minL:14,tw:2,lw:3,cw:4,clip:VIEW,unit:false});
+    /* column-top eye line */
+    const yt=yC(Tc); line(ctx,CX-110,yt,CX+200,yt,COL.green,1.6,[6,4]);
+    ctx.restore();
+    ctx.save(); rrect(ctx,CX-120,VIEW[0],300,VIEW[1]-VIEW[0],16); ctx.strokeStyle=COL.border||'#c2d1e5'; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+    textAt(ctx,'close-up',CX-108,VIEW[0]+20,{align:'left',size:12,weight:700,color:COL.muted});
+    /* counting pointer */
+    if(cnt){ cnt.tk+=dt; const per=cnt.n>12?0.16:0.32;
+      if(!cnt.end&&cnt.tk>per){ cnt.tk=0; cnt.k++; sq.v-=3; pops.push({k:cnt.k,v:cnt.b0+cnt.k*x.minor,t:0}); beep(1200+cnt.k*40,0.04,0.015); if(cnt.k>=cnt.n){ cnt.end=true; done[th]=1; } }
+      springTo(ptr,yC(cnt.b0+cnt.k*x.minor),300,20,dt); springTo(sq,0,200,10,dt);
+      const px=CX+102+sq.x*6;
+      line(ctx,px+8,ptr.x,px+36,ptr.x,COL.yellow,4); arrowHead(ctx,px,ptr.x,Math.PI,COL.yellow,12);
+      /* bracket between the two big marks */
+      const ya=yC(cnt.b0), yb=yC(cnt.b0+x.major); line(ctx,CX-118,ya,CX-118,yb,COL.yellow,2); line(ctx,CX-124,ya,CX-112,ya,COL.yellow,2); line(ctx,CX-124,yb,CX-112,yb,COL.yellow,2);
+      pops.forEach(p=>{ p.t+=dt; const yy=yC(p.v); if(p.k===cnt.k||cnt.n<=12||p.k%5===0) textAt(ctx,String(p.k),CX+150,yy+5,{size:13,weight:700,color:COL.yellow,alpha:clamp(1.4-p.t*0.3,0.35,1)}); });
+      if(cnt.end){ const eq=fmt(x.major,2)+' °C ÷ '+cnt.n+' divisions = '+fmt(x.minor,2)+' °C';
+        rrect(ctx,592,420,200,62,12); ctx.save(); ctx.fillStyle='#e4f7ec'; ctx.fill(); ctx.strokeStyle=COL.green; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+        textAt(ctx,'one small division',692,442,{align:'center',size:12,weight:600,color:COL.muted}); textAt(ctx,eq,692,467,{align:'center',size:12.5,weight:700,color:COL.green}); }
+    }
+    /* reading */
+    const r=rd(), off=Math.abs(Tc-r)>0.25*x.minor;
+    tag(ctx,off?'between '+fmt(Math.floor(Tc/x.minor)*x.minor,2)+' and '+fmt(Math.ceil(Tc/x.minor)*x.minor,2)+' °C':'reads '+fmt(r,2)+' °C',692,clamp(yt+4,VIEW[0]+20,400),off?COL.yellow:COL.green,{size:13});
+    setv($,'cM',fmt(x.major,2)+' °C'); setv($,'cN',cnt&&cnt.end?String(cnt.n):cnt?'counting… '+cnt.k:'?');
+    setv($,'cO',done[th]?fmt(x.minor,2)+' °C':'?'); setv($,'cR',off?'≈ '+fmt(Tc,1)+' °C (between marks)':fmt(r,2)+' °C');
+  };
+  S.found=()=>done[0]?'One small division = 10 °C ÷ 10 = 1 °C — the smallest value this thermometer can read is 1 °C.':'';
+  S.fb=()=>{ const x=c(); if(!done[th]) return ['warn','Press "Count" to count the divisions between two big marks.'];
+    if(Math.abs(Tc-rd())>0.25*x.minor) return ['warn','The column stops between two marks — this thermometer cannot read '+fmtT(T,2)+' exactly.'];
+    return ['ok','The column top sits on a mark: '+fmt(rd(),2)+' °C.']; };
+  return S;
+}); }
+
+/* =====================================================================
+   7.5  LET US MEASURE — the temperature of warm water
+   Water cools by Newton's law toward the room (27 °C) with τ = 25 min;
+   the bulb follows its surroundings with τ = 15 s in water and 2 min in
+   air (a wet bulb first dips below room temperature as it dries). Touching
+   the bottom or the side of the beaker mixes in the cooler glass. A tilted
+   thermometer or an eye above/below the column shifts the reading by
+   parallax: the scale is ~3 mm in front of the column, the eye 25 cm away,
+   1 °C ≈ 2.3 mm on the glass → ±12 cm of eye height ≈ ±0.6 °C.
+   Time runs 10× fast.
+   ===================================================================== */
+function buildA5(){ return buildScene(wrap=>{
+  const S={q:'What is the temperature of the warm water — and how must the thermometer be read?'};
+  const BXc=300, BT=250, BB=492, BW=230, WL=292, L=325, SPEED=10, ROOM=27;
+  let Tw=58, T0=58, Tb=ROOM, wet=0, inW=false, dipped=false, depth=0.45, tilt=0, eye=0, clock=0, rec=[], prevTb=ROOM, rate=0, gripX=spr(BXc+6), gripY=spr(70), th=spr(0), eyeY=spr(0);
+  const L_=v=>v;
+  S.html=`
+    <div class="control-group"><div class="toggle-group"><button class="toggle-btn navy" id="dp" style="margin-top:0">⬇ Dip into the water</button><button class="toggle-btn" id="out">⬆ Take it out</button></div></div>
+    ${slider('dS','How deep',0,1,0.01,0.45)}${slider('tS','Tilt',0,30,1,0)}${slider('eS','Eye height',-1,1,0.05,0)}
+    <div class="control-group"><button class="toggle-btn play" id="rd" style="width:100%">👁 Read now</button>
+      <button class="toggle-btn" id="pw" style="width:100%;margin-top:6px">🫖 Pour fresh warm water</button></div>`;
+  S.cards=card('cC','Column',COL.red)+card('cE','You read',COL.green)+card('cW','Water cools to room')+card('cT','Time');
+  S.tail=`<div class="control-group"><label>Your readings</label>${logTable('tL',['Time','Read','Right way?'])}</div>`;
+  let $g;
+  S.wire=$=>{ $g=$;
+    $('#dp').onclick=()=>{ dipped=true; }; $('#out').onclick=()=>{ dipped=false; };
+    const f=()=>{ depth=+$('#dS').value; tilt=+$('#tS').value; eye=+$('#eS').value;
+      $('#dSV').textContent=depth>0.97?'touching bottom':Math.round(depth*100)+'%'; $('#tSV').textContent=tilt+'°'; $('#eSV').textContent=Math.abs(eye)<0.1?'level with column':eye>0?'above':'below'; };
+    ['dS','tS','eS'].forEach(id=>$('#'+id).oninput=f); f();
+    $('#pw').onclick=()=>{ Tw=T0; clock=0; };
+    $('#rd').onclick=()=>{ const r=readNow(); rec.unshift(r); if(rec.length>6) rec.pop(); };
+  };
+  let state={};
+  const readNow=()=>{ const s=state, ok=s.inW&&!s.bottom&&!s.side&&tilt<3&&Math.abs(eye)<0.12&&rate<0.03;
+    const why=!s.inW?'taken out':s.bottom?'bulb on the bottom':s.side?'bulb on the side':tilt>=3?'tilted':Math.abs(eye)>=0.12?(eye>0?'eye too high':'eye too low'):rate>=0.03?'still rising':'';
+    return {time:clock,v:Math.round(s.app*2)/2,ok,why,true:Tw}; };
+  S.tick=(dt,ctx,t,$)=>{
+    const sdt=dt*SPEED;
+    Tw+=sdt*(ROOM-Tw)/1500; clock+=sdt;
+    springTo(th,tilt*Math.PI/180,60,12,dt);
+    /* where should the bulb be? */
+    const c=Math.cos(th.x), s=Math.sin(th.x);
+    const bulbY=dipped?lerp(WL+40,BB-20,depth):WL-24;
+    let gx=BXc+40, gy=bulbY-c*L; let bx=gx-s*L;
+    const minX=BXc-BW/2+10; let side=false; if(dipped&&bx<minX){ gx+=minX-bx; bx=minX; side=true; }
+    springTo(gripX,gx,40,11,dt); springTo(gripY,gy,40,11,dt);
+    const bX=gripX.x-s*L, bY=gripY.x+c*L;
+    inW=bY>WL+6; const bottom=dipped&&inW&&depth>0.97, side2=inW&&bX<minX+2;
+    /* bulb physics */
+    const glass=Tw-0.35*(Tw-ROOM);
+    let Tenv, tau;
+    if(inW){ Tenv=bottom?0.5*Tw+0.5*glass:side2?0.75*Tw+0.25*glass:Tw; tau=15; wet=1; }
+    else { wet=Math.max(0,wet-sdt/90); Tenv=ROOM-4*wet; tau=120; }
+    prevTb=Tb; Tb+=sdt*(Tenv-Tb)/tau; rate=dt>0?(Tb-prevTb)/sdt:0;
+    /* parallax: eye ±1 → ±12 cm; scale 3 mm in front of the column; 2.3 mm per °C */
+    const app=Tb+(eye*120*3/250)/2.3+Math.tan(th.x)*3/2.3*0.6;
+    state={inW,bottom,side:side2,app};
+    /* table, beaker, water */
+    tableTop(ctx,20,780,BB,0);
+    const b=beakerDraw(ctx,BXc,BT,BB,BW,{grad:6});
+    beakerWater(ctx,b,WL,tempCol(Tw),t,0.8); steam(ctx,BXc,WL-14,BW*0.5,(Tw-35)/20,t);
+    textAt(ctx,'warm water',BXc,BB-20,{align:'center',size:12,weight:600,color:COL.muted});
+    /* thermometer, drawn in its own tilted frame */
+    ctx.save(); ctx.translate(gripX.x,gripY.x); ctx.rotate(th.x);
+    const r=thermoV(ctx,0,0,L-30,Tb,{lo:-10,hi:110,minor:1,major:10,w:14,bulbL:30,bulbR:6,fs:9,minL:3,midL:5,bigL:8});
+    ctx.restore();
+    /* water in front of the immersed part */
+    ctx.save(); ctx.beginPath(); ctx.rect(b.x0+2,WL+2,BW-4,BB-WL-4); ctx.fillStyle=rgba(tempCol(Tw),0.12); ctx.fill(); ctx.restore();
+    if(inW){ ctx.save(); ctx.globalAlpha=0.6; ctx.strokeStyle=COL.blue; ctx.lineWidth=1.4; ctx.beginPath(); ctx.ellipse(gripX.x-s*(WL-gripY.x)/c,WL,12+Math.sin(t*4)*2,3,0,0,7); ctx.stroke(); ctx.restore(); }
+    if(bottom||side2) tag(ctx,bottom?'touching the bottom!':'touching the side!',bX+70,bY+4,COL.red,{size:12});
+    /* hand holding the top */
+    armTo(ctx,760,-90,gripX.x+10,gripY.x+4,262,252,1,56,{sleeve:'#fdf4dc'});
+    /* column-top close-up with the eye line */
+    const colLocal=r.yOf(Tb), cx=gripX.x-s*colLocal, cy=gripY.x+c*colLocal, LX=600, LY=330, LR=112, Z=5;
+    springTo(eyeY,eye,60,12,dt);
+    lensView(ctx,LX,LY,LR,cx,cy,()=>{
+      ctx.save(); ctx.translate(LX,LY); ctx.scale(Z,Z); ctx.rotate(th.x); ctx.translate(0,-colLocal);
+      thermoV(ctx,0,0,L-30,Tb,{lo:-10,hi:110,minor:1,major:10,w:14,bulbL:30,bulbR:6,fs:4,minL:3,midL:5,bigL:8,tw:0.4,lw:0.6,unit:false});
+      ctx.restore();
+      const dy=-(app-Tb)*r.ppd*Z;
+      line(ctx,LX-LR,LY,LX+LR,LY,COL.red,1,[3,3]);
+      line(ctx,LX-LR,LY+dy-eyeY.x*30,LX+LR,LY+dy+eyeY.x*30,COL.yellow,2.2);
+    });
+    const ex=LX+LR+56, ey=LY+eyeY.x*70;
+    eyeSide(ctx,ex,ey,30,true); line(ctx,ex-30,ey,LX+LR+4,LY+eyeY.x*30,COL.yellow,2,[6,4]);
+    tag(ctx,'you read '+fmt(Math.round(app*2)/2,1)+' °C',LX,LY-LR-16,Math.abs(eye)<0.12&&tilt<3?COL.green:COL.yellow,{size:14});
+    /* room thermometer on the wall + clock */
+    clockDraw(ctx,90,80,26,clock,mmss(clock));
+    textAt(ctx,'room 27 °C',90,140,{align:'center',size:11,weight:600,color:COL.muted});
+    setv($,'cC',fmtT(Tb)+(rate<0.03?' · steady':rate>0?' · rising':' · falling'));
+    setv($,'cE',fmt(Math.round(app*2)/2,1)+' °C'); setv($,'cW',fmtT(Tw)); setv($,'cT',mmss(clock));
+    setLog($,'tL',rec.map(q=>[mmss(q.time),q.v.toFixed(1)+' °C',{t:q.ok?'✓ yes':'✗ '+q.why,c:q.ok?'g':'rd'}]));
+  };
+  S.found=()=>{ const g=rec.find(q=>q.ok); return g?'The water was '+g.v.toFixed(1)+' °C — read with the bulb in the water, held upright, not touching, eye level with the column.':''; };
+  S.fb=()=>{ if(!dipped&&Tb>ROOM+1) return ['warn','Out of the water the column falls at once — read it while it is in the water.'];
+    if(!dipped) return ['warn','Dip the bulb into the warm water.'];
+    if(rate>=0.03&&rate>0) return ['warn','The column is still rising — wait till it stops.'];
+    if(state.bottom||state.side) return ['bad','The bulb must not touch the bottom or the sides of the beaker.'];
+    if(tilt>=3) return ['bad','Hold the thermometer upright — not tilted.'];
+    if(Math.abs(eye)>=0.12) return ['bad','Bring your eye level with the top of the column.'];
+    return ['ok','Correct position — read it now (don\'t wait too long, the water is cooling).']; };
+  return S;
+}); }
+
+/* =====================================================================
+   7.6  LET US COMPARE — boiling water and melting ice
+   Beaker: 300 g water from 25 °C, burner gives P (W), loses 1.2 W/K.
+     below boiling:  m·c·dT/dt = P − 1.2(T − 27)            (c = 4.18 J/g°C)
+     boiling:        T stays at the boiling point, dm/dt = −(P − loss)/2260 J/g
+   Ice: 200 g crushed ice from the freezer (−8 °C) warmed by the room
+   (0.9 W/K): warms to 0 °C, then stays at 0 °C while 334 J/g melts it.
+   Phiban's class (Shillong, Table 7.2) found boiling water at 98.0 °C.
+   Five students read the same thermometer with their eye slightly high
+   or low → 97.8…98.1 °C (parallax ≈ 0.05 °C per cm of eye height).
+   Time runs 30× (or 120×) fast.
+   ===================================================================== */
+function buildA6(){ return buildScene(wrap=>{
+  const S={q:'What are the temperatures of melting ice and boiling water? Do they change while it goes on?'};
+  const STU=[['Phiban',-4,1],['Shemphang',0,0],['Onestar',-2,2],['Kloi',0.4,1],['Bandarisha',2,0]];
+  const IX=110, BXc=360, ROOM=27;
+  let speed=30, P=450, on=true, bp=98.0, mw=300, Tw=25, mi=200, Tice=-8, mm=0, thB=25, thI=ROOM, clock=0, hist=[], hT=0, bub=[], boilT=0, meltT=0, stu=-1, stuT=0, head=spr(900), headY=spr(150), reads=[], again=[], chips=[];
+  S.html=`
+    <div class="control-group"><label>Burner</label><div class="toggle-group"><button class="toggle-btn active" id="bOn">🔥 On</button><button class="toggle-btn" id="bOff">Off</button></div></div>
+    ${slider('pS','Flame',150,700,10,450)}
+    <div class="control-group"><label>Where</label>${chipList('loc',['Phiban\'s lab, Shillong','At sea level'],0)}
+      <label style="margin-top:8px">Time runs</label>${chipList('sp',['30× fast','120× fast'],0)}</div>
+    <div class="control-group"><button class="toggle-btn navy" id="ns" style="margin-top:0">🧑‍🎓 Next student reads</button>
+      <button class="toggle-btn" id="ag" style="width:100%;margin-top:6px">⟳ Read both again</button>
+      <button class="toggle-btn" id="rs" style="width:100%;margin-top:6px">Start over (fresh ice, fresh water)</button></div>`;
+  S.cards=card('cI','Ice beaker',COL.blue)+card('cB','Water beaker',COL.red)+card('cK','Time')+card('cS','Student readings',COL.green);
+  S.tail=`<div class="control-group"><label>Table 7.2 · Boiling water</label>${logTable('tS',['Name','Reading (°C)'])}
+    <label style="margin-top:8px">Read again after some time</label>${logTable('tA',['Time','Ice','Boiling'])}</div>`;
+  S.wire=$=>{
+    $('#bOn').onclick=()=>{ on=true; $('#bOn').classList.add('active'); $('#bOff').classList.remove('active'); };
+    $('#bOff').onclick=()=>{ on=false; $('#bOff').classList.add('active'); $('#bOn').classList.remove('active'); };
+    const f=()=>{ P=+$('#pS').value; $('#pSV').textContent=P+' W'; }; $('#pS').oninput=f; f();
+    wireChips(wrap,'loc',i=>{ bp=i?100.0:98.0; reads=[]; stu=-1; });
+    wireChips(wrap,'sp',i=>speed=i?120:30);
+    $('#ns').onclick=()=>{ stu=(reads.length<STU.length?reads.length:(stu+1)%STU.length); stuT=0; head.x=900; };
+    $('#ag').onclick=()=>{ again.unshift([clock,thI,thB]); if(again.length>5) again.pop(); };
+    $('#rs').onclick=()=>{ mw=300; Tw=25; mi=200; Tice=-8; mm=0; thB=25; thI=ROOM; clock=0; hist=[]; boilT=0; meltT=0; reads=[]; again=[]; stu=-1; };
+  };
+  S.tick=(dt,ctx,t,$)=>{
+    const sdt=dt*speed, n=8, h=sdt/n;
+    let evap=0;
+    for(let k=0;k<n;k++){
+      /* boiling beaker */
+      const pin=(on&&mw>20?P:0)*0.85, loss=1.2*(Tw-ROOM);
+      if(Tw<bp-1e-6||pin<=loss){ Tw+=h*(pin-loss)/(mw*4.18+40); if(Tw>bp) Tw=bp; }
+      else { const dm=(pin-loss)/2260*h; mw-=dm; evap+=dm; }
+      /* ice beaker */
+      const q=0.9*(ROOM-Tice)*h;
+      if(mi>0&&Tice<0){ Tice+=q/(mi*2.1+mm*4.18+30); if(Tice>0) Tice=0; }
+      else if(mi>0){ const d=Math.min(mi,q/334); mi-=d; mm+=d; }
+      else Tice+=q/(mm*4.18+30);
+      /* thermometers follow with τ = 5 s */
+      thB+=(Tw-thB)*h/5; thI+=(Tice-thI)*h/5;
+    }
+    clock+=sdt; if(Tw>=bp-0.01&&on) boilT+=sdt; if(mi>0&&Tice>=-0.01) meltT+=sdt;
+    hT+=sdt; if(hT>10){ hT=0; hist.push([clock/60,thI,thB]); if(hist.length>800) hist.shift(); }
+    /* chart */
+    const span=Math.max(10,Math.ceil(clock/60/10)*10);
+    miniChart(ctx,14,8,262,150,[0,span],[-10,110],[{pts:hist.map(p=>[p[0],p[2]]),col:COL.red},{pts:hist.map(p=>[p[0],p[1]]),col:COL.blue}],{yt:[0,50,100],xt:[0,span/2,span],xl:'min',yl:'°C'});
+    /* ---------- ice setup ---------- */
+    tableTop(ctx,10,790,488,0);
+    standDraw(ctx,30,488,IX,250);
+    const bi=beakerDraw(ctx,IX,392,488,130);
+    const lvl=488-8-(mm/200)*60;
+    if(mm>2) beakerWater(ctx,bi,lvl,COL.blue,t,0.4);
+    { const r=rng(5), N=Math.ceil(26*mi/200); for(let i=0;i<N;i++){ const x=IX-52+r()*104, y=478-r()*72*(0.4+0.6*mi/200); iceDraw(ctx,x,y+Math.sin(t+i)*0.6,15,r()*3,clamp(1-mi/200,0,0.7)*0.4); } }
+    thermoV(ctx,IX,186,410,thI,{lo:-10,hi:110,minor:1,major:10,w:12,bulbL:28,bulbR:6,fs:9,minL:3,midL:5,bigL:8});
+    tag(ctx,fmtT(thI),IX+52,180,COL.blue,{size:13});
+    textAt(ctx,'crushed ice',IX+62,384,{align:'center',size:11,weight:600,color:COL.muted});
+    /* ---------- boiling setup ---------- */
+    standDraw(ctx,462,488,BXc,58);
+    tripod(ctx,BXc,372,488,120); gauze(ctx,BXc,369,150);
+    burnerDraw(ctx,BXc,488,on&&mw>20?0.35+0.65*(P-150)/550:0,t);
+    const bb=beakerDraw(ctx,BXc,236,366,150,{grad:4}), wl=366-8-(mw/300)*96;
+    const boiling=Tw>=bp-0.01&&on&&mw>20;
+    if(boiling&&Math.random()<dt*(10+P/25)) bubAdd(bub,BXc-60+Math.random()*120,360);
+    else if(Tw>75&&on&&Math.random()<dt*(Tw-75)*0.4) bubAdd(bub,BXc-60+Math.random()*120,360,1.5);
+    bubStep(bub,dt,()=>wl); bubDraw(ctx,bub,COL.red);
+    beakerWater(ctx,bb,wl,tempCol(Tw),t,boiling?2.2:0.5);
+    steam(ctx,BXc,234,110,boiling?1:(Tw-60)/40,t);
+    const tb=thermoV(ctx,BXc,52,300,thB,{lo:-10,hi:110,minor:1,major:10,w:12,bulbL:28,bulbR:6,fs:9,minL:3,midL:5,bigL:8});
+    tag(ctx,fmtT(thB),BXc-58,46,COL.red,{size:13});
+    if(mw<=20) tag(ctx,'water boiled away — start over',BXc,220,COL.red,{size:12});
+    /* ---------- the student reading it ---------- */
+    const yc=tb.yOf(thB);
+    if(stu>=0){ stuT+=dt; const st=STU[stu], ey=yc-st[1]*9;
+      springTo(head,stuT<3.2?540:930,40,11,dt); springTo(headY,ey,40,11,dt);
+      ctx.save(); ctx.translate(head.x,0); ctx.scale(-1,1); headSide(ctx,0,headY.x+0.06*110,110,{hair:st[2]}); ctx.restore();
+      const ex=head.x-0.25*110;
+      if(head.x<600){ line(ctx,ex,headY.x,BXc+14,yc,COL.yellow,2,[6,4]);
+        const read=Math.round((thB+st[1]*0.05)*10)/10;
+        tag(ctx,st[0]+' reads '+read.toFixed(1)+' °C',head.x+10,headY.x+112,COL.yellow,{size:13});
+        if(stuT>1.6&&!reads.some(r=>r[0]===stu)&&reads.length<STU.length&&stu===reads.length) reads.push([stu,read,boiling]); }
+      /* lens on the column top for this student */
+      lensView(ctx,660,400,78,BXc,yc,()=>{ ctx.save(); ctx.translate(660-30,400); ctx.scale(5,5); ctx.translate(-BXc,-yc);
+        thermoV(ctx,BXc,52,300,thB,{lo:-10,hi:110,minor:1,major:10,w:12,bulbL:28,bulbR:6,fs:5,minL:3,midL:5,bigL:8,tw:0.4,lw:0.6,unit:false}); ctx.restore();
+        const dy=-st[1]*0.05*tb.ppd*5; line(ctx,660-78,400,660+78,400,COL.red,1,[3,3]); line(ctx,660-78,400+dy+st[1]*4,660+78,400+dy-st[1]*4,COL.yellow,2.2); });
+    }
+    setv($,'cI',fmtT(thI)+(mi>0&&Tice>=-0.01?' · melting':mi>0?' · warming':' · all melted'));
+    setv($,'cB',fmtT(thB)+(boiling?' · boiling':''));
+    setv($,'cK',mmss(clock)); setv($,'cS',reads.length?Math.min(...reads.map(r=>r[1])).toFixed(1)+' – '+Math.max(...reads.map(r=>r[1])).toFixed(1)+' °C':'—');
+    setLog($,'tS',reads.map(r=>[STU[r[0]][0],{t:r[1].toFixed(1)+(r[2]?'':' (not boiling yet)'),c:r[2]?'':'rd'}]));
+    setLog($,'tA',again.map(a=>[mmss(a[0]),{t:fmtT(a[1]),c:'b'},{t:fmtT(a[2]),c:'rd'}]));
+  };
+  S.found=()=>{ if(reads.length<STU.length||!reads.every(r=>r[2])||boilT<120||meltT<120) return '';
+    return 'Boiling water stays at '+bp.toFixed(1)+' °C and melting ice at 0 °C. The class read '+Math.min(...reads.map(r=>r[1])).toFixed(1)+'–'+Math.max(...reads.map(r=>r[1])).toFixed(1)+' °C only because of how each student read it.'; };
+  S.fb=()=>{ if(!on&&Tw<bp-0.5) return ['warn','Light the burner to heat the water.'];
+    if(Tw<bp-0.01) return ['warn','Heating… watch the red line climb, then flatten.'];
+    if(reads.length<STU.length) return ['warn','Water is boiling. Let each student read the thermometer.'];
+    if(boilT<120||meltT<120) return ['warn','Wait a few minutes, then press "Read both again" — has anything changed?'];
+    return ['ok','Same eye level → same reading. Phiban\'s eye was a little low, Bandarisha\'s a little high.']; };
+  return S;
+}); }
+
+/* =====================================================================
+   7.7  LET US ANALYSE — 10 days of maximum and minimum air temperature
+   Each day the air is coldest near sunrise (6 am) and warmest at about
+   2:30 pm: T(h) follows half-cosines between the day's minimum and maximum.
+   Day values = the place's normals (IMD-like, mid-month, interpolated by
+   date) + a weather anomaly that persists from day to day (a ← 0.6a + noise,
+   σ 1.6 °C); cloudy days lower the max by 3 °C and raise the min by 1.5 °C,
+   rainy days −5 / +1. A max/min thermometer in the screen pushes a red
+   index up and a blue index down; they are read and reset each midnight.
+   ===================================================================== */
+function buildA7(){ return buildScene(wrap=>{
+  const S={q:'Do the maximum and minimum air temperatures stay the same day after day?'};
+  const PL={Delhi:[[23.9,10.9],[29.9,15.8],[33.1,19.1],[28.3,12.9]],Shillong:[[17.6,6.6],[21.6,10.5],[22.3,14.0],[19.4,9.5]],Chennai:[[31.1,21.7],[33.0,23.7],[31.9,24.5],[29.8,23.0]],Leh:[[1.5,-12.0],[6.5,-6.7],[14.1,-1.5],[7.6,-7.6]]};
+  const NAMES=Object.keys(PL), SEAS=[{n:'Late Feb → (towards summer)',m:0,start:[2,24],mon:['Feb','Mar'],len:28},{n:'Late Oct → (towards winter)',m:2,start:[10,24],mon:['Oct','Nov'],len:31}];
+  const GY=430, TX=600;
+  let place=0, sea=0, seed=1, days=[], d=0, hour=0, running=false, runAll=false, rows=[], Tair=0, mx=-99, mn=99, colT=spr(0), sunA=0;
+  const gen=()=>{ const r=rng(seed*97+place*13+sea*7), P=PL[NAMES[place]], s=SEAS[sea]; let a=0; days=[];
+    for(let i=0;i<11;i++){ const dayOfMonth=s.start[1]+i, f=(dayOfMonth-15)/s.len; /* 0 at mid-month, 1 at next mid-month */
+      const nMax=lerp(P[s.m][0],P[s.m+1][0],f), nMin=lerp(P[s.m][1],P[s.m+1][1],f);
+      a=0.6*a+gauss()*1.6*0.8; const u=r(), sky=u<0.12?2:u<0.36?1:0;
+      const amax=a+gauss()*0.5+(sky===1?-3:sky===2?-5:0), amin=a*0.7+gauss()*0.5+(sky===1?1.5:sky===2?1:0);
+      const dm=dayOfMonth>s.len?dayOfMonth-s.len:dayOfMonth, mo=dayOfMonth>s.len?s.mon[1]:s.mon[0];
+      days.push({max:nMax+amax,min:nMin+amin,sky,date:dm+' '+mo}); } };
+  const Tat=(i,h)=>{ const D=days[i], P=days[Math.max(0,i-1)];
+    if(h<6) return P.max-(P.max-D.min)*(1-Math.cos(Math.PI*(h+9.5)/15.5))/2;
+    if(h<=14.5) return D.min+(D.max-D.min)*(1-Math.cos(Math.PI*(h-6)/8.5))/2;
+    const N=days[Math.min(days.length-1,i+1)]; return D.max-(D.max-N.min)*(1-Math.cos(Math.PI*(h-14.5)/15.5))/2; };
+  const reset=()=>{ gen(); d=1; hour=0; rows=[]; running=false; runAll=false; Tair=Tat(1,0); mx=mn=Tair; colT.x=Tair; };
+  S.html=`
+    <div class="control-group"><label>Place</label>${chipList('pl',NAMES,0)}<label style="margin-top:8px">Dates</label>${chipList('se',SEAS.map(s=>s.n),0)}</div>
+    <div class="control-group"><button class="toggle-btn navy" id="r1" style="margin-top:0">▶ Run the next day</button>
+      <button class="toggle-btn play" id="ra" style="width:100%;margin-top:6px">⏩ Run all 10 days</button>
+      <button class="toggle-btn" id="nw" style="width:100%;margin-top:6px">↺ Another 10 days</button></div>`;
+  S.cards=card('cX','Highest maximum',COL.red)+card('cN','Lowest minimum',COL.blue)+card('cT','Maximum: day 1 → 10',COL.green)+card('cR','Average day–night gap');
+  S.tail=`<div class="control-group"><label>Table 7.3 · Max and min air temperature</label>${logTable('tL',['S.no.','Date','Max (°C)','Min (°C)'])}</div>`;
+  S.wire=$=>{
+    wireChips(wrap,'pl',i=>{ place=i; reset(); }); wireChips(wrap,'se',i=>{ sea=i; reset(); });
+    $('#r1').onclick=()=>{ if(rows.length<10) running=true; };
+    $('#ra').onclick=()=>{ if(rows.length<10){ running=true; runAll=true; } };
+    $('#nw').onclick=()=>{ seed++; reset(); };
+    reset();
+  };
+  S.tick=(dt,ctx,t,$)=>{
+    const D=days[d];
+    if(running){ hour+=dt*(runAll?10:4.5);
+      if(hour>=24){ rows.push({date:D.date,max:Math.round(mx*10)/10,min:Math.round(mn*10)/10}); hour=0;
+        if(rows.length>=10){ running=false; runAll=false; hour=23.99; } else { d++; if(!runAll) running=false; Tair=Tat(d,0); mx=mn=Tair; } } }
+    Tair=Tat(d,Math.min(hour,23.999)); if(rows.length<10){ mx=Math.max(mx,Tair); mn=Math.min(mn,Tair); }
+    springTo(colT,Tair,80,16,dt);
+    /* sky: day / night */
+    const sunUp=Math.sin(Math.PI*(hour-6)/12), light=clamp(sunUp*1.6+0.25,0,1), Dn=days[d];
+    const dim=Dn.sky===2?0.55:Dn.sky===1?0.8:1;
+    ctx.save(); const g=ctx.createLinearGradient(0,0,0,GY); g.addColorStop(0,mixCol('#1a3a5c','#cfe6fb',light*dim)); g.addColorStop(1,mixCol('#4c6178','#f4f9ff',light*dim)); ctx.fillStyle=g; ctx.fillRect(-300,-100,1400,GY+100); ctx.restore();
+    if(light<0.5){ const r=rng(3); ctx.save(); ctx.globalAlpha=(0.5-light)*1.6; ctx.fillStyle='#fff'; for(let i=0;i<40;i++) ctx.fillRect(r()*460,r()*300,1.6,1.6); ctx.restore(); }
+    /* the Sun's arc */
+    const sa=Math.PI*(hour-6)/12, sx=250-Math.cos(sa)*210, sy=360-Math.sin(sa)*300;
+    if(hour>5.5&&hour<18.5) sunIcon(ctx,sx,sy,22,t);
+    else { const ma=Math.PI*((hour+12)%24-6)/12; circ(ctx,250-Math.cos(ma)*210,360-Math.sin(ma)*280,16,'#c2d1e5','#f6f9fc',2); }
+    if(Dn.sky>0){ for(let i=0;i<3;i++) cloud(ctx,((60+i*150+t*14)%560)-40,70+i*28,46,Dn.sky===2?COL.mid:'#c2d1e5'); }
+    if(Dn.sky===2){ ctx.save(); ctx.strokeStyle=rgba(COL.blue,0.6); ctx.lineWidth=1.4; for(let i=0;i<50;i++){ const x=(i*37+t*60)%520-20, y=(i*53+t*420)%340+110; ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(x-4,y+12); ctx.stroke(); } ctx.restore(); }
+    /* ground, tree, weather screen */
+    soilBand(ctx,-20,820,GY,90,'#eef5e6');
+    line(ctx,90,GY,90,GY-120,COL.ink,5); circ(ctx,90,GY-150,46,COL.green,'#f1faf3',2.4); circ(ctx,60,GY-120,30,COL.green,'#f1faf3',2.4);
+    const SX=300, SY=GY-140;
+    ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=3; [[SX-40,GY],[SX+40,GY]].forEach(p=>line(ctx,p[0],SY+70,p[0],GY,COL.ink,3));
+    rect(ctx,SX-56,SY-4,112,78,COL.ink,'#fff',2.6); ctx.beginPath(); ctx.moveTo(SX-64,SY-4); ctx.lineTo(SX,SY-30); ctx.lineTo(SX+64,SY-4); ctx.closePath(); ctx.fillStyle='#fff'; ctx.fill(); ctx.stroke();
+    for(let y=SY+6;y<SY+70;y+=9) line(ctx,SX-50,y,SX+50,y+4,COL.mid,1.4); ctx.restore();
+    textAt(ctx,'weather station screen',SX,GY+20,{align:'center',size:11,weight:600,color:COL.muted});
+    line(ctx,SX+56,SY+30,TX-30,150,COL.mid,1.2,[4,4]);
+    /* max/min thermometer (inside the screen, shown large) */
+    rrect(ctx,TX-56,40,150,420,14); ctx.save(); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle='#c2d1e5'; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+    const lo=NAMES[place]==='Leh'?-20:-10, hi=NAMES[place]==='Leh'?30:50;
+    const th=thermoV(ctx,TX,58,402,colT.x,{lo,hi,minor:1,major:10,w:16,bulbL:30,bulbR:7,fs:11});
+    const yX=th.yOf(mx), yN=th.yOf(mn);
+    rect(ctx,TX-6,yX-6,12,6,COL.red,COL.red,1); rect(ctx,TX-6,yN,12,6,COL.blue,COL.blue,1);
+    textAt(ctx,'max '+fmt(mx,1),TX-12,yX-1,{align:'right',size:12,weight:700,color:COL.red});
+    textAt(ctx,'min '+fmt(mn,1),TX-12,yN+10,{align:'right',size:12,weight:700,color:COL.blue});
+    /* day card + mini chart */
+    const hh=Math.floor(hour), mm_=Math.floor((hour-hh)*60);
+    rrect(ctx,TX+108,40,92,74,10); ctx.save(); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+    textAt(ctx,'Day '+Math.min(10,rows.length+1),TX+154,60,{align:'center',size:12,weight:700,color:COL.muted}); textAt(ctx,Dn.date,TX+154,82,{align:'center',size:15,weight:700});
+    textAt(ctx,String(hh).padStart(2,'0')+':'+String(mm_).padStart(2,'0'),TX+154,104,{align:'center',size:13,weight:600,color:COL.navy});
+    const all=rows.flatMap(r=>[r.max,r.min]).concat([mx,mn]); const ylo=Math.floor((Math.min(...all)-2)/5)*5, yhi=Math.ceil((Math.max(...all)+2)/5)*5;
+    const ch=miniChart(ctx,TX+104,130,96,250,[1,10],[ylo,yhi],[{pts:rows.map((r,i)=>[i+1,r.max]),col:COL.red},{pts:rows.map((r,i)=>[i+1,r.min]),col:COL.blue}],{yt:[ylo,yhi],xt:[1,10]});
+    rows.forEach((r,i)=>{ circ(ctx,ch.px(i+1),ch.py(r.max),2.6,COL.red,COL.red,1); circ(ctx,ch.px(i+1),ch.py(r.min),2.6,COL.blue,COL.blue,1); });
+    if(running){ circ(ctx,ch.px(rows.length+1),ch.py(mx),3,COL.red,'#fff',1.4); circ(ctx,ch.px(rows.length+1),ch.py(mn),3,COL.blue,'#fff',1.4); }
+    /* cards + table */
+    if(rows.length){ const ix=rows.reduce((b,r,i)=>r.max>rows[b].max?i:b,0), iN=rows.reduce((b,r,i)=>r.min<rows[b].min?i:b,0);
+      setv($,'cX',fmt(rows[ix].max,1)+' °C · '+rows[ix].date); setv($,'cN',fmt(rows[iN].min,1)+' °C · '+rows[iN].date);
+      setv($,'cR',fmt(rows.reduce((a,r)=>a+r.max-r.min,0)/rows.length,1)+' °C'); }
+    else { setv($,'cX','—'); setv($,'cN','—'); setv($,'cR','—'); }
+    setv($,'cT',rows.length>=10?trendTxt():rows.length?'after day 10':'—');
+    setLog($,'tL',rows.map((r,i)=>[i+1,r.date,{t:fmt(r.max,1),c:'rd'},{t:fmt(r.min,1),c:'b'}]));
+  };
+  /* least-squares slope of the maximum over the 10 days */
+  const slope=k=>{ const n=rows.length, xs=rows.map((_,i)=>i), ys=rows.map(r=>r[k]), xm=(n-1)/2, ym=ys.reduce((a,b)=>a+b,0)/n;
+    let a=0,b=0; xs.forEach((x,i)=>{ a+=(x-xm)*(ys[i]-ym); b+=(x-xm)*(x-xm); }); return a/b*(n-1); };
+  const trendTxt=()=>{ const s=slope('max'); return (s>=0?'rose ':'fell ')+fmt(Math.abs(s),1)+' °C'; };
+  S.found=()=>{ if(rows.length<10) return ''; const s=slope('max'), m=slope('min');
+    return 'No — they change every day. Over 10 days the max '+(s>=0?'rose':'fell')+' by about '+fmt(Math.abs(s),1)+' °C, the min '+(m>=0?'rose':'fell')+' by '+fmt(Math.abs(m),1)+' °C ('+(sea?'towards winter':'towards summer')+').'; };
+  S.fb=()=>{ if(!rows.length) return ['warn','Run the days — watch the red index climb in the afternoon and the blue one drop before sunrise.'];
+    if(rows.length<10) return null;
+    const cl=days.slice(1,11).filter(x=>x.sky>0).length;
+    return ['ok',cl?'Notice the cloudy/rainy days: a lower maximum and a higher minimum.':'Clear skies: big gaps between day and night.']; };
+  return S;
+}); }
+
+
+/* ---------------------------------------------------------------------
+   ACTIVITIES + ROUTER
+   --------------------------------------------------------------------- */
+function _b(name){ return typeof window[name]==='function'?window[name]:()=>{ const d=document.createElement('div'); d.textContent='(not built)'; return d; }; }
+const activities = [
+  { num:'7.1', tag:'', title:'Hot or Cold?', desc:'Let us investigate · three bowls, two hands · can touch be trusted?', build:_b('buildA1') },
+  { num:'7.2', tag:'', title:'Clinical Thermometer', desc:'Let us measure · body temperature of 10 persons · Table 7.1', build:_b('buildA2') },
+  { num:'7.3', tag:'', title:'Range of a Thermometer', desc:'Let us observe · lowest and highest marks of a laboratory thermometer', build:_b('buildA3') },
+  { num:'7.4', tag:'', title:'Smallest Division', desc:'Let us observe and calculate · what does one small division read?', build:_b('buildA4') },
+  { num:'7.5', tag:'', title:'Warm Water', desc:'Let us measure · the correct way to read a laboratory thermometer', build:_b('buildA5') },
+  { num:'7.6', tag:'', title:'Ice and Boiling Water', desc:'Let us compare · temperatures that stay constant · Table 7.2', build:_b('buildA6') },
+  { num:'7.7', tag:'', title:'Max and Min Air Temperature', desc:'Let us analyse · 10 days of weather reports · Table 7.3', build:_b('buildA7') },
+];
+if(typeof buildGal==='function') activities.unshift({num:'G',tag:'',title:'Gallery',desc:'',build:buildGal});
+let currentIndex = 0;
+
+function buildNav(){
+  const nav = document.getElementById('sideNav');
+  nav.innerHTML='';
+  activities.forEach((a,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'nav-item'+(i===currentIndex?' active':'');
+    btn.innerHTML = `<span class="n-num">${a.num}${a.tag?'<br>'+a.tag:''}</span><span class="n-title">${a.title}</span>`;
+    btn.onclick = ()=>{ currentIndex=i; render(); };
+    nav.appendChild(btn);
+  });
+}
+function render(){
+  stopAllLoops();
+  buildNav();
+  const a = activities[currentIndex];
+  document.getElementById('panelBadge').textContent = a.num+(a.tag?' '+a.tag:'');
+  document.getElementById('panelTitle').textContent = a.title;
+  document.getElementById('panelDesc').textContent = a.desc||'';
+  const body = document.getElementById('panelBody');
+  body.innerHTML='';
+  body.appendChild(a.build());
+}
+function labShell(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `<div class="lab-canvas-wrap"><canvas></canvas></div><div class="lab-side"></div>`;
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   INIT
+   --------------------------------------------------------------------- */
+render();
+
+</script>
+<script src="../../tracking/activity-tracker.js"></script>
+<script src="../../nav/back-button.js"></script>
+</body>
+</html>

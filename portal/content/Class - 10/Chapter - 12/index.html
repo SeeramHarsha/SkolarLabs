@@ -1,0 +1,987 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 10 · Chapter 12 — Magnetic Effects of Electric Current | Botclub Labs</title>
+<link href="../../vendor/fonts/fonts.css" rel="stylesheet">
+<style>
+:root{
+  --navy-1:#0f2640; --navy-2:#1a3a5c; --navy-3:#234a73;
+  --accent: #00d4ff; --accent-2: #00d4ff;
+  --bg: #0d1117; --surface-0: rgba(255,255,255,0.04); --surface-1: rgba(255,255,255,0.04); --surface-2: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.08); --border-strong: rgba(255,255,255,0.08);
+  --text-1: #ffffff; --text-2: #ffffff; --text-3: #ffffff;
+  --real:#d9432b; --virtual:#2f8fe0; --ok:#1f9d55; --warn:#c9820b;
+  --radius:14px; --radius-sm:9px;
+  --fs-xs:clamp(10px,0.62vw,12px); --fs-sm:clamp(11px,0.72vw,13.5px);
+  --fs-md:clamp(12.5px,0.85vw,15px); --fs-lg:clamp(15px,1.15vw,19px);
+  --fs-xl:clamp(18px,1.5vw,25px);
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:22px; --sp-6:30px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{ font-family:'Poppins',system-ui,sans-serif; background:var(--bg); color:var(--text-1); overflow:hidden; }
+button, input, select{font-family:inherit;}
+
+.app{height:100vh; display:flex; flex-direction:column; min-height:0;}
+.topbar{
+  flex:0 0 auto; background:linear-gradient(120deg, var(--navy-1) 0%, var(--navy-2) 55%, var(--navy-3) 100%);
+  color:#fff; padding:clamp(10px,1.1vh,18px) clamp(14px,1.6vw,28px);
+  display:flex; align-items:center; gap:var(--sp-4); box-shadow:0 2px 10px rgba(15,38,64,0.25); z-index:5;
+}
+.topbar .brand-badge{
+  width:clamp(34px,2.6vw,44px); height:clamp(34px,2.6vw,44px); border-radius:10px; background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center;
+  font-size:clamp(16px,1.4vw,22px); flex:0 0 auto;
+}
+.topbar .titles{min-width:0;}
+.topbar .chip{
+  display:inline-block; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.28);
+  border-radius:6px; padding:2px 9px; font-size:var(--fs-xs); letter-spacing:0.06em; text-transform:uppercase; font-weight:600; margin-bottom:4px;
+}
+.topbar h1{font-size:var(--fs-lg); font-weight:600; line-height:1.25; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.topbar p{font-size:var(--fs-sm); opacity:0.78; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.topbar .spacer{flex:1;}
+.topbar .prof-note{font-size:var(--fs-xs); opacity:0.85; text-align:right; max-width:270px; line-height:1.5; display:none;}
+@media (min-width:1100px){ .topbar .prof-note{display:block;} }
+
+.body-wrap{flex:1; display:flex; min-height:0; overflow:hidden;}
+.sidenav{
+  flex:0 0 clamp(190px,15.5vw,268px); background:var(--surface-0); border-right:1px solid var(--border);
+  overflow-y:auto; padding:var(--sp-3); display:flex; flex-direction:column; gap:6px;
+}
+.nav-section-label{font-size:var(--fs-xs); text-transform:uppercase; letter-spacing:0.08em; color:var(--text-3); font-weight:600; padding:8px 8px 2px;}
+.nav-item{
+  display:flex; flex-direction:column; align-items:flex-start; gap:1px; text-align:left; width:100%;
+  border:1px solid var(--border); background:var(--surface-1); border-radius:var(--radius-sm); padding:8px 11px; cursor:pointer; transition:all .15s ease;
+}
+.nav-item:hover{background:var(--surface-2); border-color:var(--border-strong);}
+.nav-item.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.nav-item .n-num{font-size:var(--fs-xs); font-weight:700; letter-spacing:.04em; color:var(--accent); opacity:.95;}
+.nav-item.active .n-num{color:var(--accent-2);}
+.nav-item .n-title{font-size:var(--fs-md); font-weight:600; line-height:1.3;}
+.nav-item .n-sub{font-size:var(--fs-xs); color:var(--text-2);}
+.nav-item.active .n-sub{color:rgba(255,255,255,0.75);}
+.nav-item .n-type{align-self:flex-end; font-size:9px; text-transform:uppercase; letter-spacing:.05em; background:var(--surface-2); border-radius:4px; padding:1px 5px; color:var(--text-3); margin-top:2px;}
+.nav-item.active .n-type{background:rgba(255,255,255,0.15); color:#fff;}
+
+.content{flex:1; min-width:0; display:flex; flex-direction:column; overflow:hidden;}
+.panel-head{flex:0 0 auto; padding:var(--sp-4) var(--sp-5) var(--sp-2); border-bottom:1px solid var(--border); background:var(--surface-0);}
+.panel-head .badge-row{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+.panel-badge{background:var(--navy-2); color:#fff; font-size:var(--fs-xs); font-weight:700; padding:3px 10px; border-radius:6px; letter-spacing:.04em;}
+.panel-typebadge{font-size:var(--fs-xs); color:var(--text-2); border:1px solid var(--border); padding:2px 8px; border-radius:6px;}
+.panel-head h2{font-size:var(--fs-xl); font-weight:600; margin-top:6px; color:var(--text-1);}
+.panel-head p{font-size:var(--fs-sm); color:var(--text-2); margin-top:3px; line-height:1.5; max-width:1000px;}
+.panel-body{flex:1; min-height:0; overflow:hidden; padding:var(--sp-4) var(--sp-5); display:flex;}
+
+.lab-view{flex:1; display:flex; gap:var(--sp-4); min-height:0; min-width:0;}
+.lab-canvas-wrap{flex:2; min-width:0; min-height:0; background:#f7fafd; border:1px solid var(--border); border-radius:var(--radius); position:relative; overflow:hidden;}
+.lab-canvas-wrap canvas{width:100%; height:100%; display:block;}
+.lab-legend{position:absolute; top:10px; left:12px; background:rgba(255,255,255,0.92); border:1px solid var(--border); border-radius:8px; padding:7px 11px; font-size:var(--fs-xs); color:var(--text-2); line-height:1.8; backdrop-filter:blur(2px);}
+.lab-legend span{display:inline-block; width:16px; height:2.5px; margin-right:6px; vertical-align:middle;}
+
+.lab-side{flex:1; min-width:270px; max-width:400px; display:flex; flex-direction:column; gap:var(--sp-3); min-height:0; overflow-y:auto; padding-right:2px;}
+.control-group{background:var(--surface-0); border:1px solid var(--border); border-radius:var(--radius-sm); padding:11px 13px;}
+.control-group label{font-size:var(--fs-sm); font-weight:600; color:var(--text-1); display:flex; justify-content:space-between;}
+.control-group label .val{color:var(--accent); font-weight:700;}
+.control-group input[type=range]{width:100%; margin-top:8px; accent-color:var(--navy-2); cursor:pointer;}
+.toggle-group{display:flex; gap:6px; margin-top:8px; flex-wrap:wrap;}
+.toggle-btn{flex:1; min-width:60px; padding:8px 6px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:600; cursor:pointer; text-align:center; color:var(--text-2);}
+.toggle-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.toggle-btn.small{font-size:10.5px; padding:6px 4px;}
+.grid6{display:grid; grid-template-columns:1fr 1fr 1fr; gap:6px; margin-top:8px;}
+
+.result-cards{display:grid; grid-template-columns:1fr 1fr; gap:7px;}
+.rcard{background:var(--surface-0); border:1px solid var(--border); border-radius:9px; padding:8px 10px;}
+.rcard .rlabel{font-size:9.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--text-3); font-weight:600;}
+.rcard .rval{font-size:var(--fs-md); font-weight:700; color:var(--text-1); margin-top:2px;}
+.rcard.wide{grid-column:1/-1;}
+.nature-tags{display:flex; gap:5px; flex-wrap:wrap; margin-top:3px;}
+.tag{font-size:10px; font-weight:700; padding:2px 8px; border-radius:12px;}
+.tag.real{background:#fde7e2; color:var(--real);}
+.tag.virtual{background:#e6f2fd; color:var(--virtual);}
+.tag.warn{background:#fdf1e0; color:var(--warn);}
+.tag.ok{background:#e4f7ec; color:var(--ok);}
+.tag.size{background:var(--surface-2); color:var(--text-2);}
+.info-note{font-size:var(--fs-xs); color:var(--text-2); line-height:1.6;}
+.warn-banner{margin-top:8px; background:#fdece7; border:1px solid #f3bcaa; color:#a4331c; font-size:var(--fs-xs); font-weight:600; padding:7px 10px; border-radius:8px;}
+.ok-banner{margin-top:8px; background:#e4f7ec; border:1px solid #b8e8cb; color:#1f6b3d; font-size:var(--fs-xs); font-weight:600; padding:7px 10px; border-radius:8px;}
+
+.mini-table{width:100%; border-collapse:collapse; font-size:10.5px;}
+.mini-table th{background:var(--navy-2); color:#fff; padding:5px 6px; text-align:left; font-weight:600;}
+.mini-table td{padding:5px 6px; border-bottom:1px solid var(--border); color:var(--text-2);}
+.mini-table tr.hl td{background:#eaf3fd; color:var(--text-1); font-weight:600;}
+.check-row{display:flex; align-items:center; gap:8px; font-size:var(--fs-sm); margin-top:8px;}
+.check-row input{width:16px; height:16px; accent-color:var(--navy-2);}
+
+@media (max-width:1000px) and (orientation:portrait), (max-width:1000px) and (min-height:601px){
+  .body-wrap{flex-direction:column;}
+  .sidenav{flex:0 0 auto; width:100%; height:auto; flex-direction:row; overflow-x:auto; overflow-y:hidden; border-right:none; border-bottom:1px solid var(--border); padding:8px;}
+  .nav-section-label{display:none;}
+  .nav-item{flex:0 0 auto; width:170px;}
+  .panel-body{overflow-y:auto;}
+  .lab-view{flex-direction:column;}
+  .lab-canvas-wrap{min-height:280px;}
+  .lab-side{max-width:none;}
+  .content{overflow-y:auto;}
+}
+@media (max-width:620px){
+  .topbar h1{white-space:normal;}
+  .result-cards{grid-template-columns:1fr 1fr;}
+}
+::-webkit-scrollbar{width:8px; height:8px;}
+::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+</style>
+</head>
+<body>
+<!-- CLAUDE-BACK-NAV-START -->
+<div id="claude-back-nav" style="width:100%;box-sizing:border-box;display:flex;gap:8px;align-items:center;padding:8px 14px;background:#0d1117;border-bottom:1px solid rgba(255,255,255,0.08);font-family:'Poppins',sans-serif;position:relative;z-index:9999;">
+  <button type="button" id="claude-back-btn" onclick="window.location.href='../../index.html?openClass=10'" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:rgba(255,255,255,0.06);color:#fff;border:1px solid rgba(255,255,255,0.14);border-radius:16px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;">&#8592; Back to Class 10 Chapters</button>
+</div>
+<!-- CLAUDE-BACK-NAV-END -->
+
+<div class="app">
+  <div class="topbar">
+    <div class="brand-badge">🧲</div>
+    <div class="titles">
+      <div class="chip">Grade 10 · Chapter 12</div>
+      <h1>Magnetic Effects of Electric Current</h1>
+      <p>Field-line & directional-rule simulator for classroom demonstration</p>
+    </div>
+    <div class="spacer"></div>
+    <div class="prof-note">Select an activity on the left. The wire, coil, and Fleming's-rule labs are computed live from the real Biot–Savart law and vector cross products — verified against Example 12.1 and 12.2.</div>
+  </div>
+  <div class="body-wrap">
+    <nav class="sidenav" id="sideNav"></nav>
+    <main class="content">
+      <div class="panel-head">
+        <div class="badge-row">
+          <div class="panel-badge" id="panelBadge">12.1</div>
+          <div class="panel-typebadge" id="panelType">Lab</div>
+        </div>
+        <h2 id="panelTitle">Select an activity</h2>
+        <p id="panelDesc">Choose an activity from the left to begin.</p>
+      </div>
+      <div class="panel-body" id="panelBody"></div>
+    </main>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   CHAPTER 12 — MAGNETIC EFFECTS OF ELECTRIC CURRENT
+   ========================================================================= */
+
+/* ---------------------------------------------------------------------
+   0. SHARED HELPERS
+   --------------------------------------------------------------------- */
+function fitCanvas(canvas){
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  const rect = canvas.parentElement.getBoundingClientRect();
+  const w = Math.max(200, rect.width);
+  const h = Math.max(160, rect.height);
+  canvas.width = Math.round(w*dpr);
+  canvas.height = Math.round(h*dpr);
+  canvas.style.width = w+'px';
+  canvas.style.height = h+'px';
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, w, h};
+}
+function line(ctx,x1,y1,x2,y2,color,width,dash){
+  ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=width||2;
+  if(dash) ctx.setLineDash(dash); else ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); ctx.restore();
+}
+function arrowHead(ctx,x,y,ang,color,size){
+  size=size||8; ctx.save(); ctx.fillStyle=color; ctx.translate(x,y); ctx.rotate(ang);
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-size,size*0.42); ctx.lineTo(-size,-size*0.42); ctx.closePath(); ctx.fill(); ctx.restore();
+}
+function textAt(ctx,txt,x,y,opts){
+  opts=opts||{}; ctx.save();
+  ctx.font=(opts.weight||500)+' '+(opts.size||12)+'px Poppins, sans-serif';
+  ctx.fillStyle=opts.color||'#132a44'; ctx.textAlign=opts.align||'left'; ctx.textBaseline=opts.baseline||'alphabetic';
+  ctx.fillText(txt,x,y); ctx.restore();
+}
+function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+function fmt(x,d){ if(!isFinite(x)) return '—'; d=d===undefined?2:d; return Number(x.toFixed(d)).toString(); }
+
+/* vector helpers (2D & 3D) */
+function sub2(a,b){return {x:a.x-b.x,y:a.y-b.y};}
+function add2(a,b){return {x:a.x+b.x,y:a.y+b.y};}
+function scale2(a,s){return {x:a.x*s,y:a.y*s};}
+function len2(a){return Math.hypot(a.x,a.y);}
+function norm2(a){const l=len2(a)||1e-9; return {x:a.x/l,y:a.y/l};}
+
+function cross3(a,b){ return {x:a.y*b.z-a.z*b.y, y:a.z*b.x-a.x*b.z, z:a.x*b.y-a.y*b.x}; }
+function len3(a){ return Math.hypot(a.x,a.y,a.z); }
+function norm3(a){ const l=len3(a)||1e-9; return {x:a.x/l,y:a.y/l,z:a.z/l}; }
+
+/* compass needle drawer: draws N (red) / S (white) needle rotated by angle (radians, 0 = pointing up/north) */
+function drawCompass(ctx,cx,cy,r,angle,label){
+  ctx.save();
+  ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2);
+  ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle='#8195ab'; ctx.lineWidth=1.6; ctx.stroke();
+  ctx.translate(cx,cy); ctx.rotate(angle);
+  ctx.beginPath(); ctx.moveTo(0,-r*0.8); ctx.lineTo(r*0.22,0); ctx.lineTo(0,r*0.15); ctx.lineTo(-r*0.22,0); ctx.closePath();
+  ctx.fillStyle='#d9432b'; ctx.fill();
+  ctx.beginPath(); ctx.moveTo(0,r*0.8); ctx.lineTo(r*0.22,0); ctx.lineTo(0,-r*0.15); ctx.lineTo(-r*0.22,0); ctx.closePath();
+  ctx.fillStyle='#c2d1e5'; ctx.fill(); ctx.strokeStyle='#8195ab'; ctx.lineWidth=1; ctx.stroke();
+  ctx.restore();
+  if(label) textAt(ctx,label,cx,cy+r+14,{align:'center',size:10.5,color:'#4c6178'});
+}
+
+/* ---------------------------------------------------------------------
+   1. ACTIVITY DATA + ROUTER
+   --------------------------------------------------------------------- */
+const activities = [
+  { id:'a1', num:'12.1', title:'Bar Magnet & Field Lines', sub:'Activities 12.2 – 12.3', type:'barmagnetlab',
+    desc:'Field lines emerge from the north pole and merge at the south pole, never crossing, and are closer together where the field is stronger. Explore both the iron-filings pattern and the compass-traced field lines.' },
+
+  { id:'a2', num:'Activities 12.1 & 12.4', title:"Oersted's Experiment", sub:'A current-carrying wire deflects a compass', type:'oerstedlab',
+    desc:'Hans Christian Oersted discovered that a current-carrying wire produces its own magnetic field, deflecting a nearby compass. Switch the current on, reverse its direction, and change its strength to see the effect.' },
+
+  { id:'a3', num:'12.2.1 – 12.2.2', title:'Field of a Straight Conductor', sub:'Activity 12.5 & the Right-Hand Thumb Rule', type:'wirelab',
+    desc:"The field lines around a straight current-carrying wire are concentric circles. Point your right thumb along the current — your curled fingers give the field direction. Field strength follows the real Biot–Savart law, B = μ₀I / 2πr." },
+
+  { id:'a4', num:'12.2.3 – 12.2.4', title:'Loop, Coil & Solenoid', sub:'Activities 12.6 — the electromagnet', type:'coillab',
+    desc:'Bend the straight wire into a loop and the field lines bunch up at the centre. Stack many loops into a solenoid and it behaves just like a bar magnet — strong enough to magnetise a soft-iron core into an electromagnet.' },
+
+  { id:'a5', num:'12.3', title:'Force on a Current-Carrying Conductor', sub:"Activity 12.7 — Fleming's Left-Hand Rule", type:'flemlab',
+    desc:'A current-carrying conductor in a magnetic field feels a force perpendicular to both. Pick any current and field direction and watch the force direction compute live — verified against Example 12.2.' },
+
+  { id:'a6', num:'12.4', title:'Domestic Electric Circuits', sub:'Live/neutral/earth wiring, fuses & overloading', type:'circuitlab2',
+    desc:'Every home circuit has a live, neutral, and earth wire, protected by a fuse rated for its maximum safe current. Switch appliances on and off — or simulate a short circuit — and watch the fuse respond.' },
+];
+
+let currentIndex = 0;
+
+function buildNav(){
+  const nav = document.getElementById('sideNav');
+  nav.innerHTML = '<div class="nav-section-label">Chapter 12 Activities</div>';
+  activities.forEach((a,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'nav-item'+(i===currentIndex?' active':'');
+    btn.innerHTML = `<span class="n-num">${a.num}</span><span class="n-title">${a.title}</span><span class="n-sub">${a.sub}</span><span class="n-type">Interactive</span>`;
+    btn.onclick = ()=>{ currentIndex=i; render(); };
+    nav.appendChild(btn);
+  });
+}
+
+function render(){
+  buildNav();
+  const a = activities[currentIndex];
+  document.getElementById('panelBadge').textContent = a.num;
+  document.getElementById('panelType').textContent = 'Interactive Lab';
+  document.getElementById('panelTitle').textContent = `${a.num}: ${a.title}`;
+  document.getElementById('panelDesc').textContent = a.desc;
+  const body = document.getElementById('panelBody');
+  body.innerHTML='';
+  if(a.type==='barmagnetlab') body.appendChild(buildBarMagnetLab());
+  else if(a.type==='oerstedlab') body.appendChild(buildOerstedLab());
+  else if(a.type==='wirelab') body.appendChild(buildWireLab());
+  else if(a.type==='coillab') body.appendChild(buildCoilLab());
+  else if(a.type==='flemlab') body.appendChild(buildFlemingLab());
+  else if(a.type==='circuitlab2') body.appendChild(buildDomesticCircuitLab());
+}
+
+/* ---------------------------------------------------------------------
+   2. BAR MAGNET FIELD LINES (Activities 12.2 – 12.3)
+   --------------------------------------------------------------------- */
+function traceFieldLine(N,S,seedAngle,maxSteps,stepSize){
+  const R=8; // seed radius around N pole
+  let p = {x:N.x+R*Math.cos(seedAngle), y:N.y+R*Math.sin(seedAngle)};
+  const pts=[p];
+  for(let i=0;i<maxSteps;i++){
+    const dN=sub2(p,N), rN=Math.max(len2(dN),4);
+    const dS=sub2(p,S), rS=Math.max(len2(dS),4);
+    const fN = scale2(dN, 1/(rN*rN*rN));
+    const fS = scale2(dS, -1/(rS*rS*rS));
+    const f = add2(fN,fS);
+    const d = norm2(f);
+    p = add2(p, scale2(d,stepSize));
+    pts.push(p);
+    if(len2(sub2(p,S)) < 9) break;
+    if(Math.abs(p.x)>2000||Math.abs(p.y)>2000) break;
+  }
+  return pts;
+}
+function fieldDirAt(p,N,S){
+  const dN=sub2(p,N), rN=Math.max(len2(dN),4);
+  const dS=sub2(p,S), rS=Math.max(len2(dS),4);
+  const fN = scale2(dN, 1/(rN*rN*rN));
+  const fS = scale2(dS, -1/(rS*rS*rS));
+  return norm2(add2(fN,fS));
+}
+
+function buildBarMagnetLab(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `
+    <div class="lab-canvas-wrap"><canvas id="bmCanvas"></canvas></div>
+    <div class="lab-side">
+      <div class="control-group">
+        <label>Display mode</label>
+        <div class="toggle-group">
+          <button class="toggle-btn active" data-mode="lines">Field Lines</button>
+          <button class="toggle-btn" data-mode="filings">Iron Filings</button>
+        </div>
+      </div>
+      <div class="control-group">
+        <label>Compass position along a field line <span class="val" id="bmTVal">50%</span></label>
+        <input type="range" id="bmT" min="0" max="100" step="1" value="50">
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:2px;">What the compass shows</label>
+        <div class="result-cards">
+          <div class="rcard wide"><div class="rlabel">Field direction here</div><div class="rval" id="bmDir">—</div></div>
+        </div>
+      </div>
+      <div class="control-group">
+        <p class="info-note">Field lines <strong>emerge from N</strong> and <strong>merge into S</strong> — never crossing. Where lines are <em>closer together</em>, the field is stronger. A compass needle always turns to lie <strong>tangent</strong> to the field line, N-tip pointing the way the field points.</p>
+      </div>
+    </div>`;
+
+  const canvas = wrap.querySelector('#bmCanvas');
+  const modeBtns = wrap.querySelectorAll('.toggle-btn');
+  const tSlider = wrap.querySelector('#bmT');
+  let mode='lines';
+  modeBtns.forEach(b=>b.onclick=()=>{ modeBtns.forEach(x=>x.classList.remove('active')); b.classList.add('active'); mode=b.dataset.mode; paint(); });
+
+  function paint(){
+    const {ctx,w,h} = fitCanvas(canvas);
+    ctx.clearRect(0,0,w,h);
+    const cx=w*0.5, cy=h*0.5;
+    const halfLen = Math.min(w,h)*0.14;
+    const N={x:cx+halfLen,y:cy}, S={x:cx-halfLen,y:cy};
+
+    // magnet body
+    ctx.fillStyle='#d9432b'; ctx.fillRect(cx,cy-14,halfLen,28);
+    ctx.fillStyle='#2f8fe0'; ctx.fillRect(cx-halfLen,cy-14,halfLen,28);
+    ctx.strokeStyle='#132a44'; ctx.lineWidth=2; ctx.strokeRect(cx-halfLen,cy-14,halfLen*2,28);
+    textAt(ctx,'N',N.x-16,cy+5,{align:'center',size:14,weight:700,color:'#fff'});
+    textAt(ctx,'S',S.x+16,cy+5,{align:'center',size:14,weight:700,color:'#fff'});
+
+    const seeds=[];
+    for(let i=0;i<14;i++){ seeds.push(-Math.PI*0.92 + i*(Math.PI*1.84/13)); }
+
+    if(mode==='lines'){
+      const lines = seeds.map(a=>traceFieldLine(N,S,a,300,4));
+      lines.forEach(pts=>{
+        ctx.strokeStyle='#2f8fe0'; ctx.lineWidth=1.6;
+        ctx.beginPath(); pts.forEach((p,i)=>{ if(i===0) ctx.moveTo(p.x,p.y); else ctx.lineTo(p.x,p.y); }); ctx.stroke();
+        const mid = pts[Math.floor(pts.length*0.5)];
+        const nxt = pts[Math.min(pts.length-1,Math.floor(pts.length*0.5)+3)];
+        if(mid&&nxt) arrowHead(ctx,mid.x,mid.y,Math.atan2(nxt.y-mid.y,nxt.x-mid.x),'#2f8fe0',6);
+      });
+      // compass on chosen line (seed index 3, an upper line)
+      const chosen = traceFieldLine(N,S,seeds[3],300,4);
+      const t = parseInt(tSlider.value,10)/100;
+      const idx = clamp(Math.floor(t*(chosen.length-1)),0,chosen.length-1);
+      const p = chosen[idx];
+      const dir = fieldDirAt(p,N,S);
+      const ang = Math.atan2(dir.x,-dir.y); // convert to compass angle (0=up)
+      drawCompass(ctx,p.x,p.y,16,ang,null);
+      const dirLabel = Math.abs(dir.x)>Math.abs(dir.y) ? (dir.x>0?'pointing right (towards S)':'pointing left') : (dir.y>0?'pointing down':'pointing up');
+      wrap.querySelector('#bmDir').textContent = dirLabel;
+    } else {
+      wrap.querySelector('#bmDir').textContent = '(switch to Field Lines to see compass)';
+      const step=22;
+      for(let gx=step*0.5; gx<w; gx+=step){
+        for(let gy=step*0.5; gy<h; gy+=step){
+          const p={x:gx,y:gy};
+          const dMag = Math.min(len2(sub2(p,N)),len2(sub2(p,S)));
+          if(dMag<20) continue;
+          const dir = fieldDirAt(p,N,S);
+          const l = clamp(8 + 60/dMag*10, 5, 11);
+          ctx.strokeStyle='rgba(30,30,30,0.55)'; ctx.lineWidth=1.3;
+          line(ctx, p.x-dir.x*l/2,p.y-dir.y*l/2, p.x+dir.x*l/2,p.y+dir.y*l/2, 'rgba(40,40,40,0.6)',1.3);
+        }
+      }
+    }
+    textAt(ctx,mode==='lines'?'Magnetic Field Lines':'Iron Filings Pattern',w*0.5,20,{align:'center',size:13,weight:700,color:'#132a44'});
+  }
+  tSlider.oninput=paint;
+  const ro=new ResizeObserver(()=>paint()); ro.observe(canvas.parentElement);
+  requestAnimationFrame(paint);
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   3. OERSTED'S EXPERIMENT (Activities 12.1 & 12.4) — real tangent law
+   --------------------------------------------------------------------- */
+function buildOerstedLab(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `
+    <div class="lab-canvas-wrap"><canvas id="oeCanvas"></canvas></div>
+    <div class="lab-side">
+      <div class="control-group">
+        <label>Circuit</label>
+        <div class="toggle-group">
+          <button class="toggle-btn" data-key="off">Key Open</button>
+          <button class="toggle-btn active" data-key="on">Key Closed</button>
+        </div>
+      </div>
+      <div class="control-group">
+        <label>Current direction</label>
+        <div class="toggle-group">
+          <button class="toggle-btn active" data-dir="ns">North → South</button>
+          <button class="toggle-btn" data-dir="sn">South → North</button>
+        </div>
+      </div>
+      <div class="control-group">
+        <label>Current I <span class="val" id="oeIVal">3 A</span></label>
+        <input type="range" id="oeI" min="0.5" max="10" step="0.5" value="3">
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:2px;">Live readings</label>
+        <div class="result-cards">
+          <div class="rcard"><div class="rlabel">Field from wire, B</div><div class="rval" id="oeB">—</div></div>
+          <div class="rcard"><div class="rlabel">Needle deflection</div><div class="rval" id="oeDefl">—</div></div>
+        </div>
+      </div>
+      <div class="control-group">
+        <p class="info-note">This is the <strong>tangent law</strong>: tan θ = B<sub>wire</sub> / B<sub>Earth</sub>. Since B<sub>wire</sub> = μ₀I/2πr grows with current, so does the deflection — exactly what Oersted observed in 1820.</p>
+      </div>
+    </div>`;
+
+  const canvas = wrap.querySelector('#oeCanvas');
+  const keyBtns = wrap.querySelectorAll('[data-key]');
+  const dirBtns = wrap.querySelectorAll('[data-dir]');
+  const iSlider = wrap.querySelector('#oeI');
+  let keyOn=true, dir='ns';
+  const r = 0.05; // 5 cm
+  const Bearth = 3.6e-5; // Tesla, typical horizontal component
+
+  keyBtns.forEach(b=>b.onclick=()=>{ keyBtns.forEach(x=>x.classList.remove('active')); b.classList.add('active'); keyOn=b.dataset.key==='on'; paint(); });
+  dirBtns.forEach(b=>b.onclick=()=>{ dirBtns.forEach(x=>x.classList.remove('active')); b.classList.add('active'); dir=b.dataset.dir; paint(); });
+
+  function paint(){
+    const I = parseFloat(iSlider.value);
+    const Bwire = keyOn ? (4*Math.PI*1e-7*I)/(2*Math.PI*r) : 0;
+    const tanTheta = Bwire/Bearth;
+    const theta = Math.atan(tanTheta) * (dir==='ns'?1:-1);
+    wrap.querySelector('#oeIVal').textContent = I+' A';
+    wrap.querySelector('#oeB').textContent = keyOn ? (Bwire*1e6).toFixed(2)+' µT' : '0 µT';
+    wrap.querySelector('#oeDefl').textContent = keyOn ? Math.abs(theta*180/Math.PI).toFixed(1)+'° '+(theta>0?'East':theta<0?'West':'') : '0° (no current)';
+
+    const {ctx,w,h} = fitCanvas(canvas);
+    ctx.clearRect(0,0,w,h);
+    const cx=w*0.5, wireY=h*0.4;
+    line(ctx,w*0.15,wireY,w*0.85,wireY,'#c9822f',5);
+    // current direction arrow along wire
+    if(keyOn){
+      const ax1 = dir==='ns'? w*0.2:w*0.8, ax2=dir==='ns'?w*0.35:w*0.65;
+      arrowHead(ctx,ax2,wireY,dir==='ns'?0:Math.PI,'#e8a33d',9);
+      textAt(ctx,'Current '+(dir==='ns'?'(N → S)':'(S → N)'),cx,wireY-40,{align:'center',size:12,weight:600,color:'#4c6178'});
+    } else {
+      textAt(ctx,'Key open — no current',cx,wireY-40,{align:'center',size:12,weight:600,color:'#8195ab'});
+    }
+    textAt(ctx,'N',w*0.12,wireY+4,{size:11,color:'#4c6178'});
+    textAt(ctx,'S',w*0.88,wireY+4,{size:11,color:'#4c6178'});
+
+    // compass below wire
+    const compY = h*0.68;
+    // compass rest orientation = N-S (horizontal, pointing towards wire's N/S labels means needle default = along the wire, i.e horizontal) per Fig 12.5 style: default north pole points toward "North" label (up-left diagonal shown in fig, but let's simplify: at rest, needle points along the wire direction i.e horizontal, angle=90deg (pointing toward the N/S wire ends)
+    const restAngle = Math.PI/2; // horizontal, pointing right (toward S end) as "geographic north" reference simplification
+    const I2 = keyOn? I:0;
+    const Bwire2 = keyOn? (4*Math.PI*1e-7*I2)/(2*Math.PI*r):0;
+    const theta2 = Math.atan(Bwire2/Bearth)*(dir==='ns'?1:-1);
+    drawCompass(ctx,cx,compY,30,restAngle - theta2, null);
+    textAt(ctx,'Compass needle',cx,compY+46,{align:'center',size:11,color:'#4c6178'});
+    textAt(ctx,'E',cx+42,compY+4,{size:10,color:'#8195ab'});
+    textAt(ctx,'W',cx-46,compY+4,{size:10,color:'#8195ab'});
+
+    textAt(ctx,"Oersted's Experiment",cx,20,{align:'center',size:13,weight:700,color:'#132a44'});
+  }
+  iSlider.oninput=paint;
+  const ro=new ResizeObserver(()=>paint()); ro.observe(canvas.parentElement);
+  requestAnimationFrame(paint);
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   4. STRAIGHT CONDUCTOR + RIGHT-HAND THUMB RULE
+   --------------------------------------------------------------------- */
+function buildWireLab(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `
+    <div class="lab-canvas-wrap"><canvas id="wireCanvas"></canvas></div>
+    <div class="lab-side">
+      <div class="control-group">
+        <label>Current direction (viewed end-on)</label>
+        <div class="toggle-group">
+          <button class="toggle-btn active" data-dir="out">⊙ Out of page</button>
+          <button class="toggle-btn" data-dir="in">⊗ Into page</button>
+        </div>
+      </div>
+      <div class="control-group">
+        <label>Current I <span class="val" id="wIVal">5 A</span></label>
+        <input type="range" id="wI" min="0.5" max="15" step="0.5" value="5">
+      </div>
+      <div class="control-group">
+        <label>Compass distance from wire <span class="val" id="wRVal">4 cm</span></label>
+        <input type="range" id="wR" min="1.5" max="10" step="0.5" value="4">
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:2px;">Right-hand thumb rule</label>
+        <div class="result-cards">
+          <div class="rcard wide"><div class="rlabel">Field strength B = μ₀I/2πr</div><div class="rval" id="wB">—</div></div>
+        </div>
+        <p class="info-note" style="margin-top:8px;">Point your right <strong>thumb</strong> along the current. Your <strong>curled fingers</strong> wrap around the wire in the direction of the field lines.</p>
+      </div>
+    </div>`;
+
+  const canvas = wrap.querySelector('#wireCanvas');
+  const dirBtns = wrap.querySelectorAll('[data-dir]');
+  const iSlider = wrap.querySelector('#wI');
+  const rSlider = wrap.querySelector('#wR');
+  let out=true;
+  dirBtns.forEach(b=>b.onclick=()=>{ dirBtns.forEach(x=>x.classList.remove('active')); b.classList.add('active'); out=b.dataset.dir==='out'; paint(); });
+
+  function paint(){
+    const I = parseFloat(iSlider.value);
+    const rCm = parseFloat(rSlider.value);
+    wrap.querySelector('#wIVal').textContent = I+' A';
+    wrap.querySelector('#wRVal').textContent = rCm+' cm';
+    const rM = rCm/100;
+    const B = (4*Math.PI*1e-7*I)/(2*Math.PI*rM);
+    wrap.querySelector('#wB').textContent = (B*1e6).toFixed(2)+' µT';
+
+    const {ctx,w,h} = fitCanvas(canvas);
+    ctx.clearRect(0,0,w,h);
+    const cx=w*0.5, cy=h*0.5;
+    const pxPerCm = Math.min(w,h)*0.32/10;
+
+    // concentric circles
+    for(let rc=2; rc<=9; rc+=1.4){
+      ctx.beginPath(); ctx.arc(cx,cy,rc*pxPerCm,0,Math.PI*2);
+      ctx.strokeStyle='rgba(47,143,224,0.55)'; ctx.lineWidth=1.4; ctx.stroke();
+      // arrow on circle
+      const ang = out? -Math.PI*0.15 : Math.PI*1.15;
+      const ax = cx+rc*pxPerCm*Math.cos(ang), ay=cy+rc*pxPerCm*Math.sin(ang);
+      const tangentAng = ang + (out? Math.PI/2 : -Math.PI/2);
+      arrowHead(ctx,ax,ay,tangentAng,'#2f8fe0',6);
+    }
+
+    // wire (dot / cross)
+    ctx.beginPath(); ctx.arc(cx,cy,14,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle='#132a44'; ctx.lineWidth=2.4; ctx.stroke();
+    if(out){ ctx.beginPath(); ctx.arc(cx,cy,4,0,Math.PI*2); ctx.fillStyle='#132a44'; ctx.fill(); }
+    else{
+      ctx.strokeStyle='#132a44'; ctx.lineWidth=2.2;
+      line(ctx,cx-7,cy-7,cx+7,cy+7,'#132a44',2.2); line(ctx,cx-7,cy+7,cx+7,cy-7,'#132a44',2.2);
+    }
+    textAt(ctx,out?'Current out of page':'Current into page',cx,cy-40,{align:'center',size:12,weight:600,color:'#4c6178'});
+
+    // compass at distance r, sitting on the field circle
+    const compAng = Math.PI*0.35;
+    const compX = cx+rCm*pxPerCm*Math.cos(compAng), compY=cy+rCm*pxPerCm*Math.sin(compAng);
+    const tdir = out ? {x:-Math.sin(compAng), y:Math.cos(compAng)} : {x:Math.sin(compAng), y:-Math.cos(compAng)};
+    const needleAngle = Math.atan2(tdir.x, -tdir.y);
+    drawCompass(ctx,compX,compY,15,needleAngle,null);
+
+    textAt(ctx,'P',compX+18,compY-8,{size:11,color:'#4c6178'});
+    line(ctx,cx,cy,compX,compY,'#9aa9bb',1,[3,3]);
+
+    textAt(ctx,'Field lines: concentric circles around the wire',cx,h-16,{align:'center',size:11.5,color:'#4c6178'});
+    textAt(ctx,'Right-Hand Thumb Rule',cx,20,{align:'center',size:13,weight:700,color:'#132a44'});
+  }
+  iSlider.oninput=paint; rSlider.oninput=paint;
+  const ro=new ResizeObserver(()=>paint()); ro.observe(canvas.parentElement);
+  requestAnimationFrame(paint);
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   5. LOOP / COIL / SOLENOID + ELECTROMAGNET (Activity 12.6)
+   --------------------------------------------------------------------- */
+function buildCoilLab(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `
+    <div class="lab-canvas-wrap"><canvas id="coilCanvas"></canvas></div>
+    <div class="lab-side">
+      <div class="control-group">
+        <label>Configuration</label>
+        <div class="toggle-group">
+          <button class="toggle-btn active" data-c="loop">Single Loop</button>
+          <button class="toggle-btn" data-c="solenoid">Solenoid</button>
+        </div>
+      </div>
+      <div class="control-group">
+        <label>Current direction</label>
+        <div class="toggle-group">
+          <button class="toggle-btn active" data-d="fwd">Forward</button>
+          <button class="toggle-btn" data-d="rev">Reversed</button>
+        </div>
+      </div>
+      <div class="control-group">
+        <label>Turns / Current <span class="val" id="coilNVal">3</span></label>
+        <input type="range" id="coilN" min="1" max="8" step="1" value="3">
+      </div>
+      <div class="control-group" id="magnetGroup">
+        <label style="margin-bottom:2px;">Electromagnet strength</label>
+        <div class="result-cards">
+          <div class="rcard wide"><div class="rlabel">Relative field strength</div><div class="rval" id="coilStrength">—</div></div>
+        </div>
+        <div class="check-row"><input type="checkbox" id="coilNail"><label for="coilNail" style="font-weight:500;">Bring an iron nail near the end</label></div>
+        <p class="info-note" style="margin-top:8px;" id="coilPoles"></p>
+      </div>
+    </div>`;
+
+  const canvas = wrap.querySelector('#coilCanvas');
+  const cfgBtns = wrap.querySelectorAll('[data-c]');
+  const dirBtns = wrap.querySelectorAll('[data-d]');
+  const nSlider = wrap.querySelector('#coilN');
+  const nailChk = wrap.querySelector('#coilNail');
+  let cfg='loop', fwd=true;
+
+  cfgBtns.forEach(b=>b.onclick=()=>{ cfgBtns.forEach(x=>x.classList.remove('active')); b.classList.add('active'); cfg=b.dataset.c; paint(); });
+  dirBtns.forEach(b=>b.onclick=()=>{ dirBtns.forEach(x=>x.classList.remove('active')); b.classList.add('active'); fwd=b.dataset.d==='fwd'; paint(); });
+  nailChk.onchange=paint;
+
+  function paint(){
+    const n = parseInt(nSlider.value,10);
+    wrap.querySelector('#coilNVal').textContent = n;
+    const strength = n*1.4;
+    wrap.querySelector('#coilStrength').textContent = strength.toFixed(1)+' (relative units)';
+
+    const {ctx,w,h} = fitCanvas(canvas);
+    ctx.clearRect(0,0,w,h);
+    const cx=w*0.5, cy=h*0.5;
+
+    if(cfg==='loop'){
+      const R = Math.min(w,h)*0.22;
+      ctx.beginPath(); ctx.ellipse(cx,cy,R,R*0.42,0,0,Math.PI*2);
+      ctx.strokeStyle='#c9822f'; ctx.lineWidth=5; ctx.stroke();
+      // arrows on loop showing current direction
+      const dirSign = fwd?1:-1;
+      for(let a=0;a<Math.PI*2;a+=Math.PI/4){
+        const x1=cx+R*Math.cos(a), y1=cy+R*0.42*Math.sin(a);
+        const tang = a+Math.PI/2*dirSign;
+        arrowHead(ctx,x1,y1,tang,'#e8a33d',7);
+      }
+      // field lines through center (straight, density ~ n)
+      for(let i=0;i<n;i++){
+        const off = (i-(n-1)/2)*10;
+        const x0=cx-R*0.55, x1=cx+R*0.55;
+        rayHint(ctx,x0,cy+off,x1,cy+off, fwd);
+      }
+      textAt(ctx,'Single current loop — field lines bunch straight through the centre',cx,h*0.86,{align:'center',size:12,color:'#4c6178'});
+      wrap.querySelector('#coilPoles').textContent = fwd? 'Right face behaves as North pole (right-hand rule).' : 'Left face behaves as North pole (current reversed).';
+    } else {
+      const solW = Math.min(w,h)*0.68, solH = Math.min(w,h)*0.34;
+      const x0=cx-solW/2, x1=cx+solW/2, midY=cy;
+      const loops = 8;
+      ctx.strokeStyle='#c9822f'; ctx.lineWidth=3;
+      for(let i=0;i<=loops;i++){
+        const x = x0 + (solW/loops)*i;
+        ctx.beginPath(); ctx.ellipse(x,midY,solH*0.14,solH*0.5,0,0,Math.PI*2); ctx.stroke();
+      }
+      // iron core
+      ctx.fillStyle='#8a97a8'; ctx.fillRect(x0+8,midY-solH*0.16,solW-16,solH*0.32);
+      const N_end = fwd? x1: x0, S_end = fwd? x0:x1;
+      textAt(ctx,'N',N_end + (fwd?24:-24), midY,{align:'center',size:15,weight:700,color:'#d9432b'});
+      textAt(ctx,'S',S_end + (fwd?-24:24), midY,{align:'center',size:15,weight:700,color:'#2f8fe0'});
+
+      // external field lines (bar-magnet style) using dipole approx around ends
+      const Np={x:N_end,y:midY}, Sp={x:S_end,y:midY};
+      const seeds=[-1.3,-1.0,-0.7,0.7,1.0,1.3];
+      seeds.forEach(a=>{
+        const pts=traceFieldLine(fwd?Np:Sp, fwd?Sp:Np, a, 220, 4.2);
+        ctx.strokeStyle='rgba(47,143,224,0.55)'; ctx.lineWidth=1.3;
+        ctx.beginPath(); pts.forEach((p,i)=>{ if(i===0) ctx.moveTo(p.x,p.y); else ctx.lineTo(p.x,p.y); }); ctx.stroke();
+      });
+
+      // internal field arrows (straight, parallel)
+      for(let i=0;i<3;i++){
+        const yOff=(i-1)*solH*0.22;
+        rayHint(ctx, x0+16, midY+yOff, x1-16, midY+yOff, fwd);
+      }
+
+      wrap.querySelector('#coilPoles').textContent = 'Field inside is uniform & parallel; outside it looks just like a bar magnet.';
+
+      // nail attraction demo
+      if(nailChk.checked){
+        const attract = strength>=4.2;
+        const nailX = N_end + (fwd? 70:-70);
+        const nailY = midY;
+        const pull = attract? clamp((strength-4)*4,0,26):0;
+        const nx = nailX - (fwd?1:-1)*pull;
+        ctx.save(); ctx.translate(nx,nailY); ctx.rotate(fwd?Math.PI/2:-Math.PI/2);
+        ctx.fillStyle='#7a828c'; ctx.fillRect(-4,-22,8,44);
+        ctx.beginPath(); ctx.moveTo(-4,-22); ctx.lineTo(4,-22); ctx.lineTo(0,-32); ctx.closePath(); ctx.fill();
+        ctx.restore();
+        textAt(ctx, attract? 'Nail is attracted!' : 'Too weak to attract — increase turns/current', nailX, midY+50,{align:'center',size:11.5,weight:600,color: attract?'#1f9d55':'#c9820b'});
+      }
+    }
+    textAt(ctx, cfg==='loop'?'Current-Carrying Circular Loop':'Solenoid — an Electromagnet', cx, 20,{align:'center',size:13,weight:700,color:'#132a44'});
+  }
+  function rayHint(ctx,x0,y,x1,y2,forward){
+    ctx.strokeStyle='#132a44'; ctx.lineWidth=1.6;
+    line(ctx,x0,y,x1,y2,'#132a44',1.6);
+    const mx=(x0+x1)/2;
+    arrowHead(ctx,forward?x1:x0, y, forward?0:Math.PI, '#132a44',6);
+  }
+  nSlider.oninput=paint;
+  const ro=new ResizeObserver(()=>paint()); ro.observe(canvas.parentElement);
+  requestAnimationFrame(paint);
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   6. FLEMING'S LEFT-HAND RULE (Activity 12.7 / Example 12.2)
+   --------------------------------------------------------------------- */
+const AXES = {
+  right:{v:{x:1,y:0,z:0}, label:'Right'},
+  left:{v:{x:-1,y:0,z:0}, label:'Left'},
+  up:{v:{x:0,y:1,z:0}, label:'Up'},
+  down:{v:{x:0,y:-1,z:0}, label:'Down'},
+  toward:{v:{x:0,y:0,z:1}, label:'Toward you (out of page)'},
+  away:{v:{x:0,y:0,z:-1}, label:'Away from you (into page)'},
+};
+function isoProject(v, originX, originY, scale){
+  const ix = (v.x - v.z) * Math.cos(Math.PI/6);
+  const iy = v.y - (v.x + v.z) * Math.sin(Math.PI/6);
+  return {x: originX + ix*scale, y: originY - iy*scale};
+}
+
+function buildFlemingLab(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  const opts = Object.keys(AXES).map(k=>`<option value="${k}">${AXES[k].label}</option>`).join('');
+  wrap.innerHTML = `
+    <div class="lab-canvas-wrap"><canvas id="flemCanvas"></canvas></div>
+    <div class="lab-side">
+      <div class="control-group">
+        <label style="margin-bottom:6px;">Magnetic Field direction (1st finger)</label>
+        <div class="grid6" id="fieldGrid"></div>
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:6px;">Current direction (2nd finger)</label>
+        <div class="grid6" id="currGrid"></div>
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:2px;">Result (thumb → Force)</label>
+        <div class="result-cards">
+          <div class="rcard wide"><div class="rlabel">Force direction</div><div class="rval" id="flemF">—</div></div>
+        </div>
+      </div>
+      <div class="control-group">
+        <button class="toggle-btn" id="flemExample" style="width:100%;">Try Example 12.2 (electron)</button>
+        <p class="info-note" style="margin-top:8px;">Fleming's Left-Hand Rule: <strong>First</strong> finger = Field, <strong>seCond</strong> finger = Current, <strong>thuMb</strong> = Motion (Force). Force is greatest when current ⊥ field, and zero when they're parallel.</p>
+      </div>
+    </div>`;
+
+  const canvas = wrap.querySelector('#flemCanvas');
+  const fieldGrid = wrap.querySelector('#fieldGrid');
+  const currGrid = wrap.querySelector('#currGrid');
+  let fieldKey='right', currKey='up';
+
+  function buildGrid(container, selectedKey, onPick){
+    container.innerHTML='';
+    Object.keys(AXES).forEach(k=>{
+      const b=document.createElement('button');
+      b.className='toggle-btn small'+(k===selectedKey?' active':'');
+      b.textContent=AXES[k].label;
+      b.onclick=()=>{ onPick(k); };
+      container.appendChild(b);
+    });
+  }
+  function refreshGrids(){
+    buildGrid(fieldGrid, fieldKey, (k)=>{ fieldKey=k; refreshGrids(); paint(); });
+    buildGrid(currGrid, currKey, (k)=>{ currKey=k; refreshGrids(); paint(); });
+  }
+
+  wrap.querySelector('#flemExample').onclick=()=>{ fieldKey='right'; currKey='up'; refreshGrids(); paint(); };
+
+  function nearestAxisLabel(v){
+    let best=null, bestDot=-2;
+    Object.keys(AXES).forEach(k=>{
+      const d = v.x*AXES[k].v.x + v.y*AXES[k].v.y + v.z*AXES[k].v.z;
+      if(d>bestDot){ bestDot=d; best=k; }
+    });
+    return best;
+  }
+
+  function paint(){
+    const B = AXES[fieldKey].v, I = AXES[currKey].v;
+    const Fv = cross3(I,B);
+    const Fmag = len3(Fv);
+    const Fdir = Fmag>0.001 ? norm3(Fv) : null;
+
+    if(!Fdir){
+      wrap.querySelector('#flemF').textContent = 'Zero — current is parallel to field';
+    } else {
+      const label = AXES[nearestAxisLabel(Fdir)].label;
+      wrap.querySelector('#flemF').textContent = label;
+    }
+
+    const {ctx,w,h} = fitCanvas(canvas);
+    ctx.clearRect(0,0,w,h);
+    const originX=w*0.5, originY=h*0.58, scale=Math.min(w,h)*0.24;
+
+    // axes (light gray)
+    const axisDefs = [{x:1,y:0,z:0},{x:-1,y:0,z:0},{x:0,y:1,z:0},{x:0,y:-1,z:0},{x:0,y:0,z:1},{x:0,y:0,z:-1}];
+    axisDefs.forEach(a=>{
+      const p = isoProject(a,originX,originY,scale*1.3);
+      line(ctx,originX,originY,p.x,p.y,'#e2e8f0',1.4);
+    });
+    const lbl = isoProject({x:1.55,y:0,z:0},originX,originY,scale); textAt(ctx,'Right',lbl.x,lbl.y,{size:10,color:'#9aa9bb'});
+    const lbl2 = isoProject({x:0,y:1.55,z:0},originX,originY,scale); textAt(ctx,'Up',lbl2.x,lbl2.y,{size:10,color:'#9aa9bb'});
+    const lbl3 = isoProject({x:0,y:0,z:1.55},originX,originY,scale); textAt(ctx,'You',lbl3.x,lbl3.y,{size:10,color:'#9aa9bb'});
+
+    function drawVec(v,color,label,lenMul){
+      lenMul=lenMul||1;
+      const scaled={x:v.x*lenMul,y:v.y*lenMul,z:v.z*lenMul};
+      const p = isoProject(scaled,originX,originY,scale);
+      line(ctx,originX,originY,p.x,p.y,color,3.6);
+      arrowHead(ctx,p.x,p.y,Math.atan2(p.y-originY,p.x-originX),color,10);
+      const lp = isoProject({x:v.x*(lenMul+0.35),y:v.y*(lenMul+0.35),z:v.z*(lenMul+0.35)},originX,originY,scale);
+      textAt(ctx,label,lp.x,lp.y,{align:'center',size:12,weight:700,color});
+    }
+
+    drawVec(B,'#2f8fe0','B (Field)',1.15);
+    drawVec(I,'#e8a33d','I (Current)',0.9);
+    if(Fdir) drawVec(Fdir,'#1f9d55','F (Force)',1.4);
+
+    ctx.fillStyle='#132a44'; ctx.beginPath(); ctx.arc(originX,originY,4,0,Math.PI*2); ctx.fill();
+
+    textAt(ctx,"Fleming's Left-Hand Rule",originX,20,{align:'center',size:13,weight:700,color:'#132a44'});
+    if(!Fdir) textAt(ctx,'No force: I and B are parallel',originX,h-16,{align:'center',size:12,color:'#c9820b',weight:600});
+  }
+  refreshGrids();
+  const ro=new ResizeObserver(()=>paint()); ro.observe(canvas.parentElement);
+  requestAnimationFrame(paint);
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   7. DOMESTIC ELECTRIC CIRCUITS (12.4)
+   --------------------------------------------------------------------- */
+function buildDomesticCircuitLab(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `
+    <div class="lab-canvas-wrap"><canvas id="domCanvas"></canvas></div>
+    <div class="lab-side">
+      <div class="control-group">
+        <label style="margin-bottom:6px;">5 A circuit (lights & fans)</label>
+        <div class="check-row"><input type="checkbox" id="d_bulb1" checked><label for="d_bulb1">Bulb — 60 W</label></div>
+        <div class="check-row"><input type="checkbox" id="d_bulb2"><label for="d_bulb2">Bulb — 100 W</label></div>
+        <div class="check-row"><input type="checkbox" id="d_fan"><label for="d_fan">Fan — 80 W</label></div>
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:6px;">15 A circuit (heavy appliances)</label>
+        <div class="check-row"><input type="checkbox" id="d_geyser"><label for="d_geyser">Geyser — 2000 W</label></div>
+        <div class="check-row"><input type="checkbox" id="d_iron"><label for="d_iron">Electric iron — 1000 W</label></div>
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:2px;">Circuit status</label>
+        <div class="result-cards">
+          <div class="rcard"><div class="rlabel">5 A circuit current</div><div class="rval" id="d_i5">—</div></div>
+          <div class="rcard"><div class="rlabel">15 A circuit current</div><div class="rval" id="d_i15">—</div></div>
+        </div>
+        <div id="d_status5"></div>
+        <div id="d_status15"></div>
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:6px;">Fault simulation (earth wire safety)</label>
+        <div class="check-row"><input type="checkbox" id="d_fault"><label for="d_fault">Insulation fault on the iron's metal body</label></div>
+        <div class="check-row"><input type="checkbox" id="d_earthed" checked><label for="d_earthed">Metal body connected to earth wire</label></div>
+        <div id="d_shock"></div>
+      </div>
+    </div>`;
+
+  const canvas = wrap.querySelector('#domCanvas');
+  const ids=['d_bulb1','d_bulb2','d_fan','d_geyser','d_iron','d_fault','d_earthed'];
+  const els={}; ids.forEach(id=>{ els[id]=wrap.querySelector('#'+id); els[id].onchange=paint; });
+
+  function paint(){
+    const P5 = (els.d_bulb1.checked?60:0)+(els.d_bulb2.checked?100:0)+(els.d_fan.checked?80:0);
+    const P15 = (els.d_geyser.checked?2000:0)+(els.d_iron.checked?1000:0);
+    const I5 = P5/220, I15 = P15/220;
+    wrap.querySelector('#d_i5').textContent = fmt(I5,3)+' A';
+    wrap.querySelector('#d_i15').textContent = fmt(I15,3)+' A';
+
+    const s5 = wrap.querySelector('#d_status5'), s15=wrap.querySelector('#d_status15');
+    const blown5 = I5>5, blown15=I15>15;
+    s5.innerHTML = blown5? '<div class="warn-banner">⚠ 5 A fuse BLOWN — overload! ('+fmt(I5,2)+' A &gt; 5 A rating)</div>' : '<div class="ok-banner">✓ 5 A circuit OK ('+fmt(I5,2)+' A / 5 A)</div>';
+    s15.innerHTML = blown15? '<div class="warn-banner">⚠ 15 A fuse BLOWN — overload! ('+fmt(I15,2)+' A &gt; 15 A rating)</div>' : '<div class="ok-banner">✓ 15 A circuit OK ('+fmt(I15,2)+' A / 15 A)</div>';
+
+    const fault = els.d_fault.checked, earthed=els.d_earthed.checked;
+    const shockDiv = wrap.querySelector('#d_shock');
+    if(fault && earthed) shockDiv.innerHTML='<div class="ok-banner">✓ Fault current flows safely to earth — body stays at 0 V. No shock, and the surge trips the fuse.</div>';
+    else if(fault && !earthed) shockDiv.innerHTML='<div class="warn-banner">⚠ DANGER: metal body is live! Touching it could give a severe shock.</div>';
+    else shockDiv.innerHTML='';
+
+    const {ctx,w,h} = fitCanvas(canvas);
+    ctx.clearRect(0,0,w,h);
+    const x0=w*0.06, liveY=h*0.18, neutY=h*0.28, earthY=h*0.08;
+    line(ctx,x0,earthY,w*0.94,earthY,'#1f9d55',3); textAt(ctx,'Earth',x0-4,earthY-6,{align:'left',size:10.5,color:'#1f9d55',weight:600});
+    line(ctx,x0,liveY,w*0.94,liveY,'#d9432b',3); textAt(ctx,'Live',x0-4,liveY-6,{align:'left',size:10.5,color:'#d9432b',weight:600});
+    line(ctx,x0,neutY,w*0.94,neutY,'#132a44',3); textAt(ctx,'Neutral',x0-4,neutY-6,{align:'left',size:10.5,color:'#132a44',weight:600});
+
+    // fuse boxes
+    function fuseIcon(x,y,blown,label){
+      ctx.strokeStyle= blown? '#d9432b':'#1f9d55'; ctx.lineWidth=2.4;
+      ctx.strokeRect(x-16,y-9,32,18);
+      if(blown){ line(ctx,x-12,y,x-2,y-6,'#d9432b',2); line(ctx,x-2,y-6,x+2,y+4,'#d9432b',2); line(ctx,x+2,y+4,x+12,y,'#d9432b',2); }
+      else { line(ctx,x-12,y,x+12,y,'#1f9d55',2); }
+      textAt(ctx,label,x,y+24,{align:'center',size:10,color:'#4c6178'});
+    }
+    const branch5X = w*0.32, branch15X=w*0.62;
+    line(ctx,branch5X,liveY,branch5X,liveY+30,'#d9432b',2.4);
+    fuseIcon(branch5X,liveY+42,blown5,'5A fuse');
+    line(ctx,branch15X,liveY,branch15X,liveY+30,'#d9432b',2.4);
+    fuseIcon(branch15X,liveY+42,blown15,'15A fuse');
+
+    // appliances on 5A branch
+    const applY = h*0.78;
+    function bulb(x,y,on){
+      ctx.beginPath(); ctx.arc(x,y,12,0,Math.PI*2); ctx.fillStyle= on? '#ffd76b':'#eef2f8'; ctx.fill(); ctx.strokeStyle='#132a44'; ctx.lineWidth=1.6; ctx.stroke();
+    }
+    const items5 = [['d_bulb1',branch5X-50],['d_bulb2',branch5X],['d_fan',branch5X+50]];
+    items5.forEach(([id,x])=>{ bulb(x,applY,els[id].checked); line(ctx,x,liveY+52,x,applY-12,'#9aa9bb',1.4,[3,3]); textAt(ctx,id==='d_fan'?'Fan':id==='d_bulb1'?'60W':'100W',x,applY+22,{align:'center',size:9.5,color:'#4c6178'}); });
+
+    const items15=[['d_geyser',branch15X-30],['d_iron',branch15X+30]];
+    items15.forEach(([id,x])=>{ bulb(x,applY,els[id].checked); line(ctx,x,liveY+52,x,applY-12,'#9aa9bb',1.4,[3,3]); textAt(ctx,id==='d_geyser'?'Geyser':'Iron',x,applY+22,{align:'center',size:9.5,color:'#4c6178'}); });
+
+    if(fault){
+      const ix = branch15X+30;
+      ctx.strokeStyle= (earthed? '#1f9d55':'#d9432b'); ctx.lineWidth=2;
+      ctx.setLineDash([4,3]);
+      line(ctx,ix,applY+12,ix,earthY,earthed?'#1f9d55':'#d9432b',2,[4,3]);
+      ctx.setLineDash([]);
+      textAt(ctx,earthed?'fault → earth (safe)':'fault — body live!',ix,applY+38,{align:'center',size:10,color:earthed?'#1f9d55':'#d9432b',weight:600});
+    }
+
+    textAt(ctx,'Domestic Wiring: Live / Neutral / Earth',w*0.5,h*0.02+12,{align:'center',size:13,weight:700,color:'#132a44'});
+  }
+  paint();
+  const ro=new ResizeObserver(()=>paint()); ro.observe(canvas.parentElement);
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   8. INIT
+   --------------------------------------------------------------------- */
+render();
+</script>
+
+<div class="reset-progress-bar">
+  <button class="reset-progress-btn" onclick="__resetChapterProgress()">
+    &#8635; Reset Progress
+  </button>
+</div>
+<script>
+function __resetChapterProgress(){
+  if(!confirm('Reset all saved progress for this chapter? This cannot be undone.')) return;
+  var keys = ["off", "on", "right", "up"];
+  keys.forEach(function(k){ localStorage.removeItem(k); });
+  alert('Progress has been reset.');
+  location.reload();
+}
+</script>
+  <script src="../../tracking/activity-tracker.js"></script>
+<script src="../../nav/back-button.js"></script>
+</body>
+</html>

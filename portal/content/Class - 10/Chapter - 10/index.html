@@ -1,0 +1,1197 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 10 · Chapter 10 — The Human Eye and the Colourful World | Botclub Labs</title>
+<link href="../../vendor/fonts/fonts.css" rel="stylesheet">
+<style>
+:root{
+  --navy-1:#0f2640; --navy-2:#1a3a5c; --navy-3:#234a73;
+  --accent:#2f8fe0; --accent-2:#5cc8ff;
+  --bg:#eef2f8; --surface-0:#ffffff; --surface-1:#f6f9fc; --surface-2:#eef2f8;
+  --border:#dbe4f0; --border-strong:#c2d1e5;
+  --text-1:#132a44; --text-2:#4c6178; --text-3:#8195ab;
+  --real:#d9432b; --virtual:#2f8fe0; --ok:#1f9d55; --warn:#c9820b;
+  --radius:14px; --radius-sm:9px;
+  --fs-xs:clamp(10px,0.62vw,12px); --fs-sm:clamp(11px,0.72vw,13.5px);
+  --fs-md:clamp(12.5px,0.85vw,15px); --fs-lg:clamp(15px,1.15vw,19px);
+  --fs-xl:clamp(18px,1.5vw,25px);
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:22px; --sp-6:30px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{ font-family:'Poppins',system-ui,sans-serif; background:var(--bg); color:var(--text-1); overflow:hidden; }
+button, input{font-family:inherit;}
+
+.app{height:100vh; height:100dvh; display:flex; flex-direction:column; min-height:0;}
+.topbar{
+  flex:0 0 auto; background:linear-gradient(120deg, var(--navy-1) 0%, var(--navy-2) 55%, var(--navy-3) 100%);
+  color:#fff; padding:clamp(10px,1.1vh,18px) clamp(14px,1.6vw,28px);
+  display:flex; align-items:center; gap:var(--sp-4); box-shadow:0 2px 10px rgba(15,38,64,0.25); z-index:5;
+}
+.topbar .brand-badge{
+  width:clamp(34px,2.6vw,44px); height:clamp(34px,2.6vw,44px); border-radius:10px; background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center;
+  font-size:clamp(16px,1.4vw,22px); flex:0 0 auto;
+}
+.topbar .titles{min-width:0;}
+.topbar .chip{
+  display:inline-block; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.28);
+  border-radius:6px; padding:2px 9px; font-size:var(--fs-xs); letter-spacing:0.06em; text-transform:uppercase; font-weight:600; margin-bottom:4px;
+}
+.topbar h1{font-size:var(--fs-lg); font-weight:600; line-height:1.25; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.topbar p{font-size:var(--fs-sm); opacity:0.78; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.topbar .spacer{flex:1;}
+.topbar .prof-note{font-size:var(--fs-xs); opacity:0.85; text-align:right; max-width:270px; line-height:1.5; display:none;}
+@media (min-width:1100px){ .topbar .prof-note{display:block;} }
+
+.body-wrap{flex:1; display:flex; min-height:0; overflow:hidden;}
+.sidenav{
+  flex:0 0 clamp(190px,15.5vw,268px); background:var(--surface-0); border-right:1px solid var(--border);
+  overflow-y:auto; padding:var(--sp-3); display:flex; flex-direction:column; gap:6px;
+}
+.nav-section-label{font-size:var(--fs-xs); text-transform:uppercase; letter-spacing:0.08em; color:var(--text-3); font-weight:600; padding:8px 8px 2px;}
+.nav-item{
+  display:flex; flex-direction:column; align-items:flex-start; gap:1px; text-align:left; width:100%;
+  border:1px solid var(--border); background:var(--surface-1); border-radius:var(--radius-sm); padding:8px 11px; cursor:pointer; transition:all .15s ease;
+}
+.nav-item:hover{background:var(--surface-2); border-color:var(--border-strong);}
+.nav-item.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.nav-item .n-num{font-size:var(--fs-xs); font-weight:700; letter-spacing:.04em; color:var(--accent); opacity:.95;}
+.nav-item.active .n-num{color:var(--accent-2);}
+.nav-item .n-title{font-size:var(--fs-md); font-weight:600; line-height:1.3;}
+.nav-item .n-sub{font-size:var(--fs-xs); color:var(--text-2);}
+.nav-item.active .n-sub{color:rgba(255,255,255,0.75);}
+.nav-item .n-type{align-self:flex-end; font-size:9px; text-transform:uppercase; letter-spacing:.05em; background:var(--surface-2); border-radius:4px; padding:1px 5px; color:var(--text-3); margin-top:2px;}
+.nav-item.active .n-type{background:rgba(255,255,255,0.15); color:#fff;}
+
+.content{flex:1; min-width:0; display:flex; flex-direction:column; overflow:hidden;}
+.panel-head{flex:0 0 auto; padding:var(--sp-4) var(--sp-5) var(--sp-2); border-bottom:1px solid var(--border); background:var(--surface-0);}
+.panel-head .badge-row{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+.panel-badge{background:var(--navy-2); color:#fff; font-size:var(--fs-xs); font-weight:700; padding:3px 10px; border-radius:6px; letter-spacing:.04em;}
+.panel-typebadge{font-size:var(--fs-xs); color:var(--text-2); border:1px solid var(--border); padding:2px 8px; border-radius:6px;}
+.panel-head h2{font-size:var(--fs-xl); font-weight:600; margin-top:6px; color:var(--text-1);}
+.panel-head p{font-size:var(--fs-sm); color:var(--text-2); margin-top:3px; line-height:1.5; max-width:1000px;}
+.panel-body{flex:1; min-height:0; overflow:hidden; padding:var(--sp-4) var(--sp-5); display:flex;}
+
+.demo-view{flex:1; display:flex; gap:var(--sp-4); min-height:0; min-width:0;}
+.demo-canvas-wrap{
+  flex:1.5; min-width:0; min-height:0; background:#eaf2fb; border:1px solid var(--border); border-radius:var(--radius);
+  display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;
+}
+.demo-canvas-wrap canvas{width:100%; height:100%; display:block;}
+.demo-side{flex:1; min-width:260px; max-width:420px; display:flex; flex-direction:column; gap:var(--sp-3); min-height:0;}
+.step-card{background:var(--surface-0); border:1px solid var(--border); border-radius:var(--radius); padding:var(--sp-4); flex:1; min-height:0; overflow-y:auto;}
+.step-card .step-tag{font-size:var(--fs-xs); font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:.05em;}
+.step-card .step-text{font-size:var(--fs-md); line-height:1.65; color:var(--text-1); margin-top:6px;}
+.step-card .step-text strong{color:var(--navy-2);}
+.step-card .step-text em{color:var(--accent); font-style:normal; font-weight:600;}
+.outcome-pill{display:inline-block; margin-top:10px; font-size:var(--fs-xs); font-weight:600; padding:3px 10px; border-radius:20px;}
+.outcome-pill.ok{background:#e4f7ec; color:var(--ok); border:1px solid #b8e8cb;}
+.outcome-pill.info{background:#e6f2fd; color:var(--accent); border:1px solid #b9dcfb;}
+
+.ctrl-row{display:flex; gap:8px; align-items:center; flex-wrap:wrap; flex:0 0 auto;}
+.btn{padding:9px 16px; border-radius:9px; border:1px solid var(--border-strong); background:var(--surface-0); color:var(--text-1); cursor:pointer; font-size:var(--fs-sm); font-weight:600; transition:all .12s ease; white-space:nowrap;}
+.btn:hover{background:var(--surface-2);}
+.btn:disabled{opacity:.4; cursor:default;}
+.btn.primary{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.btn.primary:hover{background:var(--navy-1);}
+.btn.ghost{background:transparent;}
+.step-dots{display:flex; gap:5px; align-items:center; margin-left:auto;}
+.step-dot{width:7px; height:7px; border-radius:50%; background:var(--border-strong); transition:all .2s;}
+.step-dot.active{background:var(--navy-2); width:20px; border-radius:5px;}
+
+.lab-view{flex:1; display:flex; gap:var(--sp-4); min-height:0; min-width:0;}
+.lab-canvas-wrap{flex:2; min-width:0; min-height:0; background:#f7fafd; border:1px solid var(--border); border-radius:var(--radius); position:relative; overflow:hidden;}
+.lab-canvas-wrap canvas{width:100%; height:100%; display:block;}
+.lab-legend{position:absolute; top:10px; left:12px; background:rgba(255,255,255,0.92); border:1px solid var(--border); border-radius:8px; padding:7px 11px; font-size:var(--fs-xs); color:var(--text-2); line-height:1.8; backdrop-filter:blur(2px);}
+.lab-legend span{display:inline-block; width:16px; height:2.5px; margin-right:6px; vertical-align:middle;}
+.leg-incident{background:#e8a33d;} .leg-refl{background:#2f8fe0;} .leg-real{background:#d9432b;}
+.leg-virtual{background:#2f8fe0; opacity:.55; border-top:2px dashed #2f8fe0; height:0; margin-top:2px;}
+
+.lab-side{flex:1; min-width:270px; max-width:400px; display:flex; flex-direction:column; gap:var(--sp-3); min-height:0; overflow-y:auto; padding-right:2px;}
+.control-group{background:var(--surface-0); border:1px solid var(--border); border-radius:var(--radius-sm); padding:11px 13px;}
+.control-group label{font-size:var(--fs-sm); font-weight:600; color:var(--text-1); display:flex; justify-content:space-between;}
+.control-group label .val{color:var(--accent); font-weight:700;}
+.control-group input[type=range]{width:100%; margin-top:8px; accent-color:var(--navy-2); cursor:pointer;}
+.toggle-group{display:flex; gap:6px; margin-top:8px;}
+.toggle-btn{flex:1; padding:8px 6px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:600; cursor:pointer; text-align:center; color:var(--text-2);}
+.toggle-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.quick-jump{display:flex; flex-wrap:wrap; gap:6px; margin-top:9px;}
+.jump-btn{flex:1 1 calc(33% - 5px); padding:6px 4px; font-size:10.5px; font-weight:600; text-align:center; border:1px solid var(--border-strong); background:var(--surface-1); border-radius:6px; cursor:pointer; color:var(--text-2);}
+.jump-btn.active{background:var(--accent); border-color:var(--accent); color:#fff;}
+
+.result-cards{display:grid; grid-template-columns:1fr 1fr; gap:7px;}
+.rcard{background:var(--surface-0); border:1px solid var(--border); border-radius:9px; padding:8px 10px;}
+.rcard .rlabel{font-size:9.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--text-3); font-weight:600;}
+.rcard .rval{font-size:var(--fs-md); font-weight:700; color:var(--text-1); margin-top:2px;}
+.rcard.wide{grid-column:1/-1;}
+.nature-tags{display:flex; gap:5px; flex-wrap:wrap; margin-top:3px;}
+.tag{font-size:10px; font-weight:700; padding:2px 8px; border-radius:12px;}
+.tag.real{background:#fde7e2; color:var(--real);}
+.tag.virtual{background:#e6f2fd; color:var(--virtual);}
+.tag.warn{background:#fdf1e0; color:var(--warn);}
+.tag.ok{background:#e4f7ec; color:var(--ok);}
+.tag.size{background:var(--surface-2); color:var(--text-2);}
+.info-note{font-size:var(--fs-xs); color:var(--text-2); line-height:1.6;}
+.warn-banner{margin-top:8px; background:#fdece7; border:1px solid #f3bcaa; color:#a4331c; font-size:var(--fs-xs); font-weight:600; padding:7px 10px; border-radius:8px;}
+
+.mini-table{width:100%; border-collapse:collapse; font-size:10.5px;}
+.mini-table th{background:var(--navy-2); color:#fff; padding:5px 6px; text-align:left; font-weight:600;}
+.mini-table td{padding:5px 6px; border-bottom:1px solid var(--border); color:var(--text-2);}
+.mini-table tr.hl td{background:#eaf3fd; color:var(--text-1); font-weight:600;}
+
+@media (max-width:1000px) and (orientation:portrait), (max-width:1000px) and (min-height:601px){
+  .body-wrap{flex-direction:column;}
+  .sidenav{flex:0 0 auto; width:100%; height:auto; flex-direction:row; overflow-x:auto; overflow-y:hidden; border-right:none; border-bottom:1px solid var(--border); padding:8px;}
+  .nav-section-label{display:none;}
+  .nav-item{flex:0 0 auto; width:170px;}
+  .panel-body{overflow-y:auto;}
+  .demo-view, .lab-view{flex-direction:column;}
+  .demo-canvas-wrap{min-height:260px;}
+  .lab-canvas-wrap{min-height:280px;}
+  .demo-side, .lab-side{max-width:none; min-width:0;}
+  .content{overflow-y:auto;}
+}
+@media (max-width:620px){
+  .topbar h1{white-space:normal;}
+  .quick-jump{flex-direction:column;}
+  .jump-btn{flex:1 1 auto;}
+  .result-cards{grid-template-columns:1fr 1fr;}
+}
+@media (max-width:420px){
+  .topbar{padding:10px 12px; gap:10px;}
+  .topbar .brand-badge{display:none;}
+  .nav-item{width:140px; padding:7px 9px;}
+  .panel-head{padding:12px 14px 8px;}
+  .panel-body{padding:12px 14px;}
+  .demo-canvas-wrap{min-height:220px;}
+  .lab-canvas-wrap{min-height:230px;}
+  .lab-legend{font-size:10px; padding:5px 8px; line-height:1.5;}
+  .control-group{padding:9px 10px;}
+  .btn{padding:8px 12px;}
+  .result-cards{grid-template-columns:1fr;}
+}
+::-webkit-scrollbar{width:8px; height:8px;}
+::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand-badge">👁️</div>
+    <div class="titles">
+      <div class="chip">Grade 10 · Chapter 10</div>
+      <h1>The Human Eye and the Colourful World</h1>
+      <p>Physics-accurate activity simulator for classroom demonstration</p>
+    </div>
+    <div class="spacer"></div>
+    <div class="prof-note">Select an activity on the left. The Vision Defects and Prism labs compute real numbers live from the lens formula and Snell's law — drag the sliders to explore any case, including the textbook's worked exercises.</div>
+  </div>
+  <div class="body-wrap">
+    <nav class="sidenav" id="sideNav"></nav>
+    <main class="content">
+      <div class="panel-head">
+        <div class="badge-row">
+          <div class="panel-badge" id="panelBadge">10.1</div>
+          <div class="panel-typebadge" id="panelType">Lab</div>
+        </div>
+        <h2 id="panelTitle">Select an activity</h2>
+        <p id="panelDesc">Choose an activity from the left to begin.</p>
+      </div>
+      <div class="panel-body" id="panelBody"></div>
+    </main>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   CHAPTER 10 — THE HUMAN EYE AND THE COLOURFUL WORLD
+   ========================================================================= */
+
+/* ---------------------------------------------------------------------
+   0. SHARED CANVAS / VECTOR HELPERS
+   --------------------------------------------------------------------- */
+function fitCanvas(canvas){
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  const rect = canvas.parentElement.getBoundingClientRect();
+  const w = Math.max(200, rect.width);
+  const h = Math.max(160, rect.height);
+  canvas.width = Math.round(w*dpr);
+  canvas.height = Math.round(h*dpr);
+  canvas.style.width = w+'px';
+  canvas.style.height = h+'px';
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, w, h};
+}
+function line(ctx,x1,y1,x2,y2,color,width,dash){
+  ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=width||2;
+  if(dash) ctx.setLineDash(dash); else ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); ctx.restore();
+}
+function arrowHead(ctx,x,y,ang,color,size){
+  size=size||8; ctx.save(); ctx.fillStyle=color; ctx.translate(x,y); ctx.rotate(ang);
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-size,size*0.42); ctx.lineTo(-size,-size*0.42); ctx.closePath(); ctx.fill(); ctx.restore();
+}
+function rayWithHead(ctx,x1,y1,x2,y2,color,width,dash){
+  line(ctx,x1,y1,x2,y2,color,width,dash);
+  if(!dash) arrowHead(ctx,x2,y2,Math.atan2(y2-y1,x2-x1),color,7);
+}
+function textAt(ctx,txt,x,y,opts){
+  opts=opts||{}; ctx.save();
+  ctx.font=(opts.weight||500)+' '+(opts.size||12)+'px Poppins, sans-serif';
+  ctx.fillStyle=opts.color||'#132a44'; ctx.textAlign=opts.align||'left'; ctx.textBaseline=opts.baseline||'alphabetic';
+  ctx.fillText(txt,x,y); ctx.restore();
+}
+function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+
+/* 2D vector helpers (for prism ray tracing) */
+function v2(x,y){return {x,y};}
+function vAdd(a,b){return {x:a.x+b.x,y:a.y+b.y};}
+function vSub(a,b){return {x:a.x-b.x,y:a.y-b.y};}
+function vScale(a,s){return {x:a.x*s,y:a.y*s};}
+function vDot(a,b){return a.x*b.x+a.y*b.y;}
+function vCross(a,b){return a.x*b.y-a.y*b.x;}
+function vLen(a){return Math.hypot(a.x,a.y);}
+function vNorm(a){const l=vLen(a)||1e-9; return {x:a.x/l,y:a.y/l};}
+function vRot(a,ang){const c=Math.cos(ang),s=Math.sin(ang); return {x:a.x*c-a.y*s, y:a.x*s+a.y*c};}
+
+/* ---------------------------------------------------------------------
+   1. ACTIVITY DATA + ROUTER
+   --------------------------------------------------------------------- */
+const activities = [
+  { id:'a1', num:'10.1', title:'The Human Eye', sub:'Anatomy & power of accommodation', type:'eyelab',
+    desc:'The eye lens changes curvature (via the ciliary muscles) to keep the image sharp on the retina as an object moves — this is accommodation. Drag the slider to move the object and watch the lens and rays respond.' },
+
+  { id:'a2', num:'10.2', title:'Defects of Vision', sub:'Myopia & Hypermetropia — live correction', type:'visionlab',
+    desc:'Set a far point (myopia) or near point (hypermetropia) and see exactly where the uncorrected image falls — then switch on the corrective lens and watch the required power (in dioptres) computed live from the lens formula.' },
+
+  { id:'a3', num:'Activity 10.1', title:'Refraction Through a Prism', sub:'∠i, ∠r, ∠e and angle of deviation', type:'prismlab',
+    desc:"Trace a ray of light PE through a triangular glass prism exactly as in the pin activity: bending towards the normal at AB, then away from the normal at AC. Adjust the prism angle A and incidence angle i and watch ∠D update live." },
+
+  { id:'a4', num:'Activity 10.2', title:'Dispersion of White Light', sub:'VIBGYOR & recombination', type:'demo',
+    desc:'A narrow beam of sunlight through a slit is split by a prism into a band of seven colours — red bends least, violet bends most. A second, inverted prism recombines them back into white light.',
+    draw: drawDispersion,
+    steps:[
+      {label:'A narrow beam of sunlight enters a dark room through a small slit in cardboard — a thin beam of <strong>white light</strong>.', state:0},
+      {label:'The beam is allowed to fall on one face of a glass prism.', state:1},
+      {label:'On the far side, a screen shows a beautiful <strong>band of colours</strong>: Violet, Indigo, Blue, Green, Yellow, Orange, Red — remembered as <em>VIBGYOR</em>. This band is the <strong>spectrum</strong>, and its formation is called <strong>dispersion</strong>.', state:2, outcome:'Red bends least; violet bends most.'},
+      {label:'Newton placed a <strong>second, identical prism upside-down</strong> right after the first. All seven colours pass through it and recombine — a beam of <strong>white light</strong> emerges again.', state:3, outcome:'Proves sunlight is made of seven colours.'},
+    ]},
+
+  { id:'a5', num:'10.4', title:'Rainbow Formation', sub:"Nature's own prism", type:'demo',
+    desc:'Each tiny raindrop acts like a miniature prism: it refracts and disperses sunlight, reflects it internally off the back surface, then refracts it again on the way out — sending different colours to your eye at slightly different angles.',
+    draw: drawRainbow,
+    steps:[
+      {label:'Sunlight (white) enters the curved surface of a raindrop and is both <strong>refracted and dispersed</strong> — bent by different amounts for each colour.', state:0},
+      {label:'The dispersed rays strike the <strong>back inner surface</strong> of the drop and undergo <strong>total internal reflection</strong>, turning back into the drop.', state:1},
+      {label:'The rays <strong>refract again</strong> as they exit the front of the drop, spreading the colours further and sending them out at slightly different angles.', state:2},
+      {label:'Millions of raindrops together send red, orange, yellow... violet to your eye from slightly different directions — you see a <strong>rainbow</strong>, always formed opposite the Sun.', state:3, outcome:'Sun behind you, rainbow in front — always.'},
+    ]},
+
+  { id:'a6', num:'10.5', title:'Atmospheric Refraction', sub:'Twinkling stars, early sunrise & late sunset', type:'demo',
+    desc:"The atmosphere's density — and refractive index — increases as you go down towards the Earth. Starlight and sunlight bend continuously through this changing medium, producing several everyday effects.",
+    draw: drawAtmospheric,
+    steps:[
+      {label:"A star's light bends continuously as it enters layers of increasingly denser air, bending <strong>towards the normal</strong> at each step. The star appears <em>slightly higher</em> than its true position.", state:0},
+      {label:'Because the air is turbulent and constantly moving, the exact path — and so the apparent position — <strong>keeps fluctuating</strong>. The amount of light reaching your eye flickers: the star <em>twinkles</em>.', state:1},
+      {label:'Planets are much <strong>closer</strong> and appear as extended sources (many point-sources together). Each point twinkles independently, and the effects <strong>average out</strong> — planets shine steadily.', state:2, outcome:'Stars = point source → twinkle. Planets = extended source → steady.'},
+      {label:'Near the horizon, atmospheric refraction bends sunlight over the curve of the Earth. The Sun becomes visible about <strong>2 minutes before</strong> actual sunrise, and stays visible <strong>2 minutes after</strong> actual sunset.', state:3, outcome:'Also causes the flattened shape of the setting Sun.'},
+    ]},
+
+  { id:'a7', num:'10.6', title:'Scattering of Light', sub:'Tyndall effect, blue sky & red danger signals', type:'scatterlab',
+    desc:'Fine particles in the atmosphere scatter shorter (blue) wavelengths far more strongly than longer (red) ones. Explore how particle size changes the colour of scattered light — and why the sky is blue, sunsets are red, and danger signals are red.' },
+];
+
+let currentIndex = 0;
+
+function buildNav(){
+  const nav = document.getElementById('sideNav');
+  nav.innerHTML = '<div class="nav-section-label">Chapter 10 Activities</div>';
+  activities.forEach((a,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'nav-item'+(i===currentIndex?' active':'');
+    const typeLabel = a.type==='demo' ? 'Demo' : a.type==='eyelab' ? 'Interactive' : a.type==='visionlab' ? 'Correction Lab' : a.type==='prismlab' ? 'Ray-Trace Lab' : 'Interactive';
+    btn.innerHTML = `<span class="n-num">${a.num}</span><span class="n-title">${a.title}</span><span class="n-sub">${a.sub}</span><span class="n-type">${typeLabel}</span>`;
+    btn.onclick = ()=>{ currentIndex=i; render(); };
+    nav.appendChild(btn);
+  });
+}
+
+function render(){
+  buildNav();
+  const a = activities[currentIndex];
+  document.getElementById('panelBadge').textContent = a.num;
+  document.getElementById('panelType').textContent =
+    a.type==='demo' ? 'Step Demo' : a.type==='eyelab' ? 'Interactive Lab' : a.type==='visionlab' ? 'Correction Lab' : a.type==='prismlab' ? 'Ray-Trace Lab' : 'Interactive Lab';
+  document.getElementById('panelTitle').textContent = `${a.num}: ${a.title}`;
+  document.getElementById('panelDesc').textContent = a.desc;
+  const body = document.getElementById('panelBody');
+  body.innerHTML='';
+  if(a.type==='demo') body.appendChild(buildDemoView(a));
+  else if(a.type==='eyelab') body.appendChild(buildEyeLab());
+  else if(a.type==='visionlab') body.appendChild(buildVisionLab());
+  else if(a.type==='prismlab') body.appendChild(buildPrismLab());
+  else if(a.type==='scatterlab') body.appendChild(buildScatterLab());
+}
+
+/* ---------------------------------------------------------------------
+   2. DEMO VIEW (step-through cartoons)
+   --------------------------------------------------------------------- */
+function buildDemoView(activity){
+  const wrap=document.createElement('div'); wrap.className='demo-view';
+  wrap.innerHTML = `
+    <div class="demo-canvas-wrap"><canvas id="demoCanvas"></canvas></div>
+    <div class="demo-side">
+      <div class="step-card">
+        <div class="step-tag" id="stepTag">Step 1</div>
+        <div class="step-text" id="stepText"></div>
+        <span class="outcome-pill info" id="outcomePill" style="display:none;"></span>
+      </div>
+      <div class="ctrl-row">
+        <button class="btn" id="btnPrev">← Prev</button>
+        <button class="btn primary" id="btnNext">Next →</button>
+        <button class="btn ghost" id="btnReset">↺ Reset</button>
+        <div class="step-dots" id="stepDots"></div>
+      </div>
+    </div>`;
+  let step=0;
+  const canvas = wrap.querySelector('#demoCanvas');
+  function paint(){ const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h); activity.draw(ctx,w,h,step); }
+  function draw(){
+    const s = activity.steps[step];
+    wrap.querySelector('#stepTag').textContent = `Step ${step+1} of ${activity.steps.length}`;
+    wrap.querySelector('#stepText').innerHTML = s.label;
+    const pill = wrap.querySelector('#outcomePill');
+    if(s.outcome){ pill.style.display='inline-block'; pill.textContent=s.outcome; } else pill.style.display='none';
+    wrap.querySelector('#btnPrev').disabled = step===0;
+    const nb = wrap.querySelector('#btnNext'); nb.disabled = step===activity.steps.length-1;
+    nb.textContent = step===activity.steps.length-1 ? 'Done ✓' : 'Next →';
+    const dotsWrap = wrap.querySelector('#stepDots'); dotsWrap.innerHTML='';
+    activity.steps.forEach((_,i)=>{ const d=document.createElement('div'); d.className='step-dot'+(i===step?' active':''); dotsWrap.appendChild(d); });
+    paint();
+  }
+  wrap.querySelector('#btnPrev').onclick=()=>{ step=Math.max(0,step-1); draw(); };
+  wrap.querySelector('#btnNext').onclick=()=>{ step=Math.min(activity.steps.length-1,step+1); draw(); };
+  wrap.querySelector('#btnReset').onclick=()=>{ step=0; draw(); };
+  const ro=new ResizeObserver(()=>paint()); ro.observe(canvas.parentElement);
+  requestAnimationFrame(draw);
+  return wrap;
+}
+
+/* ---- demo illustration: Activity 10.2 dispersion ---- */
+function drawDispersion(ctx,w,h,step){
+  ctx.fillStyle='#0f1c2e'; ctx.fillRect(0,0,w,h);
+  const cardX=w*0.06, cardW=w*0.05, cardY=h*0.15, cardH=h*0.7;
+  ctx.fillStyle='#3a3f4a'; ctx.fillRect(cardX,cardY,cardW,cardH);
+  const slitY=h*0.5;
+  ctx.fillStyle='#0f1c2e'; ctx.fillRect(cardX,slitY-3,cardW,6);
+  textAt(ctx,'Slit',cardX+cardW/2,cardY-8,{align:'center',size:11,color:'#cfd9e6'});
+  // sunbeam to slit
+  for(let i=-1;i<=1;i++) line(ctx,0,slitY+i*30-20,cardX,slitY,'#f4c14a',1.4);
+  if(step===0){
+    rayWithHead(ctx,cardX+cardW,slitY,w*0.42,slitY,'#fff',2.6);
+    textAt(ctx,'Narrow beam of white light',w*0.3,slitY-14,{size:12,color:'#cfd9e6'});
+    return;
+  }
+  // prism
+  const px=w*0.5, pTop=h*0.22, pBot=h*0.72, pHalf=w*0.085;
+  ctx.beginPath(); ctx.moveTo(px,pTop); ctx.lineTo(px-pHalf,pBot); ctx.lineTo(px+pHalf,pBot); ctx.closePath();
+  ctx.fillStyle='rgba(190,225,250,0.22)'; ctx.fill(); ctx.strokeStyle='#8fb4d9'; ctx.lineWidth=2; ctx.stroke();
+  const hitX = px-pHalf*0.35, hitY = slitY;
+  rayWithHead(ctx,cardX+cardW,slitY,hitX,hitY,'#fff',2.6);
+  if(step===1){
+    textAt(ctx,'Beam falls on one face of the prism',w*0.5,h*0.9,{align:'center',size:12,color:'#cfd9e6'});
+    return;
+  }
+  const colors=['#8b00ff','#4b0082','#0033ff','#00c853','#ffee00','#ff9100','#ff1a1a'];
+  const names=['V','I','B','G','Y','O','R'];
+  const exitX = px+pHalf*0.55, exitYbase=h*0.55;
+  const screenX = w*0.92;
+  colors.forEach((c,i)=>{
+    const spread = (i-3)*10;
+    const endY = exitYbase + spread*3.2;
+    rayWithHead(ctx,hitX,hitY,exitX,exitYbase+ (i-3)*2,c,1.6);
+    rayWithHead(ctx,exitX,exitYbase+(i-3)*2,screenX,endY,c,2.2);
+  });
+  // screen
+  ctx.fillStyle='#1c2534'; ctx.fillRect(screenX-4,h*0.28,8,h*0.5);
+  textAt(ctx,'Screen',screenX,h*0.24,{align:'center',size:11,color:'#cfd9e6'});
+  if(step>=2){
+    names.forEach((nm,i)=>{
+      textAt(ctx,nm,screenX+16,exitYbase+(i-3)*3.2*10-3,{size:11,weight:700,color:colors[i]});
+    });
+    textAt(ctx,'V I B G Y O R  — the spectrum',w*0.5,h*0.92,{align:'center',size:12,color:'#cfd9e6'});
+  }
+  if(step>=3){
+    // second inverted prism recombining
+    const p2x=w*0.78, p2Top=h*0.78, p2Bot=h*0.28, p2Half=w*0.07;
+    ctx.beginPath(); ctx.moveTo(p2x,p2Top); ctx.lineTo(p2x-p2Half,p2Bot); ctx.lineTo(p2x+p2Half,p2Bot); ctx.closePath();
+    ctx.fillStyle='rgba(190,225,250,0.22)'; ctx.fill(); ctx.strokeStyle='#8fb4d9'; ctx.lineWidth=2; ctx.stroke();
+    colors.forEach((c,i)=>{
+      rayWithHead(ctx,exitX,exitYbase+(i-3)*2, p2x-p2Half*0.4, exitYbase+(i-3)*10,c,1.6);
+    });
+    rayWithHead(ctx,p2x-p2Half*0.2,exitYbase,w*0.98,exitYbase,'#fff',2.8);
+    textAt(ctx,'2nd inverted prism → white light again',p2x,p2Top-10,{align:'center',size:11,color:'#cfd9e6'});
+  }
+}
+
+/* ---- demo illustration: 10.4 Rainbow ---- */
+function drawRainbow(ctx,w,h,step){
+  ctx.fillStyle='#eaf4ff'; ctx.fillRect(0,0,w,h);
+  if(step<3){
+    const cx=w*0.5, cy=h*0.5, r=h*0.28;
+    ctx.beginPath(); ctx.arc(cx,cy,r,0,Math.PI*2); ctx.fillStyle='rgba(150,200,240,0.35)'; ctx.fill();
+    ctx.strokeStyle='#5c86ad'; ctx.lineWidth=2; ctx.stroke();
+    const inX=cx-r*1.7, inY=cy-r*1.1;
+    const entryX=cx-r*0.55, entryY=cy-r*0.55;
+    rayWithHead(ctx,inX,inY,entryX,entryY,'#fff',3);
+    textAt(ctx,'Sunlight',inX,inY-10,{size:12,color:'#4c6178'});
+    if(step>=0){
+      const colors=['#8b00ff','#0033ff','#00c853','#ff9100','#ff1a1a'];
+      const backX=cx+r*0.35, backY=cy+r*0.15;
+      colors.forEach((c,i)=>{
+        rayWithHead(ctx,entryX,entryY,backX+i*2,backY+i*2,c,1.6);
+      });
+      textAt(ctx,'Refraction + dispersion',entryX-10,entryY+22,{size:11,color:'#4c6178'});
+    }
+    if(step>=1){
+      const colors=['#8b00ff','#0033ff','#00c853','#ff9100','#ff1a1a'];
+      const backX=cx+r*0.35, backY=cy+r*0.15;
+      const outStartX=cx-r*0.2, outStartY=cy+r*0.75;
+      colors.forEach((c,i)=>{
+        rayWithHead(ctx,backX+i*2,backY+i*2,outStartX+i*3,outStartY+i*2,c,1.6);
+      });
+      textAt(ctx,'Total internal reflection',backX+6,backY-8,{size:11,color:'#4c6178'});
+    }
+    if(step>=2){
+      const colors=['#8b00ff','#0033ff','#00c853','#ff9100','#ff1a1a'];
+      const outStartX=cx-r*0.2, outStartY=cy+r*0.75;
+      colors.forEach((c,i)=>{
+        rayWithHead(ctx,outStartX+i*3,outStartY+i*2,outStartX-r*0.9+i*8,outStartY+r*0.55+i*6,c,2);
+      });
+      textAt(ctx,'Refraction again — colours spread out',outStartX-40,outStartY+r*0.7,{size:11,color:'#4c6178'});
+    }
+  } else {
+    // big picture: sun behind observer, rainbow arc in front
+    const sunX=w*0.12, sunY=h*0.2;
+    textAt(ctx,'☀',sunX,sunY,{size:34,align:'center'});
+    const obsX=w*0.28, obsY=h*0.82;
+    ctx.fillStyle='#132a44'; ctx.beginPath(); ctx.arc(obsX,obsY-16,8,0,Math.PI*2); ctx.fill();
+    ctx.fillRect(obsX-5,obsY-8,10,26);
+    line(ctx,sunX+20,sunY+10,obsX,obsY-16,'#f4c14a',1.6,[4,3]);
+    textAt(ctx,'Observer',obsX,obsY+28,{align:'center',size:11,color:'#4c6178'});
+    // rainbow arc
+    const arcX=w*0.66, arcY=h*0.86, R1=h*0.62;
+    const bands=[['#ff1a1a',0],['#ff9100',8],['#ffee00',16],['#00c853',24],['#0033ff',32],['#4b0082',40],['#8b00ff',48]];
+    bands.forEach(([c,off])=>{
+      ctx.beginPath(); ctx.arc(arcX,arcY,R1-off,Math.PI*1.08,Math.PI*1.92); ctx.strokeStyle=c; ctx.lineWidth=7; ctx.stroke();
+    });
+    textAt(ctx,'Rainbow forms opposite the Sun',arcX,h*0.16,{align:'center',size:12,color:'#4c6178'});
+  }
+}
+
+/* ---- demo illustration: 10.5 Atmospheric refraction ---- */
+function drawAtmospheric(ctx,w,h,step){
+  ctx.fillStyle='#0b1830'; ctx.fillRect(0,0,w,h);
+  if(step<=2){
+    // layered atmosphere with bending starlight
+    for(let i=0;i<6;i++){
+      const y=h*0.15+i*(h*0.55/6);
+      ctx.fillStyle=`rgba(90,140,200,${0.06+i*0.02})`;
+      ctx.fillRect(0,y,w,h*0.55/6);
+    }
+    const groundY=h*0.72;
+    ctx.fillStyle='#1c2a1c'; ctx.fillRect(0,groundY,w,h-groundY);
+    ctx.fillStyle='#132a44'; ctx.beginPath(); ctx.arc(w*0.25,groundY-16,8,0,Math.PI*2); ctx.fill(); ctx.fillRect(w*0.25-5,groundY-8,10,24);
+
+    const starTrueX=w*0.85, starTrueY=h*0.06;
+    textAt(ctx,'★',starTrueX,starTrueY+14,{size:20,align:'center',color:'#ffe27a'});
+    textAt(ctx,'True position',starTrueX,starTrueY+30,{size:10,align:'center',color:'#9fb4c9'});
+
+    // bent path: several segments bending toward normal (vertical) as it descends
+    let px=starTrueX, py=starTrueY+18;
+    const obsX=w*0.25, obsY=groundY-16;
+    const nseg=5;
+    ctx.strokeStyle='#ffe27a'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(px,py);
+    for(let i=1;i<=nseg;i++){
+      const t=i/nseg;
+      const nx = starTrueX + (obsX-starTrueX)*Math.pow(t,1.35);
+      const ny = starTrueY+18 + (obsY-(starTrueY+18))*t;
+      ctx.lineTo(nx,ny); px=nx; py=ny;
+    }
+    ctx.stroke();
+    arrowHead(ctx,obsX,obsY,Math.atan2(obsY-py,obsX-(px-5)),'#ffe27a',7);
+
+    const apparentX = starTrueX - (starTrueX-obsX)*0.06, apparentY = starTrueY-10;
+    if(step>=0){
+      textAt(ctx,'★',apparentX,apparentY+14,{size:16,align:'center',color:'rgba(255,226,122,0.55)'});
+      line(ctx,apparentX,apparentY+16,obsX,obsY,'#ffe27a',1.2,[3,3]);
+      textAt(ctx,'Apparent position (higher)',apparentX,apparentY-4,{size:10,align:'center',color:'#cfd9e6'});
+    }
+    if(step===1){
+      textAt(ctx,'Path fluctuates → brightness flickers: the star twinkles',w*0.5,h*0.94,{align:'center',size:12,color:'#cfd9e6'});
+    }
+    if(step===2){
+      // compare planet as extended source
+      const planetX=w*0.55, planetY=h*0.18;
+      ctx.fillStyle='#e8a33d'; ctx.beginPath(); ctx.arc(planetX,planetY,10,0,Math.PI*2); ctx.fill();
+      for(let i=-2;i<=2;i++) line(ctx,planetX+i*3,planetY+ i*2,obsX+i*1.4,obsY,'rgba(255,226,122,0.5)',1);
+      textAt(ctx,'Planet = many point-sources → variations average out (steady)',w*0.5,h*0.94,{align:'center',size:12,color:'#cfd9e6'});
+    } else {
+      textAt(ctx,'Star = point source, bends towards the normal in denser air below',w*0.5,h*0.02+16,{align:'center',size:12,color:'#cfd9e6'});
+    }
+  } else {
+    // sunrise/sunset diagram
+    ctx.fillStyle='#0f2440'; ctx.fillRect(0,0,w,h);
+    const cx=w*0.5, cy=h*1.05, R=h*0.75;
+    ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fillStyle='#2b4a63'; ctx.fill();
+    ctx.beginPath(); ctx.arc(cx,cy,R+16,0,Math.PI*2); ctx.strokeStyle='rgba(120,170,220,0.35)'; ctx.lineWidth=16; ctx.stroke();
+    const obsX=cx, obsY=cy-R;
+    ctx.fillStyle='#132a44'; ctx.beginPath(); ctx.arc(obsX,obsY-10,6,0,Math.PI*2); ctx.fill(); ctx.fillRect(obsX-4,obsY-4,8,16);
+    // horizon line
+    line(ctx,obsX-w*0.4,obsY,obsX+w*0.4,obsY,'rgba(255,255,255,0.35)',1.4,[5,4]);
+    textAt(ctx,'Horizon',obsX+w*0.4+8,obsY+4,{size:11,color:'#cfd9e6'});
+    // actual sun position (below horizon)
+    const actualX=obsX+w*0.34, actualY=obsY+22;
+    ctx.fillStyle='rgba(255,180,90,0.55)'; ctx.beginPath(); ctx.arc(actualX,actualY,13,0,Math.PI*2); ctx.fill();
+    textAt(ctx,'Actual Sun\n(below horizon)',actualX,actualY+28,{size:10,align:'center',color:'#cfd9e6'});
+    // apparent sun position (above horizon)
+    const appX=obsX+w*0.30, appY=obsY-20;
+    ctx.fillStyle='#ffb84d'; ctx.beginPath(); ctx.arc(appX,appY,15,0,Math.PI*2); ctx.fill();
+    for(let i=0;i<8;i++){ const a=i/8*Math.PI*2; line(ctx,appX+Math.cos(a)*18,appY+Math.sin(a)*18,appX+Math.cos(a)*24,appY+Math.sin(a)*24,'#ffb84d',2); }
+    textAt(ctx,'Apparent Sun (visible!)',appX,appY-24,{size:11,color:'#ffe27a'});
+    // bent ray from actual to observer via apparent
+    rayWithHead(ctx,actualX,actualY,appX,appY,'#ffe27a',2,[5,3]);
+    rayWithHead(ctx,appX,appY,obsX,obsY,'#ffe27a',2.2);
+    textAt(ctx,'Sun visible ~2 min before actual sunrise / after actual sunset',w*0.5,h*0.06,{align:'center',size:12,color:'#cfd9e6'});
+  }
+}
+
+/* ---------------------------------------------------------------------
+   3. EYE ANATOMY & ACCOMMODATION LAB
+   --------------------------------------------------------------------- */
+function lensImage(u,h,f){ const v=1/(1/f+1/u); const m=v/u; return {v,h2:m*h,m}; }
+
+function buildEyeLab(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `
+    <div class="lab-canvas-wrap">
+      <canvas id="eyeCanvas"></canvas>
+      <div class="lab-legend">
+        <div><span class="leg-incident"></span>Incident ray</div>
+        <div><span class="leg-refl"></span>Refracted → focused on retina</div>
+      </div>
+    </div>
+    <div class="lab-side">
+      <div class="control-group">
+        <label>Object distance <span class="val" id="eDistVal">25 cm (Near Point)</span></label>
+        <input type="range" id="eDist" min="0" max="5" step="1" value="0">
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:2px;">Ciliary muscles &amp; lens</label>
+        <div class="result-cards">
+          <div class="rcard"><div class="rlabel">Ciliary muscles</div><div class="rval" id="eMuscle">Contracted</div></div>
+          <div class="rcard"><div class="rlabel">Lens curvature</div><div class="rval" id="eCurve">High</div></div>
+          <div class="rcard wide"><div class="rlabel">Relative focal length</div><div class="rval" id="eFocal">Short</div></div>
+        </div>
+      </div>
+      <div class="control-group">
+        <p class="info-note">
+        As the object moves <strong>closer</strong>, ciliary muscles <em>contract</em> → the lens gets <em>thicker/more curved</em> → focal length <em>decreases</em> — so the image still lands exactly on the retina.
+        As the object moves <strong>farther</strong> (towards infinity), the muscles <em>relax</em> → the lens <em>thins</em> → focal length <em>increases</em>.
+        This adjusting ability is called <strong>accommodation</strong>. It has limits — nothing closer than the <strong>near point (~25 cm)</strong> can be focused.
+        </p>
+      </div>
+    </div>`;
+
+  const canvas = wrap.querySelector('#eyeCanvas');
+  const slider = wrap.querySelector('#eDist');
+  const stops = [
+    {label:'25 cm (Near Point)', u:-30, muscle:'Fully contracted', curve:'Maximum', focal:'Shortest'},
+    {label:'50 cm', u:-46, muscle:'Contracted', curve:'High', focal:'Short'},
+    {label:'1 m', u:-62, muscle:'Slightly contracted', curve:'Medium-high', focal:'Medium-short'},
+    {label:'3 m', u:-78, muscle:'Slightly relaxed', curve:'Medium-low', focal:'Medium-long'},
+    {label:'10 m', u:-90, muscle:'Relaxed', curve:'Low', focal:'Long'},
+    {label:'∞ (Far Point)', u:-105, muscle:'Fully relaxed', curve:'Minimum', focal:'Longest'},
+  ];
+
+  function paint(){
+    const idx = parseInt(slider.value,10);
+    const s = stops[idx];
+    wrap.querySelector('#eDistVal').textContent = s.label;
+    wrap.querySelector('#eMuscle').textContent = s.muscle;
+    wrap.querySelector('#eCurve').textContent = s.curve;
+    wrap.querySelector('#eFocal').textContent = s.focal;
+
+    const {ctx,w,h} = fitCanvas(canvas);
+    ctx.clearRect(0,0,w,h);
+    const originX = w*0.62, cy=h*0.5;
+    const scale = Math.min(w/210,h/130);
+    const X=(x)=>originX+x*scale, Y=(y)=>cy-y*scale;
+
+    line(ctx,0,cy,w,cy,'#c2d1e5',1.4);
+
+    // eyeball
+    const eyeR = 34;
+    const eyeCx = 22;
+    ctx.beginPath(); ctx.arc(X(eyeCx),Y(0),eyeR*scale,0,Math.PI*2);
+    ctx.fillStyle='rgba(220,235,250,0.5)'; ctx.fill(); ctx.strokeStyle='#4f6b8a'; ctx.lineWidth=2; ctx.stroke();
+    // retina arc (right inner side)
+    ctx.beginPath(); ctx.arc(X(eyeCx),Y(0),eyeR*scale*0.94,-Math.PI*0.42,Math.PI*0.42);
+    ctx.strokeStyle='#d9432b'; ctx.lineWidth=3; ctx.stroke();
+    textAt(ctx,'Retina',X(eyeCx+eyeR*0.75),Y(eyeR*0.55),{size:11,color:'#d9432b',weight:600});
+
+    // lens plane at x=0 (thin lens approx), curvature visual driven by index
+    const curveAmt = 5 + (5-idx)*2.2; // thicker when idx small (near)
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(X(0),Y(-16));
+    ctx.quadraticCurveTo(X(curveAmt*0.16),Y(0),X(0),Y(16));
+    ctx.quadraticCurveTo(X(-curveAmt*0.16),Y(0),X(0),Y(-16));
+    ctx.closePath();
+    ctx.fillStyle='rgba(140,190,235,0.65)'; ctx.fill(); ctx.strokeStyle='#2f5c86'; ctx.lineWidth=2; ctx.stroke();
+    ctx.restore();
+    textAt(ctx,'Lens',X(0),Y(-20),{align:'center',size:11,color:'#2f5c86',weight:600});
+    // cornea
+    ctx.beginPath(); ctx.arc(X(eyeCx-eyeR),Y(0),9*scale,-Math.PI*0.5,Math.PI*0.5);
+    ctx.strokeStyle='#6f9dc9'; ctx.lineWidth=2.4; ctx.stroke();
+
+    // image distance fixed at retina: v = eyeR*2*0.94 approx (distance from lens plane x=0 to retina)
+    const v = eyeCx + eyeR*0.94;
+    const hObj = 9;
+    const u = s.u;
+    const f = 1/(1/v - 1/u);
+
+    // object arrow
+    rayWithHead(ctx,X(u),Y(0),X(u),Y(hObj),'#1f9d55',3.2);
+    textAt(ctx,'Object',X(u),Y(hObj)+16,{align:'center',size:11,color:'#1f9d55',weight:600});
+
+    // rays: parallel-style + through-center-style, both converge at (v, h2)
+    const res = lensImage(u,hObj,f);
+    const v2_=res.v, h2=res.h2;
+    // ray A: object -> (0,hObj) -> image
+    rayWithHead(ctx,X(u),Y(hObj),X(0),Y(hObj),'#e8a33d',2);
+    rayWithHead(ctx,X(0),Y(hObj),X(v2_),Y(h2),'#2f8fe0',2);
+    // ray B: object -> (0,0) -> image (through centre, straight)
+    rayWithHead(ctx,X(u),Y(hObj),X(v2_),Y(h2),'#e8a33d',1.6,[4,3]);
+
+    ctx.fillStyle='#1f9d55'; ctx.beginPath(); ctx.arc(X(v2_),Y(h2),3.6,0,Math.PI*2); ctx.fill();
+    textAt(ctx,'Sharp image',X(v2_),Y(h2)-12,{align:'center',size:10.5,color:'#1f9d55',weight:600});
+
+    textAt(ctx,'Not to scale — for teaching purposes',X(0),h-14,{align:'center',size:11,color:'#8195ab'});
+  }
+
+  slider.oninput = paint;
+  const ro=new ResizeObserver(()=>paint()); ro.observe(canvas.parentElement);
+  requestAnimationFrame(paint);
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   4. DEFECTS OF VISION LAB (Myopia / Hypermetropia — real diopters)
+   --------------------------------------------------------------------- */
+function buildVisionLab(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `
+    <div class="lab-canvas-wrap">
+      <canvas id="visCanvas"></canvas>
+      <div class="lab-legend">
+        <div><span class="leg-incident"></span>Incident ray</div>
+        <div><span class="leg-refl"></span>Path to eye's focus point</div>
+      </div>
+    </div>
+    <div class="lab-side">
+      <div class="control-group">
+        <label>Defect Type</label>
+        <div class="toggle-group">
+          <button class="toggle-btn active" data-type="myopia">Myopia</button>
+          <button class="toggle-btn" data-type="hyper">Hypermetropia</button>
+        </div>
+      </div>
+      <div class="control-group" id="paramGroup">
+        <label id="paramLabel">Far point <span class="val" id="paramVal">80 cm</span></label>
+        <input type="range" id="paramSlider" min="40" max="300" step="5" value="80">
+      </div>
+      <div class="control-group">
+        <label>Corrective Lens</label>
+        <div class="toggle-group">
+          <button class="toggle-btn" data-corr="off">Without</button>
+          <button class="toggle-btn active" data-corr="on">With</button>
+        </div>
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:2px;">Live results</label>
+        <div class="result-cards">
+          <div class="rcard"><div class="rlabel">Focal length f</div><div class="rval" id="vFocal">—</div></div>
+          <div class="rcard"><div class="rlabel">Power P</div><div class="rval" id="vPower">—</div></div>
+          <div class="rcard wide">
+            <div class="rlabel">Lens required</div>
+            <div class="nature-tags" id="vTags"></div>
+          </div>
+        </div>
+      </div>
+      <div class="control-group">
+        <p class="info-note" id="vExplain"></p>
+      </div>
+    </div>`;
+
+  const canvas = wrap.querySelector('#visCanvas');
+  const typeBtns = wrap.querySelectorAll('[data-type]');
+  const corrBtns = wrap.querySelectorAll('[data-corr]');
+  const slider = wrap.querySelector('#paramSlider');
+
+  let defect='myopia', corrected=true;
+
+  function configureSlider(){
+    if(defect==='myopia'){
+      wrap.querySelector('#paramLabel').innerHTML = 'Far point <span class="val" id="paramVal">'+slider.value+' cm</span>';
+      slider.min=40; slider.max=300; slider.step=5; if(slider.value>300||slider.value<40) slider.value=80;
+    } else {
+      wrap.querySelector('#paramLabel').innerHTML = 'Near point <span class="val" id="paramVal">'+slider.value+' cm</span>';
+      slider.min=30; slider.max=200; slider.step=5; if(slider.value<30) slider.value=60;
+    }
+  }
+
+  typeBtns.forEach(b=>b.onclick=()=>{
+    typeBtns.forEach(x=>x.classList.remove('active')); b.classList.add('active');
+    defect=b.dataset.type; slider.value = defect==='myopia'?80:60;
+    configureSlider(); paint();
+  });
+  corrBtns.forEach(b=>b.onclick=()=>{
+    corrBtns.forEach(x=>x.classList.remove('active')); b.classList.add('active');
+    corrected = b.dataset.corr==='on'; paint();
+  });
+  slider.oninput = ()=>{ paint(); };
+
+  function paint(){
+    const val = parseFloat(slider.value);
+    const labelSpan = wrap.querySelector('#paramVal');
+    if(labelSpan) labelSpan.textContent = val+' cm';
+
+    let f, P, lensType, explain, offsetPx;
+    const NORMAL_NEAR = 25;
+    if(defect==='myopia'){
+      const FP = val;
+      f = -FP; // cm
+      P = 100/f; // dioptres (f in cm -> convert: P=1/f(m)=100/f(cm))
+      lensType = 'Concave (diverging)';
+      explain = `A concave lens of focal length ${Math.abs(f/100).toFixed(2)} m forms a virtual image of a distant object exactly at the person's far point (${FP} cm), which the defective eye can then focus normally.`;
+      offsetPx = corrected? 0 : clamp((300-FP)/260*26+3, 3, 30); // more severe (smaller FP) = bigger offset before retina
+    } else {
+      const N = val;
+      f = 1/(1/NORMAL_NEAR - 1/N) * 1; // in cm: 1/f = 1/25 - 1/N (both cm)
+      P = 100/f;
+      lensType = 'Convex (converging)';
+      explain = `A convex lens of focal length ${(f/100).toFixed(2)} m takes an object at the normal near point (25 cm) and forms a virtual image at the person's actual near point (${N} cm), which the eye can then focus.`;
+      offsetPx = corrected? 0 : clamp((N-25)/175*26+3, 3, 30);
+    }
+
+    wrap.querySelector('#vFocal').textContent = (f/100).toFixed(3)+' m';
+    wrap.querySelector('#vPower').textContent = (P>=0?'+':'')+P.toFixed(2)+' D';
+    const tagWrap = wrap.querySelector('#vTags'); tagWrap.innerHTML='';
+    function tag(t,cls){ const s=document.createElement('span'); s.className='tag '+cls; s.textContent=t; tagWrap.appendChild(s); }
+    tag(lensType, defect==='myopia'?'virtual':'ok');
+    tag(corrected? 'Corrected — sharp on retina':'Uncorrected — blurred', corrected?'ok':'warn');
+    wrap.querySelector('#vExplain').textContent = corrected ? explain : `Without correction, the eye cannot bring ${defect==='myopia'?'distant':'nearby'} objects to a sharp focus on the retina.`;
+
+    // ---- draw ----
+    const {ctx,w,h} = fitCanvas(canvas);
+    ctx.clearRect(0,0,w,h);
+    const cx = w*0.62, cy=h*0.5, R=Math.min(w,h)*0.26;
+
+    // eyeball
+    ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2);
+    ctx.fillStyle='rgba(220,235,250,0.5)'; ctx.fill(); ctx.strokeStyle='#4f6b8a'; ctx.lineWidth=2; ctx.stroke();
+    // retina line
+    const retinaX = cx+R*0.86;
+    line(ctx,retinaX,cy-R*0.5,retinaX,cy+R*0.5,'#d9432b',3);
+    textAt(ctx,'Retina',retinaX,cy-R*0.5-8,{align:'center',size:11,color:'#d9432b',weight:600});
+    // lens
+    const lensX = cx-R*0.35;
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(lensX,cy-R*0.42); ctx.quadraticCurveTo(lensX+10,cy,lensX,cy+R*0.42);
+    ctx.quadraticCurveTo(lensX-10,cy,lensX,cy-R*0.42);
+    ctx.closePath(); ctx.fillStyle='rgba(140,190,235,0.7)'; ctx.fill(); ctx.strokeStyle='#2f5c86'; ctx.lineWidth=2; ctx.stroke();
+    ctx.restore();
+
+    // object
+    const objX = cx - R*(defect==='myopia'?2.6:1.9);
+    rayWithHead(ctx,objX,cy,objX,cy-R*0.5,'#1f9d55',3);
+    textAt(ctx,defect==='myopia'?'Distant object':'Near object',objX,cy-R*0.5-12,{align:'center',size:11,color:'#1f9d55',weight:600});
+
+    // corrective lens icon
+    let corrX = objX + (lensX-objX)*0.55;
+    if(corrected){
+      ctx.save();
+      if(defect==='myopia'){
+        ctx.beginPath();
+        ctx.moveTo(corrX-3,cy-R*0.45); ctx.lineTo(corrX+3,cy-R*0.45);
+        ctx.quadraticCurveTo(corrX-4,cy,corrX+3,cy+R*0.45);
+        ctx.lineTo(corrX-3,cy+R*0.45);
+        ctx.quadraticCurveTo(corrX+4,cy,corrX-3,cy-R*0.45);
+        ctx.closePath();
+      } else {
+        ctx.beginPath();
+        ctx.moveTo(corrX,cy-R*0.45); ctx.quadraticCurveTo(corrX+8,cy,corrX,cy+R*0.45);
+        ctx.quadraticCurveTo(corrX-8,cy,corrX,cy-R*0.45);
+        ctx.closePath();
+      }
+      ctx.fillStyle='rgba(255,255,255,0.85)'; ctx.fill(); ctx.strokeStyle='#132a44'; ctx.lineWidth=2; ctx.stroke();
+      ctx.restore();
+      textAt(ctx,'Corrective lens',corrX,cy+R*0.45+16,{align:'center',size:10.5,color:'#132a44',weight:600});
+    }
+
+    // rays from object; converge point depends on offsetPx
+    const focusX = corrected ? retinaX : (defect==='myopia' ? retinaX-offsetPx*2 : retinaX+offsetPx*2);
+    const bendX = corrected ? corrX : lensX;
+    for(let i=-1;i<=1;i++){
+      rayWithHead(ctx,objX,cy-R*0.5+ i*0,objX,cy - (i===0?0:0), '#e8a33d',0,null); // no-op placeholder (kept for clarity, removed below)
+    }
+    // three simple converging rays from object top to focus point, bending at lens position(s)
+    const topY = cy-R*0.4;
+    [0, 0.5, 1].forEach((frac,idx)=>{
+      const startY = topY;
+      rayWithHead(ctx, objX, startY, bendX, cy + (startY-cy)*0.35, '#e8a33d', 1.8);
+      rayWithHead(ctx, bendX, cy + (startY-cy)*0.35, focusX, cy, '#2f8fe0', 1.8);
+    });
+
+    if(!corrected){
+      ctx.fillStyle='#d9432b'; ctx.beginPath(); ctx.arc(focusX,cy,4,0,Math.PI*2); ctx.fill();
+      textAt(ctx,defect==='myopia'?'Image forms before retina — blurred':'Image forms behind retina — blurred',cx,cy+R+30,{align:'center',size:11.5,color:'#d9432b',weight:600});
+      line(ctx,focusX,cy-R*0.35,focusX,cy+R*0.35,'#d9432b',1.4,[4,3]);
+    } else {
+      ctx.fillStyle='#1f9d55'; ctx.beginPath(); ctx.arc(focusX,cy,4,0,Math.PI*2); ctx.fill();
+      textAt(ctx,'Image forms exactly on retina — sharp',cx,cy+R+30,{align:'center',size:11.5,color:'#1f9d55',weight:600});
+    }
+    textAt(ctx, defect==='myopia'?'Myopic Eye (Near-sightedness)':'Hypermetropic Eye (Far-sightedness)', cx, cy-R-16, {align:'center',size:13,color:'#132a44',weight:600});
+  }
+
+  configureSlider();
+  const ro=new ResizeObserver(()=>paint()); ro.observe(canvas.parentElement);
+  requestAnimationFrame(paint);
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   5. PRISM RAY-TRACE LAB (Activity 10.1)
+   --------------------------------------------------------------------- */
+function tracePrism(Adeg, ideg, n){
+  const A = Adeg*Math.PI/180, i = ideg*Math.PI/180;
+  const H=62;
+  const halfBase = H*Math.tan(A/2);
+  const apex=v2(0,H), B=v2(-halfBase,0), C=v2(halfBase,0);
+  const centroid = vScale(vAdd(vAdd(apex,B),C),1/3);
+
+  const dAB = vNorm(vSub(B,apex));
+  const E = vAdd(apex, vScale(dAB, vLen(vSub(B,apex))*0.55));
+  let n1 = vRot(dAB, Math.PI/2);
+  if(vDot(n1, vSub(E,centroid))<0) n1 = vScale(n1,-1);
+  const nIn1 = vScale(n1,-1);
+
+  const r1 = Math.asin(clamp(Math.sin(i)/n,-1,1));
+  const dIn = vRot(nIn1, i);
+  const dRef = vRot(nIn1, r1);
+
+  const d2 = vSub(C,apex);
+  const rhs = vSub(apex,E);
+  const det = -dRef.x*d2.y + d2.x*dRef.y;
+  const t = (-rhs.x*d2.y + d2.x*rhs.y)/det;
+  const F = vAdd(E, vScale(dRef,t));
+
+  let n2 = vRot(vNorm(d2), Math.PI/2);
+  if(vDot(n2, vSub(F,centroid))<0) n2 = vScale(n2,-1);
+
+  const r2 = Math.acos(clamp(vDot(vNorm(dRef),n2),-1,1));
+  let TIR=false, e=null, dOut=null;
+  if(n*Math.sin(r2) > 1){ TIR=true; }
+  else{
+    e = Math.asin(n*Math.sin(r2));
+    const sense = vCross(n2,dRef) >= 0 ? 1 : -1;
+    dOut = vRot(n2, sense*e);
+  }
+  let D=null;
+  if(!TIR) D = Math.acos(clamp(vDot(vNorm(dIn),vNorm(dOut)),-1,1))*180/Math.PI;
+
+  return {apex,B,C,E,F,n1,n2,dIn,dRef,dOut,r1:r1*180/Math.PI,r2:r2*180/Math.PI,e:e?e*180/Math.PI:null,D,TIR};
+}
+
+function buildPrismLab(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `
+    <div class="lab-canvas-wrap">
+      <canvas id="prismCanvas"></canvas>
+      <div class="lab-legend">
+        <div><span class="leg-incident"></span>Incident ray (PE)</div>
+        <div><span class="leg-refl"></span>Refracted ray (EF)</div>
+        <div><span class="leg-real"></span>Emergent ray (FS)</div>
+      </div>
+    </div>
+    <div class="lab-side">
+      <div class="control-group">
+        <label>Angle of prism (A) <span class="val" id="pAVal">60°</span></label>
+        <input type="range" id="pA" min="30" max="80" step="1" value="60">
+      </div>
+      <div class="control-group">
+        <label>Angle of incidence (i) <span class="val" id="pIVal">45°</span></label>
+        <input type="range" id="pI" min="5" max="85" step="1" value="45">
+      </div>
+      <div class="control-group">
+        <label>Refractive index (n) <span class="val" id="pNVal">1.50</span></label>
+        <input type="range" id="pN" min="120" max="200" step="1" value="150">
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:2px;">Live readings</label>
+        <div class="result-cards">
+          <div class="rcard"><div class="rlabel">∠ incidence (i)</div><div class="rval" id="pOutI">—</div></div>
+          <div class="rcard"><div class="rlabel">∠ refraction (r)</div><div class="rval" id="pOutR">—</div></div>
+          <div class="rcard"><div class="rlabel">∠ refraction 2 (r₂)</div><div class="rval" id="pOutR2">—</div></div>
+          <div class="rcard"><div class="rlabel">∠ emergence (e)</div><div class="rval" id="pOutE">—</div></div>
+          <div class="rcard wide"><div class="rlabel">∠ deviation (D)</div><div class="rval" id="pOutD">—</div></div>
+          <div class="rcard wide"><div class="rlabel">Check: r + r₂ vs A</div><div class="rval" id="pOutCheck">—</div></div>
+        </div>
+        <div class="warn-banner" id="pTIRBanner" style="display:none;">Total internal reflection at AC — no ray emerges. Try a smaller angle of incidence.</div>
+      </div>
+      <div class="control-group">
+        <p class="info-note">At <strong>AB</strong> (air → glass) the ray bends <em>towards</em> the normal (r &lt; i). At <strong>AC</strong> (glass → air) it bends <em>away</em> from the normal. Unlike a slab, the two faces are <strong>not parallel</strong> — so the emergent ray is <em>not</em> parallel to the incident ray; it deviates by angle D.</p>
+      </div>
+    </div>`;
+
+  const canvas = wrap.querySelector('#prismCanvas');
+  const aSlider = wrap.querySelector('#pA');
+  const iSlider = wrap.querySelector('#pI');
+  const nSlider = wrap.querySelector('#pN');
+
+  function paint(){
+    const A = parseFloat(aSlider.value);
+    const iDeg = parseFloat(iSlider.value);
+    const n = parseFloat(nSlider.value)/100;
+    wrap.querySelector('#pAVal').textContent = A+'°';
+    wrap.querySelector('#pIVal').textContent = iDeg+'°';
+    wrap.querySelector('#pNVal').textContent = n.toFixed(2);
+
+    const res = tracePrism(A,iDeg,n);
+    wrap.querySelector('#pOutI').textContent = iDeg.toFixed(1)+'°';
+    wrap.querySelector('#pOutR').textContent = res.r1.toFixed(1)+'°';
+    wrap.querySelector('#pOutR2').textContent = res.r2.toFixed(1)+'°';
+    wrap.querySelector('#pOutE').textContent = res.TIR ? '—' : res.e.toFixed(1)+'°';
+    wrap.querySelector('#pOutD').textContent = res.TIR ? '—' : res.D.toFixed(1)+'°';
+    wrap.querySelector('#pOutCheck').textContent = (res.r1+res.r2).toFixed(1)+'°  ≈  '+A+'°';
+    wrap.querySelector('#pTIRBanner').style.display = res.TIR ? 'block' : 'none';
+
+    const {ctx,w,h} = fitCanvas(canvas);
+    ctx.clearRect(0,0,w,h);
+    const originX=w*0.5, originY=h*0.82;
+    const scale = Math.min(w/230,h/190);
+    const X=(p)=>originX+p.x*scale, Y=(p)=>originY-p.y*scale;
+
+    // prism
+    ctx.beginPath();
+    ctx.moveTo(X(res.apex).x!==undefined?X(res.apex):0,0); // placeholder not used
+    ctx.restore();
+
+    function PX(p){ return {x:originX+p.x*scale, y:originY-p.y*scale}; }
+    const Apx=PX(res.apex), Bpx=PX(res.B), Cpx=PX(res.C), Epx=PX(res.E), Fpx=PX(res.F);
+
+    ctx.beginPath(); ctx.moveTo(Apx.x,Apx.y); ctx.lineTo(Bpx.x,Bpx.y); ctx.lineTo(Cpx.x,Cpx.y); ctx.closePath();
+    ctx.fillStyle='rgba(190,225,250,0.4)'; ctx.fill(); ctx.strokeStyle='#4f6b8a'; ctx.lineWidth=2.2; ctx.stroke();
+    textAt(ctx,'A',Apx.x,Apx.y-10,{align:'center',size:12,weight:700,color:'#132a44'});
+    textAt(ctx,'B',Bpx.x-10,Bpx.y+14,{align:'center',size:11,color:'#132a44'});
+    textAt(ctx,'C',Cpx.x+10,Cpx.y+14,{align:'center',size:11,color:'#132a44'});
+
+    // normals (dashed)
+    const nlen=34;
+    line(ctx,Epx.x-res.n1.x*nlen*scale/scale, Epx.y+res.n1.y*nlen, Epx.x+res.n1.x*nlen, Epx.y-res.n1.y*nlen, '#9aa9bb',1.3,[4,3]);
+    line(ctx,Fpx.x-res.n2.x*nlen, Fpx.y+res.n2.y*nlen, Fpx.x+res.n2.x*nlen, Fpx.y-res.n2.y*nlen, '#9aa9bb',1.3,[4,3]);
+    textAt(ctx,'N',Epx.x+res.n1.x*nlen,Epx.y-res.n1.y*nlen-4,{size:10,color:'#9aa9bb'});
+    textAt(ctx,"N'",Fpx.x+res.n2.x*nlen,Fpx.y-res.n2.y*nlen-4,{size:10,color:'#9aa9bb'});
+
+    // incident ray
+    const rayLen=70;
+    const Ppt = {x:Epx.x-res.dIn.x*rayLen, y:Epx.y+res.dIn.y*rayLen};
+    rayWithHead(ctx,Ppt.x,Ppt.y,Epx.x,Epx.y,'#e8a33d',2.6);
+    textAt(ctx,'P',Ppt.x-6,Ppt.y+14,{size:11,color:'#e8a33d',weight:600});
+    textAt(ctx,'E',Epx.x-4,Epx.y-8,{size:11,color:'#132a44',weight:600});
+    textAt(ctx,'i',Epx.x-res.dIn.x*18,Epx.y+res.dIn.y*18-6,{size:12,weight:700,color:'#e8a33d'});
+
+    // refracted ray inside prism
+    rayWithHead(ctx,Epx.x,Epx.y,Fpx.x,Fpx.y,'#2f8fe0',2.6);
+    textAt(ctx,'r',Epx.x+ (Fpx.x-Epx.x)*0.15, Epx.y+(Fpx.y-Epx.y)*0.15-8,{size:12,weight:700,color:'#2f8fe0'});
+    textAt(ctx,'F',Fpx.x-4,Fpx.y-8,{size:11,color:'#132a44',weight:600});
+    textAt(ctx,'r₂',Fpx.x-(Fpx.x-Epx.x)*0.15,Fpx.y-(Fpx.y-Epx.y)*0.15-8,{size:12,weight:700,color:'#2f8fe0'});
+
+    if(!res.TIR){
+      const Spt = {x:Fpx.x+res.dOut.x*rayLen, y:Fpx.y-res.dOut.y*rayLen};
+      rayWithHead(ctx,Fpx.x,Fpx.y,Spt.x,Spt.y,'#d9432b',2.6);
+      textAt(ctx,'S',Spt.x+6,Spt.y+14,{size:11,color:'#d9432b',weight:600});
+      textAt(ctx,'e',Fpx.x+res.dOut.x*18,Fpx.y-res.dOut.y*18-6,{size:12,weight:700,color:'#d9432b'});
+    } else {
+      // show reflection back
+      const reflDir = vSub(res.dRef, vScale(res.n2, 2*vDot(res.dRef,res.n2)));
+      const Rpt = {x:Fpx.x+reflDir.x*40, y:Fpx.y-reflDir.y*40};
+      rayWithHead(ctx,Fpx.x,Fpx.y,Rpt.x,Rpt.y,'#d9432b',2,[5,4]);
+    }
+
+    textAt(ctx,'Refraction Through a Triangular Prism',originX,20,{align:'center',size:13,color:'#4c6178',weight:600});
+  }
+
+  aSlider.oninput=paint; iSlider.oninput=paint; nSlider.oninput=paint;
+  const ro=new ResizeObserver(()=>paint()); ro.observe(canvas.parentElement);
+  requestAnimationFrame(paint);
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   6. SCATTERING OF LIGHT LAB (10.6)
+   --------------------------------------------------------------------- */
+function buildScatterLab(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `
+    <div class="lab-canvas-wrap"><canvas id="scatCanvas"></canvas></div>
+    <div class="lab-side">
+      <div class="control-group">
+        <label style="margin-bottom:2px;">Scenario</label>
+        <div class="quick-jump" id="scenarioJump"></div>
+      </div>
+      <div class="control-group">
+        <label>Particle / droplet size <span class="val" id="scSizeVal">Air molecules</span></label>
+        <input type="range" id="scSize" min="0" max="4" step="1" value="0">
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:2px;">What's happening</label>
+        <p class="info-note" id="scExplain"></p>
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:2px;">Quick facts</label>
+        <div class="result-cards">
+          <div class="rcard wide"><div class="rlabel">Red wavelength vs Blue</div><div class="rval">≈ 1.8 × longer</div></div>
+          <div class="rcard wide"><div class="rlabel">Scattering rule</div><div class="rval" style="font-size:12px;">Shorter λ scattered far more than longer λ</div></div>
+        </div>
+      </div>
+    </div>`;
+
+  const canvas = wrap.querySelector('#scatCanvas');
+  const sizeSlider = wrap.querySelector('#scSize');
+  const jumpWrap = wrap.querySelector('#scenarioJump');
+
+  const sizeLabels = ['Air molecules','Smoke particles','Fine dust','Mist droplets','Large cloud droplets'];
+  const sizeColors = ['#2f8fe0','#5cb8ea','#9dc9c8','#e8c98a','#f2f2f2'];
+  const sizeExplain = [
+    'Air molecules are far smaller than the wavelength of light — they scatter short (blue) wavelengths much more strongly than long (red) ones. This is why the clear sky looks blue.',
+    'Fine smoke particles scatter light of many wavelengths, making the path of the beam visible — the Tyndall effect.',
+    'Fine dust scatters a mix of wavelengths, tinting scattered light slightly warmer than pure blue.',
+    'Mist droplets are larger and scatter longer wavelengths too, so scattered light looks pale / whitish.',
+    'Large cloud droplets scatter all visible wavelengths almost equally — the scattered light appears white (clouds).',
+  ];
+
+  let scenario='clearsky';
+  const scenarios = [
+    {id:'clearsky', label:'Clear Sky', size:0},
+    {id:'tyndall', label:'Tyndall (Smoke)', size:1},
+    {id:'sunset', label:'Sunset', size:0},
+    {id:'fog', label:'Foggy Danger Signal', size:3},
+  ];
+  function buildJump(){
+    jumpWrap.innerHTML='';
+    scenarios.forEach(s=>{
+      const b=document.createElement('button'); b.className='jump-btn'+(s.id===scenario?' active':'');
+      b.textContent=s.label;
+      b.onclick=()=>{ scenario=s.id; sizeSlider.value=s.size; buildJump(); paint(); };
+      jumpWrap.appendChild(b);
+    });
+  }
+  sizeSlider.oninput = ()=>{ paint(); };
+
+  function paint(){
+    const idx = parseInt(sizeSlider.value,10);
+    wrap.querySelector('#scSizeVal').textContent = sizeLabels[idx];
+    wrap.querySelector('#scExplain').textContent = sizeExplain[idx];
+
+    const {ctx,w,h} = fitCanvas(canvas);
+    ctx.clearRect(0,0,w,h);
+
+    if(scenario==='clearsky'){
+      const g=ctx.createLinearGradient(0,0,0,h); g.addColorStop(0,'#bfe0ff'); g.addColorStop(1,'#eaf6ff');
+      ctx.fillStyle=g; ctx.fillRect(0,0,w,h*0.75);
+      ctx.fillStyle='#2c6e3f'; ctx.fillRect(0,h*0.75,w,h*0.25);
+      const sunX=w*0.15, sunY=h*0.18;
+      textAt(ctx,'☀',sunX,sunY,{size:32,align:'center'});
+      for(let i=0;i<9;i++){
+        const ang = -0.3+i*0.12;
+        const endX = sunX + Math.cos(ang)*w*0.75, endY = sunY + Math.sin(ang)*w*0.45;
+        line(ctx,sunX+10,sunY,endX,endY,'#fff8dc',1.2,[2,3]);
+        // scatter points along path
+        for(let t=0.2;t<0.9;t+=0.22){
+          const px=sunX+10+(endX-sunX-10)*t, py=sunY+(endY-sunY)*t;
+          ctx.fillStyle='rgba(80,150,255,0.5)'; ctx.beginPath(); ctx.arc(px,py,2.4,0,Math.PI*2); ctx.fill();
+        }
+      }
+      textAt(ctx,'Fine air molecules scatter blue light strongly in all directions — the sky looks blue',w*0.5,h*0.9,{align:'center',size:12,color:'#20405c'});
+    } else if(scenario==='tyndall'){
+      ctx.fillStyle='#1b2430'; ctx.fillRect(0,0,w,h);
+      const holeX=w*0.1, holeY=h*0.45;
+      ctx.fillStyle='#333'; ctx.fillRect(holeX-14,h*0.15,10,h*0.6);
+      ctx.fillStyle='#111'; ctx.fillRect(holeX-14,holeY-3,10,6);
+      rayWithHead(ctx,holeX-4,holeY,w*0.86,holeY,'#fff8dc',2.6);
+      for(let i=0;i<70;i++){
+        const px = holeX + Math.random()*(w*0.76);
+        const py = holeY + (Math.random()-0.5)*40*(0.3+Math.random());
+        ctx.fillStyle='rgba(255,255,255,'+(0.15+Math.random()*0.25)+')';
+        ctx.beginPath(); ctx.arc(px,py,1.6,0,Math.PI*2); ctx.fill();
+      }
+      textAt(ctx,'Smoke particles scatter the beam — its path becomes visible (Tyndall effect)',w*0.5,h*0.88,{align:'center',size:12,color:'#cfd9e6'});
+    } else if(scenario==='sunset'){
+      const g=ctx.createLinearGradient(0,0,0,h); g.addColorStop(0,'#2b3a55'); g.addColorStop(0.55,'#e8794f'); g.addColorStop(1,'#f4c14a');
+      ctx.fillStyle=g; ctx.fillRect(0,0,w,h*0.8);
+      ctx.fillStyle='#1c2a1c'; ctx.fillRect(0,h*0.8,w,h*0.2);
+      const sunX=w*0.82, sunY=h*0.74;
+      ctx.fillStyle='#ff7a3d'; ctx.beginPath(); ctx.arc(sunX,sunY,26,0,Math.PI*2); ctx.fill();
+      const obsX=w*0.15, obsY=h*0.78;
+      ctx.fillStyle='#132a44'; ctx.beginPath(); ctx.arc(obsX,obsY-16,7,0,Math.PI*2); ctx.fill(); ctx.fillRect(obsX-5,obsY-9,10,22);
+      // long path through atmosphere
+      rayWithHead(ctx,sunX-20,sunY,obsX,obsY-16,'#ffb56b',3);
+      for(let t=0.1;t<0.9;t+=0.08){
+        const px=sunX-20+(obsX-(sunX-20))*t, py=sunY+(obsY-16-sunY)*t;
+        ctx.fillStyle='rgba(80,150,255,0.35)'; ctx.beginPath(); ctx.arc(px,py,2,0,Math.PI*2); ctx.fill();
+      }
+      textAt(ctx,'Long atmospheric path scatters almost all the blue away — only red/orange survives to reach the eye',w*0.5,h*0.92,{align:'center',size:12,color:'#f3e6d0'});
+    } else {
+      // fog danger signal
+      const g=ctx.createLinearGradient(0,0,0,h); g.addColorStop(0,'#c9d3dc'); g.addColorStop(1,'#9fb0bd');
+      ctx.fillStyle=g; ctx.fillRect(0,0,w,h);
+      for(let i=0;i<140;i++){
+        ctx.fillStyle='rgba(255,255,255,'+(0.15+Math.random()*0.25)+')';
+        ctx.beginPath(); ctx.arc(Math.random()*w,Math.random()*h,Math.random()*3+1,0,Math.PI*2); ctx.fill();
+      }
+      const sigX=w*0.12, sigY=h*0.5;
+      ctx.fillStyle='#d9432b'; ctx.beginPath(); ctx.arc(sigX,sigY,10,0,Math.PI*2); ctx.fill();
+      ctx.strokeStyle='#132a44'; ctx.lineWidth=3; ctx.strokeRect(sigX-16,sigY+14,32,60);
+      const colors=['#d9432b','#2f8fe0','#1f9d55'];
+      const dist=[0.86,0.5,0.32];
+      colors.forEach((c,i)=>{
+        rayWithHead(ctx,sigX+10,sigY,sigX+10+(w*0.8)*dist[i],sigY - i*4,c,3);
+        textAt(ctx,i===0?'Red — travels farthest':i===1?'Blue — scattered sooner':'Green — scattered sooner',sigX+10+(w*0.8)*dist[i]+8,sigY-i*4+4,{size:10.5,color:c});
+      });
+      textAt(ctx,'Red is scattered least by fog/smoke — visible farthest. That is why danger signals are red.',w*0.5,h*0.9,{align:'center',size:12,color:'#20405c'});
+    }
+  }
+
+  buildJump();
+  const ro=new ResizeObserver(()=>paint()); ro.observe(canvas.parentElement);
+  requestAnimationFrame(paint);
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   7. INIT
+   --------------------------------------------------------------------- */
+render();
+</script>
+  <script src="../../tracking/activity-tracker.js"></script>
+<script src="../../nav/back-button.js"></script>
+</body>
+</html>

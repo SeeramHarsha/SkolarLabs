@@ -1,0 +1,1726 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 8 · Chapter 7 — Particulate Nature of Matter | Botclub Labs</title>
+<link href="../../vendor/fonts/fonts.css" rel="stylesheet">
+<style>
+:root{
+  --navy-1:#0f2640; --navy-2:#1a3a5c; --navy-3:#234a73;
+  --accent:#2f8fe0; --accent-2:#5cc8ff;
+  --bg:#eef2f8; --surface-0:#ffffff; --surface-1:#f6f9fc; --surface-2:#eef2f8;
+  --border:#dbe4f0; --border-strong:#c2d1e5;
+  --text-1:#132a44; --text-2:#4c6178; --text-3:#8195ab;
+  --f-red:#d9432b; --f-blue:#2f8fe0; --f-green:#1f9d55; --f-yellow:#d9a017;
+  --radius:14px; --radius-sm:9px;
+  --fs-xs:clamp(10px,0.62vw,12px); --fs-sm:clamp(11px,0.72vw,13.5px);
+  --fs-md:clamp(12.5px,0.85vw,15px); --fs-lg:clamp(15px,1.15vw,19px);
+  --fs-xl:clamp(18px,1.5vw,25px);
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:22px; --sp-6:30px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{ font-family:'Poppins',system-ui,sans-serif; background:var(--bg); color:var(--text-1); overflow:hidden; }
+button, input, select{font-family:inherit;}
+
+.app{height:100vh; display:flex; flex-direction:column; min-height:0;}
+.topbar{
+  flex:0 0 auto; background:linear-gradient(120deg, var(--navy-1) 0%, var(--navy-2) 55%, var(--navy-3) 100%);
+  color:#fff; padding:clamp(9px,1vh,16px) clamp(14px,1.6vw,28px);
+  display:flex; align-items:center; gap:var(--sp-4); box-shadow:0 2px 10px rgba(15,38,64,0.25); z-index:5;
+}
+.topbar .brand-badge{
+  width:clamp(32px,2.4vw,40px); height:clamp(32px,2.4vw,40px); border-radius:10px; background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center;
+  font-size:clamp(15px,1.3vw,20px); flex:0 0 auto;
+}
+.topbar .chip{
+  display:inline-block; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.28);
+  border-radius:6px; padding:2px 9px; font-size:var(--fs-xs); letter-spacing:0.06em; text-transform:uppercase; font-weight:600; margin-bottom:3px;
+}
+.topbar h1{font-size:var(--fs-lg); font-weight:600; line-height:1.2; white-space:nowrap;}
+.topbar .spacer{flex:1;}
+.topbar .legend{display:flex; gap:14px; font-size:var(--fs-xs); color:rgba(255,255,255,0.85); align-items:center;}
+.topbar .legend span{display:inline-flex; align-items:center; gap:5px;}
+.topbar .legend i{width:12px; height:4px; border-radius:2px; display:inline-block;}
+
+.body-wrap{flex:1; display:flex; min-height:0; overflow:hidden;}
+.sidenav{
+  flex:0 0 clamp(170px,13.5vw,230px); background:var(--surface-0); border-right:1px solid var(--border);
+  overflow-y:auto; padding:var(--sp-2); display:flex; flex-direction:column; gap:4px;
+}
+.nav-item{
+  display:flex; align-items:center; gap:8px; text-align:left; width:100%;
+  border:1px solid var(--border); background:var(--surface-1); border-radius:var(--radius-sm); padding:7px 10px; cursor:pointer; transition:all .15s ease;
+}
+.nav-item:hover{background:var(--surface-2); border-color:var(--border-strong);}
+.nav-item.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.nav-item .n-num{font-size:var(--fs-xs); font-weight:700; color:var(--accent); flex:0 0 auto; min-width:26px;}
+.nav-item.active .n-num{color:var(--accent-2);}
+.nav-item .n-title{font-size:var(--fs-sm); font-weight:600; line-height:1.25;}
+
+.content{flex:1; min-width:0; display:flex; flex-direction:column; overflow:hidden;}
+.panel-head{flex:0 0 auto; padding:var(--sp-3) var(--sp-5); border-bottom:1px solid var(--border); background:var(--surface-0); display:flex; align-items:baseline; gap:12px;}
+.panel-badge{background:var(--navy-2); color:#fff; font-size:var(--fs-xs); font-weight:700; padding:3px 10px; border-radius:6px;}
+.panel-head h2{font-size:var(--fs-lg); font-weight:600; color:var(--text-1);}
+.panel-head p{font-size:var(--fs-sm); color:var(--text-2); flex:1; text-align:right;}
+.panel-body{flex:1; min-height:0; overflow:hidden; padding:var(--sp-3) var(--sp-5); display:flex;}
+
+.lab-view{flex:1; display:flex; gap:var(--sp-4); min-height:0; min-width:0;}
+.lab-canvas-wrap{flex:7 1 0; min-width:0; min-height:0; background:#fff; border:1px solid var(--border); border-radius:var(--radius); position:relative; overflow:hidden;}
+.lab-canvas-wrap canvas{width:100%; height:100%; display:block;}
+.lab-side{flex:3 1 0; min-width:230px; display:flex; flex-direction:column; gap:var(--sp-3); min-height:0; overflow-y:auto; padding-right:2px;}
+.side-sub{display:flex; flex-direction:column; gap:var(--sp-3);}
+
+.control-group{background:var(--surface-0); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 12px;}
+.control-group label{font-size:var(--fs-sm); font-weight:600; color:var(--text-1); display:flex; justify-content:space-between;}
+.control-group label .val{color:var(--accent); font-weight:700;}
+.control-group input[type=range]{width:100%; margin-top:7px; accent-color:var(--navy-2); cursor:pointer;}
+.toggle-group{display:flex; gap:6px; margin-top:7px; flex-wrap:wrap;}
+.toggle-btn{flex:1; min-width:56px; padding:7px 5px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:600; cursor:pointer; text-align:center; color:var(--text-2);}
+.toggle-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.toggle-btn.small{font-size:10.5px; padding:6px 3px;}
+.toggle-btn.play{background:var(--f-green); border-color:var(--f-green); color:#fff;}
+.toggle-btn.navy{background:var(--navy-2); border-color:var(--navy-2); color:#fff; width:100%; margin-top:9px;}
+.toggle-btn:disabled{opacity:.5; cursor:not-allowed;}
+.chip-btn{display:inline-flex; align-items:center; gap:5px; padding:6px 11px; margin:3px 3px 0 0; border:1px solid var(--border-strong); background:var(--surface-1); border-radius:18px; cursor:pointer; font-size:var(--fs-sm); font-weight:600; color:var(--text-2);}
+.chip-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.chip-btn.ok{border-color:var(--f-green);} .chip-btn.bad{border-color:var(--f-red);}
+.chip-wrap{display:flex; flex-wrap:wrap; margin-top:3px;}
+
+.role-row{display:flex; align-items:center; gap:8px; margin-top:7px; font-size:var(--fs-sm); font-weight:600;}
+.role-row .rdot{width:10px; height:10px; border-radius:50%; flex:0 0 auto; display:inline-block;}
+.role-row .rname{width:70px; flex:0 0 auto; color:var(--text-2);}
+.role-row select{flex:1; min-width:0; padding:6px 7px; border:1px solid var(--border-strong); border-radius:7px; font-size:var(--fs-sm); background:var(--surface-1); color:var(--text-1); cursor:pointer;}
+
+.step-row{display:flex; gap:5px;}
+.step-pill{flex:1; padding:6px 4px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:10.5px; font-weight:700; color:var(--text-3); cursor:pointer;}
+.step-pill.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.step-pill.done{border-color:var(--f-green); color:var(--f-green);}
+.step-pill.active.done{color:#fff;}
+.opt-btn{display:block; width:100%; text-align:left; margin-top:6px; padding:7px 9px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:500; color:var(--text-1); cursor:pointer; line-height:1.3;}
+.opt-btn.active{border-color:var(--navy-2); background:#e3ecf7; font-weight:600;}
+.var-row{display:flex; align-items:center; gap:6px; margin-top:7px;}
+.var-row .vname{flex:0 0 88px; font-size:var(--fs-sm); font-weight:600;}
+.var-row .toggle-group{margin-top:0; flex:1;}
+
+.result-cards{display:grid; grid-template-columns:1fr 1fr; gap:6px;}
+.result-cards.three{grid-template-columns:1fr 1fr 1fr;}
+.rcard{background:var(--surface-0); border:1px solid var(--border); border-radius:9px; padding:7px 9px;}
+.rcard .rlabel{font-size:9.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--text-3); font-weight:600;}
+.rcard .rval{font-size:var(--fs-md); font-weight:700; color:var(--text-1); margin-top:1px;}
+.rcard.wide{grid-column:1/-1;}
+.hint{font-size:var(--fs-xs); color:var(--text-3); margin-top:6px; line-height:1.4;}
+.fb{font-size:var(--fs-xs); font-weight:600; margin-top:6px; padding:5px 8px; border-radius:7px;}
+.fb.ok{background:#e4f7ec; color:#1f6b3d;}
+.fb.bad{background:#fdece7; color:#a4331c;}
+.fb.warn{background:#fdf4dc; color:#8a6410;}
+.log{width:100%; border-collapse:collapse; font-size:10.5px; margin-top:4px;}
+.log th{text-align:left; color:var(--text-3); font-weight:600; text-transform:uppercase; font-size:9px; letter-spacing:.04em; padding:3px 4px; border-bottom:1px solid var(--border);}
+.log td{padding:4px; border-bottom:1px solid var(--surface-2); color:var(--text-2);}
+.log td.r-ok{color:var(--f-green); font-weight:700;} .log td.r-bad{color:var(--f-red); font-weight:700;} .log td.r-warn{color:var(--f-yellow); font-weight:700;}
+.hidden{display:none !important;}
+
+@media (max-width:1000px) and (orientation:portrait), (max-width:1000px) and (min-height:601px){
+  .body-wrap{flex-direction:column;}
+  .sidenav{flex:0 0 auto; width:100%; height:auto; flex-direction:row; overflow-x:auto; overflow-y:hidden; border-right:none; border-bottom:1px solid var(--border); padding:6px;}
+  .nav-item{flex:0 0 auto; width:150px;}
+  .panel-body{overflow-y:auto;}
+  .lab-view{flex-direction:column;}
+  .lab-canvas-wrap{min-height:320px;}
+  .lab-side{min-width:0;}
+  .content{overflow-y:auto;}
+  .topbar .legend{display:none;}
+  .topbar h1{white-space:normal;}
+}
+::-webkit-scrollbar{width:7px; height:7px;}
+::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand-badge">⚛</div>
+    <div>
+      <div class="chip">Grade 8 · Ch 7</div>
+      <h1>Particulate Nature of Matter</h1>
+    </div>
+    <div class="spacer"></div>
+    <div class="legend">
+      <span><i style="background:var(--f-yellow)"></i>What you do · heat</span>
+      <span><i style="background:var(--f-red)"></i>Attraction between particles</span>
+      <span><i style="background:var(--f-blue)"></i>Water</span>
+      <span><i style="background:var(--f-green)"></i>Particle motion</span>
+    </div>
+  </div>
+  <div class="body-wrap">
+    <nav class="sidenav" id="sideNav"></nav>
+    <main class="content">
+      <div class="panel-head">
+        <div class="panel-badge" id="panelBadge">7.1</div>
+        <h2 id="panelTitle">Select an activity</h2>
+        <p id="panelDesc"></p>
+      </div>
+      <div class="panel-body" id="panelBody"></div>
+    </main>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   GRADE 8 — CHAPTER 7: PARTICULATE NATURE OF MATTER
+   Every activity runs a continuous animation loop: sliders/buttons set a
+   TARGET or start an action; the drawn object is moved every frame by the
+   real relation behind it — falling and bouncing chalk, exponential
+   grinding, Fick diffusion (D from Stokes–Einstein), weir flow out of a
+   tilted glass, Boyle's law in a sealed syringe, water's bulk modulus,
+   apparent molar volumes of dissolved sugar/salt, latent heat at the
+   melting point, and Brownian kicks from moving air particles.
+   ========================================================================= */
+const COL = {red:'#d9432b', blue:'#2f8fe0', green:'#1f9d55', yellow:'#d9a017', ink:'#132a44', muted:'#4c6178', mid:'#8195ab'};
+
+/* ---------------------------------------------------------------------
+   0. CANVAS HELPERS
+   --------------------------------------------------------------------- */
+function fitCanvas(canvas){
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  const r = canvas.parentElement.getBoundingClientRect();
+  const w = Math.max(200, r.width), h = Math.max(160, r.height);
+  if(canvas._w!==w || canvas._h!==h || canvas._dpr!==dpr){
+    canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr);
+    canvas.style.width = w+'px'; canvas.style.height = h+'px';
+    canvas._w=w; canvas._h=h; canvas._dpr=dpr;
+  }
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, w, h};
+}
+function line(ctx,x1,y1,x2,y2,color,width,dash){
+  ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=width||2;
+  if(dash) ctx.setLineDash(dash); else ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); ctx.restore();
+}
+function arrowHead(ctx,x,y,ang,color,size){
+  size=size||7; ctx.save(); ctx.fillStyle=color; ctx.translate(x,y); ctx.rotate(ang);
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-size,size*0.42); ctx.lineTo(-size,-size*0.42); ctx.closePath(); ctx.fill(); ctx.restore();
+}
+function vec(ctx,x1,y1,x2,y2,color,width){ line(ctx,x1,y1,x2,y2,color,width||2.6); arrowHead(ctx,x2,y2,Math.atan2(y2-y1,x2-x1),color,7); }
+function dimArrow(ctx,x,y1,y2,color){ line(ctx,x,y1,x,y2,color,1.6); arrowHead(ctx,x,y1,-Math.PI/2,color,5); arrowHead(ctx,x,y2,Math.PI/2,color,5); }
+function textAt(ctx,txt,x,y,opts){
+  opts=opts||{}; ctx.save();
+  ctx.font=(opts.weight||500)+' '+(opts.size||12)+'px Poppins, sans-serif';
+  ctx.fillStyle=opts.color||COL.ink; ctx.textAlign=opts.align||'left'; ctx.textBaseline=opts.baseline||'alphabetic';
+  if(opts.alpha!==undefined) ctx.globalAlpha=opts.alpha;
+  ctx.fillText(txt,x,y); ctx.restore();
+}
+function rect(ctx,x,y,w,h,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw===undefined?2.2:lw; if(fill){ctx.fillStyle=fill; ctx.fillRect(x,y,w,h);} if(lw!==0){ctx.strokeStyle=stroke; ctx.strokeRect(x,y,w,h);} ctx.restore(); }
+function circ(ctx,x,y,r,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw||2.2; ctx.beginPath(); ctx.arc(x,y,Math.max(0.1,r),0,Math.PI*2); if(fill){ctx.fillStyle=fill; ctx.fill();} ctx.strokeStyle=stroke; ctx.stroke(); ctx.restore(); }
+function rrect(ctx,x,y,w,h,r){ r=Math.min(r,w/2,h/2); ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function fmt(x,d){ if(!isFinite(x)) return '—'; d=d===undefined?2:d; return Number(x.toFixed(d)).toString(); }
+function gauss(){ return (Math.random()+Math.random()+Math.random()+Math.random()-2)*1.2247; }
+function hexRgb(h){ const n=parseInt(h.slice(1),16); return [n>>16&255, n>>8&255, n&255]; }
+function mixCol(a,b,t){ const A=hexRgb(a),B=hexRgb(b); t=clamp(t,0,1); return 'rgb('+A.map((v,i)=>Math.round(lerp(v,B[i],t))).join(',')+')'; }
+function rampCol(stops,x){ // stops: [[pos,hex],...]
+  if(x<=stops[0][0]) return mixCol(stops[0][1],stops[0][1],0);
+  for(let i=1;i<stops.length;i++){ if(x<=stops[i][0]){ const a=stops[i-1],b=stops[i]; return mixCol(a[1],b[1],(x-a[0])/(b[0]-a[0])); } }
+  const l=stops[stops.length-1][1]; return mixCol(l,l,0);
+}
+function thermo(ctx,x,top,bot,frac,outline,liquid){
+  const br=8;
+  ctx.save(); ctx.lineWidth=2; ctx.strokeStyle=outline; ctx.fillStyle='#fff';
+  rrect(ctx,x-5,top,10,bot-top+2,5); ctx.fill(); ctx.stroke(); ctx.restore();
+  const lh=(bot-top-5)*clamp(frac,0,1);
+  ctx.save(); ctx.fillStyle=liquid; ctx.fillRect(x-2.2,bot-lh,4.4,lh+6); ctx.restore();
+  circ(ctx,x,bot+br,br,outline,'#fff',2); circ(ctx,x,bot+br,br-3.2,liquid,liquid,1);
+  for(let i=0;i<=4;i++){ const yy=top+5+(bot-top-5)*i/4; line(ctx,x+5,yy,x+9,yy,outline,1.1); }
+}
+function flame(ctx,cx,baseY,width,inten,t){
+  const n=5;
+  for(let i=0;i<n;i++){
+    const fx=cx-width/2+width*(i+0.5)/n;
+    const hh=(6+inten*32)*(0.78+0.22*Math.sin(t*13+i*1.7));
+    const sway=Math.sin(t*9+i*2.1)*3;
+    ctx.save(); ctx.lineJoin='round';
+    ctx.strokeStyle=COL.red; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(fx-7,baseY); ctx.quadraticCurveTo(fx-7,baseY-hh*0.55,fx+sway,baseY-hh); ctx.quadraticCurveTo(fx+7,baseY-hh*0.55,fx+7,baseY); ctx.stroke();
+    ctx.strokeStyle=COL.yellow; ctx.lineWidth=1.6;
+    ctx.beginPath(); ctx.moveTo(fx-3.5,baseY); ctx.quadraticCurveTo(fx-3,baseY-hh*0.35,fx+sway*0.5,baseY-hh*0.55); ctx.quadraticCurveTo(fx+3,baseY-hh*0.35,fx+3.5,baseY); ctx.stroke();
+    ctx.restore();
+  }
+}
+
+/* ---------------------------------------------------------------------
+   0b. ANIMATION ENGINE
+   --------------------------------------------------------------------- */
+let activeStops = [];
+function stopAllLoops(){ activeStops.forEach(s=>{ try{ s(); }catch(e){} }); activeStops=[]; }
+function animLoop(tick){
+  let last = performance.now();
+  let raf;
+  function frame(now){
+    const dt = Math.max(0, Math.min(0.04, (now-last)/1000));
+    last = now;
+    tick(dt);
+    raf = requestAnimationFrame(frame);
+  }
+  raf = requestAnimationFrame(frame);
+  const stop = ()=>cancelAnimationFrame(raf);
+  activeStops.push(stop);
+  return stop;
+}
+/** Exponential ease — frame-rate independent, always smooth. */
+function approach(cur,tgt,rate,dt){ return cur + (tgt-cur)*(1-Math.exp(-rate*dt)); }
+/** Spring-damper — gives natural overshoot and settle. */
+function springTo(state,target,k,damping,dt){
+  const acc = (target-state.x)*k - state.v*damping;
+  state.v += acc*dt;
+  state.x += state.v*dt;
+  return state.x;
+}
+function toggleWire(btns,cb){
+  btns.forEach(b=>b.onclick=()=>{ btns.forEach(x=>x.classList.remove('active')); b.classList.add('active'); cb(b); });
+}
+
+/* ---------------------------------------------------------------------
+   0c. CHAPTER-7 HELPERS — hands, magnifier, ground, particles
+   --------------------------------------------------------------------- */
+const G = 10;                       // N/kg — textbook value
+function smooth01(a,b,x){ const t=clamp((x-a)/(b-a),0,1); return t*t*(3-2*t); }
+function angDiff(a,b){ return Math.atan2(Math.sin(a-b),Math.cos(a-b)); }
+function rng(seed){ let s=(seed>>>0)||1; return ()=>{ s=(Math.imul(s,1664525)+1013904223)>>>0; return s/4294967296; }; }
+function sgn(x){ return x>0?1:x<0?-1:0; }
+
+/* labelled force arrow; skipped when tiny */
+function force(ctx,x,y,dx,dy,col,label,side){
+  const L=Math.hypot(dx,dy); if(L<4) return;
+  vec(ctx,x,y,x+dx,y+dy,col,3);
+  if(label && side==='b'){ textAt(ctx,label,x+dx/2,y+dy+18,{size:12,weight:700,color:col,align:'center'}); return; }
+  if(label){ const ox=side==='l'?-8:8; textAt(ctx,label,x+dx+(Math.abs(dx)>Math.abs(dy)?0:ox),y+dy+(Math.abs(dx)>Math.abs(dy)?-9:(dy>0?14:-4)),{size:12,weight:700,color:col,align:Math.abs(dx)>Math.abs(dy)?'center':(side==='l'?'right':'left')}); }
+}
+function ground(ctx,x0,x1,y){
+  line(ctx,x0,y,x1,y,COL.ink,2.4);
+  ctx.save(); ctx.strokeStyle='#c2d1e5'; ctx.lineWidth=1.1; ctx.beginPath();
+  for(let x=x0+8;x<x1;x+=14){ ctx.moveTo(x,y+2); ctx.lineTo(x-8,y+10); } ctx.stroke(); ctx.restore();
+}
+function coil(ctx,x,y1,y2,n,wd,col,lwd){
+  const L=y2-y1, lead=Math.min(12,Math.abs(L)*0.1), body=L-2*lead, N=n*24;
+  ctx.save(); ctx.strokeStyle=col; ctx.lineWidth=lwd||2; ctx.lineJoin='round'; ctx.beginPath();
+  ctx.moveTo(x,y1); ctx.lineTo(x,y1+lead);
+  const pitch=body/n;
+  for(let i=0;i<=N;i++){ const u=i/N, a=u*n*Math.PI*2;
+    ctx.lineTo(x+Math.sin(a)*wd/2, y1+lead+body*u - Math.cos(a)*Math.min(pitch*0.35,wd*0.18) + Math.min(pitch*0.35,wd*0.18)); }
+  ctx.lineTo(x,y2); ctx.stroke(); ctx.restore();
+}
+/* hand seen from the side: palm facing `dir` (±1), fingertips at (x,y) */
+function hand(ctx,x,y,dir,armLen,armAng){
+  const a=armAng===undefined?(dir>0?Math.PI:0):armAng;
+  const bx=x-dir*18, by=y;
+  ctx.save(); ctx.lineCap='round'; ctx.lineJoin='round';
+  line(ctx,bx,by,bx+Math.cos(a)*armLen,by+Math.sin(a)*armLen,COL.ink,9);
+  line(ctx,bx,by,bx+Math.cos(a)*armLen,by+Math.sin(a)*armLen,'#fff',5);
+  ctx.beginPath(); ctx.moveTo(bx,by-10); ctx.lineTo(x-dir*2,by-9); ctx.quadraticCurveTo(x+dir*2,by-8,x+dir*1,by); ctx.quadraticCurveTo(x+dir*2,by+8,x-dir*2,by+9); ctx.lineTo(bx,by+10); ctx.closePath();
+  ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke();
+  ctx.restore();
+}
+/* hand pressing downward: fingertip at (x,y) */
+function handDown(ctx,x,y,armLen){
+  ctx.save(); ctx.lineCap='round';
+  line(ctx,x,y-16,x+armLen*0.25,y-16-armLen,COL.ink,10); line(ctx,x,y-16,x+armLen*0.25,y-16-armLen,'#fff',6);
+  ctx.beginPath(); rrect(ctx,x-12,y-22,24,22,8); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke();
+  line(ctx,x-5,y-8,x-5,y-1,COL.mid,1.2); line(ctx,x+3,y-8,x+3,y-1,COL.mid,1.2);
+  ctx.restore();
+}
+function magnifier(ctx,cx,cy,R,draw,label){
+  ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fillStyle='#fbfdff'; ctx.fill(); ctx.clip(); draw(); ctx.restore();
+  circ(ctx,cx,cy,R,COL.ink,null,3);
+  if(label) textAt(ctx,label,cx,cy+R+16,{align:'center',size:11,weight:600,color:COL.muted});
+}
+/* jagged surface profile (friction close-up) */
+function roughProfile(seed,rough,n){ const R=rng(seed), a=[]; for(let i=0;i<n;i++) a.push((R()-0.5)*2*rough*(0.6+0.4*R())); return a; }
+
+const WFILL = 'rgba(47,143,224,0.14)', WFILL2 = 'rgba(47,143,224,0.28)';
+/* arrow whose HEAD sits at (x,y), pointing along ang — a push on a surface */
+function push(ctx,x,y,ang,len,col){ if(len<3) return; vec(ctx,x-Math.cos(ang)*len,y-Math.sin(ang)*len,x,y,col,2.2); }
+const GC = 981;                     // cm/s² — g for motion in cm
+const SUP = {'0':'⁰','1':'¹','2':'²','3':'³','4':'⁴','5':'⁵','6':'⁶','7':'⁷','8':'⁸','9':'⁹','-':'⁻'};
+function sup(n){ return String(n).split('').map(c=>SUP[c]||c).join(''); }
+function fmtLen(cm){ if(cm>=1) return fmt(cm,1)+' cm'; if(cm>=0.1) return fmt(cm*10,1)+' mm'; if(cm>=1e-4) return Math.round(cm*1e4)+' µm'; return fmt(cm*1e7,1)+' nm'; }
+function dot(ctx,x,y,r,stroke,fill,lw){ ctx.beginPath(); ctx.arc(x,y,Math.max(0.3,r),0,Math.PI*2); if(fill){ctx.fillStyle=fill; ctx.fill();} if(stroke){ctx.strokeStyle=stroke; ctx.lineWidth=lw||1.4; ctx.stroke();} }
+
+/* ---- polygons (world units, y up) ---- */
+function polyArea(p){ let a=0; for(let i=0;i<p.length;i++){ const q=p[i], r=p[(i+1)%p.length]; a+=q[0]*r[1]-r[0]*q[1]; } return Math.abs(a)/2; }
+/* keep the part of polygon p with y <= Y */
+function clipBelow(p,Y){
+  const out=[];
+  for(let i=0;i<p.length;i++){
+    const a=p[i], b=p[(i+1)%p.length], ia=a[1]<=Y, ib=b[1]<=Y;
+    if(ia) out.push(a);
+    if(ia!==ib){ const u=(Y-a[1])/(b[1]-a[1]); out.push([a[0]+(b[0]-a[0])*u, Y]); }
+  }
+  return out;
+}
+function xform(p,ox,oy,ang){ const c=Math.cos(ang), s=Math.sin(ang); return p.map(q=>[ox+q[0]*c-q[1]*s, oy+q[0]*s+q[1]*c]); }
+function polyPath(ctx,p,X,Y){ ctx.beginPath(); p.forEach((q,i)=>ctx[i?'lineTo':'moveTo'](X(q[0]),Y(q[1]))); ctx.closePath(); }
+/* water surface Y so that the part of polygon p below it has area A (bisection) */
+function levelFor(p,A){
+  let lo=Math.min(...p.map(q=>q[1])), hi=Math.max(...p.map(q=>q[1]));
+  if(A<=0) return lo;
+  for(let k=0;k<40;k++){ const m=(lo+hi)/2; if(polyArea(clipBelow(p,m))<A) lo=m; else hi=m; }
+  return (lo+hi)/2;
+}
+/* width of polygon p along the horizontal line y=Y */
+function widthAt(p,Y){ const xs=[]; for(let i=0;i<p.length;i++){ const a=p[i], b=p[(i+1)%p.length]; if((a[1]-Y)*(b[1]-Y)<=0 && a[1]!==b[1]) xs.push(a[0]+(b[0]-a[0])*(Y-a[1])/(b[1]-a[1])); } return xs.length<2?0:Math.max(...xs)-Math.min(...xs); }
+
+/* ---------------------------------------------------------------------
+   PARTICLE SIMULATOR for the magnified views (unit disk, y down).
+   Langevin thermostat (random kicks + drag) sets each particle's
+   temperature; springs to home sites make a solid; elastic collisions
+   between discs pass momentum on — which is also what makes a big
+   smoke particle jitter (Brownian motion).
+   --------------------------------------------------------------------- */
+function psNew(){ return {ps:[]}; }
+function psAdd(S,o){ const p=Object.assign({x:0,y:0,vx:0,vy:0,r:0.06,m:1,k:0,hx:0,hy:0,temp:0.3,damp:2,gy:0,col:COL.blue,fill:'#fff',trail:0,alpha:1,lw:1.6},o); S.ps.push(p); return p; }
+function psStep(S,dt,wall){
+  const n=Math.max(1,Math.ceil(dt/0.005)), h=dt/n, P=S.ps, N=P.length;
+  for(let s=0;s<n;s++){
+    for(let i=0;i<N;i++){ const p=P[i]; if(p.pin) continue;
+      if(p.damp>0){ const sd=Math.sqrt(2*p.damp*p.temp/p.m*h); p.vx+=-p.damp*p.vx*h+sd*gauss(); p.vy+=-p.damp*p.vy*h+sd*gauss(); }
+      if(p.k>0){ p.vx+=-p.k*(p.x-p.hx)/p.m*h; p.vy+=-p.k*(p.y-p.hy)/p.m*h; }
+      p.vy+=p.gy*h; p.x+=p.vx*h; p.y+=p.vy*h;
+    }
+    for(let i=0;i<N;i++){ const a=P[i];
+      for(let j=i+1;j<N;j++){ const b=P[j];
+        const dx=b.x-a.x, dy=b.y-a.y, rr=a.r+b.r; if(Math.abs(dx)>rr||Math.abs(dy)>rr) continue;
+        const d2=dx*dx+dy*dy; if(d2>=rr*rr||d2<1e-10) continue;
+        const d=Math.sqrt(d2), nx=dx/d, ny=dy/d, ov=rr-d;
+        const ia=a.pin?0:1/a.m, ib=b.pin?0:1/b.m, it=ia+ib; if(it===0) continue;
+        a.x-=nx*ov*ia/it; a.y-=ny*ov*ia/it; b.x+=nx*ov*ib/it; b.y+=ny*ov*ib/it;
+        const vn=(b.vx-a.vx)*nx+(b.vy-a.vy)*ny;
+        if(vn<0){ const J=-1.9*vn/it; a.vx-=J*ia*nx; a.vy-=J*ia*ny; b.vx+=J*ib*nx; b.vy+=J*ib*ny; }
+      }
+    }
+    for(let i=0;i<N;i++){ const p=P[i]; if(p.pin) continue;
+      if(wall) wall(p);
+      else { const d=Math.hypot(p.x,p.y), lim=1-p.r; if(d>lim){ const nx=p.x/d, ny=p.y/d; p.x=nx*lim; p.y=ny*lim; const vn=p.vx*nx+p.vy*ny; if(vn>0){ p.vx-=2*vn*nx; p.vy-=2*vn*ny; } } }
+    }
+  }
+}
+/* red attraction lines between near neighbours (only between particles passing `f`) */
+function psBonds(ctx,S,cx,cy,R,maxD,f,alpha){
+  const P=S.ps.filter(f||(()=>true)); ctx.save(); ctx.strokeStyle=COL.red; ctx.lineWidth=1.6;
+  for(let i=0;i<P.length;i++) for(let j=i+1;j<P.length;j++){ const a=P[i], b=P[j], d=Math.hypot(a.x-b.x,a.y-b.y);
+    if(d<maxD){ ctx.globalAlpha=(alpha===undefined?1:alpha)*Math.min(1,(1-d/maxD)*2.2)*Math.min(a.alpha,b.alpha); ctx.beginPath(); ctx.moveTo(cx+a.x*R,cy+a.y*R); ctx.lineTo(cx+b.x*R,cy+b.y*R); ctx.stroke(); } }
+  ctx.restore();
+}
+function psDraw(ctx,S,cx,cy,R){
+  S.ps.forEach(p=>{ if(p.trail>0){ const sp=Math.hypot(p.vx,p.vy); if(sp>0.05){ ctx.save(); ctx.globalAlpha=0.8*p.alpha; line(ctx,cx+(p.x-p.vx*p.trail)*R,cy+(p.y-p.vy*p.trail)*R,cx+p.x*R,cy+p.y*R,COL.green,1.6); ctx.restore(); } } });
+  S.ps.forEach(p=>{ ctx.save(); ctx.globalAlpha=p.alpha; dot(ctx,cx+p.x*R,cy+p.y*R,p.r*R,p.col,p.fill,p.lw); ctx.restore(); });
+}
+/* hexagonal block of home sites inside the unit disk */
+function hexSites(sp,x0,x1,y0,y1){ const out=[]; let row=0; for(let y=y1;y>=y0-1e-9;y-=sp*0.866,row++){ for(let x=x0+(row%2?sp/2:0);x<=x1+1e-9;x+=sp){ if(Math.hypot(x,y)<0.93) out.push([x,y]); } } return out; }
+/* round "magnified view" frame with a pointer ring on the object being viewed */
+function zoomFrame(ctx,cx,cy,R,tx,ty,label,draw){
+  if(tx!==null){
+    const d=Math.hypot(cx-tx,cy-ty)||1, ux=(cx-tx)/d, uy=(cy-ty)/d, a=Math.asin(clamp(R/d,0,1));
+    ctx.save(); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.1; ctx.setLineDash([4,4]);
+    [a,-a].forEach(s=>{ const c=Math.cos(s), sn=Math.sin(s), vx=ux*c-uy*sn, vy=ux*sn+uy*c, L=Math.sqrt(Math.max(0,d*d-R*R)); ctx.beginPath(); ctx.moveTo(tx,ty); ctx.lineTo(tx+vx*L,ty+vy*L); ctx.stroke(); });
+    ctx.restore(); circ(ctx,tx,ty,7,COL.ink,null,1.8);
+  }
+  magnifier(ctx,cx,cy,R,draw,label);
+}
+
+/* ---------------------------------------------------------------------
+   1. ACTIVITIES + ROUTER
+   --------------------------------------------------------------------- */
+const activities = [
+  { num:'7.1', title:'Break the Chalk', desc:'Break · grind · zoom in', build: buildA1 },
+  { num:'7.2', title:'Sugar in Water', desc:'Taste the top layer before and after stirring', build: buildA2 },
+  { num:'7.3', title:'Hammer & Heat a Solid', desc:'Fixed shape · melting point', build: buildA3 },
+  { num:'7.4', title:'Pour a Liquid', desc:'The shape changes, the volume does not', build: buildA4 },
+  { num:'7.5', title:'Smoke in Gas Jars', desc:'A gas fills all the space it gets', build: buildA5 },
+  { num:'7.6', title:'Squeeze a Syringe', desc:'Air squeezes, water does not', build: buildA6 },
+  { num:'7.7', title:'Water Level A · B · C', desc:'Dissolved particles fill the gaps', build: buildA7 },
+  { num:'7.8', title:'Potassium Permanganate', desc:'Water particles never stop — faster when hot', build: buildA8 },
+  { num:'7.9', title:'Incense in a Room', desc:'Moving air particles carry the fragrance', build: buildA9 },
+];
+let currentIndex = 0;
+
+function buildNav(){
+  const nav = document.getElementById('sideNav');
+  nav.innerHTML='';
+  activities.forEach((a,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'nav-item'+(i===currentIndex?' active':'');
+    btn.innerHTML = `<span class="n-num">${a.num}</span><span class="n-title">${a.title}</span>`;
+    btn.onclick = ()=>{ currentIndex=i; render(); };
+    nav.appendChild(btn);
+  });
+}
+function render(){
+  stopAllLoops();
+  buildNav();
+  const a = activities[currentIndex];
+  document.getElementById('panelBadge').textContent = a.num;
+  document.getElementById('panelTitle').textContent = a.title;
+  document.getElementById('panelDesc').textContent = a.desc||'';
+  const body = document.getElementById('panelBody');
+  body.innerHTML='';
+  body.appendChild(a.build());
+}
+function labShell(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `<div class="lab-canvas-wrap"><canvas></canvas></div><div class="lab-side"></div>`;
+  return wrap;
+}
+
+/* =====================================================================
+   7.1 BREAK THE CHALK
+   Each piece is lifted and bent until it snaps (~7°). The halves fall
+   under gravity (g = 981 cm/s², shown in 0.35× slow motion), bounce
+   (restitution 0.3) and skid to rest (μ = 0.4 → deceleration μg).
+   Pieces under 1.5 cm are too short to snap by hand.
+   Grinding shrinks the grain size exponentially towards a floor:
+        d(t) = d∞ + (d₀ − d∞)·e^(−kt),   k = 0.6 s⁻¹,  d∞ = 20 µm
+   The lens scales real sizes: size on screen = real size × magnification.
+   A constituent particle (~0.3 nm) only shows up beyond ~×10⁷, far past
+   any ordinary microscope, so that view is labelled "imagined".
+   ===================================================================== */
+function chalkBar(ctx,x1,y1,x2,y2,r){
+  const dx=x2-x1, dy=y2-y1, L=Math.hypot(dx,dy)||1, nx=-dy/L*r, ny=dx/L*r;
+  ctx.save(); ctx.beginPath(); ctx.moveTo(x1+nx,y1+ny); ctx.lineTo(x2+nx,y2+ny); ctx.lineTo(x2-nx,y2-ny); ctx.lineTo(x1-nx,y1-ny); ctx.closePath();
+  ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.lineJoin='round'; ctx.stroke();
+  if(L>r*3){ ctx.strokeStyle='#dbe4f0'; ctx.lineWidth=1.2; ctx.beginPath(); ctx.moveTo(x1+nx*0.4+dx*0.12,y1+ny*0.4+dy*0.12); ctx.lineTo(x2+nx*0.4-dx*0.12,y2+ny*0.4-dy*0.12); ctx.stroke(); }
+  ctx.restore();
+}
+function buildA1(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label style="margin-bottom:6px;">By hand</label>
+      <button class="toggle-btn play" id="brk" style="width:100%;padding:9px;">✋ Break every piece in two</button>
+      <div class="hint">Pieces shorter than 1.5 cm are too small to snap by hand.</div></div>
+    <div class="control-group"><label style="margin-bottom:6px;">Mortar &amp; pestle</label>
+      <button class="toggle-btn navy" id="grd" style="margin-top:0;padding:9px;">⚙ Put in mortar &amp; grind</button></div>
+    <div class="control-group"><label>Magnification <span class="val" id="mV"></span></label><input type="range" id="mR" min="0.5" max="8" step="0.05" value="1">
+      <div class="toggle-group" id="mP"><button class="toggle-btn small active" data-m="1">🔍 ×10</button><button class="toggle-btn small" data-m="3">🔬 ×1000</button><button class="toggle-btn small" data-m="7.7">⚛ ×5·10⁷</button></div></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Pieces</div><div class="rval" id="r1">1</div></div>
+      <div class="rcard"><div class="rlabel">Size of each</div><div class="rval" id="r2">8 cm</div></div>
+      <div class="rcard wide"><div class="rlabel">In the lens</div><div class="rval" id="r3" style="font-size:var(--fs-sm)">—</div></div></div>
+      <div class="fb" id="fb"></div>
+      <button class="toggle-btn navy" id="rs">↺ New stick of chalk</button></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), mR=$('#mR');
+  const RAD=0.5, SM=0.35, MU=0.4, BX=-6, BY=12, MX=10, HAND_MIN=1.5, K_G=0.6, D_INF=0.002;
+  const BITS=[]; { const r=rng(7); for(let i=0;i<260;i++) BITS.push({u:(r()*2-1)*Math.sqrt(r()), v:r(), s:r(), ph:r()*6.28}); }
+  let pieces, queue, cur, bend, hands, dust, toM, mChunks, grinding, dG, phi, amp, t;
+  function reset(){ pieces=[{len:8,x:-9,y:RAD,a:0,vx:0,vy:0,w:0,st:'rest'}]; queue=[]; cur=null; bend=0; hands=null; dust=[]; toM=[]; mChunks=0; grinding=false; dG=1; phi=0; amp=0; t=0; }
+  reset();
+  let zoomL=+mR.value;
+  const breakable=()=>pieces.filter(p=>p.len>=HAND_MIN);
+  $('#brk').onclick=()=>{ if(toM.length||mChunks) return; queue.push(...breakable().filter(p=>!queue.includes(p)&&p!==cur)); };
+  $('#grd').onclick=()=>{
+    if(mChunks===0&&toM.length===0){ if(breakable().length||cur||queue.length) return;
+      pieces.sort((a,b)=>b.x-a.x).forEach((p,i)=>toM.push({p,x0:p.x,y0:p.y,u:-i*0.13})); pieces=[]; grinding=true; return; }
+    grinding=!grinding; };
+  $('#rs').onclick=reset;
+  toggleWire([...wrap.querySelectorAll('#mP .toggle-btn')],b=>{ mR.value=b.dataset.m; });
+  mR.oninput=()=>wrap.querySelectorAll('#mP .toggle-btn').forEach(x=>x.classList.remove('active'));
+
+  function snap(p){
+    pieces.splice(pieces.indexOf(p),1);
+    const L2=p.len/2, c=Math.cos(bend), s=Math.sin(bend);
+    [-1,1].forEach(sd=>pieces.push({len:L2, x:p.x+sd*L2/2*c, y:p.y-L2/2*s, a:-sd*bend, vx:sd*(10+Math.random()*12), vy:12+Math.random()*10, w:-sd*(1.5+Math.random()*2.5), st:'fly'}));
+    for(let k=0;k<8;k++) dust.push({x:p.x,y:p.y,vx:gauss()*12,vy:6+Math.random()*18,life:1});
+    hands.open=0.001;
+  }
+  function stepPiece(p,dt){
+    const dtp=dt*SM;
+    if(p.st==='fly'){
+      p.vy-=GC*dtp; p.x+=p.vx*dtp; p.y+=p.vy*dtp; p.a+=p.w*dtp;
+      const low=p.y-(p.len/2)*Math.abs(Math.sin(p.a))-RAD*Math.abs(Math.cos(p.a));
+      if(low<0){ p.y-=low; if(p.vy<0){ p.vy=-0.3*p.vy; p.w*=0.5; p.vx*=0.85; } if(Math.abs(p.vy)<28) p.st='slide'; }
+    } else if(p.st==='slide'){
+      const aT=Math.round(p.a/Math.PI)*Math.PI; p.a=approach(p.a,aT,10,dt);
+      p.y=RAD+(p.len/2)*Math.abs(Math.sin(p.a-aT));
+      const dv=MU*GC*dtp; p.vx=Math.abs(p.vx)<=dv?0:p.vx-Math.sign(p.vx)*dv; p.x+=p.vx*dtp;
+      if(p.vx===0&&Math.abs(p.a-aT)<0.004){ p.a=0; p.y=RAD; p.st='rest'; }
+    }
+  }
+  function drawZoom(ctx,cx,cy,R,g,mag,pc,ground){
+    const s=pc*mag, cell=g*s;
+    ctx.fillStyle='#f6f9fc'; ctx.fillRect(cx-R,cy-R,2*R,2*R);
+    const pores=()=>[0.05,0.005,0.0005].forEach(scl=>{ const sp=scl*s; if(sp<6||sp>3*R) return; const i0=Math.floor((-R)/sp)-1, i1=Math.ceil(R/sp)+1;
+      ctx.save(); ctx.strokeStyle='#c2d1e5'; ctx.lineWidth=1;
+      for(let i=i0;i<=i1;i++) for(let j=i0;j<=i1;j++){ const r=rng((i*73856093)^(j*19349663)); const x=cx+i*sp+(r()-0.5)*sp*0.8, y=cy+j*sp+(r()-0.5)*sp*0.8; ctx.beginPath(); ctx.arc(x,y,sp*(0.06+0.08*r()),0,Math.PI*2); ctx.stroke(); }
+      ctx.restore(); });
+    let what;
+    if(cell>2.2*R){
+      if(cell<8*R){ const r=rng(3), n=22; ctx.beginPath(); for(let i=0;i<n;i++){ const a=i/n*Math.PI*2, rr=cell*0.42*(0.86+0.28*r()); ctx[i?'lineTo':'moveTo'](cx+Math.cos(a)*rr,cy+Math.sin(a)*rr); } ctx.closePath(); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke(); }
+      else { ctx.fillStyle='#fff'; ctx.fillRect(cx-R,cy-R,2*R,2*R); }
+      pores(); what=ground?'The surface of one speck — still chalk':'The surface of the chalk piece';
+    } else if(2*R/cell<30){
+      const n=Math.ceil(R/cell)+1;
+      for(let i=-n;i<=n;i++) for(let j=-n;j<=n;j++){ const r=rng((i+50)*977+(j+50)*131+11), x=cx+(i+(r()-0.5)*0.5)*cell, y=cy+(j+(r()-0.5)*0.5)*cell, m=10;
+        ctx.beginPath(); for(let k=0;k<m;k++){ const a=k/m*Math.PI*2, rr=cell*0.36*(0.7+0.5*r()); ctx[k?'lineTo':'moveTo'](x+Math.cos(a)*rr,y+Math.sin(a)*rr); } ctx.closePath();
+        ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=cell>14?1.6:1; ctx.stroke(); }
+      what=ground?'Tiny grains — each one still chalk':'Small pieces — each one still chalk';
+    } else {
+      const r=rng(5); ctx.fillStyle='#8195ab'; for(let i=0;i<500;i++){ ctx.globalAlpha=0.35; ctx.fillRect(cx-R+r()*2*R,cy-R+r()*2*R,1.2,1.2); } ctx.globalAlpha=1;
+      what='Grains too small to make out at this zoom';
+    }
+    const dp=3e-8*s;
+    if(dp>=3.5){
+      const al=smooth01(3.5,10,dp), a=dp*1.1, rows=Math.ceil(R/(a*0.866))+1, cols=Math.ceil(R/a)+1;
+      ctx.save(); ctx.globalAlpha=al; ctx.fillStyle='rgba(255,255,255,0.85)'; ctx.fillRect(cx-R,cy-R,2*R,2*R);
+      const P=(i,j)=>{ const ph=((i*7919+j*104729)%628)/100; return [cx+(i+(j&1)*0.5)*a+Math.sin(t*9+ph)*a*0.05, cy+j*a*0.866+Math.cos(t*8+ph*1.3)*a*0.05]; };
+      if(dp>14){ ctx.strokeStyle=COL.red; ctx.lineWidth=Math.min(2.4,dp*0.06);
+        for(let j=-rows;j<=rows;j++) for(let i=-cols;i<=cols;i++){ const p=P(i,j), q=P(i+1,j), u=P(i+((j&1)?1:0),j+1); ctx.beginPath(); ctx.moveTo(p[0],p[1]); ctx.lineTo(q[0],q[1]); ctx.moveTo(p[0],p[1]); ctx.lineTo(u[0],u[1]); ctx.stroke(); } }
+      for(let j=-rows;j<=rows;j++) for(let i=-cols;i<=cols;i++){ const p=P(i,j); dot(ctx,p[0],p[1],dp*0.36,COL.ink,'#fff',Math.min(2,0.6+dp*0.05)); }
+      ctx.restore();
+      if(al>0.5) what='Constituent particles of chalk (imagined — too small for any ordinary microscope)';
+    }
+    return what;
+  }
+
+  animLoop((dt)=>{
+    t+=dt;
+    if(!cur&&queue.length){ cur=queue.shift(); if(pieces.includes(cur)&&cur.st==='rest'){ cur.st='lift'; cur.sx={x:cur.x,v:0}; cur.sy={x:cur.y,v:0}; cur.sa={x:cur.a,v:0}; cur.T=0; bend=0; hands={o:0,open:0}; } else cur=null; }
+    if(cur){
+      cur.T+=dt; hands.o=approach(hands.o,1,8,dt);
+      if(cur.st==='lift'){ cur.x=springTo(cur.sx,BX,60,14,dt); cur.y=springTo(cur.sy,BY,60,14,dt); cur.a=springTo(cur.sa,0,60,14,dt); if(cur.T>0.8){ cur.x=BX; cur.y=BY; cur.a=0; cur.st='bend'; } }
+      else if(cur.st==='bend'){ bend+=(0.05+bend*3)*dt; if(bend>=0.12){ const p=cur; cur=null; snap(p); } }
+    }
+    if(hands&&hands.open>0){ hands.open+=dt*2.2; if(hands.open>=1) hands=null; }
+    pieces.forEach(p=>{ if(p!==cur) stepPiece(p,dt); });
+    const tab=pieces.filter(p=>p.st==='rest'||p.st==='slide').sort((a,b)=>a.x-b.x);
+    for(let i=0;i+1<tab.length;i++){ const a=tab[i], b=tab[i+1], need=(a.len+b.len)/2+0.35, gap=b.x-a.x; if(gap<need){ const m=(need-gap)*Math.min(1,6*dt)/2; a.x-=m; b.x+=m; } }
+    tab.forEach(p=>{ p.x=clamp(p.x,-15.5+p.len/2,3.2-p.len/2); });
+    dust.forEach(d=>{ const dtp=dt*SM; d.vy-=GC*dtp; d.x+=d.vx*dtp; d.y+=d.vy*dtp; if(d.y<0.1){ d.y=0.1; d.vx=0; d.vy=0; d.life-=dt*0.5; } }); dust=dust.filter(d=>d.life>0);
+    toM.forEach(m=>{ m.u+=dt/0.7; }); toM=toM.filter(m=>{ if(m.u>=1){ mChunks+=m.p.len; return false; } return true; });
+    const canGrind=grinding&&!toM.length&&mChunks>0;
+    if(canGrind) dG=D_INF+(dG-D_INF)*Math.exp(-K_G*dt);
+    amp=approach(amp,canGrind?1:0,4,dt); phi+=5*amp*dt;
+    zoomL=approach(zoomL,+mR.value,4,dt);
+    const mag=Math.pow(10,zoomL);
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const pc=Math.min(w/35,h/30), X=x=>w/2+x*pc, Y=y=>h*0.9-y*pc;
+    ground(ctx,X(-17),X(17),Y(0));
+    // mortar
+    const rim=6.5, bot=(xo)=>rim-5.0*Math.sqrt(Math.max(0,1-(xo/5.4)**2));
+    ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.fillStyle='#fff';
+    ctx.beginPath(); ctx.moveTo(X(MX-6.3),Y(rim)); ctx.ellipse(X(MX),Y(rim),6.3*pc,5.8*pc,0,Math.PI,0,true); ctx.closePath(); ctx.fill(); ctx.stroke();
+    rect(ctx,X(MX-3),Y(0.95),6*pc,0.95*pc,COL.ink,'#fff',2.2);
+    ctx.beginPath(); ctx.ellipse(X(MX),Y(rim),5.4*pc,5.0*pc,0,Math.PI,0,true); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.4; ctx.stroke();
+    line(ctx,X(MX-6.3),Y(rim),X(MX-5.4),Y(rim),COL.ink,2.4); line(ctx,X(MX+5.4),Y(rim),X(MX+6.3),Y(rim),COL.ink,2.4);
+    ctx.restore();
+    // pestle head position
+    const hx=MX+Math.cos(phi)*2.6*amp+(1-amp)*1.8, hy=bot(hx-MX)+0.95+Math.abs(Math.sin(phi))*0.25*amp;
+    // contents of the mortar
+    if(mChunks>0){
+      const N=Math.round(clamp(mChunks*Math.pow(1/dG,1.4),1,260)), heap=1.9*Math.cbrt(mChunks/8);
+      if(dG<0.3){ ctx.save(); ctx.globalAlpha=smooth01(0.3,0.06,dG); ctx.beginPath(); for(let k=0;k<=24;k++){ const xo=-3.8+7.6*k/24, yy=bot(xo)+heap*Math.max(0,1-(xo/3.8)**2); ctx[k?'lineTo':'moveTo'](X(MX+xo),Y(yy)); } ctx.fillStyle='#f6f9fc'; ctx.fill(); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.3; ctx.stroke(); ctx.restore(); }
+      for(let i=0;i<N;i++){ const b=BITS[i]; let xo=b.u*3.6; const yy=bot(xo)+b.v*heap*Math.max(0.1,1-b.u*b.u)+dG*0.5;
+        if(Math.abs(MX+xo-hx)<1.6) xo+=Math.sin(t*40+b.ph)*0.12*amp;
+        const px=X(MX+xo), py=Y(yy), sz=Math.max(1.1,dG*pc);
+        if(dG>0.15){ const r=rng(i*31+5); ctx.beginPath(); for(let k=0;k<7;k++){ const a=k/7*Math.PI*2+b.ph, rr=sz*0.5*(0.7+0.5*r()); ctx[k?'lineTo':'moveTo'](px+Math.cos(a)*rr,py+Math.sin(a)*rr); } ctx.closePath(); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=1.6; ctx.stroke(); }
+        else { ctx.fillStyle=COL.mid; ctx.fillRect(px-sz/2,py-sz/2,sz,sz); }
+      }
+    }
+    // pestle
+    { const tx=hx+4.2, ty=hy+9.5; ctx.save(); ctx.lineCap='round';
+      line(ctx,X(hx),Y(hy),X(tx),Y(ty),COL.ink,1.25*pc+4); line(ctx,X(hx),Y(hy),X(tx),Y(ty),'#fff',1.25*pc);
+      ctx.restore(); circ(ctx,X(hx),Y(hy),0.85*pc,COL.ink,'#fff',2.2);
+      if(amp>0.3){ ctx.save(); ctx.globalAlpha=amp; const dir=-Math.sin(phi); vec(ctx,X(tx),Y(ty+1.2),X(tx+dir*2.2),Y(ty+1.2),COL.yellow,2.4); ctx.restore(); } }
+    // pieces on the table / in the air
+    pieces.forEach(p=>{ if(p===cur) return; const c=Math.cos(p.a)*p.len/2, s=Math.sin(p.a)*p.len/2; chalkBar(ctx,X(p.x-c),Y(p.y-s),X(p.x+c),Y(p.y+s),RAD*pc); });
+    toM.forEach(m=>{ const u=clamp(m.u,0,1), e=u*u*(3-2*u), x=lerp(m.x0,MX+(Math.random()-0.5)*0.1,e), y=lerp(m.y0,2.5,e)+9*4*e*(1-e), a=u*4, c=Math.cos(a)*m.p.len/2, s=Math.sin(a)*m.p.len/2; chalkBar(ctx,X(x-c),Y(y-s),X(x+c),Y(y+s),RAD*pc); });
+    // the piece being bent + the two hands
+    let HL=null, HR=null;
+    if(cur){ const L2=cur.len/2, c=Math.cos(bend)*L2, s=Math.sin(bend)*L2, ca=Math.cos(cur.a)*L2, sa=Math.sin(cur.a)*L2;
+      if(cur.st==='bend'){ chalkBar(ctx,X(cur.x-c),Y(cur.y-s),X(cur.x),Y(cur.y),RAD*pc); chalkBar(ctx,X(cur.x),Y(cur.y),X(cur.x+c),Y(cur.y-s),RAD*pc);
+        if(bend>0.05) line(ctx,X(cur.x),Y(cur.y)-RAD*pc,X(cur.x)+2,Y(cur.y)-RAD*pc*0.2,COL.ink,1.4);
+        const q=RAD*pc; vec(ctx,X(cur.x-c*0.8),Y(cur.y-s*0.8)-q-26,X(cur.x-c*0.8),Y(cur.y-s*0.8)-q-3,COL.yellow,2.6); vec(ctx,X(cur.x+c*0.8),Y(cur.y-s*0.8)-q-26,X(cur.x+c*0.8),Y(cur.y-s*0.8)-q-3,COL.yellow,2.6); vec(ctx,X(cur.x),Y(cur.y)+q+26,X(cur.x),Y(cur.y)+q+3,COL.yellow,2.6);
+        HL=[X(cur.x-c),Y(cur.y-s)]; HR=[X(cur.x+c),Y(cur.y-s)]; }
+      else { chalkBar(ctx,X(cur.x-ca),Y(cur.y-sa),X(cur.x+ca),Y(cur.y+sa),RAD*pc); HL=[X(cur.x-ca),Y(cur.y-sa)]; HR=[X(cur.x+ca),Y(cur.y+sa)]; }
+      hands.lx=HL; hands.rx=HR; }
+    if(hands&&hands.lx){ const o=hands.open, al=cur?hands.o:1-o, dx=o*40, dy=-o*18;
+      ctx.save(); ctx.globalAlpha=clamp(al,0,1);
+      hand(ctx,hands.lx[0]-dx,hands.lx[1]+dy,1,70,Math.PI*0.78); hand(ctx,hands.rx[0]+dx,hands.rx[1]+dy,-1,70,Math.PI*0.22);
+      ctx.restore(); }
+    dust.forEach(d=>{ ctx.save(); ctx.globalAlpha=clamp(d.life,0,1); ctx.fillStyle=COL.mid; ctx.fillRect(X(d.x)-1.2,Y(d.y)-1.2,2.4,2.4); ctx.restore(); });
+    // scale bar
+    line(ctx,X(-16),Y(-1.6),X(-14),Y(-1.6),COL.ink,2); textAt(ctx,'2 cm',X(-13.6),Y(-1.6)+4,{size:11,color:COL.muted});
+    // lens
+    const R=Math.min(w*0.2,h*0.3), cx=w-R-16, cy=R+16;
+    let tx, ty, g;
+    if(mChunks>0||toM.length){ tx=X(MX); ty=Y(bot(0)+0.8); g=mChunks>0?dG:1; }
+    else { const big=pieces.slice().sort((a,b)=>b.len-a.len)[0]||cur; const p=cur||big; tx=X(p.x); ty=Y(p.y); g=p.len; }
+    const eX=Math.floor(zoomL+1e-9), mant=Math.round(mag/Math.pow(10,eX));
+    const magTxt=mag<1000?'×'+Math.round(mag):'×'+(mant>1?mant+'·':'')+'10'+sup(eX);
+    let what='';
+    zoomFrame(ctx,cx,cy,R,tx,ty,magTxt+(mag<=30?' · magnifying glass':mag<=1500?' · microscope':' · beyond any ordinary microscope'),()=>{ what=drawZoom(ctx,cx,cy,R,g,mag,pc,mChunks>0); });
+
+    // readouts
+    const tot=pieces.length;
+    $('#mV').textContent=magTxt;
+    if(mChunks>0){ const n=mChunks*Math.pow(1/dG,3); $('#r1').textContent=n<1000?Math.round(n).toString():'≈ 10'+sup(Math.round(Math.log10(n))); $('#r2').textContent=fmtLen(dG); }
+    else { const ls=pieces.concat(cur?[cur]:[]).map(p=>p.len); $('#r1').textContent=String(tot); const mn=Math.min(...ls), mx=Math.max(...ls); $('#r2').textContent=ls.length?(mn===mx?fmtLen(mn):fmtLen(mn)+' – '+fmtLen(mx)):'—'; }
+    $('#r3').textContent=what;
+    const brk=$('#brk'), grd=$('#grd');
+    brk.disabled=!breakable().length||mChunks>0||toM.length>0;
+    grd.disabled=mChunks===0&&!toM.length&&(breakable().length>0||!!cur||queue.length>0);
+    grd.textContent=(mChunks>0||toM.length)?(grinding?'⏸ Stop grinding':'⚙ Grind'):'⚙ Put in mortar & grind';
+    const fb=$('#fb');
+    if(zoomL>7.2){ fb.className='fb ok'; fb.textContent='The smallest units that cannot be broken further: constituent particles.'; }
+    else if(mChunks>0){ fb.className='fb ok'; fb.textContent='Finer and finer — every speck is still chalk.'; }
+    else if(tot===1&&pieces[0]&&pieces[0].len===8){ fb.className='fb warn'; fb.textContent='Break the stick of chalk.'; }
+    else if(breakable().length||cur){ fb.className='fb ok'; fb.textContent='Each piece is still chalk — only smaller.'; }
+    else { fb.className='fb warn'; fb.textContent='Too small to break by hand — grind them.'; }
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   7.2 SUGAR IN WATER — TASTE THE TOP LAYER
+   The water is 40 layers of 0.25 cm. Sugar spreads between layers by
+   Fick's law, ∂c/∂t = D·∂²c/∂z², with
+       D = 5.2×10⁻¹⁰ m²/s (sucrose in still water)  →  crossing 10 cm
+           takes ~L²/D ≈ 200 days, so unstirred the top stays plain;
+       stirring adds an eddy mixing of ~2×10⁻³ m²/s → mixed in seconds.
+   Crystals dissolve at  dm/dt = −r·(m/m₀)^(2/3)·(1 − c/cₛ),
+   cₛ = 2000 g/L, r = 0.006 g/s unstirred, 0.4 g/s stirred (≈1 min).
+   Crystals sink at their Stokes speed (~8 cm/s). Chemistry clock ×10.
+   You can just taste sugar at about 4 g/L.
+   ===================================================================== */
+function buildA2(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><button class="toggle-btn play" id="add" style="width:100%;padding:9px;">🥄 Add 2 teaspoons of sugar</button>
+      <div class="toggle-group"><button class="toggle-btn" id="stir">🥢 Stir</button><button class="toggle-btn" id="taste">👅 Taste the top layer</button></div></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Sugar grains left</div><div class="rval" id="r1">—</div></div>
+      <div class="rcard"><div class="rlabel">Time passed</div><div class="rval" id="r2">0 s</div></div>
+      <div class="rcard wide"><div class="rlabel">Last taste of the top layer</div><div class="rval" id="r3">—</div></div></div>
+      <div class="fb" id="fb"></div><div class="hint">Time runs ×10 faster than real.</div>
+      <button class="toggle-btn navy" id="rs">↺ Fresh glass of water</button></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas');
+  const N=40, H=10, RIN=3.5, DZ=H/N, AREA=Math.PI*RIN*RIN, CELLV=AREA*DZ/1000, D0=5.2e-6, KST=20, CS=2000, TC=10, TASTE=4;
+  let c, m, m0, crystals, colH, spoon, stirring, swirl, theta, tasteA, lastTaste, clock, t;
+  const S=psNew();
+  function reset(){ c=new Float64Array(N); m=0; m0=0; crystals=[]; colH=new Float64Array(14); spoon=null; stirring=false; swirl=0; theta=0; tasteA=null; lastTaste=null; clock=0; t=0;
+    S.ps.length=0; const r=rng(9); for(let i=0;i<76;i++) psAdd(S,{x:(r()-0.5)*1.4,y:(r()-0.5)*1.4,r:0.075,temp:0.35,damp:3,col:COL.blue,fill:'#eaf4fd',kind:'w'}); $('#stir').classList.remove('active'); }
+  reset();
+  $('#add').onclick=()=>{ if(spoon) return; spoon={T:0,rel:0}; };
+  $('#stir').onclick=()=>{ stirring=!stirring; $('#stir').classList.toggle('active',stirring); };
+  $('#taste').onclick=()=>{ if(!tasteA) tasteA={T:0,done:false}; };
+  $('#rs').onclick=reset;
+
+  animLoop((dt)=>{
+    t+=dt;
+    swirl=approach(swirl,stirring?1:0,stirring?2:0.6,dt); theta+=7*dt*(stirring?1:0.2*swirl);
+    // chemistry (real seconds)
+    const dtr=dt*TC; clock+=dtr;
+    if(m>1e-6){
+      const lo=Math.max(1,Math.round(N*0.4*swirl)), cb=c.slice(0,lo+1).reduce((a,b)=>a+b,0)/(lo+1);
+      const dm=Math.min(m,(0.006+0.4*swirl)*Math.pow(m/m0,2/3)*Math.max(0,1-cb/CS)*dtr);
+      m-=dm; for(let i=0;i<=lo;i++) c[i]+=dm/(lo+1)/CELLV;
+    }
+    const Dt=D0+KST*swirl*swirl, ns=Math.min(400,Math.ceil(dtr/(0.4*DZ*DZ/Dt))), hs=dtr/ns, f=Dt*hs/(DZ*DZ);
+    for(let s=0;s<ns;s++){ const nc=new Float64Array(N); for(let i=0;i<N;i++){ const a=c[i-1>=0?i-1:i], b=c[i+1<N?i+1:i]; nc[i]=c[i]+f*(a-2*c[i]+b); } c=nc; }
+    // spoon adding sugar
+    if(spoon){ spoon.T+=dt;
+      if(spoon.T>0.7&&spoon.rel<40&&spoon.T<1.6){ const k=Math.min(40,Math.floor((spoon.T-0.7)/0.9*40)); while(spoon.rel<k){ spoon.rel++; crystals.push({x:1.2+gauss()*0.35,y:14.2,vx:-6+gauss()*4,vy:0,st:'fall',s:0.9+Math.random()*0.5,r:0,th:Math.random()*6.28,lift:Math.random()}); } }
+      if(spoon.T>2.4) spoon=null; }
+    crystals.forEach(k=>{
+      if(k.st!=='fall') return;
+      const inW=k.y<H; k.vy=inW?approach(k.vy,-8,120,dt):k.vy-GC*dt; if(inW) k.vx=approach(k.vx,0,20,dt);
+      k.x+=k.vx*dt; k.y+=k.vy*dt; k.x=clamp(k.x,-RIN+0.3,RIN-0.3);
+      const ci=clamp(Math.floor((k.x+RIN)/(2*RIN)*14),0,13);
+      if(k.y<=colH[ci]+0.12){ k.y=colH[ci]+0.12; colH[ci]+=0.16; if(ci>0) colH[ci-1]+=0.04; if(ci<13) colH[ci+1]+=0.04; k.st='bed'; k.bx=k.x; k.by=k.y; k.r=Math.abs(k.x)/RIN*2.6+0.4; m+=8.4/40; m0+=8.4/40; }
+    });
+    // tasting spoon
+    if(tasteA){ tasteA.T+=dt; if(!tasteA.done&&tasteA.T>0.75){ tasteA.done=true; lastTaste=c[N-1]; } if(tasteA.T>1.6) tasteA=null; }
+    // magnified top layer: sugar particles follow the top-layer concentration
+    const want=Math.round(clamp(c[N-1]/40,0,1)*14), have=S.ps.filter(p=>p.kind==='s');
+    if(have.length<want){ { const a=Math.random()*6.28, rr=Math.sqrt(Math.random())*0.8; psAdd(S,{x:Math.cos(a)*rr,y:Math.sin(a)*rr,r:0.1,temp:0.35,damp:3,col:COL.ink,fill:'#fff',kind:'s',lw:2}); } }
+    else if(have.length>want){ S.ps.splice(S.ps.indexOf(have[0]),1); }
+    psStep(S,dt);
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const pc=Math.min(w/30,h/17.5), X=x=>w*0.5+x*pc, Y=y=>h*0.9-y*pc, CX=-8.5, gx=x=>X(CX+x);
+    ground(ctx,X(-14.5),X(14.5),Y(-0.6));
+    // water with vortex surface
+    const dip=0.7*swirl, surf=x=>H+dip*((x/RIN)**2-0.5);
+    ctx.save(); ctx.beginPath(); ctx.moveTo(gx(-RIN),Y(0)); for(let k=0;k<=30;k++){ const x=-RIN+2*RIN*k/30; ctx.lineTo(gx(x),Y(surf(x))); } ctx.lineTo(gx(RIN),Y(0)); ctx.closePath(); ctx.fillStyle=WFILL; ctx.fill(); ctx.restore();
+    // dissolved sugar: grey dots, density ∝ concentration, jiggling
+    { const r=rng(21); ctx.save(); ctx.fillStyle=COL.muted;
+      for(let i=0;i<N;i++){ const n=Math.min(14,Math.round(c[i]/5)); for(let k=0;k<n;k++){ const px=-RIN+0.2+r()*(2*RIN-0.4), pz=i*DZ+r()*DZ, ph=r()*6.28; if(pz>surf(px)-0.1) continue; ctx.fillRect(gx(px)+Math.sin(t*5+ph)*1.5-1,Y(pz)+Math.cos(t*4+ph)*1.5-1,2,2); } } ctx.restore(); }
+    ctx.save(); ctx.strokeStyle=COL.blue; ctx.lineWidth=2.2; ctx.beginPath(); for(let k=0;k<=30;k++){ const x=-RIN+2*RIN*k/30; ctx[k?'lineTo':'moveTo'](gx(x),Y(surf(x))); } ctx.stroke(); ctx.restore();
+    // crystals
+    const fac=m0>0?Math.cbrt(Math.max(0,m)/m0):1;
+    crystals.forEach(k=>{ let x=k.x, y=k.y, s=k.s;
+      if(k.st==='bed'){ s*=fac; if(s<0.08) return; const L=smooth01(0.1,0.7,swirl); k.th+=(2+k.lift*2)*swirl*dt*(1+0.3*Math.sin(t));
+        x=lerp(k.bx,Math.cos(k.th)*k.r,L); y=lerp(k.by,0.4+k.lift*5.5*swirl,L); }
+      const p=Math.max(2,s*0.22*pc); ctx.save(); ctx.translate(gx(x),Y(y)); ctx.rotate(k.th); ctx.fillStyle='#fff'; ctx.strokeStyle=COL.ink; ctx.lineWidth=1.3; ctx.fillRect(-p/2,-p/2,p,p); ctx.strokeRect(-p/2,-p/2,p,p); ctx.restore(); });
+    // glass tumbler
+    ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.6; ctx.lineJoin='round'; ctx.beginPath(); ctx.moveTo(gx(-RIN-0.25),Y(12.5)); ctx.lineTo(gx(-RIN-0.1),Y(-0.6)); ctx.lineTo(gx(RIN+0.1),Y(-0.6)); ctx.lineTo(gx(RIN+0.25),Y(12.5)); ctx.stroke(); ctx.restore();
+    line(ctx,gx(-RIN),Y(0),gx(RIN),Y(0),COL.mid,1.2);
+    // stirring rod
+    if(stirring||swirl>0.05){ const tipx=Math.cos(theta)*2.1*Math.max(swirl,0.3), tipy=1.2; ctx.save(); ctx.lineCap='round'; line(ctx,gx(tipx),Y(tipy),gx(tipx*0.4+1.8),Y(15.5),COL.ink,6); line(ctx,gx(tipx),Y(tipy),gx(tipx*0.4+1.8),Y(15.5),'#fff',2.6); ctx.restore();
+      if(swirl>0.2){ ctx.save(); ctx.globalAlpha=swirl; ctx.strokeStyle=COL.green; ctx.lineWidth=2; ctx.beginPath(); ctx.ellipse(gx(0),Y(4),2.4*pc,0.5*pc,0,0.2,Math.PI-0.2); ctx.stroke(); arrowHead(ctx,gx(-2.3),Y(4)-0.2*pc,Math.PI*0.9,COL.green,7); ctx.restore(); } }
+    // adding spoon
+    if(spoon){ const T=spoon.T, inU=smooth01(0,0.6,T)-smooth01(1.8,2.4,T), tip=smooth01(0.6,1.1,T)-smooth01(1.5,1.8,T);
+      const sx=gx(lerp(9,1.2,inU)), sy=Y(14.8); ctx.save(); ctx.globalAlpha=clamp(inU*1.5,0,1); ctx.translate(sx,sy); ctx.rotate(-tip*1.1);
+      ctx.beginPath(); ctx.ellipse(0,0,1.1*pc,0.5*pc,0,0,Math.PI); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.stroke(); line(ctx,-1.1*pc,0,1.1*pc,0,COL.ink,2);
+      line(ctx,1.05*pc,-1,5*pc,-0.9*pc,COL.ink,3);
+      if(spoon.rel<40){ const n=Math.round((40-spoon.rel)/5); for(let k=0;k<n;k++) ctx.strokeRect(-0.7*pc+k*0.2*pc,-0.25*pc,4,4); }
+      ctx.restore(); }
+    // tasting spoon
+    if(tasteA){ const T=tasteA.T, d=smooth01(0,0.6,T)-smooth01(0.9,1.5,T), sx=gx(-1.5), sy=Y(lerp(15,H-0.2,d));
+      ctx.save(); ctx.beginPath(); ctx.ellipse(sx,sy,0.9*pc,0.4*pc,0,0,Math.PI); ctx.fillStyle=tasteA.done?'rgba(47,143,224,0.3)':'#fff'; ctx.fill(); ctx.strokeStyle=COL.yellow; ctx.lineWidth=2.4; ctx.stroke(); line(ctx,sx-0.9*pc,sy,sx+0.9*pc,sy,COL.yellow,2); line(ctx,sx-0.85*pc,sy-1,sx-4.5*pc,sy-1.2*pc,COL.yellow,3); ctx.restore(); }
+    textAt(ctx,'top layer',gx(RIN)+8,Y(H-0.3)+4,{size:11,color:COL.muted});
+    textAt(ctx,'bottom',gx(RIN)+8,Y(0.3)+4,{size:11,color:COL.muted});
+    // concentration profile
+    { const x0=X(-0.6), x1=X(6.2), cmax=Math.max(...c), top=cmax>40?Math.pow(10,Math.ceil(Math.log10(cmax))):40, XC=v=>x0+(x1-x0)*clamp(v/top,0,1);
+      line(ctx,x0,Y(0),x0,Y(H),COL.ink,1.6); line(ctx,x0,Y(0),x1,Y(0),COL.ink,1.6);
+      ctx.save(); ctx.fillStyle='rgba(76,97,120,0.10)'; ctx.beginPath(); ctx.moveTo(x0,Y(0)); for(let i=0;i<N;i++) ctx.lineTo(XC(c[i]),Y((i+0.5)*DZ)); ctx.lineTo(x0,Y(H)); ctx.closePath(); ctx.fill(); ctx.restore();
+      ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.beginPath(); for(let i=0;i<N;i++) ctx[i?'lineTo':'moveTo'](XC(c[i]),Y((i+0.5)*DZ)); ctx.stroke(); ctx.restore();
+      line(ctx,XC(TASTE),Y(0),XC(TASTE),Y(H),COL.mid,1.1,[4,4]);
+      textAt(ctx,'sugar in each layer',x0,Y(H)-18,{size:11,weight:600,color:COL.muted});
+      textAt(ctx,'0',x0,Y(0)+14,{size:10,color:COL.muted,align:'center'}); textAt(ctx,top+' g/L',x1,Y(0)+14,{size:10,color:COL.muted,align:'center'});
+      textAt(ctx,'just sweet',XC(TASTE)+3,Y(H)-4,{size:10,color:COL.muted}); }
+    // magnified top layer
+    const R=Math.min(w*0.19,h*0.25), cx=w-R-16, cy=R+16;
+    zoomFrame(ctx,cx,cy,R,gx(-0.5),Y(H-0.4),'top layer, magnified (imagined)',()=>{ psDraw(ctx,S,cx,cy,R); });
+
+    const nLeft=m0>0?m/m0:0;
+    $('#r1').textContent=m0>0?(nLeft>0.005?fmt(m,1)+' g':'none'):'—';
+    $('#r2').textContent=clock<120?Math.round(clock)+' s':fmt(clock/60,1)+' min';
+    $('#r3').textContent=lastTaste===null?'—':(lastTaste>=TASTE?'Sweet · ':'Not sweet · ')+fmt(lastTaste,1)+' g/L';
+    $('#r3').style.color=lastTaste===null?'':(lastTaste>=TASTE?'var(--f-green)':'var(--f-red)');
+    const fb=$('#fb');
+    if(m0===0){ fb.className='fb warn'; fb.textContent='Add sugar — do not stir yet.'; }
+    else if(c[N-1]<TASTE&&!stirring){ fb.className='fb warn'; fb.textContent='Sugar sits at the bottom. The top is still plain.'; }
+    else if(nLeft>0.01){ fb.className='fb ok'; fb.textContent='Stirring spreads the sugar particles through the water.'; }
+    else { fb.className='fb ok'; fb.textContent='No grains left — yet every layer is sweet: sugar broke into invisible particles.'; }
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   7.3 HAMMER & HEAT A SOLID
+   Hammer: the head is swung about the wrist with angular acceleration
+   90 rad/s² (≈4 m/s at impact, shown ×0.3 slow motion), rebounds with a
+   material-dependent restitution, and the object rings on a
+   spring-damper. Metals and wood dent; rock salt cleaves into smaller
+   blocks that fly, bounce and skid (μg). Every block is still salt.
+   Heat (Table 7.1 — ice 0 °C, urea 133 °C, iron 1538 °C), 20 g samples:
+       dH/dt = P − hA(T − 25) − εσA(T⁴ − T₀⁴)
+       H < m·c_s·ΔT → heating;  next m·L → melting at constant T;
+       then heating the liquid.
+   L: ice 334, urea 243, iron 247 J/g. c: 2.1/1.55/0.68 (solid). Iron
+   loses ~400 W by radiation near 1538 °C, so a weak heater never melts it.
+   Particles vibrate with amplitude ∝ √T (reaching ~0.2 of the spacing at
+   the melting point); melted particles lose their fixed places.
+   Heating clock ×4.
+   ===================================================================== */
+function buildA3(){
+  const wrap=labShell();
+  const OBJ={nail:{n:'Iron nail',top:1.1,e:0.45,dent:0.04,kind:'metal'},salt:{n:'Rock salt',top:3.4,e:0.12,dent:0,kind:'salt'},stone:{n:'Stone',top:3.2,e:0.5,dent:0,kind:'stone'},
+    wood:{n:'Wooden block',top:3,e:0.2,dent:0.16,kind:'wood'},key:{n:'Key',top:2.6,e:0.45,dent:0.03,kind:'metal'},al:{n:'Aluminium',top:1.3,e:0.3,dent:0.12,kind:'metal'}};
+  const MAT={ice:{n:'Ice',m:20,cs:2.1,L:334,cl:4.18,Tm:0,T0:-20,A:4.7e-3,eps:0.95,Tmax:60,Tlo:-25},
+    urea:{n:'Urea',m:20,cs:1.55,L:243,cl:2.1,Tm:133,T0:25,A:3.66e-3,eps:0.9,Tmax:180,Tlo:0},
+    iron:{n:'Iron',m:20,cs:0.68,L:247,cl:0.82,Tm:1538,T0:25,A:1.13e-3,eps:0.6,Tmax:1650,Tlo:0}};
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><div class="toggle-group" id="mdB" style="margin-top:0"><button class="toggle-btn active" data-m="h">🔨 Hammer it</button><button class="toggle-btn" data-m="q">🔥 Heat it</button></div></div>
+    <div class="side-sub" id="subH">
+      <div class="control-group"><label>Solid object</label><div class="chip-wrap" id="obB">${Object.keys(OBJ).map((k,i)=>`<button class="chip-btn${i?'':' active'}" data-o="${k}">${OBJ[k].n}</button>`).join('')}</div>
+        <button class="toggle-btn play" id="hit" style="width:100%;padding:9px;margin-top:9px;">🔨 Strike</button></div>
+      <div class="control-group"><div class="result-cards">
+        <div class="rcard"><div class="rlabel">Hits</div><div class="rval" id="h1">0</div></div>
+        <div class="rcard"><div class="rlabel">Hammer speed</div><div class="rval" id="h2" style="color:var(--f-yellow)">—</div></div>
+        <div class="rcard wide"><div class="rlabel">Shape</div><div class="rval" id="h3">Definite</div></div></div>
+        <div class="fb" id="fbH"></div>
+        <button class="toggle-btn navy" id="rsH">↺ Fresh object</button></div></div>
+    <div class="side-sub hidden" id="subQ">
+      <div class="control-group"><label>Solid (Table 7.1)</label><div class="chip-wrap" id="mtB">${Object.keys(MAT).map((k,i)=>`<button class="chip-btn${i?'':' active'}" data-k="${k}">${MAT[k].n} · ${MAT[k].Tm} °C</button>`).join('')}</div></div>
+      <div class="control-group"><label>Heater power <span class="val" id="pV"></span></label><input type="range" id="pR" min="50" max="1500" step="10" value="250">
+        <button class="toggle-btn play" id="heat" style="width:100%;padding:9px;margin-top:9px;">🔥 Heat on</button></div>
+      <div class="control-group"><div class="result-cards">
+        <div class="rcard"><div class="rlabel">Temperature</div><div class="rval" id="q1" style="color:var(--f-yellow)">—</div></div>
+        <div class="rcard"><div class="rlabel">Melted</div><div class="rval" id="q2">0 %</div></div>
+        <div class="rcard wide"><div class="rlabel">Heat lost to the room</div><div class="rval" id="q3">—</div></div></div>
+        <div class="fb" id="fbQ"></div><div class="hint">Heating shown ×4 faster · sample drawn ×1.6.</div>
+        <button class="toggle-btn navy" id="rsQ">↺ Fresh sample</button></div></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), pR=$('#pR');
+  let mode='h', ok='nail', mk='ice', t=0;
+  // ---- hammer state
+  const SM=0.3, LH=13, TH_UP=1.15, TH_REST=0.45;
+  let hm, obj, frags, chips, hits, vHit;
+  // ---- heat state
+  let Hq, on, hist, tq;
+  const L=psNew();
+  function lattice(kind){
+    L.ps.length=0;
+    const a=0.25, sites=kind==='salt'?(()=>{ const o=[]; for(let y=0.62;y>-0.5;y-=a) for(let x=-0.75;x<=0.76;x+=a) if(Math.hypot(x,y)<0.9) o.push([x,y]); return o; })():hexSites(a,-0.8,0.8,-0.45,0.66);
+    const r=rng(4);
+    sites.forEach(([x,y],i)=>{ const jx=(kind==='stone'||kind==='wood')?(r()-0.5)*0.06:0, jy=(kind==='stone'||kind==='wood')?(r()-0.5)*0.06:0;
+      const alt=kind==='salt'&&((Math.round((x+0.75)/a)+Math.round((0.62-y)/a))%2===1);
+      psAdd(L,{x:x+jx,y:y+jy,hx:x+jx,hy:y+jy,k:60,r:alt?0.075:0.1,temp:0.02,damp:4,col:COL.ink,fill:'#fff',lw:1.8}); });
+  }
+  function resetH(){ hm={th:TH_REST,w:0,ph:'rest',T:0,sp:{x:TH_REST,v:0}}; obj={sh:{x:0,v:0},dent:0}; frags=ok==='salt'?[{x:-4,y:0,w:6,h:3.4,a:0,vx:0,vy:0,va:0,st:'rest'}]:[]; chips=[]; hits=0; vHit=0; lattice(OBJ[ok].kind); }
+  function resetQ(){ Hq=0; on=false; hist=[]; tq=0; lattice(mk==='urea'?'salt':'metal'); }
+  resetH();
+  toggleWire([...wrap.querySelectorAll('#mdB .toggle-btn')],b=>{ mode=b.dataset.m; $('#subH').classList.toggle('hidden',mode!=='h'); $('#subQ').classList.toggle('hidden',mode!=='q'); if(mode==='h') resetH(); else resetQ(); });
+  wrap.querySelectorAll('#obB .chip-btn').forEach(b=>b.onclick=()=>{ wrap.querySelectorAll('#obB .chip-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); ok=b.dataset.o; resetH(); });
+  wrap.querySelectorAll('#mtB .chip-btn').forEach(b=>b.onclick=()=>{ wrap.querySelectorAll('#mtB .chip-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); mk=b.dataset.k; resetQ(); });
+  $('#hit').onclick=()=>{ if(hm.ph==='rest'){ hm.ph='raise'; hm.T=0; hm.sp={x:hm.th,v:0}; } };
+  $('#rsH').onclick=resetH; $('#rsQ').onclick=resetQ;
+  $('#heat').onclick=()=>{ on=!on; };
+  const OX=-4, PX=OX+LH;
+  const qState=H=>{ const s=MAT[mk], H1=s.m*s.cs*(s.Tm-s.T0), H2=H1+s.m*s.L; if(H<H1) return [s.T0+H/(s.m*s.cs),0]; if(H<H2) return [s.Tm,(H-H1)/(s.m*s.L)]; return [s.Tm+(H-H2)/(s.m*s.cl),1]; };
+  const topAt=x=>{ if(ok!=='salt') return OBJ[ok].top-obj.dent; let tp=0; frags.forEach(f=>{ if(f.st==='rest'&&Math.abs(x-f.x)<f.w/2+0.6) tp=Math.max(tp,f.h); }); return tp; };
+  const PY=OBJ.nail.top+2.2;
+
+  function strike(){
+    const o=OBJ[ok], v=Math.abs(hm.w)*0.3; vHit=v; hits++;   // head speed (m/s) for a 30 cm hammer
+    obj.sh.v-=v*14;
+    if(o.dent) obj.dent=Math.min(o.kind==='wood'?0.7:0.5,obj.dent+o.dent);
+    // particles below the hammer are pushed together, then spring back
+    L.ps.forEach(p=>{ if(p.hy<-0.1) p.vy+=0.15*v*Math.max(0,1-Math.abs(p.hx)*0.8); });
+    if(o.kind==='metal') L.ps.forEach(p=>{ if(p.hy<-0.3){ p.hx+=0.025*Math.sign(p.hx||1); } });
+    if(ok==='salt'){
+      let best=null; frags.forEach(f=>{ if(f.st==='rest'&&Math.abs(f.x-OX)<f.w/2+0.6&&(!best||f.h>best.h)) best=f; });
+      if(best&&best.w>0.9){ frags.splice(frags.indexOf(best),1); const n=best.w>3?3:2, ww=best.w/n;
+        for(let i=0;i<n;i++){ const s=i-(n-1)/2; frags.push({x:best.x+s*ww,y:0,w:ww*0.96,h:Math.min(best.h,ww*(0.8+0.3*Math.random())),a:0,vx:s*(25+Math.random()*25)+gauss()*6,vy:25+Math.random()*35,va:(Math.random()-0.5)*8,st:'fly'}); }
+        const cx=L.ps.reduce((m,p)=>m+p.hx,0)/L.ps.length+ (Math.random()-0.5)*0.2; L.ps.forEach(p=>{ if(p.hx>cx) p.hx+=0.13; else p.hx-=0.13; }); }
+    }
+    if(ok==='stone') for(let k=0;k<3;k++) chips.push({x:OX+gauss()*0.8,y:OBJ.stone.top,vx:gauss()*30,vy:20+Math.random()*30,life:2});
+  }
+
+  animLoop((dt)=>{
+    t+=dt;
+    if(mode==='h'){
+      const dts=dt*SM, thC=Math.asin(clamp((topAt(OX)+2-PY)/LH,-1,1));
+      if(hm.ph==='raise'){ hm.T+=dt; hm.th=springTo(hm.sp,TH_UP,50,12,dt); hm.w=0; if(hm.T>0.55) hm.ph='swing'; }
+      else if(hm.ph==='swing'){ hm.w-=90*dts; hm.th+=hm.w*dts; if(hm.th<=thC){ hm.th=thC; strike(); hm.w=OBJ[ok].e*Math.abs(hm.w); hm.ph='reb'; hm.T=0; } }
+      else if(hm.ph==='reb'){ hm.T+=dt; hm.w-=30*dts; hm.th+=hm.w*dts; if(hm.th<thC){ hm.th=thC; hm.w=0; } if(hm.T>0.5){ hm.ph='back'; hm.sp={x:hm.th,v:0}; hm.T=0; } }
+      else if(hm.ph==='back'){ hm.T+=dt; hm.th=springTo(hm.sp,TH_REST,30,10,dt); if(hm.T>0.8) hm.ph='rest'; }
+      else { hm.th=approach(hm.th,TH_REST,4,dt); }
+      const o=OBJ[ok]; springTo(obj.sh,0,o.kind==='metal'?900:500,o.kind==='metal'?4:18,dt);
+      frags.forEach(f=>{ if(f.st!=='fly') return; const d=dt*0.45; f.vy-=GC*d; f.x+=f.vx*d; f.y+=f.vy*d; f.a+=f.va*d;
+        if(f.y<=0){ f.y=0; if(f.vy<0) f.vy=-0.25*f.vy; f.va*=0.5; f.vx*=0.7; if(Math.abs(f.vy)<14){ f.vy=0; f.a=approach(f.a,Math.round(f.a/(Math.PI/2))*Math.PI/2,20,dt); const dv=0.5*GC*d; f.vx=Math.abs(f.vx)<=dv?0:f.vx-Math.sign(f.vx)*dv; if(f.vx===0){ f.a=Math.round(f.a/(Math.PI/2))*Math.PI/2; f.st='rest'; } } }
+        f.x=clamp(f.x,-12.5,8.5); });
+      chips.forEach(c=>{ const d=dt*0.45; c.vy-=GC*d; c.x+=c.vx*d; c.y+=c.vy*d; if(c.y<0){ c.y=0; c.vx=0; c.vy=0; c.life-=dt; } }); chips=chips.filter(c=>c.life>0);
+      L.ps.forEach(p=>{ p.temp=0.02; });
+      psStep(L,dt);
+    } else {
+      const s=MAT[mk], P=+pR.value; $('#pV').textContent=P+' W';
+      let [T,f]=qState(Hq);
+      const loss=10*s.A*(T-25)+s.eps*5.67e-8*s.A*((T+273)**4-298**4);
+      const dtr=dt*4; if(on||Math.abs(loss)>0) Hq=Math.max(0,Hq+((on?P:0)-loss)*dtr); tq+=dtr;
+      [T,f]=qState(Hq); if(T>=s.Tmax){ on=false; }
+      if(!hist.length||tq-hist[hist.length-1][0]>0.25) hist.push([tq,T]); if(hist.length>900) hist.shift();
+      // particles: vibration grows with T; melted ones leave their sites
+      const tempS=60*Math.pow(0.2*0.25,2)*(T+273)/(s.Tm+273);
+      const nMelt=Math.round(f*L.ps.length), order=L.ps.slice().sort((a,b)=>a.hy-b.hy);
+      order.forEach((p,i)=>{ const melt=i<nMelt; p.k=melt?0:60; p.gy=melt?5:0; p.temp=melt?Math.max(tempS,0.06):tempS; p.damp=melt?3:4; p.trail=melt?0.15:0; });
+      psStep(L,dt);
+      $('#q1').textContent=Math.round(T)+' °C'; $('#q2').textContent=Math.round(f*100)+' %';
+      $('#q3').textContent=Math.round(Math.max(0,loss))+' W';
+      $('#heat').textContent=on?'⏸ Heat off':'🔥 Heat on';
+      const fb=$('#fbQ');
+      if(f>0&&f<1){ fb.className='fb ok'; fb.textContent='Melting: heat goes into freeing particles, so T stays at '+s.Tm+' °C.'; }
+      else if(f>=1){ fb.className='fb ok'; fb.textContent='All liquid — particles have left their fixed places.'; }
+      else if(on&&(on?P:0)<=loss*1.02&&T>s.T0+50){ fb.className='fb bad'; fb.textContent='Heat lost = heat supplied. It will never reach '+s.Tm+' °C — raise the power.'; }
+      else if(on){ fb.className='fb warn'; fb.textContent='Particles vibrate harder as it heats.'; }
+      else { fb.className='fb warn'; fb.textContent='Switch the heater on.'; }
+    }
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const R=Math.min(w*0.2,h*0.27), cx=w-R-16, cy=R+16;
+    if(mode==='h'){
+      const pc=Math.min(w/33,h/22), X=x=>w*0.42+x*pc, Y=y=>h*0.78-y*pc, o=OBJ[ok], sh=obj.sh.x*0.012;
+      // board / anvil
+      rect(ctx,X(-13),Y(0),22*pc,1.6*pc,COL.ink,'#fff',2.2); for(let k=0;k<4;k++) line(ctx,X(-12+k*5),Y(-0.5),X(-14.5+k*5),Y(-0.9),'#dbe4f0',1.2);
+      ground(ctx,X(-15),X(16),Y(-1.6));
+      // object
+      ctx.save(); ctx.translate(X(OX),Y(0)); ctx.scale(1,1+sh); ctx.translate(-X(OX),-Y(0));
+      const x0=X(OX), y0=Y(0), u=pc; ctx.lineJoin='round'; ctx.lineWidth=2.2; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff';
+      if(ok==='nail'){ ctx.beginPath(); ctx.moveTo(x0-5*u,y0); ctx.lineTo(x0+4*u,y0); ctx.lineTo(x0+5.4*u,y0-0.25*u); ctx.lineTo(x0+4*u,y0-0.5*u); ctx.lineTo(x0-5*u,y0-0.5*u); ctx.closePath(); ctx.fill(); ctx.stroke(); rect(ctx,x0-5.5*u,y0-1.1*u,0.5*u,1.1*u,COL.ink,'#fff',2.2); }
+      else if(ok==='stone'){ ctx.beginPath(); ctx.moveTo(x0-3.2*u,y0); ctx.bezierCurveTo(x0-3.8*u,y0-2.2*u,x0-1.2*u,y0-3.4*u,x0+0.6*u,y0-3.2*u); ctx.bezierCurveTo(x0+3*u,y0-3*u,x0+3.8*u,y0-1.2*u,x0+3.1*u,y0); ctx.closePath(); ctx.fill(); ctx.stroke(); line(ctx,x0-1.5*u,y0-1*u,x0-0.5*u,y0-1.6*u,COL.mid,1.1); line(ctx,x0+1*u,y0-2*u,x0+2*u,y0-1.5*u,COL.mid,1.1); }
+      else if(ok==='wood'){ rect(ctx,x0-4*u,y0-3*u,8*u,3*u,COL.ink,'#fff',2.2); for(let k=1;k<4;k++){ ctx.beginPath(); ctx.moveTo(x0-4*u,y0-k*0.75*u); ctx.bezierCurveTo(x0-1*u,y0-k*0.75*u-3,x0+1*u,y0-k*0.75*u+3,x0+4*u,y0-k*0.75*u); ctx.strokeStyle='#c2d1e5'; ctx.lineWidth=1.1; ctx.stroke(); } }
+      else if(ok==='key'){ ctx.beginPath(); ctx.arc(x0-3.2*u,y0-1.3*u,1.3*u,0,Math.PI*2); ctx.fill(); ctx.stroke(); circ(ctx,x0-3.2*u,y0-1.3*u,0.45*u,COL.ink,'#fff',2);
+        ctx.beginPath(); ctx.moveTo(x0-1.9*u,y0-1.6*u); ctx.lineTo(x0+4*u,y0-1.6*u); ctx.lineTo(x0+4*u,y0-0.4*u); for(let k=0;k<4;k++){ ctx.lineTo(x0+(3.4-k*1.1)*u,y0-0.4*u); ctx.lineTo(x0+(3.1-k*1.1)*u,y0); ctx.lineTo(x0+(2.8-k*1.1)*u,y0-0.4*u); } ctx.lineTo(x0-1.9*u,y0-1.0*u); ctx.closePath(); ctx.fill(); ctx.stroke(); }
+      else if(ok==='al'){ rect(ctx,x0-3.5*u,y0-1.3*u,7*u,1.3*u,COL.ink,'#fff',2.2); line(ctx,x0-3*u,y0-0.9*u,x0+2*u,y0-0.9*u,'#dbe4f0',1.2); }
+      if(obj.dent>0.005){ const tp=Y(o.top), dw=1.4*u, dd=obj.dent*u; ctx.save(); ctx.fillStyle='#fff'; ctx.beginPath(); ctx.moveTo(x0-dw,tp-1); ctx.quadraticCurveTo(x0,tp+dd*2,x0+dw,tp-1); ctx.closePath(); ctx.fill(); ctx.beginPath(); ctx.moveTo(x0-dw,tp); ctx.quadraticCurveTo(x0,tp+dd*2,x0+dw,tp); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke(); ctx.restore(); }
+      ctx.restore();
+      frags.forEach(f=>{ ctx.save(); ctx.translate(X(f.x),Y(f.y+f.h/2)); ctx.rotate(-f.a); const ww=f.w*pc, hh=f.h*pc; ctx.beginPath(); ctx.moveTo(-ww/2,hh/2); ctx.lineTo(-ww/2,-hh/2+hh*0.12); ctx.lineTo(-ww/2+ww*0.15,-hh/2); ctx.lineTo(ww/2,-hh/2); ctx.lineTo(ww/2,hh/2); ctx.closePath(); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.stroke();
+        ctx.strokeStyle='#c2d1e5'; ctx.lineWidth=1; for(let k=1;k<3;k++){ ctx.beginPath(); ctx.moveTo(-ww/2+ww*k/3,-hh/2); ctx.lineTo(-ww/2+ww*k/3,hh/2); ctx.stroke(); } ctx.restore(); });
+      chips.forEach(c=>{ ctx.save(); ctx.globalAlpha=clamp(c.life,0,1); ctx.beginPath(); ctx.moveTo(X(c.x),Y(c.y)-3); ctx.lineTo(X(c.x)+3,Y(c.y)+2); ctx.lineTo(X(c.x)-3,Y(c.y)+2); ctx.closePath(); ctx.strokeStyle=COL.ink; ctx.lineWidth=1.4; ctx.stroke(); ctx.restore(); });
+      // hammer: wrist at (PX,PY), head at LH along the handle
+      const th=hm.th, hx=PX-LH*Math.cos(th), hy=PY+LH*Math.sin(th), ux=-Math.cos(th), uy=Math.sin(th), nx=Math.sin(th), ny=Math.cos(th);
+      ctx.save(); ctx.lineCap='round'; line(ctx,X(PX+1.5*Math.cos(th)),Y(PY-1.5*Math.sin(th)),X(hx),Y(hy),COL.ink,0.9*pc+4); line(ctx,X(PX+1.5*Math.cos(th)),Y(PY-1.5*Math.sin(th)),X(hx),Y(hy),'#fff',0.9*pc); ctx.restore();
+      { const c=[[hx+nx*2.2-ux*0.1,hy+ny*2.2-uy*0.1],[hx+nx*2.2+ux*1.4,hy+ny*2.2+uy*1.4],[hx-nx*2+ux*1.4,hy-ny*2+uy*1.4],[hx-nx*2-ux*0.1,hy-ny*2-uy*0.1]]; ctx.save(); ctx.beginPath(); c.forEach((q,i)=>ctx[i?'lineTo':'moveTo'](X(q[0]),Y(q[1]))); ctx.closePath(); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.stroke(); ctx.restore(); }
+      // fist + arm
+      ctx.save(); ctx.lineCap='round'; line(ctx,X(PX),Y(PY),X(PX+6),Y(PY+8),COL.ink,14); line(ctx,X(PX),Y(PY),X(PX+6),Y(PY+8),'#fff',9); ctx.restore(); circ(ctx,X(PX),Y(PY),1.1*pc,COL.ink,'#fff',2.2);
+      if(hm.ph==='swing'&&Math.abs(hm.w)>2){ const L=Math.min(60,Math.abs(hm.w)*4), sx=X(hx)-3.2*pc, sy=Y(hy); vec(ctx,sx,sy,sx-Math.sin(th)*L,sy+Math.cos(th)*L,COL.yellow,3); }
+      textAt(ctx,o.n,X(OX),Y(-1.6)+22,{align:'center',size:12,weight:600,color:COL.muted});
+      zoomFrame(ctx,cx,cy,R,X(OX),Y(Math.max(0.3,topAt(OX)*0.5)),'particles, magnified (imagined)',()=>{ psBonds(ctx,L,cx,cy,R,0.32); psDraw(ctx,L,cx,cy,R); });
+      $('#h1').textContent=String(hits); $('#h2').textContent=vHit?fmt(vHit,1)+' m/s':'—';
+      $('#h3').textContent=ok==='salt'?(frags.length>1?'Broke into '+frags.length+' pieces — each has a fixed shape':'Definite'):(obj.dent>0.01?'Definite (small dent)':'Definite — unchanged');
+      const fb=$('#fbH');
+      if(!hits){ fb.className='fb warn'; fb.textContent='Strike the '+o.n.toLowerCase()+'.'; }
+      else if(ok==='salt'){ fb.className='fb ok'; fb.textContent='Salt splits along its layers, but every piece keeps a definite shape.'; }
+      else { fb.className='fb ok'; fb.textContent='Particles are held strongly in fixed places — it keeps its shape and volume.'; }
+    } else {
+      const s=MAT[mk], [T,f]=qState(Hq);
+      const pc=Math.min(w*0.56/16,h/22), X=x=>w*0.3+x*pc, Y=y=>h*0.86-y*pc;
+      ground(ctx,X(-9),X(9),Y(0));
+      // stand + burner + flame
+      line(ctx,X(-5.5),Y(0),X(-5.5),Y(8),COL.ink,2.4); line(ctx,X(5.5),Y(0),X(5.5),Y(8),COL.ink,2.4); line(ctx,X(-6.5),Y(8),X(6.5),Y(8),COL.ink,3);
+      rect(ctx,X(-1.5),Y(3.2),3*pc,3.2*pc,COL.ink,'#fff',2.2); rect(ctx,X(-2.5),Y(0.6),5*pc,0.6*pc,COL.ink,'#fff',2);
+      const P=+pR.value; if(on) flame(ctx,X(0),Y(3.3),2.6*pc,0.25+0.75*P/1500,t);
+      // crucible / beaker
+      const bw=7, bh=5.5, by=8.2;
+      ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.6; ctx.beginPath(); ctx.moveTo(X(-bw/2-0.3),Y(by+bh)); ctx.lineTo(X(-bw/2),Y(by)); ctx.lineTo(X(bw/2),Y(by)); ctx.lineTo(X(bw/2+0.3),Y(by+bh)); ctx.stroke(); ctx.restore();
+      // sample: a block that slumps into a pool as it melts
+      const hot=mk==='iron'?smooth01(700,1500,T):0, fillS=mk==='iron'?mixCol('#ffffff','#ffe0b0',hot):'#fff', fillL=mk==='ice'?WFILL2:(mk==='iron'?mixCol('#f2f2f2','#ffd79a',hot):'#f6f9fc');
+      const side=(mk==='iron'?1.37:mk==='urea'?2.47:2.8)*1.6, sS=side*Math.sqrt(1-f), pool=f*side*side/bw*1.1;
+      if(pool>0.01){ ctx.save(); ctx.fillStyle=fillL; ctx.fillRect(X(-bw/2)+2,Y(by+pool),bw*pc-4,pool*pc); ctx.restore(); line(ctx,X(-bw/2)+2,Y(by+pool),X(bw/2)-2,Y(by+pool),mk==='ice'?COL.blue:COL.mid,2); }
+      if(sS>0.05){ const rr=Math.min(sS*0.45,f*1.6+0.08)*pc; ctx.save(); rrect(ctx,X(-sS/2),Y(by+pool*0.6+sS),sS*pc,sS*pc,rr); ctx.fillStyle=fillS; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.stroke(); ctx.restore(); }
+      // thermometer
+      thermo(ctx,X(2.6),Y(by+9),Y(by+1.4),(T-s.Tlo)/(s.Tmax-s.Tlo),COL.ink,COL.yellow);
+      textAt(ctx,s.n,X(0),Y(-0.2)+20,{align:'center',size:12,weight:600,color:COL.muted});
+      // heating curve
+      const gx0=w*0.6, gx1=w-20, gy0=h-34, gy1=cy+R+44;
+      if(gy0-gy1>60){ const tmax=Math.max(40,(hist.length?hist[hist.length-1][0]:0)*1.1), GX=x=>gx0+(gx1-gx0)*x/tmax, GY=v=>gy0-(gy0-gy1)*(v-s.Tlo)/(s.Tmax-s.Tlo);
+        line(ctx,gx0,gy0,gx1,gy0,COL.ink,1.6); line(ctx,gx0,gy0,gx0,gy1,COL.ink,1.6);
+        line(ctx,gx0,GY(s.Tm),gx1,GY(s.Tm),COL.red,1.2,[5,4]); textAt(ctx,'melting point '+s.Tm+' °C',gx1,GY(s.Tm)-5,{align:'right',size:10,weight:600,color:COL.red});
+        ctx.save(); ctx.strokeStyle=COL.yellow; ctx.lineWidth=2.6; ctx.beginPath(); hist.forEach((q,i)=>ctx[i?'lineTo':'moveTo'](GX(q[0]),GY(q[1]))); ctx.stroke(); ctx.restore();
+        textAt(ctx,'temperature',gx0+4,gy1-6,{size:10,weight:600,color:COL.muted}); textAt(ctx,'time →',gx1,gy0+14,{align:'right',size:10,color:COL.muted}); }
+      zoomFrame(ctx,cx,cy,R,X(0),Y(by+0.8),f>0&&f<1?'melting: particles leave their places':'particles, magnified (imagined)',()=>{ psBonds(ctx,L,cx,cy,R,0.32); psDraw(ctx,L,cx,cy,R); });
+    }
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   7.4 POUR A LIQUID
+   Each container is a shaped outline of fixed depth (4 cm), so volume =
+   area × 4 cm. As the hand tilts the full container, the water surface
+   stays level: it is found by bisection so that the part of the tilted
+   outline below it holds exactly the water left. Whatever rises above the
+   lip spills over it like a weir:
+        Q = C_d·(2/3)·√(2g)·b·h^(3/2)  ≈ 71·h^(3/2) mL/s   (b = 4 cm)
+   and falls as a projectile into the next container. Volume is conserved:
+   200 mL in, 200 mL out — unless the walls are wet, in which case about
+   3.5 mL clings to the walls of the container just emptied.
+   Finger test: the water surface obeys the shallow-water wave equation,
+        η_tt = c²·η_xx − γ·η_t,   c = √(g·d) = √(981 × 2.6) ≈ 50 cm/s,
+   driven by the moving finger; wood does not let the finger in at all.
+   ===================================================================== */
+function buildA4(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><div class="toggle-group" id="mdB" style="margin-top:0"><button class="toggle-btn active" data-m="p">🫗 Pour</button><button class="toggle-btn" data-m="f">☝ Finger test</button></div></div>
+    <div class="side-sub" id="subP">
+      <div class="control-group"><label style="margin-bottom:4px;">Pour the water</label>
+        <div class="toggle-group"><button class="toggle-btn" id="pAB">A → B</button><button class="toggle-btn" id="pBC">B → C</button><button class="toggle-btn" id="pCA">C → A</button></div>
+        <label style="margin-top:10px;">Containers</label>
+        <div class="toggle-group" id="clB"><button class="toggle-btn active" data-c="1">Clean &amp; dry</button><button class="toggle-btn" data-c="0">Wet walls</button></div></div>
+      <div class="control-group"><div class="result-cards three">
+        <div class="rcard"><div class="rlabel">A</div><div class="rval" id="vA" style="color:var(--f-blue)">—</div></div>
+        <div class="rcard"><div class="rlabel">B</div><div class="rval" id="vB" style="color:var(--f-blue)">—</div></div>
+        <div class="rcard"><div class="rlabel">C</div><div class="rval" id="vC" style="color:var(--f-blue)">—</div></div></div>
+        <div class="fb" id="fbP"></div>
+        <button class="toggle-btn navy" id="rsP">↺ 200 mL back in A</button></div></div>
+    <div class="side-sub hidden" id="subF">
+      <div class="control-group"><label style="margin-bottom:4px;">Push the finger into</label>
+        <div class="toggle-group" id="fmB"><button class="toggle-btn active" data-f="w">💧 Water</button><button class="toggle-btn" data-f="s">🪵 Wooden block</button></div>
+        <button class="toggle-btn play" id="fgo" style="width:100%;padding:9px;margin-top:9px;">☝ Move the finger</button></div>
+      <div class="control-group"><div class="fb" id="fbF"></div></div></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas');
+  const DEPTH=4, CD_Q=0.6*(2/3)*Math.sqrt(2*GC)*DEPTH, FILM=3.5;
+  const C=[
+    {n:'A',x:-12.8,poly:[[-3.2,0],[3.2,0],[3.2,13],[-3.2,13]],open:2},
+    {n:'B',x:-1,poly:[[-5,0],[5,0],[1.5,9],[1.5,14],[-1.5,14],[-1.5,9]],open:3},
+    {n:'C',x:11.3,poly:[[-5,0],[5,0],[8,6],[-8,6]],open:2}];
+  C.forEach(c=>{ c.mark=levelFor(c.poly,200/DEPTH); c.top=Math.max(...c.poly.map(q=>q[1])); c.lipX=Math.max(...c.poly.filter(q=>q[1]===c.top).map(q=>q[0])); });
+  let clean=true, pour=null, t=0, mode='p';
+  function resetP(){ C.forEach((c,i)=>{ c.V=i===0?200:0; c.film=0; c.sl={x:0,v:0}; c.px=c.x; c.py=0; c.th=0; }); pour=null; }
+  resetP();
+  toggleWire([...wrap.querySelectorAll('#clB .toggle-btn')],b=>{ clean=b.dataset.c==='1'; });
+  toggleWire([...wrap.querySelectorAll('#mdB .toggle-btn')],b=>{ mode=b.dataset.m; $('#subP').classList.toggle('hidden',mode!=='p'); $('#subF').classList.toggle('hidden',mode!=='f'); });
+  const startPour=(i,j)=>{ if(pour||C[i].V<1) return; const s=C[i], d=C[j];
+    if(d.film>0){ d.V+=d.film; d.film=0; }
+    pour={s,d,dir:Math.sign(d.x-s.x),ph:'lift',T:0,tilt:0,Q:0,hold:0}; };
+  $('#pAB').onclick=()=>startPour(0,1); $('#pBC').onclick=()=>startPour(1,2); $('#pCA').onclick=()=>startPour(2,0);
+  $('#rsP').onclick=resetP;
+  // pose of the source so that its pouring lip sits just over the target's mouth
+  const poseFor=(p,tilt)=>{ const s=p.s, d=p.d, th=-p.dir*tilt, lx=p.dir*s.lipX, ly=s.top, c=Math.cos(th), sn=Math.sin(th);
+    const tx=d.x-p.dir*1.3, ty=d.top+2.2; return {px:tx-(lx*c-ly*sn), py:ty-(lx*sn+ly*c), th}; };
+
+  // ---- finger test
+  const NS=90, TW=24, WD=2.6, cW=Math.sqrt(GC*WD);
+  let eta=new Float64Array(NS), etv=new Float64Array(NS), fm='w', fOn=false, fx=0, fvx=0, fdep={x:0,v:0}, ft=0;
+  toggleWire([...wrap.querySelectorAll('#fmB .toggle-btn')],b=>{ fm=b.dataset.f; eta.fill(0); etv.fill(0); buildLens(); });
+  $('#fgo').onclick=()=>{ fOn=!fOn; };
+  const F=psNew();
+  function buildLens(){ F.ps.length=0;
+    if(fm==='w'){ const r=rng(2); for(let i=0;i<50;i++) psAdd(F,{x:(r()-0.5)*1.5,y:0.2+r()*0.7,r:0.085,temp:0.2,damp:3,gy:7,col:COL.blue,fill:'#eaf4fd'}); }
+    else hexSites(0.2,-0.9,0.9,-0.05,0.95).forEach(([x,y])=>psAdd(F,{x,y,hx:x,hy:y,k:80,r:0.085,temp:0.01,damp:4,col:COL.ink,fill:'#fff'}));
+    F.finger=psAdd(F,{x:0,y:-1.5,r:0.28,pin:true,col:COL.ink,fill:'#fff',lw:2.2}); }
+  buildLens();
+
+  animLoop((dt)=>{
+    t+=dt;
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    if(mode==='p'){
+      // ---------- pouring physics
+      let stream=null;
+      if(pour){ const p=pour, s=p.s; p.T+=dt;
+        const home={px:s.x,py:0,th:0};
+        if(p.ph==='lift'){ const u=smooth01(0,0.9,p.T), q=poseFor(p,0.12*u); s.px=lerp(home.px,q.px,u); s.py=lerp(0,q.py,u); s.th=q.th; if(p.T>=0.9){ p.ph='pour'; p.tilt=0.12; } }
+        else if(p.ph==='pour'){ p.tilt=Math.min(2.6,p.tilt+dt*(p.Q>2?0.25:0.6)); const q=poseFor(p,p.tilt); s.px=q.px; s.py=q.py; s.th=q.th;
+          if(p.tilt>=2.6||s.V<=(clean?0.02:FILM)+0.02){ p.hold+=dt; if(p.hold>0.7){ if(!clean){ const f=Math.min(FILM,s.V); s.film=f; s.V-=f; } p.ph='back'; p.T=0; p.from={px:s.px,py:s.py,th:s.th}; } } }
+        else if(p.ph==='back'){ const u=smooth01(0,1,p.T); s.px=lerp(p.from.px,home.px,u); s.py=lerp(p.from.py,0,u)+Math.sin(u*Math.PI)*1.5; s.th=lerp(p.from.th,0,u); if(p.T>=1){ s.px=s.x; s.py=0; s.th=0; pour=null; } }
+        // weir flow over the lip
+        if(pour&&p.ph!=='lift'){ const wp=xform(s.poly,s.px,s.py,s.th), lip=xform([[p.dir*s.lipX,s.top]],s.px,s.py,s.th)[0], cap=polyArea(clipBelow(wp,lip[1]))*DEPTH;
+          const avail=s.V-(clean?0:FILM);
+          if(avail>0&&s.V>cap){ const sw=Math.max(0.5,widthAt(wp,lip[1]-1e-4)), hh=(s.V-cap)/(DEPTH*sw); let Q=CD_Q*Math.pow(hh,1.5); Q=Math.min(Q,avail/dt,(s.V-cap)/dt); s.V-=Q*dt; p.d.V+=Q*dt; p.Q=Q; p.d.sl.v+=gauss()*Math.min(3,Q*0.02);
+            stream={x:lip[0],y:lip[1],u:p.dir*Math.min(12,Math.sqrt(GC*hh)),Q}; }
+          else p.Q=approach(p.Q,0,10,dt); }
+      }
+      C.forEach(c=>springTo(c.sl,0,70,2.5,dt));
+
+      const pc=Math.min(w/38,h/24), X=x=>w*0.5+(x-1.5)*pc, Y=y=>h*0.9-y*pc;
+      ground(ctx,X(-17),X(20),Y(0));
+      C.forEach(c=>{
+        const wp=xform(c.poly,c.px,c.py,c.th), A=c.V/DEPTH;
+        let yl=null;
+        if(A>0.01){ const pouring=pour&&pour.s===c&&pour.ph!=='lift'; let lipY=Infinity;
+          if(pouring){ lipY=xform([[pour.dir*c.lipX,c.top]],c.px,c.py,c.th)[0][1]; }
+          yl=Math.min(levelFor(wp,A),lipY);
+          const wet=clipBelow(wp,yl); if(wet.length>2){ ctx.save(); polyPath(ctx,wet,X,Y); ctx.fillStyle=WFILL2; ctx.fill(); ctx.restore();
+            const xs=wet.filter(q=>Math.abs(q[1]-yl)<1e-6).map(q=>q[0]); if(xs.length>=2){ const a=Math.min(...xs), b=Math.max(...xs), amp=clamp(c.sl.x,-0.25,0.25);
+              ctx.save(); ctx.strokeStyle=COL.blue; ctx.lineWidth=2.2; ctx.beginPath(); for(let k=0;k<=20;k++){ const x=lerp(a,b,k/20); ctx[k?'lineTo':'moveTo'](X(x),Y(yl+amp*Math.sin(k/20*Math.PI*3+t*9))); } ctx.stroke(); ctx.restore(); } } }
+        if(c.film>0){ const r=rng(c.n.charCodeAt(0)); for(let k=0;k<14;k++){ const i=Math.floor(r()*c.poly.length), a=c.poly[i], b=c.poly[(i+1)%c.poly.length]; if(i===c.open) continue; const u=r(), q=xform([[lerp(a[0],b[0],u)*0.96,lerp(a[1],b[1],u)*0.97+0.1]],c.px,c.py,c.th)[0]; dot(ctx,X(q[0]),Y(q[1]),2.2,COL.blue,'#eaf4fd',1.2); } }
+        // outline (skip the open top edge)
+        ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.6; ctx.lineJoin='round'; ctx.beginPath(); const n=wp.length;
+        for(let k=0;k<n;k++){ const q=wp[(c.open+1+k)%n]; ctx[k?'lineTo':'moveTo'](X(q[0]),Y(q[1])); } ctx.stroke(); ctx.restore();
+        // 200 mL mark
+        { const wl=widthAt(c.poly,c.mark)/2, e=xform([[-wl,c.mark],[wl,c.mark]],c.px,c.py,c.th); line(ctx,X(e[0][0]),Y(e[0][1]),X(e[1][0]),Y(e[1][1]),COL.yellow,1.6,[5,4]);
+          if(Math.abs(c.th)<0.05) textAt(ctx,'200 mL',X(c.x),Y(e[1][1])-5,{size:10,weight:600,color:COL.yellow,align:'center'}); }
+        if(Math.abs(c.th)<0.05&&c.py<0.05) textAt(ctx,c.n,X(c.x),Y(0)+20,{align:'center',size:14,weight:700,color:COL.ink});
+      });
+      // hand holding the source
+      if(pour){ const s=pour.s, g=xform([[-pour.dir*(s.poly===C[1].poly?2.2:s.lipX*0.85),s.top*0.45]],s.px,s.py,s.th)[0]; hand(ctx,X(g[0]),Y(g[1]),pour.dir,60,pour.dir>0?Math.PI*0.95:Math.PI*0.05); }
+      if(stream&&stream.Q>0.5){ const d=pour.d, lvl=d.V>0.01?levelFor(d.poly,d.V/DEPTH):0, yEnd=lvl, pts=[];
+        for(let k=0;k<=60;k++){ const tt=k*0.006, x=stream.x+stream.u*tt, y=Math.max(yEnd,stream.y-0.5*GC*tt*tt); pts.push([x,y]); if(y<=yEnd) break; }
+        const lw=clamp(1.5+stream.Q/8,1.5,8);
+        ctx.save(); ctx.lineCap='round'; ctx.strokeStyle=WFILL2; ctx.lineWidth=lw+2; ctx.beginPath(); pts.forEach((q,i)=>ctx[i?'lineTo':'moveTo'](X(q[0]),Y(q[1]))); ctx.stroke();
+        ctx.strokeStyle=COL.blue; ctx.lineWidth=1.6; ctx.setLineDash([7,6]); ctx.lineDashOffset=-t*220; ctx.stroke(); ctx.restore(); }
+      ['A','B','C'].forEach((n,i)=>{ const c=C[i]; $('#v'+n).textContent=Math.round(c.V+c.film)+' mL'; });
+      $('#pAB').disabled=!!pour||C[0].V<1; $('#pBC').disabled=!!pour||C[1].V<1; $('#pCA').disabled=!!pour||C[2].V<1;
+      const fb=$('#fbP'), tot=C.reduce((a,c)=>a+c.V,0), full=C.find(c=>c.V>150);
+      if(pour){ fb.className='fb ok'; fb.textContent='The water takes the shape of whatever holds it.'; }
+      else if(full&&full.V>=199.5){ fb.className='fb ok'; fb.textContent='Container '+full.n+': new shape, same 200 mL — definite volume, no fixed shape.'; }
+      else if(full){ fb.className='fb warn'; fb.textContent='Container '+full.n+' reads '+Math.round(full.V)+' mL — some water is still stuck to the wet walls.'; }
+      else { fb.className='fb warn'; fb.textContent='Pour the water into the next container.'; }
+    } else {
+      // ---------- finger test
+      if(fOn) ft+=dt;
+      const xf=fOn?7*Math.sin(ft*1.8):fx*0.98; fvx=(xf-fx)/Math.max(dt,1e-3); fx=xf;
+      const inW=fm==='w';
+      springTo(fdep,fOn?(inW?-1.6:0):3,60,11,dt);
+      // shallow-water waves forced by the finger
+      const dx=TW/(NS-1), ns=Math.ceil(dt/(0.5*dx/cW)), hs=dt/ns;
+      if(inW) for(let s=0;s<ns;s++){ const a=new Float64Array(NS);
+        for(let i=1;i<NS-1;i++){ const x=-TW/2+i*dx, g=(x-fx)/0.8, G=Math.exp(-g*g), dG=-2*g/0.8*G;
+          a[i]=cW*cW*(eta[i-1]-2*eta[i]+eta[i+1])/(dx*dx)-3*etv[i]+(fdep.x<0?1:0)*(-fvx)*dG*160; }
+        for(let i=1;i<NS-1;i++){ etv[i]+=a[i]*hs; eta[i]+=etv[i]*hs; } eta[0]=eta[1]; eta[NS-1]=eta[NS-2]; }
+      const pc=Math.min(w/30,h/20), X=x=>w*0.5+x*pc, Y=y=>h*0.62-y*pc;
+      ground(ctx,X(-14),X(14),Y(-4.4));
+      // tray
+      ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.6; ctx.lineJoin='round'; ctx.beginPath(); ctx.moveTo(X(-TW/2-0.4),Y(1.2)); ctx.lineTo(X(-TW/2),Y(-4)); ctx.lineTo(X(TW/2),Y(-4)); ctx.lineTo(X(TW/2+0.4),Y(1.2)); ctx.stroke(); ctx.restore();
+      const surf=i=>(inW?0:0)+eta[i];
+      if(inW){ ctx.save(); ctx.beginPath(); ctx.moveTo(X(-TW/2),Y(-4)); for(let i=0;i<NS;i++) ctx.lineTo(X(-TW/2+i*dx),Y(-4+WD+1.4+surf(i))); ctx.lineTo(X(TW/2),Y(-4)); ctx.closePath(); ctx.fillStyle=WFILL2; ctx.fill();
+        ctx.strokeStyle=COL.blue; ctx.lineWidth=2.2; ctx.beginPath(); for(let i=0;i<NS;i++) ctx[i?'lineTo':'moveTo'](X(-TW/2+i*dx),Y(-4+WD+1.4+surf(i))); ctx.stroke(); ctx.restore(); }
+      else { rect(ctx,X(-TW/2+0.3),Y(0),(TW-0.6)*pc,4*pc,COL.ink,'#fff',2.4); for(let k=1;k<4;k++){ ctx.save(); ctx.strokeStyle='#c2d1e5'; ctx.lineWidth=1.1; ctx.beginPath(); ctx.moveTo(X(-TW/2+0.3),Y(-k)); ctx.bezierCurveTo(X(-4),Y(-k)-4,X(4),Y(-k)+4,X(TW/2-0.3),Y(-k)); ctx.stroke(); ctx.restore(); } }
+      // finger
+      const tipY=(inW?-4+WD+1.4:0)+fdep.x;
+      handDown(ctx,X(fx),Y(tipY),110);
+      if(Math.abs(fvx)>0.5&&fdep.x<0.5) vec(ctx,X(fx),Y(tipY)-50,X(fx)+clamp(fvx*3,-45,45),Y(tipY)-50,COL.yellow,2.6);
+      if(!inW&&fOn) vec(ctx,X(fx)+18,Y(tipY)-30,X(fx)+18,Y(tipY)-6,COL.yellow,2.6);
+      // lens on the fingertip
+      F.finger.x=0; F.finger.y=inW?clamp(-(fdep.x+0.2)*0.35-0.1,-1.4,0.4):-0.37-Math.max(0,fdep.x)*0.35;
+      F.ps.forEach(p=>{ if(p!==F.finger&&inW) p.vx+=-fvx*0.004*(1-Math.min(1,Math.abs(p.y-F.finger.y))); });
+      psStep(F,dt);
+      const R=Math.min(w*0.2,h*0.25), cx=w-R-16, cy=R+16;
+      zoomFrame(ctx,cx,cy,R,X(fx),Y(tipY),inW?'water particles move aside, then flow back':'wood particles hold their places',()=>{ if(!inW) psBonds(ctx,F,cx,cy,R,0.27,p=>p!==F.finger); else psBonds(ctx,F,cx,cy,R,0.23,p=>p!==F.finger,0.45); psDraw(ctx,F,cx,cy,R); });
+      const fb=$('#fbF');
+      if(!fOn){ fb.className='fb warn'; fb.textContent='Move the finger.'; }
+      else if(inW){ fb.className='fb ok'; fb.textContent='The finger slips through; the water closes up behind it.'; }
+      else { fb.className='fb bad'; fb.textContent='The finger cannot go in — strong attractions hold the wood together.'; }
+    }
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   7.5 SMOKE IN GAS JARS
+   Every smoke speck is a Langevin particle: dv = −γv·dt + √(2γT)·dW,
+   i.e. it is knocked about at random by air particles, so it spreads
+   with D = T/γ (≈ 8 cm²/s here — the stirring of a real jar of smoke,
+   not molecular diffusion). Fresh smoke is hot and rises with a
+   buoyancy that fades as it cools (τ ≈ 3 s). The walls and the glass
+   plate reflect particles. Once the plate is pulled out the smoke
+   fills Jar B too, heading for an even 50 : 50 split.
+   The lens is a real collision simulation: one heavy smoke speck
+   (mass 40×) hit by fast air particles jiggles — Brownian motion.
+   ===================================================================== */
+function brownianSim(n){
+  const S=psNew(), r=rng(13);
+  S.big=psAdd(S,{x:0,y:0,r:0.13,m:40,damp:0,k:0.8,hx:0,hy:0,col:COL.ink,fill:'#dfe5ec',lw:2});
+  for(let i=0;i<n;i++){ const a=r()*6.28, d=0.3+r()*0.6; psAdd(S,{x:Math.cos(a)*d,y:Math.sin(a)*d,vx:gauss()*0.8,vy:gauss()*0.8,r:0.035,temp:0.6,damp:0.3,col:COL.green,fill:'#fff',trail:0.12,lw:1.4}); }
+  S.path=[]; return S;
+}
+function brownianDraw(ctx,S,cx,cy,R){
+  if(S.path.length>1){ ctx.save(); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.2; ctx.beginPath(); S.path.forEach((q,i)=>ctx[i?'lineTo':'moveTo'](cx+q[0]*R,cy+q[1]*R)); ctx.stroke(); ctx.restore(); }
+  psDraw(ctx,S,cx,cy,R);
+}
+function brownianStep(S,dt,speed){ S.ps.forEach(p=>{ if(p!==S.big) p.temp=0.6*speed*speed; }); psStep(S,dt); S.path.push([S.big.x,S.big.y]); if(S.path.length>160) S.path.shift(); }
+
+function buildA5(){
+  const wrap=labShell();
+  const STEPS=['Collect smoke','Cover & turn over','Put Jar B on top','Remove the plate'];
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><div class="step-row" id="stR">${STEPS.map((s,i)=>`<div class="step-pill" data-i="${i}">${i+1}</div>`).join('')}</div>
+      <div class="hint" id="stT" style="font-weight:600;color:var(--text-1);font-size:var(--fs-sm)"></div>
+      <button class="toggle-btn play" id="nx" style="width:100%;padding:9px;margin-top:8px;">Next step ▶</button></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Smoke in A</div><div class="rval" id="r1">—</div></div>
+      <div class="rcard"><div class="rlabel">Smoke in B</div><div class="rval" id="r2">—</div></div></div>
+      <div class="fb" id="fb"></div>
+      <button class="toggle-btn navy" id="rs">↺ Start again</button></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas');
+  const JW=4.8, TEMP=17, GAM=2, NMAX=260;
+  let step, T, ps, jA, plate, jB, t;
+  const B=brownianSim(26);
+  function reset(){ step=0; T=0; ps=[]; jA={cx:0,cy:18,ang:0}; plate={x:15,on:false}; jB={dy:30,on:false}; t=0; }
+  reset();
+  $('#nx').onclick=()=>{ if(step<3&&T>0.6){ step++; T=0;
+    if(step===1){ ps=ps.filter(p=>p.in); ps.forEach(p=>{ p.lx=p.x-jA.cx; p.ly=p.y-jA.cy; }); }
+    if(step===2) jB.on=true; } };
+  $('#rs').onclick=reset;
+  const inA=p=>p.y<16.2, count=()=>ps.filter(p=>p.in).length;
+
+  animLoop((dt)=>{
+    t+=dt; T+=dt;
+    // --- choreography
+    if(step===1){ plate.on=true; plate.x=lerp(15,0,smooth01(0,0.8,T)); const u=smooth01(1.0,2.4,T); jA.ang=Math.PI*u; jA.cx=0; jA.cy=lerp(18,8,u)+Math.sin(u*Math.PI)*3; }
+    if(step>=2){ jB.dy=lerp(30,0,smooth01(0,1.2,step===2?T:9)); }
+    if(step===3){ plate.x=lerp(0,15,smooth01(0,1.2,T)); }
+    // --- smoke
+    if(step===0&&count()<NMAX&&ps.length<NMAX+160){ const n=Math.random()<dt*70?1:0; for(let k=0;k<n+ (Math.random()<dt*70?1:0);k++) ps.push({x:gauss()*0.15,y:8.6,vx:gauss()*0.5,vy:4,heat:1,in:false,age:0}); }
+    const turning=step===1&&T>=1.0&&T<2.4;
+    ps.forEach(p=>{
+      p.age+=dt;
+      if(turning){ const c=Math.cos(jA.ang), s=Math.sin(jA.ang); p.x=jA.cx+p.lx*c-p.ly*s; p.y=jA.cy+p.lx*s+p.ly*c; return; }
+      const sd=Math.sqrt(2*GAM*TEMP*dt); p.vx+=-GAM*p.vx*dt+sd*gauss(); p.vy+=-GAM*p.vy*dt+sd*gauss()+p.heat*14*dt; p.heat*=Math.exp(-dt/3);
+      const ox=p.x, oy=p.y; p.x+=p.vx*dt; p.y+=p.vy*dt;
+      const bounce=(axis,lim,sgn)=>{ if(sgn*(p[axis]-lim)>0){ p[axis]=lim-(p[axis]-lim); p['v'+axis]*=-1; } };
+      if(step===0||(step===1&&T<1.0)){
+        if(p.in){ bounce('x',JW,1); bounce('x',-JW,-1); bounce('y',25.8,1); if(plate.on&&plate.x<5) bounce('y',10.2,-1); if(p.y<10) p.in=false; }
+        else { if(p.y>10&&Math.abs(p.x)<JW&&oy<=10) p.in=true; else if(p.y>9.6&&Math.abs(p.x)<5.6&&Math.abs(ox)>=5.6){ p.x=ox; p.vx*=-1; } }
+      } else {
+        const top=step>=3?32.2:15.8; bounce('x',JW,1); bounce('x',-JW,-1); bounce('y',0.3,-1); bounce('y',top,1);
+        if(step>=3&&p.x>plate.x-7){ if(oy<16.2&&p.y>=16.2){ p.y=16.2-(p.y-16.2); p.vy*=-1; } else if(oy>16.2&&p.y<=16.2){ p.y=16.2+(16.2-p.y); p.vy*=-1; } }
+      }
+    });
+    if(step===0) ps=ps.filter(p=>p.in||(p.age<5&&p.y>-1&&Math.abs(p.x)<20&&p.y<40));
+    brownianStep(B,dt,1);
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const pc=Math.min(w/30,h/37), X=x=>w*0.36+x*pc, Y=y=>h*0.95-y*pc;
+    ground(ctx,X(-11),X(17),Y(0));
+    // incense stick in its holder
+    if(step===0||(step===1&&T<0.8)){ const a=step===0?1:1-T/0.8; ctx.save(); ctx.globalAlpha=a; rect(ctx,X(-1.2),Y(0.8),2.4*pc,0.8*pc,COL.ink,'#fff',2); line(ctx,X(0),Y(0.8),X(0),Y(8.6),COL.ink,2.4); line(ctx,X(0),Y(7.6),X(0),Y(8.6),COL.red,3); ctx.restore(); }
+    // smoke
+    ps.forEach(p=>{ const a=p.in?0.55:clamp(0.55*(1-p.age/5),0,0.55); ctx.save(); ctx.globalAlpha=a; dot(ctx,X(p.x),Y(p.y),0.42*pc,null,'#b8c3cf'); ctx.restore(); });
+    // jars
+    const jar=(j,lbl)=>{ ctx.save(); ctx.translate(X(j.cx),Y(j.cy)); ctx.rotate(-j.ang); const u=pc, hw=5*u;
+      ctx.strokeStyle=COL.ink; ctx.lineWidth=2.6; ctx.lineJoin='round'; ctx.beginPath(); ctx.moveTo(-hw-4,8*u); ctx.lineTo(-hw,8*u); ctx.lineTo(-hw,-7*u); ctx.quadraticCurveTo(-hw,-8*u,-hw+u,-8*u); ctx.lineTo(hw-u,-8*u); ctx.quadraticCurveTo(hw,-8*u,hw,-7*u); ctx.lineTo(hw,8*u); ctx.lineTo(hw+4,8*u); ctx.stroke();
+      line(ctx,hw-6,-6*u,hw-6,4*u,'#dbe4f0',2);
+      ctx.rotate(j.ang); textAt(ctx,lbl,0,5,{align:'center',size:16,weight:700,color:COL.ink,alpha:0.8}); ctx.restore(); };
+    jar(jA,'A');
+    if(jB.on) jar({cx:0,cy:24.4+jB.dy,ang:0},'B');
+    if(plate.on&&plate.x<14.9){ let px, py, a=0;
+      if(step===1&&T<2.4){ const c=Math.cos(jA.ang), s=Math.sin(jA.ang), lx=plate.x, ly=-8.2; px=jA.cx+lx*c-ly*s; py=jA.cy+lx*s+ly*c; a=jA.ang; } else { px=plate.x; py=16.2; }
+      ctx.save(); ctx.translate(X(px),Y(py)); ctx.rotate(-a); rect(ctx,-7*pc,-0.2*pc,14*pc,0.4*pc,COL.ink,'#eef2f8',2); ctx.restore();
+      if(step===3&&T<1.3){ hand(ctx,X(px+7)+18,Y(py),-1,60,0); vec(ctx,X(px+7)+30,Y(py)-18,X(px+7)+70,Y(py)-18,COL.yellow,2.6); } }
+    if(step===1&&T<1.0) hand(ctx,X(plate.x+7)+18,Y(10),-1,60,0);
+    // lens on one smoke speck
+    const R=Math.min(w*0.2,h*0.26), cx=w-R-16, cy=R+16, tgt=ps.find(p=>p.in)||ps[0];
+    zoomFrame(ctx,cx,cy,R,tgt?X(tgt.x):null,tgt?Y(tgt.y):0,'smoke speck hit by air particles',()=>brownianDraw(ctx,B,cx,cy,R));
+
+    // readouts
+    wrap.querySelectorAll('.step-pill').forEach((el,i)=>{ el.classList.toggle('active',i===step); el.classList.toggle('done',i<step); });
+    $('#stT').textContent=STEPS[step]; $('#nx').disabled=step>=3;
+    const n=count(), nA=ps.filter(p=>p.in&&inA(p)).length;
+    $('#r1').textContent=step>=1&&n?Math.round(100*nA/n)+' %':(step===0?Math.round(100*Math.min(1,n/NMAX))+' % full':'—');
+    $('#r2').textContent=step>=3&&n?Math.round(100*(n-nA)/n)+' %':(jB.on?'0 %':'—');
+    const fb=$('#fb');
+    if(step===0){ fb.className='fb warn'; fb.textContent=n<NMAX*0.6?'Smoke rises and is trapped in Jar A.':'Jar A is full of smoke — next step.'; }
+    else if(step<3){ fb.className='fb ok'; fb.textContent='The smoke fills the whole of Jar A, whatever way it is turned.'; }
+    else if((n-nA)/Math.max(1,n)<0.35){ fb.className='fb warn'; fb.textContent='The smoke moves up into Jar B…'; }
+    else { fb.className='fb ok'; fb.textContent='Smoke fills both jars: a gas has no fixed shape or volume.'; }
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   7.6 SQUEEZE A SYRINGE
+   20 mL syringe, bore 2 cm (A = 3.14 cm²), air column 6.37 cm.
+   Sealed air (Boyle, slow push → isothermal):  p = p₀·L₀/L
+   Plunger (plus hand, 3 kg) obeys  m·L̈ = (p − p₀)·A − F − c·L̇,
+   so it settles on a spring-damper and springs back when you let go.
+   Check: F = 30 N → Δp = 30/3.14×10⁻⁴ = 95.5 kPa → V = 20×100/195.5
+   = 10.2 mL.
+   Sealed water: bulk modulus K = 2.2 GPa → ΔV/V = Δp/K = 0.004 %
+   (0.0009 mL at 30 N) — practically incompressible.
+   Open nozzle (2 mm): the contents stream out, Q = C_d·a·√(2Δp/ρ).
+   ===================================================================== */
+function buildA6(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label style="margin-bottom:4px;">Inside the syringe</label>
+      <div class="toggle-group" id="flB"><button class="toggle-btn active" data-f="a">💨 Air</button><button class="toggle-btn" data-f="w">💧 Water</button></div>
+      <div class="toggle-group" id="thB"><button class="toggle-btn active" data-t="1">👍 Thumb on the end</button><button class="toggle-btn" data-t="0">End open</button></div></div>
+    <div class="control-group"><label>Your push <span class="val" id="fV"></span></label><input type="range" id="fR" min="0" max="60" step="1" value="0">
+      <button class="toggle-btn navy" id="lg">✋ Let go</button></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Volume inside</div><div class="rval" id="r1">20 mL</div></div>
+      <div class="rcard"><div class="rlabel">Pressure inside</div><div class="rval" id="r2" style="color:var(--f-red)">100 kPa</div></div>
+      <div class="rcard wide"><div class="rlabel">Squeezed by</div><div class="rval" id="r3">0 %</div></div></div>
+      <div class="fb" id="fb"></div>
+      <button class="toggle-btn navy" id="rs">↺ Refill to 20 mL</button></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), fR=$('#fR');
+  const A=3.14e-4, L0=0.0637, P0=1e5, M=3, CDMP=23, K=2.2e9, NOZ=Math.PI*1e-6, CD=0.6, RHO={a:1.2,w:1000}, FR=1.2;
+  let fluid='a', sealed=true, L, Lref, v, t, parts, jet;
+  function reset(){ L=L0; Lref=L0; v=0; t=0; jet=[]; fR.value=0;
+    parts=[]; const r=rng(8);
+    if(fluid==='a') for(let i=0;i<40;i++){ const a=r()*6.28; parts.push({x:r(),y:(r()*2-1)*0.85,vx:Math.cos(a),vy:Math.sin(a)}); }
+    else for(let i=0;i<15;i++) for(let j=0;j<5;j++) parts.push({x:(i+0.5)/15,y:-0.72+j*0.36+(i%2)*0.18-0.09,ph:r()*6.28}); }
+  reset();
+  toggleWire([...wrap.querySelectorAll('#flB .toggle-btn')],b=>{ fluid=b.dataset.f; reset(); });
+  toggleWire([...wrap.querySelectorAll('#thB .toggle-btn')],b=>{ sealed=b.dataset.t==='1'; });
+  $('#lg').onclick=()=>{ fR.value=0; };
+  $('#rs').onclick=reset;
+  let P=P0;
+
+  animLoop((dt)=>{
+    t+=dt;
+    const F=+fR.value; $('#fV').textContent=F+' N';
+    const Lold=L;
+    // ---- plunger physics
+    if(fluid==='a'){
+      const n=40, h=dt/n;
+      for(let s=0;s<n;s++){
+        let dp; if(sealed){ P=P0*Lref/L; dp=P-P0; }
+        else { const q=Math.max(0,-v)*A/(CD*NOZ); dp=0.5*RHO.a*q*q; P=P0+dp; }
+        if(!sealed) Lref=L;
+        let fn=dp*A-F-CDMP*v;
+        if(Math.abs(v)<1e-3&&Math.abs(fn)<FR){ v=0; continue; }
+        fn-=Math.sign(v||fn)*FR;
+        v+=fn/M*h; L+=v*h;
+        if(L<0.004){ L=0.004; v=0; } if(L>L0+0.011){ L=L0+0.011; v=Math.min(0,v); }
+        if(!sealed&&L>=Lref&&v>0){ v=0; }
+      }
+    } else {
+      if(sealed){ P=P0+F/A; L=approach(L,Lref*(1-(F/A)/K),20,dt); v=0; }
+      else { const dp=Math.max(0,F-FR)/A; P=P0+dp; v=-CD*NOZ/A*Math.sqrt(2*dp/RHO.w); L=Math.max(0.003,L+v*dt); if(L<=0.003) v=0; Lref=L; }
+    }
+    // ---- particles (x from 0 = nozzle end to 1 = plunger face, y in ±1)
+    const Lc=L*100;
+    if(fluid==='a'){
+      const target=Math.max(2,Math.round(40*Lref/L0));
+      while(parts.filter(p=>!p.out).length>target){ const p=parts.filter(q=>!q.out).sort((a,b)=>a.x-b.x)[0]; p.out=true; p.x=0; p.y=0; p.vx=-1; p.age=0; }
+      const spd=1.2;
+      parts.forEach(p=>{
+        if(p.out){ p.age+=dt; p.x+=p.vx*dt*4/Math.max(1,Lc); return; }
+        p.x+=p.vx*spd*dt/Math.max(0.5,Lc)*3; p.y+=p.vy*spd*dt;
+        if(p.x<0.02){ p.x=0.02; p.vx=Math.abs(p.vx); } if(p.x>0.98){ p.x=0.98; p.vx=-Math.abs(p.vx); }
+        if(Math.abs(p.y)>0.88){ p.y=Math.sign(p.y)*0.88; p.vy*=-1; }
+        // rescale x when the plunger moves: particles are carried by the moving wall
+      });
+      parts=parts.filter(p=>!p.out||p.age<1.2);
+    } else if(!sealed){
+      const keep=Math.round(75*L/L0); let inside=parts.filter(p=>!p.out);
+      while(inside.length>keep){ const p=inside.sort((a,b)=>a.x-b.x)[0]; p.out=true; p.age=0; p.vx=-(Math.sqrt(2*Math.max(0,F-FR)/A/RHO.w)); inside=parts.filter(q=>!q.out); }
+      parts.forEach(p=>{ if(p.out){ p.age+=dt; } });
+      parts=parts.filter(p=>!p.out||p.age<0.6);
+      inside=parts.filter(p=>!p.out); const nCol=Math.max(1,Math.ceil(inside.length/5));
+      inside.sort((a,b)=>a.x-b.x).forEach((p,i)=>{ const col=Math.floor(i/5); p.x=approach(p.x,(col+0.5)/nCol,10,dt); });
+    }
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const pc=Math.min(w/16,h/8), X=x=>w*0.47+x*pc, Y=y=>h*0.5-y*pc;
+    const xN=-6, face=xN+Lc, ri=1, rodEnd=face+5.5;
+    const XP=u=>X(xN+u*Lc);
+    // contents
+    if(fluid==='w'){ const inside=parts.filter(p=>!p.out); if(inside.length){ ctx.save(); ctx.fillStyle=WFILL; ctx.fillRect(X(xN),Y(ri),Lc*pc,2*ri*pc); ctx.restore(); } }
+    // barrel, nozzle, finger grips
+    ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.6; ctx.lineJoin='round';
+    ctx.beginPath(); ctx.moveTo(X(xN-0.9),Y(0.18)); ctx.lineTo(X(xN),Y(0.18)); ctx.lineTo(X(xN),Y(ri)); ctx.lineTo(X(xN+L0*100+1.3),Y(ri)); ctx.moveTo(X(xN-0.9),Y(-0.18)); ctx.lineTo(X(xN),Y(-0.18)); ctx.lineTo(X(xN),Y(-ri)); ctx.lineTo(X(xN+L0*100+1.3),Y(-ri)); ctx.stroke();
+    line(ctx,X(xN+L0*100+1.3),Y(ri+1.1),X(xN+L0*100+1.3),Y(-ri-1.1),COL.ink,3);
+    for(let m=0;m<=20;m+=2){ const xx=X(xN+m/3.14), L2=m%10?5:10; line(ctx,xx,Y(ri),xx,Y(ri)-L2,COL.mid,1.1); if(m%10===0) textAt(ctx,m+' mL',xx,Y(ri)-14,{size:10,color:COL.muted,align:'center'}); }
+    ctx.restore();
+    // particles
+    if(fluid==='a') parts.forEach(p=>{ const px=p.out?X(xN-0.9)-p.age*80:XP(p.x), py=p.out?Y(0)+Math.sin(p.age*30)*2:Y(p.y*ri*0.9); ctx.save(); ctx.globalAlpha=p.out?clamp(1-p.age,0,1):1;
+      if(!p.out) line(ctx,px-p.vx*9,py+p.vy*9,px,py,COL.green,1.6); dot(ctx,px,py,4,COL.ink,'#fff',1.4); ctx.restore(); });
+    else parts.forEach(p=>{ let px, py; if(p.out){ px=X(xN-0.9)+p.vx*p.age*60; py=Y(0)+0.5*981*p.age*p.age*0.5; } else { px=XP(p.x)+Math.sin(t*9+p.ph)*1.6; py=Y(p.y*ri)+Math.cos(t*8+p.ph)*1.6; }
+      ctx.save(); ctx.globalAlpha=p.out?clamp(1-p.age*1.6,0,1):1; dot(ctx,px,py,Math.min(5,0.19*pc),COL.blue,'#eaf4fd',1.6); ctx.restore(); });
+    if(fluid==='w'&&!sealed&&v<-1e-4){ ctx.save(); ctx.strokeStyle=COL.blue; ctx.lineWidth=3; ctx.setLineDash([8,6]); ctx.lineDashOffset=t*200; ctx.beginPath(); ctx.moveTo(X(xN-0.9),Y(0)); ctx.quadraticCurveTo(X(xN-5),Y(0)+4,X(xN-8),Y(0)+14); ctx.stroke(); ctx.restore(); }
+    // plunger: rubber head + rod + thumb pad
+    rect(ctx,X(face),Y(ri-0.05),0.55*pc,(2*ri-0.1)*pc,COL.ink,'#fff',2.4);
+    line(ctx,X(face+0.55),Y(0.35),X(rodEnd),Y(0.35),COL.ink,2.2); line(ctx,X(face+0.55),Y(-0.35),X(rodEnd),Y(-0.35),COL.ink,2.2);
+    line(ctx,X(rodEnd),Y(1.3),X(rodEnd),Y(-1.3),COL.ink,3.4);
+    // pressure inside pushing on the plunger (red), your push (yellow)
+    const dp=P-P0;
+    if(fluid==='a'&&Math.abs(dp)>500){ const Lr=clamp(dp/1000*0.5,-40,40); [-0.55,0,0.55].forEach(y=>push(ctx,X(face),Y(y),Lr>0?0:Math.PI,Math.abs(Lr),COL.red)); }
+    if(fluid==='w'&&sealed&&dp>500){ const Lr=clamp(dp/1000*0.5,0,40); [-0.55,0,0.55].forEach(y=>push(ctx,X(face),Y(y),0,Lr,COL.red)); }
+    if(F>0.5){ const Lf=clamp(F*0.9,6,60); vec(ctx,X(rodEnd)+Lf+14,Y(0),X(rodEnd)+14,Y(0),COL.yellow,3.2); textAt(ctx,F+' N',X(rodEnd)+14+Lf/2,Y(0)-10,{size:12,weight:700,color:COL.yellow,align:'center'}); }
+    hand(ctx,X(rodEnd)+6,Y(0),-1,70,0.25);
+    if(sealed){ hand(ctx,X(xN-0.9),Y(0),1,70,Math.PI*0.9); }
+    // readouts
+    const V=A*L*1e6;
+    $('#r1').textContent=(fluid==='w'&&sealed)?fmt(V,4)+' mL':fmt(V,1)+' mL';
+    $('#r2').textContent=Math.round(P/1000)+' kPa';
+    const sq=(1-L/L0)*100; $('#r3').textContent=(fluid==='w'&&sealed)?fmt(sq,4)+' %':fmt(Math.max(0,sq),0)+' %';
+    const fb=$('#fb');
+    if(fluid==='a'&&sealed){ if(F<1&&Math.abs(L-L0)>0.002){ fb.className='fb ok'; fb.textContent='Let go — the squeezed air pushes the plunger back.'; } else if(F<1){ fb.className='fb warn'; fb.textContent='Push the plunger.'; } else { fb.className='fb ok'; fb.textContent='Air particles have big gaps, so they can be pushed closer.'; } }
+    else if(fluid==='w'&&sealed){ fb.className=F<1?'fb warn':'fb bad'; fb.textContent=F<1?'Push the plunger.':'Water hardly squeezes — its particles are already close together.'; }
+    else { fb.className='fb warn'; fb.textContent='The end is open — the '+(fluid==='a'?'air':'water')+' just escapes.'; }
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   7.7 WATER LEVEL A · B · C
+   Glass of 6 cm bore (28.3 cm²) half filled: 150 mL → mark A.
+   Solid crystals take up their own volume, m/ρ → mark B.
+   Dissolved, each mole takes up only its apparent molar volume φ
+   (it slips into the spaces between water particles) → mark C:
+                    ρ (g/cm³)  φ (cm³/mol)   2 tsp: B→C
+       sugar          1.587       211          −0.11 mL
+       common salt    2.165       16.6         −2.1 mL
+       glucose        1.54        112          −0.20 mL
+       sand           2.65        insoluble      0
+   The level lens magnifies the height scale so that these changes show.
+   Crystals dissolve as dm/dt = −k·(m/m₀)^(2/3); stirring raises k ~60×.
+   Clock ×10.
+   ===================================================================== */
+function buildA7(){
+  const wrap=labShell();
+  const SOL={sugar:{n:'Sugar',tsp:4.2,rho:1.587,M:342.3,phi:211.3},salt:{n:'Salt',tsp:6,rho:2.165,M:58.44,phi:16.6},glucose:{n:'Glucose',tsp:3.5,rho:1.54,M:180.16,phi:111.9},sand:{n:'Sand',tsp:5,rho:2.65,M:0,phi:0}};
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label>Solid</label><div class="chip-wrap" id="soB">${Object.keys(SOL).map((k,i)=>`<button class="chip-btn${i?'':' active'}" data-s="${k}">${SOL[k].n}</button>`).join('')}</div>
+      <label style="margin-top:10px;">Teaspoons <span class="val" id="tV"></span></label><input type="range" id="tR" min="1" max="4" step="1" value="2">
+      <button class="toggle-btn play" id="add" style="width:100%;padding:9px;margin-top:9px;">🥄 Add it · mark B</button>
+      <div class="toggle-group"><button class="toggle-btn" id="stir">🥢 Stir with the glass rod</button></div></div>
+    <div class="control-group"><div class="result-cards three">
+      <div class="rcard"><div class="rlabel">Level A</div><div class="rval" id="rA">—</div></div>
+      <div class="rcard"><div class="rlabel">Level B</div><div class="rval" id="rB">—</div></div>
+      <div class="rcard"><div class="rlabel">Level C</div><div class="rval" id="rC">—</div></div></div>
+      <div class="result-cards" style="margin-top:6px"><div class="rcard wide"><div class="rlabel">From B to C</div><div class="rval" id="rD">—</div></div></div>
+      <div class="fb" id="fb"></div><div class="hint">Levels shown as volume in mL. Time ×10.</div>
+      <button class="toggle-btn navy" id="rs">↺ Fresh water · mark A</button></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), tR=$('#tR');
+  const AREA=Math.PI*9, VW=150, HV=11;
+  let sk='sugar', mS, mD, m0, crystals, spoon, stirring, swirl, theta, Bmark, Cmark, t;
+  const S=psNew();
+  function lens(){ S.ps.length=0; const r=rng(6);
+    hexSites(0.22,-0.95,0.95,-0.95,0.95).forEach(([x,y])=>{ if(r()<0.72) psAdd(S,{x:x+(r()-0.5)*0.05,y,r:0.085,temp:0.2,damp:3,col:COL.blue,fill:'#eaf4fd',kind:'w'}); });
+    S.ps.filter(p=>Math.hypot(p.x-0.1,p.y-0.55)<0.33).forEach(p=>S.ps.splice(S.ps.indexOf(p),1));
+    hexSites(0.16,-0.2,0.4,0.3,0.8).filter(([x,y])=>Math.hypot(x-0.1,y-0.55)<0.28).forEach(([x,y])=>psAdd(S,{x,y,hx:x,hy:y,k:90,r:sk==='salt'?0.055:0.07,temp:0.01,damp:4,col:COL.ink,fill:'#fff',kind:'s',lw:1.8}));
+  }
+  function reset(){ mS=0; mD=0; m0=0; crystals=[]; spoon=null; stirring=false; swirl=0; theta=0; Bmark=null; Cmark=null; t=0; $('#stir').classList.remove('active'); lens(); }
+  reset();
+  wrap.querySelectorAll('#soB .chip-btn').forEach(b=>b.onclick=()=>{ wrap.querySelectorAll('#soB .chip-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); sk=b.dataset.s; reset(); });
+  $('#add').onclick=()=>{ if(spoon||m0>0) return; spoon={T:0,rel:0,m:+tR.value*SOL[sk].tsp}; };
+  $('#stir').onclick=()=>{ stirring=!stirring; $('#stir').classList.toggle('active',stirring); };
+  $('#rs').onclick=reset;
+  const vol=()=>{ const s=SOL[sk]; return VW+mS/s.rho+(s.M?mD/s.M*s.phi:0); };
+
+  animLoop((dt)=>{
+    t+=dt; $('#tV').textContent=tR.value+' tsp ('+fmt(+tR.value*SOL[sk].tsp,1)+' g)';
+    swirl=approach(swirl,stirring?1:0,stirring?2:0.7,dt); theta+=7*dt*(stirring?1:0.3*swirl);
+    const s=SOL[sk], lvl0=vol()/AREA;
+    // spoon + falling crystals (each counts towards the volume once it is under water)
+    if(spoon){ spoon.T+=dt; const N=30;
+      if(spoon.T>0.7&&spoon.rel<N&&spoon.T<1.6){ const k=Math.min(N,Math.floor((spoon.T-0.7)/0.9*N)); while(spoon.rel<k){ spoon.rel++; crystals.push({x:1+gauss()*0.3,y:HV+2,vx:-5+gauss()*3,vy:0,st:'fall',m:spoon.m/N,s:0.8+Math.random()*0.5,th:Math.random()*6.28,lift:Math.random(),r:0}); } }
+      if(spoon.T>2.4){ m0=spoon.m; spoon=null; } }
+    crystals.forEach(k=>{ if(k.st==='bed') return; const inW=k.y<lvl0;
+      if(inW&&k.st==='fall'){ k.st='sink'; mS+=k.m; }
+      k.vy=inW?approach(k.vy,-(sk==='sand'?12:8),120,dt):k.vy-GC*dt; if(inW) k.vx=approach(k.vx,0,20,dt);
+      k.x+=k.vx*dt; k.y+=k.vy*dt; k.x=clamp(k.x,-2.7,2.7);
+      if(k.y<=0.15+Math.random()*0.25){ k.st='bed'; k.bx=k.x; k.by=k.y; k.r=Math.abs(k.x)+0.3; } });
+    if(m0>0&&!spoon&&Bmark===null&&crystals.every(k=>k.st==='bed')) Bmark=vol();
+    // dissolving (clock ×10)
+    if(s.M&&mS>1e-6&&Bmark!==null){ const dm=Math.min(mS,m0*(0.0008+0.05*swirl)*Math.pow(mS/m0,2/3)*dt*10); mS-=dm; mD+=dm; if(mS<1e-4){ mD+=mS; mS=0; } }
+    if(Bmark!==null&&(swirl>0.05||mD>0)) Cmark=vol();
+    // particle lens: dissolved share of solute particles let go of the crystal
+    const sp=S.ps.filter(p=>p.kind==='s'), f=m0>0?mD/m0:0;
+    sp.forEach((p,i)=>{ const free=i<Math.round(f*sp.length)*1; if(free&&p.k>0){ p.k=0; p.temp=0.2; p.damp=3; } });
+    S.ps.forEach(p=>{ if(p.kind==='w') p.temp=0.2*(1+swirl); });
+    psStep(S,dt);
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const pc=Math.min(w/22,h/15), X=x=>w*0.27+x*pc, Y=y=>h*0.88-y*pc;
+    ground(ctx,X(-6),X(7),Y(-0.3));
+    const lvl=vol()/AREA, dip=0.4*swirl, surf=x=>lvl+dip*((x/3)**2-0.5);
+    ctx.save(); ctx.beginPath(); ctx.moveTo(X(-3),Y(0)); for(let k=0;k<=24;k++){ const x=-3+6*k/24; ctx.lineTo(X(x),Y(surf(x))); } ctx.lineTo(X(3),Y(0)); ctx.closePath(); ctx.fillStyle=WFILL; ctx.fill();
+    ctx.strokeStyle=COL.blue; ctx.lineWidth=2.2; ctx.beginPath(); for(let k=0;k<=24;k++){ const x=-3+6*k/24; ctx[k?'lineTo':'moveTo'](X(x),Y(surf(x))); } ctx.stroke(); ctx.restore();
+    // dissolved solute: faint jiggling dots
+    if(mD>0){ const n=Math.round(clamp(mD/Math.max(m0,1),0,1)*90), r=rng(3); ctx.save(); ctx.fillStyle=COL.muted; for(let i=0;i<n;i++){ const x=-2.8+r()*5.6, y=0.2+r()*(lvl-0.4), ph=r()*6.28; ctx.fillRect(X(x)+Math.sin(t*5+ph)*1.5-1,Y(y)+Math.cos(t*4+ph)*1.5-1,2,2); } ctx.restore(); }
+    const fac=m0>0&&s.M?Math.cbrt(Math.max(0,mS)/m0):1;
+    crystals.forEach(k=>{ let x=k.x, y=k.y, sz=k.s*(k.st==='bed'?fac:1); if(sz<0.08) return;
+      if(k.st==='bed'){ const Lf=smooth01(0.1,0.7,swirl); k.th+=(2+k.lift*2)*swirl*dt; x=lerp(k.bx,Math.cos(k.th)*Math.min(2.6,k.r),Lf); y=lerp(k.by,0.3+k.lift*lvl*0.7*swirl,Lf); }
+      const p=Math.max(2,sz*0.2*pc); ctx.save(); ctx.translate(X(x),Y(y)); ctx.rotate(k.th); if(sk==='sand'){ ctx.beginPath(); ctx.arc(0,0,p*0.55,0,6.28); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=1.3; ctx.stroke(); } else { ctx.fillStyle='#fff'; ctx.strokeStyle=COL.ink; ctx.lineWidth=1.3; ctx.fillRect(-p/2,-p/2,p,p); ctx.strokeRect(-p/2,-p/2,p,p); } ctx.restore(); });
+    // vessel
+    ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.6; ctx.beginPath(); ctx.moveTo(X(-3.2),Y(HV)); ctx.lineTo(X(-3.2),Y(-0.3)); ctx.lineTo(X(3.2),Y(-0.3)); ctx.lineTo(X(3.2),Y(HV)); ctx.stroke(); ctx.restore();
+    // marks on the glass
+    const mark=(v,l,dx)=>{ if(v===null) return; const y=Y(v/AREA); line(ctx,X(3.2),y,X(3.2)+10,y,COL.ink,2); textAt(ctx,l,X(3.2)+13+dx,y+4,{size:12,weight:700}); };
+    mark(VW,'A',0); mark(Bmark,'B',12); mark(Cmark,'C',24);
+    // stirring rod
+    if(stirring||swirl>0.05){ const tipx=Math.cos(theta)*2*Math.max(swirl,0.3); ctx.save(); ctx.lineCap='round'; line(ctx,X(tipx),Y(0.6),X(tipx*0.4+1.5),Y(HV+3),COL.ink,6); line(ctx,X(tipx),Y(0.6),X(tipx*0.4+1.5),Y(HV+3),'#fff',2.6); ctx.restore(); }
+    if(spoon){ const T=spoon.T, inU=smooth01(0,0.6,T)-smooth01(1.8,2.4,T), tip=smooth01(0.6,1.1,T)-smooth01(1.5,1.8,T), sx=X(lerp(8,1,inU)), sy=Y(HV+2.6);
+      ctx.save(); ctx.globalAlpha=clamp(inU*1.5,0,1); ctx.translate(sx,sy); ctx.rotate(-tip*1.1); ctx.beginPath(); ctx.ellipse(0,0,1*pc,0.45*pc,0,0,Math.PI); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.stroke(); line(ctx,-pc,0,pc,0,COL.ink,2); line(ctx,0.95*pc,-1,4.5*pc,-0.8*pc,COL.ink,3); ctx.restore(); }
+    // lens 1: the height scale near the marks, magnified
+    const R=Math.min(w*0.2,h*0.22), cx=w-R-16, cy1=R+16, cy2=cy1+2*R+34;
+    const hA=VW/AREA, hB=Bmark!==null?Bmark/AREA:hA+0.2, ZM=clamp(0.75*R/(pc*Math.max(hB-hA,0.05)),4,60), yc=(hA+hB)/2, LY=y=>cy1+(yc-y)*pc*ZM;
+    zoomFrame(ctx,cx,cy1,R,X(3.2),Y(hA),'level scale ×'+Math.round(ZM),()=>{
+      const wx=cx+R*0.1; ctx.save(); ctx.fillStyle=WFILL; const ly=LY(lvl); ctx.fillRect(cx-R,ly,wx-(cx-R),cy1+R-ly); ctx.restore();
+      line(ctx,cx-R,LY(lvl),wx,LY(lvl),COL.blue,2.4); line(ctx,wx,cy1-R,wx,cy1+R,COL.ink,3);
+      for(let mm=Math.floor((yc-R/(pc*ZM))*10);mm<=Math.ceil((yc+R/(pc*ZM))*10);mm++){ const y=LY(mm/10); if(pc*ZM/10<3) break; line(ctx,wx,y,wx+(mm%10?8:16),y,COL.mid,1.1); if(mm%10===0) textAt(ctx,mm/10+' cm',wx+20,y+4,{size:10,color:COL.muted}); }
+      [[VW,'A'],[Bmark,'B'],[Cmark,'C']].forEach(([v,l],i)=>{ if(v===null) return; const y=LY(v/AREA); line(ctx,cx-R*0.45,y,wx,y,COL.ink,1.6,[4,3]); textAt(ctx,l,cx-R*0.5-i*13,y+4,{size:13,weight:700,align:'right'}); }); });
+    // lens 2: particles
+    zoomFrame(ctx,cx,cy2,R,X(0),Y(0.5),f>0.02?'dissolved particles fill the gaps':'particles, magnified (imagined)',()=>{ psDraw(ctx,S,cx,cy2,R); });
+
+    $('#rA').textContent=fmt(VW,2); $('#rB').textContent=Bmark===null?'—':fmt(Bmark,2); $('#rC').textContent=Cmark===null?'—':fmt(Cmark,2);
+    $('#rD').textContent=(Bmark===null||Cmark===null)?'—':(Cmark-Bmark>=0?'+':'')+fmt(Cmark-Bmark,2)+' mL';
+    $('#add').disabled=m0>0||!!spoon;
+    const fb=$('#fb');
+    if(Bmark===null){ fb.className='fb warn'; fb.textContent=spoon?'The level rises as the solid goes under water.':'Add the solid.'; }
+    else if(!s.M){ fb.className='fb warn'; fb.textContent='Sand does not dissolve — it just sits in the water, so the level stays at B.'; }
+    else if(Cmark===null){ fb.className='fb warn'; fb.textContent='Level B marked. Now stir.'; }
+    else if(mS>0.01*m0){ fb.className='fb ok'; fb.textContent='Dissolving… the level slips below B.'; }
+    else { fb.className='fb ok'; fb.textContent='C is below B: the dissolved particles went into the spaces between water particles.'; }
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   7.8 POTASSIUM PERMANGANATE — COLD · ROOM · HOT
+   Each tumbler is a 24 × 32 grid (0.25 cm cells). The pink colour
+   spreads by diffusion plus the slow stirring currents in the water:
+        ∂c/∂t = D·∇²c − u·∇c
+   Faster particles in warmer water: Stokes–Einstein  D ∝ T/η(T)
+        η = 1.52 (5 °C), 0.89 (25 °C), 0.355 (80 °C) mPa·s
+        → D(5 °C) : D(25 °C) : D(80 °C) = 0.55 : 1 : 2.97
+   Effective D at 25 °C = 0.02 cm²/s (colour through 8 cm of water in
+   about half an hour). The grain dissolves at a rate ∝ D too.
+   Clock ×120.
+   ===================================================================== */
+function buildA8(){
+  const wrap=labShell();
+  const TUB=[{n:'Ice-cold',T:5,eta:1.519,x:-9.3},{n:'Room',T:25,eta:0.89,x:-1},{n:'Hot',T:80,eta:0.355,x:7.3}];
+  TUB.forEach(u=>{ u.f=((u.T+273)/298)*(0.89/u.eta); });
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><button class="toggle-btn play" id="drop" style="width:100%;padding:9px;">💜 Drop a grain in each tumbler</button></div>
+    <div class="control-group"><label>Look closely at</label><div class="toggle-group" id="lkB">${TUB.map((u,i)=>`<button class="toggle-btn${i===1?' active':''}" data-i="${i}">${u.n}</button>`).join('')}</div></div>
+    <div class="control-group"><div class="result-cards three">${TUB.map((u,i)=>`<div class="rcard"><div class="rlabel">${u.n} ${u.T} °C</div><div class="rval" id="s${i}">—</div></div>`).join('')}</div>
+      <div class="result-cards" style="margin-top:6px"><div class="rcard wide"><div class="rlabel">Time passed</div><div class="rval" id="rt">0 min</div></div></div>
+      <div class="fb" id="fb"></div><div class="hint">Share of the water already pink. Clock ×120.</div>
+      <button class="toggle-btn navy" id="rs">↺ Fresh water</button></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas');
+  const NX=24, NY=32, DX=0.25, W=NX*DX, H=NY*DX, D25=0.02, U25=0.004, TC=120, M0=1;
+  let look=1, dropped, clock, t;
+  const S=psNew();
+  function lens(){ S.ps.length=0; const u=TUB[look], r=rng(12);
+    for(let i=0;i<46;i++) psAdd(S,{x:(r()-0.5)*1.5,y:(r()-0.5)*1.2-0.2,r:0.08,temp:0.1*u.f*(u.T+273)/298,damp:2,col:COL.blue,fill:'#eaf4fd',kind:'w',trail:0.08});
+    hexSites(0.13,-0.3,0.3,0.5,0.9).filter(([x,y])=>y>0.5).forEach(([x,y],i)=>psAdd(S,{x,y,hx:x,hy:y,k:120,r:0.06,temp:0.002,damp:5,col:'#9b2c6f',fill:'#f3d3e6',kind:'k',lw:1.6,rank:Math.hypot(x,y-0.8)}));
+    S.ps.filter(p=>p.kind==='k').sort((a,b)=>b.rank-a.rank).forEach((p,i)=>p.ord=i); S.T0=null; }
+  function reset(){ TUB.forEach(u=>{ u.c=new Float64Array(NX*NY); u.m=0; u.gy=null; u.gv=0; u.t90=null; }); dropped=false; clock=0; t=0; lens(); }
+  reset();
+  $('#drop').onclick=()=>{ if(dropped) return; dropped=true; TUB.forEach(u=>{ u.gy=H+2; u.gv=0; u.m=M0; }); };
+  toggleWire([...wrap.querySelectorAll('#lkB .toggle-btn')],b=>{ look=+b.dataset.i; lens(); });
+  $('#rs').onclick=reset;
+  const I=(i,j)=>j*NX+i;
+  const OFF={c:document.createElement('canvas')}; OFF.c.width=NX; OFF.c.height=NY; OFF.ctx=OFF.c.getContext('2d');
+  function stepGrid(u,dtr){
+    const D=D25*u.f, U=U25*u.f, ns=Math.max(1,Math.ceil(dtr/(0.2*DX*DX/D))), h=dtr/ns, c0=u.c;
+    for(let s=0;s<ns;s++){
+      // grain at the bottom centre releases colour
+      if(u.gy!==null&&u.gy<=0.15&&u.m>0){ const dm=Math.min(u.m,0.004*u.f*h*Math.pow(u.m/M0,2/3)); u.m-=dm; const a=I(NX/2-1,0), b=I(NX/2,0); u.c[a]+=dm/2; u.c[b]+=dm/2; }
+      const c=u.c, n=new Float64Array(NX*NY), k=D*h/(DX*DX);
+      for(let j=0;j<NY;j++) for(let i=0;i<NX;i++){
+        const cc=c[I(i,j)], l=c[I(Math.max(0,i-1),j)], r=c[I(Math.min(NX-1,i+1),j)], d=c[I(i,Math.max(0,j-1))], up=c[I(i,Math.min(NY-1,j+1))];
+        // two convection cells: ψ = U·W/π·sin(2πx/W)·sin(πy/H)
+        const x=(i+0.5)/NX, y=(j+0.5)/NY, vx=U*Math.sin(2*Math.PI*x)*Math.cos(Math.PI*y)*0.5, vy=-U*Math.cos(2*Math.PI*x)*Math.sin(Math.PI*y);
+        const ax=vx>0?(cc-l):(r-cc), ay=vy>0?(cc-d):(up-cc);
+        n[I(i,j)]=cc+k*(l+r+d+up-4*cc)-h/DX*(vx*ax+vy*ay);
+      }
+      u.c=n;
+    }
+  }
+
+  animLoop((dt)=>{
+    t+=dt;
+    if(dropped){ clock+=dt*TC;
+      TUB.forEach(u=>{ if(u.gy>0.15){ u.gv=approach(u.gv,u.gy>H?-60:-5,u.gy>H?10:40,dt); u.gy=Math.max(0.15,u.gy+u.gv*dt); } stepGrid(u,dt*TC); }); }
+    TUB.forEach(u=>{ const tot=u.c.reduce((a,b)=>a+b,0)+u.m; if(tot<1e-9){ u.spread=0; return; } const cu=M0/(NX*NY); let n=0; for(let q=0;q<u.c.length;q++) if(u.c[q]>=0.5*cu) n++; u.spread=n/(NX*NY); if(u.spread>=0.9&&u.t90===null) u.t90=clock; });
+    // lens: water particles knock permanganate particles out of the grain
+    const LU=TUB[look];
+    if(dropped&&LU.gy<=0.15){ if(S.T0===null) S.T0=t; const nFree=Math.floor((t-S.T0)*1.2*LU.f); S.ps.forEach(p=>{ if(p.kind==='k'&&p.k>0&&p.ord<nFree){ p.k=0; p.temp=0.1*LU.f; p.damp=2; } }); }
+    psStep(S,dt);
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const pc=Math.min(w/25.5,h/19), X=x=>w*0.5+(x+0.9)*pc, Y=y=>h*0.86-y*pc;
+    ground(ctx,X(-13),X(11.5),Y(-0.3));
+    const cu=M0/(NX*NY);
+    TUB.forEach((u,ti)=>{ const x0=u.x-W/2;
+      ctx.save(); ctx.fillStyle=WFILL; ctx.fillRect(X(x0),Y(H),W*pc,H*pc); ctx.restore();
+      { const id=OFF.ctx.createImageData(NX,NY); for(let j=0;j<NY;j++) for(let i=0;i<NX;i++){ const v=u.c[I(i,j)]/cu, q=((NY-1-j)*NX+i)*4; id.data[q]=176; id.data[q+1]=40; id.data[q+2]=122; id.data[q+3]=Math.round(255*clamp(v*0.55,0,0.85)); }
+        OFF.ctx.putImageData(id,0,0); ctx.save(); ctx.imageSmoothingEnabled=true; ctx.drawImage(OFF.c,X(x0),Y(H),W*pc,H*pc); ctx.restore(); }
+      line(ctx,X(x0),Y(H),X(x0+W),Y(H),COL.blue,2);
+      if(u.gy!==null&&u.m>0.002){ const s=Math.max(2.5,Math.cbrt(u.m/M0)*0.3*pc); ctx.save(); ctx.translate(X(u.x),Y(u.gy)-s/2); ctx.rotate(0.5); ctx.fillStyle='#6d1f4f'; ctx.fillRect(-s/2,-s/2,s,s); ctx.restore(); }
+      ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.6; ctx.beginPath(); ctx.moveTo(X(x0-0.35),Y(H+1.3)); ctx.lineTo(X(x0-0.15),Y(-0.3)); ctx.lineTo(X(x0+W+0.15),Y(-0.3)); ctx.lineTo(X(x0+W+0.35),Y(H+1.3)); ctx.stroke(); ctx.restore();
+      if(u.T>50) for(let k=0;k<3;k++){ const bx=X(u.x-1.5+k*1.5); ctx.save(); ctx.strokeStyle=COL.yellow; ctx.lineWidth=1.8; ctx.globalAlpha=0.5+0.4*Math.sin(t*2+k); ctx.beginPath(); for(let q=0;q<=12;q++){ const yy=Y(H+0.6)-q*3.5-((t*20+k*9)%12); ctx[q?'lineTo':'moveTo'](bx+Math.sin(q*0.8+t*3+k)*4,yy); } ctx.stroke(); ctx.restore(); }
+      if(u.T<10) [[-1.8,0],[1.2,0.3]].forEach(([dx,rot],k)=>{ ctx.save(); ctx.translate(X(u.x+dx),Y(H-0.25)+Math.sin(t*1.5+k)*1.5); ctx.rotate(rot); ctx.strokeStyle=COL.blue; ctx.lineWidth=1.8; ctx.fillStyle='#fff'; ctx.fillRect(-0.55*pc,-0.55*pc,1.1*pc,1.1*pc); ctx.strokeRect(-0.55*pc,-0.55*pc,1.1*pc,1.1*pc); ctx.restore(); });
+      textAt(ctx,u.n+' · '+u.T+' °C',X(u.x),Y(-0.3)+20,{align:'center',size:12,weight:700,color:ti===look?COL.ink:COL.muted});
+      // spread bar
+      const bw=W*pc, by=Y(-0.3)+30; rect(ctx,X(x0),by,bw,6,COL.border||'#c2d1e5','#eef2f8',1); ctx.save(); ctx.fillStyle='#b0287a'; ctx.fillRect(X(x0),by,bw*u.spread,6); ctx.restore();
+    });
+    const R=Math.min(w*0.19,h*0.24), cx=w-R-16, cy=R+16;
+    zoomFrame(ctx,cx,cy,R,X(LU.x),Y(0.4),LU.n+' water, magnified (imagined)',()=>psDraw(ctx,S,cx,cy,R));
+
+    TUB.forEach((u,i)=>{ $('#s'+i).textContent=dropped?Math.round(u.spread*100)+' %':'—'; });
+    $('#rt').textContent=fmt(clock/60,1)+' min'; $('#drop').disabled=dropped;
+    const fb=$('#fb'), done=TUB.filter(u=>u.t90!==null);
+    if(!dropped){ fb.className='fb warn'; fb.textContent='Drop the grains.'; }
+    else if(!done.length){ fb.className='fb ok'; fb.textContent='Pink streaks spread out from each grain — fastest in the hot water.'; }
+    else { fb.className='fb ok'; fb.textContent=done.map(u=>u.n+': '+Math.round(u.t90/60)+' min').join(' · ')+' — hotter water, faster particles.'; }
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   7.9 INCENSE IN A ROOM
+   Room 5 m × 3 m (side view). Each fragrance parcel takes a random
+   step every instant, knocked about by moving air particles:
+        step size σ = √(2K·Δt)
+   K is the room's mixing coefficient: ~0.002 m²/s in still air,
+   ~0.006 with a gentle draught, ~0.025 with a fan. Spreading time grows
+   as x²/K: with K = 0.006 people 1.5 / 3 / 4.5 m away smell it after
+   about 4 / 15 / 23 min — "wait for a few minutes". Fresh smoke is
+   hot and first rises (buoyancy fading over ~20 s).
+   A person smells it once the local density passes a threshold.
+   Clock ×60.
+   ===================================================================== */
+function buildA9(){
+  const wrap=labShell();
+  const AIR=[{n:'Still air',K:0.002},{n:'Gentle draught',K:0.006},{n:'Fan on',K:0.025}];
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><button class="toggle-btn play" id="lit" style="width:100%;padding:9px;">🔥 Light the incense stick</button></div>
+    <div class="control-group"><label>Air in the room</label><div class="toggle-group" id="airB">${AIR.map((a,i)=>`<button class="toggle-btn${i===1?' active':''}" data-i="${i}">${a.n}</button>`).join('')}</div></div>
+    <div class="control-group"><div class="result-cards three">
+      <div class="rcard"><div class="rlabel">1.5 m away</div><div class="rval" id="p0">—</div></div>
+      <div class="rcard"><div class="rlabel">3 m away</div><div class="rval" id="p1">—</div></div>
+      <div class="rcard"><div class="rlabel">4.5 m away</div><div class="rval" id="p2">—</div></div></div>
+      <div class="result-cards" style="margin-top:6px"><div class="rcard wide"><div class="rlabel">Time since lighting</div><div class="rval" id="rt">—</div></div></div>
+      <div class="fb" id="fb"></div><div class="hint">Clock ×60.</div>
+      <button class="toggle-btn navy" id="rs">↺ Air the room out</button></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas');
+  const RW=5, RH=3, TC=60, CAP=1400, RATE=0.8, SX=0.35, SY=1.05, NOSE=1.55;
+  const PEOPLE=[1.5,3,4.5].map(x=>({x:x+SX,t:null,glow:0}));
+  let air=1, lit=false, clock=0, ps=[], emitAcc=0, t=0;
+  const B=brownianSim(26);
+  function reset(){ lit=false; clock=0; ps=[]; emitAcc=0; PEOPLE.forEach(p=>{ p.t=null; p.glow=0; }); }
+  $('#lit').onclick=()=>{ if(!lit){ reset(); lit=true; } };
+  toggleWire([...wrap.querySelectorAll('#airB .toggle-btn')],b=>{ air=+b.dataset.i; });
+  $('#rs').onclick=reset;
+
+  animLoop((dt)=>{
+    t+=dt;
+    const K=AIR[air].K, dtr=dt*TC;
+    if(lit){ clock+=dtr; emitAcc+=RATE*dtr; while(emitAcc>=1&&ps.length<CAP){ emitAcc-=1; ps.push({x:SX+gauss()*0.02,y:SY,heat:1}); } if(ps.length>=CAP) emitAcc=0; }
+    const sd=Math.sqrt(2*K*dtr);
+    ps.forEach(p=>{ p.x+=gauss()*sd; p.y+=gauss()*sd+0.05*p.heat*dtr; p.heat*=Math.exp(-dtr/20);
+      if(p.x<0.02) p.x=0.04-p.x; if(p.x>RW-0.02) p.x=2*(RW-0.02)-p.x; if(p.y<0.02) p.y=0.04-p.y; if(p.y>RH-0.02) p.y=2*(RH-0.02)-p.y; });
+    const thr=0.25*CAP/(RW*RH)*Math.PI*0.45*0.45;
+    PEOPLE.forEach(pp=>{ let n=0; ps.forEach(p=>{ const dx=p.x-pp.x, dy=p.y-NOSE; if(dx*dx+dy*dy<0.2025) n++; }); pp.n=n; if(n>=thr&&pp.t===null) pp.t=clock; pp.glow=approach(pp.glow,pp.t!==null?1:0,3,dt); });
+    brownianStep(B,dt,air===2?1.3:1);
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const pc=Math.min(w/5.5,h/4.3), X=x=>(w-RW*pc)/2+x*pc, Y=y=>h*0.93-y*pc;
+    // room
+    ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.6; ctx.strokeRect(X(0),Y(RH),RW*pc,RH*pc); ctx.restore();
+    ground(ctx,X(-0.1),X(RW+0.1),Y(0));
+    // fan
+    if(air===2){ const fx=X(RW-0.35), fy=Y(2.5); circ(ctx,fx,fy,0.28*pc,COL.ink,'#fff',2); for(let k=0;k<3;k++){ const a=t*18+k*2.094; line(ctx,fx,fy,fx+Math.cos(a)*0.25*pc,fy+Math.sin(a)*0.25*pc,COL.ink,3); } line(ctx,fx+0.28*pc,fy,X(RW),fy,COL.ink,2); }
+    if(air===1){ ctx.save(); ctx.strokeStyle=COL.green; ctx.lineWidth=1.6; ctx.globalAlpha=0.6; for(let k=0;k<2;k++){ const yy=Y(2.2-k*0.9); ctx.beginPath(); for(let q=0;q<=40;q++){ const xx=X(((t*0.15+k*0.4)%1)*RW*0.6+q*0.03); ctx[q?'lineTo':'moveTo'](xx,yy+Math.sin(q*0.5+t*2)*3); } ctx.stroke(); } ctx.restore(); }
+    // fragrance parcels
+    ctx.save(); ctx.fillStyle='#7d6a8f'; ctx.globalAlpha=0.6; ps.forEach(p=>ctx.fillRect(X(p.x)-1.3,Y(p.y)-1.3,2.6,2.6)); ctx.restore();
+    // incense on a small table
+    rect(ctx,X(0.12),Y(0.72),0.5*pc,0.06*pc,COL.ink,'#fff',2); line(ctx,X(0.18),Y(0.66),X(0.18),Y(0),COL.ink,2); line(ctx,X(0.56),Y(0.66),X(0.56),Y(0),COL.ink,2);
+    rect(ctx,X(SX-0.06),Y(0.78),0.12*pc,0.06*pc,COL.ink,'#fff',1.6);
+    const stickTop=lit?SY-0.05*Math.min(1,clock/1800):SY; line(ctx,X(SX),Y(0.78),X(SX+0.04),Y(stickTop),COL.ink,2.2);
+    if(lit&&ps.length<CAP){ dot(ctx,X(SX+0.04),Y(stickTop),2.6,COL.red,COL.red); ctx.save(); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.6; ctx.beginPath(); for(let q=0;q<=30;q++){ const yy=Y(stickTop)-q*3, xx=X(SX+0.04)+Math.sin(q*0.35-t*3)*q*0.35; ctx[q?'lineTo':'moveTo'](xx,yy); } ctx.stroke(); ctx.restore(); }
+    // people
+    PEOPLE.forEach((pp,i)=>{ const x=X(pp.x-0.12), col=mixCol('#132a44','#1f9d55',pp.glow), u=pc;
+      circ(ctx,x,Y(1.62),0.11*u,col,'#fff',2.2); line(ctx,x-0.11*u,Y(1.6),x-0.16*u,Y(1.58),col,2);
+      line(ctx,x,Y(1.51),x,Y(0.85),col,2.4); line(ctx,x,Y(0.85),x-0.12*u,Y(0),col,2.4); line(ctx,x,Y(0.85),x+0.12*u,Y(0),col,2.4); line(ctx,x,Y(1.4),x-0.15*u,Y(1.0),col,2.2); line(ctx,x,Y(1.4),x+0.15*u,Y(1.0),col,2.2);
+      if(pp.glow>0.05){ ctx.save(); ctx.globalAlpha=pp.glow; ctx.strokeStyle=COL.green; ctx.lineWidth=1.6; for(let k=0;k<2;k++){ ctx.beginPath(); for(let q=0;q<=8;q++) ctx[q?'lineTo':'moveTo'](x-0.2*u-q*3,Y(1.6+k*0.08)+Math.sin(q+t*5)*2); ctx.stroke(); } ctx.restore();
+        textAt(ctx,'smells it · '+fmt(pp.t/60,1)+' min',x,Y(1.9),{align:'center',size:11,weight:700,color:COL.green,alpha:pp.glow}); }
+      textAt(ctx,[1.5,3,4.5][i]+' m',x,Y(0)+16,{align:'center',size:11,color:COL.muted}); });
+    // lens
+    const R=Math.min(w*0.17,h*0.2), cx=w-R-14, cy=R+14, tg=ps[Math.floor(ps.length*0.5)];
+    zoomFrame(ctx,cx,cy,R,tg?X(tg.x):null,tg?Y(tg.y):0,'air particles hit a fragrance particle',()=>brownianDraw(ctx,B,cx,cy,R));
+
+    PEOPLE.forEach((pp,i)=>{ $('#p'+i).textContent=pp.t===null?'—':fmt(pp.t/60,1)+' min'; $('#p'+i).style.color=pp.t===null?'':'var(--f-green)'; });
+    $('#rt').textContent=lit?fmt(clock/60,1)+' min':'—';
+    $('#lit').disabled=lit;
+    const fb=$('#fb'), n=PEOPLE.filter(p=>p.t!==null).length;
+    if(!lit){ fb.className='fb warn'; fb.textContent='Light the incense stick in the corner.'; }
+    else if(!n){ fb.className='fb warn'; fb.textContent='Fragrance near the stick only… so far.'; }
+    else if(n<3){ fb.className='fb ok'; fb.textContent='Moving air particles carry the fragrance further and further.'; }
+    else { fb.className='fb ok'; fb.textContent='Everyone smells it — the particles have spread through the room.'; }
+  });
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   INIT
+   --------------------------------------------------------------------- */
+render();
+</script>
+<script src="../../tracking/activity-tracker.js"></script>
+<script src="../../nav/back-button.js"></script>
+</body>
+</html>

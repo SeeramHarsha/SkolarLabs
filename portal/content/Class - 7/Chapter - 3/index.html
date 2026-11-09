@@ -1,0 +1,1617 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 7 · Chapter 3 — Electricity: Circuits and their Components | Botclub Labs</title>
+<link href="../../vendor/fonts/fonts.css" rel="stylesheet">
+<style>
+:root{
+  --navy-1:#0f2640; --navy-2:#1a3a5c; --navy-3:#234a73;
+  --accent:#2f8fe0; --accent-2:#5cc8ff;
+  --bg:#eef2f8; --surface-0:#ffffff; --surface-1:#f6f9fc; --surface-2:#eef2f8;
+  --border:#dbe4f0; --border-strong:#c2d1e5;
+  --text-1:#132a44; --text-2:#4c6178; --text-3:#8195ab;
+  --f-red:#d9432b; --f-blue:#2f8fe0; --f-green:#1f9d55; --f-yellow:#d9a017;
+  --radius:14px; --radius-sm:9px;
+  --fs-xs:clamp(10px,0.62vw,12px); --fs-sm:clamp(11px,0.72vw,13.5px);
+  --fs-md:clamp(12.5px,0.85vw,15px); --fs-lg:clamp(15px,1.15vw,19px);
+  --fs-xl:clamp(18px,1.5vw,25px);
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:22px; --sp-6:30px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{ font-family:'Poppins',system-ui,sans-serif; background:var(--bg); color:var(--text-1); overflow:hidden; }
+button, input, select{font-family:inherit;}
+
+.app{height:100vh; display:flex; flex-direction:column; min-height:0;}
+.topbar{
+  flex:0 0 auto; background:linear-gradient(120deg, var(--navy-1) 0%, var(--navy-2) 55%, var(--navy-3) 100%);
+  color:#fff; padding:clamp(9px,1vh,16px) clamp(14px,1.6vw,28px);
+  display:flex; align-items:center; gap:var(--sp-4); box-shadow:0 2px 10px rgba(15,38,64,0.25); z-index:5;
+}
+.topbar .brand-badge{
+  width:clamp(32px,2.4vw,40px); height:clamp(32px,2.4vw,40px); border-radius:10px; background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center;
+  font-size:clamp(15px,1.3vw,20px); flex:0 0 auto;
+}
+.topbar .chip{
+  display:inline-block; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.28);
+  border-radius:6px; padding:2px 9px; font-size:var(--fs-xs); letter-spacing:0.06em; text-transform:uppercase; font-weight:600; margin-bottom:3px;
+}
+.topbar h1{font-size:var(--fs-lg); font-weight:600; line-height:1.2; white-space:nowrap;}
+.topbar .spacer{flex:1;}
+.topbar .legend{display:flex; gap:14px; font-size:var(--fs-xs); color:rgba(255,255,255,0.85); align-items:center;}
+.topbar .legend span{display:inline-flex; align-items:center; gap:5px;}
+.topbar .legend i{width:12px; height:4px; border-radius:2px; display:inline-block;}
+
+.body-wrap{flex:1; display:flex; min-height:0; overflow:hidden;}
+.sidenav{
+  flex:0 0 clamp(170px,13.5vw,230px); background:var(--surface-0); border-right:1px solid var(--border);
+  overflow-y:auto; padding:var(--sp-2); display:flex; flex-direction:column; gap:4px;
+}
+.nav-item{
+  display:flex; align-items:center; gap:8px; text-align:left; width:100%;
+  border:1px solid var(--border); background:var(--surface-1); border-radius:var(--radius-sm); padding:7px 10px; cursor:pointer; transition:all .15s ease;
+}
+.nav-item:hover{background:var(--surface-2); border-color:var(--border-strong);}
+.nav-item.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.nav-item .n-num{font-size:var(--fs-xs); font-weight:700; color:var(--accent); flex:0 0 auto; min-width:26px;}
+.nav-item.active .n-num{color:var(--accent-2);}
+.nav-item .n-title{font-size:var(--fs-sm); font-weight:600; line-height:1.25;}
+
+.content{flex:1; min-width:0; display:flex; flex-direction:column; overflow:hidden;}
+.panel-head{flex:0 0 auto; padding:var(--sp-3) var(--sp-5); border-bottom:1px solid var(--border); background:var(--surface-0); display:flex; align-items:baseline; gap:12px;}
+.panel-badge{background:var(--navy-2); color:#fff; font-size:var(--fs-xs); font-weight:700; padding:3px 10px; border-radius:6px;}
+.panel-head h2{font-size:var(--fs-lg); font-weight:600; color:var(--text-1);}
+.panel-head p{font-size:var(--fs-sm); color:var(--text-2); flex:1; text-align:right;}
+.panel-body{flex:1; min-height:0; overflow:hidden; padding:var(--sp-3) var(--sp-5); display:flex;}
+
+.lab-view{flex:1; display:flex; gap:var(--sp-4); min-height:0; min-width:0;}
+.lab-canvas-wrap{flex:7 1 0; min-width:0; min-height:0; background:#fff; border:1px solid var(--border); border-radius:var(--radius); position:relative; overflow:hidden;}
+.lab-canvas-wrap canvas{width:100%; height:100%; display:block;}
+.lab-side{flex:3 1 0; min-width:230px; display:flex; flex-direction:column; gap:var(--sp-3); min-height:0; overflow-y:auto; padding-right:2px;}
+.side-sub{display:flex; flex-direction:column; gap:var(--sp-3);}
+
+.control-group{background:var(--surface-0); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 12px;}
+.control-group label{font-size:var(--fs-sm); font-weight:600; color:var(--text-1); display:flex; justify-content:space-between;}
+.control-group label .val{color:var(--accent); font-weight:700;}
+.control-group input[type=range]{width:100%; margin-top:7px; accent-color:var(--navy-2); cursor:pointer;}
+.toggle-group{display:flex; gap:6px; margin-top:7px; flex-wrap:wrap;}
+.toggle-btn{flex:1; min-width:56px; padding:7px 5px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:600; cursor:pointer; text-align:center; color:var(--text-2);}
+.toggle-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.toggle-btn.small{font-size:10.5px; padding:6px 3px;}
+.toggle-btn.play{background:var(--f-green); border-color:var(--f-green); color:#fff;}
+.toggle-btn.navy{background:var(--navy-2); border-color:var(--navy-2); color:#fff; width:100%; margin-top:9px;}
+.toggle-btn:disabled{opacity:.5; cursor:not-allowed;}
+.chip-btn{display:inline-flex; align-items:center; gap:5px; padding:6px 11px; margin:3px 3px 0 0; border:1px solid var(--border-strong); background:var(--surface-1); border-radius:18px; cursor:pointer; font-size:var(--fs-sm); font-weight:600; color:var(--text-2);}
+.chip-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.chip-btn.ok{border-color:var(--f-green);} .chip-btn.bad{border-color:var(--f-red);}
+.chip-wrap{display:flex; flex-wrap:wrap; margin-top:3px;}
+
+.role-row{display:flex; align-items:center; gap:8px; margin-top:7px; font-size:var(--fs-sm); font-weight:600;}
+.role-row .rdot{width:10px; height:10px; border-radius:50%; flex:0 0 auto; display:inline-block;}
+.role-row .rname{width:70px; flex:0 0 auto; color:var(--text-2);}
+.role-row select{flex:1; min-width:0; padding:6px 7px; border:1px solid var(--border-strong); border-radius:7px; font-size:var(--fs-sm); background:var(--surface-1); color:var(--text-1); cursor:pointer;}
+
+.step-row{display:flex; gap:5px;}
+.step-pill{flex:1; padding:6px 4px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:10.5px; font-weight:700; color:var(--text-3); cursor:pointer;}
+.step-pill.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.step-pill.done{border-color:var(--f-green); color:var(--f-green);}
+.step-pill.active.done{color:#fff;}
+.opt-btn{display:block; width:100%; text-align:left; margin-top:6px; padding:7px 9px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:500; color:var(--text-1); cursor:pointer; line-height:1.3;}
+.opt-btn.active{border-color:var(--navy-2); background:#e3ecf7; font-weight:600;}
+.var-row{display:flex; align-items:center; gap:6px; margin-top:7px;}
+.var-row .vname{flex:0 0 88px; font-size:var(--fs-sm); font-weight:600;}
+.var-row .toggle-group{margin-top:0; flex:1;}
+
+.result-cards{display:grid; grid-template-columns:1fr 1fr; gap:6px;}
+.result-cards.three{grid-template-columns:1fr 1fr 1fr;}
+.rcard{background:var(--surface-0); border:1px solid var(--border); border-radius:9px; padding:7px 9px;}
+.rcard .rlabel{font-size:9.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--text-3); font-weight:600;}
+.rcard .rval{font-size:var(--fs-md); font-weight:700; color:var(--text-1); margin-top:1px;}
+.rcard.wide{grid-column:1/-1;}
+.hint{font-size:var(--fs-xs); color:var(--text-3); margin-top:6px; line-height:1.4;}
+.fb{font-size:var(--fs-xs); font-weight:600; margin-top:6px; padding:5px 8px; border-radius:7px;}
+.fb.ok{background:#e4f7ec; color:#1f6b3d;}
+.fb.bad{background:#fdece7; color:#a4331c;}
+.fb.warn{background:#fdf4dc; color:#8a6410;}
+.log{width:100%; border-collapse:collapse; font-size:10.5px; margin-top:4px;}
+.log th{text-align:left; color:var(--text-3); font-weight:600; text-transform:uppercase; font-size:9px; letter-spacing:.04em; padding:3px 4px; border-bottom:1px solid var(--border);}
+.log td{padding:4px; border-bottom:1px solid var(--surface-2); color:var(--text-2);}
+.log td.r-ok{color:var(--f-green); font-weight:700;} .log td.r-bad{color:var(--f-red); font-weight:700;} .log td.r-warn{color:var(--f-yellow); font-weight:700;}
+.hidden{display:none !important;}
+
+@media (max-width:1000px) and (orientation:portrait), (max-width:1000px) and (min-height:601px){
+  .body-wrap{flex-direction:column;}
+  .sidenav{flex:0 0 auto; width:100%; height:auto; flex-direction:row; overflow-x:auto; overflow-y:hidden; border-right:none; border-bottom:1px solid var(--border); padding:6px;}
+  .nav-item{flex:0 0 auto; width:150px;}
+  .panel-body{overflow-y:auto;}
+  .lab-view{flex-direction:column;}
+  .lab-canvas-wrap{min-height:320px;}
+  .lab-side{min-width:0;}
+  .content{overflow-y:auto;}
+  .topbar .legend{display:none;}
+  .topbar h1{white-space:normal;}
+}
+::-webkit-scrollbar{width:7px; height:7px;}
+::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand-badge">⚡</div>
+    <div>
+      <div class="chip">Grade 7 · Ch 3</div>
+      <h1>Electricity: Circuits and their Components</h1>
+    </div>
+    <div class="spacer"></div>
+    <div class="legend">
+      <span><i style="background:var(--f-yellow)"></i>What you do · light</span>
+      <span><i style="background:var(--f-red)"></i>Current · + terminal</span>
+      <span><i style="background:var(--f-blue)"></i>− terminal · insulator</span>
+      <span><i style="background:var(--f-green)"></i>Closed circuit · conductor</span>
+    </div>
+  </div>
+  <div class="body-wrap">
+    <nav class="sidenav" id="sideNav"></nav>
+    <main class="content">
+      <div class="panel-head">
+        <div class="panel-badge" id="panelBadge">2.1</div>
+        <h2 id="panelTitle">Select an activity</h2>
+        <p id="panelDesc"></p>
+      </div>
+      <div class="panel-body" id="panelBody"></div>
+    </main>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   GRADE 7 — CHAPTER 3: ELECTRICITY: CIRCUITS AND THEIR COMPONENTS
+   Activities 3.1 – 3.11 (NCERT Curiosity, gecu103). Every activity runs a
+   continuous animation loop: buttons and sliders only set TARGETS; cells
+   slide, fall and skid, switches swing and bounce on their contacts, wires
+   fly to their joints on springs. Every glow comes from a real circuit:
+   a net solver decides whether the loop is closed, the filament heats
+   from I²R and cools by radiation, the LED follows its knee voltage, and
+   current chevrons travel the actual wires from + to −.
+   ========================================================================= */
+const COL = {red:'#d9432b', blue:'#2f8fe0', green:'#1f9d55', yellow:'#d9a017', ink:'#132a44', muted:'#4c6178', mid:'#8195ab'};
+
+/* ---------------------------------------------------------------------
+   0. CANVAS HELPERS
+   --------------------------------------------------------------------- */
+function fitCanvas(canvas){
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  const r = canvas.parentElement.getBoundingClientRect();
+  const w = Math.max(200, r.width), h = Math.max(160, r.height);
+  if(canvas._w!==w || canvas._h!==h || canvas._dpr!==dpr){
+    canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr);
+    canvas.style.width = w+'px'; canvas.style.height = h+'px';
+    canvas._w=w; canvas._h=h; canvas._dpr=dpr;
+  }
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, w, h};
+}
+function line(ctx,x1,y1,x2,y2,color,width,dash){
+  ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=width||2;
+  if(dash) ctx.setLineDash(dash); else ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); ctx.restore();
+}
+function arrowHead(ctx,x,y,ang,color,size){
+  size=size||7; ctx.save(); ctx.fillStyle=color; ctx.translate(x,y); ctx.rotate(ang);
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-size,size*0.42); ctx.lineTo(-size,-size*0.42); ctx.closePath(); ctx.fill(); ctx.restore();
+}
+function vec(ctx,x1,y1,x2,y2,color,width){ line(ctx,x1,y1,x2,y2,color,width||2.6); arrowHead(ctx,x2,y2,Math.atan2(y2-y1,x2-x1),color,7); }
+function dimArrow(ctx,x,y1,y2,color){ line(ctx,x,y1,x,y2,color,1.6); arrowHead(ctx,x,y1,-Math.PI/2,color,5); arrowHead(ctx,x,y2,Math.PI/2,color,5); }
+function textAt(ctx,txt,x,y,opts){
+  opts=opts||{}; ctx.save();
+  ctx.font=(opts.weight||500)+' '+(opts.size||12)+'px Poppins, sans-serif';
+  ctx.fillStyle=opts.color||COL.ink; ctx.textAlign=opts.align||'left'; ctx.textBaseline=opts.baseline||'alphabetic';
+  if(opts.alpha!==undefined) ctx.globalAlpha=opts.alpha;
+  ctx.fillText(txt,x,y); ctx.restore();
+}
+function rect(ctx,x,y,w,h,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw===undefined?2.2:lw; if(fill){ctx.fillStyle=fill; ctx.fillRect(x,y,w,h);} if(lw!==0){ctx.strokeStyle=stroke; ctx.strokeRect(x,y,w,h);} ctx.restore(); }
+function circ(ctx,x,y,r,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw||2.2; ctx.beginPath(); ctx.arc(x,y,Math.max(0.1,r),0,Math.PI*2); if(fill){ctx.fillStyle=fill; ctx.fill();} ctx.strokeStyle=stroke; ctx.stroke(); ctx.restore(); }
+function rrect(ctx,x,y,w,h,r){ r=Math.min(r,w/2,h/2); ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function fmt(x,d){ if(!isFinite(x)) return '—'; d=d===undefined?2:d; return Number(x.toFixed(d)).toString(); }
+function gauss(){ return (Math.random()+Math.random()+Math.random()+Math.random()-2)*1.2247; }
+function hexRgb(h){ const n=parseInt(h.slice(1),16); return [n>>16&255, n>>8&255, n&255]; }
+function mixCol(a,b,t){ const A=hexRgb(a),B=hexRgb(b); t=clamp(t,0,1); return 'rgb('+A.map((v,i)=>Math.round(lerp(v,B[i],t))).join(',')+')'; }
+function rampCol(stops,x){ // stops: [[pos,hex],...]
+  if(x<=stops[0][0]) return mixCol(stops[0][1],stops[0][1],0);
+  for(let i=1;i<stops.length;i++){ if(x<=stops[i][0]){ const a=stops[i-1],b=stops[i]; return mixCol(a[1],b[1],(x-a[0])/(b[0]-a[0])); } }
+  const l=stops[stops.length-1][1]; return mixCol(l,l,0);
+}
+function thermo(ctx,x,top,bot,frac,outline,liquid){
+  const br=8;
+  ctx.save(); ctx.lineWidth=2; ctx.strokeStyle=outline; ctx.fillStyle='#fff';
+  rrect(ctx,x-5,top,10,bot-top+2,5); ctx.fill(); ctx.stroke(); ctx.restore();
+  const lh=(bot-top-5)*clamp(frac,0,1);
+  ctx.save(); ctx.fillStyle=liquid; ctx.fillRect(x-2.2,bot-lh,4.4,lh+6); ctx.restore();
+  circ(ctx,x,bot+br,br,outline,'#fff',2); circ(ctx,x,bot+br,br-3.2,liquid,liquid,1);
+  for(let i=0;i<=4;i++){ const yy=top+5+(bot-top-5)*i/4; line(ctx,x+5,yy,x+9,yy,outline,1.1); }
+}
+function flame(ctx,cx,baseY,width,inten,t){
+  const n=5;
+  for(let i=0;i<n;i++){
+    const fx=cx-width/2+width*(i+0.5)/n;
+    const hh=(6+inten*32)*(0.78+0.22*Math.sin(t*13+i*1.7));
+    const sway=Math.sin(t*9+i*2.1)*3;
+    ctx.save(); ctx.lineJoin='round';
+    ctx.strokeStyle=COL.red; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(fx-7,baseY); ctx.quadraticCurveTo(fx-7,baseY-hh*0.55,fx+sway,baseY-hh); ctx.quadraticCurveTo(fx+7,baseY-hh*0.55,fx+7,baseY); ctx.stroke();
+    ctx.strokeStyle=COL.yellow; ctx.lineWidth=1.6;
+    ctx.beginPath(); ctx.moveTo(fx-3.5,baseY); ctx.quadraticCurveTo(fx-3,baseY-hh*0.35,fx+sway*0.5,baseY-hh*0.55); ctx.quadraticCurveTo(fx+3,baseY-hh*0.35,fx+3.5,baseY); ctx.stroke();
+    ctx.restore();
+  }
+}
+
+/* ---------------------------------------------------------------------
+   0b. ANIMATION ENGINE
+   --------------------------------------------------------------------- */
+let activeStops = [];
+function stopAllLoops(){ activeStops.forEach(s=>{ try{ s(); }catch(e){} }); activeStops=[]; }
+function animLoop(tick){
+  let last = performance.now();
+  let raf;
+  function frame(now){
+    const dt = Math.max(0, Math.min(0.04, (now-last)/1000));
+    last = now;
+    try{ tick(dt); }catch(e){ if(window.__errs) __errs.push(String(e&&e.stack||e).slice(0,300)); else console.error(e); }
+    raf = requestAnimationFrame(frame);
+  }
+  raf = requestAnimationFrame(frame);
+  const stop = ()=>cancelAnimationFrame(raf);
+  activeStops.push(stop);
+  return stop;
+}
+/** Exponential ease — frame-rate independent, always smooth. */
+function approach(cur,tgt,rate,dt){ return cur + (tgt-cur)*(1-Math.exp(-rate*dt)); }
+/** Spring-damper — gives natural overshoot and settle. */
+function springTo(state,target,k,damping,dt){
+  const acc = (target-state.x)*k - state.v*damping;
+  state.v += acc*dt;
+  state.x += state.v*dt;
+  return state.x;
+}
+function toggleWire(btns,cb){
+  btns.forEach(b=>b.onclick=()=>{ btns.forEach(x=>x.classList.remove('active')); b.classList.add('active'); cb(b); });
+}
+
+
+
+/* ---------------------------------------------------------------------
+   0c. CHAPTER-3 HELPERS — virtual stage, circuit engine (cells, a
+       filament that really heats and cools, an LED with a real knee
+       voltage), current that flows along the actual wires, and the
+       line-drawn components: cell, lamp, LED, switch, holders, wires
+   --------------------------------------------------------------------- */
+function rng(seed){ let s=(seed>>>0)||1; return ()=>{ s=(Math.imul(s,1664525)+1013904223)>>>0; return s/4294967296; }; }
+function smooth01(a,b,x){ const t=clamp((x-a)/(b-a),0,1); return t*t*(3-2*t); }
+function angDiff(a,b){ return Math.atan2(Math.sin(a-b),Math.cos(a-b)); }
+function ease(x){ x=clamp(x,0,1); return x<0.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2; }
+function spr(x){ return {x:x||0,v:0}; }
+function setv($,id,v){ const e=$('#'+id); if(e&&e.textContent!==v) e.textContent=v; }
+function setc($,id,c){ const e=$('#'+id); if(e&&e.style.color!==c) e.style.color=c; }
+function card(id,l,col){ return `<div class="rcard"><div class="rlabel">${l}</div><div class="rval" id="${id}"${col?` style="color:${col}"`:''}>—</div></div>`; }
+/* every scene draws on an 800 × 500 virtual stage, fitted into the canvas */
+const VW=800, VH=500;
+function stage(ctx,w,h){ const s=Math.min(w/VW,h/VH), ox=(w-VW*s)/2, oy=(h-VH*s)/2; ctx.translate(ox,oy); ctx.scale(s,s); return s; }
+function stepPills(el,names,cur,done,onPick){
+  el.innerHTML=names.map((n,i)=>`<button class="step-pill${i===cur?' active':''}${done[i]?' done':''}" data-i="${i}">${n}</button>`).join('');
+  el.querySelectorAll('.step-pill').forEach(b=>b.onclick=()=>onPick(+b.dataset.i));
+}
+function hexRgb(h){ if(h[0]!=='#') return h.match(/[\d.]+/g).slice(0,3).map(Number); const n=parseInt(h.slice(1),16); return [n>>16&255, n>>8&255, n&255]; }
+function rgba(h,a){ const c=hexRgb(h); return `rgba(${c[0]},${c[1]},${c[2]},${a})`; }
+function fitFont(ctx,txt,maxW,size,weight){
+  let s=size; ctx.font=weight+' '+s+'px Poppins, sans-serif';
+  while(s>9 && ctx.measureText(txt).width>maxW){ s-=0.5; ctx.font=weight+' '+s+'px Poppins, sans-serif'; }
+  return s;
+}
+function tableTop(ctx,x0,x1,y,legs){ ctx.save(); ctx.lineWidth=2.2; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; rrect(ctx,x0,y,x1-x0,12,3); ctx.fill(); ctx.stroke();
+  if(legs){ line(ctx,x0+22,y+12,x0+22,y+legs,COL.ink,2.4); line(ctx,x1-22,y+12,x1-22,y+legs,COL.ink,2.4); } ctx.restore(); }
+function meterV(ctx,x,y,w,h,frac,col,label){ // vertical bar meter, y = top
+  ctx.save(); rrect(ctx,x,y,w,h,5); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=1.6; ctx.stroke();
+  const f=clamp(frac,0,1); ctx.save(); rrect(ctx,x,y,w,h,5); ctx.clip(); ctx.fillStyle=col; ctx.globalAlpha=0.85; ctx.fillRect(x,y+h*(1-f),w,h*f); ctx.restore();
+  if(label) textAt(ctx,label,x+w/2,y+h+16,{align:'center',size:12,weight:700,color:col});
+  ctx.restore();
+}
+function tag(ctx,txt,x,y,col,o){ o=o||{}; ctx.save(); ctx.font=(o.weight||700)+' '+(o.size||13)+'px Poppins, sans-serif';
+  const w=ctx.measureText(txt).width+16, h=(o.size||13)+10; const X=o.align==='left'?x:(o.align==='right'?x-w:x-w/2);
+  ctx.globalAlpha=o.alpha===undefined?1:o.alpha; rrect(ctx,X,y-h/2,w,h,h/2); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=col; ctx.lineWidth=1.8; ctx.stroke();
+  ctx.fillStyle=col; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(txt,X+w/2,y+1); ctx.restore(); }
+function leader(ctx,x1,y1,x2,y2,txt,col,a){ ctx.save(); ctx.globalAlpha=a===undefined?1:a; line(ctx,x1,y1,x2,y2,col||COL.muted,1.3); circ(ctx,x1,y1,2.4,col||COL.muted,col||COL.muted,1);
+  textAt(ctx,txt,x2+(x2>=x1?5:-5),y2+4,{align:x2>=x1?'left':'right',size:12.5,weight:600,color:col||COL.muted}); ctx.restore(); }
+function glow(ctx,x,y,R,col,a){ if(a<=0.01) return; const c=hexRgb(col); ctx.save(); const g=ctx.createRadialGradient(x,y,0,x,y,R);
+  g.addColorStop(0,`rgba(${c},${Math.min(1,a)})`); g.addColorStop(0.35,`rgba(${c},${Math.min(1,a)*0.45})`); g.addColorStop(1,`rgba(${c},0)`);
+  ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,y,R,0,Math.PI*2); ctx.fill(); ctx.restore(); }
+function rayBurst(ctx,x,y,r0,r1,n,col,a,t){ if(a<=0.03) return; ctx.save(); ctx.globalAlpha=Math.min(1,a); ctx.strokeStyle=col; ctx.lineWidth=2.2; ctx.lineCap='round';
+  for(let i=0;i<n;i++){ const an=i/n*Math.PI*2+0.2, f=0.8+0.2*Math.sin(t*6+i*1.7); ctx.beginPath(); ctx.moveTo(x+Math.cos(an)*r0,y+Math.sin(an)*r0); ctx.lineTo(x+Math.cos(an)*(r0+(r1-r0)*f),y+Math.sin(an)*(r0+(r1-r0)*f)); ctx.stroke(); } ctx.restore(); }
+
+/* =====================================================================
+   CIRCUIT ENGINE
+   Cell: e.m.f. 1.5 V, internal resistance 0.25 Ω.
+   Incandescent lamp: filament resistance R = R_hot·(T/2700 K)^1.2
+   (tungsten — cold it is ~1/14 of hot, so it gulps current at switch-on).
+   Heat balance  C·dT/dt = I²R − k(T⁴−T₀⁴) − g(T−T₀): 75 % radiated,
+   25 % conducted into the thick support wires. The real time constant
+   (≈ 0.05 s) is stretched to 0.25 s so the warm-up and the after-glow
+   are watchable: it turns dull red → orange → yellow-white, and fades
+   back through red when the current stops.
+   LED: I = s·ln(1+e^{(V−V_f)/s})/R_d — nothing flows below its knee
+   voltage V_f, and nothing ever flows backwards.
+   ===================================================================== */
+const CELL_E=1.5, CELL_R=0.25;
+function lampNew(Vr,Ir,tau){ const Tr=2700,P=Vr*Ir; return {Vr,Ir,Tr,Rh:Vr/Ir,k:0.75*P/(Tr**4-300**4),g:0.25*P/(Tr-300),C:3.25*P*(tau||0.25)/Tr,T:300,I:0,broken:false}; }
+function lampR(L){ return L.Rh*Math.pow(L.T/L.Tr,1.2); }
+/* drive with e.m.f. E through extra series resistance r (cells + wires); returns I */
+function lampStep(L,E,r,dt){
+  const n=Math.max(1,Math.ceil(dt/0.005)), h=dt/n; let I=0;
+  for(let i=0;i<n;i++){ const R=lampR(L); I=L.broken?0:Math.abs(E)/(r+R); const P=I*I*R;
+    L.T+=(P-L.k*(L.T**4-300**4)-L.g*(L.T-300))/L.C*h; L.T=Math.max(300,L.T); }
+  L.I=I; return I;
+}
+function lampBr(T){ return Math.pow(clamp((T-900)/1800,0,1.25),3); }            // visible light, 0…~1
+const FIL_RAMP=[[800,'#132a44'],[1000,'#8a1c0c'],[1450,'#d9432b'],[1950,'#ef7d1f'],[2450,'#f2b12a'],[2800,'#ffe79a']];
+function filCol(T){ return rampCol(FIL_RAMP,T); }
+const LEDS={ red:{name:'Red',Vf:1.8,col:'#d9432b'}, yellow:{name:'Yellow',Vf:2.0,col:'#d9a017'}, green:{name:'Green',Vf:2.2,col:'#1f9d55'}, blue:{name:'Blue',Vf:2.7,col:'#2f8fe0'} };
+function ledCurrent(E,r,Vf){ // solve E − I r = V_led(I), forward only
+  if(E<=0) return 0; const s=0.045, Rd=18;
+  const f=I=>{ const V=E-I*r; return s*Math.log1p(Math.exp((V-Vf)/s))/Rd - I; };
+  let lo=0, hi=E/Math.max(r,0.01)+1; for(let i=0;i<50;i++){ const m=(lo+hi)/2; if(f(m)>0) lo=m; else hi=m; } return lo;
+}
+function ledBr(I){ return clamp(Math.log10(1+I/0.0005)/Math.log10(1+0.025/0.0005),0,1.15); }
+
+/* ---- paths: current really travels along the drawn wires ---- */
+function pathNew(pts){ const L=[0]; for(let i=1;i<pts.length;i++) L.push(L[i-1]+Math.hypot(pts[i].x-pts[i-1].x,pts[i].y-pts[i-1].y)); return {pts,L,len:L[L.length-1]}; }
+function pathAt(P,s){ s=clamp(s,0,P.len); let i=1; while(i<P.L.length-1 && P.L[i]<s) i++;
+  const a=P.pts[i-1], b=P.pts[i], seg=(P.L[i]-P.L[i-1])||1, u=(s-P.L[i-1])/seg; return {x:a.x+(b.x-a.x)*u, y:a.y+(b.y-a.y)*u, a:Math.atan2(b.y-a.y,b.x-a.x)}; }
+function pts(...ls){ const out=[]; ls.forEach(l=>l.forEach(p=>{ const q=out[out.length-1]; if(!q||Math.hypot(q.x-p.x,q.y-p.y)>0.01) out.push({x:p.x,y:p.y}); })); return out; }
+function rev(l){ return l.slice().reverse(); }
+function P(x,y){ return {x,y}; }
+function sagPts(a,b,sag,n,side){ n=n||24; const mx=(a.x+b.x)/2+(side||0), my=(a.y+b.y)/2+sag, out=[];
+  for(let i=0;i<=n;i++){ const t=i/n, u=1-t; out.push({x:u*u*a.x+2*u*t*mx+t*t*b.x, y:u*u*a.y+2*u*t*my+t*t*b.y}); } return out; }
+function bezPts(a,c1,c2,b,n){ n=n||28; const out=[]; for(let i=0;i<=n;i++){ const t=i/n,u=1-t;
+  out.push({x:u*u*u*a.x+3*u*u*t*c1.x+3*u*t*t*c2.x+t*t*t*b.x, y:u*u*u*a.y+3*u*u*t*c1.y+3*u*t*t*c2.y+t*t*t*b.y}); } return out; }
+function strokePts(ctx,p,col,w,dash){ if(p.length<2) return; ctx.save(); ctx.strokeStyle=col; ctx.lineWidth=w; ctx.lineCap='round'; ctx.lineJoin='round'; ctx.setLineDash(dash||[]);
+  ctx.beginPath(); ctx.moveTo(p[0].x,p[0].y); for(let i=1;i<p.length;i++) ctx.lineTo(p[i].x,p[i].y); ctx.stroke(); ctx.restore(); }
+function subPts(Pa,s0,s1){ const out=[pathAt(Pa,s0)]; for(let i=0;i<Pa.pts.length;i++) if(Pa.L[i]>s0 && Pa.L[i]<s1) out.push(Pa.pts[i]); out.push(pathAt(Pa,s1)); return out; }
+/* a flexible insulated wire; `strip` px of bare metal at both ends */
+function wireDraw(ctx,p,col,strip,o){ o=o||{}; const Pa=pathNew(p); const sa=o.stripA===undefined?strip:o.stripA, sb=o.stripB===undefined?strip:o.stripB;
+  if(Pa.len<1) return Pa;
+  const s0=Math.min(sa,Pa.len/2), s1=Math.max(Pa.len/2,Pa.len-sb);
+  strokePts(ctx,subPts(Pa,0,s0+1),COL.ink,2.2); strokePts(ctx,subPts(Pa,s1-1,Pa.len),COL.ink,2.2);
+  const mid=subPts(Pa,s0,s1); strokePts(ctx,mid,COL.ink,o.w?o.w+2.4:7); strokePts(ctx,mid,col,o.w||4.6);
+  return Pa; }
+/* moving current: chevrons that travel + → − along the path at a speed ∝ current */
+function flowNew(){ return {ph:0,v:0}; }
+function flowStep(f,target,dt){ f.v=approach(f.v,target,5,dt); f.ph+=f.v*dt; }
+function flowDraw(ctx,Pa,f,o){ o=o||{}; const gap=o.gap||26, col=o.col||COL.red, a=clamp(Math.abs(f.v)/(o.full||40),0,1)*(o.alpha||1);
+  if(a<0.02||Pa.len<2) return; ctx.save(); ctx.globalAlpha=a; ctx.strokeStyle=col; ctx.lineWidth=o.lw||2.4; ctx.lineCap='round'; ctx.lineJoin='round';
+  const dir=f.v>=0?1:-1, k=o.size||5; let s=((f.ph%gap)+gap)%gap;
+  for(;s<Pa.len;s+=gap){ const q=pathAt(Pa,s), an=q.a+(dir<0?Math.PI:0); ctx.save(); ctx.translate(q.x,q.y); ctx.rotate(an);
+    ctx.beginPath(); ctx.moveTo(-k,-k*0.8); ctx.lineTo(k*0.4,0); ctx.lineTo(-k,k*0.8); ctx.stroke(); ctx.restore(); }
+  ctx.restore(); }
+/* current speed on screen: 1 A ≈ 170 px/s, capped */
+function flowSpeed(I){ return I<1e-6?0:clamp(25+170*I,0,420); }
+
+/* ---- union-find nets: who is connected to whom ---- */
+function nets(nodes,links){ const p={}; nodes.forEach(n=>p[n]=n); const f=n=>p[n]===n?n:(p[n]=f(p[n])); links.forEach(([a,b])=>{ p[f(a)]=f(b); }); return f; }
+
+/* =====================================================================
+   COMPONENTS (all line drawings)
+   ===================================================================== */
+/* a cell lying along angle `ang`; (cx,cy) = centre; dir=+1 → + cap toward +x (local)
+   returns world positions of the + cap tip and − disc                                   */
+function drawCell(ctx,cx,cy,ang,o){
+  o=o||{}; const L=o.len||150, R=o.r||28, d=o.dir===undefined?1:o.dir, a=o.alpha===undefined?1:o.alpha;
+  ctx.save(); ctx.globalAlpha*=a; ctx.translate(cx,cy); ctx.rotate(ang); ctx.scale(d,1);
+  ctx.lineWidth=2.4; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff';
+  rrect(ctx,-L/2,-R,L,2*R,7); ctx.fill(); ctx.stroke();
+  // printed band near the + end and the signs
+  line(ctx,L/2-34,-R,L/2-34,R,COL.ink,1.4);
+  ctx.save(); ctx.scale(d,1); textAt(ctx,'+',(L/2-18)*d,7,{align:'center',size:20,weight:700,color:COL.red}); textAt(ctx,'−',(-L/2+18)*d,7,{align:'center',size:20,weight:700,color:COL.blue});
+  if(o.label!==false) textAt(ctx,o.label||'1.5 V',0,5,{align:'center',size:13,weight:600,color:COL.muted}); ctx.restore();
+  // + metal cap (protrudes) and − flat disc
+  ctx.lineWidth=2.4; ctx.strokeStyle=COL.red; ctx.fillStyle='#fff'; rrect(ctx,L/2-1,-R*0.36,9,R*0.72,3); ctx.fill(); ctx.stroke();
+  line(ctx,-L/2-1.5,-R*0.72,-L/2-1.5,R*0.72,COL.blue,3.4);
+  if(o.warm>0.02){ ctx.save(); ctx.globalAlpha*=clamp(o.warm,0,1); ctx.strokeStyle=COL.red; ctx.lineWidth=2; for(let i=-1;i<=1;i++){ ctx.beginPath();
+    for(let k=0;k<=10;k++){ const yy=-R-8-k*3.2, xx=i*30+Math.sin(k*0.9+(o.t||0)*8+i)*4; if(k) ctx.lineTo(xx,yy); else ctx.moveTo(xx,yy);} ctx.stroke(); } ctx.restore(); }
+  ctx.restore();
+  const c=Math.cos(ang), s=Math.sin(ang);
+  return {p:{x:cx+c*(L/2+8)*d, y:cy+s*(L/2+8)*d}, n:{x:cx-c*(L/2+1.5)*d, y:cy-s*(L/2+1.5)*d}};
+}
+/* coil spring along x from x0 to x1 (compresses as x1 moves) */
+function springDraw(ctx,x0,x1,y,h,turns,col){ ctx.save(); ctx.strokeStyle=col||COL.ink; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(x0,y);
+  const n=turns*2; for(let i=1;i<n;i++){ ctx.lineTo(x0+(x1-x0)*i/n, y+(i%2?-h:h)); } ctx.lineTo(x1,y); ctx.stroke(); ctx.restore(); }
+
+/* incandescent torch lamp, standing upright; (x,y) = the metal tip at the bottom.
+   st: {T, broken, yaw, labels, cut}. Returns tip/case points and the current path
+   through it (tip → thick wire → filament → thick wire → case).                      */
+function lampDraw(ctx,x,y,s,st){
+  st=st||{}; const T=st.T||300, br=st.broken?0:lampBr(T);
+  const P0=(u,v)=>({x:x+u*s,y:y-v*s});
+  ctx.save(); ctx.translate(x,y); ctx.scale(s,s); ctx.lineJoin='round'; ctx.lineCap='round';
+  const lw=w=>w/s*Math.min(s,1.6);
+  glow(ctx,0,-86,52+46*Math.min(1,br),COL.yellow,0.75*Math.min(1,br));
+  // glass bulb
+  ctx.lineWidth=lw(2.4); ctx.strokeStyle=COL.ink; ctx.fillStyle=rgba('#fff7d6',Math.min(0.9,br*0.9));
+  ctx.beginPath(); ctx.moveTo(-10,-40); ctx.bezierCurveTo(-12,-54,-26,-62,-26,-80); ctx.arc(0,-80,26,Math.PI,0); ctx.bezierCurveTo(26,-62,12,-54,10,-40); ctx.fill(); ctx.stroke();
+  // metal case with threads, insulator, tip
+  ctx.fillStyle='#fff'; ctx.beginPath(); ctx.rect(-12,-40,24,32); ctx.fill(); ctx.stroke();
+  ctx.save(); ctx.beginPath(); ctx.rect(-12,-40,24,32); ctx.clip(); ctx.lineWidth=lw(1.4); const off=((st.thread||0)%1)*7;
+  for(let k=-1;k<6;k++){ const yy=-36+k*7+off; ctx.beginPath(); ctx.moveTo(-12,yy); ctx.lineTo(12,yy-3); ctx.stroke(); } ctx.restore();
+  ctx.fillStyle=COL.ink; ctx.beginPath(); ctx.moveTo(-9,-8); ctx.lineTo(9,-8); ctx.lineTo(6,-3); ctx.lineTo(-6,-3); ctx.closePath(); ctx.fill();
+  ctx.fillStyle='#fff'; ctx.strokeStyle=COL.ink; ctx.beginPath(); ctx.arc(0,-2.5,4.5,0,Math.PI); ctx.fill(); ctx.stroke();
+  // thick support wires + bead
+  const wc=st.hl?COL.red:COL.ink;
+  ctx.strokeStyle=wc; ctx.lineWidth=lw(2.6);
+  ctx.beginPath(); ctx.moveTo(0,-4); ctx.lineTo(0,-30); ctx.lineTo(-9,-44); ctx.lineTo(-9,-84); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(11,-26); ctx.lineTo(9,-44); ctx.lineTo(9,-84); ctx.stroke();
+  ctx.fillStyle='#fff'; ctx.strokeStyle=COL.ink; ctx.lineWidth=lw(2); rrect(ctx,-13,-66,26,7,3.5); ctx.fill(); ctx.stroke();
+  // filament: a coil seen at angle `yaw`
+  const yaw=st.yaw||0, turns=7, fc=st.broken?COL.ink:filCol(T);
+  ctx.strokeStyle=fc; ctx.lineWidth=lw(br>0.05?2.4:1.8); ctx.beginPath();
+  const fil=[]; for(let i=0;i<=turns*16;i++){ const u=i/(turns*16), ph=u*turns*Math.PI*2; const xx=-9+18*u, zz=Math.sin(ph)*3.2, yy=-86+Math.cos(ph)*3.2;
+    const px=xx*Math.cos(yaw)+zz*Math.sin(yaw); fil.push({x:px,y:yy}); }
+  if(st.broken){ const half=fil.length>>1; ctx.moveTo(fil[0].x,fil[0].y); for(let i=1;i<half-6;i++) ctx.lineTo(fil[i].x,fil[i].y); ctx.moveTo(fil[half+6].x,fil[half+6].y+3); for(let i=half+6;i<fil.length;i++) ctx.lineTo(fil[i].x,fil[i].y); }
+  else { fil.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y)); }
+  ctx.stroke();
+  if(br>0.5){ ctx.strokeStyle=rgba('#ffffff',Math.min(1,(br-0.5)*1.6)); ctx.lineWidth=lw(1); ctx.stroke(); }
+  ctx.restore();
+  const path=[P0(0,-2),P0(0,4),P0(0,30),P0(-9,44),P0(-9,84)].concat(fil.filter((_,i)=>i%4===0).map(p=>({x:x+p.x*s,y:y+p.y*s}))).concat([P0(9,84),P0(9,44),P0(11,26),P0(12,24)]);
+  return {tip:P0(0,0), cas:P0(12,24), path, bulb:P0(0,80), br};
+}
+/* LED standing upright; (x,y) = base of the dome. flip ∈[-1,1] = cos of the yaw
+   (legs swap sides as it turns). Returns anode (long leg) & cathode (short leg) ends. */
+function ledDraw(ctx,x,y,s,key,b,o){
+  o=o||{}; const L=LEDS[key], f=o.flip===undefined?1:o.flip, legA=o.legA||46, legK=o.legK||38;
+  ctx.save(); ctx.translate(x,y); ctx.scale(s,s); ctx.lineJoin='round'; ctx.lineCap='round';
+  const lw=w=>w/s*Math.min(s,1.6);
+  glow(ctx,0,-18,30+28*Math.min(1,b),L.col,0.8*Math.min(1,b));
+  // legs: anode (+, long) on local +x, cathode (−, short) on −x
+  ctx.lineWidth=lw(2.6); ctx.strokeStyle=o.hlA||COL.ink; ctx.beginPath(); ctx.moveTo(4*f,-6); ctx.lineTo(4*f,legA); ctx.stroke();
+  ctx.strokeStyle=o.hlK||COL.ink; ctx.beginPath(); ctx.moveTo(-4*f,-6); ctx.lineTo(-4*f,legK); ctx.stroke();
+  // inside: post (anode) and bigger anvil (cathode) with the tiny chip, bond wire
+  ctx.lineWidth=lw(1.6); ctx.strokeStyle=COL.ink;
+  ctx.beginPath(); ctx.moveTo(4*f,-6); ctx.lineTo(4*f,-16); ctx.lineTo(1.5*f,-18); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(-4*f,-6); ctx.lineTo(-4*f,-12); ctx.lineTo(-7.5*f,-16); ctx.lineTo(-0.5*f,-16); ctx.lineTo(-1.5*f,-12); ctx.lineTo(-4*f,-12); ctx.stroke();
+  ctx.fillStyle=b>0.05?L.col:COL.ink; ctx.fillRect(-3.4*f-1,-18.5,2.2,2.5);
+  ctx.beginPath(); ctx.moveTo(-3.3*f,-18.5); ctx.quadraticCurveTo(-0.5*f,-24,1.5*f,-18); ctx.stroke();
+  // epoxy dome + rim (flat edge on the cathode side)
+  ctx.lineWidth=lw(2.4); ctx.strokeStyle=L.col; ctx.fillStyle=rgba(L.col,0.08+0.5*Math.min(1,b));
+  ctx.beginPath(); ctx.moveTo(-10,-2); ctx.lineTo(-10,-24); ctx.arc(0,-24,10,Math.PI,0); ctx.lineTo(10,-2); ctx.closePath(); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(-12*(f>=0?0.85:1),-2); ctx.lineTo(12*(f>=0?1:0.85),-2); ctx.lineTo(12*(f>=0?1:0.85),1); ctx.lineTo(-12*(f>=0?0.85:1),1); ctx.closePath(); ctx.stroke();
+  ctx.restore();
+  return {a:{x:x+4*f*s,y:y+legA*s}, k:{x:x-4*f*s,y:y+legK*s}, top:{x,y:y-34*s}};
+}
+/* safety-pin switch: drawing pin at (px,py) is the pivot; the pin swings to `ang`
+   (0 = pointing +x). o.p2 = the second drawing pin. Returns the pin's free end. */
+function pinHead(ctx,x,y,r,col){ circ(ctx,x,y,r,col||COL.ink,'#fff',2.4); circ(ctx,x,y,r*0.45,col||COL.ink,null,1.6); }
+function safetyPin(ctx,px,py,ang,len,col){
+  ctx.save(); ctx.translate(px,py); ctx.rotate(ang); ctx.lineWidth=2.4; ctx.strokeStyle=col||COL.ink; ctx.lineJoin='round'; ctx.lineCap='round';
+  ctx.beginPath(); ctx.arc(0,0,9,0,Math.PI*2); ctx.stroke();                         // coil ring round the drawing pin
+  ctx.beginPath(); ctx.moveTo(8,-4); ctx.lineTo(len-12,-6); ctx.moveTo(8,4); ctx.lineTo(len-14,4); ctx.stroke();
+  ctx.beginPath(); rrect(ctx,len-16,-10,20,15,4); ctx.stroke();                       // clasp head
+  ctx.restore();
+  return {x:px+Math.cos(ang)*(len+2), y:py+Math.sin(ang)*(len+2)};
+}
+/* cell holder for n cells along x; (x,y) = left end centre; spring on the left (−),
+   plate on the right (+). ins = 0…1 how far the cells are pushed in. */
+function holderDraw(ctx,x,y,n,cl,R,comp){
+  const W=n*cl+34; ctx.save(); ctx.lineWidth=2.4; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff';
+  ctx.beginPath(); ctx.moveTo(x,y-R-8); ctx.lineTo(x,y+R+8); ctx.lineTo(x+W,y+R+8); ctx.lineTo(x+W,y-R-8); ctx.stroke();
+  line(ctx,x+6,y-R*0.8,x+6,y+R*0.8,COL.ink,3);
+  springDraw(ctx,x+6,x+24-comp,y,R*0.5,5,COL.ink);
+  line(ctx,x+W-5,y-R*0.6,x+W-5,y+R*0.6,COL.ink,3);
+  ctx.restore();
+  return {n:{x:x-2,y:y+R+2}, p:{x:x+W+2,y:y+R+2}, W, springEnd:x+24-comp};
+}
+/* lamp holder: a small block with two screws; (x,y) = centre of the top */
+function lampHolder(ctx,x,y){ ctx.save(); ctx.lineWidth=2.4; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff';
+  rrect(ctx,x-40,y,80,34,6); ctx.fill(); ctx.stroke(); rrect(ctx,x-16,y-10,32,12,3); ctx.fill(); ctx.stroke();
+  circ(ctx,x-28,y+17,5,COL.ink,'#fff',2); circ(ctx,x+28,y+17,5,COL.ink,'#fff',2); line(ctx,x-31,y+17,x-25,y+17,COL.ink,1.5); line(ctx,x+25,y+17,x+31,y+17,COL.ink,1.5);
+  ctx.restore(); return {a:{x:x-28,y:y+17}, b:{x:x+28,y:y+17}}; }
+/* a twisted joint of wire ends covered with tape */
+function splice(ctx,x,y,a){ if(a<=0.02) return; ctx.save(); ctx.globalAlpha=a; ctx.lineWidth=2; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; rrect(ctx,x-9,y-7,18,14,3); ctx.fill(); ctx.stroke();
+  line(ctx,x-4,y-7,x-4,y+7,COL.ink,1.2); line(ctx,x+3,y-7,x+3,y+7,COL.ink,1.2); ctx.restore(); }
+/* table-3.x style result tick / cross */
+function mark(ctx,x,y,ok,a){ ctx.save(); ctx.globalAlpha=a===undefined?1:a; ctx.lineWidth=4; ctx.lineCap='round'; ctx.strokeStyle=ok?COL.green:COL.red; ctx.beginPath();
+  if(ok){ ctx.moveTo(x-9,y); ctx.lineTo(x-2,y+7); ctx.lineTo(x+10,y-8); } else { ctx.moveTo(x-8,y-8); ctx.lineTo(x+8,y+8); ctx.moveTo(x+8,y-8); ctx.lineTo(x-8,y+8); } ctx.stroke(); ctx.restore(); }
+
+
+/* =====================================================================
+   3.1 LET US EXPLORE A TORCH
+   Cut-away torch: two cells, a spring at the tail, a metal strip that
+   runs back from the reflector through the slide switch. The switch knob
+   slides on a spring; the strip closes only when the knob really reaches
+   the contact. “Open” unscrews the tail cap, tips the torch tail-down and
+   the cells slide out under g·sinθ, fall, bounce (e = 0.3) and skid to a
+   stop with friction on the table.
+   ===================================================================== */
+function rotAbout(p,c,a){ const s=Math.sin(a),k=Math.cos(a); return {x:c.x+(p.x-c.x)*k-(p.y-c.y)*s, y:c.y+(p.x-c.x)*s+(p.y-c.y)*k}; }
+function fallBody(b,dt,floor,R,o){ o=o||{}; const g=1500;
+  b.vy+=g*dt; b.x+=b.vx*dt; b.y+=b.vy*dt; b.ang+=b.va*dt;
+  if(b.y+R>=floor){ b.y=floor-R; if(b.vy>60){ b.vy=-b.vy*0.3; b.va*=0.5; b.bounces=(b.bounces||0)+1; } else b.vy=0;
+    const s=Math.sign(b.vx); b.vx-=s*520*dt; if(Math.sign(b.vx)!==s) b.vx=0;                    // sliding friction μg
+    b.va=approach(b.va,-(angDiff(b.ang,0))*9,10,dt); }
+  if(o.xmin!==undefined && b.x<o.xmin){ b.x=o.xmin; b.vx=Math.abs(b.vx)*0.3; }
+  if(o.xmax!==undefined && b.x>o.xmax){ b.x=o.xmax; b.vx=-Math.abs(b.vx)*0.3; }
+  b.rest=b.y+R>=floor-0.5 && Math.abs(b.vx)<2 && Math.abs(b.vy)<2 && Math.abs(angDiff(b.ang,0))<0.02;
+  return b; }
+function buildA1(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label>Slide the switch</label><div class="toggle-group"><button class="toggle-btn active" id="off">OFF</button><button class="toggle-btn" id="on">ON</button></div></div>
+    <div class="control-group"><button class="toggle-btn navy" id="open" style="margin-top:0">🔧 Open the torch</button></div>
+    <div class="control-group"><label>Cells: fresh → used up <span class="val" id="fV"></span></label><input type="range" id="fr" min="0" max="100" value="100"></div>
+    <div class="control-group"><div class="result-cards">${card('k1','Lamp')}${card('k2','Path')}${card('k3','Current')}${card('k4','Cells inside')}</div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const PIV={x:640,y:165}, AX=165, TAIL=150, TABLE=458;
+  const lamp=lampNew(2.5,0.3), flow=flowNew();
+  const knob=spr(0); let knobT=0;
+  const cells=[{u:245,free:null},{u:398,free:null}];           // centres along the torch axis
+  let tilt=spr(0), capOff=0, capFree=null, thread=0, phase='closed', ph=0, t=0, fresh=1, tween=null;
+  toggleWire([$('#off'),$('#on')],b=>{ knobT=b.id==='on'?1:0; });
+  $('#fr').oninput=()=>{ fresh=+$('#fr').value/100; setv($,'fV',$('#fr').value+'%'); }; setv($,'fV','100%');
+  $('#open').onclick=()=>{
+    if(phase==='closed'){ phase='unscrew'; ph=0; $('#open').textContent='🔋 Put the cells back'; }
+    else if(phase==='open'){ phase='refill'; ph=0; tween=cells.map((c,i)=>({from:{x:c.free.x,y:c.free.y,ang:c.free.ang}, d:i*0.25}));
+      tween.cap={x:capFree.x,y:capFree.y,ang:capFree.ang}; $('#open').textContent='🔧 Open the torch'; }
+  };
+  const W=p=>rotAbout(p,PIV,tilt.x);                             // torch-local → world
+
+  animLoop(dt=>{ t+=dt; ph+=dt; const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h); ctx.save(); stage(ctx,w,h);
+    // ---------- timeline ----------
+    if(phase==='unscrew'){ capOff=-44*ease(ph/0.9); thread+=dt*2.2*(ph<0.9?1:0);
+      if(ph>0.9){ phase='tilt'; ph=0; const c=W({x:TAIL-20+capOff,y:AX}); capFree={x:c.x,y:c.y,vx:330,vy:-240,ang:tilt.x,va:2.5}; } }
+    if(phase==='tilt'||phase==='open'){ springTo(tilt,-0.36,30,9,dt);
+      cells.forEach(c=>{ if(c.free) return; const a=900*Math.sin(-tilt.x)-60; if(a>0){ c.vu=(c.vu||0)+a*dt; c.u-=c.vu*dt; }
+        if(c.u+75<TAIL-6){ const p=W({x:c.u,y:AX}); const k=Math.cos(tilt.x), s=Math.sin(tilt.x); c.free={x:p.x,y:p.y,vx:-c.vu*k,vy:-c.vu*s,ang:tilt.x,va:0.6}; } });
+      // rear cell cannot pass through the front one: they slide as a stack
+      if(!cells[0].free && !cells[1].free && cells[1].u-cells[0].u<153){ cells[1].u=cells[0].u+153; cells[1].vu=cells[0].vu; }
+      if(cells[0].free && !cells[1].free){ /* front one keeps sliding on its own */ }
+      if(cells.every(c=>c.free&&c.free.rest) && capFree.rest) phase='open'; }
+    if(phase==='refill'){ const done=[];
+      cells.forEach((c,i)=>{ const tw=tween[i], k=ease((ph-tw.d)/0.8), home=W({x:[245,398][i],y:AX});
+        const mid={x:(tw.from.x+home.x)/2-80,y:Math.min(tw.from.y,home.y)-120};
+        const u=1-k; c.free.x=u*u*tw.from.x+2*u*k*mid.x+k*k*home.x; c.free.y=u*u*tw.from.y+2*u*k*mid.y+k*k*home.y; c.free.ang=lerp(tw.from.ang,tilt.x,k); done.push(k>=1); });
+      const kc=ease((ph-0.5)/0.8), home=W({x:TAIL-64,y:AX}); capFree.x=lerp(tween.cap.x,home.x,kc); capFree.y=lerp(tween.cap.y,home.y,kc); capFree.ang=lerp(tween.cap.ang,tilt.x,kc);
+      if(done.every(Boolean)&&kc>=1){ cells.forEach((c,i)=>{ c.free=null; c.u=[245,398][i]; c.vu=0; }); capFree=null; capOff=-44; phase='level'; ph=0; } }
+    if(phase==='level'){ springTo(tilt,0,40,11,dt); if(Math.abs(tilt.x)<0.004&&Math.abs(tilt.v)<0.02){ tilt.x=0; phase='screw'; ph=0; } }
+    if(phase==='screw'){ capOff=-44*(1-ease(ph/0.9)); thread-=dt*2.2*(ph<0.9?1:0); if(ph>0.9){ capOff=0; phase='closed'; } }
+    if(capFree && (phase==='tilt'||phase==='open')) fallBody(capFree,dt,TABLE,50,{xmin:60,xmax:720});
+    cells.forEach(c=>{ if(c.free && (phase==='tilt'||phase==='open')) fallBody(c.free,dt,TABLE,28,{xmin:100}); });
+    if(cells[0].free&&cells[1].free&&(phase==='tilt'||phase==='open')){ const a=cells[0].free,b=cells[1].free; if(a.y>TABLE-40&&b.y>TABLE-40){ const L0=a.x<b.x?a:b, R0=a.x<b.x?b:a, ov=156-(R0.x-L0.x); if(ov>0){ L0.x-=ov/2; R0.x+=ov/2; if(L0.x<100){ R0.x+=100-L0.x; L0.x=100; } const v=(L0.vx+R0.vx)/2; L0.vx=Math.min(L0.vx,v); R0.vx=Math.max(R0.vx,v); } } }
+
+    // ---------- electricity ----------
+    springTo(knob,knobT,170,13,dt);
+    const contact=knob.x>0.82, inside=phase==='closed', closed=contact&&inside;
+    const E=closed?2*(1.0+0.55*fresh):0, r=2*(CELL_R+2.2*(1-fresh))+0.1;
+    const I=lampStep(lamp,E,r,dt), br=lampBr(lamp.T);
+    flowStep(flow,closed?flowSpeed(I):0,dt);
+
+    // ---------- draw ----------
+    tableTop(ctx,40,780,TABLE,40);
+    // beam (world space, from the lens)
+    if(br>0.02){ const L1=W({x:720,y:AX-62}), L2=W({x:720,y:AX+62}); ctx.save(); const g=ctx.createLinearGradient(L1.x,0,800,0);
+      g.addColorStop(0,rgba(COL.yellow,0.36*Math.min(1,br))); g.addColorStop(1,rgba(COL.yellow,0)); ctx.fillStyle=g;
+      ctx.beginPath(); ctx.moveTo(L1.x,L1.y); ctx.lineTo(820,L1.y-120); ctx.lineTo(820,L2.y+120); ctx.lineTo(L2.x,L2.y); ctx.closePath(); ctx.fill();
+      for(let i=-2;i<=2;i++){ line(ctx,L1.x+4,AX+i*24,800,AX+i*62,rgba(COL.yellow,0.5*Math.min(1,br)),2,[10,8]); } ctx.restore(); }
+    ctx.save(); ctx.translate(PIV.x,PIV.y); ctx.rotate(tilt.x); ctx.translate(-PIV.x,-PIV.y);
+    const R=46;
+    // body
+    ctx.lineWidth=2.6; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff';
+    ctx.beginPath(); ctx.moveTo(TAIL,AX-R); ctx.lineTo(580,AX-R); ctx.lineTo(720,AX-78); ctx.lineTo(720,AX+78); ctx.lineTo(580,AX+R); ctx.lineTo(TAIL,AX+R); ctx.stroke();
+    line(ctx,720,AX-78,720,AX+78,COL.ink,3.4);                                        // lens
+    ctx.save(); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.8; ctx.beginPath(); ctx.moveTo(600,AX-16); ctx.quadraticCurveTo(640,AX-60,716,AX-72); ctx.moveTo(600,AX+16); ctx.quadraticCurveTo(640,AX+60,716,AX+72); ctx.stroke(); ctx.restore();
+    // metal return strip along the top, with the switch gap
+    const SY=AX-R+8, gapA=376, gapB=410;
+    const stripCol=closed&&I>0.01?COL.red:COL.ink;
+    line(ctx,TAIL+4,SY,gapA,SY,COL.ink,2.4); line(ctx,gapB,SY,598,SY,COL.ink,2.4); line(ctx,598,SY,604,AX-14,COL.ink,2.4);
+    line(ctx,TAIL+4,SY,TAIL+4,AX-8,COL.ink,2.4);
+    // switch: knob on top, bridge under it
+    const kx=lerp(344,392,knob.x);
+    ctx.save(); ctx.lineWidth=2.4; ctx.strokeStyle=COL.yellow; ctx.fillStyle='#fff'; rrect(ctx,kx-2,AX-R-20,38,20,6); ctx.fill(); ctx.stroke();
+    for(let i=0;i<3;i++) line(ctx,kx+8+i*9,AX-R-16,kx+8+i*9,AX-R-4,COL.yellow,1.6); ctx.restore();
+    line(ctx,kx,SY+4,kx+36,SY+4,contact?COL.green:COL.ink,3.2); line(ctx,kx+18,AX-R,kx+18,SY+4,COL.ink,1.6);
+    rect(ctx,336,AX-R-3,110,3,COL.ink,COL.ink,0);
+    textAt(ctx,contact?'ON':'OFF',kx+17,AX-R-28,{align:'center',size:13,weight:700,color:contact?COL.green:COL.muted});
+    // tail spring + tail cap (unscrews)
+    springDraw(ctx,TAIL+2,cells[0].free?TAIL+22:cells[0].u-75,AX,12,4,COL.ink);
+    if(!capFree){ const cx=TAIL-20+capOff; ctx.save(); ctx.lineWidth=2.6; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; rrect(ctx,cx-20,AX-R-4,40,2*R+8,6); ctx.fill(); ctx.stroke();
+      ctx.save(); rrect(ctx,cx-20,AX-R-4,40,2*R+8,6); ctx.clip(); for(let k=-1;k<8;k++){ const yy=AX-R+k*14+(thread*14%14); line(ctx,cx-20,yy,cx+20,yy+6,COL.mid,1.4); } ctx.restore(); ctx.restore(); }
+    // lamp at the focus, facing forward
+    ctx.save(); ctx.translate(596,AX); ctx.rotate(Math.PI/2); const LD=lampDraw(ctx,0,0,0.78,{T:lamp.T}); ctx.restore();
+    line(ctx,482,AX,596,AX,COL.ink,3);                                                  // centre contact rod
+    // cells still inside
+    cells.forEach(c=>{ if(!c.free) drawCell(ctx,c.u,AX,0,{len:150,r:28}); });
+    // current path (torch-local): + cap → rod → lamp → reflector → strip → switch → tail → spring → − disc
+    if(closed){ const lp=LD.path.map(p=>({x:596-p.y,y:AX+p.x})); const path=pathNew(pts([P(482,AX),P(596,AX)],lp,[P(604,AX-14),P(598,SY),P(TAIL+4,SY),P(TAIL+4,AX-8),P(TAIL+10,AX),P(cells[0].u-76,AX)]));
+      flowDraw(ctx,path,flow,{full:60}); }
+    ctx.restore();
+    // loose cells and cap in world space
+    cells.forEach(c=>{ if(c.free) drawCell(ctx,c.free.x,c.free.y,c.free.ang,{len:150,r:28}); });
+    if(capFree){ ctx.save(); ctx.translate(capFree.x,capFree.y); ctx.rotate(capFree.ang); ctx.lineWidth=2.6; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; rrect(ctx,-20,-R-4,40,2*R+8,6); ctx.fill(); ctx.stroke();
+      for(let k=0;k<6;k++) line(ctx,-20,-R+6+k*14,20,-R+12+k*14,COL.mid,1.4); ctx.restore(); }
+    if(phase==='open') tag(ctx,'↑ two cells were inside the torch',250,TABLE+30,COL.ink,{size:13});
+
+    // ---------- readouts ----------
+    setv($,'k1',br>0.05?(br>0.5?'Glowing':'Dim glow'):'Off'); setc($,'k1',br>0.05?COL.yellow:COL.muted);
+    setv($,'k2',closed?'Complete':(inside?'Gap at switch':'Opened')); setc($,'k2',closed?COL.green:COL.red);
+    setv($,'k3',fmt(I,2)+' A'); setc($,'k3',I>0.01?COL.red:COL.muted);
+    setv($,'k4',inside?'2 (hidden)':(phase==='open'?'2 — on the table':'…'));
+    ctx.restore();
+  });
+  return wrap;
+}
+
+
+/* =====================================================================
+   3.2 TERMINALS OF AN ELECTRIC CELL
+   A large cell drawn as a true projected cylinder: turning it about its
+   vertical axis foreshortens the body by cos φ and opens the end faces
+   into ellipses of half-width R·|sin φ|. The yaw follows the slider on a
+   spring; “Spin it” gives it a flick that dies away with pivot friction
+   (dω/dt = −1.5 − 0.35ω), so it slows and stops on its own.
+   ===================================================================== */
+function buildA2(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label>Turn the cell <span class="val" id="aV"></span></label><input type="range" id="ang" min="0" max="360" value="25">
+      <div class="toggle-group"><button class="toggle-btn small" id="bP">+ end</button><button class="toggle-btn small" id="bS">Side</button><button class="toggle-btn small" id="bN">− end</button></div></div>
+    <div class="control-group"><div class="toggle-group" style="margin-top:0"><button class="toggle-btn play" id="spin">🌀 Spin it</button><button class="toggle-btn" id="mag">🔍 Magnify ends</button></div></div>
+    <div class="control-group"><div class="result-cards">${card('k1','Facing you')}${card('k2','Terminals')}</div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const cx=400, cy=270, L=360, R=82, yaw=spr(25*Math.PI/180);
+  let target=yaw.x, spinning=false, om=0, magT=0, t=0; const mag=spr(0);
+  const setT=deg=>{ spinning=false; let a=deg*Math.PI/180; a=yaw.x+angDiff(a,yaw.x); target=a; };
+  $('#ang').oninput=()=>setT(+$('#ang').value);
+  $('#bP').onclick=()=>{ setT(90); }; $('#bS').onclick=()=>{ setT(0); }; $('#bN').onclick=()=>{ setT(270); };
+  $('#spin').onclick=()=>{ spinning=true; om=16; yaw.v=0; };
+  $('#mag').onclick=()=>{ magT=magT?0:1; $('#mag').classList.toggle('active',!!magT); };
+
+  function ell(ctx,x,y,rx,ry,col,w,half,fill){ ctx.save(); ctx.lineWidth=w||2.6; ctx.strokeStyle=col; ctx.beginPath();
+    if(half) ctx.ellipse(x,y,Math.max(0.1,rx),ry,0,half>0?-Math.PI/2:Math.PI/2,half>0?Math.PI/2:Math.PI*1.5); else ctx.ellipse(x,y,Math.max(0.1,rx),ry,0,0,Math.PI*2);
+    if(fill){ ctx.fillStyle=fill; ctx.fill(); } ctx.stroke(); ctx.restore(); }
+
+  animLoop(dt=>{ t+=dt; const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h); ctx.save(); stage(ctx,w,h);
+    if(spinning){ om-=(1.5+0.35*om)*dt; yaw.x+=om*dt; if(om<=0.05){ spinning=false; om=0; target=yaw.x; yaw.v=0; } }
+    else springTo(yaw,target,55,9,dt);
+    springTo(mag,magT,90,11,dt);
+    const phi=yaw.x, c=Math.cos(phi), s=Math.sin(phi), deg=((phi*180/Math.PI)%360+360)%360;
+    if(!spinning) setv($,'aV',Math.round(((target*180/Math.PI)%360+360)%360)+'°'); else setv($,'aV',Math.round(deg)+'°');
+    // shadow + table
+    ctx.save(); ctx.fillStyle='rgba(19,42,68,0.07)'; ctx.beginPath(); ctx.ellipse(cx,cy+R+34,(L/2)*Math.abs(c)+R*Math.abs(s)+20,14,0,0,Math.PI*2); ctx.fill(); ctx.restore();
+    line(ctx,120,cy+R+48,680,cy+R+48,COL.mid,1.6,[6,6]);
+    const xp=cx+c*L/2, xn=cx-c*L/2, rx=R*Math.abs(s);
+    const capL=20, xc=cx+c*(L/2+capL), capR=R*0.32;
+    const plusNear=s>0;                                   // + end faces the viewer
+    // far end first (outer half only), then body, then near end
+    const drawPlusEnd=near=>{ // body end face, then the protruding cap (small cylinder)
+      ell(ctx,xp,cy,rx,R,COL.ink,2.6,near?0:(c>=0?1:-1),near?'#fff':null);
+      if(near){ ell(ctx,xp,cy,rx*0.86,R*0.86,COL.mid,1.4); }
+      // cap cylinder
+      const crx=capR*Math.abs(s);
+      ctx.save(); ctx.fillStyle='#fff'; ctx.strokeStyle=COL.red; ctx.lineWidth=2.6;
+      ctx.beginPath(); ctx.moveTo(xp,cy-capR); ctx.lineTo(xc,cy-capR); ctx.lineTo(xc,cy+capR); ctx.lineTo(xp,cy+capR); ctx.closePath(); if(Math.abs(c)>0.05){ ctx.fill(); ctx.stroke(); } ctx.restore();
+      ell(ctx,xc,cy,crx,capR,COL.red,2.6,0,'#fff'); ell(ctx,xc,cy,crx*0.45,capR*0.45,COL.red,1.4);
+    };
+    const drawMinusEnd=near=>{ ell(ctx,xn,cy,rx,R,COL.ink,2.6,near?0:(c>=0?-1:1),near?'#fff':null);
+      if(near){ ell(ctx,xn,cy,rx*0.74,R*0.74,COL.blue,3.2); ell(ctx,xn,cy,rx*0.74,R*0.74,COL.blue,1,0,rgba(COL.blue,0.08)); } };
+    if(plusNear) drawMinusEnd(false); else drawPlusEnd(false);
+    // body silhouette + printed wrapper
+    ctx.save(); ctx.fillStyle='#fff'; ctx.beginPath(); ctx.moveTo(xn,cy-R); ctx.lineTo(xp,cy-R); ctx.lineTo(xp,cy+R); ctx.lineTo(xn,cy+R); ctx.closePath(); ctx.fill(); ctx.restore();
+    line(ctx,xn,cy-R,xp,cy-R,COL.ink,2.6); line(ctx,xn,cy+R,xp,cy+R,COL.ink,2.6);
+    const bx=cx+c*(L/2-62); if(Math.abs(s)>0.03) ell(ctx,bx,cy,rx,R,COL.ink,1.6,-(c*s)>=0?1:-1); else line(ctx,bx,cy-R,bx,cy+R,COL.ink,1.6);
+    ctx.save(); ctx.translate(cx,cy); ctx.scale(Math.max(0.02,Math.abs(c)),1);
+    textAt(ctx,'+',Math.sign(c||1)*(L/2-95),16,{align:'center',size:46,weight:700,color:COL.red});
+    textAt(ctx,'−',-Math.sign(c||1)*(L/2-95),16,{align:'center',size:46,weight:700,color:COL.blue});
+    textAt(ctx,'1.5 V',-10,10,{align:'center',size:28,weight:700,color:COL.muted}); ctx.restore();
+    if(plusNear) drawPlusEnd(true); else drawMinusEnd(true);
+    // side-profile lenses
+    const m=mag.x;
+    if(m>0.1){ const lens=(lx,ly,plus,ex)=>{ const Rl=74*m; ctx.save(); ctx.globalAlpha=clamp(m,0,1);
+        line(ctx,ex,cy-R*0.4,lx,ly+Rl,COL.mid,1.3,[4,4]);
+        circ(ctx,lx,ly,Rl,COL.ink,'#fff',2.4); ctx.beginPath(); ctx.arc(lx,ly,Rl-2,0,Math.PI*2); ctx.clip();
+        const k=Rl/74; ctx.translate(lx,ly); ctx.scale(k,k); ctx.lineWidth=3; ctx.lineJoin='round';
+        if(plus){ ctx.strokeStyle=COL.ink; ctx.beginPath(); ctx.moveTo(-80,-58); ctx.lineTo(-22,-58); ctx.lineTo(-22,58); ctx.lineTo(-80,58); ctx.stroke();
+          ctx.strokeStyle=COL.red; ctx.beginPath(); ctx.moveTo(-22,-20); ctx.lineTo(4,-20); ctx.quadraticCurveTo(12,-20,12,-12); ctx.lineTo(12,12); ctx.quadraticCurveTo(12,20,4,20); ctx.lineTo(-22,20); ctx.stroke();
+          vec(ctx,26,0,16,0,COL.red,2); textAt(ctx,'metal cap',4,46,{align:'center',size:14,weight:700,color:COL.red}); textAt(ctx,'sticks out',4,-32,{align:'center',size:12,weight:600,color:COL.red}); }
+        else { ctx.strokeStyle=COL.ink; ctx.beginPath(); ctx.moveTo(80,-58); ctx.lineTo(22,-58); ctx.lineTo(22,58); ctx.lineTo(80,58); ctx.stroke();
+          line(ctx,18,-42,18,42,COL.blue,5); textAt(ctx,'flat disc',-12,6,{align:'center',size:14,weight:700,color:COL.blue}); }
+        ctx.restore(); ctx.save(); ctx.globalAlpha=clamp(m,0,1); circ(ctx,lx,ly,Rl,COL.ink,null,2.6); line(ctx,lx+Rl*0.7,ly+Rl*0.7,lx+Rl*1.05,ly+Rl*1.05,COL.ink,6); ctx.restore(); };
+      lens(640,96,true,xp); lens(160,96,false,xn); }
+    // readouts
+    const facing=Math.abs(s)<0.5?'Side (+ and − signs)':(plusNear?'+ terminal · metal cap':'− terminal · flat disc');
+    setv($,'k1',facing); setc($,'k1',Math.abs(s)<0.5?COL.ink:(plusNear?COL.red:COL.blue));
+    setv($,'k2','2  ( + and − )');
+    if(Math.abs(s)>0.5){ tag(ctx,plusNear?'+ positive terminal':'− negative terminal',plusNear?xc:xn,cy-R-40,plusNear?COL.red:COL.blue,{size:15}); }
+    ctx.restore();
+  });
+  return wrap;
+}
+
+
+/* =====================================================================
+   3.3 HOW TO BUILD A BATTERY
+   Cells sit in a torch tube, stacked end to end. Each cell is a real
+   object: to reverse it the hand lifts it out (spring), turns it 180°,
+   and drops it back; “Swap order” lifts both and slides them past each
+   other. The pushes add with sign: E = 1.5 V × Σ(±1). Two cells with one
+   reversed cancel exactly (0 V, lamp dark); four with one reversed give
+   3 V on a 4.8 V lamp — a dull glow. The filament heats and cools by the
+   same thermal model as every lamp in this chapter.
+   ===================================================================== */
+function buildA3(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label>Cells in the torch</label><div class="toggle-group"><button class="toggle-btn active" id="n2">2 cells</button><button class="toggle-btn" id="n4">4 cells</button></div></div>
+    <div class="control-group"><label>Turn a cell around</label><div class="toggle-group" id="flips"></div>
+      <button class="toggle-btn navy" id="swap">⇄ Swap the order</button></div>
+    <div class="control-group"><label>Switch</label><div class="toggle-group"><button class="toggle-btn" id="off">OFF</button><button class="toggle-btn active" id="on">ON</button></div></div>
+    <div class="control-group"><div class="result-cards">${card('k1','Battery push')}${card('k2','Lamp')}${card('k3','Joints')}${card('k4','Current')}</div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const AX=210, FRONT=606, TIP=640; const CLs=spr(200); const uOf=sl=>FRONT-CLs.x/2-CLs.x*sl;
+  const mk=(i)=>({id:i, slot:i, u:spr(FRONT-100-200*i), lift:spr(-420), ang:spr(0), angT:0, q:[], present:false});
+  const cells=[0,1,2,3].map(mk);
+  let n=2, swOn=true, t=0, lamp=lampNew(2.5,0.3); const flow=flowNew();
+  const busy=()=>cells.some(c=>c.q.length);
+  function enter(c){ c.present=true; c.lift.x=-420; c.q.push({lift:0}); }
+  function leave(c){ c.q.push({lift:-420,after:()=>{ c.present=false; }}); }
+  cells.forEach((c,i)=>{ if(i<2){ c.present=true; c.lift.x=0; } });
+  function flips(){ $('#flips').innerHTML=cells.slice(0,n).map((c,i)=>`<button class="toggle-btn small" data-i="${i}">↻ Cell ${i+1}</button>`).join('');
+    $('#flips').querySelectorAll('button').forEach(b=>b.onclick=()=>{ const c=cells.find(x=>x.slot===+b.dataset.i&&x.present); if(!c||c.q.length) return;
+      c.q.push({lift:-120},{ang:c.angT+Math.PI},{lift:0}); }); }
+  flips();
+  toggleWire([$('#n2'),$('#n4')],b=>{ if(busy()) return; const m=b.id==='n4'?4:2; if(m===n) return;
+    if(m===4){ cells.forEach(c=>{ if(c.slot>=2){ c.u.x=FRONT-60-120*c.slot; c.angT=0; c.ang.x=0; enter(c); } }); lamp=Object.assign(lampNew(4.8,0.5),{T:lamp.T}); }
+    else { cells.forEach(c=>{ if(c.slot>=2) leave(c); }); lamp=Object.assign(lampNew(2.5,0.3),{T:lamp.T}); }
+    n=m; flips(); });
+  $('#swap').onclick=()=>{ if(busy()) return; const act=cells.filter(c=>c.present);
+    act.forEach(c=>{ const ns=n-1-c.slot; const hi=-120-40*(c.slot%2); c.q.push({lift:hi},{slot2:ns},{lift:0}); }); };
+  toggleWire([$('#off'),$('#on')],b=>{ swOn=b.id==='on'; });
+
+  animLoop(dt=>{ t+=dt; const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h); ctx.save(); stage(ctx,w,h);
+    // hands-free cell moves: each step springs until it arrives
+    cells.forEach(c=>{ const s=c.q[0];
+      if(s){ if(s.lift!==undefined) c.liftT=s.lift; if(s.ang!==undefined) c.angT=s.ang; if(s.slot2!==undefined){ c.slotT=s.slot2; }
+        const ok=(s.lift===undefined||Math.abs(c.lift.x-s.lift)<3&&Math.abs(c.lift.v)<40)&&(s.ang===undefined||Math.abs(c.ang.x-s.ang)<0.04)&&(s.slot2===undefined||Math.abs(c.u.x-uOf(s.slot2))<2);
+        if(ok){ if(s.slot2!==undefined){ c.slot=s.slot2; c.slotT=undefined; } if(s.after) s.after(); c.q.shift(); } }
+      springTo(c.lift,c.liftT===undefined?c.lift.x:c.liftT,s&&s.lift===0?110:70,s&&s.lift===0?12:13,dt);
+      springTo(c.ang,c.angT,60,11,dt); springTo(c.u,uOf(c.slotT===undefined?c.slot:c.slotT),55,12,dt); });
+    const nEff=cells.some(c=>c.present&&c.slot>=2)?4:2; springTo(CLs,nEff===4?120:200,40,11,dt);
+    // electricity: series e.m.f. with sign
+    const seated=cells.filter(c=>c.present&&c.slot<n);
+    const allIn=seated.length===n && seated.every(c=>Math.abs(c.lift.x)<4);
+    const dirs=seated.map(c=>Math.cos(c.angT)>0?1:-1);
+    const Enet=CELL_E*dirs.reduce((a,b)=>a+b,0), closed=allIn&&swOn;
+    const I=lampStep(lamp,closed?Enet:0,n*CELL_R+0.1,dt), br=lampBr(lamp.T);
+    flowStep(flow,closed&&Math.abs(Enet)>0.01?Math.sign(Enet)*flowSpeed(I):0,dt);
+
+    // ---------- draw ----------
+    // tube + head
+    const TL=FRONT-nEff*CLs.x-24, R=40;
+    ctx.save(); ctx.lineWidth=2.6; ctx.strokeStyle=COL.ink;
+    ctx.beginPath(); ctx.moveTo(TL,AX-R); ctx.lineTo(650,AX-R); ctx.lineTo(740,AX-72); ctx.lineTo(740,AX+72); ctx.lineTo(650,AX+R); ctx.lineTo(TL,AX+R); ctx.lineTo(TL,AX-R); ctx.stroke(); ctx.restore();
+    line(ctx,740,AX-72,740,AX+72,COL.ink,3.4);
+    if(br>0.02){ ctx.save(); const g=ctx.createLinearGradient(740,0,810,0); g.addColorStop(0,rgba(COL.yellow,0.4*Math.min(1,br))); g.addColorStop(1,rgba(COL.yellow,0)); ctx.fillStyle=g;
+      ctx.beginPath(); ctx.moveTo(740,AX-60); ctx.lineTo(810,AX-110); ctx.lineTo(810,AX+110); ctx.lineTo(740,AX+60); ctx.fill(); ctx.restore(); }
+    springDraw(ctx,TL+2,TL+22,AX,11,4,COL.ink);
+    // return strip + switch on top
+    const SY=AX-R+7; line(ctx,TL+2,SY,440,SY,COL.ink,2.4); line(ctx,470,SY,650,SY,COL.ink,2.4); line(ctx,650,SY,660,AX-12,COL.ink,2.4); line(ctx,TL+2,SY,TL+2,AX-6,COL.ink,2.4);
+    const kx=swOn?470:430; line(ctx,kx-30,SY+3,kx,SY+3,swOn?COL.green:COL.ink,3.2);
+    ctx.save(); ctx.lineWidth=2.4; ctx.strokeStyle=COL.yellow; ctx.fillStyle='#fff'; rrect(ctx,kx-34,AX-R-18,38,18,6); ctx.fill(); ctx.stroke(); ctx.restore();
+    // lamp, facing forward
+    ctx.save(); ctx.translate(TIP,AX); ctx.rotate(Math.PI/2); const LD=lampDraw(ctx,0,0,0.78,{T:lamp.T}); ctx.restore();
+    line(ctx,FRONT,AX,TIP,AX,COL.ink,3);
+    // current along the outside loop
+    if(closed){ const lp=LD.path.map(p=>({x:TIP-p.y,y:AX+p.x})); const path=pathNew(pts([P(FRONT,AX),P(TIP,AX)],lp,[P(660,AX-12),P(650,SY),P(TL+2,SY),P(TL+2,AX-6),P(TL+22,AX)]));
+      flowDraw(ctx,path,flow,{full:60}); }
+    // cells (lifted ones float above the tube, turning in the air)
+    cells.forEach(c=>{ if(!c.present && c.lift.x<-400) return; drawCell(ctx,c.u.x,AX+c.lift.x,c.ang.x,{len:CLs.x-4,r:27}); });
+    // joints between neighbours: + meets − is right, like meets like is wrong
+    let bad=0;
+    if(allIn){ const bySlot=seated.slice().sort((a,b)=>a.slot-b.slot);
+      for(let i=0;i<bySlot.length-1;i++){ const f=bySlot[i], r=bySlot[i+1];                 // f nearer the lamp
+        const fBack=Math.cos(f.angT)>0?'−':'+', rFront=Math.cos(r.angT)>0?'+':'−', ok=fBack!==rFront; if(!ok) bad++;
+        const jx=(f.u.x+r.u.x)/2; tag(ctx,rFront+' | '+fBack,jx,AX+R+34,ok?COL.green:COL.red,{size:13}); mark(ctx,jx,AX+R+64,ok); } }
+    // the lamp's own reading
+    meterV(ctx,752,330,22,120,br,COL.yellow,'light');
+    textAt(ctx,'Battery = '+fmt(Math.abs(Enet),1)+' V',120,440,{size:22,weight:700,color:Math.abs(Enet)>0.1?COL.ink:COL.red});
+    textAt(ctx,dirs.map(d=>d>0?'+1.5':'−1.5').join('  ')+'  (V)',120,468,{size:14,weight:600,color:COL.muted});
+    if(closed&&Math.abs(Enet)>0.1&&Enet<0) tag(ctx,'whole battery reversed — current runs the other way',380,120,COL.red,{size:12});
+    // readouts
+    setv($,'k1',allIn?fmt(Math.abs(Enet),1)+' V':'—'); setc($,'k1',Math.abs(Enet)>0.1?COL.ink:COL.red);
+    setv($,'k2',br>0.5?'Bright':(br>0.03?'Dim':'Off')); setc($,'k2',br>0.03?COL.yellow:COL.muted);
+    setv($,'k3',allIn?(bad?bad+' wrong way':'all + to −'):'—'); setc($,'k3',bad?COL.red:COL.green);
+    setv($,'k4',fmt(I,2)+' A');
+    ctx.restore();
+  });
+  return wrap;
+}
+
+
+/* =====================================================================
+   3.4 THE INCANDESCENT LAMP
+   A big torch lamp in its socket, wired to cells through a safety-pin
+   switch. Switch on: the filament’s temperature is integrated from its
+   heat balance, so it creeps from dull red to yellow-white in ~0.4 s and
+   fades back through red after switch-off. Unscrewing is a real screw:
+   the lamp rises one thread pitch per turn, so the filament coil spins
+   as it comes out — and the circuit opens the moment the tip leaves the
+   centre contact. The lens follows the current through the coil.
+   ===================================================================== */
+function buildA4(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label>Switch</label><div class="toggle-group"><button class="toggle-btn active" id="off">OFF</button><button class="toggle-btn" id="on">ON</button></div></div>
+    <div class="control-group"><label>Cells</label><div class="toggle-group"><button class="toggle-btn" id="c1">1 cell</button><button class="toggle-btn active" id="c2">2 cells</button></div></div>
+    <div class="control-group"><label>Turn the lamp <span class="val" id="yV"></span></label><input type="range" id="yaw" min="0" max="180" value="20">
+      <div class="toggle-group"><button class="toggle-btn" id="out">⤴ Take it out</button><button class="toggle-btn" id="lab">🏷 Label parts</button></div></div>
+    <div class="control-group"><div class="result-cards">${card('k1','What glows')}${card('k2','Filament')}${card('k3','Current')}${card('k4','Lamp')}</div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const X0=300, Y0=440, S=2.9;
+  const lamp=lampNew(2.5,0.3), flow=flowNew(), coilFlow=flowNew();
+  const lift=spr(0), yaw=spr(20*Math.PI/180), pin=spr(-0.62), labA=spr(0);
+  let on=false, nc=2, liftT=0, yawT=yaw.x, labT=0, t=0;
+  toggleWire([$('#off'),$('#on')],b=>{ on=b.id==='on'; });
+  toggleWire([$('#c1'),$('#c2')],b=>{ nc=b.id==='c1'?1:2; });
+  $('#yaw').oninput=()=>{ yawT=+$('#yaw').value*Math.PI/180; setv($,'yV',$('#yaw').value+'°'); }; setv($,'yV','20°');
+  $('#out').onclick=()=>{ liftT=liftT?0:-112; $('#out').textContent=liftT?'⤵ Screw it back':'⤴ Take it out'; };
+  $('#lab').onclick=()=>{ labT=labT?0:1; $('#lab').classList.toggle('active',!!labT); };
+  const PIV={x:430,y:470}, PIN2={x:500,y:470};
+
+  animLoop(dt=>{ t+=dt; const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h); ctx.save(); stage(ctx,w,h);
+    springTo(lift,liftT,26,9,dt); springTo(yaw,yawT,40,10,dt); springTo(pin,on?0:-0.62,120,11,dt); springTo(labA,labT,60,11,dt);
+    const turns=-lift.x/(7*S);                                          // one turn per thread pitch
+    const seated=lift.x>-3, contact=pin.x>-0.03, closed=seated&&contact;
+    const I=lampStep(lamp,closed?nc*CELL_E:0,nc*CELL_R+0.15,dt), br=lampBr(lamp.T);
+    flowStep(flow,closed?flowSpeed(I):0,dt); flowStep(coilFlow,closed?flowSpeed(I)*0.35:0,dt);
+    const LY=Y0+lift.x;
+    // socket (collar = one terminal, centre contact = the other)
+    const cw=12*S+9;
+    ctx.save(); ctx.lineWidth=2.6; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff';
+    rrect(ctx,X0-cw-16,Y0+6,2*cw+32,26,5); ctx.fill(); ctx.stroke(); ctx.restore();
+    line(ctx,X0-12,Y0+4,X0+12,Y0+4,COL.ink,3);
+    // battery holder with two (or one) cells
+    const HX=560, HY=300, cl=92;
+    const Hd=holderDraw(ctx,HX,HY,2,cl,24,6);
+    for(let i=0;i<2;i++){ const cxp=HX+24+cl*(i+0.5)+2; if(i<2-nc){ line(ctx,cxp-40,HY,cxp+40,HY,COL.ink,2.4); textAt(ctx,'metal strip',cxp,HY-12,{align:'center',size:11,color:COL.muted}); continue; }
+      drawCell(ctx,cxp,HY,0,{len:cl-8,r:22,label:false}); }
+    // wires
+    const sockBot=P(X0,Y0+32), collar=P(X0+cw,Y0-70);
+    const red=sagPts(P(Hd.p.x,Hd.p.y),P(sockBot.x+30,sockBot.y+6),70,26), blue1=sagPts(collar,PIV,40,20), blue2=sagPts(PIN2,P(Hd.n.x,Hd.n.y),30,20);
+    wireDraw(ctx,red,COL.red,8); line(ctx,sockBot.x+30,sockBot.y+6,X0,Y0+6,COL.ink,2.4);
+    wireDraw(ctx,blue1,COL.blue,8); wireDraw(ctx,blue2,COL.blue,8);
+    // switch
+    pinHead(ctx,PIN2.x,PIN2.y,9); const tipP=safetyPin(ctx,PIV.x,PIV.y,pin.x,68); pinHead(ctx,PIV.x,PIV.y,8);
+    // the lamp (collar drawn over its case so it looks screwed in)
+    const LD=lampDraw(ctx,X0,LY,S,{T:lamp.T,yaw:yaw.x+turns*Math.PI*2,thread:turns,hl:closed&&I>0.02});
+    ctx.save(); ctx.lineWidth=2.6; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; ctx.beginPath(); ctx.rect(X0-cw,Y0-92,2*cw,98); ctx.fill(); ctx.stroke();
+    for(let k=0;k<4;k++) line(ctx,X0-cw,Y0-78+k*22,X0+cw,Y0-78+k*22,COL.mid,1.2); ctx.restore();
+    // current through everything
+    if(closed){ const path=pathNew(pts(red,[P(X0,Y0+6)],LD.path,[P(X0+cw,Y0-60)],[collar],blue1,[tipP],[PIN2],blue2));
+      flowDraw(ctx,path,flow,{full:60}); }
+    // lens on the filament
+    const LX=610, LYc=120, LR=92, fp=LD.bulb;
+    line(ctx,X0+10,LY-86*S,LX-LR*0.8,LYc+LR*0.5,COL.mid,1.3,[4,4]);
+    ctx.save(); circ(ctx,LX,LYc,LR,COL.ink,'#fff',2.4); ctx.beginPath(); ctx.arc(LX,LYc,LR-2,0,Math.PI*2); ctx.clip();
+    glow(ctx,LX,LYc,LR*1.2,COL.yellow,0.7*Math.min(1,br));
+    const coil=[]; const turnsN=5, yw=yaw.x+turns*Math.PI*2; for(let i=0;i<=turnsN*24;i++){ const u=i/(turnsN*24), ph=u*turnsN*Math.PI*2;
+      const xx=-70+140*u, zz=Math.sin(ph)*16, yy=Math.cos(ph)*16; coil.push({x:LX+xx*Math.cos(yw)*0.2+xx*0.8+zz*Math.sin(yw)*0.6, y:LYc+yy}); }
+    line(ctx,LX-100,LYc+16,coil[0].x,coil[0].y,COL.ink,4); line(ctx,coil[coil.length-1].x,coil[coil.length-1].y,LX+100,LYc+16,COL.ink,4);
+    strokePts(ctx,coil,filCol(lamp.T),4); if(br>0.4) strokePts(ctx,coil,rgba('#ffffff',Math.min(1,(br-0.4))),1.6);
+    if(closed) flowDraw(ctx,pathNew(coil),coilFlow,{full:20,gap:30,col:COL.red,size:6});
+    ctx.restore(); circ(ctx,LX,LYc,LR,COL.ink,null,2.6);
+    textAt(ctx,'filament',LX,LYc+LR+20,{align:'center',size:13,weight:700,color:COL.ink});
+    textAt(ctx,Math.round(lamp.T-273)+' °C',LX,LYc+LR+40,{align:'center',size:15,weight:700,color:lamp.T>1000?COL.red:COL.muted});
+    // part labels
+    const a=labA.x; if(a>0.02){ const Lp=(u,v)=>({x:X0+u*S,y:LY-v*S});
+      const lab=(u,v,ty,txt,col)=>{ const p=Lp(u,v); leader(ctx,p.x,p.y,160,ty,txt,col,a); };
+      lab(-5,86,120,'filament (thin)',COL.red); lab(-24,78,165,'glass bulb',COL.ink); lab(-9,74,210,'thick wire',COL.ink); lab(-13,62,255,'insulator (bead)',COL.blue);
+      lab(-12,22,300,'metal case (terminal)',COL.ink); lab(-2,1,345,'metal tip (terminal)',COL.ink); }
+    // readouts
+    setv($,'k1',br>0.03?'the thin filament':'nothing'); setc($,'k1',br>0.03?COL.yellow:COL.muted);
+    setv($,'k2',Math.round(lamp.T-273)+' °C'); setc($,'k2',lamp.T>1000?COL.red:COL.muted);
+    setv($,'k3',fmt(I,2)+' A'); setv($,'k4',seated?'screwed in':'out of socket');
+    ctx.restore();
+  });
+  return wrap;
+}
+
+
+/* =====================================================================
+   3.5 LED — LIGHT EMITTING DIODE
+   A big LED you can turn (legs swap sides with cos φ) or flick into a
+   spin that slows with friction. “Measure the legs” slides a ruler in on
+   a spring and reads both lengths; “Compare with a bulb” brings a torch
+   lamp alongside — the lamp has a filament coil, the LED has none, only
+   a tiny chip on the anvil joined by a hair-thin bond wire.
+   ===================================================================== */
+function buildA5(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label>LED colour</label><div class="chip-wrap" id="cols">${Object.keys(LEDS).map(k=>`<button class="chip-btn${k==='red'?' active':''}" data-k="${k}"><i style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${LEDS[k].col}"></i>${LEDS[k].name}</button>`).join('')}</div></div>
+    <div class="control-group"><label>Turn the LED <span class="val" id="yV"></span></label><input type="range" id="yaw" min="0" max="180" value="0">
+      <div class="toggle-group"><button class="toggle-btn play" id="spin">🌀 Spin it</button></div></div>
+    <div class="control-group"><div class="toggle-group" style="margin-top:0"><button class="toggle-btn" id="rul">📏 Measure legs</button><button class="toggle-btn" id="cmp">💡 Compare with bulb</button></div></div>
+    <div class="control-group"><div class="result-cards">${card('k1','Filament?')}${card('k2','Longer leg')}${card('k3','Long leg')}${card('k4','Short leg')}</div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const S=4.5, MM=0.6;                                   // 1 drawing unit = 0.6 mm
+  let key='red', yawT=0, spinning=false, om=0, rulT=0, cmpT=0, t=0;
+  const yaw=spr(0), rul=spr(0), cmp=spr(0);
+  $('#cols').querySelectorAll('.chip-btn').forEach(b=>b.onclick=()=>{ $('#cols').querySelectorAll('.chip-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); key=b.dataset.k; });
+  $('#yaw').oninput=()=>{ spinning=false; const a=+$('#yaw').value*Math.PI/180; yawT=yaw.x+angDiff(a,yaw.x); setv($,'yV',$('#yaw').value+'°'); }; setv($,'yV','0°');
+  $('#spin').onclick=()=>{ spinning=true; om=14; };
+  $('#rul').onclick=()=>{ rulT=rulT?0:1; $('#rul').classList.toggle('active',!!rulT); };
+  $('#cmp').onclick=()=>{ cmpT=cmpT?0:1; $('#cmp').classList.toggle('active',!!cmpT); };
+
+  animLoop(dt=>{ t+=dt; const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h); ctx.save(); stage(ctx,w,h);
+    if(spinning){ om-=(1.4+0.3*om)*dt; yaw.x+=om*dt; if(om<=0.05){ spinning=false; yawT=yaw.x; yaw.v=0; } } else springTo(yaw,yawT,50,9,dt);
+    springTo(rul,rulT,70,10,dt); springTo(cmp,cmpT,55,10,dt);
+    const f=Math.cos(yaw.x), X=lerp(360,250,cmp.x), Y=190;
+    const L=LEDS[key];
+    // the LED (unpowered here) — a slow glint sweeps the dome so it reads as glass-clear epoxy
+    const E=ledDraw(ctx,X,Y,S,key,0,{flip:f,legA:46,legK:38,hlA:COL.red,hlK:COL.blue});
+    ctx.save(); ctx.globalAlpha=0.55; const gx=X+Math.sin(t*0.9)*28; line(ctx,gx-6,Y-24*S+10,gx+2,Y-24*S+42,'#ffffff',6); ctx.restore();
+    // leg tags at the ends
+    tag(ctx,'+ long',E.a.x+(f>=0?34:-34),E.a.y-8,COL.red,{size:13}); tag(ctx,'− short',E.k.x+(f>=0?-36:36),E.k.y-8,COL.blue,{size:13});
+    // flat edge on the rim marks the − side
+    textAt(ctx,'no filament — a tiny chip',X,Y-34*S-12,{align:'center',size:14,weight:700,color:L.col});
+    // ruler slides in from the right and reads both legs from the rim
+    const rx=lerp(900,X+90,rul.x);
+    if(rul.x>0.01){ const top=Y+S, len=50*S; ctx.save(); ctx.lineWidth=2.2; ctx.strokeStyle=COL.yellow; ctx.fillStyle='#fff'; rrect(ctx,rx,top-6,48,len+12,5); ctx.fill(); ctx.stroke();
+      for(let mm=0;mm<=30;mm++){ const y=top+mm/MM*S; if(y>top+len) break; line(ctx,rx,y,rx+(mm%5?8:16),y,COL.ink,mm%5?1:1.6); if(mm%10===0) textAt(ctx,String(mm),rx+30,y+4,{align:'center',size:11,weight:600,color:COL.ink}); }
+      ctx.restore();
+      const a=clamp((rul.x-0.6)/0.4,0,1); if(a>0){ line(ctx,E.a.x,E.a.y,rx,E.a.y,rgba(COL.red,a),1.6,[4,3]); line(ctx,E.k.x,E.k.y,rx,E.k.y,rgba(COL.blue,a),1.6,[4,3]); } }
+    // bulb alongside
+    if(cmp.x>0.01){ const bx=lerp(900,590,cmp.x); lampDraw(ctx,bx,Y+46*S,2.9,{T:300,yaw:t*0.6});
+      const q=(u,v)=>({x:bx+u*2.9,y:Y+46*S-v*2.9}); const p=q(0,86); leader(ctx,p.x+20,p.y,bx+90,p.y-60,'filament',COL.ink,clamp(cmp.x,0,1)); }
+    // readouts
+    const la=(46-1)*MM, lk=(38-1)*MM;
+    setv($,'k1','None'); setc($,'k1',L.col);
+    setv($,'k2','+ terminal'); setc($,'k2',COL.red);
+    setv($,'k3',rul.x>0.8?fmt(la,0)+' mm':'?'); setv($,'k4',rul.x>0.8?fmt(lk,0)+' mm':'?');
+    ctx.restore();
+  });
+  return wrap;
+}
+
+
+/* =====================================================================
+   3.6 MAKE THE LAMP GLOW — Table 3.1
+   Build it for real: strip 1 cm of plastic off four wires (the sleeves
+   slide off and drop), push the cell against the holder’s spring (it
+   rebounds and settles), screw the lamp in. Then pick an arrangement,
+   predict, and connect: every free wire end flies to its joint on its
+   own spring. Nothing is scripted — a net solver decides: the lamp glows
+   only if its two terminals land on different cell terminals; if + and −
+   meet directly it is a short circuit (≈ 5 A, the cell heats, the lamp
+   stays dark); plastic left on an end conducts nothing.
+   ===================================================================== */
+const ARR6=[
+  {n:1, d:'+ → tip · − → case', j:{A:1,C:1,B:2,D:2}},
+  {n:2, d:'− wire left loose',   j:{A:1,C:1}},
+  {n:3, d:'both lamp wires on +',j:{A:1,C:1,D:1}},
+  {n:4, d:'+ and − on the tip',  j:{A:1,B:1,C:1}},
+  {n:5, d:'both lamp wires on −',j:{B:1,C:1,D:1}},
+  {n:6, d:'+ → case · − → tip', j:{A:1,D:1,B:2,C:2}},
+];
+function buildA6(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><div class="step-row" id="steps"></div></div>
+    <div class="side-sub" id="s0"><div class="control-group"><button class="toggle-btn play" id="strip" style="width:100%;padding:9px">✂ Strip 1 cm from every end</button></div></div>
+    <div class="side-sub hidden" id="s1"><div class="control-group"><button class="toggle-btn play" id="ins" style="width:100%;padding:9px">🔋 Push the cell in (− to spring)</button></div></div>
+    <div class="side-sub hidden" id="s2"><div class="control-group"><button class="toggle-btn play" id="scr" style="width:100%;padding:9px">💡 Screw the lamp in</button>
+      <div class="toggle-group"><button class="toggle-btn" id="fuse">Fused lamp</button></div></div></div>
+    <div class="side-sub hidden" id="s3">
+      <div class="control-group"><label>Arrangement</label><div class="chip-wrap" id="arr">${ARR6.map(a=>`<button class="chip-btn${a.n===1?' active':''}" data-n="${a.n}">${a.n}</button>`).join('')}</div><div class="hint" id="arrD"></div></div>
+      <div class="control-group"><label>Your prediction</label><div class="toggle-group"><button class="toggle-btn" id="pY">Will glow</button><button class="toggle-btn" id="pN">Won’t glow</button></div>
+        <button class="toggle-btn navy" id="con">🔌 Connect</button></div></div>
+    <div class="control-group"><div class="result-cards">${card('k1','Lamp')}${card('k2','Current')}</div></div>
+    <div class="control-group"><label>Table 3.1</label><table class="log"><thead><tr><th>No.</th><th>Predicted</th><th>Observed</th><th></th></tr></thead><tbody id="lg"></tbody></table></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  let step=0; const done=[false,false,false,false];
+  const showStep=i=>{ step=i; [0,1,2,3].forEach(k=>$('#s'+k).classList.toggle('hidden',k!==i)); stepPills($('#steps'),['1 Strip','2 Cell','3 Lamp','4 Connect'],step,done,showStep); };
+  showStep(0);
+  // --- geometry ---
+  const TABLE=478, HX=70, HY=400, CLEN=170;
+  const LHX=600, LHY=330;
+  const J={1:P(450,262), 2:P(450,346)};
+  const W={ A:{col:COL.red}, B:{col:COL.blue}, C:{col:COL.mid}, D:{col:COL.mid} };
+  const rest={A:P(330,462), B:P(40,468), C:P(520,462), D:P(720,462)};
+  const off={A:P(-7,-4), B:P(7,4), C:P(7,-4), D:P(-7,4)};
+  Object.keys(W).forEach(k=>{ W[k].ex=spr(rest[k].x); W[k].ey=spr(rest[k].y); W[k].pull=spr(0); W[k].pullT=0; W[k].sleeve=null; W[k].bare=false; });
+  const cellY=spr(-260), cellX=spr(0); let cellT=-260, cellIn=false;
+  const lampLift=spr(-120); let lampT=-120, lampIn=false;
+  const lamp=lampNew(1.5,0.2), flow=flowNew();
+  let lastDk='', arr=ARR6[0], pred=null, connected=false, logged=true, warm=0, t=0, settleT=0;
+  $('#arrD').textContent=arr.d;
+  $('#strip').onclick=()=>{ Object.values(W).forEach(w=>{ if(!w.bare&&!w.sleeve) w.pullT=1; }); };
+  $('#ins').onclick=()=>{ if(cellIn) return; cellT=0; cellX.x=-14; };
+  $('#scr').onclick=()=>{ lampT=0; };
+  $('#fuse').onclick=()=>{ lamp.broken=!lamp.broken; $('#fuse').classList.toggle('active',lamp.broken); logged=true; };
+  $('#arr').querySelectorAll('.chip-btn').forEach(b=>b.onclick=()=>{ $('#arr').querySelectorAll('.chip-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active');
+    arr=ARR6[+b.dataset.n-1]; $('#arrD').textContent=arr.d; connected=false; pred=null; $('#pY').classList.remove('active'); $('#pN').classList.remove('active'); });
+  toggleWire([$('#pY'),$('#pN')],b=>{ pred=b.id==='pY'; });
+  $('#con').onclick=()=>{ connected=true; logged=false; settleT=0; };
+
+  animLoop(dt=>{ t+=dt; const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h); ctx.save(); stage(ctx,w,h);
+    // --- mechanics ---
+    Object.values(W).forEach(w=>{ springTo(w.pull,w.pullT,40,10,dt);
+      if(w.pullT===1 && w.pull.x>0.97 && !w.sleeve){ w.sleeve={x:0,y:0,vx:(Math.random()-0.5)*80,vy:-60,ang:0,va:(Math.random()-0.5)*8,init:false}; w.bare=true; w.pullT=0; w.pull.x=0; w.pull.v=0; } });
+    springTo(cellY,cellT,70,10,dt); if(cellT===0&&Math.abs(cellY.x)<2){ cellIn=true; }
+    springTo(cellX,0,cellIn?90:0,cellIn?7:0,dt);                              // the holder spring pushes the cell home, overshoots, settles
+    springTo(lampLift,lampT,30,9,dt); lampIn=lampT===0&&lampLift.x>-2;
+    Object.keys(W).forEach(k=>{ const w=W[k], jn=connected?arr.j[k]:0, tg=jn?P(J[jn].x+off[k].x,J[jn].y+off[k].y):rest[k];
+      springTo(w.ex,tg.x,connected?38:30,connected?8:9,dt); springTo(w.ey,tg.y,connected?38:30,connected?8:9,dt); });
+    done[0]=Object.values(W).every(w=>w.bare); done[1]=cellIn; done[2]=lampIn;
+
+    // --- drawing: table, holders ---
+    tableTop(ctx,20,780,TABLE,0);
+    const comp=cellY.x>-30?5-cellX.x:0;                                                   // spring squeeze (px)
+    const Hd=holderDraw(ctx,HX,HY,1,CLEN,28,comp);
+    const cellCx=Hd.springEnd+(CLEN+2)/2+1.5;
+    const CT=drawCell(ctx,cellCx,HY+cellY.x,cellY.x<-1?-0.25*clamp(-cellY.x/200,0,1):0,{len:CLEN+2,r:28,warm,t});
+    const LH=lampHolder(ctx,LHX,LHY);
+    const turns=-lampLift.x/(7*1.7);
+    const LD=lampDraw(ctx,LHX,LHY-8+lampLift.x,1.7,{T:lamp.T,broken:lamp.broken,thread:turns,yaw:turns*6.28});
+    // --- wires ---
+    const fixed={A:P(Hd.p.x,Hd.p.y), B:P(Hd.n.x,Hd.n.y), C:LH.a, D:LH.b};
+    const wp={};
+    Object.keys(W).forEach(k=>{ const w=W[k], e=P(w.ex.x,w.ey.x), a=fixed[k];
+      wp[k]=sagPts(a,e,Math.max(40,110-Math.abs(e.y-a.y)*0.35),26);
+      const Pa=wireDraw(ctx,wp[k],w.col,w.bare?14:0,{stripA:5,stripB:w.bare?14:w.pull.x*14});
+      // sleeve being slid off / falling
+      const q=pathAt(Pa,Pa.len), dir=q.a;
+      if(!w.bare && w.pull.x>0.01){ const sx=q.x+Math.cos(dir)*w.pull.x*6, sy=q.y+Math.sin(dir)*w.pull.x*6; strokePts(ctx,[P(sx-Math.cos(dir)*14,sy-Math.sin(dir)*14),P(sx,sy)],COL.ink,7); strokePts(ctx,[P(sx-Math.cos(dir)*13,sy-Math.sin(dir)*13),P(sx-1,sy)],w.col,4.6); }
+      if(w.sleeve){ const s=w.sleeve; if(!s.init){ s.x=q.x+Math.cos(dir)*8; s.y=q.y+Math.sin(dir)*8; s.ang=dir; s.init=true; }
+        if(!s.rest) fallBody(s,dt,TABLE,3.5,{xmin:30});
+        ctx.save(); ctx.translate(s.x,s.y); ctx.rotate(s.ang); ctx.lineCap='round'; ctx.strokeStyle=COL.ink; ctx.lineWidth=7; ctx.beginPath(); ctx.moveTo(-7,0); ctx.lineTo(7,0); ctx.stroke(); ctx.strokeStyle=w.col; ctx.lineWidth=4.6; ctx.stroke(); ctx.restore(); }
+    });
+    // joints
+    if(connected){ [1,2].forEach(jn=>{ const ks=Object.keys(W).filter(k=>arr.j[k]===jn); if(ks.length<2) return; const near=ks.every(k=>Math.hypot(W[k].ex.x-J[jn].x,W[k].ey.x-J[jn].y)<14); splice(ctx,J[jn].x,J[jn].y,near?1:0); }); }
+
+    // --- electricity: net solver ---
+    const links=[];
+    if(cellIn){ links.push(['A','P'],['B','N']); }
+    if(lampIn){ links.push(['C','TIP'],['D','CASE']); }
+    if(connected){ [1,2].forEach(jn=>{ const ks=Object.keys(W).filter(k=>arr.j[k]===jn && W[k].bare && Math.hypot(W[k].ex.x-J[jn].x,W[k].ey.x-J[jn].y)<14); for(let i=1;i<ks.length;i++) links.push([ks[0],ks[i]]); }); }
+    const f=nets(['A','B','C','D','P','N','TIP','CASE'],links);
+    const short=cellIn&&f('P')===f('N');
+    const lampOK=cellIn&&lampIn&&!short&&((f('TIP')===f('P')&&f('CASE')===f('N'))||(f('TIP')===f('N')&&f('CASE')===f('P')));
+    const I=lampStep(lamp,lampOK?CELL_E:0,CELL_R+0.05,dt), Ishort=short?CELL_E/(CELL_R+0.05):0;
+    warm=approach(warm,short?1:0,short?0.5:0.3,dt);
+    const Itot=lampOK?I:Ishort;
+    flowStep(flow,Itot>0.001?flowSpeed(Itot):0,dt);
+    if(Itot>0.001){ const toJ=k=>wp[k], fromJ=k=>rev(wp[k]);
+      let path;
+      if(short) path=pts([CT.p],toJ('A'),fromJ('B'),[CT.n]);
+      else { const X=['C','D'].find(k=>f(k)===f('P')), Y=X==='C'?'D':'C';
+        const scr={C:LH.a,D:LH.b}, lampPath=X==='C'?LD.path:rev(LD.path);
+        const PY=['A','B'].find(k=>f(k)===f(X)), NY=PY==='A'?'B':'A';
+        path=pts([CT.p],toJ(PY),fromJ(X),[scr[X]],lampPath,[scr[Y]],toJ(Y),fromJ(NY),[CT.n]); }
+      flowDraw(ctx,pathNew(path),flow,{full:60,gap:24}); }
+    if(short){ tag(ctx,'short circuit — current skips the lamp',400,120,COL.red,{size:14}); }
+    // table rows
+    if(connected&&!logged){ settleT+=dt; if(settleT>1.6){ logged=true; const glow=lampBr(lamp.T)>0.1;
+      const ok=pred===null?null:(pred===glow);
+      $('#lg').insertAdjacentHTML('afterbegin',`<tr><td>${arr.n}</td><td>${pred===null?'—':(pred?'Glow':'No glow')}</td><td class="${glow?'r-ok':'r-bad'}">${glow?'Glows':'No glow'}${!done[0]?' (ends not stripped)':''}</td><td class="${ok===null?'':(ok?'r-ok':'r-bad')}">${ok===null?'':(ok?'✓':'✗')}</td></tr>`); done[3]=true; stepPills($('#steps'),['1 Strip','2 Cell','3 Lamp','4 Connect'],step,done,showStep); } }
+    const dk=done.join(); if(dk!==lastDk){ lastDk=dk; stepPills($('#steps'),['1 Strip','2 Cell','3 Lamp','4 Connect'],step,done,showStep); }
+    // labels
+    textAt(ctx,'cell holder',HX+100,HY+62,{align:'center',size:13,weight:600,color:COL.muted});
+    textAt(ctx,'lamp holder',LHX+48,LHY+22,{size:13,weight:600,color:COL.muted});
+    const br=lampBr(lamp.T);
+    setv($,'k1',br>0.1?'Glows':(lamp.broken?'Fused':'Does not glow')); setc($,'k1',br>0.1?COL.yellow:COL.muted);
+    setv($,'k2',short?fmt(Ishort,1)+' A (short!)':fmt(I,2)+' A'); setc($,'k2',short?COL.red:COL.ink);
+    ctx.restore();
+  });
+  return wrap;
+}
+
+
+/* =====================================================================
+   3.7 MAKE AN LED GLOW
+   Two cells drop into a holder against its spring. Red wire from the
+   battery’s + terminal, blue from −. “Interchange the wires” makes both
+   wire ends lift off their legs and cross over on springs. The LED obeys
+   its real curve: I = s·ln(1+e^{(V−V_f)/s})/R_d, forward only — so it
+   glows with + on the long leg, stays dark the other way round, and with
+   only ONE cell (1.5 V, below every V_f) it barely conducts at all.
+   ===================================================================== */
+function buildA7(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><button class="toggle-btn play" id="ins" style="width:100%;padding:9px">🔋 Put the cells in</button>
+      <div class="toggle-group"><button class="toggle-btn" id="one">1 cell</button><button class="toggle-btn active" id="two">2 cells</button></div></div>
+    <div class="control-group"><label>LED colour</label><div class="chip-wrap" id="cols">${Object.keys(LEDS).map(k=>`<button class="chip-btn${k==='red'?' active':''}" data-k="${k}"><i style="display:inline-block;width:10px;height:10px;border-radius:50%;background:${LEDS[k].col}"></i>${LEDS[k].name}</button>`).join('')}</div></div>
+    <div class="control-group"><button class="toggle-btn navy" id="swap" style="margin-top:0">⇄ Interchange the wires</button>
+      <button class="toggle-btn" id="find" style="width:100%;margin-top:6px">Which is the + terminal?</button></div>
+    <div class="control-group"><div class="result-cards">${card('k1','LED')}${card('k2','Current')}${card('k3','Long leg on')}${card('k4','Battery')}</div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const HX=60, HY=390, CLN=118, LX=560, LY=210, S=3.4;
+  let key='red', nc=2, swapped=false, inserted=false, t=0, findT=0;
+  const cy=[spr(-320),spr(-320)], cyT=[-320,-320], cx=spr(0); let cxT=0;
+  const endR={x:spr(0),y:spr(0)}, endB={x:spr(0),y:spr(0)}; let init=false;
+  const flow=flowNew(); let I=0, bLED=0;
+  $('#ins').onclick=()=>{ inserted=true; cyT[0]=0; setTimeout(()=>{ cyT[1]=nc===2?0:-320; },250); cx.x=-12; };
+  toggleWire([$('#one'),$('#two')],b=>{ nc=b.id==='one'?1:2; if(inserted) cyT[1]=nc===2?0:-320; });
+  $('#cols').querySelectorAll('.chip-btn').forEach(b=>b.onclick=()=>{ $('#cols').querySelectorAll('.chip-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); key=b.dataset.k; });
+  $('#swap').onclick=()=>{ swapped=!swapped; };
+  $('#find').onclick=()=>{ findT=3; };
+
+  animLoop(dt=>{ t+=dt; const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h); ctx.save(); stage(ctx,w,h);
+    cy.forEach((c,i)=>springTo(c,cyT[i],70,9,dt));
+    const seated=cy.map(c=>Math.abs(c.x)<2.5);
+    springTo(cx,0,seated[0]?90:0,7,dt);
+    if(findT>0) findT-=dt;
+    tableTop(ctx,20,780,462,0);
+    // holder + cells (cell 2 slot gets a metal strip when only one cell is used)
+    const comp=seated[0]?6-cx.x:0;
+    const Hd=holderDraw(ctx,HX,HY,2,CLN,26,comp);
+    const base=Hd.springEnd;
+    const c0=drawCell(ctx,base+CLN/2-1,HY+cy[0].x,0,{len:CLN-2,r:26,label:false});
+    if(nc===1&&Math.abs(cy[1].x)>200){ line(ctx,base+CLN,HY,HX+Hd.W-5,HY,COL.ink,3); textAt(ctx,'metal strip',base+CLN*1.5,HY-12,{align:'center',size:11,color:COL.muted}); }
+    const c1=drawCell(ctx,base+CLN*1.5-1,HY+cy[1].x,0,{len:CLN-2,r:26,label:false});
+    const cellsIn=seated[0]&&(nc===1||seated[1]);
+    const E=cellsIn?nc*CELL_E:0;
+    // LED
+    const L=LEDS[key];
+    const Ed=ledDraw(ctx,LX,LY,S,key,bLED,{legA:46,legK:38});
+    textAt(ctx,'long leg (+)',Ed.a.x+14,Ed.a.y+4,{size:12,weight:600,color:COL.red}); textAt(ctx,'short leg (−)',Ed.k.x-14,Ed.k.y+4,{align:'right',size:12,weight:600,color:COL.blue});
+    // wire ends fly to their legs (crossing over when interchanged, lifting to clear each other)
+    const tR=swapped?Ed.k:Ed.a, tB=swapped?Ed.a:Ed.k;
+    if(!init){ endR.x.x=tR.x; endR.y.x=tR.y; endB.x.x=tB.x; endB.y.x=tB.y; init=true; }
+    springTo(endR.x,tR.x,30,8,dt); springTo(endR.y,tR.y-Math.min(60,Math.abs(endR.x.x-tR.x)*2.2),30,8,dt);
+    springTo(endB.x,tB.x,30,8,dt); springTo(endB.y,tB.y+Math.min(40,Math.abs(endB.x.x-tB.x)*1.4),30,8,dt);
+    const rP=P(endR.x.x,endR.y.x), bP=P(endB.x.x,endB.y.x);
+    const redW=sagPts(P(Hd.p.x,Hd.p.y),rP,40,30), blueW=bezPts(P(Hd.n.x,Hd.n.y),P(Hd.n.x-20,Hd.n.y+70),P(bP.x-60,460),bP,34);
+    wireDraw(ctx,redW,COL.red,10,{stripA:4}); wireDraw(ctx,blueW,COL.blue,10,{stripA:4});
+    const onLeg=(p,q)=>Math.hypot(p.x-q.x,p.y-q.y)<6;
+    const fwd=onLeg(rP,Ed.a)&&onLeg(bP,Ed.k), revd=onLeg(rP,Ed.k)&&onLeg(bP,Ed.a);
+    I=fwd?ledCurrent(E,nc*CELL_R+0.1,L.Vf):0;
+    bLED=approach(bLED,ledBr(I),30,dt);                          // an LED lights almost instantly
+    flowStep(flow,flowSpeed(I*4),dt);
+    if(I>1e-5){ const path=pathNew(pts(redW,[P(Ed.a.x,Ed.a.y),P(LX+4*S,LY-6*S),P(LX-4*S,LY-6*S),P(Ed.k.x,Ed.k.y)],rev(blueW),[P(Hd.n.x,Hd.n.y)]));
+      flowDraw(ctx,path,flow,{full:40}); }
+    if(revd&&cellsIn){ const bx=LX, by=LY-17*S; mark(ctx,bx+56,by,false); tag(ctx,'current cannot pass this way',bx,LY-44*S+6,COL.red,{size:13}); }
+    if(fwd&&cellsIn&&I<0.0005){ tag(ctx,'1.5 V is below this LED’s '+L.Vf+' V — too little',LX,LY-44*S+6,COL.red,{size:13}); }
+    // + terminal finder: a ring runs from the + cap along the red wire
+    if(findT>0){ const a=clamp(findT,0,1); circ(ctx,Hd.p.x,Hd.p.y,14+Math.sin(t*8)*3,rgba(COL.red,a),null,3);
+      const RP=pathNew(redW), q=pathAt(RP,(3-findT)/2*RP.len); circ(ctx,q.x,q.y,9,rgba(COL.red,a),rgba(COL.red,0.25*a),2.4);
+      tag(ctx,'+ terminal: joined to a cell’s + cap',Hd.p.x+10,Hd.p.y+44,COL.red,{size:12,alpha:a}); }
+    textAt(ctx,'+',Hd.p.x-12,HY-36,{size:22,weight:700,color:COL.red}); textAt(ctx,'−',Hd.n.x+6,HY-36,{size:22,weight:700,color:COL.blue});
+    setv($,'k1',bLED>0.08?'Glows':'Dark'); setc($,'k1',bLED>0.08?L.col:COL.muted);
+    setv($,'k2',fmt(I*1000,1)+' mA'); setv($,'k3',swapped?'− wire':'+ wire'); setc($,'k3',swapped?COL.blue:COL.red);
+    setv($,'k4',cellsIn?fmt(E,1)+' V':'no cells');
+    ctx.restore();
+  });
+  return wrap;
+}
+
+
+/* =====================================================================
+   3.8 LET US CONSTRUCT A SWITCH
+   Seen from above. Each drawing pin falls under gravity (its shadow
+   closes in as it drops), punches into the cardboard and rebounds twice
+   before it rests. The safety pin swings on the first drawing pin with
+   real rotational inertia: the slider sets a target angle, a torsion
+   spring and pivot friction drive it there, and when it swings into the
+   second pin it stops dead with a small rebound (e = 0.35).
+   ===================================================================== */
+function pinDrop(){ return {h:1.2,v:0,rest:false,on:false}; }
+function pinDropStep(p,dt){ if(!p.on||p.rest) return; p.v-=5.5*dt; p.h+=p.v*dt; if(p.h<=0){ p.h=0; if(p.v<-0.35){ p.v=-p.v*0.22; } else { p.v=0; p.rest=true; } } }
+function pinDropDraw(ctx,x,y,p,col){ if(!p.on) return; const k=1+p.h*0.9;
+  ctx.save(); ctx.globalAlpha=0.18*clamp(1-p.h*0.5,0,1); ctx.fillStyle=COL.ink; ctx.beginPath(); ctx.ellipse(x+p.h*40,y+p.h*50,13,11,0,0,Math.PI*2); ctx.fill(); ctx.restore();
+  pinHead(ctx,x,y-p.h*20,13*k,col); }
+function buildA8(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><button class="toggle-btn play" id="b1" style="width:100%">📌 Pin the safety pin down</button>
+      <button class="toggle-btn play" id="b2" style="width:100%;margin-top:6px">📌 Fix the second pin</button>
+      <button class="toggle-btn play" id="b3" style="width:100%;margin-top:6px">〰 Connect a wire to each pin</button></div>
+    <div class="control-group"><label>Turn the safety pin <span class="val" id="aV"></span></label><input type="range" id="ang" min="-80" max="25" value="-50">
+      <div class="toggle-group"><button class="toggle-btn" id="flick">👆 Flick it closed</button></div></div>
+    <div class="control-group"><div class="result-cards">${card('k1','Pins touching?')}${card('k2','Gap')}${card('k3','Switch')}</div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const PV={x:250,y:270}, LEN=250, P2={x:PV.x+LEN+14,y:PV.y};
+  const p1=pinDrop(), p2=pinDrop();
+  const ang={x:-0.87,v:0}; let angT=-0.87, t=0, wires=spr(0), wiresT=0, loose={x:0,y:0};
+  const contactA=Math.asin(0)-0.0;                     // the free end meets pin 2 at 0 rad
+  $('#b1').onclick=()=>{ p1.on=true; };
+  $('#b2').onclick=()=>{ p2.on=true; };
+  $('#b3').onclick=()=>{ wiresT=1; };
+  $('#ang').oninput=()=>{ angT=+$('#ang').value*Math.PI/180; setv($,'aV',$('#ang').value+'°'); }; setv($,'aV','−50°');
+  $('#flick').onclick=()=>{ if(p1.rest){ angT=0.35; ang.v=4.5; $('#ang').value=20; setv($,'aV','20°'); } };
+
+  animLoop(dt=>{ t+=dt; const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h); ctx.save(); stage(ctx,w,h);
+    pinDropStep(p1,dt); pinDropStep(p2,dt); springTo(wires,wiresT,30,9,dt);
+    // rotation: torsion spring toward the target + pivot friction; blocked by pin 2
+    if(p1.rest){ const n=4; for(let i=0;i<n;i++){ const h=dt/n; const acc=(angT-ang.x)*28-ang.v*6.5; ang.v+=acc*h; ang.x+=ang.v*h;
+        if(p2.rest && ang.x>contactA){ ang.x=contactA; if(ang.v>0.4) ang.v=-ang.v*0.35; else ang.v=Math.min(0,ang.v); } } }
+    // cardboard
+    ctx.save(); ctx.lineWidth=2.6; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; ctx.beginPath(); ctx.moveTo(110,120); ctx.lineTo(690,108); ctx.lineTo(700,420); ctx.lineTo(100,430); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle=COL.mid; ctx.lineWidth=1; for(let i=0;i<5;i++){ ctx.beginPath(); ctx.moveTo(130,150+i*60); ctx.lineTo(680,140+i*60); ctx.setLineDash([2,10]); ctx.stroke(); } ctx.restore();
+    textAt(ctx,'cardboard',120,448,{size:13,weight:600,color:COL.muted});
+    // wires come in from the edges
+    if(wires.x>0.01){ const a=P(lerp(-60,40,wires.x),380), b=P(lerp(860,760,wires.x),380);
+      const w1=bezPts(a,P(140,380),P(PV.x-80,PV.y+80),P(PV.x-6,PV.y+10),24), w2=bezPts(b,P(700,380),P(P2.x+80,P2.y+80),P(P2.x+6,P2.y+10),24);
+      wireDraw(ctx,w1,COL.red,16); wireDraw(ctx,w2,COL.blue,16); }
+    // safety pin (loose until pin 1 holds it)
+    let sp;
+    if(!p1.rest){ const jig=p1.on?0:Math.sin(t*1.3)*0.02; sp=safetyPin(ctx,PV.x+30,PV.y+70,-0.25+jig,LEN,COL.ink); }
+    else sp=safetyPin(ctx,PV.x,PV.y,ang.x,LEN,COL.ink);
+    pinDropDraw(ctx,PV.x,PV.y,p1,COL.ink); pinDropDraw(ctx,P2.x,P2.y,p2,COL.ink);
+    // contact
+    const touching=p1.rest&&p2.rest&&Math.abs(ang.x-contactA)<0.01;
+    const gapPx=p2.rest?Math.max(0,Math.hypot(sp.x-P2.x,sp.y-P2.y)-13):NaN;
+    if(touching){ circ(ctx,P2.x,P2.y,22+Math.sin(t*6)*2,COL.green,null,3); }
+    else if(p1.rest&&p2.rest){ line(ctx,sp.x,sp.y,P2.x,P2.y,COL.mid,1.4,[3,4]); textAt(ctx,'air gap',(sp.x+P2.x)/2+6,(sp.y+P2.y)/2-8,{size:13,weight:600,color:COL.muted}); }
+    // arc showing the swing
+    if(p1.rest){ ctx.save(); ctx.strokeStyle=rgba(COL.yellow,0.7); ctx.lineWidth=2; ctx.setLineDash([6,6]); ctx.beginPath(); ctx.arc(PV.x,PV.y,LEN+2,-1.4,0.45); ctx.stroke(); ctx.restore(); }
+    const ready=p1.rest&&p2.rest&&wires.x>0.95;
+    setv($,'k1',touching?'Yes':'No'); setc($,'k1',touching?COL.green:COL.muted);
+    setv($,'k2',isFinite(gapPx)?(touching?'closed':fmt(gapPx/25,1)+' cm'):'—');
+    setv($,'k3',ready?(touching?'ON':'OFF'):'not ready'); setc($,'k3',ready?(touching?COL.green:COL.ink):COL.muted);
+    ctx.restore();
+  });
+  return wrap;
+}
+
+
+/* =====================================================================
+   3.9 TESTING THE SWITCH
+   Cell, lamp and the home-made switch in one loop. ON swings the safety
+   pin onto the second drawing pin; it hits with some speed and bounces
+   (e = 0.45), so the circuit really makes–breaks–makes a few times
+   before it settles — contact bounce — and the filament smooths it out.
+   “Move the switch” lifts the whole switch, flies it to another wire and
+   drops it in: the lamp behaves the same wherever the gap is.
+   ===================================================================== */
+function nearestS(Pa,p){ let best=0,bd=1e9; for(let s=0;s<=Pa.len;s+=2){ const q=pathAt(Pa,s), d=Math.hypot(q.x-p.x,q.y-p.y); if(d<bd){ bd=d; best=s; } } return best; }
+function splitAt(Pa,s0,s1){ return [subPts(Pa,0,s0), subPts(Pa,s1,Pa.len)]; }
+function buildA9(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label>Switch</label><div class="toggle-group"><button class="toggle-btn active" id="off">OFF</button><button class="toggle-btn" id="on">ON</button></div></div>
+    <div class="control-group"><label>Put the switch in</label><div class="toggle-group" id="pos"><button class="toggle-btn small active" data-p="0">+ wire</button><button class="toggle-btn small" data-p="1">− wire (top)</button><button class="toggle-btn small" data-p="2">− wire (side)</button></div></div>
+    <div class="control-group"><div class="result-cards">${card('k1','Circuit')}${card('k2','Lamp')}${card('k3','Current')}${card('k4','Contact')}</div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const HX=108, HY=430, CLN=170, LHX=600, LHY=300, SL=150;
+  const lamp=lampNew(1.5,0.2), flow=flowNew();
+  const pinA={x:-0.6,v:0}; let on=false, t=0, bounces=0, makes=0, wasC=false;
+  // switch placement: wire + arc position
+  const SPOTS=[{w:'A',c:P(420,478)},{w:'B',c:P(400,70)},{w:'B',c:P(60,268)}];
+  let spot=0, fly=null;
+  toggleWire([$('#off'),$('#on')],b=>{ on=b.id==='on'; bounces=0; makes=0; });
+  toggleWire([...$('#pos').querySelectorAll('button')],b=>{ const n=+b.dataset.p; if(n===spot||fly) return; fly={from:spot,to:n,k:0}; });
+
+  animLoop(dt=>{ t+=dt; const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h); ctx.save(); stage(ctx,w,h);
+    // safety pin dynamics with the stop at 0 rad
+    for(let i=0;i<4;i++){ const hh=dt/4, tg=on?0.25:-0.6; const acc=(tg-pinA.x)*90-pinA.v*5; pinA.v+=acc*hh; pinA.x+=pinA.v*hh;
+      if(pinA.x>0){ pinA.x=0; if(pinA.v>0.5){ pinA.v=-pinA.v*0.45; bounces++; } else pinA.v=0; } }
+    const contact=pinA.x>-0.012;
+    if(contact&&!wasC) makes++; wasC=contact;
+    // layout
+    const comp=6; const Hd=holderDraw(ctx,HX,HY,1,CLN,28,comp);
+    const CT=drawCell(ctx,Hd.springEnd+(CLN+2)/2+1.5,HY,0,{len:CLN+2,r:28});
+    const LH=lampHolder(ctx,LHX,LHY); const LD=lampDraw(ctx,LHX,LHY-8,1.6,{T:lamp.T});
+    const WA=pathNew(pts([P(Hd.p.x,Hd.p.y),P(Hd.p.x,478),P(535,478),P(535,LH.a.y+40),P(LH.a.x,LH.a.y+40),LH.a]));
+    const WB=pathNew(pts([LH.b,P(LH.b.x,LH.b.y+40),P(730,LH.b.y+40),P(730,70),P(60,70),P(60,Hd.n.y),P(Hd.n.x,Hd.n.y)]));
+    const wireOf=k=>k==='A'?WA:WB, colOf=k=>k==='A'?COL.red:COL.blue;
+    // where is the switch?
+    const place=n=>{ const sp=SPOTS[n], Pa=wireOf(sp.w), s=nearestS(Pa,sp.c), q0=pathAt(Pa,s-SL/2), q1=pathAt(Pa,s+SL/2); return {sp,Pa,s,q0,q1,ang:Math.atan2(q1.y-q0.y,q1.x-q0.x)}; };
+    let cur=place(spot), sw, inFlight=false;
+    if(fly){ fly.k+=dt/1.1; const a=place(fly.from), b=place(fly.to), k=ease(fly.k), up=Math.sin(Math.PI*clamp(fly.k,0,1))*120;
+      const mid=q=>P((q.q0.x+q.q1.x)/2,(q.q0.y+q.q1.y)/2); const ma=mid(a), mb=mid(b);
+      let da=angDiff(b.ang,a.ang); const an=a.ang+da*k; const cx=lerp(ma.x,mb.x,k), cy=lerp(ma.y,mb.y,k)-up;
+      sw={q0:P(cx-Math.cos(an)*SL/2,cy-Math.sin(an)*SL/2), q1:P(cx+Math.cos(an)*SL/2,cy+Math.sin(an)*SL/2), ang:an, lift:up};
+      inFlight=true; if(fly.k>=1){ spot=fly.to; fly=null; cur=place(spot); } }
+    if(!inFlight) sw={q0:cur.q0,q1:cur.q1,ang:cur.ang,lift:0};
+    // wires: the one holding the switch is cut at the pins
+    const parts={A:[WA.pts],B:[WB.pts]};
+    if(!inFlight){ const k=cur.sp.w; parts[k]=splitAt(cur.Pa,cur.s-SL/2,cur.s+SL/2); }
+    ['A','B'].forEach(k=>parts[k].forEach(p=>wireDraw(ctx,p,colOf(k),8,{stripA:p===parts[k][0]?4:8})));
+    // switch: cardboard, pins, safety pin (angle relative to the wire)
+    ctx.save(); const mx=(sw.q0.x+sw.q1.x)/2, my=(sw.q0.y+sw.q1.y)/2; ctx.translate(mx,my); ctx.rotate(sw.ang); ctx.lineWidth=2.2; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff';
+    if(sw.lift>1){ ctx.save(); ctx.globalAlpha=0.12; ctx.fillStyle=COL.ink; ctx.fillRect(-SL/2-20,-22+sw.lift*0.4,SL+40,50); ctx.restore(); }
+    rrect(ctx,-SL/2-20,-28,SL+40,46,6); ctx.fill(); ctx.stroke(); ctx.restore();
+    pinHead(ctx,sw.q1.x,sw.q1.y,10);
+    const tipP=safetyPin(ctx,sw.q0.x,sw.q0.y,sw.ang+pinA.x,SL-12,COL.ink); pinHead(ctx,sw.q0.x,sw.q0.y,9);
+    if(contact&&!inFlight) circ(ctx,sw.q1.x,sw.q1.y,17,COL.green,null,2.6);
+    else if(!inFlight) textAt(ctx,'gap',(tipP.x+sw.q1.x)/2,(tipP.y+sw.q1.y)/2-12,{align:'center',size:12,weight:700,color:COL.red});
+    // electricity
+    const closed=contact&&!inFlight;
+    const I=lampStep(lamp,closed?CELL_E:0,CELL_R+0.05,dt), br=lampBr(lamp.T);
+    flowStep(flow,closed?flowSpeed(I):0,dt);
+    if(closed){ const la=parts.A, lb=parts.B; let path;
+      const swPts=[sw.q0,sw.q1];
+      if(cur.sp.w==='A') path=pts([CT.p],la[0],swPts,la[1],LD.path,lb[0],[CT.n]);
+      else path=pts([CT.p],la[0],LD.path,lb[0],swPts,lb[1],[CT.n]);
+      flowDraw(ctx,pathNew(path),flow,{full:60}); }
+    textAt(ctx,closed?'closed circuit':'open circuit',400,30,{align:'center',size:18,weight:700,color:closed?COL.green:COL.red});
+    setv($,'k1',closed?'Closed':'Open'); setc($,'k1',closed?COL.green:COL.red);
+    setv($,'k2',br>0.1?'Glows':'Off'); setc($,'k2',br>0.1?COL.yellow:COL.muted);
+    setv($,'k3',fmt(I,2)+' A'); setv($,'k4',on?(makes>1?'bounced '+(makes-1)+'×, then held':'made'):'broken');
+    ctx.restore();
+  });
+  return wrap;
+}
+
+
+/* =====================================================================
+   3.10 LET US DRAW CIRCUIT DIAGRAMS
+   One live circuit that morphs: every component glides to its place on
+   a neat rectangle and cross-fades from picture to symbol, while each
+   floppy wire is resampled and straightened point by point into ruled
+   lines. The circuit keeps working throughout — the lamp (or LED)
+   glows and the current chevrons keep running + → − in both drawings.
+   ===================================================================== */
+function resample(p,n){ const Pa=pathNew(p), out=[]; for(let i=0;i<=n;i++){ const q=pathAt(Pa,Pa.len*i/n); out.push(P(q.x,q.y)); } return out; }
+function symCell(ctx,a,col){ ctx.save(); ctx.globalAlpha*=a; line(ctx,-30,0,-6,0,col,2.4); line(ctx,6,0,30,0,col,2.4); line(ctx,6,-18,6,18,col,2.4); line(ctx,-6,-9,-6,9,col,5);
+  textAt(ctx,'+',12,-12,{size:13,weight:700,color:COL.red}); textAt(ctx,'−',-16,-12,{size:13,weight:700,color:COL.blue}); ctx.restore(); }
+function symBattery(ctx,a,col){ ctx.save(); ctx.globalAlpha*=a; line(ctx,-40,0,-20,0,col,2.4); line(ctx,-20,-9,-20,9,col,5); line(ctx,-8,-18,-8,18,col,2.4); line(ctx,-8,0,8,0,col,2.4,[3,3]);
+  line(ctx,8,-9,8,9,col,5); line(ctx,20,-18,20,18,col,2.4); line(ctx,20,0,40,0,col,2.4); textAt(ctx,'+',26,-12,{size:13,weight:700,color:COL.red}); textAt(ctx,'−',-34,-12,{size:13,weight:700,color:COL.blue}); ctx.restore(); }
+function symLamp(ctx,a,col,br){ ctx.save(); ctx.globalAlpha*=a; glow(ctx,0,0,40+30*Math.min(1,br),COL.yellow,0.7*Math.min(1,br)); line(ctx,0,30,0,18,col,2.4); line(ctx,0,-30,0,-18,col,2.4); circ(ctx,0,0,18,col,'#fff',2.4);
+  const k=12.7; line(ctx,-k,-k,k,k,col,2.2); line(ctx,-k,k,k,-k,col,2.2); ctx.restore(); }
+function symLED(ctx,a,col,b,lc){ ctx.save(); ctx.globalAlpha*=a; glow(ctx,0,0,36+26*Math.min(1,b),lc,0.7*Math.min(1,b));  // apex up: current flows upward
+  line(ctx,0,30,0,10,col,2.4); line(ctx,0,-30,0,-10,col,2.4); ctx.fillStyle='#fff'; ctx.strokeStyle=col; ctx.lineWidth=2.4; ctx.beginPath(); ctx.moveTo(-12,10); ctx.lineTo(12,10); ctx.lineTo(0,-10); ctx.closePath(); ctx.fill(); ctx.stroke();
+  line(ctx,-12,-10,12,-10,col,2.6); vec(ctx,14,-2,28,-14,lc||col,1.8); vec(ctx,14,6,28,-6,lc||col,1.8); ctx.restore(); }
+function symSwitch(ctx,a,col,open){ ctx.save(); ctx.globalAlpha*=a; line(ctx,-40,0,-22,0,col,2.4); line(ctx,22,0,40,0,col,2.4); circ(ctx,-22,0,3.5,col,col,1.5); circ(ctx,22,0,3.5,col,col,1.5);
+  const an=-0.55*open; line(ctx,-22,0,-22+Math.cos(an)*44,Math.sin(an)*44,col,2.6); ctx.restore(); }
+function buildA10(){
+  const wrap=labShell();
+  const SYMS=['LED','Electric lamp','Battery','Electric cell','Switch ON','Switch OFF','Wire'];
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label>Circuit</label><div class="toggle-group"><button class="toggle-btn active" id="ca">Lamp + switch</button><button class="toggle-btn" id="cb">LED + battery</button></div></div>
+    <div class="control-group"><label>Picture → circuit diagram <span class="val" id="mV"></span></label><input type="range" id="m" min="0" max="100" value="0">
+      <button class="toggle-btn navy" id="draw">✏ Draw it with symbols</button></div>
+    <div class="control-group" id="swg"><label>Switch</label><div class="toggle-group"><button class="toggle-btn" id="off">OFF</button><button class="toggle-btn active" id="on">ON</button></div></div>
+    <div class="control-group"><label>Table 3.2 — symbols</label><div class="chip-wrap" id="sy">${SYMS.map((s,i)=>`<button class="chip-btn" data-i="${i}">${s}</button>`).join('')}</div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  let circuit='a', mT=0, on=true, hi=-1, hiT=0, t=0, auto=null;
+  const m=spr(0), sw=spr(0);
+  const lamp=lampNew(1.5,0.2), flow=flowNew(); let bLED=0;
+  toggleWire([$('#ca'),$('#cb')],b=>{ circuit=b.id==='ca'?'a':'b'; $('#swg').classList.toggle('hidden',circuit==='b'); });
+  $('#m').oninput=()=>{ auto=null; mT=+$('#m').value/100; };
+  $('#draw').onclick=()=>{ auto={k:0,from:m.x,to:m.x>0.95?0:1}; };
+  toggleWire([$('#off'),$('#on')],b=>{ on=b.id==='on'; });
+  $('#sy').querySelectorAll('.chip-btn').forEach(b=>b.onclick=()=>{ $('#sy').querySelectorAll('.chip-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); hi=+b.dataset.i; hiT=4; });
+  const CPIC={cell:P(250,420),lamp:P(640,330),sw:P(330,150),bat:P(250,410),led:P(600,250)};
+  const CSYM={cell:P(400,420),lamp:P(620,255),sw:P(400,90),bat:P(400,420),led:P(620,255)};
+
+  animLoop(dt=>{ t+=dt; const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h); ctx.save(); stage(ctx,w,h);
+    if(auto){ auto.k+=dt/2.2; mT=lerp(auto.from,auto.to,ease(auto.k)); $('#m').value=Math.round(mT*100); if(auto.k>=1) auto=null; }
+    springTo(m,mT,auto?400:60,auto?40:12,dt); const e=smooth01(0,1,m.x); setv($,'mV',Math.round(clamp(m.x,0,1)*100)+'%');
+    springTo(sw,on?0:1,120,12,dt); if(hiT>0) hiT-=dt;
+    const pulse=k=>hiT>0&&k===hi?COL.yellow:COL.ink;
+    const C=k=>P(lerp(CPIC[k].x,CSYM[k].x,e),lerp(CPIC[k].y,CSYM[k].y,e));
+    const T=(k,rp,rs)=>{ const c=C(k); return P(c.x+lerp(rp.x,rs.x,e), c.y+lerp(rp.y,rs.y,e)); };
+    const wire=(a,b,corners,sag)=>{ const pic=resample(sagPts(a,b,sag,40),160), dia=resample(pts([a],corners,[b]),160); return pic.map((p,i)=>P(lerp(p.x,dia[i].x,e),lerp(p.y,dia[i].y,e))); };
+    let loop=[], closed=false, I=0;
+    if(circuit==='a'){
+      const cp=T('cell',P(83,0),P(30,0)), cn=T('cell',P(-77,0),P(-30,0));
+      const la=T('lamp',P(28,17),P(0,30)), lb=T('lamp',P(-28,17),P(0,-30));
+      const s2=T('sw',P(75,0),P(40,0)), s1=T('sw',P(-75,0),P(-40,0));
+      const w1=wire(cp,la,[P(620,420)],60), w2=wire(lb,s2,[P(620,90)],-40), w3=wire(s1,cn,[P(180,90),P(180,420)],80);
+      closed=sw.x<0.05;
+      I=lampStep(lamp,closed?CELL_E:0,CELL_R+0.05,dt);
+      // pictures (fade out) and symbols (fade in)
+      const cc=C('cell'), lc=C('lamp'), sc=C('sw');
+      ctx.save(); ctx.globalAlpha=1-e;
+      drawCell(ctx,cc.x,cc.y,0,{len:150,r:26});
+      const LH=lampHolder(ctx,lc.x,lc.y); const LD=lampDraw(ctx,lc.x,lc.y-8,1.4,{T:lamp.T});
+      ctx.save(); ctx.lineWidth=2.2; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; rrect(ctx,sc.x-100,sc.y-30,200,50,6); ctx.fill(); ctx.stroke(); ctx.restore();
+      pinHead(ctx,sc.x+75,sc.y,10); safetyPin(ctx,sc.x-75,sc.y,-0.55*sw.x,138,COL.ink); pinHead(ctx,sc.x-75,sc.y,9);
+      ctx.restore();
+      ctx.save(); ctx.translate(cc.x,cc.y); symCell(ctx,e,pulse(3)); ctx.restore();
+      ctx.save(); ctx.translate(lc.x,lc.y); symLamp(ctx,e,pulse(1),lampBr(lamp.T)); ctx.restore();
+      ctx.save(); ctx.translate(sc.x,sc.y); symSwitch(ctx,e,sw.x>0.5?pulse(5):pulse(4),sw.x); ctx.restore();
+      [[w1,COL.red],[w2,COL.blue],[w3,COL.blue]].forEach(([p,c])=>{ if(e<0.98) { ctx.save(); ctx.globalAlpha=1-e; wireDraw(ctx,p,c,6); ctx.restore(); } if(e>0.02){ ctx.save(); ctx.globalAlpha=e; strokePts(ctx,p,pulse(6),2.4); ctx.restore(); } });
+      const lampIn=e<0.5?rev(LD.path):[la,lb];
+      loop=pts([cp],w1,e<0.5?[LH.b]:[],lampIn,e<0.5?[LH.a]:[],w2,[s2,s1],w3,[cn]);
+      flowStep(flow,closed?flowSpeed(I):0,dt);
+      if(circuit==='a'&&hiT>0&&(hi===0||hi===2)) tag(ctx,'not in this circuit',400,250,COL.muted,{size:12});
+    } else {
+      const bp=T('bat',P(120,28),P(40,0)), bn=T('bat',P(-122,28),P(-40,0));
+      const ea=T('led',P(4*2.2,46*2.2),P(0,30)), ek=T('led',P(-4*2.2,38*2.2),P(0,-30));
+      const w1=wire(bp,ea,[P(620,420)],50), w2=wire(ek,bn,[P(620,90),P(180,90),P(180,420)],90);
+      closed=true; I=ledCurrent(2*CELL_E,2*CELL_R+0.1,LEDS.red.Vf); bLED=approach(bLED,ledBr(I),20,dt);
+      const bc=C('bat'), lc=C('led');
+      ctx.save(); ctx.globalAlpha=1-e;
+      const Hd=holderDraw(ctx,bc.x-120,bc.y,2,103,24,6); drawCell(ctx,Hd.springEnd+50.5,bc.y,0,{len:99,r:24,label:false}); drawCell(ctx,Hd.springEnd+153.5,bc.y,0,{len:99,r:24,label:false});
+      ledDraw(ctx,lc.x,lc.y,2.2,'red',bLED,{legA:46,legK:38});
+      ctx.restore();
+      ctx.save(); ctx.translate(bc.x,bc.y); symBattery(ctx,e,pulse(2)); ctx.restore();
+      ctx.save(); ctx.translate(lc.x,lc.y); symLED(ctx,e,pulse(0),bLED,LEDS.red.col); ctx.restore();
+      [[w1,COL.red],[w2,COL.blue]].forEach(([p,c])=>{ if(e<0.98){ ctx.save(); ctx.globalAlpha=1-e; wireDraw(ctx,p,c,6); ctx.restore(); } if(e>0.02){ ctx.save(); ctx.globalAlpha=e; strokePts(ctx,p,pulse(6),2.4); ctx.restore(); } });
+      loop=pts([bp],w1,[ea,ek],w2,[bn]);
+      flowStep(flow,flowSpeed(I*4),dt);
+      if(hiT>0&&(hi===1||hi===3||hi===4||hi===5)) tag(ctx,'not in this circuit',400,250,COL.muted,{size:12});
+    }
+    if(I>1e-5) flowDraw(ctx,pathNew(loop),flow,{full:50});
+    textAt(ctx,e>0.5?'circuit diagram':'real circuit',400,34,{align:'center',size:17,weight:700,color:COL.ink});
+    if(e>0.5) textAt(ctx,'current: + → −',400,56,{align:'center',size:12,weight:600,color:COL.red,alpha:(e-0.5)*2});
+    // Table 3.2 strip
+    ctx.save(); ctx.globalAlpha=0.35+0.65*e; const xs=[60,170,280,390,500,610,720];
+    const draws=[c=>symLED(ctx,1,c,0,COL.red),c=>symLamp(ctx,1,c,0),c=>symBattery(ctx,1,c),c=>symCell(ctx,1,c),c=>symSwitch(ctx,1,c,0),c=>symSwitch(ctx,1,c,1),c=>line(ctx,-30,0,30,0,c,2.4)];
+    xs.forEach((x,i)=>{ const col=hiT>0&&hi===i?COL.yellow:COL.muted; ctx.save(); ctx.translate(x,468); ctx.scale(0.55,0.55); if(i===0) ctx.rotate(Math.PI/2); if(i===1) ctx.rotate(Math.PI/2); draws[i](col); ctx.restore();
+      textAt(ctx,SYMS[i],x,496,{align:'center',size:10.5,weight:600,color:col}); });
+    ctx.restore();
+    ctx.restore();
+  });
+  return wrap;
+}
+
+
+/* =====================================================================
+   3.11 CONDUCTOR DETECTIVE — the conduction tester
+   Cell + lamp with two free probe ends. Each object slides onto the test
+   block and stops exactly under the probes by sliding friction (it is
+   launched with v₀ = √(2·μg·d)). “Test it” lowers both probes on springs
+   onto the object’s two ends. The lamp current is I = E/(r + R_lamp +
+   R_object): metals ≈ 0 Ω → full glow; a pencil lead (graphite, ~3 Ω)
+   → a visibly dimmer glow; insulators ~10⁹ Ω → nothing.
+   ===================================================================== */
+const OBJ11=[
+  {k:'key',   n:'Key',          m:'Metal',     R:0.01, L:110, th:30},
+  {k:'coin',  n:'Coin',         m:'Metal',     R:0.01, L:50,  th:100},
+  {k:'spoon', n:'Spoon',        m:'Metal',     R:0.02, L:150, th:34},
+  {k:'needle',n:'Sewing needle',m:'Metal',     R:0.05, L:120, th:6},
+  {k:'foil',  n:'Aluminium foil',m:'Metal',    R:0.01, L:110, th:14},
+  {k:'lead',  n:'Pencil lead',  m:'Graphite',  R:3.0,  L:110, th:8},
+  {k:'stick', n:'Stick',        m:'Wood',      R:1e9,  L:140, th:18},
+  {k:'scale', n:'Scale',        m:'Plastic',   R:1e12, L:150, th:24},
+  {k:'bangle',n:'Bangle',       m:'Glass',     R:1e12, L:60,  th:120},
+  {k:'eraser',n:'Eraser',       m:'Rubber',    R:1e12, L:60,  th:26},
+  {k:'paper', n:'Paper strip',  m:'Paper',     R:1e10, L:130, th:6},
+  {k:'candle',n:'Candle',       m:'Wax',       R:1e12, L:120, th:30},
+  {k:'cork',  n:'Cork',         m:'Cork',      R:1e12, L:44,  th:44},
+];
+function drawObj11(ctx,o,x,y){ // (x,y) = centre of the object; y = resting line through its middle
+  const L=o.L, c=COL.ink; ctx.save(); ctx.lineWidth=2.4; ctx.strokeStyle=c; ctx.fillStyle='#fff'; ctx.lineJoin='round';
+  switch(o.k){
+    case 'key': circ(ctx,x-L+14,y,15,c,'#fff',2.4); circ(ctx,x-L+14,y,5,c,null,2); rect(ctx,x-L+29,y-5,2*L-40,10,c,'#fff'); ctx.beginPath(); ctx.moveTo(x+L-40,y+5); ctx.lineTo(x+L-36,y+14); ctx.lineTo(x+L-28,y+5); ctx.lineTo(x+L-22,y+12); ctx.lineTo(x+L-14,y+5); ctx.stroke(); break;
+    case 'coin': circ(ctx,x,y,L,c,'#fff',2.6); circ(ctx,x,y,L-8,c,null,1.2); textAt(ctx,'₹5',x,y+7,{align:'center',size:20,weight:700,color:c}); break;
+    case 'spoon': ctx.beginPath(); ctx.ellipse(x+L-36,y,36,20,0,0,Math.PI*2); ctx.fill(); ctx.stroke(); rrect(ctx,x-L,y-5,2*L-70,10,5); ctx.fill(); ctx.stroke(); break;
+    case 'needle': line(ctx,x-L,y,x+L-6,y,c,3); line(ctx,x+L-6,y,x+L,y,c,1.5); ctx.beginPath(); ctx.ellipse(x-L+8,y,5,2,0,0,Math.PI*2); ctx.stroke(); break;
+    case 'foil': ctx.beginPath(); for(let i=0;i<=12;i++){ const xx=x-L+2*L*i/12; ctx.lineTo(xx,y-7+(i%2?3:-2)); } for(let i=12;i>=0;i--){ const xx=x-L+2*L*i/12; ctx.lineTo(xx,y+7+(i%2?2:-3)); } ctx.closePath(); ctx.fill(); ctx.stroke(); break;
+    case 'lead': rect(ctx,x-L,y-4,2*L,8,c,'#5a6b80'); break;
+    case 'stick': ctx.beginPath(); ctx.moveTo(x-L,y-8); ctx.bezierCurveTo(x-L/2,y-11,x+L/2,y-6,x+L,y-9); ctx.lineTo(x+L,y+8); ctx.bezierCurveTo(x+L/2,y+10,x-L/2,y+6,x-L,y+9); ctx.closePath(); ctx.fill(); ctx.stroke();
+      for(let i=0;i<3;i++) line(ctx,x-L+30+i*60,y-2,x-L+70+i*60,y-1,COL.mid,1.2); break;
+    case 'scale': rect(ctx,x-L,y-12,2*L,24,c,'#fff'); for(let i=0;i<=30;i++){ const xx=x-L+6+i*(2*L-12)/30; line(ctx,xx,y-12,xx,y-12+(i%5?5:9),c,1); } break;
+    case 'bangle': circ(ctx,x,y,L,COL.blue,null,5); circ(ctx,x,y,L-7,COL.blue,null,1.2); break;
+    case 'eraser': rrect(ctx,x-L,y-13,2*L,26,6); ctx.fill(); ctx.stroke(); line(ctx,x-L+30,y-13,x-L+30,y+13,c,1.4); break;
+    case 'paper': ctx.beginPath(); ctx.moveTo(x-L,y-3); ctx.quadraticCurveTo(x,y-9,x+L,y-3); ctx.lineTo(x+L,y+3); ctx.quadraticCurveTo(x,y-3,x-L,y+3); ctx.closePath(); ctx.fill(); ctx.stroke(); break;
+    case 'candle': rect(ctx,x-L,y-15,2*L,30,c,'#fff'); line(ctx,x+L,y,x+L+10,y-3,c,2); break;
+    case 'cork': ctx.beginPath(); ctx.moveTo(x-L,y-22); ctx.lineTo(x+L,y-18); ctx.lineTo(x+L,y+18); ctx.lineTo(x-L,y+22); ctx.closePath(); ctx.fill(); ctx.stroke(); for(let i=0;i<6;i++) circ(ctx,x-L+10+(i*23)%70,y-12+(i*17)%26,2,COL.mid,null,1); break;
+  }
+  ctx.restore(); }
+function buildA11(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label>Object to test</label><div class="chip-wrap" id="objs">${OBJ11.map((o,i)=>`<button class="chip-btn${i===0?' active':''}" data-i="${i}">${o.n}</button>`).join('')}</div></div>
+    <div class="control-group"><div class="toggle-group" style="margin-top:0"><button class="toggle-btn play" id="test">⬇ Test it</button><button class="toggle-btn" id="touch">Touch probe ends</button></div></div>
+    <div class="control-group"><div class="result-cards">${card('k1','Lamp glows?')}${card('k2','Conclusion')}${card('k3','Material')}${card('k4','Current')}</div></div>
+    <div class="control-group"><label>Table 3.3</label><table class="log"><thead><tr><th>Object</th><th>Material</th><th>Glows</th><th>Conclusion</th></tr></thead><tbody id="lg"></tbody></table></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const HX=50, HY=110, CLN=150, LHX=620, LHY=190, OX=400, OY=400, MUG=900;
+  const lamp=lampNew(1.5,0.2), flow=flowNew();
+  let cur=0, mode='up', t=0, logged={}, settle=0;
+  const ox=spr(OX); let slide=null, outgoing=null;
+  const pL={x:spr(300),y:spr(250)}, pR={x:spr(500),y:spr(250)};
+  const choose=i=>{ if(i===cur||slide) return; outgoing={o:OBJ11[cur],x:ox.x,v:Math.sqrt(2*MUG*520)}; cur=i; const d=460; slide={x:OX-d,v:Math.sqrt(2*MUG*d)}; ox.x=OX-d; mode='up'; $('#test').textContent='⬇ Test it'; };
+  $('#objs').querySelectorAll('.chip-btn').forEach(b=>b.onclick=()=>{ if(slide) return; $('#objs').querySelectorAll('.chip-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); choose(+b.dataset.i); });
+  $('#test').onclick=()=>{ if(slide) return; mode=mode==='test'?'up':'test'; $('#test').textContent=mode==='test'?'⬆ Lift probes':'⬇ Test it'; settle=0; };
+  $('#touch').onclick=()=>{ mode=mode==='touch'?'up':'touch'; $('#test').textContent='⬇ Test it'; };
+
+  animLoop(dt=>{ t+=dt; const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h); ctx.save(); stage(ctx,w,h);
+    const o=OBJ11[cur];
+    // friction slides: v decreases by μg·dt until it stops
+    if(slide){ slide.v=Math.max(0,slide.v-MUG*dt); slide.x+=slide.v*dt; if(slide.v<=0){ slide.x=OX; slide=null; } ox.x=slide?slide.x:OX; }
+    if(outgoing){ outgoing.v=Math.max(0,outgoing.v-MUG*dt); outgoing.x+=outgoing.v*dt; if(outgoing.v<=0||outgoing.x>1000) outgoing=null; }
+    // probe targets
+    const isRound=o.k==='coin'||o.k==='bangle', oy=isRound?OY+40-o.L:OY+40-o.th/2, top=oy-o.th/2;
+    let tL=P(300,250), tR=P(500,250);
+    if(mode==='test'){ tL=isRound?P(ox.x-o.L*0.72,oy-o.L*0.72):P(ox.x-o.L+10,top); tR=isRound?P(ox.x+o.L*0.72,oy-o.L*0.72):P(ox.x+o.L-12,top); }
+    if(mode==='touch'){ tL=P(393,240); tR=P(407,240); }
+    springTo(pL.x,tL.x,40,9,dt); springTo(pL.y,tL.y,55,8,dt); springTo(pR.x,tR.x,40,9,dt); springTo(pR.y,tR.y,55,8,dt);
+    const at=(p,q)=>Math.hypot(p.x.x-q.x,p.y.x-q.y)<4;
+    const onObj=mode==='test'&&at(pL,tL)&&at(pR,tR)&&!slide;
+    const touching=mode==='touch'&&Math.abs(pL.x.x-pR.x.x)<16&&Math.abs(pL.y.x-pR.y.x)<4;
+    const Rx=touching?0:(onObj?o.R:1e15);
+    const I=lampStep(lamp,CELL_E,CELL_R+0.05+Rx,dt), br=lampBr(lamp.T);
+    flowStep(flow,I>1e-4?flowSpeed(I):0,dt);
+    // scene
+    tableTop(ctx,20,780,OY+60,0);
+    ctx.save(); ctx.lineWidth=2.4; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; rrect(ctx,OX-190,OY+40,380,20,4); ctx.fill(); ctx.stroke(); ctx.restore();
+    if(outgoing) drawObj11(ctx,outgoing.o,outgoing.x,OY+ (outgoing.o.k==='coin'||outgoing.o.k==='bangle'?40-outgoing.o.L:40-outgoing.o.th/2));
+    drawObj11(ctx,o,ox.x,oy);
+    // tester
+    const Hd=holderDraw(ctx,HX,HY,1,CLN,26,6); const CT=drawCell(ctx,Hd.springEnd+(CLN+2)/2+1.5,HY,0,{len:CLN+2,r:26});
+    const LH=lampHolder(ctx,LHX,LHY); const LD=lampDraw(ctx,LHX,LHY-8,1.5,{T:lamp.T});
+    const pLp=P(pL.x.x,pL.y.x), pRp=P(pR.x.x,pR.y.x);
+    const wRed=sagPts(P(Hd.p.x,Hd.p.y),LH.a,60,26), wL=bezPts(P(Hd.n.x,Hd.n.y),P(Hd.n.x-10,Hd.n.y+150),P(pLp.x-40,pLp.y-160),P(pLp.x,pLp.y-22),30), wR=bezPts(LH.b,P(LH.b.x+10,LH.b.y+120),P(pRp.x+60,pRp.y-160),P(pRp.x,pRp.y-22),30);
+    wireDraw(ctx,wRed,COL.red,6); wireDraw(ctx,wL,COL.blue,6); wireDraw(ctx,wR,COL.blue,6);
+    [pLp,pRp].forEach(p=>{ line(ctx,p.x,p.y-22,p.x,p.y,COL.ink,3.2); rect(ctx,p.x-5,p.y-34,10,14,COL.ink,'#fff',2); });
+    if(I>1e-4){ const through=touching?[pLp,pRp]:[pLp,P(pLp.x+(pRp.x-pLp.x)*0.5,oy),pRp];
+      const path=pts([CT.p],wRed,LD.path,[LH.b],wR,[pRp],rev(through),rev(wL),[CT.n]);
+      flowDraw(ctx,pathNew(path),flow,{full:60}); }
+    // verdict on the object
+    const glowing=br>0.05;
+    if(onObj){ settle+=dt; if(settle>0.7) tag(ctx,glowing?'conductor':'insulator',ox.x,OY+88,glowing?COL.green:COL.blue,{size:15});
+      if(settle>1.2&&!logged[o.k]){ logged[o.k]=1; $('#lg').insertAdjacentHTML('afterbegin',`<tr><td>${o.n}</td><td>${o.m}</td><td class="${glowing?'r-ok':''}">${glowing?'Yes':'No'}</td><td style="color:${glowing?COL.green:COL.blue};font-weight:700">${glowing?'Conductor':'Insulator'}</td></tr>`); } }
+    if(touching) tag(ctx,'tester works!',400,190,COL.green,{size:14});
+    setv($,'k1',(onObj||touching)?(glowing?(br<0.5?'Yes (dimmer)':'Yes'):'No'):'—'); setc($,'k1',glowing?COL.yellow:COL.muted);
+    setv($,'k2',onObj?(glowing?'Conductor':'Insulator'):'—'); setc($,'k2',glowing?COL.green:COL.blue);
+    setv($,'k3',o.m); setv($,'k4',I<1e-4?'0 A':fmt(I,2)+' A');
+    ctx.restore();
+  });
+  return wrap;
+}
+
+
+/* ---------------------------------------------------------------------
+   1. ACTIVITIES + ROUTER
+   --------------------------------------------------------------------- */
+const activities = [
+  { num:'3.1', title:'Explore a Torch', desc:'Slide the switch · open it up', build: buildA1 },
+  { num:'3.2', title:'Terminals of a Cell', desc:'Turn it around · + cap and − disc', build: buildA2 },
+  { num:'3.3', title:'Build a Battery', desc:'Reorder · reverse · + to −', build: buildA3 },
+  { num:'3.4', title:'Incandescent Lamp', desc:'Which part glows? How is it fixed?', build: buildA4 },
+  { num:'3.5', title:'The LED', desc:'No filament · one long leg', build: buildA5 },
+  { num:'3.6', title:'Make the Lamp Glow', desc:'Table 3.1 · predict, then connect', build: buildA6 },
+  { num:'3.7', title:'Make an LED Glow', desc:'Long leg to + · then swap', build: buildA7 },
+  { num:'3.8', title:'Construct a Switch', desc:'Two drawing pins · a safety pin', build: buildA8 },
+  { num:'3.9', title:'Test the Switch', desc:'ON closes the gap · anywhere in the loop', build: buildA9 },
+  { num:'3.10', title:'Circuit Diagrams', desc:'Picture → symbols (Table 3.2)', build: buildA10 },
+  { num:'3.11', title:'Conductor Detective', desc:'Table 3.3 · conductor or insulator?', build: buildA11 },
+];
+let currentIndex = 0;
+
+function buildNav(){
+  const nav = document.getElementById('sideNav');
+  nav.innerHTML='';
+  activities.forEach((a,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'nav-item'+(i===currentIndex?' active':'');
+    btn.innerHTML = `<span class="n-num">${a.num}</span><span class="n-title">${a.title}</span>`;
+    btn.onclick = ()=>{ currentIndex=i; render(); };
+    nav.appendChild(btn);
+  });
+}
+function render(){
+  stopAllLoops();
+  buildNav();
+  const a = activities[currentIndex];
+  document.getElementById('panelBadge').textContent = a.num;
+  document.getElementById('panelTitle').textContent = a.title;
+  document.getElementById('panelDesc').textContent = a.desc||'';
+  const body = document.getElementById('panelBody');
+  body.innerHTML='';
+  body.appendChild(a.build());
+}
+function labShell(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `<div class="lab-canvas-wrap"><canvas></canvas></div><div class="lab-side"></div>`;
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   INIT
+   --------------------------------------------------------------------- */
+render();
+</script>
+<script src="../../tracking/activity-tracker.js"></script>
+<script src="../../nav/back-button.js"></script>
+</body>
+</html>

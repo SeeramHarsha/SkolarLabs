@@ -1,0 +1,1184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 10 · Chapter 11 — Electricity | Botclub Labs</title>
+<link href="../../vendor/fonts/fonts.css" rel="stylesheet">
+<style>
+:root{
+  --navy-1:#0f2640; --navy-2:#1a3a5c; --navy-3:#234a73;
+  --accent: #00d4ff; --accent-2: #00d4ff;
+  --bg: #0d1117; --surface-0: rgba(255,255,255,0.04); --surface-1: rgba(255,255,255,0.04); --surface-2: rgba(255,255,255,0.04);
+  --border: rgba(255,255,255,0.08); --border-strong: rgba(255,255,255,0.08);
+  --text-1: #ffffff; --text-2: #ffffff; --text-3: #ffffff;
+  --real:#d9432b; --virtual:#2f8fe0; --ok:#1f9d55; --warn:#c9820b;
+  --radius:14px; --radius-sm:9px;
+  --fs-xs:clamp(10px,0.62vw,12px); --fs-sm:clamp(11px,0.72vw,13.5px);
+  --fs-md:clamp(12.5px,0.85vw,15px); --fs-lg:clamp(15px,1.15vw,19px);
+  --fs-xl:clamp(18px,1.5vw,25px);
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:22px; --sp-6:30px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{ font-family:'Poppins',system-ui,sans-serif; background:var(--bg); color:var(--text-1); overflow:hidden; }
+button, input, select{font-family:inherit;}
+
+.app{height:100vh; display:flex; flex-direction:column; min-height:0;}
+.topbar{
+  flex:0 0 auto; background:linear-gradient(120deg, var(--navy-1) 0%, var(--navy-2) 55%, var(--navy-3) 100%);
+  color:#fff; padding:clamp(10px,1.1vh,18px) clamp(14px,1.6vw,28px);
+  display:flex; align-items:center; gap:var(--sp-4); box-shadow:0 2px 10px rgba(15,38,64,0.25); z-index:5;
+}
+.topbar .brand-badge{
+  width:clamp(34px,2.6vw,44px); height:clamp(34px,2.6vw,44px); border-radius:10px; background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center;
+  font-size:clamp(16px,1.4vw,22px); flex:0 0 auto;
+}
+.topbar .titles{min-width:0;}
+.topbar .chip{
+  display:inline-block; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.28);
+  border-radius:6px; padding:2px 9px; font-size:var(--fs-xs); letter-spacing:0.06em; text-transform:uppercase; font-weight:600; margin-bottom:4px;
+}
+.topbar h1{font-size:var(--fs-lg); font-weight:600; line-height:1.25; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.topbar p{font-size:var(--fs-sm); opacity:0.78; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.topbar .spacer{flex:1;}
+.topbar .prof-note{font-size:var(--fs-xs); opacity:0.85; text-align:right; max-width:270px; line-height:1.5; display:none;}
+@media (min-width:1100px){ .topbar .prof-note{display:block;} }
+
+.body-wrap{flex:1; display:flex; min-height:0; overflow:hidden;}
+.sidenav{
+  flex:0 0 clamp(190px,15.5vw,268px); background:var(--surface-0); border-right:1px solid var(--border);
+  overflow-y:auto; padding:var(--sp-3); display:flex; flex-direction:column; gap:6px;
+}
+.nav-section-label{font-size:var(--fs-xs); text-transform:uppercase; letter-spacing:0.08em; color:var(--text-3); font-weight:600; padding:8px 8px 2px;}
+.nav-item{
+  display:flex; flex-direction:column; align-items:flex-start; gap:1px; text-align:left; width:100%;
+  border:1px solid var(--border); background:var(--surface-1); border-radius:var(--radius-sm); padding:8px 11px; cursor:pointer; transition:all .15s ease;
+}
+.nav-item:hover{background:var(--surface-2); border-color:var(--border-strong);}
+.nav-item.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.nav-item .n-num{font-size:var(--fs-xs); font-weight:700; letter-spacing:.04em; color:var(--accent); opacity:.95;}
+.nav-item.active .n-num{color:var(--accent-2);}
+.nav-item .n-title{font-size:var(--fs-md); font-weight:600; line-height:1.3;}
+.nav-item .n-sub{font-size:var(--fs-xs); color:var(--text-2);}
+.nav-item.active .n-sub{color:rgba(255,255,255,0.75);}
+.nav-item .n-type{align-self:flex-end; font-size:9px; text-transform:uppercase; letter-spacing:.05em; background:var(--surface-2); border-radius:4px; padding:1px 5px; color:var(--text-3); margin-top:2px;}
+.nav-item.active .n-type{background:rgba(255,255,255,0.15); color:#fff;}
+
+.content{flex:1; min-width:0; display:flex; flex-direction:column; overflow:hidden;}
+.panel-head{flex:0 0 auto; padding:var(--sp-4) var(--sp-5) var(--sp-2); border-bottom:1px solid var(--border); background:var(--surface-0);}
+.panel-head .badge-row{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+.panel-badge{background:var(--navy-2); color:#fff; font-size:var(--fs-xs); font-weight:700; padding:3px 10px; border-radius:6px; letter-spacing:.04em;}
+.panel-typebadge{font-size:var(--fs-xs); color:var(--text-2); border:1px solid var(--border); padding:2px 8px; border-radius:6px;}
+.panel-head h2{font-size:var(--fs-xl); font-weight:600; margin-top:6px; color:var(--text-1);}
+.panel-head p{font-size:var(--fs-sm); color:var(--text-2); margin-top:3px; line-height:1.5; max-width:1000px;}
+.panel-body{flex:1; min-height:0; overflow:hidden; padding:var(--sp-4) var(--sp-5); display:flex;}
+
+.demo-view{flex:1; display:flex; gap:var(--sp-4); min-height:0; min-width:0;}
+.demo-canvas-wrap{
+  flex:1.5; min-width:0; min-height:0; background:#eaf2fb; border:1px solid var(--border); border-radius:var(--radius);
+  display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;
+}
+.demo-canvas-wrap canvas{width:100%; height:100%; display:block;}
+.demo-side{flex:1; min-width:260px; max-width:420px; display:flex; flex-direction:column; gap:var(--sp-3); min-height:0;}
+.step-card{background:var(--surface-0); border:1px solid var(--border); border-radius:var(--radius); padding:var(--sp-4); flex:1; min-height:0; overflow-y:auto;}
+.step-card .step-tag{font-size:var(--fs-xs); font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:.05em;}
+.step-card .step-text{font-size:var(--fs-md); line-height:1.65; color:var(--text-1); margin-top:6px;}
+.step-card .step-text strong{color:var(--navy-2);}
+.step-card .step-text em{color:var(--accent); font-style:normal; font-weight:600;}
+.outcome-pill{display:inline-block; margin-top:10px; font-size:var(--fs-xs); font-weight:600; padding:3px 10px; border-radius:20px;}
+.outcome-pill.ok{background:#e4f7ec; color:var(--ok); border:1px solid #b8e8cb;}
+.outcome-pill.info{background:#e6f2fd; color:var(--accent); border:1px solid #b9dcfb;}
+
+.ctrl-row{display:flex; gap:8px; align-items:center; flex-wrap:wrap; flex:0 0 auto;}
+.btn{padding:9px 16px; border-radius:9px; border:1px solid var(--border-strong); background:var(--surface-0); color:var(--text-1); cursor:pointer; font-size:var(--fs-sm); font-weight:600; transition:all .12s ease; white-space:nowrap;}
+.btn:hover{background:var(--surface-2);}
+.btn:disabled{opacity:.4; cursor:default;}
+.btn.primary{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.btn.primary:hover{background:var(--navy-1);}
+.btn.ghost{background:transparent;}
+.step-dots{display:flex; gap:5px; align-items:center; margin-left:auto;}
+.step-dot{width:7px; height:7px; border-radius:50%; background:var(--border-strong); transition:all .2s;}
+.step-dot.active{background:var(--navy-2); width:20px; border-radius:5px;}
+
+.lab-view{flex:1; display:flex; gap:var(--sp-4); min-height:0; min-width:0;}
+.lab-canvas-wrap{flex:2; min-width:0; min-height:0; background:#f7fafd; border:1px solid var(--border); border-radius:var(--radius); position:relative; overflow:hidden;}
+.lab-canvas-wrap canvas{width:100%; height:100%; display:block;}
+.lab-legend{position:absolute; top:10px; left:12px; background:rgba(255,255,255,0.92); border:1px solid var(--border); border-radius:8px; padding:7px 11px; font-size:var(--fs-xs); color:var(--text-2); line-height:1.8; backdrop-filter:blur(2px);}
+.lab-legend span{display:inline-block; width:16px; height:2.5px; margin-right:6px; vertical-align:middle;}
+
+.lab-side{flex:1; min-width:270px; max-width:400px; display:flex; flex-direction:column; gap:var(--sp-3); min-height:0; overflow-y:auto; padding-right:2px;}
+.control-group{background:var(--surface-0); border:1px solid var(--border); border-radius:var(--radius-sm); padding:11px 13px;}
+.control-group label{font-size:var(--fs-sm); font-weight:600; color:var(--text-1); display:flex; justify-content:space-between;}
+.control-group label .val{color:var(--accent); font-weight:700;}
+.control-group input[type=range]{width:100%; margin-top:8px; accent-color:var(--navy-2); cursor:pointer;}
+.toggle-group{display:flex; gap:6px; margin-top:8px; flex-wrap:wrap;}
+.toggle-btn{flex:1; min-width:60px; padding:8px 6px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:600; cursor:pointer; text-align:center; color:var(--text-2);}
+.toggle-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.quick-jump{display:flex; flex-wrap:wrap; gap:6px; margin-top:9px;}
+.jump-btn{flex:1 1 calc(33% - 5px); padding:6px 4px; font-size:10.5px; font-weight:600; text-align:center; border:1px solid var(--border-strong); background:var(--surface-1); border-radius:6px; cursor:pointer; color:var(--text-2);}
+.jump-btn.active{background:var(--accent); border-color:var(--accent); color:#fff;}
+
+.result-cards{display:grid; grid-template-columns:1fr 1fr; gap:7px;}
+.rcard{background:var(--surface-0); border:1px solid var(--border); border-radius:9px; padding:8px 10px;}
+.rcard .rlabel{font-size:9.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--text-3); font-weight:600;}
+.rcard .rval{font-size:var(--fs-md); font-weight:700; color:var(--text-1); margin-top:2px;}
+.rcard.wide{grid-column:1/-1;}
+.nature-tags{display:flex; gap:5px; flex-wrap:wrap; margin-top:3px;}
+.tag{font-size:10px; font-weight:700; padding:2px 8px; border-radius:12px;}
+.tag.real{background:#fde7e2; color:var(--real);}
+.tag.virtual{background:#e6f2fd; color:var(--virtual);}
+.tag.warn{background:#fdf1e0; color:var(--warn);}
+.tag.ok{background:#e4f7ec; color:var(--ok);}
+.tag.size{background:var(--surface-2); color:var(--text-2);}
+.info-note{font-size:var(--fs-xs); color:var(--text-2); line-height:1.6;}
+.warn-banner{margin-top:8px; background:#fdece7; border:1px solid #f3bcaa; color:#a4331c; font-size:var(--fs-xs); font-weight:600; padding:7px 10px; border-radius:8px;}
+
+.mini-table{width:100%; border-collapse:collapse; font-size:10.5px;}
+.mini-table th{background:var(--navy-2); color:#fff; padding:5px 6px; text-align:left; font-weight:600;}
+.mini-table td{padding:5px 6px; border-bottom:1px solid var(--border); color:var(--text-2);}
+.mini-table tr.hl td{background:#eaf3fd; color:var(--text-1); font-weight:600;}
+
+@media (max-width:1000px) and (orientation:portrait), (max-width:1000px) and (min-height:601px){
+  .body-wrap{flex-direction:column;}
+  .sidenav{flex:0 0 auto; width:100%; height:auto; flex-direction:row; overflow-x:auto; overflow-y:hidden; border-right:none; border-bottom:1px solid var(--border); padding:8px;}
+  .nav-section-label{display:none;}
+  .nav-item{flex:0 0 auto; width:170px;}
+  .panel-body{overflow-y:auto;}
+  .demo-view, .lab-view{flex-direction:column;}
+  .demo-canvas-wrap{min-height:260px;}
+  .lab-canvas-wrap{min-height:280px;}
+  .demo-side, .lab-side{max-width:none;}
+  .content{overflow-y:auto;}
+}
+@media (max-width:620px){
+  .topbar h1{white-space:normal;}
+  .quick-jump{flex-direction:column;}
+  .jump-btn{flex:1 1 auto;}
+  .result-cards{grid-template-columns:1fr 1fr;}
+}
+::-webkit-scrollbar{width:8px; height:8px;}
+::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+</style>
+</head>
+<body>
+<!-- CLAUDE-BACK-NAV-START -->
+<div id="claude-back-nav" style="width:100%;box-sizing:border-box;display:flex;gap:8px;align-items:center;padding:8px 14px;background:#0d1117;border-bottom:1px solid rgba(255,255,255,0.08);font-family:'Poppins',sans-serif;position:relative;z-index:9999;">
+  <button type="button" id="claude-back-btn" onclick="window.location.href='../../index.html?openClass=10'" style="display:inline-flex;align-items:center;gap:6px;padding:6px 12px;background:rgba(255,255,255,0.06);color:#fff;border:1px solid rgba(255,255,255,0.14);border-radius:16px;font-size:12px;font-weight:600;cursor:pointer;font-family:'Poppins',sans-serif;">&#8592; Back to Class 10 Chapters</button>
+</div>
+<!-- CLAUDE-BACK-NAV-END -->
+
+<div class="app">
+  <div class="topbar">
+    <div class="brand-badge">⚡</div>
+    <div class="titles">
+      <div class="chip">Grade 10 · Chapter 11</div>
+      <h1>Electricity</h1>
+      <p>Physics-accurate circuit simulator for classroom demonstration</p>
+    </div>
+    <div class="spacer"></div>
+    <div class="prof-note">Select an activity on the left. The Ohm's Law, Resistance-Factors, Series/Parallel and Power labs all compute real numbers live — drag sliders to reproduce any textbook example.</div>
+  </div>
+  <div class="body-wrap">
+    <nav class="sidenav" id="sideNav"></nav>
+    <main class="content">
+      <div class="panel-head">
+        <div class="badge-row">
+          <div class="panel-badge" id="panelBadge">11.1</div>
+          <div class="panel-typebadge" id="panelType">Lab</div>
+        </div>
+        <h2 id="panelTitle">Select an activity</h2>
+        <p id="panelDesc">Choose an activity from the left to begin.</p>
+      </div>
+      <div class="panel-body" id="panelBody"></div>
+    </main>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   CHAPTER 11 — ELECTRICITY
+   ========================================================================= */
+
+/* ---------------------------------------------------------------------
+   0. SHARED HELPERS
+   --------------------------------------------------------------------- */
+function fitCanvas(canvas){
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  const rect = canvas.parentElement.getBoundingClientRect();
+  const w = Math.max(200, rect.width);
+  const h = Math.max(160, rect.height);
+  canvas.width = Math.round(w*dpr);
+  canvas.height = Math.round(h*dpr);
+  canvas.style.width = w+'px';
+  canvas.style.height = h+'px';
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, w, h};
+}
+function line(ctx,x1,y1,x2,y2,color,width,dash){
+  ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=width||2;
+  if(dash) ctx.setLineDash(dash); else ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); ctx.restore();
+}
+function arrowHead(ctx,x,y,ang,color,size){
+  size=size||8; ctx.save(); ctx.fillStyle=color; ctx.translate(x,y); ctx.rotate(ang);
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-size,size*0.42); ctx.lineTo(-size,-size*0.42); ctx.closePath(); ctx.fill(); ctx.restore();
+}
+function textAt(ctx,txt,x,y,opts){
+  opts=opts||{}; ctx.save();
+  ctx.font=(opts.weight||500)+' '+(opts.size||12)+'px Poppins, sans-serif';
+  ctx.fillStyle=opts.color||'#132a44'; ctx.textAlign=opts.align||'left'; ctx.textBaseline=opts.baseline||'alphabetic';
+  ctx.fillText(txt,x,y); ctx.restore();
+}
+function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+function fmt(x,d){ if(!isFinite(x)) return '—'; d=d===undefined?2:d; return Number(x.toFixed(d)).toString(); }
+
+/* Circuit-drawing helpers */
+function drawZigzag(ctx,x1,y1,x2,y2,amp,n,color,width){
+  amp=amp||9; n=n||6; color=color||'#132a44'; width=width||2.4;
+  const dx=x2-x1, dy=y2-y1, len=Math.hypot(dx,dy)||1e-6;
+  const ux=dx/len, uy=dy/len, px=-uy, py=ux;
+  const leadFrac=0.14;
+  const zStart=leadFrac, zEnd=1-leadFrac;
+  ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=width; ctx.lineJoin='round';
+  ctx.beginPath();
+  ctx.moveTo(x1,y1);
+  const leadX=x1+dx*zStart, leadY=y1+dy*zStart;
+  ctx.lineTo(leadX,leadY);
+  for(let i=0;i<=n;i++){
+    const t=zStart+(zEnd-zStart)*(i/n);
+    const sign = (i%2===0)? 1:-1;
+    const bx=x1+dx*t, by=y1+dy*t;
+    const ox=bx+px*amp*sign, oy=by+py*amp*sign;
+    ctx.lineTo(ox,oy);
+  }
+  ctx.lineTo(x1+dx*zEnd,y1+dy*zEnd);
+  ctx.lineTo(x2,y2);
+  ctx.stroke();
+  ctx.restore();
+}
+function drawBattery(ctx,x1,y1,x2,y2,cells,color){
+  color=color||'#132a44'; cells=cells||1;
+  const dx=x2-x1, dy=y2-y1, len=Math.hypot(dx,dy)||1e-6;
+  const ux=dx/len, uy=dy/len, px=-uy, py=ux;
+  const n=cells*2;
+  ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=2.6; ctx.lineCap='round';
+  const gap=len/(n+1);
+  for(let i=1;i<=n;i++){
+    const t=i/(n+1);
+    const cx=x1+dx*t, cy=y1+dy*t;
+    const long = (i%2===1);
+    const h = long? 13:7;
+    ctx.lineWidth = long? 2.6:5;
+    ctx.beginPath();
+    ctx.moveTo(cx+px*h,cy+py*h);
+    ctx.lineTo(cx-px*h,cy-py*h);
+    ctx.stroke();
+  }
+  ctx.restore();
+  textAt(ctx,'+',x1-px*20-ux*4,y1-py*20-uy*4,{size:12,weight:700,color,align:'center'});
+  textAt(ctx,'−',x2-px*20+ux*4,y2-py*20+uy*4,{size:13,weight:700,color,align:'center'});
+}
+function drawMeter(ctx,x,y,label,color){
+  color=color||'#132a44';
+  ctx.save();
+  ctx.beginPath(); ctx.arc(x,y,15,0,Math.PI*2);
+  ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=color; ctx.lineWidth=2; ctx.stroke();
+  ctx.restore();
+  textAt(ctx,label,x,y+4.5,{align:'center',size:13,weight:700,color});
+}
+function drawSwitch(ctx,x1,y1,x2,y2,closed,color){
+  color=color||'#132a44';
+  const dx=x2-x1, dy=y2-y1, len=Math.hypot(dx,dy);
+  const ux=dx/len, uy=dy/len;
+  const gapA={x:x1+ux*len*0.3,y:y1+uy*len*0.3};
+  const gapB={x:x1+ux*len*0.7,y:y1+uy*len*0.7};
+  line(ctx,x1,y1,gapA.x,gapA.y,color,2.4);
+  line(ctx,gapB.x,gapB.y,x2,y2,color,2.4);
+  ctx.fillStyle=color;
+  ctx.beginPath(); ctx.arc(gapA.x,gapA.y,2.6,0,Math.PI*2); ctx.fill();
+  ctx.beginPath(); ctx.arc(gapB.x,gapB.y,2.6,0,Math.PI*2); ctx.fill();
+  if(closed){ line(ctx,gapA.x,gapA.y,gapB.x,gapB.y,color,2.4); }
+  else{ line(ctx,gapA.x,gapA.y, gapA.x-uy*14, gapA.y+ux*14, color,2.4); }
+}
+
+/* ---------------------------------------------------------------------
+   1. ACTIVITY DATA + ROUTER
+   --------------------------------------------------------------------- */
+const activities = [
+  { id:'a1', num:'11.1 – 11.2', title:'Current & Potential Difference', sub:'I = Q/t and V = W/Q', type:'basiclab',
+    desc:'Charge flows only when there is a potential difference — just as water flows only when there is a pressure difference. Explore both relationships live, and watch the direction of conventional current versus electron flow.' },
+
+  { id:'a2', num:'11.3', title:'Circuit Diagram Symbols', sub:'Table 11.1 — reading a schematic', type:'demo',
+    desc:'Every circuit diagram uses a standard set of symbols. Step through each one exactly as listed in Table 11.1.',
+    draw: drawSymbolCard,
+    steps:[
+      {label:'<strong>An electric cell</strong> — the longer line is the positive terminal, the shorter line is negative.', state:0},
+      {label:'<strong>A battery</strong> — two or more cells joined end to end (positive of one to negative of next).', state:1},
+      {label:'<strong>Plug key / switch (open)</strong> — a gap in the conducting link; current cannot flow.', state:2},
+      {label:'<strong>Plug key / switch (closed)</strong> — the gap is bridged; current can flow.', state:3},
+      {label:'<strong>A wire joint</strong> — a solid dot marks two wires that <em>are</em> electrically connected.', state:4},
+      {label:'<strong>Wires crossing without joining</strong> — one wire hops over the other; no dot, no connection.', state:5},
+      {label:'<strong>Electric bulb</strong> — shown as a filament coil or the familiar bulb icon.', state:6},
+      {label:'<strong>A resistor of resistance R</strong> — drawn as a zigzag.', state:7},
+      {label:'<strong>Variable resistance / rheostat</strong> — a zigzag with an arrow, used to change resistance in a circuit.', state:8},
+      {label:'<strong>Ammeter (A)</strong> — always connected in <em>series</em>, so all the current passes through it.', state:9},
+      {label:'<strong>Voltmeter (V)</strong> — always connected in <em>parallel</em>, across the two points being measured.', state:10},
+    ]},
+
+  { id:'a3', num:'Activity 11.1', title:"Verifying Ohm's Law", sub:'V–I graph for a nichrome wire', type:'ohmlab',
+    desc:"Connect 1, 2, 3, and 4 cells (1.5 V each) across a nichrome wire XY and record the ammeter and voltmeter readings each time. V/I stays constant — Ohm's Law." },
+
+  { id:'a4', num:'Activity 11.2', title:'Comparing Components', sub:'Same circuit, different resistance', type:'comparelab',
+    desc:'With four cells (6 V) as the source, swap the component in the gap XY — a nichrome wire, a torch bulb, and a 10 W (220 V) bulb — and compare the ammeter readings.' },
+
+  { id:'a5', num:'Activity 11.3', title:'Factors Affecting Resistance', sub:'R = ρ l / A', type:'factorslab',
+    desc:'Resistance depends on length, area of cross-section, and the material itself. Adjust the wire and swap materials from Table 11.2 to see how R — and the resulting current — changes.' },
+
+  { id:'a6', num:'Activities 11.4 – 11.6', title:'Series & Parallel Circuits', sub:'Live circuit builder', type:'circuitbuilder',
+    desc:'Build a three-resistor circuit in series or parallel. Watch current, voltage and equivalent resistance update live — in series the current is the same everywhere; in parallel the voltage is the same across every branch.' },
+
+  { id:'a7', num:'11.7', title:'Heating Effect of Current', sub:"Joule's Law: H = I²Rt", type:'heatlab',
+    desc:'Electrical energy dissipated as heat in a resistor — the working principle of heaters, irons, bulb filaments, and fuses. Adjust I, R and t and watch the heating coil respond.' },
+
+  { id:'a8', num:'11.8', title:'Electric Power & Energy Cost', sub:'P = VI and the electricity bill', type:'powerlab',
+    desc:'Every appliance is rated in watts. Explore how power, time and the cost per unit (kWh) combine to produce your electricity bill — and compare two appliances running in parallel.' },
+];
+
+let currentIndex = 0;
+
+function buildNav(){
+  const nav = document.getElementById('sideNav');
+  nav.innerHTML = '<div class="nav-section-label">Chapter 11 Activities</div>';
+  activities.forEach((a,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'nav-item'+(i===currentIndex?' active':'');
+    const typeLabel = a.type==='demo' ? 'Demo' : a.type==='basiclab' ? 'Interactive' : a.type==='ohmlab' ? "Ohm's Law Lab" : a.type==='comparelab' ? 'Interactive' : a.type==='factorslab' ? 'Resistance Lab' : a.type==='circuitbuilder' ? 'Circuit Builder' : a.type==='heatlab' ? 'Heating Lab' : 'Power Lab';
+    btn.innerHTML = `<span class="n-num">${a.num}</span><span class="n-title">${a.title}</span><span class="n-sub">${a.sub}</span><span class="n-type">${typeLabel}</span>`;
+    btn.onclick = ()=>{ currentIndex=i; render(); };
+    nav.appendChild(btn);
+  });
+}
+
+function render(){
+  buildNav();
+  const a = activities[currentIndex];
+  document.getElementById('panelBadge').textContent = a.num;
+  document.getElementById('panelType').textContent =
+    a.type==='demo' ? 'Step Demo' : a.type==='basiclab' ? 'Interactive Lab' : a.type==='ohmlab' ? "Ohm's Law Lab" : a.type==='comparelab' ? 'Interactive Lab' : a.type==='factorslab' ? 'Resistance Lab' : a.type==='circuitbuilder' ? 'Circuit Builder' : a.type==='heatlab' ? 'Heating Lab' : 'Power Lab';
+  document.getElementById('panelTitle').textContent = `${a.num}: ${a.title}`;
+  document.getElementById('panelDesc').textContent = a.desc;
+  const body = document.getElementById('panelBody');
+  body.innerHTML='';
+  if(a.type==='demo') body.appendChild(buildDemoView(a));
+  else if(a.type==='basiclab') body.appendChild(buildBasicLab());
+  else if(a.type==='ohmlab') body.appendChild(buildOhmLab());
+  else if(a.type==='comparelab') body.appendChild(buildCompareLab());
+  else if(a.type==='factorslab') body.appendChild(buildFactorsLab());
+  else if(a.type==='circuitbuilder') body.appendChild(buildCircuitBuilder());
+  else if(a.type==='heatlab') body.appendChild(buildHeatLab());
+  else if(a.type==='powerlab') body.appendChild(buildPowerLab());
+}
+
+/* ---------------------------------------------------------------------
+   2. DEMO VIEW (step-through) + Symbol card drawer
+   --------------------------------------------------------------------- */
+function buildDemoView(activity){
+  const wrap=document.createElement('div'); wrap.className='demo-view';
+  wrap.innerHTML = `
+    <div class="demo-canvas-wrap"><canvas id="demoCanvas"></canvas></div>
+    <div class="demo-side">
+      <div class="step-card">
+        <div class="step-tag" id="stepTag">Step 1</div>
+        <div class="step-text" id="stepText"></div>
+        <span class="outcome-pill info" id="outcomePill" style="display:none;"></span>
+      </div>
+      <div class="ctrl-row">
+        <button class="btn" id="btnPrev">← Prev</button>
+        <button class="btn primary" id="btnNext">Next →</button>
+        <button class="btn ghost" id="btnReset">↺ Reset</button>
+        <div class="step-dots" id="stepDots"></div>
+      </div>
+    </div>`;
+  let step=0;
+  const canvas = wrap.querySelector('#demoCanvas');
+  function paint(){ const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h); activity.draw(ctx,w,h,step); }
+  function draw(){
+    const s = activity.steps[step];
+    wrap.querySelector('#stepTag').textContent = `Step ${step+1} of ${activity.steps.length}`;
+    wrap.querySelector('#stepText').innerHTML = s.label;
+    const pill = wrap.querySelector('#outcomePill');
+    if(s.outcome){ pill.style.display='inline-block'; pill.textContent=s.outcome; } else pill.style.display='none';
+    wrap.querySelector('#btnPrev').disabled = step===0;
+    const nb = wrap.querySelector('#btnNext'); nb.disabled = step===activity.steps.length-1;
+    nb.textContent = step===activity.steps.length-1 ? 'Done ✓' : 'Next →';
+    const dotsWrap = wrap.querySelector('#stepDots'); dotsWrap.innerHTML='';
+    activity.steps.forEach((_,i)=>{ const d=document.createElement('div'); d.className='step-dot'+(i===step?' active':''); dotsWrap.appendChild(d); });
+    paint();
+  }
+  wrap.querySelector('#btnPrev').onclick=()=>{ step=Math.max(0,step-1); draw(); };
+  wrap.querySelector('#btnNext').onclick=()=>{ step=Math.min(activity.steps.length-1,step+1); draw(); };
+  wrap.querySelector('#btnReset').onclick=()=>{ step=0; draw(); };
+  const ro=new ResizeObserver(()=>paint()); ro.observe(canvas.parentElement);
+  requestAnimationFrame(draw);
+  return wrap;
+}
+
+function drawSymbolCard(ctx,w,h,step){
+  ctx.fillStyle='#fff'; ctx.fillRect(0,0,w,h);
+  const cx=w*0.5, cy=h*0.46;
+  const names=['Electric Cell','Battery','Switch (Open)','Switch (Closed)','Wire Joint','Wires Crossing','Electric Bulb','Resistor R','Rheostat','Ammeter','Voltmeter'];
+  textAt(ctx,names[step],cx,h*0.86,{align:'center',size:16,weight:700,color:'#132a44'});
+  const x1=cx-110, x2=cx+110, y=cy;
+  line(ctx,x1-40,y,x1,y,'#132a44',2.4);
+  line(ctx,x2,y,x2+40,y,'#132a44',2.4);
+  if(step===0){ drawBattery(ctx,x1,y,x2,y,1); }
+  else if(step===1){ drawBattery(ctx,x1,y,x2,y,3); }
+  else if(step===2){ drawSwitch(ctx,x1,y,x2,y,false); }
+  else if(step===3){ drawSwitch(ctx,x1,y,x2,y,true); }
+  else if(step===4){
+    line(ctx,x1,y,x2,y,'#132a44',2.4);
+    line(ctx,cx,y,cx,y-40,'#132a44',2.4);
+    ctx.fillStyle='#132a44'; ctx.beginPath(); ctx.arc(cx,y,4,0,Math.PI*2); ctx.fill();
+  } else if(step===5){
+    line(ctx,x1,y,x2,y,'#132a44',2.4);
+    line(ctx,cx,y-40,cx,y-8,'#132a44',2.4);
+    line(ctx,cx,y+8,cx,y+40,'#132a44',2.4);
+    ctx.save(); ctx.strokeStyle='#132a44'; ctx.lineWidth=2.4;
+    ctx.beginPath(); ctx.arc(cx,y,8,Math.PI,0); ctx.stroke(); ctx.restore();
+  } else if(step===6){
+    line(ctx,x1,y,cx-24,y,'#132a44',2.4); line(ctx,cx+24,y,x2,y,'#132a44',2.4);
+    ctx.strokeStyle='#132a44'; ctx.lineWidth=2;
+    for(let i=0;i<3;i++){ ctx.beginPath(); ctx.arc(cx-16+i*16,y,10,0,Math.PI*1.6); ctx.stroke(); }
+  } else if(step===7){
+    drawZigzag(ctx,x1,y,x2,y,10,7,'#132a44',2.6);
+  } else if(step===8){
+    drawZigzag(ctx,x1,y,x2,y,10,7,'#132a44',2.6);
+    line(ctx,cx-30,y-34,cx+30,y+6,'#132a44',2.2);
+    arrowHead(ctx,cx+30,y+6,Math.atan2(40,60),'#132a44',8);
+  } else if(step===9){
+    line(ctx,x1,y,cx-15,y,'#132a44',2.4); line(ctx,cx+15,y,x2,y,'#132a44',2.4);
+    drawMeter(ctx,cx,y,'A');
+  } else if(step===10){
+    line(ctx,x1,y,cx-15,y,'#132a44',2.4); line(ctx,cx+15,y,x2,y,'#132a44',2.4);
+    drawMeter(ctx,cx,y,'V');
+  }
+}
+
+/* ---------------------------------------------------------------------
+   3. BASIC LAB (11.1–11.2: I = Q/t, V = W/Q, current direction)
+   --------------------------------------------------------------------- */
+function buildBasicLab(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `
+    <div class="lab-canvas-wrap">
+      <canvas id="basicCanvas"></canvas>
+      <div class="lab-legend">
+        <div><span style="background:#d9432b;"></span>Conventional current</div>
+        <div><span style="background:#2f8fe0;"></span>Electron flow (opposite)</div>
+      </div>
+    </div>
+    <div class="lab-side">
+      <div class="control-group">
+        <label>Charge Q <span class="val" id="bQVal">4 C</span></label>
+        <input type="range" id="bQ" min="0.5" max="10" step="0.5" value="4">
+      </div>
+      <div class="control-group">
+        <label>Time t <span class="val" id="bTVal">8 s</span></label>
+        <input type="range" id="bT" min="1" max="20" step="1" value="8">
+      </div>
+      <div class="control-group">
+        <label>Potential difference V <span class="val" id="bVVal">6 V</span></label>
+        <input type="range" id="bV" min="1" max="20" step="1" value="6">
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:2px;">Live results</label>
+        <div class="result-cards">
+          <div class="rcard"><div class="rlabel">Current I = Q/t</div><div class="rval" id="bI">—</div></div>
+          <div class="rcard"><div class="rlabel">Work W = VQ</div><div class="rval" id="bW">—</div></div>
+        </div>
+      </div>
+      <div class="control-group">
+        <p class="info-note">Electrons (negative) actually drift from the <strong>−</strong> terminal to the <strong>+</strong> terminal through the wire. By convention, <strong>electric current</strong> is taken in the <em>opposite</em> direction — from + to − through the external circuit.</p>
+      </div>
+    </div>`;
+
+  const canvas = wrap.querySelector('#basicCanvas');
+  const qS=wrap.querySelector('#bQ'), tS=wrap.querySelector('#bT'), vS=wrap.querySelector('#bV');
+  let phase=0;
+
+  function paint(){
+    const Q=parseFloat(qS.value), t=parseFloat(tS.value), V=parseFloat(vS.value);
+    wrap.querySelector('#bQVal').textContent=Q+' C';
+    wrap.querySelector('#bTVal').textContent=t+' s';
+    wrap.querySelector('#bVVal').textContent=V+' V';
+    const I=Q/t, W=V*Q;
+    wrap.querySelector('#bI').textContent=fmt(I,3)+' A';
+    wrap.querySelector('#bW').textContent=fmt(W,2)+' J';
+
+    const {ctx,w,h}=fitCanvas(canvas);
+    ctx.clearRect(0,0,w,h);
+    const x1=w*0.22, x2=w*0.78, yTop=h*0.28, yBot=h*0.72;
+    // loop: top wire (bulb), right wire, bottom wire (battery), left wire (ammeter)
+    line(ctx,x1,yTop,x2,yTop,'#132a44',2.6);
+    line(ctx,x2,yTop,x2,yBot,'#132a44',2.6);
+    line(ctx,x1,yBot,x2,yBot,'#132a44',2.6);
+    line(ctx,x1,yTop,x1,yBot,'#132a44',2.6);
+    // bulb on top
+    const bulbX=(x1+x2)/2;
+    ctx.strokeStyle='#132a44'; ctx.lineWidth=2;
+    for(let i=0;i<3;i++){ ctx.beginPath(); ctx.arc(bulbX-16+i*16,yTop,10,0,Math.PI*1.6); ctx.stroke(); }
+    // battery on bottom
+    drawBattery(ctx,x1+ (x2-x1)*0.36, yBot, x1+(x2-x1)*0.64, yBot, 2);
+    // ammeter on left
+    drawMeter(ctx, x1, (yTop+yBot)/2, 'A');
+
+    textAt(ctx,'Conventional current I = '+fmt(I,3)+' A',w*0.5,h*0.92,{align:'center',size:12,color:'#4c6178',weight:600});
+
+    // animate flow markers
+    const speed = clamp(I*0.6,0.15,3.2);
+    phase += speed*0.02;
+    const perim = 2*(x2-x1)+2*(yBot-yTop);
+    function posOnLoop(frac, reverse){
+      let d = ((reverse? -frac: frac) % 1 + 1) % 1 * perim;
+      const segTop=(x2-x1), segRight=(yBot-yTop), segBot=(x2-x1), segLeft=(yBot-yTop);
+      if(d<segTop) return {x:x1+d,y:yTop, dir:0};
+      d-=segTop;
+      if(d<segRight) return {x:x2,y:yTop+d, dir:1};
+      d-=segRight;
+      if(d<segBot) return {x:x2-d,y:yBot, dir:2};
+      d-=segBot;
+      return {x:x1,y:yBot-d, dir:3};
+    }
+    // conventional current arrows (red), direction: clockwise from + terminal (bottom-right of battery) up through ammeter... simplify: clockwise loop
+    for(let i=0;i<8;i++){
+      const f = (phase + i/8);
+      const p = posOnLoop(f%1,false);
+      ctx.fillStyle='#d9432b'; ctx.beginPath(); ctx.arc(p.x,p.y,4,0,Math.PI*2); ctx.fill();
+    }
+    textAt(ctx,'I (conventional)',x1-8,(yTop+yBot)/2-24,{align:'right',size:10.5,color:'#d9432b',weight:600});
+    // electron flow (blue), opposite direction, offset slightly inward
+    for(let i=0;i<8;i++){
+      const f = (phase + i/8);
+      const p = posOnLoop(1-(f%1),false);
+      ctx.fillStyle='#2f8fe0'; ctx.beginPath(); ctx.arc(p.x,p.y-6,3,0,Math.PI*2); ctx.fill();
+    }
+  }
+  qS.oninput=paint; tS.oninput=paint; vS.oninput=paint;
+  const ro=new ResizeObserver(()=>paint()); ro.observe(canvas.parentElement);
+  let raf;
+  function loop(){ paint(); raf=requestAnimationFrame(loop); }
+  loop();
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   4. OHM'S LAW LAB (Activity 11.1)
+   --------------------------------------------------------------------- */
+function buildOhmLab(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `
+    <div class="lab-canvas-wrap"><canvas id="ohmCanvas"></canvas></div>
+    <div class="lab-side">
+      <div class="control-group">
+        <label>Nichrome wire resistance R <span class="val" id="oRVal">5 Ω</span></label>
+        <input type="range" id="oR" min="2" max="15" step="0.5" value="5">
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:6px;">Readings table</label>
+        <table class="mini-table" id="oTable"></table>
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:2px;">Result</label>
+        <div class="result-cards">
+          <div class="rcard wide"><div class="rlabel">V / I (every row)</div><div class="rval" id="oSlope">—</div></div>
+        </div>
+      </div>
+      <div class="control-group">
+        <p class="info-note">Each cell adds 1.5 V. Since <strong>V/I stays constant</strong> at every point, the graph is a straight line through the origin — <strong>Ohm's Law</strong>: V ∝ I, and that constant is the resistance R.</p>
+      </div>
+    </div>`;
+
+  const canvas = wrap.querySelector('#ohmCanvas');
+  const rSlider = wrap.querySelector('#oR');
+
+  function paint(){
+    const R = parseFloat(rSlider.value);
+    wrap.querySelector('#oRVal').textContent = R+' Ω';
+    const rows = [1,2,3,4].map(n=>{ const V=n*1.5; const I=V/R; return {n,I,V}; });
+
+    let html='<tr><th>Cells</th><th>I (A)</th><th>V (V)</th><th>V/I (Ω)</th></tr>';
+    rows.forEach(r=>{ html+=`<tr><td>${r.n}</td><td>${fmt(r.I,3)}</td><td>${fmt(r.V,2)}</td><td>${fmt(r.V/r.I,2)}</td></tr>`; });
+    wrap.querySelector('#oTable').innerHTML = html;
+    wrap.querySelector('#oSlope').textContent = fmt(R,2)+' Ω (= R)';
+
+    const {ctx,w,h} = fitCanvas(canvas);
+    ctx.clearRect(0,0,w,h);
+
+    // top: small circuit; bottom: V-I graph
+    const circH = h*0.34;
+    const x1=w*0.15, x2=w*0.85, y=circH*0.5;
+    line(ctx,x1,y,x2,y,'#132a44',2.2);
+    line(ctx,x1,y,x1,circH*0.9,'#132a44',2.2);
+    line(ctx,x2,y,x2,circH*0.9,'#132a44',2.2);
+    line(ctx,x1,circH*0.9,x2,circH*0.9,'#132a44',2.2);
+    drawZigzag(ctx,x1+(x2-x1)*0.3,y,x1+(x2-x1)*0.7,y,8,6,'#132a44',2.2);
+    textAt(ctx,'X',x1+(x2-x1)*0.28,y-14,{size:10,color:'#4c6178'});
+    textAt(ctx,'Y',x1+(x2-x1)*0.72,y-14,{size:10,color:'#4c6178'});
+    drawMeter(ctx,x1,circH*0.9,'A');
+    drawBattery(ctx, x1+(x2-x1)*0.35, circH*0.9, x1+(x2-x1)*0.65, circH*0.9, 4);
+    textAt(ctx,'Nichrome wire XY, R = '+fmt(R,1)+' Ω, up to 4 cells',w*0.5,14,{align:'center',size:12,color:'#4c6178',weight:600});
+
+    // graph
+    const gx0=w*0.14, gx1=w*0.92, gy0=h*0.94, gy1=circH+30;
+    line(ctx,gx0,gy0,gx1,gy0,'#132a44',1.6); // x-axis (I)
+    line(ctx,gx0,gy0,gx0,gy1,'#132a44',1.6); // y-axis (V)
+    arrowHead(ctx,gx1,gy0,0,'#132a44',7);
+    arrowHead(ctx,gx0,gy1,-Math.PI/2,'#132a44',7);
+    textAt(ctx,'Current I (A) →',gx1-4,gy0+22,{align:'right',size:11,color:'#4c6178'});
+    ctx.save(); ctx.translate(gx0-30,gy1+10); ctx.rotate(-Math.PI/2); textAt(ctx,'Potential Difference V (V) →',0,0,{align:'left',size:11,color:'#4c6178'}); ctx.restore();
+
+    const maxI = Math.max(...rows.map(r=>r.I))*1.25;
+    const maxV = Math.max(...rows.map(r=>r.V))*1.25;
+    const Ix=(I)=> gx0 + (I/maxI)*(gx1-gx0-20);
+    const Vy=(V)=> gy0 - (V/maxV)*(gy0-gy1-20);
+
+    // line through origin with slope R
+    line(ctx, Ix(0),Vy(0), Ix(maxI*0.98),Vy(R*maxI*0.98), '#2f8fe0',2.6);
+    rows.forEach(r=>{
+      ctx.fillStyle='#d9432b'; ctx.beginPath(); ctx.arc(Ix(r.I),Vy(r.V),4.5,0,Math.PI*2); ctx.fill();
+      ctx.strokeStyle='#fff'; ctx.lineWidth=1; ctx.stroke();
+    });
+  }
+  rSlider.oninput=paint;
+  const ro=new ResizeObserver(()=>paint()); ro.observe(canvas.parentElement);
+  requestAnimationFrame(paint);
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   5. COMPARE COMPONENTS LAB (Activity 11.2)
+   --------------------------------------------------------------------- */
+function buildCompareLab(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `
+    <div class="lab-canvas-wrap"><canvas id="cmpCanvas"></canvas></div>
+    <div class="lab-side">
+      <div class="control-group">
+        <label>Component in gap XY</label>
+        <div class="toggle-group" id="cmpToggle">
+          <button class="toggle-btn active" data-c="nichrome">Nichrome wire</button>
+          <button class="toggle-btn" data-c="torch">Torch bulb</button>
+          <button class="toggle-btn" data-c="w10">10 W (220 V) bulb</button>
+        </div>
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:2px;">Ammeter reading</label>
+        <div class="result-cards">
+          <div class="rcard wide"><div class="rlabel">Resistance</div><div class="rval" id="cmpR">—</div></div>
+          <div class="rcard wide"><div class="rlabel">Current (4 cells = 6 V)</div><div class="rval" id="cmpI">—</div></div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:6px;">All three, compared</label>
+        <table class="mini-table" id="cmpTable"></table>
+      </div>
+      <div class="control-group">
+        <p class="info-note">Same source, same circuit — yet wildly different currents. This shows that different components resist the flow of charge by very different amounts.</p>
+      </div>
+    </div>`;
+
+  const canvas = wrap.querySelector('#cmpCanvas');
+  const toggle = wrap.querySelectorAll('#cmpToggle .toggle-btn');
+  const V = 6;
+  const comps = {
+    nichrome: {label:'Nichrome wire', R:10},
+    torch: {label:'Torch bulb', R:2},
+    w10: {label:'10 W (220 V) bulb', R:4840},
+  };
+  let current='nichrome';
+
+  toggle.forEach(b=>b.onclick=()=>{ toggle.forEach(x=>x.classList.remove('active')); b.classList.add('active'); current=b.dataset.c; paint(); });
+
+  function paint(){
+    const c = comps[current];
+    const I = V/c.R;
+    wrap.querySelector('#cmpR').textContent = c.R>=1000? (c.R/1000).toFixed(2)+' kΩ' : fmt(c.R,2)+' Ω';
+    wrap.querySelector('#cmpI').textContent = I<0.001? (I*1e6).toFixed(1)+' µA' : I<1? (I*1000).toFixed(1)+' mA' : fmt(I,3)+' A';
+
+    let html='<tr><th>Component</th><th>R (Ω)</th><th>I at 6V</th></tr>';
+    Object.keys(comps).forEach(k=>{
+      const cc=comps[k]; const ii=V/cc.R;
+      const iStr = ii<0.001? (ii*1e6).toFixed(1)+' µA' : ii<1? (ii*1000).toFixed(1)+' mA' : fmt(ii,2)+' A';
+      html+=`<tr class="${k===current?'hl':''}"><td>${cc.label}</td><td>${cc.R>=1000?(cc.R/1000)+'k':cc.R}</td><td>${iStr}</td></tr>`;
+    });
+    wrap.querySelector('#cmpTable').innerHTML=html;
+
+    const {ctx,w,h} = fitCanvas(canvas);
+    ctx.clearRect(0,0,w,h);
+    const x1=w*0.18, x2=w*0.82, yTop=h*0.3, yBot=h*0.72;
+    line(ctx,x1,yTop,x2,yTop,'#132a44',2.4);
+    line(ctx,x2,yTop,x2,yBot,'#132a44',2.4);
+    line(ctx,x1,yBot,x2,yBot,'#132a44',2.4);
+    line(ctx,x1,yTop,x1,yBot,'#132a44',2.4);
+    drawZigzag(ctx,x1+(x2-x1)*0.35,yTop,x1+(x2-x1)*0.65,yTop,9,6,'#132a44',2.4);
+    textAt(ctx,'X',x1+(x2-x1)*0.32,yTop-14,{size:11,color:'#4c6178'});
+    textAt(ctx,'Y',x1+(x2-x1)*0.68,yTop-14,{size:11,color:'#4c6178'});
+    textAt(ctx,c.label,(x1+x2)/2,yTop-30,{align:'center',size:12,weight:700,color:'#132a44'});
+    drawMeter(ctx,x1,(yTop+yBot)/2,'A');
+    drawBattery(ctx,x1+(x2-x1)*0.35,yBot,x1+(x2-x1)*0.65,yBot,4);
+
+    // ammeter needle deflection visual: bar showing relative current (log scale)
+    const barW = w*0.5;
+    const barX = w*0.25, barY = h*0.92;
+    ctx.fillStyle='#eef2f8'; ctx.fillRect(barX,barY-8,barW,16);
+    const logI = Math.log10(clamp(I,1e-7,10));
+    const frac = clamp((logI+7)/7,0,1);
+    ctx.fillStyle='#2f8fe0'; ctx.fillRect(barX,barY-8,barW*frac,16);
+    textAt(ctx,'Relative current (log scale)',barX,barY-14,{size:10.5,color:'#4c6178'});
+  }
+  paint();
+  const ro=new ResizeObserver(()=>paint()); ro.observe(canvas.parentElement);
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   6. FACTORS AFFECTING RESISTANCE LAB (Activity 11.3)
+   --------------------------------------------------------------------- */
+const MATERIALS = {
+  silver:{label:'Silver', rho:1.60e-8},
+  copper:{label:'Copper', rho:1.62e-8},
+  iron:{label:'Iron', rho:10.0e-8},
+  manganese:{label:'Manganese', rho:1.84e-6},
+  nichrome:{label:'Nichrome', rho:100e-6},
+};
+
+function buildFactorsLab(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `
+    <div class="lab-canvas-wrap"><canvas id="facCanvas"></canvas></div>
+    <div class="lab-side">
+      <div class="control-group">
+        <label>Material</label>
+        <div class="toggle-group" id="facMat">
+          <button class="toggle-btn" data-m="silver">Silver</button>
+          <button class="toggle-btn active" data-m="copper">Copper</button>
+          <button class="toggle-btn" data-m="iron">Iron</button>
+          <button class="toggle-btn" data-m="manganese">Manganese</button>
+          <button class="toggle-btn" data-m="nichrome">Nichrome</button>
+        </div>
+      </div>
+      <div class="control-group">
+        <label>Length l <span class="val" id="facLVal">1.0 m</span></label>
+        <input type="range" id="facL" min="0.25" max="2" step="0.05" value="1">
+      </div>
+      <div class="control-group">
+        <label>Diameter d <span class="val" id="facDVal">0.30 mm</span></label>
+        <input type="range" id="facD" min="0.1" max="1.0" step="0.02" value="0.3">
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:2px;">Result</label>
+        <div class="result-cards">
+          <div class="rcard"><div class="rlabel">Resistivity ρ</div><div class="rval" id="facRho">—</div></div>
+          <div class="rcard"><div class="rlabel">Resistance R</div><div class="rval" id="facR">—</div></div>
+          <div class="rcard wide"><div class="rlabel">Current at 6 V</div><div class="rval" id="facI">—</div></div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:6px;">All materials at this size</label>
+        <table class="mini-table" id="facTable"></table>
+      </div>
+    </div>`;
+
+  const canvas = wrap.querySelector('#facCanvas');
+  const matBtns = wrap.querySelectorAll('#facMat .toggle-btn');
+  const lSlider = wrap.querySelector('#facL');
+  const dSlider = wrap.querySelector('#facD');
+  let material='copper';
+
+  matBtns.forEach(b=>b.onclick=()=>{ matBtns.forEach(x=>x.classList.remove('active')); b.classList.add('active'); material=b.dataset.m; paint(); });
+
+  function computeR(rho,L,d_mm){
+    const d = d_mm/1000;
+    const A = Math.PI*(d/2)*(d/2);
+    return rho*L/A;
+  }
+
+  function paint(){
+    const L = parseFloat(lSlider.value);
+    const d = parseFloat(dSlider.value);
+    wrap.querySelector('#facLVal').textContent = L.toFixed(2)+' m';
+    wrap.querySelector('#facDVal').textContent = d.toFixed(2)+' mm';
+
+    const rho = MATERIALS[material].rho;
+    const R = computeR(rho,L,d);
+    wrap.querySelector('#facRho').textContent = rho.toExponential(2)+' Ωm';
+    wrap.querySelector('#facR').textContent = R>=1000? (R/1000).toFixed(2)+' kΩ' : fmt(R,3)+' Ω';
+    const I = 6/R;
+    wrap.querySelector('#facI').textContent = I<0.001? (I*1e6).toFixed(2)+' µA' : I<1? (I*1000).toFixed(2)+' mA' : fmt(I,3)+' A';
+
+    let html='<tr><th>Material</th><th>ρ (Ωm)</th><th>R (Ω)</th></tr>';
+    Object.keys(MATERIALS).forEach(k=>{
+      const m=MATERIALS[k]; const rr=computeR(m.rho,L,d);
+      html+=`<tr class="${k===material?'hl':''}"><td>${m.label}</td><td>${m.rho.toExponential(2)}</td><td>${rr>=1000?(rr/1000).toFixed(1)+'k':fmt(rr,2)}</td></tr>`;
+    });
+    wrap.querySelector('#facTable').innerHTML=html;
+
+    const {ctx,w,h} = fitCanvas(canvas);
+    ctx.clearRect(0,0,w,h);
+    // draw wire proportional to L (length) and d (thickness)
+    const wireLenPx = clamp(w*0.15 + L*w*0.28, w*0.2, w*0.75);
+    const wireThickPx = clamp(2 + d*22, 2, 26);
+    const cx=w*0.5, cy=h*0.42;
+    ctx.strokeStyle='#c9822f'; ctx.lineWidth=wireThickPx; ctx.lineCap='round';
+    ctx.beginPath(); ctx.moveTo(cx-wireLenPx/2,cy); ctx.lineTo(cx+wireLenPx/2,cy); ctx.stroke();
+    ctx.strokeStyle='#8a5a1e'; ctx.lineWidth=1.4; ctx.beginPath(); ctx.moveTo(cx-wireLenPx/2,cy); ctx.lineTo(cx+wireLenPx/2,cy); ctx.stroke();
+    textAt(ctx,'l = '+L.toFixed(2)+' m',cx,cy-wireThickPx/2-14,{align:'center',size:12,color:'#4c6178'});
+    textAt(ctx,'d = '+d.toFixed(2)+' mm',cx,cy+wireThickPx/2+22,{align:'center',size:12,color:'#4c6178'});
+    textAt(ctx,MATERIALS[material].label+' wire',cx,h*0.14,{align:'center',size:14,weight:700,color:'#132a44'});
+
+    // simple circuit below
+    const x1=w*0.15,x2=w*0.85,yb=h*0.78;
+    line(ctx,x1,yb,x2,yb,'#132a44',2);
+    line(ctx,x1,yb,x1,h*0.6,'#132a44',2); line(ctx,x2,yb,x2,h*0.6,'#132a44',2);
+    line(ctx,x1,h*0.6,cx-wireLenPx/2,cy,'#132a44',2,[3,3]);
+    line(ctx,x2,h*0.6,cx+wireLenPx/2,cy,'#132a44',2,[3,3]);
+    drawMeter(ctx,x1,yb,'A');
+    drawBattery(ctx,x1+(x2-x1)*0.4,yb,x1+(x2-x1)*0.6,yb,4);
+    textAt(ctx,'R = '+ (R>=1000?(R/1000).toFixed(2)+' kΩ':fmt(R,2)+' Ω') +'  →  I = '+wrap.querySelector('#facI').textContent+' at 6 V',w*0.5,h*0.95,{align:'center',size:12,color:'#4c6178',weight:600});
+  }
+  lSlider.oninput=paint; dSlider.oninput=paint;
+  const ro=new ResizeObserver(()=>paint()); ro.observe(canvas.parentElement);
+  requestAnimationFrame(paint);
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   7. SERIES / PARALLEL CIRCUIT BUILDER (Activities 11.4–11.6)
+   --------------------------------------------------------------------- */
+function buildCircuitBuilder(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `
+    <div class="lab-canvas-wrap"><canvas id="circCanvas"></canvas></div>
+    <div class="lab-side">
+      <div class="control-group">
+        <label>Combination</label>
+        <div class="toggle-group">
+          <button class="toggle-btn active" data-mode="series">Series</button>
+          <button class="toggle-btn" data-mode="parallel">Parallel</button>
+        </div>
+      </div>
+      <div class="control-group">
+        <label>Battery voltage V <span class="val" id="cV">12 V</span></label>
+        <input type="range" id="circV" min="1" max="24" step="1" value="12">
+      </div>
+      <div class="control-group">
+        <label>R₁ <span class="val" id="cR1">5 Ω</span></label>
+        <input type="range" id="circR1" min="1" max="50" step="1" value="5">
+        <label style="margin-top:8px;">R₂ <span class="val" id="cR2">10 Ω</span></label>
+        <input type="range" id="circR2" min="1" max="50" step="1" value="10">
+        <label style="margin-top:8px;">R₃ <span class="val" id="cR3">30 Ω</span></label>
+        <input type="range" id="circR3" min="1" max="50" step="1" value="30">
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:2px;">Equivalent circuit</label>
+        <div class="result-cards">
+          <div class="rcard wide"><div class="rlabel">Equivalent resistance R_eq</div><div class="rval" id="cReq">—</div></div>
+          <div class="rcard wide"><div class="rlabel">Total current I</div><div class="rval" id="cItot">—</div></div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:6px;">Per-resistor breakdown</label>
+        <table class="mini-table" id="cTable"></table>
+      </div>
+    </div>`;
+
+  const canvas = wrap.querySelector('#circCanvas');
+  const modeBtns = wrap.querySelectorAll('[data-mode]');
+  const vS=wrap.querySelector('#circV'), r1S=wrap.querySelector('#circR1'), r2S=wrap.querySelector('#circR2'), r3S=wrap.querySelector('#circR3');
+  let mode='series';
+
+  modeBtns.forEach(b=>b.onclick=()=>{ modeBtns.forEach(x=>x.classList.remove('active')); b.classList.add('active'); mode=b.dataset.mode; paint(); });
+
+  function paint(){
+    const V=parseFloat(vS.value), R1=parseFloat(r1S.value), R2=parseFloat(r2S.value), R3=parseFloat(r3S.value);
+    wrap.querySelector('#cV').textContent=V+' V';
+    wrap.querySelector('#cR1').textContent=R1+' Ω';
+    wrap.querySelector('#cR2').textContent=R2+' Ω';
+    wrap.querySelector('#cR3').textContent=R3+' Ω';
+
+    let Req, Itot, rows;
+    if(mode==='series'){
+      Req=R1+R2+R3;
+      Itot=V/Req;
+      rows=[['R1',R1,Itot,Itot*R1],['R2',R2,Itot,Itot*R2],['R3',R3,Itot,Itot*R3]];
+    } else {
+      Req = 1/(1/R1+1/R2+1/R3);
+      const I1=V/R1, I2=V/R2, I3=V/R3;
+      Itot=I1+I2+I3;
+      rows=[['R1',R1,I1,V],['R2',R2,I2,V],['R3',R3,I3,V]];
+    }
+    wrap.querySelector('#cReq').textContent = fmt(Req,2)+' Ω';
+    wrap.querySelector('#cItot').textContent = fmt(Itot,3)+' A';
+
+    let html='<tr><th>Resistor</th><th>R (Ω)</th><th>I (A)</th><th>V (V)</th></tr>';
+    rows.forEach(r=>{ html+=`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${fmt(r[2],3)}</td><td>${fmt(r[3],2)}</td></tr>`; });
+    wrap.querySelector('#cTable').innerHTML=html;
+
+    const {ctx,w,h} = fitCanvas(canvas);
+    ctx.clearRect(0,0,w,h);
+
+    if(mode==='series'){
+      const x1=w*0.12, x2=w*0.88, yTop=h*0.28, yBot=h*0.75;
+      line(ctx,x1,yTop,x2,yTop,'#132a44',2.4);
+      line(ctx,x2,yTop,x2,yBot,'#132a44',2.4);
+      line(ctx,x1,yBot,x2,yBot,'#132a44',2.4);
+      line(ctx,x1,yTop,x1,yBot,'#132a44',2.4);
+      const seg=(x2-x1)/3;
+      [R1,R2,R3].forEach((R,i)=>{
+        const sx1=x1+seg*i+seg*0.18, sx2=x1+seg*i+seg*0.82;
+        drawZigzag(ctx,sx1,yTop,sx2,yTop,8,6,'#132a44',2.2);
+        textAt(ctx,'R'+(i+1)+'='+R+'Ω',(sx1+sx2)/2,yTop-24,{align:'center',size:11.5,weight:700,color:'#132a44'});
+        textAt(ctx,'I='+fmt(Itot,2)+'A, V='+fmt(Itot*R,2)+'V',(sx1+sx2)/2,yTop-9,{align:'center',size:9.5,color:'#4c6178'});
+      });
+      drawMeter(ctx,x1,(yTop+yBot)/2,'A');
+      drawBattery(ctx,x1+(x2-x1)*0.4,yBot,x1+(x2-x1)*0.6,yBot,3);
+      textAt(ctx,'Same current I everywhere: I = '+fmt(Itot,3)+' A',w*0.5,h*0.94,{align:'center',size:12,color:'#4c6178',weight:600});
+    } else {
+      const x1=w*0.12, x2=w*0.88, yTop=h*0.16, yBot=h*0.72;
+      const railTop=yTop+18, railBot=yBot-18;
+      line(ctx,x1,railTop,x2,railTop,'#132a44',2.4);
+      line(ctx,x1,railBot,x2,railBot,'#132a44',2.4);
+      const bx=[w*0.3,w*0.5,w*0.7];
+      [R1,R2,R3].forEach((R,i)=>{
+        drawZigzag(ctx,bx[i],railTop,bx[i],railBot,8,6,'#132a44',2.2);
+        textAt(ctx,'R'+(i+1)+'='+R+'Ω',bx[i],railTop-8,{align:'center',size:11.5,weight:700,color:'#132a44'});
+        const Ii = V/R;
+        textAt(ctx,'I'+(i+1)+'='+fmt(Ii,2)+'A',bx[i],railBot+18,{align:'center',size:9.5,color:'#4c6178'});
+      });
+      line(ctx,x1,railTop,x1,railBot,'#132a44',2.4);
+      // main loop out to battery and ammeter
+      const leftX = w*0.06;
+      line(ctx,leftX,railTop,x1,railTop,'#132a44',2.4);
+      line(ctx,leftX,railTop,leftX,railBot,'#132a44',2.4);
+      line(ctx,leftX,railBot,x1,railBot,'#132a44',2.4);
+      drawMeter(ctx,leftX,railTop-0.001,'A'); // main ammeter near top-left
+      drawBattery(ctx,leftX,railBot-((railBot-railTop)*0.35),leftX,railBot-((railBot-railTop)*0.05),2);
+      textAt(ctx,'Same voltage V = '+V+' V across every branch; total I = '+fmt(Itot,3)+' A',w*0.5,h*0.9,{align:'center',size:12,color:'#4c6178',weight:600});
+    }
+    textAt(ctx, mode==='series'?'Resistors in Series':'Resistors in Parallel', w*0.5, 18,{align:'center',size:13,weight:700,color:'#132a44'});
+  }
+
+  [vS,r1S,r2S,r3S].forEach(el=>el.oninput=paint);
+  const ro=new ResizeObserver(()=>paint()); ro.observe(canvas.parentElement);
+  requestAnimationFrame(paint);
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   8. HEATING EFFECT LAB (11.7 — Joule's Law)
+   --------------------------------------------------------------------- */
+function buildHeatLab(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `
+    <div class="lab-canvas-wrap"><canvas id="heatCanvas"></canvas></div>
+    <div class="lab-side">
+      <div class="control-group">
+        <label>Current I <span class="val" id="hIVal">5 A</span></label>
+        <input type="range" id="hI" min="0.5" max="10" step="0.5" value="5">
+      </div>
+      <div class="control-group">
+        <label>Resistance R <span class="val" id="hRVal">4 Ω</span></label>
+        <input type="range" id="hR" min="1" max="50" step="1" value="4">
+      </div>
+      <div class="control-group">
+        <label>Time t <span class="val" id="hTVal">1 s</span></label>
+        <input type="range" id="hT" min="1" max="60" step="1" value="1">
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:2px;">Result</label>
+        <div class="result-cards">
+          <div class="rcard"><div class="rlabel">Power P = I²R</div><div class="rval" id="hP">—</div></div>
+          <div class="rcard"><div class="rlabel">Heat H = I²Rt</div><div class="rval" id="hH">—</div></div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:2px;">Fuse rating calculator</label>
+        <label style="margin-top:4px;">Appliance power <span class="val" id="hApVal">1000 W</span></label>
+        <input type="range" id="hAp" min="100" max="3000" step="50" value="1000">
+        <div class="result-cards" style="margin-top:8px;">
+          <div class="rcard"><div class="rlabel">Current (at 220V)</div><div class="rval" id="hFuseI">—</div></div>
+          <div class="rcard"><div class="rlabel">Nearest standard fuse</div><div class="rval" id="hFuseR">—</div></div>
+        </div>
+      </div>
+    </div>`;
+
+  const canvas = wrap.querySelector('#heatCanvas');
+  const iS=wrap.querySelector('#hI'), rS=wrap.querySelector('#hR'), tS=wrap.querySelector('#hT');
+  const apS=wrap.querySelector('#hAp');
+  const fuseRatings=[1,2,3,5,10,15,20];
+
+  function paint(){
+    const I=parseFloat(iS.value), R=parseFloat(rS.value), t=parseFloat(tS.value);
+    wrap.querySelector('#hIVal').textContent=I+' A';
+    wrap.querySelector('#hRVal').textContent=R+' Ω';
+    wrap.querySelector('#hTVal').textContent=t+' s';
+    const P=I*I*R, H=P*t;
+    wrap.querySelector('#hP').textContent=fmt(P,2)+' W';
+    wrap.querySelector('#hH').textContent=fmt(H,2)+' J';
+
+    const ap=parseFloat(apS.value);
+    wrap.querySelector('#hApVal').textContent=ap+' W';
+    const fuseI = ap/220;
+    wrap.querySelector('#hFuseI').textContent=fmt(fuseI,2)+' A';
+    const recommended = fuseRatings.find(f=>f>=fuseI) || fuseRatings[fuseRatings.length-1];
+    wrap.querySelector('#hFuseR').textContent=recommended+' A fuse';
+
+    const {ctx,w,h} = fitCanvas(canvas);
+    ctx.clearRect(0,0,w,h);
+    const cx=w*0.5, cy=h*0.42;
+    const glow = clamp(P/300,0,1);
+    const rad = Math.max(30, Math.min(w,h)*0.16);
+    const grad = ctx.createRadialGradient(cx,cy,4,cx,cy,rad*1.6);
+    const heatColor = `rgb(${Math.round(120+135*glow)},${Math.round(40+120*(1-Math.abs(glow-0.5)*0.6))},${Math.round(30*(1-glow))})`;
+    grad.addColorStop(0, glow>0.7? '#fff8dc' : glow>0.3? '#ffb347':'#8a2f1c');
+    grad.addColorStop(1,'rgba(255,140,60,0)');
+    ctx.fillStyle=grad; ctx.beginPath(); ctx.arc(cx,cy,rad*1.6,0,Math.PI*2); ctx.fill();
+
+    // coil (zigzag circle-ish) representing heating element
+    ctx.save();
+    ctx.strokeStyle = glow>0.7? '#fff3c4' : glow>0.3? '#ff8a3d':'#7a2f1c';
+    ctx.lineWidth=6;
+    ctx.beginPath();
+    for(let a=0;a<=Math.PI*8;a+=0.1){
+      const rr=rad*0.55 + (a%(Math.PI*2)<Math.PI? 4:-4);
+      const x=cx+Math.cos(a)*rr*0.9, y=cy+Math.sin(a)*rr*0.35 + (a/(Math.PI*8)-0.5)*rad*0.6;
+      if(a===0) ctx.moveTo(x,y); else ctx.lineTo(x,y);
+    }
+    ctx.stroke();
+    ctx.restore();
+
+    textAt(ctx,'P = '+fmt(P,1)+' W   →   H = '+fmt(H,1)+' J in '+t+' s',cx,h*0.78,{align:'center',size:13,weight:700,color:'#132a44'});
+    textAt(ctx,glow>0.7?'White-hot':glow>0.4?'Glowing orange':glow>0.15?'Warm, dull red':'Barely warm',cx,h*0.85,{align:'center',size:11.5,color:'#4c6178'});
+    textAt(ctx,"Joule's Law: H = I²Rt",cx,h*0.1,{align:'center',size:13,weight:700,color:'#132a44'});
+  }
+  [iS,rS,tS,apS].forEach(el=>el.oninput=paint);
+  const ro=new ResizeObserver(()=>paint()); ro.observe(canvas.parentElement);
+  requestAnimationFrame(paint);
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   9. ELECTRIC POWER & ENERGY COST LAB (11.8)
+   --------------------------------------------------------------------- */
+function buildPowerLab(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `
+    <div class="lab-canvas-wrap"><canvas id="pwrCanvas"></canvas></div>
+    <div class="lab-side">
+      <div class="control-group">
+        <label>Appliance power P <span class="val" id="pPVal">400 W</span></label>
+        <input type="range" id="pP" min="10" max="3000" step="10" value="400">
+      </div>
+      <div class="control-group">
+        <label>Hours used per day <span class="val" id="pHVal">8 h</span></label>
+        <input type="range" id="pH" min="0.5" max="16" step="0.5" value="8">
+        <label style="margin-top:8px;">Days <span class="val" id="pDVal">30</span></label>
+        <input type="range" id="pD" min="1" max="30" step="1" value="30">
+        <label style="margin-top:8px;">Cost per kWh (₹) <span class="val" id="pCVal">3.00</span></label>
+        <input type="range" id="pC" min="1" max="12" step="0.5" value="3">
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:2px;">Result</label>
+        <div class="result-cards">
+          <div class="rcard"><div class="rlabel">Current at 220 V</div><div class="rval" id="pI">—</div></div>
+          <div class="rcard"><div class="rlabel">Energy used</div><div class="rval" id="pE">—</div></div>
+          <div class="rcard wide"><div class="rlabel">Total cost</div><div class="rval" id="pCost">—</div></div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:6px;">Two appliances in parallel at 220 V</label>
+        <table class="mini-table" id="pTable"></table>
+        <p class="info-note" style="margin-top:6px;">Each device in a parallel household circuit sees the full 220 V and draws its own current — the total current is simply the sum (as in Exercise 15).</p>
+      </div>
+    </div>`;
+
+  const canvas = wrap.querySelector('#pwrCanvas');
+  const pS=wrap.querySelector('#pP'), hS=wrap.querySelector('#pH'), dS=wrap.querySelector('#pD'), cS=wrap.querySelector('#pC');
+
+  function paint(){
+    const P=parseFloat(pS.value), hrs=parseFloat(hS.value), days=parseFloat(dS.value), rate=parseFloat(cS.value);
+    wrap.querySelector('#pPVal').textContent=P+' W';
+    wrap.querySelector('#pHVal').textContent=hrs+' h';
+    wrap.querySelector('#pDVal').textContent=days;
+    wrap.querySelector('#pCVal').textContent=rate.toFixed(2);
+
+    const I = P/220;
+    const E = P*hrs*days/1000; // kWh
+    const cost = E*rate;
+    wrap.querySelector('#pI').textContent=fmt(I,3)+' A';
+    wrap.querySelector('#pE').textContent=fmt(E,2)+' kWh';
+    wrap.querySelector('#pCost').textContent='₹ '+fmt(cost,2);
+
+    const lamp1=100, lamp2=60;
+    const i1=lamp1/220, i2=lamp2/220, itot=i1+i2;
+    wrap.querySelector('#pTable').innerHTML =
+      `<tr><th>Appliance</th><th>P (W)</th><th>I (A)</th></tr>
+       <tr><td>Lamp 1</td><td>${lamp1}</td><td>${fmt(i1,3)}</td></tr>
+       <tr><td>Lamp 2</td><td>${lamp2}</td><td>${fmt(i2,3)}</td></tr>
+       <tr class="hl"><td>Total</td><td>${lamp1+lamp2}</td><td>${fmt(itot,3)}</td></tr>`;
+
+    const {ctx,w,h} = fitCanvas(canvas);
+    ctx.clearRect(0,0,w,h);
+    // simple bill/meter visual: a dial gauge for power, and a running total bar for cost
+    const cx=w*0.3, cy=h*0.4, rad=Math.min(w,h)*0.2;
+    ctx.beginPath(); ctx.arc(cx,cy,rad,Math.PI*0.75,Math.PI*2.25); ctx.strokeStyle='#dbe4f0'; ctx.lineWidth=14; ctx.stroke();
+    const frac = clamp(P/3000,0,1);
+    ctx.beginPath(); ctx.arc(cx,cy,rad,Math.PI*0.75,Math.PI*0.75+frac*Math.PI*1.5); ctx.strokeStyle='#2f8fe0'; ctx.lineWidth=14; ctx.stroke();
+    textAt(ctx,P+' W',cx,cy+6,{align:'center',size:18,weight:700,color:'#132a44'});
+    textAt(ctx,'Appliance power',cx,cy+rad+26,{align:'center',size:12,color:'#4c6178'});
+
+    // bill card
+    const bx=w*0.62, by=h*0.18, bw=w*0.32, bh=h*0.62;
+    ctx.fillStyle='#fff'; ctx.strokeStyle='#dbe4f0'; ctx.lineWidth=1.4;
+    ctx.beginPath(); ctx.roundRect? ctx.roundRect(bx,by,bw,bh,10): ctx.rect(bx,by,bw,bh);
+    ctx.fill(); ctx.stroke();
+    textAt(ctx,'Electricity Bill',bx+bw/2,by+26,{align:'center',size:13,weight:700,color:'#132a44'});
+    textAt(ctx,'Energy: '+fmt(E,2)+' kWh',bx+16,by+56,{size:12,color:'#4c6178'});
+    textAt(ctx,'Rate: ₹'+rate.toFixed(2)+' / kWh',bx+16,by+78,{size:12,color:'#4c6178'});
+    line(ctx,bx+16,by+92,bx+bw-16,by+92,'#dbe4f0',1);
+    textAt(ctx,'Total: ₹'+fmt(cost,2),bx+16,by+118,{size:15,weight:700,color:'#1f9d55'});
+  }
+  [pS,hS,dS,cS].forEach(el=>el.oninput=paint);
+  const ro=new ResizeObserver(()=>paint()); ro.observe(canvas.parentElement);
+  requestAnimationFrame(paint);
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   10. INIT
+   --------------------------------------------------------------------- */
+render();
+</script>
+
+<div class="reset-progress-bar">
+  <button class="reset-progress-btn" onclick="__resetChapterProgress()">
+    &#8635; Reset Progress
+  </button>
+</div>
+<script>
+function __resetChapterProgress(){
+  if(!confirm('Reset all saved progress for this chapter? This cannot be undone.')) return;
+  var keys = [];
+  keys.forEach(function(k){ localStorage.removeItem(k); });
+  alert('Progress has been reset.');
+  location.reload();
+}
+</script>
+  <script src="../../tracking/activity-tracker.js"></script>
+<script src="../../nav/back-button.js"></script>
+</body>
+</html>

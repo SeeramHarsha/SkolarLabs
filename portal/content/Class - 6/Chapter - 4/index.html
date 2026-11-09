@@ -1,0 +1,1248 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 6 · Chapter 4 — Exploring Magnets | Botclub Labs</title>
+<link href="../../vendor/fonts/fonts.css" rel="stylesheet">
+<style>
+:root{
+  --navy-1:#0f2640; --navy-2:#1a3a5c; --navy-3:#234a73;
+  --accent:#2f8fe0; --accent-2:#5cc8ff;
+  --bg:#eef2f8; --surface-0:#ffffff; --surface-1:#f6f9fc; --surface-2:#eef2f8;
+  --border:#dbe4f0; --border-strong:#c2d1e5;
+  --text-1:#132a44; --text-2:#4c6178; --text-3:#8195ab;
+  --f-red:#d9432b; --f-blue:#2f8fe0; --f-green:#1f9d55; --f-yellow:#d9a017;
+  --radius:14px; --radius-sm:9px;
+  --fs-xs:clamp(10px,0.62vw,12px); --fs-sm:clamp(11px,0.72vw,13.5px);
+  --fs-md:clamp(12.5px,0.85vw,15px); --fs-lg:clamp(15px,1.15vw,19px);
+  --fs-xl:clamp(18px,1.5vw,25px);
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:22px; --sp-6:30px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{ font-family:'Poppins',system-ui,sans-serif; background:var(--bg); color:var(--text-1); overflow:hidden; }
+button, input, select{font-family:inherit;}
+
+.app{height:100vh; display:flex; flex-direction:column; min-height:0;}
+.topbar{
+  flex:0 0 auto; background:linear-gradient(120deg, var(--navy-1) 0%, var(--navy-2) 55%, var(--navy-3) 100%);
+  color:#fff; padding:clamp(9px,1vh,16px) clamp(14px,1.6vw,28px);
+  display:flex; align-items:center; gap:var(--sp-4); box-shadow:0 2px 10px rgba(15,38,64,0.25); z-index:5;
+}
+.topbar .brand-badge{
+  width:clamp(32px,2.4vw,40px); height:clamp(32px,2.4vw,40px); border-radius:10px; background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center;
+  font-size:clamp(15px,1.3vw,20px); flex:0 0 auto;
+}
+.topbar .chip{
+  display:inline-block; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.28);
+  border-radius:6px; padding:2px 9px; font-size:var(--fs-xs); letter-spacing:0.06em; text-transform:uppercase; font-weight:600; margin-bottom:3px;
+}
+.topbar h1{font-size:var(--fs-lg); font-weight:600; line-height:1.2; white-space:nowrap;}
+.topbar .spacer{flex:1;}
+.topbar .legend{display:flex; gap:14px; font-size:var(--fs-xs); color:rgba(255,255,255,0.85); align-items:center;}
+.topbar .legend span{display:inline-flex; align-items:center; gap:5px;}
+.topbar .legend i{width:12px; height:4px; border-radius:2px; display:inline-block;}
+
+.body-wrap{flex:1; display:flex; min-height:0; overflow:hidden;}
+.sidenav{
+  flex:0 0 clamp(170px,13.5vw,230px); background:var(--surface-0); border-right:1px solid var(--border);
+  overflow-y:auto; padding:var(--sp-2); display:flex; flex-direction:column; gap:4px;
+}
+.nav-item{
+  display:flex; align-items:center; gap:8px; text-align:left; width:100%;
+  border:1px solid var(--border); background:var(--surface-1); border-radius:var(--radius-sm); padding:7px 10px; cursor:pointer; transition:all .15s ease;
+}
+.nav-item:hover{background:var(--surface-2); border-color:var(--border-strong);}
+.nav-item.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.nav-item .n-num{font-size:var(--fs-xs); font-weight:700; color:var(--accent); flex:0 0 auto; min-width:26px;}
+.nav-item.active .n-num{color:var(--accent-2);}
+.nav-item .n-title{font-size:var(--fs-sm); font-weight:600; line-height:1.25;}
+
+.content{flex:1; min-width:0; display:flex; flex-direction:column; overflow:hidden;}
+.panel-head{flex:0 0 auto; padding:var(--sp-3) var(--sp-5); border-bottom:1px solid var(--border); background:var(--surface-0); display:flex; align-items:baseline; gap:12px;}
+.panel-badge{background:var(--navy-2); color:#fff; font-size:var(--fs-xs); font-weight:700; padding:3px 10px; border-radius:6px;}
+.panel-head h2{font-size:var(--fs-lg); font-weight:600; color:var(--text-1);}
+.panel-head p{font-size:var(--fs-sm); color:var(--text-2); flex:1; text-align:right;}
+.panel-body{flex:1; min-height:0; overflow:hidden; padding:var(--sp-3) var(--sp-5); display:flex;}
+
+.lab-view{flex:1; display:flex; gap:var(--sp-4); min-height:0; min-width:0;}
+.lab-canvas-wrap{flex:7 1 0; min-width:0; min-height:0; background:#fff; border:1px solid var(--border); border-radius:var(--radius); position:relative; overflow:hidden;}
+.lab-canvas-wrap canvas{width:100%; height:100%; display:block;}
+.lab-side{flex:3 1 0; min-width:230px; display:flex; flex-direction:column; gap:var(--sp-3); min-height:0; overflow-y:auto; padding-right:2px;}
+.side-sub{display:flex; flex-direction:column; gap:var(--sp-3);}
+
+.control-group{background:var(--surface-0); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 12px;}
+.control-group label{font-size:var(--fs-sm); font-weight:600; color:var(--text-1); display:flex; justify-content:space-between;}
+.control-group label .val{color:var(--accent); font-weight:700;}
+.control-group input[type=range]{width:100%; margin-top:7px; accent-color:var(--navy-2); cursor:pointer;}
+.toggle-group{display:flex; gap:6px; margin-top:7px; flex-wrap:wrap;}
+.toggle-btn{flex:1; min-width:56px; padding:7px 5px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:600; cursor:pointer; text-align:center; color:var(--text-2);}
+.toggle-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.toggle-btn.small{font-size:10.5px; padding:6px 3px;}
+.toggle-btn.play{background:var(--f-green); border-color:var(--f-green); color:#fff;}
+.toggle-btn.navy{background:var(--navy-2); border-color:var(--navy-2); color:#fff; width:100%; margin-top:9px;}
+.toggle-btn:disabled{opacity:.5; cursor:not-allowed;}
+.chip-btn{display:inline-flex; align-items:center; gap:5px; padding:6px 11px; margin:3px 3px 0 0; border:1px solid var(--border-strong); background:var(--surface-1); border-radius:18px; cursor:pointer; font-size:var(--fs-sm); font-weight:600; color:var(--text-2);}
+.chip-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.chip-btn.ok{border-color:var(--f-green);} .chip-btn.bad{border-color:var(--f-red);}
+.chip-wrap{display:flex; flex-wrap:wrap; margin-top:3px;}
+
+.role-row{display:flex; align-items:center; gap:8px; margin-top:7px; font-size:var(--fs-sm); font-weight:600;}
+.role-row .rdot{width:10px; height:10px; border-radius:50%; flex:0 0 auto; display:inline-block;}
+.role-row .rname{width:70px; flex:0 0 auto; color:var(--text-2);}
+.role-row select{flex:1; min-width:0; padding:6px 7px; border:1px solid var(--border-strong); border-radius:7px; font-size:var(--fs-sm); background:var(--surface-1); color:var(--text-1); cursor:pointer;}
+
+.step-row{display:flex; gap:5px;}
+.step-pill{flex:1; padding:6px 4px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:10.5px; font-weight:700; color:var(--text-3); cursor:pointer;}
+.step-pill.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.step-pill.done{border-color:var(--f-green); color:var(--f-green);}
+.step-pill.active.done{color:#fff;}
+.opt-btn{display:block; width:100%; text-align:left; margin-top:6px; padding:7px 9px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:500; color:var(--text-1); cursor:pointer; line-height:1.3;}
+.opt-btn:disabled{opacity:.55; cursor:not-allowed;}
+.opt-btn.active{border-color:var(--navy-2); background:#e3ecf7; font-weight:600;}
+.var-row{display:flex; align-items:center; gap:6px; margin-top:7px;}
+.var-row .vname{flex:0 0 88px; font-size:var(--fs-sm); font-weight:600;}
+.var-row .toggle-group{margin-top:0; flex:1;}
+
+.result-cards{display:grid; grid-template-columns:1fr 1fr; gap:6px;}
+.result-cards.three{grid-template-columns:1fr 1fr 1fr;}
+.rcard{background:var(--surface-0); border:1px solid var(--border); border-radius:9px; padding:7px 9px;}
+.rcard .rlabel{font-size:9.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--text-3); font-weight:600;}
+.rcard .rval{font-size:var(--fs-md); font-weight:700; color:var(--text-1); margin-top:1px;}
+.rcard.wide{grid-column:1/-1;}
+.hint{font-size:var(--fs-xs); color:var(--text-3); margin-top:6px; line-height:1.4;}
+.fb{font-size:var(--fs-xs); font-weight:600; margin-top:6px; padding:5px 8px; border-radius:7px;}
+.fb.ok{background:#e4f7ec; color:#1f6b3d;}
+.fb.bad{background:#fdece7; color:#a4331c;}
+.fb.warn{background:#fdf4dc; color:#8a6410;}
+.log{width:100%; border-collapse:collapse; font-size:10.5px; margin-top:4px;}
+.log th{text-align:left; color:var(--text-3); font-weight:600; text-transform:uppercase; font-size:9px; letter-spacing:.04em; padding:3px 4px; border-bottom:1px solid var(--border);}
+.log td{padding:4px; border-bottom:1px solid var(--surface-2); color:var(--text-2);}
+.log td.r-ok{color:var(--f-green); font-weight:700;} .log td.r-bad{color:var(--f-red); font-weight:700;} .log td.r-warn{color:var(--f-yellow); font-weight:700;}
+.log td.g{color:var(--f-green);font-weight:700;} .log td.b{color:var(--f-blue);font-weight:700;} .log td.rd{color:var(--f-red);font-weight:700;}
+.qa-input{width:100%; margin-top:7px; padding:8px 10px; border:1px solid var(--border-strong); border-radius:8px; font-size:var(--fs-sm); color:var(--text-1); background:var(--surface-1);}
+.qa-input:focus{outline:none; border-color:var(--accent); background:#fff;}
+.nav-item .n-num{line-height:1.15; text-align:center;}
+.hidden{display:none !important;}
+
+@media (max-width:1000px) and (orientation:portrait), (max-width:1000px) and (min-height:601px){
+  .body-wrap{flex-direction:column;}
+  .sidenav{flex:0 0 auto; width:100%; height:auto; flex-direction:row; overflow-x:auto; overflow-y:hidden; border-right:none; border-bottom:1px solid var(--border); padding:6px;}
+  .nav-item{flex:0 0 auto; width:150px;}
+  .panel-body{overflow-y:auto;}
+  .lab-view{flex-direction:column;}
+  .lab-canvas-wrap{min-height:320px;}
+  .lab-side{min-width:0;}
+  .content{overflow-y:auto;}
+  .topbar .legend{display:none;}
+  .topbar h1{white-space:normal;}
+}
+::-webkit-scrollbar{width:7px; height:7px;}
+::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand-badge">🧲</div>
+    <div>
+      <div class="chip">Grade 6 · Ch 4</div>
+      <h1>Exploring Magnets</h1>
+    </div>
+    <div class="spacer"></div>
+    <div class="legend">
+      <span><i style="background:var(--f-red)"></i>North pole (N)</span>
+      <span><i style="background:var(--f-blue)"></i>South pole (S)</span>
+      <span><i style="background:var(--f-yellow)"></i>What you do · force</span>
+      <span><i style="background:var(--f-green)"></i>Attracted · result · north</span>
+    </div>
+  </div>
+  <div class="body-wrap">
+    <nav class="sidenav" id="sideNav"></nav>
+    <main class="content">
+      <div class="panel-head">
+        <div class="panel-badge" id="panelBadge">4.1</div>
+        <h2 id="panelTitle">Select an activity</h2>
+        <p id="panelDesc"></p>
+      </div>
+      <div class="panel-body" id="panelBody"></div>
+    </main>
+  </div>
+</div>
+
+<script>
+
+/* =========================================================================
+   GRADE 6 — CHAPTER 4: EXPLORING MAGNETS
+   Activities 4.1–4.7. Every scene runs on a continuous animation loop:
+   sliders and buttons only set a TARGET; the magnet glides there on a
+   spring, pins and clips are pulled by a real 1/r^4 induced-dipole
+   force and fly in, suspended magnets and needles swing as damped
+   torsion pendulums toward north–south, cars roll with rolling
+   friction, filings align along the real dipole field.
+   Colour rule: red = North pole · blue = South pole
+   yellow = what you do · force arrows · green = attracted · result · north.
+   ========================================================================= */
+const COL = {red:'#d9432b', blue:'#2f8fe0', green:'#1f9d55', yellow:'#d9a017', ink:'#132a44', muted:'#4c6178', mid:'#8195ab', navy:'#1a3a5c'};
+
+/* ---------------------------------------------------------------------
+   0. CANVAS HELPERS
+   --------------------------------------------------------------------- */
+function fitCanvas(canvas){
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  const r = canvas.parentElement.getBoundingClientRect();
+  const w = Math.max(200, r.width), h = Math.max(160, r.height);
+  if(canvas._w!==w || canvas._h!==h || canvas._dpr!==dpr){
+    canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr);
+    canvas.style.width = w+'px'; canvas.style.height = h+'px';
+    canvas._w=w; canvas._h=h; canvas._dpr=dpr;
+  }
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, w, h};
+}
+function line(ctx,x1,y1,x2,y2,color,width,dash){
+  ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=width||2;
+  if(dash) ctx.setLineDash(dash); else ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); ctx.restore();
+}
+function arrowHead(ctx,x,y,ang,color,size){
+  size=size||7; ctx.save(); ctx.fillStyle=color; ctx.translate(x,y); ctx.rotate(ang);
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-size,size*0.42); ctx.lineTo(-size,-size*0.42); ctx.closePath(); ctx.fill(); ctx.restore();
+}
+function vec(ctx,x1,y1,x2,y2,color,width){ line(ctx,x1,y1,x2,y2,color,width||2.6); arrowHead(ctx,x2,y2,Math.atan2(y2-y1,x2-x1),color,7); }
+function dimArrow(ctx,x,y1,y2,color){ line(ctx,x,y1,x,y2,color,1.6); arrowHead(ctx,x,y1,-Math.PI/2,color,5); arrowHead(ctx,x,y2,Math.PI/2,color,5); }
+function textAt(ctx,txt,x,y,opts){
+  opts=opts||{}; ctx.save();
+  ctx.font=(opts.weight||500)+' '+(opts.size||12)+'px Poppins, sans-serif';
+  ctx.fillStyle=opts.color||COL.ink; ctx.textAlign=opts.align||'left'; ctx.textBaseline=opts.baseline||'alphabetic';
+  if(opts.alpha!==undefined) ctx.globalAlpha=opts.alpha;
+  ctx.fillText(txt,x,y); ctx.restore();
+}
+function rect(ctx,x,y,w,h,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw===undefined?2.2:lw; if(fill){ctx.fillStyle=fill; ctx.fillRect(x,y,w,h);} if(lw!==0){ctx.strokeStyle=stroke; ctx.strokeRect(x,y,w,h);} ctx.restore(); }
+function circ(ctx,x,y,r,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw||2.2; ctx.beginPath(); ctx.arc(x,y,Math.max(0.1,r),0,Math.PI*2); if(fill){ctx.fillStyle=fill; ctx.fill();} ctx.strokeStyle=stroke; ctx.stroke(); ctx.restore(); }
+function rrect(ctx,x,y,w,h,r){ r=Math.min(r,w/2,h/2); ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function fmt(x,d){ if(!isFinite(x)) return '—'; d=d===undefined?2:d; return Number(x.toFixed(d)).toString(); }
+function gauss(){ return (Math.random()+Math.random()+Math.random()+Math.random()-2)*1.2247; }
+function hexRgb(h){ const n=parseInt(h.slice(1),16); return [n>>16&255, n>>8&255, n&255]; }
+function mixCol(a,b,t){ const A=hexRgb(a),B=hexRgb(b); t=clamp(t,0,1); return 'rgb('+A.map((v,i)=>Math.round(lerp(v,B[i],t))).join(',')+')'; }
+function rampCol(stops,x){ // stops: [[pos,hex],...]
+  if(x<=stops[0][0]) return mixCol(stops[0][1],stops[0][1],0);
+  for(let i=1;i<stops.length;i++){ if(x<=stops[i][0]){ const a=stops[i-1],b=stops[i]; return mixCol(a[1],b[1],(x-a[0])/(b[0]-a[0])); } }
+  const l=stops[stops.length-1][1]; return mixCol(l,l,0);
+}
+function thermo(ctx,x,top,bot,frac,outline,liquid){
+  const br=8;
+  ctx.save(); ctx.lineWidth=2; ctx.strokeStyle=outline; ctx.fillStyle='#fff';
+  rrect(ctx,x-5,top,10,bot-top+2,5); ctx.fill(); ctx.stroke(); ctx.restore();
+  const lh=(bot-top-5)*clamp(frac,0,1);
+  ctx.save(); ctx.fillStyle=liquid; ctx.fillRect(x-2.2,bot-lh,4.4,lh+6); ctx.restore();
+  circ(ctx,x,bot+br,br,outline,'#fff',2); circ(ctx,x,bot+br,br-3.2,liquid,liquid,1);
+  for(let i=0;i<=4;i++){ const yy=top+5+(bot-top-5)*i/4; line(ctx,x+5,yy,x+9,yy,outline,1.1); }
+}
+function flame(ctx,cx,baseY,width,inten,t){
+  const n=5;
+  for(let i=0;i<n;i++){
+    const fx=cx-width/2+width*(i+0.5)/n;
+    const hh=(6+inten*32)*(0.78+0.22*Math.sin(t*13+i*1.7));
+    const sway=Math.sin(t*9+i*2.1)*3;
+    ctx.save(); ctx.lineJoin='round';
+    ctx.strokeStyle=COL.red; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(fx-7,baseY); ctx.quadraticCurveTo(fx-7,baseY-hh*0.55,fx+sway,baseY-hh); ctx.quadraticCurveTo(fx+7,baseY-hh*0.55,fx+7,baseY); ctx.stroke();
+    ctx.strokeStyle=COL.yellow; ctx.lineWidth=1.6;
+    ctx.beginPath(); ctx.moveTo(fx-3.5,baseY); ctx.quadraticCurveTo(fx-3,baseY-hh*0.35,fx+sway*0.5,baseY-hh*0.55); ctx.quadraticCurveTo(fx+3,baseY-hh*0.35,fx+3.5,baseY); ctx.stroke();
+    ctx.restore();
+  }
+}
+
+/* ---------------------------------------------------------------------
+   0b. ANIMATION ENGINE
+   --------------------------------------------------------------------- */
+let activeStops = [];
+function stopAllLoops(){ activeStops.forEach(s=>{ try{ s(); }catch(e){} }); activeStops=[]; }
+function animLoop(tick){
+  let last = performance.now();
+  let raf;
+  function frame(now){
+    const dt = Math.max(0, Math.min(0.04, (now-last)/1000));
+    last = now;
+    tick(dt);
+    raf = requestAnimationFrame(frame);
+  }
+  raf = requestAnimationFrame(frame);
+  const stop = ()=>cancelAnimationFrame(raf);
+  activeStops.push(stop);
+  return stop;
+}
+/** Exponential ease — frame-rate independent, always smooth. */
+function approach(cur,tgt,rate,dt){ return cur + (tgt-cur)*(1-Math.exp(-rate*dt)); }
+/** Spring-damper — gives natural overshoot and settle. */
+function springTo(state,target,k,damping,dt){
+  const acc = (target-state.x)*k - state.v*damping;
+  state.v += acc*dt;
+  state.x += state.v*dt;
+  return state.x;
+}
+function toggleWire(btns,cb){
+  btns.forEach(b=>b.onclick=()=>{ btns.forEach(x=>x.classList.remove('active')); b.classList.add('active'); cb(b); });
+}
+
+
+
+/* ---------------------------------------------------------------------
+   0c. SHARED HELPERS — virtual stage, Q→A banner, stick figures,
+       cat, cups, particles (all line diagrams, all animated)
+   --------------------------------------------------------------------- */
+function rng(seed){ let s=(seed>>>0)||1; return ()=>{ s=(Math.imul(s,1664525)+1013904223)>>>0; return s/4294967296; }; }
+function smooth01(a,b,x){ const t=clamp((x-a)/(b-a),0,1); return t*t*(3-2*t); }
+function angDiff(a,b){ return Math.atan2(Math.sin(a-b),Math.cos(a-b)); }
+function ease(x){ x=clamp(x,0,1); return x<0.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2; }
+function spr(x){ return {x:x||0,v:0}; }
+function fitFont(ctx,txt,maxW,size,weight){
+  let s=size; ctx.font=weight+' '+s+'px Poppins, sans-serif';
+  while(s>9 && ctx.measureText(txt).width>maxW){ s-=0.5; ctx.font=weight+' '+s+'px Poppins, sans-serif'; }
+  return s;
+}
+/* every scene draws on an 800 × 470 virtual stage, fitted into the canvas */
+const VW=800, VH=520, BANNER=46;
+function stage(ctx,w,h){
+  const s=Math.min(w/VW,(h-BANNER-6)/VH), ox=(w-VW*s)/2, oy=BANNER+Math.max(0,(h-BANNER-VH*s)/2);
+  ctx.translate(ox,oy); ctx.scale(s,s); return s;
+}
+/* stick figure — feet on (x,y), height s. angles from straight-down, + = toward +x */
+function stick(ctx,x,y,s,o){
+  o=o||{}; const c=o.col||COL.ink, W=o.lw||Math.max(2,s*0.02);
+  const th=0.25*s, sh=0.25*s, ua=0.17*s, fa=0.16*s;
+  const LL=o.legL||[-0.12,-0.02], LR=o.legR||[0.12,0.02];
+  const drop=Math.max(Math.cos(LL[0])*th+Math.cos(LL[1])*sh, Math.cos(LR[0])*th+Math.cos(LR[1])*sh);
+  const hip=[x+(o.dx||0), y-drop];
+  const lean=o.lean||0;
+  const neck=[hip[0]+Math.sin(lean)*0.34*s, hip[1]-Math.cos(lean)*0.34*s];
+  const hd=[neck[0]+Math.sin(lean+(o.nod||0))*0.11*s, neck[1]-Math.cos(lean+(o.nod||0))*0.11*s];
+  ctx.save(); ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle=c; ctx.lineWidth=W;
+  const limb=(p,a,l1,l2)=>{ const k=[p[0]+Math.sin(a[0])*l1,p[1]+Math.cos(a[0])*l1], e=[k[0]+Math.sin(a[1])*l2,k[1]+Math.cos(a[1])*l2];
+    ctx.beginPath(); ctx.moveTo(p[0],p[1]); ctx.lineTo(k[0],k[1]); ctx.lineTo(e[0],e[1]); ctx.stroke(); return e; };
+  const fL=limb(hip,LL,th,sh), fR=limb(hip,LR,th,sh);
+  ctx.beginPath(); ctx.moveTo(hip[0],hip[1]); ctx.lineTo(neck[0],neck[1]); ctx.stroke();
+  const sho=[lerp(hip[0],neck[0],0.92),lerp(hip[1],neck[1],0.92)];
+  const hL=limb(sho,o.armL||[-0.25,-0.1],ua,fa), hR=limb(sho,o.armR||[0.25,0.1],ua,fa);
+  ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(hd[0],hd[1],0.075*s,0,Math.PI*2); ctx.fill(); ctx.stroke();
+  const f=o.face===undefined?1:o.face;
+  if(f){ const ex=hd[0]+f*0.025*s, ey=hd[1]-0.012*s;
+    ctx.fillStyle=c; ctx.beginPath(); ctx.arc(ex,ey,Math.max(1.2,s*0.008),0,7); ctx.arc(ex+f*0.03*s,ey,Math.max(1.2,s*0.008),0,7); ctx.fill();
+    ctx.lineWidth=Math.max(1.2,W*0.6); ctx.beginPath();
+    const my=hd[1]+0.03*s, mood=o.mood===undefined?1:o.mood;
+    ctx.moveTo(ex-0.005*s*f,my); ctx.quadraticCurveTo(ex+f*0.015*s,my+mood*0.02*s,ex+f*0.04*s,my); ctx.stroke(); }
+  ctx.restore();
+  return {hip,neck,head:hd,handL:hL,handR:hR,footL:fL,footR:fR};
+}
+/* simple particle list: gravity-driven drops / crumbs / splash */
+function parts(){ return []; }
+function stepParts(P,dt,g,floorY,bounce){
+  for(const p of P){ p.vy+=(p.g===undefined?g:p.g)*dt; p.x+=p.vx*dt; p.y+=p.vy*dt; p.life-=dt;
+    if(floorY!==undefined && p.y>floorY){ if(bounce){ p.y=floorY; p.vy*=-bounce; p.vx*=0.7; } else p.life=0; } }
+  for(let i=P.length-1;i>=0;i--) if(P[i].life<=0) P.splice(i,1);
+}
+function splash(P,x,y,n,col,sp){ for(let i=0;i<n;i++){ const a=-Math.PI*(0.15+0.7*Math.random()); const v=(sp||120)*(0.5+Math.random()); P.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,life:0.5+Math.random()*0.4,r:1.5+Math.random()*2,c:col}); } }
+function drawParts(ctx,P,col){ ctx.save(); for(const p of P){ ctx.globalAlpha=clamp(p.life*2,0,1); ctx.fillStyle=p.c||col; ctx.beginPath(); ctx.arc(p.x,p.y,p.r||2.5,0,7); ctx.fill(); } ctx.restore(); }
+/* speech bubble */
+function bubble(ctx,x,y,txt,col,size,alpha){
+  if(alpha!==undefined && alpha<=0.01) return;
+  ctx.save(); if(alpha!==undefined) ctx.globalAlpha=clamp(alpha,0,1);
+  ctx.font='700 '+(size||15)+'px Poppins, sans-serif'; const tw=ctx.measureText(txt).width, hh=(size||15)*1.9;
+  rrect(ctx,x-tw/2-12,y-hh,tw+24,hh,hh/2); ctx.fillStyle='#fff'; ctx.fill(); ctx.lineWidth=2; ctx.strokeStyle=col; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x-6,y-1); ctx.lineTo(x,y+9); ctx.lineTo(x+6,y-1); ctx.fillStyle='#fff'; ctx.fill();
+  ctx.beginPath(); ctx.moveTo(x-6,y); ctx.lineTo(x,y+9); ctx.lineTo(x+6,y); ctx.stroke();
+  textAt(ctx,txt,x,y-hh*0.33,{align:'center',size:size||15,weight:700,color:col}); ctx.restore();
+}
+function ground(ctx,x0,x1,y){ line(ctx,x0,y,x1,y,COL.ink,2); ctx.save(); ctx.strokeStyle='#c2d1e5'; ctx.lineWidth=1.2; ctx.beginPath(); for(let x=x0+6;x<x1;x+=16){ ctx.moveTo(x,y+2); ctx.lineTo(x-8,y+10); } ctx.stroke(); ctx.restore(); }
+function tableTop(ctx,x0,x1,y,legs){ ctx.save(); ctx.lineWidth=2.2; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; rrect(ctx,x0,y,x1-x0,12,3); ctx.fill(); ctx.stroke();
+  if(legs){ line(ctx,x0+22,y+12,x0+22,y+legs,COL.ink,2.4); line(ctx,x1-22,y+12,x1-22,y+legs,COL.ink,2.4); } ctx.restore(); }
+function meterV(ctx,x,y,w,h,frac,col,label){ // vertical bar meter, y = top
+  ctx.save(); rrect(ctx,x,y,w,h,5); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=1.6; ctx.stroke();
+  const f=clamp(frac,0,1); ctx.save(); rrect(ctx,x,y,w,h,5); ctx.clip(); ctx.fillStyle=col; ctx.globalAlpha=0.85; ctx.fillRect(x,y+h*(1-f),w,h*f); ctx.restore();
+  if(label) textAt(ctx,label,x+w/2,y+h+16,{align:'center',size:12,weight:700,color:col});
+  ctx.restore();
+}
+/* line-drawn cup/mug; (cx,by) = bottom centre */
+function mug(ctx,cx,by,wTop,wBot,hgt,level,fill,t){
+  ctx.save(); ctx.lineJoin='round';
+  const yT=by-hgt;
+  if(level>0){ const ly=by-hgt*clamp(level,0,1), f=(by-ly)/hgt, wl=lerp(wBot,wTop,f);
+    ctx.beginPath(); ctx.moveTo(cx-wBot/2+3,by-3); ctx.lineTo(cx-wl/2+3,ly); ctx.lineTo(cx+wl/2-3,ly); ctx.lineTo(cx+wBot/2-3,by-3); ctx.closePath(); ctx.fillStyle=fill; ctx.fill();
+    ctx.beginPath(); ctx.ellipse(cx,ly,wl/2-3,5,0,0,7); ctx.strokeStyle='rgba(19,42,68,0.35)'; ctx.lineWidth=1.2; ctx.stroke(); }
+  ctx.strokeStyle=COL.ink; ctx.lineWidth=2.6;
+  ctx.beginPath(); ctx.moveTo(cx-wTop/2,yT); ctx.lineTo(cx-wBot/2,by); ctx.lineTo(cx+wBot/2,by); ctx.lineTo(cx+wTop/2,yT); ctx.stroke();
+  ctx.beginPath(); ctx.ellipse(cx,yT,wTop/2,7,0,0,7); ctx.stroke();
+  const hx=cx+lerp(wBot,wTop,0.55)/2;
+  ctx.beginPath(); ctx.moveTo(hx-2,yT+hgt*0.2); ctx.bezierCurveTo(hx+46,yT+hgt*0.12,hx+46,yT+hgt*0.72,hx-6,yT+hgt*0.74); ctx.stroke();
+  ctx.restore();
+}
+function steam(ctx,cx,y,wid,inten,t){
+  if(inten<=0.02) return;
+  ctx.save(); ctx.strokeStyle=COL.mid; ctx.lineWidth=2; ctx.lineCap='round';
+  for(let i=0;i<3;i++){ const x0=cx+(i-1)*wid*0.28, ph=(t*0.7+i*0.33)%1; ctx.globalAlpha=clamp(inten,0,1)*(1-ph)*0.9;
+    ctx.beginPath(); for(let k=0;k<=12;k++){ const yy=y-ph*30-k*6, xx=x0+Math.sin(k*0.6+t*3+i)*6; if(k) ctx.lineTo(xx,yy); else ctx.moveTo(xx,yy); } ctx.stroke(); }
+  ctx.restore();
+}
+/* thermometer with a scale, value in °C; (x,top,bot) */
+function thermoScale(ctx,x,top,bot,T,T0,T1,marks,safe){
+  const f=(T-T0)/(T1-T0);
+  if(safe!==undefined){ const ys=bot-(bot-top-5)*(safe-T0)/(T1-T0); line(ctx,x-18,ys,x+26,ys,COL.green,2,[5,3]); }
+  thermo(ctx,x,top,bot,f,COL.ink,COL.red);
+  marks.forEach(m=>{ const yy=bot-(bot-top-5)*(m-T0)/(T1-T0); textAt(ctx,m+'°',x+13,yy+4,{size:11,weight:600,color:COL.muted}); });
+}
+/* tiny x–y chart; pts = [[x,y],...] in data coords */
+function miniChart(ctx,x,y,w,h,xr,yr,series,o){
+  o=o||{}; ctx.save(); rrect(ctx,x,y,w,h,8); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle='#dbe4f0'; ctx.lineWidth=1.2; ctx.stroke();
+  const px=v=>x+34+(w-44)*(v-xr[0])/(xr[1]-xr[0]), py=v=>y+h-24-(h-36)*(v-yr[0])/(yr[1]-yr[0]);
+  line(ctx,px(xr[0]),py(yr[0]),px(xr[1]),py(yr[0]),COL.mid,1.2); line(ctx,px(xr[0]),py(yr[0]),px(xr[0]),py(yr[1]),COL.mid,1.2);
+  if(o.band){ ctx.fillStyle='rgba(31,157,85,0.1)'; const a=py(o.band[1]), b=py(o.band[0]); ctx.fillRect(px(xr[0]),a,px(xr[1])-px(xr[0]),b-a); }
+  (o.yt||[]).forEach(v=>textAt(ctx,String(v),px(xr[0])-5,py(v)+4,{align:'right',size:10,color:COL.muted}));
+  (o.xt||[]).forEach(v=>textAt(ctx,String(v),px(v),py(yr[0])+14,{align:'center',size:10,color:COL.muted}));
+  if(o.xl) textAt(ctx,o.xl,px(xr[1]),py(yr[0])+14,{align:'right',size:10,weight:600,color:COL.muted});
+  if(o.yl) textAt(ctx,o.yl,x+8,y+14,{size:10,weight:600,color:COL.muted});
+  series.forEach(s=>{ if(s.pts.length<2) return; ctx.strokeStyle=s.col; ctx.lineWidth=s.lw||2.2; if(s.dash) ctx.setLineDash(s.dash); else ctx.setLineDash([]);
+    ctx.beginPath(); s.pts.forEach((p,i)=>{ const X=px(clamp(p[0],xr[0],xr[1])), Y=py(clamp(p[1],yr[0],yr[1])); if(i) ctx.lineTo(X,Y); else ctx.moveTo(X,Y); }); ctx.stroke(); });
+  ctx.setLineDash([]); ctx.restore(); return {px,py};
+}
+
+
+/* ---------------------------------------------------------------------
+   SHARED ACTIVITY SHELL
+   scene = { q, html, cards, tail, wire($), tick(dt,ctx,t,$), found(), fb() }
+   q is the textbook's question; found() returns the answer once the
+   scene has actually produced it — it then springs into the banner.
+   --------------------------------------------------------------------- */
+function card(id,l,col){ return `<div class="rcard"><div class="rlabel">${l}</div><div class="rval" id="${id}"${col?` style="color:${col}"`:''}>—</div></div>`; }
+function setv($,id,v){ const e=$('#'+id); if(e&&e.textContent!==v) e.textContent=v; }
+function setFb($,f){ const e=$('#fb'); if(!e) return; const c=f?'fb '+f[0]:'fb hidden', tx=f?f[1]:''; if(e.className!==c) e.className=c; if(e.textContent!==tx) e.textContent=tx; }
+function optList(id,opts){ return `<div id="${id}">${opts.map((o,i)=>`<button class="opt-btn" data-i="${i}">${o}</button>`).join('')}</div>`; }
+function wireOpts(wrap,id,cb){ const bs=[...wrap.querySelectorAll('#'+id+' .opt-btn')]; bs.forEach(b=>b.onclick=()=>{ if(b.disabled) return; bs.forEach(x=>x.classList.toggle('active',x===b)); cb(+b.dataset.i); }); return bs; }
+function chipList(id,opts,act){ return `<div class="chip-wrap" id="${id}">${opts.map((o,i)=>`<button class="chip-btn${i===act?' active':''}" data-i="${i}">${o}</button>`).join('')}</div>`; }
+function wireChips(wrap,id,cb){ const bs=[...wrap.querySelectorAll('#'+id+' .chip-btn')]; bs.forEach(b=>b.onclick=()=>{ if(b.disabled) return; bs.forEach(x=>x.classList.toggle('active',x===b)); cb(+b.dataset.i); }); return bs; }
+function setActive(bs,i){ bs.forEach((b,k)=>b.classList.toggle('active',k===i)); }
+function slider(id,label,min,max,step,val){ return `<div class="control-group"><label>${label} <span class="val" id="${id}V"></span></label><input type="range" id="${id}" min="${min}" max="${max}" step="${step}" value="${val}"></div>`; }
+function logTable(id,heads){ return `<table class="log"><thead><tr>${heads.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody id="${id}"></tbody></table>`; }
+/* rows: [[cell | {t,c}] ...]; only rewritten when it changes */
+function setLog($,id,rows){
+  const e=$('#'+id); if(!e) return;
+  const html=rows.map(r=>'<tr>'+r.map(c=>typeof c==='object'?`<td class="${c.c||''}">${c.t}</td>`:`<td>${c}</td>`).join('')+'</tr>').join('');
+  if(e._h!==html){ e._h=html; e.innerHTML=html; }
+}
+function foundBanner(ctx,w,q,ans,pop,t){
+  ctx.save();
+  ctx.fillStyle='#f6f9fc'; ctx.fillRect(0,0,w,BANNER-2); line(ctx,0,BANNER-2,w,BANNER-2,'#dbe4f0',1);
+  const p=clamp(pop.x,0,1.25), got=!!ans;
+  const r=12*(got?0.8+0.2*p:1), cx=24, cy=BANNER/2-1;
+  circ(ctx,cx,cy,r,got?COL.green:COL.mid,got?COL.green:'#fff',1.8);
+  textAt(ctx,got?'✓':'?',cx,cy+5,{align:'center',size:13,weight:700,color:got?'#fff':COL.mid});
+  const txt=got?ans:q, mw=w-60; const s=fitFont(ctx,txt,mw,14.5,got?700:600);
+  ctx.globalAlpha=got?clamp(0.3+0.7*p,0,1):1;
+  textAt(ctx,txt,44,cy+5,{size:s,weight:got?700:600,color:got?'#1f6b3d':COL.muted});
+  ctx.restore();
+}
+function buildScene(factory){
+  const wrap=labShell(), S=factory(wrap);
+  wrap.querySelector('.lab-side').innerHTML = S.html+`
+    <div class="control-group"><div class="result-cards">${S.cards||''}</div><div class="fb hidden" id="fb"></div></div>`+(S.tail||'');
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), pop=spr(0);
+  S.wire($);
+  let t=0, lastAns='';
+  animLoop(dt=>{
+    t+=dt;
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    ctx.save(); ctx.beginPath(); ctx.rect(0,BANNER,w,h-BANNER); ctx.clip(); stage(ctx,w,h); S.tick(dt,ctx,t,$); ctx.restore();
+    const ans=S.found?S.found()||'':'';
+    if(ans!==lastAns){ lastAns=ans; pop.x=0; pop.v=0; }
+    springTo(pop,ans?1:0,170,11,dt);
+    foundBanner(ctx,w,S.q||'',ans,pop,t);
+    setFb($,S.fb?S.fb():null);
+  });
+  return wrap;
+}
+/* scene backdrop helpers */
+function sky(ctx,y1,top,bot){ const g=ctx.createLinearGradient(0,0,0,y1); g.addColorStop(0,top||'#e3f1fd'); g.addColorStop(1,bot||'#f7fbff'); ctx.fillStyle=g; ctx.fillRect(-400,-200,1600,y1+200); }
+function soilBand(ctx,x0,x1,y,h,col){ ctx.save(); ctx.fillStyle=col||'#f4ead8'; ctx.fillRect(x0,y,x1-x0,h); ctx.restore(); ground(ctx,x0,x1,y); }
+function cloud(ctx,x,y,s,col){ ctx.save(); ctx.strokeStyle=col||'#c2d1e5'; ctx.fillStyle='#fff'; ctx.lineWidth=2; ctx.beginPath();
+  ctx.arc(x,y,s*0.5,Math.PI*0.5,Math.PI*1.5); ctx.arc(x+s*0.55,y-s*0.35,s*0.6,Math.PI,Math.PI*1.95); ctx.arc(x+s*1.2,y,s*0.5,Math.PI*1.5,Math.PI*0.5); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore(); }
+function sunIcon(ctx,x,y,r,t){ circ(ctx,x,y,r,COL.yellow,'#fff6d6',2.4); for(let k=0;k<10;k++){ const a=k/10*6.283+t*0.2; line(ctx,x+Math.cos(a)*(r+5),y+Math.sin(a)*(r+5),x+Math.cos(a)*(r+13),y+Math.sin(a)*(r+13),COL.yellow,2); } }
+/* magnifier lens: draws contents via fn() clipped into a circle */
+function lens(ctx,cx,cy,r,fn,col,label){
+  ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,r,0,7); ctx.fillStyle='#fff'; ctx.fill(); ctx.clip(); fn(); ctx.restore();
+  circ(ctx,cx,cy,r,col||COL.ink,null,3); const a=0.78; line(ctx,cx+Math.cos(a)*r,cy+Math.sin(a)*r,cx+Math.cos(a)*(r+30),cy+Math.sin(a)*(r+30),col||COL.ink,7);
+  if(label) textAt(ctx,label,cx,cy-r-8,{align:'center',size:12,weight:700,color:col||COL.ink});
+}
+
+/* ---------------------------------------------------------------------
+   MAGNET ENGINE — shared by every activity
+   A bar magnet is modelled as two magnetic "charges" (+q at the N end,
+   −q at the S end, set in from the faces by 12 % of the length). The field
+   at any point is the sum of their inverse-square fields, which gives the
+   real dipole shape: lines leave N, curve round, enter S, and the field is
+   strongest at the ends. Soft iron (pins, clips, filings) is pulled toward
+   stronger field: F ∝ ∇|B|², which falls off roughly as 1/r⁵ far away —
+   that is why a pin ignores a magnet 5 cm away and then suddenly leaps.
+   --------------------------------------------------------------------- */
+function ell(ctx,x,y,rx,ry,fill,stroke,lw,rot){ ctx.beginPath(); ctx.ellipse(x,y,Math.max(0.1,rx),Math.max(0.1,ry),rot||0,0,7); if(fill){ ctx.fillStyle=fill; ctx.fill(); } if(stroke){ ctx.strokeStyle=stroke; ctx.lineWidth=lw||2; ctx.stroke(); } }
+function hexRgb(h){ if(h[0]==='#'){ const n=parseInt(h.slice(1),16); return [n>>16&255, n>>8&255, n&255]; } const m=String(h).match(/[\d.]+/g)||[0,0,0]; return m.slice(0,3).map(Number); }
+const NPALE='#fde4df', SPALE='#dcecfb';
+/* poles of a bar magnet centred at (x,y), N end along angle a */
+function barPoles(x,y,a,L,q){ const d=L*0.38, c=Math.cos(a), s=Math.sin(a); return [{x:x+c*d,y:y+s*d,q:q},{x:x-c*d,y:y-s*d,q:-q}]; }
+function fieldAt(P,x,y,eps){ let bx=0,by=0; const e2=(eps||6)*(eps||6); for(const p of P){ const dx=x-p.x, dy=y-p.y, r2=dx*dx+dy*dy+e2, k=p.q/(r2*Math.sqrt(r2)); bx+=k*dx; by+=k*dy; } return [bx,by]; }
+function b2At(P,x,y,eps){ const b=fieldAt(P,x,y,eps); return b[0]*b[0]+b[1]*b[1]; }
+/* force on soft iron: grad |B|² by central differences */
+function ironForce(P,x,y,eps){ const h=1.5; return [(b2At(P,x+h,y,eps)-b2At(P,x-h,y,eps))/(2*h),(b2At(P,x,y+h,eps)-b2At(P,x,y-h,eps))/(2*h)]; }
+/* force on a pole of strength q placed at (x,y) */
+function poleForce(P,x,y,q,eps){ const b=fieldAt(P,x,y,eps); return [b[0]*q,b[1]*q]; }
+
+/* ---- drawing ---- */
+function barMag(ctx,x,y,a,L,W,o){
+  o=o||{}; ctx.save(); ctx.translate(x,y); ctx.rotate(a); ctx.lineJoin='round';
+  const h=W/2;
+  if(o.plain){ rrect(ctx,-L/2,-h,L,W,3); ctx.fillStyle='#eef1f5'; ctx.fill(); ctx.strokeStyle='#5b6b7d'; ctx.lineWidth=2.4; ctx.stroke();
+    for(let i=-L/2+10;i<L/2-6;i+=14) line(ctx,i,-h+3,i+6,h-3,'#c3ccd7',1);
+    if(o.label!==false) textAt(ctx,o.label||'IRON',0,4,{align:'center',size:Math.min(11,W*0.5),weight:700,color:'#5b6b7d'});
+    ctx.restore(); return; }
+  const nc=o.unk?'#7a8ba0':COL.red, sc=o.unk?'#7a8ba0':COL.blue;
+  ctx.fillStyle=o.unk?'#f1f4f8':NPALE; ctx.fillRect(0,-h,L/2,W);
+  ctx.fillStyle=o.unk?'#f1f4f8':SPALE; ctx.fillRect(-L/2,-h,L/2,W);
+  ctx.lineWidth=2.6; ctx.strokeStyle=nc; ctx.beginPath(); ctx.moveTo(0,-h); ctx.lineTo(L/2,-h); ctx.lineTo(L/2,h); ctx.lineTo(0,h); ctx.stroke();
+  ctx.strokeStyle=sc; ctx.beginPath(); ctx.moveTo(0,-h); ctx.lineTo(-L/2,-h); ctx.lineTo(-L/2,h); ctx.lineTo(0,h); ctx.stroke();
+  line(ctx,0,-h,0,h,COL.ink,1.6);
+  if(o.letters!==false){ const fs=Math.min(16,W*0.62); ctx.save(); ctx.translate(L/2-fs*0.9,0); ctx.rotate(-a+(o.textRot||0)); textAt(ctx,o.unk?'?':'N',0,fs*0.36,{align:'center',size:fs,weight:700,color:nc}); ctx.restore();
+    ctx.save(); ctx.translate(-L/2+fs*0.9,0); ctx.rotate(-a+(o.textRot||0)); textAt(ctx,o.unk?'?':'S',0,fs*0.36,{align:'center',size:fs,weight:700,color:sc}); ctx.restore(); }
+  ctx.restore();
+}
+/* horseshoe (U) magnet, arms pointing along angle a, tips at distance s from the bend */
+function uMag(ctx,x,y,a,s,o){
+  o=o||{}; ctx.save(); ctx.translate(x,y); ctx.rotate(a); ctx.lineJoin='round';
+  const g=s*0.32, w=s*0.2, R=g/2+w;
+  const arm=(sg,col,pale)=>{ ctx.beginPath(); ctx.moveTo(0,sg*(g/2)); ctx.lineTo(s,sg*(g/2)); ctx.lineTo(s,sg*(g/2+w)); ctx.lineTo(0,sg*(g/2+w)); ctx.arc(0,0,R,sg>0?Math.PI/2:-Math.PI/2,Math.PI,sg<0); ctx.lineTo(-g/2,0); ctx.arc(0,0,g/2,Math.PI,sg>0?Math.PI/2:-Math.PI/2,sg>0); ctx.closePath(); ctx.fillStyle=pale; ctx.fill(); ctx.strokeStyle=col; ctx.lineWidth=2.6; ctx.stroke(); };
+  arm(-1,COL.red,NPALE); arm(1,COL.blue,SPALE);
+  textAt(ctx,'N',s-11,-(g/2+w/2)+5,{align:'center',size:13,weight:700,color:COL.red});
+  textAt(ctx,'S',s-11,(g/2+w/2)+5,{align:'center',size:13,weight:700,color:COL.blue});
+  ctx.restore();
+}
+function uPoles(x,y,a,s,q){ const g=s*0.32, w=s*0.2, c=Math.cos(a), sn=Math.sin(a), tip=s-6, off=g/2+w/2;
+  return [{x:x+c*tip-sn*(-off),y:y+sn*tip+c*(-off),q:q},{x:x+c*tip-sn*off,y:y+sn*tip+c*off,q:-q}]; }
+/* compass: needle N end points along canvas angle ang */
+function compassDraw(ctx,x,y,R,ang,o){
+  o=o||{}; ctx.save();
+  circ(ctx,x,y,R+6,COL.ink,'#fff',2.6); circ(ctx,x,y,R,'#c2d1e5',null,1.2);
+  for(let k=0;k<36;k++){ const a=k/36*6.283-Math.PI/2, l=k%9===0?11:k%3===0?7:4; line(ctx,x+Math.cos(a)*(R-l),y+Math.sin(a)*(R-l),x+Math.cos(a)*R,y+Math.sin(a)*R,k%9===0?COL.ink:'#8195ab',k%9===0?2:1); }
+  const L=['N','E','S','W']; L.forEach((t,k)=>{ const a=k*Math.PI/2-Math.PI/2; textAt(ctx,t,x+Math.cos(a)*(R-22),y+Math.sin(a)*(R-22)+5,{align:'center',size:Math.max(10,R*0.15),weight:700,color:t==='N'?COL.green:COL.muted}); });
+  const nl=R*0.78, nw=R*0.11, c=Math.cos(ang), s=Math.sin(ang), px=-s, py=c;
+  ctx.lineJoin='round';
+  ctx.beginPath(); ctx.moveTo(x+c*nl,y+s*nl); ctx.lineTo(x+px*nw,y+py*nw); ctx.lineTo(x-px*nw,y-py*nw); ctx.closePath(); ctx.fillStyle=o.dead?'#c9d2dd':COL.red; ctx.fill();
+  ctx.beginPath(); ctx.moveTo(x-c*nl,y-s*nl); ctx.lineTo(x+px*nw,y+py*nw); ctx.lineTo(x-px*nw,y-py*nw); ctx.closePath(); ctx.fillStyle=o.dead?'#e3e8ee':'#fff'; ctx.fill(); ctx.strokeStyle=o.dead?'#8195ab':COL.blue; ctx.lineWidth=2; ctx.stroke();
+  circ(ctx,x,y,Math.max(3,R*0.05),COL.ink,'#fff',2);
+  ctx.save(); ctx.globalAlpha=0.35; ctx.beginPath(); ctx.arc(x,y,R+2,-2.6,-1.9); ctx.strokeStyle='#fff'; ctx.lineWidth=5; ctx.stroke(); ctx.restore();
+  ctx.restore();
+}
+/* fist gripping from above; forearm goes up out of view at angle (radians from vertical) */
+function fist(ctx,x,y,s,o){
+  o=o||{}; ctx.save(); ctx.translate(x,y); ctx.lineJoin='round'; ctx.lineCap='round';
+  const arm=o.arm||0, ax=Math.sin(arm)*s*3, ay=-Math.cos(arm)*s*3;
+  ctx.beginPath(); ctx.moveTo(-s*0.38,-s*0.25); ctx.lineTo(ax-s*0.34,ay); ctx.moveTo(s*0.38,-s*0.25); ctx.lineTo(ax+s*0.34,ay); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(-s*0.38,-s*0.25); ctx.lineTo(ax-s*0.34,ay); ctx.lineTo(ax+s*0.34,ay); ctx.lineTo(s*0.38,-s*0.25); ctx.closePath(); ctx.fillStyle='#fff'; ctx.fill();
+  ctx.beginPath(); ctx.moveTo(-s*0.38,-s*0.25); ctx.lineTo(ax-s*0.34,ay); ctx.moveTo(s*0.38,-s*0.25); ctx.lineTo(ax+s*0.34,ay); ctx.stroke();
+  rrect(ctx,-s*0.5,-s*0.3,s,s*0.62,s*0.22); ctx.fillStyle='#fbe3d3'; ctx.fill(); ctx.stroke();
+  for(let i=-1;i<=1;i++) line(ctx,i*s*0.22,s*0.06,i*s*0.22,s*0.3,'#c99a7f',1.4);
+  ctx.restore();
+}
+/* little yellow push/pull arrow with a label */
+function forceArrow(ctx,x,y,dx,dy,col,lab){
+  const L=Math.hypot(dx,dy); if(L<3) return; vec(ctx,x,y,x+dx,y+dy,col||COL.yellow,3.2);
+  if(lab) textAt(ctx,lab,x+dx/2,y+dy/2-8,{align:'center',size:11,weight:700,color:col||COL.yellow});
+}
+/* paper clip / pin / nail etc. used in several activities */
+function clipDraw(ctx,x,y,a,s,col){
+  ctx.save(); ctx.translate(x,y); ctx.rotate(a); ctx.strokeStyle=col||'#5b6b7d'; ctx.lineWidth=Math.max(1.6,s*0.09); ctx.lineCap='round'; ctx.lineJoin='round';
+  const L=s, W=s*0.34; ctx.beginPath();
+  ctx.moveTo(L*0.3,W*0.12); ctx.lineTo(-L*0.36,W*0.12); ctx.arc(-L*0.36,-W*0.08,W*0.2,Math.PI/2,Math.PI*1.5); ctx.lineTo(L*0.4,-W*0.28);
+  ctx.arc(L*0.4,-W*0.04,W*0.24,-Math.PI/2,Math.PI/2); ctx.lineTo(-L*0.46,W*0.2); ctx.arc(-L*0.46,-W*0.1,W*0.3,Math.PI/2,Math.PI*1.5); ctx.lineTo(L*0.18,-W*0.4);
+  ctx.stroke(); ctx.restore();
+}
+function pinDraw(ctx,x,y,a,s,col){ ctx.save(); ctx.translate(x,y); ctx.rotate(a); line(ctx,-s/2,0,s/2,0,col||'#5b6b7d',Math.max(1.3,s*0.05)); circ(ctx,-s/2,0,Math.max(1.6,s*0.07),col||'#5b6b7d',col||'#5b6b7d',1); ctx.restore(); }
+
+/* =====================================================================
+   4.1  LET US FIND OUT — which materials does a magnet attract?
+   A bar magnet in a hand is swept over a tray of 12 objects. The pull on
+   soft iron grows as 1/d⁵ (gradient of |B|²), so each iron/steel object
+   has a "leap distance" d_c (lighter objects leap from farther):
+   pin 2.8 cm, clip 2.6, safety pin 2.4, nail 1.8, key 1.6, spoon 1.2.
+   Upward acceleration a = g·((d_c/d)⁵ − 1): the object trembles as the
+   magnet nears, then leaps and snaps to the nearest pole (slow-motion
+   ×⅛ so the leap is visible), then hangs and swings as a damped
+   pendulum driven by the magnet's own acceleration.
+   ===================================================================== */
+const OBJ41=[
+  {k:'nail',n:'Iron nail',m:'iron',dc:1.8},{k:'scale',n:'Plastic scale',m:'plastic'},{k:'clip',n:'Paper clip',m:'steel',dc:2.6},
+  {k:'eraser',n:'Eraser',m:'rubber'},{k:'key',n:'Iron key',m:'iron',dc:1.6},{k:'pencil',n:'Pencil',m:'wood'},
+  {k:'spoon',n:'Steel spoon',m:'steel',dc:1.2},{k:'bangle',n:'Glass bangle',m:'glass'},{k:'foil',n:'Aluminium foil',m:'aluminium'},
+  {k:'safety',n:'Safety pin',m:'steel',dc:2.4},{k:'wire',n:'Copper wire',m:'copper'},{k:'pin',n:'Steel pin',m:'steel',dc:2.8},
+];
+const OBJ_H={nail:10,scale:8,clip:10,eraser:18,key:18,pencil:12,spoon:16,bangle:10,foil:21,safety:12,wire:13,pin:7};
+function objDraw(ctx,k,x,y,a){
+  ctx.save(); ctx.translate(x,y); ctx.rotate(a||0); ctx.scale(1.3,1.3); ctx.lineJoin='round'; ctx.lineCap='round';
+  const G='#5b6b7d';
+  if(k==='nail'){ line(ctx,-20,0,18,0,G,3); line(ctx,-20,-5,-20,5,G,3.5); ctx.beginPath(); ctx.moveTo(18,-1.5); ctx.lineTo(24,0); ctx.lineTo(18,1.5); ctx.fillStyle=G; ctx.fill(); }
+  else if(k==='clip') clipDraw(ctx,0,0,0,30,G);
+  else if(k==='pin') pinDraw(ctx,0,0,0,30,G);
+  else if(k==='safety'){ line(ctx,-14,-3,14,-3,G,1.8); line(ctx,-14,3,12,3,G,1.8); circ(ctx,-16,0,3,G,null,1.6); rrect(ctx,10,-5,8,10,2); ctx.strokeStyle=G; ctx.lineWidth=1.8; ctx.stroke(); }
+  else if(k==='key'){ circ(ctx,-13,0,7,G,'#eef1f5',2.2); circ(ctx,-13,0,2.5,G,null,1.4); line(ctx,-6,0,18,0,G,3); line(ctx,12,0,12,6,G,2.4); line(ctx,16,0,16,5,G,2.4); }
+  else if(k==='spoon'){ ell(ctx,-12,0,10,6,'#eef1f5',G,2.2); line(ctx,-2,0,22,0,G,3); }
+  else if(k==='scale'){ rrect(ctx,-24,-3,48,6,1.5); ctx.fillStyle='#fff7d6'; ctx.fill(); ctx.strokeStyle=COL.muted; ctx.lineWidth=1.6; ctx.stroke(); for(let i=-20;i<=20;i+=4) line(ctx,i,-3,i,i%8===0?1:-0.5,COL.muted,0.8); }
+  else if(k==='eraser'){ rrect(ctx,-13,-7,26,14,3); ctx.fillStyle='#fbe9ef'; ctx.fill(); ctx.strokeStyle=COL.muted; ctx.lineWidth=1.8; ctx.stroke(); line(ctx,-2,-7,-2,7,COL.muted,1); }
+  else if(k==='pencil'){ ctx.beginPath(); ctx.moveTo(-22,-4.5); ctx.lineTo(14,-4.5); ctx.lineTo(23,0); ctx.lineTo(14,4.5); ctx.lineTo(-22,4.5); ctx.closePath(); ctx.fillStyle='#fff3d0'; ctx.fill(); ctx.strokeStyle=COL.muted; ctx.lineWidth=1.8; ctx.stroke(); line(ctx,14,-4.5,14,4.5,COL.muted,1); line(ctx,-22,0,14,0,'#e0cfa0',1); ctx.beginPath(); ctx.moveTo(20,-1.4); ctx.lineTo(23,0); ctx.lineTo(20,1.4); ctx.fillStyle=COL.ink; ctx.fill(); }
+  else if(k==='bangle'){ ell(ctx,0,0,20,4,'rgba(220,236,251,0.4)','#7fa8c9',2.6); }
+  else if(k==='foil'){ blob(ctx,[[-9,-6],[-2,-9],[7,-7],[10,0],[6,7],[-3,8],[-10,3]],'#eef1f5','#9aa7b5',1.8); line(ctx,-4,-3,3,2,'#c3ccd7',1); }
+  else if(k==='wire'){ ctx.strokeStyle='#b8733a'; ctx.lineWidth=2; ctx.beginPath(); for(let i=0;i<=40;i++){ const u=i/40; ctx.lineTo(-18+36*u,Math.sin(u*6.283*3)*4.5); } ctx.stroke(); }
+  ctx.restore();
+}
+function blob(ctx,pts,fill,stroke,lw){ ctx.beginPath(); pts.forEach((p,i)=>{ const q=pts[(i+1)%pts.length], mx=(p[0]+q[0])/2, my=(p[1]+q[1])/2; if(!i) ctx.moveTo(mx,my); else ctx.quadraticCurveTo(p[0],p[1],mx,my); }); const p=pts[0],q=pts[1]; ctx.quadraticCurveTo(p[0],p[1],(p[0]+q[0])/2,(p[1]+q[1])/2); ctx.closePath(); if(fill){ ctx.fillStyle=fill; ctx.fill(); } if(stroke){ ctx.strokeStyle=stroke; ctx.lineWidth=lw||2; ctx.stroke(); } }
+function buildA1(){ return buildScene(wrap=>{
+  const S={q:'Which of these objects does a magnet attract?'};
+  const PX=20, TRAY=380, ML=200, MW=40, SLOW=1/8, G=980*PX*SLOW*SLOW;
+  const ob=OBJ41.map((o,i)=>({...o,x0:62+i*61,x:62+i*61,y:TRAY-OBJ_H[o.k]/2,vx:0,vy:0,st:'rest',res:null,dx:0,th:spr(0),jig:0,a:0}));
+  let hCm=3, xT=0.05, mx=spr(110), my=spr(0), sweep=false, prevV=0;
+  S.html=`
+    ${slider('mP','Magnet position',0,100,1,5)}
+    ${slider('mH','Gap above the tray',0.5,6,0.1,3)}
+    <div class="control-group"><div class="toggle-group"><button class="toggle-btn play" id="sw">▶ Sweep slowly across</button></div>
+      <div class="toggle-group"><button class="toggle-btn" id="off">✋ Pull objects off</button><button class="toggle-btn" id="rs">↻ Reset</button></div></div>`;
+  S.cards=card('cG','Gap')+card('cS','Stuck to magnet',COL.green)+card('cT','Tested');
+  S.tail=`<div class="control-group"><label>Table 4.1 · Attracted by a magnet?</label>${logTable('tL',['Object','Material','Attracted?'])}</div>`;
+  S.wire=$=>{
+    const p=$('#mP'), h=$('#mH');
+    p.oninput=()=>{ xT=p.value/100; sweep=false; }; h.oninput=()=>{ hCm=+h.value; };
+    $('#sw').onclick=()=>{ if(xT>0.9) xT=0; sweep=true; };
+    $('#off').onclick=()=>{ ob.forEach(o=>{ if(o.st==='stuck'||o.st==='fly'){ o.st='ret'; o.vx=(o.x0-o.x)/0.9; o.vy=-260; } }); };
+    $('#rs').onclick=()=>{ ob.forEach(o=>{ o.st='rest'; o.x=o.x0; o.y=TRAY-OBJ_H[o.k]/2; o.res=null; o.a=0; }); };
+    S.$=$;
+  };
+  S.tick=(dt,ctx,t,$)=>{
+    if(sweep){ xT+=dt*0.07; if(xT>=1){ xT=1; sweep=false; } $('#mP').value=Math.round(xT*100); }
+    const tx=lerp(120,680,xT), ty=TRAY-hCm*PX-MW/2;
+    springTo(mx,tx,55,13,dt); springTo(my,ty,70,14,dt);
+    const ax=(mx.v-prevV)/Math.max(dt,1e-3); prevV=mx.v;
+    const by=my.x+MW/2, poles=[mx.x+ML/2-12,mx.x-ML/2+12];
+    /* ---- physics ---- */
+    for(const o of ob){
+      const hh=OBJ_H[o.k];
+      if(o.st==='rest'||o.st==='fly'){
+        const px=Math.abs(poles[0]-o.x)<Math.abs(poles[1]-o.x)?poles[0]:poles[1];
+        const dX=(px-o.x)/PX, dY=(o.y-hh/2-by)/PX, d=Math.max(0.3,Math.hypot(dX,dY));
+        if(!o.dc){ if(o.res===null && Math.abs(dX)<1.3 && dY<2.2) o.res=false; continue; }
+        const r5=Math.pow(o.dc/d,5);
+        o.jig=o.st==='rest'?smooth01(0.45,1,r5):0;
+        if(o.st==='rest' && r5>1){ o.st='fly'; o.vx=0; o.vy=0; }
+        if(o.st==='fly'){ const f=G*Math.min(r5,40); o.vx+=f*dX/d*dt; o.vy+=(-f*dY/d+G)*dt; o.x+=o.vx*dt; o.y+=o.vy*dt;
+          o.a=approach(o.a,Math.PI/2,6,dt);
+          if(o.y-hh/2<=by+1){ o.st='stuck'; o.res=true; { const pd=(px-mx.x); const nS=ob.filter(z=>z.st==='stuck'&&Math.sign(z.dx)===Math.sign(pd)).length; o.dx=pd+Math.sign(pd)*(-10+((nS%4)*9)); } o.th=spr(clamp(o.vx/400,-0.8,0.8)); }
+          if(o.y>TRAY-hh/2){ o.y=TRAY-hh/2; o.vy=0; } }
+      } else if(o.st==='stuck'){
+        /* hanging pendulum: θ'' = −(g/l)sinθ − c·θ' − (a_magnet/l)cosθ */
+        const l=24, acc=-(G*SLOW*8/l)*Math.sin(o.th.x)-3*o.th.v-(ax*0.6/l)*Math.cos(o.th.x);
+        o.th.v+=acc*dt; o.th.x+=o.th.v*dt; o.th.x=clamp(o.th.x,-1.2,1.2);
+        o.x=mx.x+o.dx; o.y=by;
+      } else if(o.st==='ret'){
+        o.vy+=900*dt; o.x+=o.vx*dt; o.y+=o.vy*dt; o.a=approach(o.a,0,8,dt);
+        if(o.y>=TRAY-hh/2 && o.vy>0){ o.y=TRAY-hh/2; o.x=o.x0; o.st='rest'; o.a=0; }
+      }
+    }
+    /* ---- draw ---- */
+    ctx.save(); rrect(ctx,30,TRAY,740,18,6); ctx.fillStyle='#f7f9fc'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+    line(ctx,36,TRAY+18,764,TRAY+18,'#c2d1e5',6);
+    ob.forEach(o=>{ if(o.st==='rest'||o.st==='ret'){ const j=o.jig*Math.sin(t*70+o.x0)*1.5; objDraw(ctx,o.k,o.x+j,o.y-o.jig*2,o.a);
+      textAt(ctx,o.n,o.x0,TRAY+36+(ob.indexOf(o)%2)*14,{align:'center',size:10.5,weight:600,color:o.res===false?COL.muted:o.res?COL.green:COL.ink}); }
+      else textAt(ctx,o.n,o.x0,TRAY+36+(ob.indexOf(o)%2)*14,{align:'center',size:10.5,weight:700,color:COL.green}); });
+    /* gap dimension */
+    if(by<TRAY-6){ dimArrow(ctx,mx.x-ML/2-18,by,TRAY,COL.yellow); textAt(ctx,fmt((TRAY-by)/PX,1)+' cm',mx.x-ML/2-24,(by+TRAY)/2+4,{align:'right',size:12,weight:700,color:COL.yellow}); }
+    fist(ctx,mx.x,my.x-MW/2-6,40,{arm:-0.25});
+    barMag(ctx,mx.x,my.x,0,ML,MW);
+    ob.forEach(o=>{ if(o.st==='fly') objDraw(ctx,o.k,o.x,o.y,o.a);
+      if(o.st==='stuck'){ const L=o.k==='spoon'?31:o.k==='nail'||o.k==='key'?28:o.k==='pin'||o.k==='clip'?21:23; ctx.save(); ctx.translate(o.x,o.y); ctx.rotate(-o.th.x); objDraw(ctx,o.k,0,L,Math.PI/2); ctx.restore(); } });
+    textAt(ctx,'slow-motion ×⅛ during a leap',770,30,{align:'right',size:11,weight:600,color:COL.mid});
+    const stuck=ob.filter(o=>o.st==='stuck').length, tested=ob.filter(o=>o.res!==null).length;
+    setv($,'cG',fmt(hCm,1)+' cm'); setv($,'cS',String(stuck)); setv($,'cT',tested+' / 12');
+    setLog($,'tL',ob.filter(o=>o.res!==null).map(o=>[o.n,o.m,o.res?{t:'Yes',c:'g'}:'No']));
+    S.done=tested===12;
+  };
+  S.found=()=>S.done?'Iron and steel objects are attracted (magnetic); plastic, rubber, wood, glass, aluminium, copper are not.':'';
+  S.fb=()=>{ const far=ob.some(o=>o.dc&&o.res===null) && hCm>3; return far?['warn','Some iron objects did not jump — lower the magnet closer to the tray.']:null; };
+  return S;
+}); }
+
+/* =====================================================================
+   4.2  LET US EXPLORE — where is a magnet's attraction strongest?
+   (a) Filings on paper: each filing is a tiny soft-iron needle. Every
+   tap of the paper frees it for ~0.5 s (mobility m = e^(−t/0.5)); while
+   free it turns to lie along the field B (torque ∝ |B|) and drifts up
+   the gradient of |B|² toward the poles. A few taps draw the field
+   pattern and pile the filings at the two ends.
+   (b) Roll the magnet in filings: filings cling in chains whose length
+   grows with |B|² just outside the surface — long tufts at the ends,
+   almost bare in the middle; the weak middle ones drop off on lifting.
+   ===================================================================== */
+function buildA2(){ return buildScene(wrap=>{
+  const S={q:'Where do most iron filings stick to a magnet?'};
+  let mode=0, shape=0, F=[], taps=0, mob=0, shake=0, sprinkle=0, shaker=spr(120);
+  const CX=400, CY=270, BL=230, BW=46, US=150;
+  const geo=()=>shape===0?{P:barPoles(CX,CY,0,BL,1),body:[...Array(13)].map((_,i)=>({x:CX-BL/2+12+i*(BL-24)/12,y:CY,r:BW/2+3})),ends:[[CX+BL/2,CY],[CX-BL/2,CY]]}
+    :(()=>{ const x0=CX-60, P=uPoles(x0,CY,0,US,1), g=US*0.32, w=US*0.2, R=g/2+w/2, b=[];
+      for(let i=0;i<=6;i++){ b.push({x:x0+i*US/6,y:CY-R,r:w/2+3}); b.push({x:x0+i*US/6,y:CY+R,r:w/2+3}); }
+      for(let i=1;i<6;i++){ const a=Math.PI/2+i/6*Math.PI; b.push({x:x0+Math.cos(a)*R,y:CY+Math.sin(a)*R,r:w/2+3}); }
+      return {P,body:b,ends:[[P[0].x+6,P[0].y],[P[1].x+6,P[1].y]]}; })();
+  let G=geo(), Bref=1;
+  const reset=()=>{ F=[]; taps=0; G=geo(); const b=fieldAt(G.P,G.ends[0][0]+40,G.ends[0][1]); Bref=Math.hypot(b[0],b[1]); };
+  reset();
+  /* roll mode */
+  let dip=0, dipT=-1, ch=[], drops=[];
+  S.html=`
+    <div class="control-group"><label>Try</label>${chipList('mC',['Filings on paper','Roll magnet in filings'],0)}</div>
+    <div class="control-group" id="g1"><label>Magnet</label>${chipList('sC',['Bar magnet','Horseshoe (U)'],0)}
+      <div class="toggle-group" style="margin-top:8px"><button class="toggle-btn play" id="sp">🧂 Sprinkle filings</button><button class="toggle-btn" id="tp">👆 Tap the paper</button></div>
+      <div class="toggle-group"><button class="toggle-btn" id="cl">↻ Clear paper</button></div></div>
+    <div class="control-group" id="g2" style="display:none"><div class="toggle-group"><button class="toggle-btn play" id="rl">🧲 Roll in filings &amp; lift</button></div></div>`;
+  S.cards=card('cA','End 1',COL.red)+card('cM','Middle')+card('cB','End 2',COL.blue)+card('cT','Taps');
+  S.wire=$=>{
+    wireChips(wrap,'mC',i=>{ mode=i; $('#g1').style.display=i?'none':''; $('#g2').style.display=i?'':'none'; });
+    wireChips(wrap,'sC',i=>{ shape=i; reset(); });
+    $('#sp').onclick=()=>{ sprinkle=Math.min(1600,sprinkle+700); shaker.x=110; };
+    $('#tp').onclick=()=>{ if(!F.length) return; mob=1; shake=1; taps++; };
+    $('#cl').onclick=()=>reset();
+    $('#rl').onclick=()=>{ if(dipT<0||dipT>4.2){ dipT=0; ch=[]; drops=[]; } };
+  };
+  /* tufts along the magnet surface (roll mode): chain length ∝ |B|² outside */
+  const RX=400, RY0=150;
+  function rollTufts(cy){ const P=barPoles(RX,cy,0,BL,1), out=[]; const b0=b2At(P,RX+BL/2+5,cy);
+    const per=[]; for(let i=0;i<=40;i++){ const u=i/40, x=RX-BL/2+u*BL; per.push([x,cy-BW/2,0,-1],[x,cy+BW/2,0,1]); }
+    for(let i=1;i<8;i++){ const y=cy-BW/2+i*BW/8; per.push([RX+BL/2,y,1,0],[RX-BL/2,y,-1,0]); }
+    for(const [x,y,nx,ny] of per){ const d=b2At(P,x+nx*5,y+ny*5)/b0, L=60*Math.min(1,Math.sqrt(d)*1.15); out.push({x,y,nx,ny,L,P}); }
+    return out; }
+  S.tick=(dt,ctx,t,$)=>{
+    if(mode===0){
+      /* ---- paper, top view ---- */
+      shake=approach(shake,0,10,dt); mob*=Math.exp(-dt/0.5);
+      const sx=Math.sin(t*90)*shake*3;
+      ctx.save(); ctx.translate(sx,0);
+      rect(ctx,70,30,660,470,COL.ink,'#fffdf8',2); for(let y=60;y<500;y+=30) line(ctx,72,y,728,y,'#eef1f5',1);
+      if(shape===0) barMag(ctx,CX,CY,0,BL,BW); else uMag(ctx,CX-60,CY,0,US);
+      /* sprinkle */
+      if(sprinkle>0){ const n=Math.min(sprinkle,Math.ceil(dt*900)); sprinkle-=n; springTo(shaker,690,4,3,dt);
+        for(let k=0;k<n;k++){ const x=80+Math.random()*640, y=40+Math.random()*450; if(x<80||x>720) continue;
+          if(G.body.some(c=>Math.hypot(x-c.x,y-c.y)<c.r)) continue; const b=fieldAt(G.P,x,y), s=Math.hypot(b[0],b[1])/Bref;
+          F.push({x,y,a:Math.random()*3.14+Math.atan2(b[1],b[0])*Math.min(1,s*0.3),z:1,stuck:false}); } }
+      for(const f of F){
+        if(f.z>0) f.z=Math.max(0,f.z-dt*5);
+        if(mob<0.02||f.stuck) continue;
+        const b=fieldAt(G.P,f.x,f.y), s=Math.hypot(b[0],b[1])/Bref, fa=Math.atan2(b[1],b[0]);
+        /* torque: turn toward the field line (a filing has no head, so mod π) */
+        f.a+=Math.sin(2*(fa-f.a))*Math.min(1,mob*Math.sqrt(s)*6)*dt*14;
+        const g=ironForce(G.P,f.x,f.y), gl=Math.hypot(g[0],g[1])||1, v=170*mob*Math.min(1,s*s*1.6);
+        f.x+=g[0]/gl*v*dt+gauss()*mob*1.4; f.y+=g[1]/gl*v*dt+gauss()*mob*1.4;
+        for(const c of G.body){ const dx=f.x-c.x, dy=f.y-c.y, d=Math.hypot(dx,dy); if(d<c.r){ f.x=c.x+dx/d*c.r; f.y=c.y+dy/d*c.r; } }
+        if(G.ends.some(e=>Math.hypot(f.x-e[0],f.y-e[1])<30) && s>1.6) f.stuck=true;
+      }
+      ctx.save(); ctx.strokeStyle='#3a4553'; ctx.lineWidth=1.3; ctx.lineCap='round'; ctx.beginPath();
+      for(const f of F){ const l=3.4, c=Math.cos(f.a)*l, s=Math.sin(f.a)*l, yy=f.y-f.z*40; ctx.moveTo(f.x-c,yy-s); ctx.lineTo(f.x+c,yy+s); }
+      ctx.stroke(); ctx.restore();
+      if(sprinkle>0||shaker.x<680){ ctx.save(); ctx.translate(shaker.x,70); ctx.rotate(0.5); rrect(ctx,-14,-30,28,40,6); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.yellow; ctx.lineWidth=2.4; ctx.stroke(); ctx.restore(); }
+      if(shake>0.05){ fist(ctx,700+sx,480,30,{arm:0.6}); textAt(ctx,'tap!',680,440,{size:13,weight:700,color:COL.yellow}); }
+      ctx.restore();
+      /* counts */
+      const n1=F.filter(f=>Math.hypot(f.x-G.ends[0][0],f.y-G.ends[0][1])<45).length, n2=F.filter(f=>Math.hypot(f.x-G.ends[1][0],f.y-G.ends[1][1])<45).length;
+      const nm=shape===0?F.filter(f=>Math.abs(f.x-CX)<30&&Math.abs(f.y-CY)<BW/2+28).length:F.filter(f=>Math.hypot(f.x-(CX-60-US*0.3),f.y-CY)<40).length;
+      setv($,'cA',String(n1)); setv($,'cB',String(n2)); setv($,'cM',String(nm)); setv($,'cT',String(taps));
+      S.ok1=taps>=3 && n1+n2>4*Math.max(1,nm);
+    } else {
+      /* ---- roll the magnet in a heap, side view ---- */
+      const HEAP=430;
+      if(dipT>=0) dipT+=dt;
+      const k=dipT<0?0:dipT<1.2?ease(dipT/1.2):dipT<2.4?1:dipT<3.8?1-ease((dipT-2.4)/1.4):0;
+      const cy=RY0+k*(HEAP-RY0-BW/2+8), roll=dipT>1.2&&dipT<2.4?Math.sin((dipT-1.2)/1.2*Math.PI*2)*30:0;
+      if(dipT>1.2&&!ch.length) ch=rollTufts(cy);
+      if(dipT>2.6) for(const c of ch) if(c.L<9&&!c.gone&&Math.random()<dt*3){ c.gone=true; for(let i=0;i<3;i++) drops.push({x:c.x+gauss()*3,y:c.y,vx:gauss()*10,vy:0,life:2,r:1.6,c:'#3a4553'}); }
+      stepParts(drops,dt,900,HEAP+4);
+      /* heap */
+      ctx.save(); ctx.beginPath(); ctx.moveTo(150,HEAP+30); for(let x=150;x<=650;x+=10){ const u=(x-400)/250; ctx.lineTo(x,HEAP+30-60*(1-u*u)*(0.92+0.08*Math.sin(x*1.7))+(k>0.8?10*Math.exp(-(((x-400-roll)/120)**2)):0)); } ctx.closePath(); ctx.fillStyle='#cfd5dc'; ctx.fill(); ctx.strokeStyle='#5b6b7d'; ctx.lineWidth=1.6; ctx.stroke();
+      ctx.fillStyle='#8a96a3'; const r=rng(5); for(let i=0;i<500;i++){ const x=150+r()*500, u=(x-400)/250, top=HEAP+30-60*(1-u*u); const y=top+r()*(HEAP+30-top); ctx.fillRect(x,y,1.6,1.6); } ctx.restore();
+      rect(ctx,100,HEAP+30,600,10,COL.ink,'#fffdf8',2);
+      ctx.save(); ctx.translate(roll,0);
+      fist(ctx,RX,cy-BW/2-4,36,{arm:-0.2});
+      barMag(ctx,RX,cy,0,BL,BW);
+      /* tufts: chains of filings following the field */
+      if(ch.length){ ctx.save(); ctx.strokeStyle='#3a4553'; ctx.lineWidth=1.3; ctx.lineCap='round'; ctx.beginPath();
+        for(const c of ch){ if(c.gone) continue; const dy=cy-(c.P[0].y); let x=c.x, y=c.y+dy*0+0, L=0; y=c.y+(cy-c.P[0].y);
+          const P=barPoles(RX,cy,0,BL,1); let px=x, py=y; while(L<c.L){ const b=fieldAt(P,px,py), bl=Math.hypot(b[0],b[1])||1; let ux=b[0]/bl, uy=b[1]/bl; if(ux*c.nx+uy*c.ny<0){ ux=-ux; uy=-uy; } const s=4; const nx=px+ux*s+Math.sin(px*3.1+L)*0.8, ny=py+uy*s+(dipT>2.4?0.6:0); ctx.moveTo(px,py); ctx.lineTo(nx,ny); px=nx; py=ny; L+=s; } }
+        ctx.stroke(); ctx.restore(); }
+      ctx.restore();
+      drawParts(ctx,drops);
+      /* strength profile under the scene */
+      if(ch.length&&dipT>3){ const bot=ch.filter(c=>c.ny>0); const x0=150,w=500,y0=505; line(ctx,x0,y0,x0+w,y0,COL.ink,1.4);
+        bot.forEach(c=>{ const h=c.gone?1:c.L*0.55; line(ctx,c.x,y0,c.x,y0-h,c.x>RX?COL.red:COL.blue,3); });
+        textAt(ctx,'filings sticking along the magnet',x0+w,y0+14,{align:'right',size:11,weight:600,color:COL.muted}); }
+      const ends=ch.filter(c=>!c.gone&&Math.abs(c.x-RX)>BL*0.35).length, mid=ch.filter(c=>!c.gone&&Math.abs(c.x-RX)<BL*0.15).length;
+      setv($,'cA',ch.length?'thick tuft':'—'); setv($,'cB',ch.length?'thick tuft':'—'); setv($,'cM',ch.length?(mid?'a few':'almost none'):'—'); setv($,'cT','—');
+      S.ok2=dipT>3.8&&ends>0;
+    }
+  };
+  S.found=()=>S.ok1||S.ok2?'Most filings stick at the two ends — the poles of the magnet. Very few stick in the middle.':'';
+  S.fb=()=>mode===0&&!F.length?['warn','Sprinkle filings, then tap the paper a few times.']:null;
+  return S;
+}); }
+
+/* =====================================================================
+   4.3  LET US INVESTIGATE — a freely suspended bar magnet
+   The Earth's field twists the magnet: I·θ″ = −K·sin(θ − θ_N) − c·θ′
+   − κ·(θ − θ_thread). For a classroom bar magnet in the Earth's
+   horizontal field (~3.5·10⁻⁵ T) the period is a few seconds; here
+   T = 5 s and damping ζ = 0.18 — so it overshoots, swings back and
+   forth several times and settles north–south (real time, no speed-up).
+   An iron bar has K = 0: only the weak thread twist acts, so it stays
+   wherever it is let go.
+   ===================================================================== */
+function buildA3(){ return buildScene(wrap=>{
+  const S={q:'In which direction does a freely hanging bar magnet come to rest?'};
+  const TN=-Math.PI/2, W0=2*Math.PI/5, ZETA=0.18;
+  let iron=false, held=true, bear=60, th={x:(60)*Math.PI/180-Math.PI/2,v:0}, rel=0, marked=false, trials=[], thr=0, sw=0;
+  const b2a=b=>b*Math.PI/180-Math.PI/2, a2b=a=>((a+Math.PI/2)*180/Math.PI%360+360)%360;
+  S.html=`
+    <div class="control-group"><label>Hang</label>${chipList('oC',['Bar magnet','Iron bar (not a magnet)'],0)}</div>
+    ${slider('bA','Turn it to face',0,359,1,60)}
+    <div class="control-group"><div class="toggle-group"><button class="toggle-btn play" id="go">✋ Let go</button><button class="toggle-btn" id="pk">🌀 Give it a spin</button></div>
+      <div class="toggle-group"><button class="toggle-btn" id="cl">↻ Clear marks</button></div></div>`;
+  S.cards=card('cS','State')+card('cD','Red end points',COL.red)+card('cN','Trials');
+  S.tail=`<div class="control-group"><label>Where did it rest?</label>${logTable('tL',['#','Object','Started at','Red end rests at'])}</div>`;
+  S.wire=$=>{
+    wireChips(wrap,'oC',i=>{ iron=!!i; held=true; marked=false; });
+    $('#bA').oninput=()=>{ bear=+$('#bA').value; held=true; marked=false; };
+    $('#go').onclick=()=>{ if(!held) return; held=false; rel=0; marked=false; thr=th.x; sw=bear; };
+    $('#pk').onclick=()=>{ held=false; rel=0; marked=false; thr=th.x; sw=a2b(th.x); th.v+=(Math.random()<0.5?-1:1)*(3+Math.random()*2); };
+    $('#cl').onclick=()=>{ trials=[]; };
+  };
+  const CX=560, CY=275, R=190;
+  S.tick=(dt,ctx,t,$)=>{
+    if(held){ const tg=b2a(bear); th.v=0; th.x=approach(th.x,th.x+angDiff(tg,th.x),8,dt); }
+    else { rel+=dt; const n=4; for(let k=0;k<n;k++){ const h=dt/n;
+        const acc=(iron?0:-W0*W0*Math.sin(th.x-TN))-2*ZETA*W0*th.v-0.02*(th.x-thr)-(iron?0.25*th.v:0);
+        th.v+=acc*h; th.x+=th.v*h; }
+      if(!marked && rel>2 && Math.abs(th.v)<0.012 && (iron||Math.abs(angDiff(th.x,TN))<0.05)){ marked=true;
+        trials.push({o:iron?'Iron bar':'Magnet',s:Math.round(sw),e:Math.round(a2b(th.x))%360,a:th.x}); } }
+    /* ---- side view: stand, thread, magnet (seen from the south) ---- */
+    rect(ctx,40,470,300,12,COL.ink,'#fff',2); line(ctx,80,470,80,90,COL.ink,5); line(ctx,78,92,240,92,COL.ink,5);
+    const hy=330; line(ctx,220,94,220,hy-14,'#8195ab',1.4);
+    const c=Math.cos(th.x), Lp=Math.max(26,Math.abs(c)*200);
+    if(iron) barMag(ctx,220,hy,0,Lp,26,{plain:true,label:Lp>70?'IRON':false});
+    else { barMag(ctx,220,hy,c>=0?0:Math.PI,Lp,26,{letters:Lp>60}); }
+    textAt(ctx,'side view (looking north)',190,505,{align:'center',size:11,weight:600,color:COL.mid});
+    textAt(ctx,'W',50,hy+5,{size:12,weight:700,color:COL.muted}); textAt(ctx,'E',330,hy+5,{size:12,weight:700,color:COL.muted});
+    if(held){ fist(ctx,220+c*80,hy-10,26,{arm:0.3}); }
+    /* ---- top view ---- */
+    circ(ctx,CX,CY,R,COL.ink,'#fffdf8',2); circ(ctx,CX,CY,R-34,'#eef1f5',null,1);
+    for(let k=0;k<72;k++){ const a=k/72*6.283, l=k%18===0?14:k%6===0?8:4; line(ctx,CX+Math.cos(a)*(R-l),CY+Math.sin(a)*(R-l),CX+Math.cos(a)*R,CY+Math.sin(a)*R,COL.mid,1); }
+    [['N',0,COL.green],['E',90,COL.muted],['S',180,COL.muted],['W',270,COL.muted]].forEach(([s,b,cl])=>{ const a=b2a(b); textAt(ctx,s,CX+Math.cos(a)*(R+16),CY+Math.sin(a)*(R+16)+6,{align:'center',size:16,weight:700,color:cl}); });
+    vec(ctx,CX,CY-R-38,CX,CY-R-60,COL.green,2.4);
+    /* pencil marks of earlier rests */
+    trials.forEach(tr=>{ const a=tr.a; line(ctx,CX-Math.cos(a)*(R-20),CY-Math.sin(a)*(R-20),CX+Math.cos(a)*(R-20),CY+Math.sin(a)*(R-20),tr.o==='Magnet'?'rgba(31,157,85,0.55)':'rgba(129,149,171,0.6)',2,[6,5]); });
+    if(iron) barMag(ctx,CX,CY,th.x,250,40,{plain:true}); else barMag(ctx,CX,CY,th.x,250,40);
+    circ(ctx,CX,CY,4,COL.ink,'#fff',2);
+    if(!held&&!iron){ const off=angDiff(TN,th.x); if(Math.abs(off)>0.05){ const a0=th.x, a1=th.x+off*0.6; ctx.save(); ctx.beginPath(); ctx.arc(CX,CY,R-48,Math.min(a0,a1),Math.max(a0,a1)); ctx.strokeStyle=COL.yellow; ctx.lineWidth=3; ctx.stroke(); ctx.restore(); arrowHead(ctx,CX+Math.cos(a1)*(R-48),CY+Math.sin(a1)*(R-48),a1+Math.sign(off)*Math.PI/2,COL.yellow,9); } }
+    textAt(ctx,'top view',CX,CY+R+30,{align:'center',size:11,weight:600,color:COL.mid});
+    const b=Math.round(a2b(th.x))%360, dir=['N','NE','E','SE','S','SW','W','NW'][Math.round(b/45)%8];
+    setv($,'cS',held?'held in hand':marked?'at rest':'swinging'); setv($,'cD',b+'° ('+dir+')'); setv($,'cN',String(trials.filter(x=>x.o==='Magnet').length));
+    setLog($,'tL',trials.map((x,i)=>[String(i+1),x.o,x.s+'°',x.o==='Magnet'?{t:x.e+'° (N)',c:'g'}:x.e+'°']));
+  };
+  S.found=()=>trials.filter(x=>x.o==='Magnet').length>=3?'It always comes to rest north–south — the same end (N pole) always points north.':'';
+  S.fb=()=>{ const ir=trials.filter(x=>x.o==='Iron bar'); return ir.length>=2&&new Set(ir.map(x=>Math.round(x.e/20))).size>1?['ok','The iron bar stops wherever you leave it — only a magnet turns to north–south.']:null; };
+  return S;
+}); }
+
+/* =====================================================================
+   4.4  LET US MAKE — a compass of our own
+   Stroking: each pass of a pole from eye to tip lines up more of the
+   needle's tiny magnetic regions: M ← M + (target − M)·0.08, so
+   1 − 0.92ⁿ → 30 strokes ≈ 92 %, 40 ≈ 96 % (the book says 30–40).
+   The end a pole leaves last becomes the OPPOSITE pole (stroke with N →
+   tip becomes S). Back-and-forth strokes undo each other, M stays ≈ 0.
+   Floating: the cork turns as a damped rotor in water,
+   θ″ = −ω₀²·|M|·sin(θ − θ_N) − 2ζω₀·θ′, ω₀ = 2π/6 s, ζ = 0.35, so a
+   well-magnetised needle swings once and settles north–south in
+   ~10 s; an unmagnetised one just drifts with the water.
+   ===================================================================== */
+function buildA4(){ return buildScene(wrap=>{
+  const S={q:'Can a magnetised needle on a floating cork find north?'};
+  let pole=0, style=0, M=0, strokes=0, queue=0, p=-1, dirSign=1, test=-1, pinsOn=0, stage=0, fl={x:0,v:0}, flT=0, drift=0, marks=[];
+  const NX0=110, NX1=430, NY=170;
+  S.html=`
+    <div class="control-group"><label>Stroke with the magnet's</label>${chipList('pC',['N pole','S pole'],0)}</div>
+    <div class="control-group"><label>Stroke</label>${chipList('yC',['Same direction every time','Back and forth'],0)}</div>
+    <div class="control-group"><div class="toggle-group"><button class="toggle-btn play" id="s1">🧲 Stroke ×1</button><button class="toggle-btn play" id="s10">Stroke ×10</button></div>
+      <div class="toggle-group"><button class="toggle-btn" id="tp">📌 Test on pins</button><button class="toggle-btn" id="fl">💧 Float on cork</button></div>
+      <div class="toggle-group"><button class="toggle-btn" id="nd">🌀 Nudge the cork</button><button class="toggle-btn" id="rs">↻ New needle</button></div></div>`;
+  S.cards=card('cK','Strokes')+card('cM','Magnetised',COL.green)+card('cP','Pins picked up')+card('cT','Tip points');
+  S.wire=$=>{
+    wireChips(wrap,'pC',i=>pole=i); wireChips(wrap,'yC',i=>style=i);
+    $('#s1').onclick=()=>{ if(stage===0) queue+=1; }; $('#s10').onclick=()=>{ if(stage===0) queue+=10; };
+    $('#tp').onclick=()=>{ if(stage===0&&p<0&&queue===0) test=0; };
+    $('#fl').onclick=()=>{ if(stage===0){ stage=1; flT=0; queue=0; p=-1; fl={x:Math.random()*6.28,v:0}; } };
+    $('#nd').onclick=()=>{ if(stage===1){ fl.v+=(Math.random()<0.5?-1:1)*(2.5+Math.random()*2); flT=0; } };
+    $('#rs').onclick=()=>{ M=0; strokes=0; queue=0; p=-1; stage=0; test=-1; pinsOn=0; dirSign=1; };
+  };
+  S.tick=(dt,ctx,t,$)=>{
+    /* ---------- stroking ---------- */
+    if(p<0&&queue>0&&test<0){ p=0; queue--; }
+    let mx=NX0, my=NY-6, ma=0;
+    if(p>=0){ p+=dt/0.55;
+      const fwd=style===0||dirSign>0, xa=fwd?NX0:NX1, xb=fwd?NX1:NX0;
+      if(p<0.65){ const u=ease(p/0.65); mx=lerp(xa,xb,u); my=NY-6; ma=(fwd?1:-1)*0.35; }
+      else { const u=ease((p-0.65)/0.35); mx=lerp(xb,xa,u); my=NY-6-Math.sin(u*Math.PI)*80; ma=(fwd?1:-1)*0.35*(1-u); }
+      if(p>=0.65&&!dipDone){ dipDone=true; strokes++;
+        /* stroke eye→tip with N leaves tip S (M→−1); with S leaves tip N (M→+1); reverse direction flips it */
+        const tgt=(pole===0?-1:1)*(fwd?1:-1); M+=(tgt-M)*0.08; if(style===1) dirSign=-dirSign; }
+      if(p>=1){ p=-1; dipDone=false; } }
+    /* ---------- pin test ---------- */
+    if(test>=0){ test+=dt; if(test>0.8&&test<0.9) pinsOn=Math.round(Math.abs(M)*7); if(test>3) test=-1; }
+    /* ---------- floating ---------- */
+    if(stage===1){ flT+=dt; const w0=2*Math.PI/6, aM=Math.abs(M), tN=M>=0?-Math.PI/2:Math.PI/2;
+      drift+=gauss()*dt*0.4; drift*=Math.exp(-dt*0.5);
+      const acc=-w0*w0*aM*Math.sin(fl.x-tN)-2*0.35*w0*fl.v+drift*0.3;
+      fl.v+=acc*dt; fl.x+=fl.v*dt; }
+    /* ---------- draw: table with needle ---------- */
+    line(ctx,40,NY+18,560,NY+18,COL.ink,2); ground(ctx,40,560,NY+18);
+    const needle=(x0,y0,x1,y1,lw)=>{ const tipN=M>0, a=Math.min(1,Math.abs(M));
+      line(ctx,x0,y0,x1,y1,'#5b6b7d',lw); ell(ctx,x0+(x1-x0)*0.03,y0+(y1-y0)*0.03,lw*1.6,lw*0.8,null,'#5b6b7d',1.4,Math.atan2(y1-y0,x1-x0));
+      if(a>0.04){ ctx.save(); ctx.globalAlpha=a; const xm=(x0+x1)/2, ym=(y0+y1)/2; line(ctx,xm,ym,x1,y1,tipN?COL.red:COL.blue,lw+1.5); line(ctx,x0,y0,xm,ym,tipN?COL.blue:COL.red,lw+1.5); ctx.restore(); } };
+    let ny=NY+14, tx0=NX0, tx1=NX1;
+    if(stage===0){
+      let lift=0; if(test>=0){ lift=test<0.6?ease(test/0.6):test<1?1:test<1.6?1-ease((test-1)/0.6):0; }
+      /* pin dish at the right */
+      ell(ctx,650,NY+12,80,14,'#f7f9fc',COL.ink,2);
+      const r=rng(3); for(let i=0;i<24;i++) pinDraw(ctx,600+r()*100,NY+6+r()*10,r()*3,22);
+      const tipX=lerp(NX1,600,lift), tipY=lerp(ny,NY+4,lift);
+      if(test>=0){ needle(lerp(NX0,470,lift),lerp(ny,NY-40,lift),tipX,tipY,3); fist(ctx,lerp(NX0,470,lift)+20,lerp(ny,NY-40,lift)-8,24,{arm:-0.4});
+        if(test>0.9) for(let i=0;i<pinsOn;i++){ const sw=Math.sin(t*4+i)*0.15; pinDraw(ctx,tipX+4+Math.cos(1.2+sw+i*0.25)*12,tipY+Math.sin(1.2+sw+i*0.25)*12,1.2+sw+i*0.25,22); } }
+      else needle(NX0,ny,NX1,ny,3);
+      textAt(ctx,'eye',NX0,ny+22,{align:'center',size:11,weight:600,color:COL.mid}); textAt(ctx,'tip',NX1,ny+22,{align:'center',size:11,weight:600,color:COL.mid});
+      if(p>=0||queue>0||test<0){ const touchN=pole===0; ctx.save(); ctx.translate(mx,my); ctx.rotate(ma); barMag(ctx,0,-60,touchN?Math.PI/2:-Math.PI/2,120,30); ctx.restore(); fist(ctx,mx+Math.sin(ma)*80,my-100,30,{arm:ma}); }
+      if(p>=0&&p<0.65) forceArrow(ctx,mx-40,NY-120,(style===0||dirSign>0?1:-1)*60,0,COL.yellow,'stroke');
+    }
+    /* ---------- bowl of water, top view ---------- */
+    const BX=330, BY=390, BR=118;
+    circ(ctx,BX,BY,BR+10,COL.ink,'#fff',2.4); ctx.save(); ctx.beginPath(); ctx.arc(BX,BY,BR,0,7); ctx.fillStyle='#e3f0fc'; ctx.fill(); ctx.strokeStyle=COL.blue; ctx.lineWidth=1.6; ctx.stroke();
+    for(let k=0;k<3;k++){ ctx.globalAlpha=0.35; ctx.beginPath(); ctx.arc(BX,BY,(t*20+k*40)%BR,0,7); ctx.strokeStyle=COL.blue; ctx.lineWidth=1; ctx.stroke(); } ctx.restore();
+    textAt(ctx,'bowl of water (top view)',BX,BY+BR+28,{align:'center',size:11,weight:600,color:COL.mid});
+    if(stage===1){ const s=smooth01(0,0.8,flT+1), cx=BX+Math.sin(t*0.4)*6, cy=BY+Math.cos(t*0.33)*5;
+      ell(ctx,cx,cy,30,22,'#f2dcb3','#a7782f',2.2,fl.x); const c=Math.cos(fl.x), sn=Math.sin(fl.x);
+      /* needle's tip is along +θ when M ≥ 0 means tip is N, so draw tip at angle fl.x */
+      needle(cx-c*90,cy-sn*90,cx+c*90,cy+sn*90,3);
+      if(Math.abs(fl.v)<0.1&&flT>4&&Math.abs(M)>0.3){ line(ctx,BX,BY-BR-14,BX,BY+BR+14,'rgba(31,157,85,0.5)',2,[6,5]); }
+    }
+    /* reference compass */
+    compassDraw(ctx,660,390,64,-Math.PI/2+Math.sin(t*1.3)*0.01);
+    textAt(ctx,'real compass',660,390+96,{align:'center',size:11,weight:600,color:COL.mid});
+    /* readouts */
+    const tipDir=stage===1&&flT>4&&Math.abs(fl.v)<0.1?(Math.abs(M)<0.15?'anywhere (drifts)':(()=>{ const b=((fl.x+Math.PI/2)*180/Math.PI%360+360)%360; return b<20||b>340?'North':b>160&&b<200?'South':Math.round(b)+'°'; })()):'—';
+    setv($,'cK',String(strokes)); setv($,'cM',Math.round(Math.abs(M)*100)+' %'); setv($,'cP',String(pinsOn)); setv($,'cT',tipDir);
+    S.ok=stage===1&&Math.abs(M)>0.6&&flT>4&&Math.abs(fl.v)<0.1;
+  };
+  let dipDone=false;
+  S.found=()=>S.ok?'Yes! The magnetised needle swings and settles north–south — it works as a compass.':'';
+  S.fb=()=>{ if(strokes>=10&&Math.abs(M)<0.15) return ['bad','Back-and-forth strokes cancel out — stroke in ONE direction only.'];
+    if(strokes>0&&strokes<25&&Math.abs(M)<0.85) return ['warn','Keep stroking — about 30–40 strokes in the same direction.']; return null; };
+  return S;
+}); }
+
+/* =====================================================================
+   4.5  LET US EXPLORE — attraction and repulsion (Table 4.2)
+   Magnet B rides on a toy car; you bring magnet A toward it. Force on B
+   = sum over the four pole pairs of q_i·q_j / r² (pole set-in 12 %), so
+   it changes sign with the facing ends and grows steeply as the gap
+   closes. The car obeys m·a = F − μ_r·m·g (rolling friction, it only
+   starts when the pull beats static friction), wheels turn with
+   ω = v/r, an attracted car rushes in and clacks (e = 0.15), a repelled
+   car is shoved away and coasts to a stop.  1 cm = 10 px.
+   ===================================================================== */
+function buildA5(){ return buildScene(wrap=>{
+  const S={q:'What happens when two ends of magnets are brought near each other?'};
+  const PX=10, ML=120, MY=258, TR=320, CW=120;
+  let aEnd=0, bEnd=0, gapT=14, ax=spr(0), car={x:560,v:0,rot:0}, stuck=false, rec={}, base=null, prevAx=0, clack=0, fB=0;
+  /* aEnd: 0 = A shows N to the car, 1 = S.  bEnd: 0 = car magnet shows N toward A, 1 = S */
+  const aPoles=x=>{ const s=aEnd===0?1:-1; return [{x:x+ML/2-ML*0.12,q:s},{x:x-ML/2+ML*0.12,q:-s}]; };
+  const bPoles=x=>{ const s=bEnd===0?1:-1; return [{x:x-ML/2+ML*0.12,q:s},{x:x+ML/2-ML*0.12,q:-s}]; };
+  const force=(xa,xb)=>{ let F=0; for(const p of aPoles(xa)) for(const q of bPoles(xb)){ const d=q.x-p.x, r=Math.max(Math.abs(d),4); F+=p.q*q.q*Math.sign(d)/(r*r); } return F; };
+  const K=2.4e6; /* a ≈ 1400 px/s² at 1 cm gap, beats static friction below ≈4.5 cm */
+  S.html=`
+    <div class="control-group"><label>Magnet A — end facing the car</label>${chipList('aC',['N','S'],0)}</div>
+    <div class="control-group"><label>Car magnet B — end facing A</label>${chipList('bC',['N','S'],0)}</div>
+    ${slider('gS','Bring A closer (gap)',0.5,20,0.1,14)}
+    <div class="control-group"><div class="toggle-group"><button class="toggle-btn play" id="ap">➡ Move A slowly toward the car</button></div>
+      <div class="toggle-group"><button class="toggle-btn" id="rs">↻ Put the car back</button></div></div>`;
+  S.cards=card('cG','Gap')+card('cF','Force on car',COL.yellow)+card('cR','Result',COL.green);
+  S.tail=`<div class="control-group"><label>Table 4.2 · Ends facing each other</label>${logTable('tL',['A','B','What happens'])}</div>`;
+  let creep=false;
+  S.wire=$=>{
+    const reset=()=>{ car={x:560,v:0,rot:0}; stuck=false; base=null; gapT=14; $('#gS').value=14; creep=false; };
+    wireChips(wrap,'aC',i=>{ aEnd=i; reset(); }); wireChips(wrap,'bC',i=>{ bEnd=i; reset(); });
+    $('#gS').oninput=()=>{ gapT=+$('#gS').value; creep=false; };
+    $('#ap').onclick=()=>{ creep=true; };
+    $('#rs').onclick=reset; S.$=$;
+  };
+  S.tick=(dt,ctx,t,$)=>{
+    if(creep){ gapT=Math.max(0.5,gapT-dt*3); $('#gS').value=gapT; if(gapT<=0.5) creep=false; }
+    /* A's target: keep the chosen gap to where the car was when you set it */
+    const carL=car.x-ML/2;
+    if(base===null) base=car.x;
+    const tgt=(stuck?ax.x:base-ML/2-gapT*PX-ML/2);
+    if(!stuck) springTo(ax,tgt,30,10,dt); else { ax.x=approach(ax.x,base-ML/2-gapT*PX-ML/2,3,dt); }
+    const vA=(ax.x-prevAx)/Math.max(dt,1e-3); prevAx=ax.x;
+    /* car dynamics */
+    const n=6; for(let k=0;k<n;k++){ const h=dt/n;
+      if(stuck){ car.x=ax.x+ML; car.v=vA; break; }
+      const F=K*force(ax.x,car.x); fB=F;
+      let a=F; const fr=120;
+      if(Math.abs(car.v)<1){ if(Math.abs(F)<fr*1.4){ a=0; car.v=0; } else a=F-Math.sign(F)*fr; }
+      else a=F-Math.sign(car.v)*fr;
+      car.v+=a*h; car.x+=car.v*h;
+      const gap=car.x-ML/2-(ax.x+ML/2);
+      if(gap<=0){ car.x=ax.x+ML; if(F<0){ stuck=true; clack=1; car.v=0; } else { car.v=Math.abs(car.v)*0.15; } }
+      if(car.x>790-CW/2){ car.x=790-CW/2; car.v=-car.v*0.3; }
+      car.rot+=car.v*h/14; }
+    clack=approach(clack,0,6,dt);
+    const gap=(car.x-ML/2-(ax.x+ML/2))/PX, moved=car.x-base;
+    const kind=(aEnd===bEnd)?'Repel':'Attract', key=(aEnd?'S':'N')+(bEnd?'S':'N');
+    if(!rec[key] && (stuck||moved>25||moved<-25)) rec[key]=moved>0?'Repel — car pushed away':'Attract — car pulled in';
+    /* ---- draw ---- */
+    line(ctx,20,TR+22,790,TR+22,COL.ink,2); ground(ctx,20,790,TR+22);
+    rect(ctx,780,TR-30,10,52,COL.ink,'#fff',2);
+    /* car */
+    const cx=car.x; ctx.save(); ctx.lineJoin='round';
+    ctx.beginPath(); ctx.moveTo(cx-CW/2,TR); ctx.lineTo(cx-CW/2,TR-28); ctx.lineTo(cx-CW/2+18,TR-44); ctx.lineTo(cx+CW/2-22,TR-44); ctx.lineTo(cx+CW/2,TR-26); ctx.lineTo(cx+CW/2,TR); ctx.closePath(); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.stroke();
+    rect(ctx,cx-CW/2+24,TR-38,30,14,COL.muted,'#eef4fb',1.4); rect(ctx,cx+4,TR-38,30,14,COL.muted,'#eef4fb',1.4);
+    for(const wx of [cx-CW/2+24,cx+CW/2-24]){ circ(ctx,wx,TR+8,14,COL.ink,'#fff',2.6); for(let s=0;s<3;s++){ const a=car.rot+s*2.094; line(ctx,wx,TR+8,wx+Math.cos(a)*11,TR+8+Math.sin(a)*11,COL.muted,1.6); } circ(ctx,wx,TR+8,3,COL.ink,COL.ink,1); }
+    ctx.restore();
+    barMag(ctx,cx,MY,bEnd===0?Math.PI:0,ML,30);
+    line(ctx,cx-20,MY+15,cx-20,TR-44,COL.mid,2); line(ctx,cx+20,MY+15,cx+20,TR-44,COL.mid,2);
+    /* magnet A in the hand */
+    barMag(ctx,ax.x,MY,aEnd===0?0:Math.PI,ML,30); fist(ctx,ax.x-20,MY-20,30,{arm:-0.5});
+    if(clack>0.05){ textAt(ctx,'clack!',ax.x+ML/2,MY-40-clack*10,{align:'center',size:15,weight:700,color:COL.green}); }
+    /* force arrow on the car */
+    const fa=clamp(fB/40,-140,140); if(!stuck&&Math.abs(fa)>4) forceArrow(ctx,cx,MY-50,fa,0,COL.yellow,fa>0?'push':'pull');
+    if(gap>0.2){ line(ctx,ax.x+ML/2,MY+30,cx-ML/2,MY+30,COL.yellow,1.4,[4,3]); textAt(ctx,fmt(gap,1)+' cm',(ax.x+ML/2+cx-ML/2)/2,MY+46,{align:'center',size:12,weight:700,color:COL.yellow}); }
+    setv($,'cG',fmt(Math.max(0,gap),1)+' cm'); setv($,'cF',Math.abs(fB)<5?'tiny':(fB>0?'push away':'pull in'));
+    setv($,'cR',stuck?'stuck together':Math.abs(car.v)>3?(car.v>0?'rolling away':'rolling in'):moved>25?'pushed away':'—');
+    setLog($,'tL',['NN','NS','SN','SS'].filter(k=>rec[k]).map(k=>[{t:k[0],c:k[0]==='N'?'rd':'b'},{t:k[1],c:k[1]==='N'?'rd':'b'},k[0]===k[1]?{t:rec[k],c:'rd'}:{t:rec[k],c:'g'}]));
+  };
+  S.found=()=>Object.keys(rec).length===4?'Like poles (N–N, S–S) repel; unlike poles (N–S) attract.':'';
+  S.fb=()=>{ const n=Object.keys(rec).length; return n>0&&n<4?['warn',`${n} of 4 pairs done — change the ends and try again.`]:null; };
+  return S;
+}); }
+
+/* =====================================================================
+   4.6  LET US INVESTIGATE — a magnet near a compass
+   Needle = damped rotor: θ″ = −ω₀²·|B|·sin(θ − θ_B) − 2ζω₀·θ′,
+   ω₀ = 2π/0.9 s, ζ = 0.15. B = Earth's horizontal field (1 unit, north)
+   + the bar magnet's field from two poles (10 cm magnet, poles set in
+   1 cm, q = 900 units·cm²). That gives the real ratio: a classroom
+   magnet (~1 A·m²) at 10 cm makes ≈5× the Earth's field, at 30 cm
+   ≈0.3× — so the needle swings ≈80° close up, ≈20° far away, and a
+   magnet's S pole held south of the compass can flip the needle right
+   round once it beats the Earth's field (closer than ≈22 cm).
+   ===================================================================== */
+function buildA6(){ return buildScene(wrap=>{
+  const S={q:'What happens to a compass needle when a magnet comes near?'};
+  const W0=2*Math.PI/0.9, Z=0.15, Q=900;
+  let side=0, face=0, d=25, hide=false, th={x:-Math.PI/2,v:0}, zoom=1, dS=spr(25), seen={}, guess=null, guessOk=null, secret=Math.random()<0.5?0:1;
+  const U=[[1,0],[-1,0],[0,1],[0,-1]], SN=['East','West','South','North'];
+  const field=()=>{ const u=U[side], dd=dS.x, f=hide?secret:face, qn=f===0?Q:-Q; let bx=0, by=-1;
+    for(const [r,q] of [[dd+1,qn],[dd+9,-qn]]){ const px=u[0]*r, py=u[1]*r, R3=Math.pow(r,3); bx+=q*(-px)/R3; by+=q*(-py)/R3; } return [bx,by]; };
+  S.html=`
+    <div class="control-group"><label>Put the magnet on the compass's</label>${chipList('sC',SN.map(s=>s+' side'),0)}</div>
+    <div class="control-group"><label>End facing the compass</label>${chipList('fC',['N pole','S pole','Unmarked magnet (?)'],0)}</div>
+    ${slider('dS','Distance from compass',3,40,0.5,25)}
+    <div class="control-group" id="gG" style="display:none"><label>Which end faces the compass?</label><div class="toggle-group"><button class="toggle-btn" id="gN">It is N</button><button class="toggle-btn" id="gS">It is S</button></div></div>`;
+  S.cards=card('cD','Distance')+card('cA','Needle turned by',COL.yellow)+card('cM','Magnet vs Earth');
+  S.tail=`<div class="control-group"><label>Observations</label>${logTable('tL',['End facing','Side','Needle\'s N end'])}</div>`;
+  S.wire=$=>{
+    wireChips(wrap,'sC',i=>side=i);
+    wireChips(wrap,'fC',i=>{ hide=i===2; if(!hide) face=i; else { secret=Math.random()<0.5?0:1; guess=null; guessOk=null; } $('#gG').style.display=hide?'':'none'; });
+    $('#dS').oninput=()=>{ d=+$('#dS').value; };
+    $('#gN').onclick=()=>{ guess=0; guessOk=secret===0; }; $('#gS').onclick=()=>{ guess=1; guessOk=secret===1; };
+  };
+  S.tick=(dt,ctx,t,$)=>{
+    springTo(dS,d,40,12,dt);
+    const B=field(), bm=Math.hypot(B[0],B[1]), ta=Math.atan2(B[1],B[0]);
+    const n=4; for(let k=0;k<n;k++){ const h=dt/n; const acc=-W0*W0*Math.min(bm,30)*Math.sin(th.x-ta)/Math.max(1,Math.sqrt(bm))-2*Z*W0*th.v; th.v+=acc*h; th.x+=th.v*h; }
+    const defl=Math.round(Math.abs(angDiff(th.x,-Math.PI/2))*180/Math.PI);
+    /* camera: pull out when the magnet is far away */
+    const u=U[side], sd=150+dS.x*7, ext=sd+130, room=u[1]?235:380; zoom=approach(zoom,Math.min(1,room/ext),5,dt);
+    ctx.save(); ctx.translate(400,262); ctx.scale(zoom,zoom);
+    rect(ctx,-560,-420,1120,840,'#eef1f5','#fffdf8',0);
+    compassDraw(ctx,0,0,120,th.x);
+    /* magnet */
+    const near=sd, cx=u[0]*(near+60), cy=u[1]*(near+60), f=hide?secret:face;
+    const ang=Math.atan2(u[1],u[0])+(f===0?Math.PI:0);
+    barMag(ctx,cx,cy,ang,120,36,{unk:hide&&guess===null});
+    /* distance tag */
+    const ex=u[0]*near, ey=u[1]*near;
+    line(ctx,u[0]*128,u[1]*128,ex,ey,COL.yellow,1.6,[5,4]); textAt(ctx,fmt(dS.x,1)+' cm',(u[0]*128+ex)/2+(u[1]?28:0),(u[1]*128+ey)/2+(u[1]?4:-10),{align:'center',size:13/zoom>20?20:13,weight:700,color:COL.yellow});
+    ctx.restore();
+    /* field arrows inset: Earth (green) + magnet (yellow) */
+    const ix=700, iy=420; circ(ctx,ix,iy,58,'#dbe4f0','#fff',1.4); textAt(ctx,'pulls on needle',ix,iy+76,{align:'center',size:11,weight:600,color:COL.mid});
+    vec(ctx,ix,iy,ix,iy-40,COL.green,3); textAt(ctx,'Earth',ix+6,iy-44,{size:10.5,weight:700,color:COL.green});
+    const mbx=B[0], mby=B[1]+1, ml=Math.hypot(mbx,mby); if(ml>0.02){ const L=Math.min(52,40*Math.sqrt(ml)); vec(ctx,ix,iy,ix+mbx/ml*L,iy+mby/ml*L,COL.yellow,3); }
+    if(Math.abs(th.v)<0.05&&dS.x<16){ const key=(hide?'?':face===0?'N':'S')+side; if(!seen[key]){ const nE=angDiff(th.x,ta); const awayN=Math.cos(th.x)*u[0]+Math.sin(th.x)*u[1];
+        seen[key]={end:hide?'? (unmarked)':face===0?'N':'S',side:SN[side],res:awayN<0?'turns AWAY from it':'turns TOWARD it',rep:awayN<0}; } }
+    setv($,'cD',fmt(dS.x,1)+' cm'); setv($,'cA',defl+'°'); setv($,'cM',fmt(ml,1)+'×');
+    const rows=Object.values(seen); setLog($,'tL',rows.map(r=>[{t:r.end,c:r.end==='N'?'rd':r.end==='S'?'b':''},r.side,{t:r.res,c:r.rep?'rd':'g'}]));
+    S.ok=rows.some(r=>r.end==='N')&&rows.some(r=>r.end==='S');
+  };
+  S.found=()=>S.ok?'The needle turns near a magnet: a magnet\'s N pole pushes the needle\'s N end away, its S pole pulls it in.':'';
+  S.fb=()=>guess===null?null:guessOk?['ok','Right! You used the compass to find the pole of an unmarked magnet.']:['bad','Not quite — watch whether the needle\'s red (N) end turns toward or away.'];
+  return S;
+}); }
+
+/* =====================================================================
+   4.7  LET US EXPLORE — does a magnet attract through other materials?
+   A clip lies on a sheet; the magnet's top pole slides along beneath it.
+   The pull on the clip is the gradient of |B|² of that pole (∝ 1/r⁵):
+   F = A·(dx, h)/r⁶ with A = 345 mg·cm⁵, h = sheet thickness + 0.3 cm.
+   The sideways part drags the clip; the downward part presses it onto
+   the sheet and raises friction (μs = 0.3, μk = 0.2). Result: through
+   paper, plastic, glass and cardboard the clip chases the magnet
+   (lagging a little), through a thick plank (h ≳ 2.5 cm) it stops
+   following, and a steel sheet soaks up the field (×0.0002) and itself grips the clip, so the clip
+   ignores the magnet even though the sheet is thin.  1 cm = 20 px.
+   ===================================================================== */
+const MAT47=[
+  {n:'Paper',t:0.01,fill:'#ffffff',st:COL.muted},{n:'Cardboard',t:0.3,fill:'#e9cf9f',st:'#a7782f'},{n:'Plastic sheet',t:0.2,fill:'rgba(255,214,120,0.35)',st:'#c9a93a'},
+  {n:'Glass',t:0.5,fill:'rgba(220,236,251,0.6)',st:'#7fa8c9'},{n:'Wooden plank',t:2,fill:'#e2b97f',st:'#8a5a2b'},{n:'Steel sheet',t:0.1,fill:'#dfe4ea',st:'#5b6b7d',shield:true}];
+function buildA7(){ return buildScene(wrap=>{
+  const S={q:'Can a magnet pull a paper clip through paper, glass, wood…?'};
+  const PX=20, X0=160, X1=640, TOP=250, A=345, G=980;
+  let mi=0, th=0.01, mxT=10, mx=spr(10), auto=false, clip={x:10,v:0}, rec={}, track={moved:0,sep:0}, held=0;
+  S.html=`
+    <div class="control-group"><label>Sheet</label>${chipList('mC',MAT47.map(m=>m.n),0)}</div>
+    ${slider('tS','Thickness',0.01,4,0.01,0.01)}
+    ${slider('xS','Magnet under the sheet',2,22,0.1,10)}
+    <div class="control-group"><div class="toggle-group"><button class="toggle-btn play" id="au">↔ Move the magnet to and fro</button></div>
+      <div class="toggle-group"><button class="toggle-btn" id="rs">↻ Put the clip back</button></div></div>`;
+  S.cards=card('cT','Gap to clip')+card('cF','Pull on clip',COL.yellow)+card('cR','Clip',COL.green);
+  S.tail=`<div class="control-group"><label>Table · Through the sheet</label>${logTable('tL',['Material','Thickness','Clip follows?'])}</div>`;
+  S.wire=$=>{
+    wireChips(wrap,'mC',i=>{ mi=i; th=MAT47[i].t; $('#tS').value=th; clip={x:mx.x,v:0}; track={moved:0,sep:0}; });
+    $('#tS').oninput=()=>{ th=+$('#tS').value; track={moved:0,sep:0}; };
+    $('#xS').oninput=()=>{ mxT=+$('#xS').value; auto=false; };
+    $('#au').onclick=()=>{ auto=!auto; };
+    $('#rs').onclick=()=>{ clip={x:mx.x,v:0}; track={moved:0,sep:0}; };
+    S.$=$;
+  };
+  S.tick=(dt,ctx,t,$)=>{
+    if(auto){ mxT=12+8*Math.sin(t*0.9); $('#xS').value=mxT; }
+    const px0=mx.x; springTo(mx,mxT,25,10,dt);
+    const M=MAT47[mi], h=th+0.3, a=A*(M.shield?2e-4:1);
+    let Fx=0, Fz=0;
+    const n=6; for(let k=0;k<n;k++){ const hh=dt/n;
+      const dx=mx.x-clip.x, r2=dx*dx+h*h, r6=r2*r2*r2; Fx=a*dx/r6; Fz=a*h/r6;
+      const N=1+Fz+(M.shield?5:0);
+      /* sliding under a big normal force is overdamped: speed ∝ the force left over after friction, never past the magnet */
+      if(Math.abs(clip.v)<0.05&&Math.abs(Fx)<0.3*N) clip.v=0;
+      else { const ex=Math.abs(Fx)-0.2*N; clip.v=ex>0?Math.sign(Fx)*Math.min(30,120*ex/N):0; }
+      if(Math.abs(clip.v*hh)>Math.abs(dx)) clip.v=dx/hh;
+      clip.x+=clip.v*hh; track.moved+=Math.abs(clip.v*hh); clip.x=clamp(clip.x,1,23); }
+    track.sep=Math.max(track.sep*Math.exp(-dt*0.2),Math.abs(mx.x-clip.x));
+    const key=M.n+'|'+fmt(th,2);
+    if(!rec[key]){ if(track.moved>3) rec[key]={m:M.n,t:th,y:true}; else if(Math.abs(mx.x-px0)>0&&Math.abs(mx.x-clip.x)>5) rec[key]={m:M.n,t:th,y:false}; }
+    /* ---- draw ---- */
+    const tpx=Math.max(3,th*PX), sx=c=>X0+c*PX;
+    line(ctx,20,470,780,470,COL.ink,2); ground(ctx,20,780,470);
+    for(const bx of [60,X1+20]){ for(let i=0;i<5;i++){ const y=470-(i+1)*((470-TOP-tpx)/5); rect(ctx,bx+(i%2)*6,y,100-(i%2)*10,(470-TOP-tpx)/5-2,COL.ink,['#fde4df','#dcecfb','#fff3d0','#e5f5ea','#f1f4f8'][i],1.8); } }
+    /* the sheet */
+    ctx.save(); ctx.fillStyle=M.fill; ctx.fillRect(X0-60,TOP,X1-X0+120,tpx); ctx.strokeStyle=M.st; ctx.lineWidth=2; ctx.strokeRect(X0-60,TOP,X1-X0+120,tpx);
+    if(M.n==='Wooden plank') for(let i=0;i<6;i++){ ctx.beginPath(); ctx.moveTo(X0-60,TOP+tpx*(i+0.5)/6); for(let x=X0-60;x<X1+60;x+=20) ctx.lineTo(x,TOP+tpx*(i+0.5)/6+Math.sin(x*0.03+i)*2); ctx.strokeStyle='rgba(138,90,43,0.4)'; ctx.lineWidth=1; ctx.stroke(); }
+    if(M.n==='Cardboard') for(let x=X0-60;x<X1+60;x+=8){ line(ctx,x,TOP+1,x+4,TOP+tpx-1,'rgba(167,120,47,0.4)',1); }
+    if(M.shield) for(let x=X0-60;x<X1+60;x+=10){ line(ctx,x,TOP,x+6,TOP+tpx,'#9aa7b5',1); }
+    ctx.restore();
+    /* clip on top */
+    clipDraw(ctx,sx(clip.x),TOP-5,0,44,'#3a4553');
+    /* magnet below, N on top, held from below */
+    const my=TOP+tpx+60;
+    barMag(ctx,sx(mx.x),my,-Math.PI/2,120,36);
+    ctx.save(); ctx.translate(sx(mx.x),my+70); ctx.rotate(Math.PI); fist(ctx,0,0,32,{arm:0.2}); ctx.restore();
+    const F=Math.hypot(Fx,Fz);
+    if(F>0.05){ const L=clamp(Math.log10(1+F)*40,6,70), ang=Math.atan2(Fz,Fx); forceArrow(ctx,sx(clip.x),TOP-26,Math.cos(ang)*L*0.7,-L*0.25,COL.yellow); }
+    /* field reach glow through the sheet */
+    ctx.save(); ctx.globalAlpha=M.shield?0.1:0.25; for(let k=1;k<=3;k++){ ctx.beginPath(); ctx.arc(sx(mx.x),TOP+tpx,k*30+((t*30)%30),Math.PI,0); ctx.strokeStyle=COL.red; ctx.lineWidth=1.4; ctx.stroke(); } ctx.restore();
+    setv($,'cT',fmt(h,2)+' cm'); setv($,'cF',F<0.3?'too weak':F<3?'gentle':'strong');
+    setv($,'cR',Math.abs(clip.v)>0.3?'sliding with the magnet':Math.abs(mx.x-clip.x)<1?'above the magnet':'left behind');
+    const rows=Object.values(rec); setLog($,'tL',rows.map(r=>[r.m,fmt(r.t*10,1)+' mm',r.y?{t:'Yes',c:'g'}:{t:'No',c:'rd'}]));
+    const ys=new Set(rows.filter(r=>r.y).map(r=>r.m)); S.ok=ys.size>=3&&rows.some(r=>!r.y);
+  };
+  S.found=()=>S.ok?'Yes — the pull passes through paper, plastic, glass, cardboard and thin wood. A thick plank is too far, and steel blocks it.':'';
+  S.fb=()=>null;
+  return S;
+}); }
+
+
+/* ---------------------------------------------------------------------
+   ACTIVITIES + ROUTER
+   --------------------------------------------------------------------- */
+function _b(name){ return typeof window[name]==='function'?window[name]:()=>{ const d=document.createElement('div'); d.textContent='(not built)'; return d; }; }
+const activities = [
+  { num:'4.1', tag:'', title:'Magnetic or Not?', desc:'Let us find out · sweep a magnet over a tray · Table 4.1', build:_b('buildA1') },
+  { num:'4.2', tag:'', title:'Where Are the Poles?', desc:'Iron filings on paper · roll a magnet in filings', build:_b('buildA2') },
+  { num:'4.3', tag:'', title:'Hang It Freely', desc:'A freely suspended magnet comes to rest north–south', build:_b('buildA3') },
+  { num:'4.4', tag:'', title:'Make a Compass', desc:'Magnetise a needle · float it on a cork', build:_b('buildA4') },
+  { num:'4.5', tag:'', title:'Attract or Repel?', desc:'Two magnets · a magnet on a toy car · Table 4.2', build:_b('buildA5') },
+  { num:'4.6', tag:'', title:'Magnet Near a Compass', desc:'The needle turns · find the poles of an unmarked magnet', build:_b('buildA6') },
+  { num:'4.7', tag:'', title:'Through Other Materials', desc:'Paper, cardboard, plastic, glass, wood, steel', build:_b('buildA7') },
+];
+if(typeof buildGal==='function') activities.unshift({num:'G',tag:'',title:'Gallery',desc:'',build:buildGal});
+let currentIndex = 0;
+
+function buildNav(){
+  const nav = document.getElementById('sideNav');
+  nav.innerHTML='';
+  activities.forEach((a,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'nav-item'+(i===currentIndex?' active':'');
+    btn.innerHTML = `<span class="n-num">${a.num}${a.tag?'<br>'+a.tag:''}</span><span class="n-title">${a.title}</span>`;
+    btn.onclick = ()=>{ currentIndex=i; render(); };
+    nav.appendChild(btn);
+  });
+}
+function render(){
+  stopAllLoops();
+  buildNav();
+  const a = activities[currentIndex];
+  document.getElementById('panelBadge').textContent = a.num+(a.tag?' '+a.tag:'');
+  document.getElementById('panelTitle').textContent = a.title;
+  document.getElementById('panelDesc').textContent = a.desc||'';
+  const body = document.getElementById('panelBody');
+  body.innerHTML='';
+  body.appendChild(a.build());
+}
+function labShell(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `<div class="lab-canvas-wrap"><canvas></canvas></div><div class="lab-side"></div>`;
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   INIT
+   --------------------------------------------------------------------- */
+render();
+
+</script>
+<script src="../../tracking/activity-tracker.js"></script>
+<script src="../../nav/back-button.js"></script>
+</body>
+</html>

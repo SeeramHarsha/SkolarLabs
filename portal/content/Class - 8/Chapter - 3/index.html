@@ -1,0 +1,1521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 8 · Chapter 3 — Health: The Ultimate Treasure | Botclub Labs</title>
+<link href="../../vendor/fonts/fonts.css" rel="stylesheet">
+<style>
+:root{
+  --navy-1:#0f2640; --navy-2:#1a3a5c; --navy-3:#234a73;
+  --accent:#2f8fe0; --accent-2:#5cc8ff;
+  --bg:#eef2f8; --surface-0:#ffffff; --surface-1:#f6f9fc; --surface-2:#eef2f8;
+  --border:#dbe4f0; --border-strong:#c2d1e5;
+  --text-1:#132a44; --text-2:#4c6178; --text-3:#8195ab;
+  --f-red:#d9432b; --f-blue:#2f8fe0; --f-green:#1f9d55; --f-yellow:#d9a017;
+  --radius:14px; --radius-sm:9px;
+  --fs-xs:clamp(10px,0.62vw,12px); --fs-sm:clamp(11px,0.72vw,13.5px);
+  --fs-md:clamp(12.5px,0.85vw,15px); --fs-lg:clamp(15px,1.15vw,19px);
+  --fs-xl:clamp(18px,1.5vw,25px);
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:22px; --sp-6:30px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{ font-family:'Poppins',system-ui,sans-serif; background:var(--bg); color:var(--text-1); overflow:hidden; }
+button, input, select{font-family:inherit;}
+
+.app{height:100vh; display:flex; flex-direction:column; min-height:0;}
+.topbar{
+  flex:0 0 auto; background:linear-gradient(120deg, var(--navy-1) 0%, var(--navy-2) 55%, var(--navy-3) 100%);
+  color:#fff; padding:clamp(9px,1vh,16px) clamp(14px,1.6vw,28px);
+  display:flex; align-items:center; gap:var(--sp-4); box-shadow:0 2px 10px rgba(15,38,64,0.25); z-index:5;
+}
+.topbar .brand-badge{
+  width:clamp(32px,2.4vw,40px); height:clamp(32px,2.4vw,40px); border-radius:10px; background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center;
+  font-size:clamp(15px,1.3vw,20px); flex:0 0 auto;
+}
+.topbar .chip{
+  display:inline-block; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.28);
+  border-radius:6px; padding:2px 9px; font-size:var(--fs-xs); letter-spacing:0.06em; text-transform:uppercase; font-weight:600; margin-bottom:3px;
+}
+.topbar h1{font-size:var(--fs-lg); font-weight:600; line-height:1.2; white-space:nowrap;}
+.topbar .spacer{flex:1;}
+.topbar .legend{display:flex; gap:14px; font-size:var(--fs-xs); color:rgba(255,255,255,0.85); align-items:center;}
+.topbar .legend span{display:inline-flex; align-items:center; gap:5px;}
+.topbar .legend i{width:12px; height:4px; border-radius:2px; display:inline-block;}
+
+.body-wrap{flex:1; display:flex; min-height:0; overflow:hidden;}
+.sidenav{
+  flex:0 0 clamp(170px,13.5vw,230px); background:var(--surface-0); border-right:1px solid var(--border);
+  overflow-y:auto; padding:var(--sp-2); display:flex; flex-direction:column; gap:4px;
+}
+.nav-item{
+  display:flex; align-items:center; gap:8px; text-align:left; width:100%;
+  border:1px solid var(--border); background:var(--surface-1); border-radius:var(--radius-sm); padding:7px 10px; cursor:pointer; transition:all .15s ease;
+}
+.nav-item:hover{background:var(--surface-2); border-color:var(--border-strong);}
+.nav-item.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.nav-item .n-num{font-size:var(--fs-xs); font-weight:700; color:var(--accent); flex:0 0 auto; min-width:26px;}
+.nav-item.active .n-num{color:var(--accent-2);}
+.nav-item .n-title{font-size:var(--fs-sm); font-weight:600; line-height:1.25;}
+
+.content{flex:1; min-width:0; display:flex; flex-direction:column; overflow:hidden;}
+.panel-head{flex:0 0 auto; padding:var(--sp-3) var(--sp-5); border-bottom:1px solid var(--border); background:var(--surface-0); display:flex; align-items:baseline; gap:12px;}
+.panel-badge{background:var(--navy-2); color:#fff; font-size:var(--fs-xs); font-weight:700; padding:3px 10px; border-radius:6px;}
+.panel-head h2{font-size:var(--fs-lg); font-weight:600; color:var(--text-1);}
+.panel-head p{font-size:var(--fs-sm); color:var(--text-2); flex:1; text-align:right;}
+.panel-body{flex:1; min-height:0; overflow:hidden; padding:var(--sp-3) var(--sp-5); display:flex;}
+
+.lab-view{flex:1; display:flex; gap:var(--sp-4); min-height:0; min-width:0;}
+.lab-canvas-wrap{flex:7 1 0; min-width:0; min-height:0; background:#fff; border:1px solid var(--border); border-radius:var(--radius); position:relative; overflow:hidden;}
+.lab-canvas-wrap canvas{width:100%; height:100%; display:block;}
+.lab-side{flex:3 1 0; min-width:230px; display:flex; flex-direction:column; gap:var(--sp-3); min-height:0; overflow-y:auto; padding-right:2px;}
+.side-sub{display:flex; flex-direction:column; gap:var(--sp-3);}
+
+.control-group{background:var(--surface-0); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 12px;}
+.control-group label{font-size:var(--fs-sm); font-weight:600; color:var(--text-1); display:flex; justify-content:space-between;}
+.control-group label .val{color:var(--accent); font-weight:700;}
+.control-group input[type=range]{width:100%; margin-top:7px; accent-color:var(--navy-2); cursor:pointer;}
+.toggle-group{display:flex; gap:6px; margin-top:7px; flex-wrap:wrap;}
+.toggle-btn{flex:1; min-width:56px; padding:7px 5px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:600; cursor:pointer; text-align:center; color:var(--text-2);}
+.toggle-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.toggle-btn.small{font-size:10.5px; padding:6px 3px;}
+.toggle-btn.play{background:var(--f-green); border-color:var(--f-green); color:#fff;}
+.toggle-btn.navy{background:var(--navy-2); border-color:var(--navy-2); color:#fff; width:100%; margin-top:9px;}
+.toggle-btn:disabled{opacity:.5; cursor:not-allowed;}
+.chip-btn{display:inline-flex; align-items:center; gap:5px; padding:6px 11px; margin:3px 3px 0 0; border:1px solid var(--border-strong); background:var(--surface-1); border-radius:18px; cursor:pointer; font-size:var(--fs-sm); font-weight:600; color:var(--text-2);}
+.chip-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.chip-btn.ok{border-color:var(--f-green); box-shadow:inset 0 0 0 1.5px var(--f-green);} .chip-btn.bad{border-color:var(--f-red); box-shadow:inset 0 0 0 1.5px var(--f-red);}
+.chip-wrap{display:flex; flex-wrap:wrap; margin-top:3px;}
+
+.role-row{display:flex; align-items:center; gap:8px; margin-top:7px; font-size:var(--fs-sm); font-weight:600;}
+.role-row .rdot{width:10px; height:10px; border-radius:50%; flex:0 0 auto; display:inline-block;}
+.role-row .rname{width:70px; flex:0 0 auto; color:var(--text-2);}
+.role-row select{flex:1; min-width:0; padding:6px 7px; border:1px solid var(--border-strong); border-radius:7px; font-size:var(--fs-sm); background:var(--surface-1); color:var(--text-1); cursor:pointer;}
+
+.step-row{display:flex; gap:5px;}
+.step-pill{flex:1; padding:6px 4px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:10.5px; font-weight:700; color:var(--text-3); cursor:pointer;}
+.step-pill.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.step-pill.done{border-color:var(--f-green); color:var(--f-green);}
+.step-pill.active.done{color:#fff;}
+.opt-btn{display:block; width:100%; text-align:left; margin-top:6px; padding:7px 9px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:500; color:var(--text-1); cursor:pointer; line-height:1.3;}
+.opt-btn.active{border-color:var(--navy-2); background:#e3ecf7; font-weight:600;}
+.var-row{display:flex; align-items:center; gap:6px; margin-top:7px;}
+.var-row .vname{flex:0 0 88px; font-size:var(--fs-sm); font-weight:600;}
+.var-row .toggle-group{margin-top:0; flex:1;}
+
+.result-cards{display:grid; grid-template-columns:1fr 1fr; gap:6px;}
+.result-cards.three{grid-template-columns:1fr 1fr 1fr;}
+.rcard{background:var(--surface-0); border:1px solid var(--border); border-radius:9px; padding:7px 9px;}
+.rcard .rlabel{font-size:9.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--text-3); font-weight:600;}
+.rcard .rval{font-size:var(--fs-md); font-weight:700; color:var(--text-1); margin-top:1px;}
+.rcard.wide{grid-column:1/-1;}
+.hint{font-size:var(--fs-xs); color:var(--text-3); margin-top:6px; line-height:1.4;}
+.fb{font-size:var(--fs-xs); font-weight:600; margin-top:6px; padding:5px 8px; border-radius:7px;}
+.fb.ok{background:#e4f7ec; color:#1f6b3d;}
+.fb.bad{background:#fdece7; color:#a4331c;}
+.fb.warn{background:#fdf4dc; color:#8a6410;}
+.log{width:100%; border-collapse:collapse; font-size:10.5px; margin-top:4px;}
+.log th{text-align:left; color:var(--text-3); font-weight:600; text-transform:uppercase; font-size:9px; letter-spacing:.04em; padding:3px 4px; border-bottom:1px solid var(--border);}
+.log td{padding:4px; border-bottom:1px solid var(--surface-2); color:var(--text-2);}
+.log td.r-ok{color:var(--f-green); font-weight:700;} .log td.r-bad{color:var(--f-red); font-weight:700;} .log td.r-warn{color:var(--f-yellow); font-weight:700;}
+.hidden{display:none !important;}
+
+@media (max-width:1000px) and (orientation:portrait), (max-width:1000px) and (min-height:601px){
+  .body-wrap{flex-direction:column;}
+  .sidenav{flex:0 0 auto; width:100%; height:auto; flex-direction:row; overflow-x:auto; overflow-y:hidden; border-right:none; border-bottom:1px solid var(--border); padding:6px;}
+  .nav-item{flex:0 0 auto; width:150px;}
+  .panel-body{overflow-y:auto;}
+  .lab-view{flex-direction:column;}
+  .lab-canvas-wrap{min-height:320px;}
+  .lab-side{min-width:0;}
+  .content{overflow-y:auto;}
+  .topbar .legend{display:none;}
+  .topbar h1{white-space:normal;}
+}
+::-webkit-scrollbar{width:7px; height:7px;}
+::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand-badge">🩺</div>
+    <div>
+      <div class="chip">Grade 8 · Ch 3</div>
+      <h1>Health: The Ultimate Treasure</h1>
+    </div>
+    <div class="spacer"></div>
+    <div class="legend">
+      <span><i style="background:var(--f-yellow)"></i>What you change</span>
+      <span><i style="background:var(--f-blue)"></i>Measured · Mental · Water</span>
+      <span><i style="background:var(--f-green)"></i>Healthy · Physical</span>
+      <span><i style="background:var(--f-red)"></i>Germs · Risk · Smoke</span>
+    </div>
+  </div>
+  <div class="body-wrap">
+    <nav class="sidenav" id="sideNav"></nav>
+    <main class="content">
+      <div class="panel-head">
+        <div class="panel-badge" id="panelBadge">3.1</div>
+        <h2 id="panelTitle">Select an activity</h2>
+        <p id="panelDesc"></p>
+      </div>
+      <div class="panel-body" id="panelBody"></div>
+    </main>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   GRADE 8 — CHAPTER 3: HEALTH — THE ULTIMATE TREASURE
+   Every activity runs a continuous animation loop: sliders/buttons set a
+   TARGET; the drawn object eases, springs or physically integrates toward
+   it every frame. People breathe and move, hearts beat at the real rate,
+   mosquitoes breed on a real life-cycle clock, cough droplets fly on real
+   drag + gravity paths, bacteria divide and die by a real dosing model.
+   ========================================================================= */
+const COL = {red:'#d9432b', blue:'#2f8fe0', green:'#1f9d55', yellow:'#d9a017', ink:'#132a44', muted:'#4c6178', mid:'#8195ab'};
+
+/* ---------------------------------------------------------------------
+   0. CANVAS HELPERS
+   --------------------------------------------------------------------- */
+function fitCanvas(canvas){
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  const r = canvas.parentElement.getBoundingClientRect();
+  const w = Math.max(200, r.width), h = Math.max(160, r.height);
+  if(canvas._w!==w || canvas._h!==h || canvas._dpr!==dpr){
+    canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr);
+    canvas.style.width = w+'px'; canvas.style.height = h+'px';
+    canvas._w=w; canvas._h=h; canvas._dpr=dpr;
+  }
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, w, h};
+}
+function line(ctx,x1,y1,x2,y2,color,width,dash){
+  ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=width||2;
+  if(dash) ctx.setLineDash(dash); else ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); ctx.restore();
+}
+function arrowHead(ctx,x,y,ang,color,size){
+  size=size||7; ctx.save(); ctx.fillStyle=color; ctx.translate(x,y); ctx.rotate(ang);
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-size,size*0.42); ctx.lineTo(-size,-size*0.42); ctx.closePath(); ctx.fill(); ctx.restore();
+}
+function vec(ctx,x1,y1,x2,y2,color,width){ line(ctx,x1,y1,x2,y2,color,width||2.6); arrowHead(ctx,x2,y2,Math.atan2(y2-y1,x2-x1),color,7); }
+function dimArrow(ctx,x,y1,y2,color){ line(ctx,x,y1,x,y2,color,1.6); arrowHead(ctx,x,y1,-Math.PI/2,color,5); arrowHead(ctx,x,y2,Math.PI/2,color,5); }
+function textAt(ctx,txt,x,y,opts){
+  opts=opts||{}; ctx.save();
+  ctx.font=(opts.weight||500)+' '+(opts.size||12)+'px Poppins, sans-serif';
+  ctx.fillStyle=opts.color||COL.ink; ctx.textAlign=opts.align||'left'; ctx.textBaseline=opts.baseline||'alphabetic';
+  if(opts.alpha!==undefined) ctx.globalAlpha=opts.alpha;
+  ctx.fillText(txt,x,y); ctx.restore();
+}
+function rect(ctx,x,y,w,h,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw===undefined?2.2:lw; if(fill){ctx.fillStyle=fill; ctx.fillRect(x,y,w,h);} if(lw!==0){ctx.strokeStyle=stroke; ctx.strokeRect(x,y,w,h);} ctx.restore(); }
+function circ(ctx,x,y,r,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw||2.2; ctx.beginPath(); ctx.arc(x,y,Math.max(0.1,r),0,Math.PI*2); if(fill){ctx.fillStyle=fill; ctx.fill();} ctx.strokeStyle=stroke; ctx.stroke(); ctx.restore(); }
+function rrect(ctx,x,y,w,h,r){ r=Math.min(r,w/2,h/2); ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function fmt(x,d){ if(!isFinite(x)) return '—'; d=d===undefined?2:d; return Number(x.toFixed(d)).toString(); }
+function gauss(){ return (Math.random()+Math.random()+Math.random()+Math.random()-2)*1.2247; }
+function hexRgb(h){ const n=parseInt(h.slice(1),16); return [n>>16&255, n>>8&255, n&255]; }
+function mixCol(a,b,t){ const A=hexRgb(a),B=hexRgb(b); t=clamp(t,0,1); return 'rgb('+A.map((v,i)=>Math.round(lerp(v,B[i],t))).join(',')+')'; }
+function rampCol(stops,x){ // stops: [[pos,hex],...]
+  if(x<=stops[0][0]) return mixCol(stops[0][1],stops[0][1],0);
+  for(let i=1;i<stops.length;i++){ if(x<=stops[i][0]){ const a=stops[i-1],b=stops[i]; return mixCol(a[1],b[1],(x-a[0])/(b[0]-a[0])); } }
+  const l=stops[stops.length-1][1]; return mixCol(l,l,0);
+}
+function thermo(ctx,x,top,bot,frac,outline,liquid){
+  const br=8;
+  ctx.save(); ctx.lineWidth=2; ctx.strokeStyle=outline; ctx.fillStyle='#fff';
+  rrect(ctx,x-5,top,10,bot-top+2,5); ctx.fill(); ctx.stroke(); ctx.restore();
+  const lh=(bot-top-5)*clamp(frac,0,1);
+  ctx.save(); ctx.fillStyle=liquid; ctx.fillRect(x-2.2,bot-lh,4.4,lh+6); ctx.restore();
+  circ(ctx,x,bot+br,br,outline,'#fff',2); circ(ctx,x,bot+br,br-3.2,liquid,liquid,1);
+  for(let i=0;i<=4;i++){ const yy=top+5+(bot-top-5)*i/4; line(ctx,x+5,yy,x+9,yy,outline,1.1); }
+}
+function flame(ctx,cx,baseY,width,inten,t){
+  const n=5;
+  for(let i=0;i<n;i++){
+    const fx=cx-width/2+width*(i+0.5)/n;
+    const hh=(6+inten*32)*(0.78+0.22*Math.sin(t*13+i*1.7));
+    const sway=Math.sin(t*9+i*2.1)*3;
+    ctx.save(); ctx.lineJoin='round';
+    ctx.strokeStyle=COL.red; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(fx-7,baseY); ctx.quadraticCurveTo(fx-7,baseY-hh*0.55,fx+sway,baseY-hh); ctx.quadraticCurveTo(fx+7,baseY-hh*0.55,fx+7,baseY); ctx.stroke();
+    ctx.strokeStyle=COL.yellow; ctx.lineWidth=1.6;
+    ctx.beginPath(); ctx.moveTo(fx-3.5,baseY); ctx.quadraticCurveTo(fx-3,baseY-hh*0.35,fx+sway*0.5,baseY-hh*0.55); ctx.quadraticCurveTo(fx+3,baseY-hh*0.35,fx+3.5,baseY); ctx.stroke();
+    ctx.restore();
+  }
+}
+
+/* ---------------------------------------------------------------------
+   0b. ANIMATION ENGINE
+   --------------------------------------------------------------------- */
+let activeStops = [];
+function stopAllLoops(){ activeStops.forEach(s=>{ try{ s(); }catch(e){} }); activeStops=[]; }
+function animLoop(tick){
+  let last = performance.now();
+  let raf;
+  function frame(now){
+    const dt = Math.max(0, Math.min(0.04, (now-last)/1000));
+    last = now;
+    tick(dt);
+    raf = requestAnimationFrame(frame);
+  }
+  raf = requestAnimationFrame(frame);
+  const stop = ()=>cancelAnimationFrame(raf);
+  activeStops.push(stop);
+  return stop;
+}
+/** Exponential ease — frame-rate independent, always smooth. */
+function approach(cur,tgt,rate,dt){ return cur + (tgt-cur)*(1-Math.exp(-rate*dt)); }
+/** Spring-damper — gives natural overshoot and settle. */
+function springTo(state,target,k,damping,dt){
+  const acc = (target-state.x)*k - state.v*damping;
+  state.v += acc*dt;
+  state.x += state.v*dt;
+  return state.x;
+}
+function toggleWire(btns,cb){
+  btns.forEach(b=>b.onclick=()=>{ btns.forEach(x=>x.classList.remove('active')); b.classList.add('active'); cb(b); });
+}
+
+function rng(seed){ let s=(seed>>>0)||1; return ()=>{ s=(Math.imul(s,1664525)+1013904223)>>>0; return s/4294967296; }; }
+function smooth01(a,b,x){ const t=clamp((x-a)/(b-a),0,1); return t*t*(3-2*t); }
+function angDiff(a,b){ return Math.atan2(Math.sin(a-b),Math.cos(a-b)); }
+function lw(k,base){ return clamp(k*base,1,3); }
+/* circular field of view. blur = optical defocus in px */
+function eyepiece(ctx,cx,cy,R,blur,draw,dark){
+  ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fillStyle='#f9fbfd'; ctx.fill(); ctx.clip();
+  if(blur>0.3) ctx.filter='blur('+Math.min(14,blur).toFixed(1)+'px)';
+  draw();
+  ctx.filter='none';
+  if(dark>0){ ctx.fillStyle='rgba(15,38,64,'+(0.92*dark).toFixed(3)+')'; ctx.fillRect(cx-R,cy-R,2*R,2*R); }
+  ctx.restore();
+  ctx.save(); const g=ctx.createRadialGradient(cx,cy,R*0.72,cx,cy,R); g.addColorStop(0,'rgba(19,42,68,0)'); g.addColorStop(1,'rgba(19,42,68,0.22)');
+  ctx.fillStyle=g; ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fill(); ctx.restore();
+  circ(ctx,cx,cy,R+4,COL.ink,null,6);
+}
+/* leader-line label outside a field */
+function tag(ctx,px,py,tx,ty,txt,col){
+  const W=ctx.canvas._w||800;
+  ctx.save(); ctx.font='700 12px Poppins, sans-serif'; const tw=ctx.measureText(txt).width; ctx.restore();
+  const right=tx>px; let bx=right?tx+4:tx-tw-12;
+  if(bx+tw+10>W-4) bx=W-tw-14;
+  line(ctx,px,py,right?bx:bx+tw+8,ty,col,1.6); circ(ctx,px,py,3,col,col,1);
+  ctx.save(); rrect(ctx,bx,ty-10,tw+10,20,6); ctx.fillStyle='rgba(255,255,255,0.94)'; ctx.fill(); ctx.strokeStyle=col; ctx.lineWidth=1.4; ctx.stroke(); ctx.restore();
+  textAt(ctx,txt,bx+5,ty+4,{size:12,weight:700,color:col});
+}
+function orgBacillus(ctx,x,y,a,k,len,t,flag,split){
+  const L=len*k/2, W=0.5*k;
+  ctx.save(); ctx.translate(x,y); ctx.rotate(a);
+  if(flag){ ctx.beginPath(); for(let i=0;i<=24;i++){ const u=i/24, xx=-L-u*6*k, yy=Math.sin(u*9-t*18)*0.45*k*(0.3+u); i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy); } ctx.strokeStyle=COL.mid; ctx.lineWidth=Math.max(0.6,k*0.12); ctx.stroke(); }
+  const pinch=split||0; // 0 → 1 : septum closes
+  ctx.beginPath();
+  ctx.moveTo(-L+W,-W); ctx.lineTo(-W*0.2,-W); ctx.quadraticCurveTo(0,-W*(1-pinch),W*0.2,-W); ctx.lineTo(L-W,-W); ctx.arc(L-W,0,W,-Math.PI/2,Math.PI/2);
+  ctx.lineTo(W*0.2,W); ctx.quadraticCurveTo(0,W*(1-pinch),-W*0.2,W); ctx.lineTo(-L+W,W); ctx.arc(-L+W,0,W,Math.PI/2,Math.PI*1.5); ctx.closePath();
+  ctx.fillStyle='#fdfefe'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=lw(k,0.35); ctx.stroke();
+  // nucleoid (no membrane) — squiggle
+  if(k>6){ ctx.beginPath(); for(let i=0;i<=12;i++){ const xx=-L*0.5+i/12*L, yy=Math.sin(i*1.9+t)*W*0.3; i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy); } ctx.strokeStyle=COL.mid; ctx.lineWidth=1.2; ctx.stroke(); }
+  ctx.restore();
+}
+
+/* ---------------------------------------------------------------------
+   0c. CHAPTER-3 HELPERS — a jointed line-drawn person, poses, insects
+   --------------------------------------------------------------------- */
+/* Person: side view, pose angles in radians measured from straight down
+   (limbs) or straight up (torso); +ve = towards the facing direction.
+   P = {lean, head, hy (hip height / H, auto if omitted),
+        legs:[[thigh,kneeBend],[..]], arms:[[upper,elbowBend],[..]]}      */
+function person(ctx,x,fy,H,P,o){
+  o=o||{}; const f=o.face||1, col=o.col||COL.ink, W=o.lw||Math.max(1.8,H*0.024);
+  const T=H*0.3, TH=H*0.245, SH=H*0.245, UA=H*0.17, FA=H*0.16, hr=H*0.078;
+  const legs=P.legs||[[0.05,0.05],[-0.05,0.05]], arms=P.arms||[[0.1,0.2],[-0.1,0.2]];
+  let hy=P.hy!==undefined?P.hy*H:Math.max(...legs.map(l=>Math.cos(l[0])*TH+Math.cos(l[0]-l[1])*SH));
+  const hip={x:x+(P.hx||0)*H,y:fy-hy+(P.bob||0)*H}, le=P.lean||0;
+  const nk={x:hip.x+Math.sin(le)*T*f,y:hip.y-Math.cos(le)*T};
+  const ha=le+(P.head||0), hd={x:nk.x+Math.sin(ha)*(hr+H*0.025)*f,y:nk.y-Math.cos(ha)*(hr+H*0.025)};
+  const limb=(o0,a,b,L1,L2,sg)=>{ const k={x:o0.x+Math.sin(a)*L1*f,y:o0.y+Math.cos(a)*L1}; const a2=a+b*sg; return [k,{x:k.x+Math.sin(a2)*L2*f,y:k.y+Math.cos(a2)*L2}]; };
+  const L=legs.map(l=>limb(hip,l[0],l[1],TH,SH,-1)), A=arms.map(a=>limb(nk,a[0],a[1],UA,FA,1));
+  ctx.save(); ctx.lineCap='round'; ctx.lineJoin='round';
+  const seg=(p,q,r,c,w)=>{ ctx.strokeStyle=c; ctx.lineWidth=w; ctx.beginPath(); ctx.moveTo(p.x,p.y); ctx.lineTo(q.x,q.y); ctx.lineTo(r.x,r.y); ctx.stroke(); };
+  const back=o.back||COL.mid;
+  seg(hip,L[1][0],L[1][1],back,W*0.95); seg(nk,A[1][0],A[1][1],back,W*0.9);
+  if(o.belly){ // torso drawn as a body outline whose width follows body mass
+    const bw=o.belly*H; ctx.beginPath(); ctx.moveTo(nk.x,nk.y);
+    ctx.quadraticCurveTo(nk.x+bw*1.6*f,(nk.y+hip.y)/2+T*0.12,hip.x+bw*0.2*f,hip.y);
+    ctx.lineTo(hip.x-H*0.03*f,hip.y); ctx.lineTo(nk.x-H*0.035*f,nk.y); ctx.closePath();
+    ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=col; ctx.lineWidth=W*0.8; ctx.stroke();
+  } else { ctx.strokeStyle=col; ctx.lineWidth=W*1.25; ctx.beginPath(); ctx.moveTo(hip.x,hip.y); ctx.lineTo(nk.x,nk.y); ctx.stroke(); }
+  seg(hip,L[0][0],L[0][1],col,W);
+  ctx.beginPath(); ctx.arc(hd.x,hd.y,hr,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=col; ctx.lineWidth=W*0.85; ctx.stroke();
+  // face: eye + mouth (mood −1 sad … +1 happy)
+  const ex=hd.x+hr*0.45*f, ey=hd.y-hr*0.12+(P.head||0)*hr*0.5;
+  if(o.eyesShut){ line(ctx,ex-hr*0.18,ey,ex+hr*0.18,ey,col,1.4); } else circ(ctx,ex,ey,Math.max(1,hr*0.1),col,col,1);
+  const md=o.mood===undefined?0.3:o.mood, mx=hd.x+hr*0.45*f, my=hd.y+hr*0.42+(P.head||0)*hr*0.4;
+  ctx.beginPath(); ctx.moveTo(mx-hr*0.22,my-md*hr*0.12); ctx.quadraticCurveTo(mx,my+md*hr*0.22,mx+hr*0.22,my-md*hr*0.12); ctx.strokeStyle=col; ctx.lineWidth=1.4; ctx.stroke();
+  seg(nk,A[0][0],A[0][1],col,W*0.95);
+  ctx.restore();
+  return {hip,nk,hd,hr,hand:A[0][1],hand2:A[1][1],foot:L[0][1],foot2:L[1][1]};
+}
+const POSE={
+  stand:(t)=>({lean:0.015*Math.sin(t*1.4),legs:[[0.05,0.03],[-0.05,0.03]],arms:[[0.08+0.03*Math.sin(t*1.4),0.18],[-0.08,0.18]]}),
+  walk:(ph,a)=>{ a=a===undefined?1:a; const s=Math.sin(ph);
+    return {lean:0.05*a,legs:[[0.42*a*s,0.08+0.7*a*Math.max(0,Math.cos(ph))],[-0.42*a*s,0.08+0.7*a*Math.max(0,-Math.cos(ph))]],
+      arms:[[-0.45*a*s,0.35],[0.45*a*s,0.35]]}; },
+  run:(ph)=>{ const s=Math.sin(ph);
+    return {lean:0.22,bob:-0.02*Math.abs(Math.cos(ph)),legs:[[0.7*s+0.1,0.3+1.3*Math.max(0,Math.cos(ph))],[-0.7*s+0.1,0.3+1.3*Math.max(0,-Math.cos(ph))]],
+      arms:[[-0.9*s,1.4],[0.9*s,1.4]]}; },
+  sit:(arm1,arm2,lean)=>({hy:0.26,lean:lean||0.05,legs:[[1.5,1.5],[1.45,1.45]],arms:[arm1||[0.3,0.9],arm2||[0.2,0.9]]}),
+};
+function mosquito(ctx,x,y,s,t,col,ang){
+  ctx.save(); ctx.translate(x,y); ctx.rotate(ang||0); ctx.lineCap='round';
+  const fl=Math.sin(t*90)*0.9;
+  ctx.strokeStyle=COL.mid; ctx.lineWidth=1; ctx.beginPath();
+  ctx.ellipse(-s*0.1,-s*0.5,s*0.18,s*0.55,-0.6+fl*0.5,0,Math.PI*2); ctx.ellipse(s*0.1,-s*0.5,s*0.18,s*0.55,0.6-fl*0.5,0,Math.PI*2); ctx.stroke();
+  line(ctx,-s*0.6,0,s*0.5,0,col||COL.ink,Math.max(1.4,s*0.22)); line(ctx,s*0.5,0,s*1.05,s*0.25,col||COL.ink,1.1);
+  for(let i=-1;i<=1;i++){ line(ctx,i*s*0.2,0,i*s*0.35-s*0.1,s*0.55,COL.ink,0.8); }
+  ctx.restore();
+}
+function housefly(ctx,x,y,s,t){
+  const fl=Math.sin(t*80);
+  ctx.save(); ctx.translate(x,y); ctx.strokeStyle=COL.mid; ctx.lineWidth=1; ctx.beginPath();
+  ctx.ellipse(-s*0.3,-s*0.4,s*0.3,s*0.45,-0.5+fl*0.4,0,Math.PI*2); ctx.ellipse(s*0.3,-s*0.4,s*0.3,s*0.45,0.5-fl*0.4,0,Math.PI*2); ctx.stroke(); ctx.restore();
+  circ(ctx,x,y,s*0.42,COL.ink,COL.ink,1);
+}
+function tree(ctx,x,gy,s,t,col){
+  const sw=Math.sin(t*1.1+x)*0.04;
+  line(ctx,x,gy,x+sw*s*0.3,gy-s*0.55,COL.ink,Math.max(2,s*0.06));
+  ctx.save(); ctx.translate(x+sw*s*0.6,gy-s*0.78); ctx.strokeStyle=col||COL.green; ctx.lineWidth=2.2; ctx.fillStyle='#fff';
+  ctx.beginPath(); ctx.arc(-s*0.14,s*0.05,s*0.2,0,Math.PI*2); ctx.arc(s*0.14,s*0.05,s*0.2,0,Math.PI*2); ctx.arc(0,-s*0.12,s*0.24,0,Math.PI*2); ctx.fill(); ctx.stroke(); ctx.restore();
+}
+function house(ctx,x,gy,w,h,col){
+  ctx.save(); ctx.strokeStyle=col||COL.ink; ctx.lineWidth=2; ctx.fillStyle='#fff'; ctx.lineJoin='round';
+  ctx.beginPath(); ctx.rect(x-w/2,gy-h,w,h); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x-w/2-w*0.1,gy-h); ctx.lineTo(x,gy-h-h*0.6); ctx.lineTo(x+w/2+w*0.1,gy-h); ctx.stroke();
+  ctx.strokeRect(x-w*0.12,gy-h*0.55,w*0.24,h*0.55); ctx.restore();
+}
+function sparkBar(ctx,x,y,w,v,col,label){ // compact labelled level bar drawn on canvas
+  rect(ctx,x,y,w,8,COL.border||'#c2d1e5','#f6f9fc',1);
+  ctx.save(); ctx.fillStyle=col; ctx.fillRect(x,y,w*clamp(v,0,1),8); ctx.restore();
+  if(label) textAt(ctx,label,x,y-4,{size:10.5,weight:700,color:col});
+}
+
+/* ---------------------------------------------------------------------
+   1. ACTIVITIES + ROUTER
+   --------------------------------------------------------------------- */
+const activities = [
+  { num:'3.1', title:'A Day in Amit’s Life', desc:'Set the routine · watch body, mind and friendships respond', build: buildA1 },
+  { num:'3.2', title:'Habits Over Months', desc:'Switch habits on · run the months · sort healthy from unhealthy', build: buildA2 },
+  { num:'3.3', title:'Clean vs Dirty Playground', desc:'Spot the hazards · clean up · watch the pests fade', build: buildA3 },
+  { num:'3.4', title:'How Diseases Spread', desc:'Pick a disease · pick a prevention · break the chain', build: buildA4 },
+  { num:'3.5', title:'Lifestyle Survey', desc:'Visit each family · toggle habits · read their risks', build: buildA5 },
+  { num:'3.6', title:'Village Health Campaign', desc:'₹10,000 budget · choose campaigns · run 60 days', build: buildA6 },
+  { num:'3.7', title:'Antibiotic Course', desc:'Finish the course or stop early · watch the survivors', build: buildA7 },
+];
+let currentIndex = 0;
+
+function buildNav(){
+  const nav = document.getElementById('sideNav');
+  nav.innerHTML='';
+  activities.forEach((a,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'nav-item'+(i===currentIndex?' active':'');
+    btn.innerHTML = `<span class="n-num">${a.num}</span><span class="n-title">${a.title}</span>`;
+    btn.onclick = ()=>{ currentIndex=i; render(); };
+    nav.appendChild(btn);
+  });
+}
+function render(){
+  stopAllLoops();
+  buildNav();
+  const a = activities[currentIndex];
+  document.getElementById('panelBadge').textContent = a.num;
+  document.getElementById('panelTitle').textContent = a.title;
+  document.getElementById('panelDesc').textContent = a.desc||'';
+  const body = document.getElementById('panelBody');
+  body.innerHTML='';
+  body.appendChild(a.build());
+}
+function labShell(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `<div class="lab-canvas-wrap"><canvas></canvas></div><div class="lab-side"></div>`;
+  return wrap;
+}
+
+/* =====================================================================
+   3.1 A DAY IN AMIT'S LIFE — health = physical + mental + social
+   Each activity pulls each level toward its own target:
+       dX/dt = k·(X_target − X)          (k per hour, below)
+   so the day is a real first-order relaxation, and the routine's
+   periodic steady state emerges over several simulated days.
+   Guidance used: teens need 8–10 h sleep and ≥ 60 min active play.
+   Screen time comes out of the night: if the day is full, it eats sleep.
+   Clock: ≤ 1.5 h per second, each activity shown ≥ 3 s · levels carry over.
+   ===================================================================== */
+const DAYACT={
+  sleep:    {n:'Sleep',       c:COL.blue,  P:[95,0.12], M:[100,0.22]},
+  breakfast:{n:'Breakfast',   c:COL.green, P:[100,0.9], M:[70,0.3]},
+  rush:     {n:'No breakfast',c:COL.red,   P:[30,0.5],  M:[35,0.4]},
+  walk:     {n:'Walk',        c:COL.green, P:[75,0.3],  M:[65,0.1]},
+  school:   {n:'School',      c:COL.mid,   P:[45,0.06], M:[60,0.08], S:[70,0.12]},
+  play:     {n:'Play outside',c:COL.green, P:[100,0.6], M:[90,0.35], S:[100,0.5]},
+  homework: {n:'Homework',    c:COL.mid,   M:[55,0.1]},
+  talk:     {n:'Family talk', c:COL.yellow,M:[95,0.6],  S:[100,0.9]},
+  dinner:   {n:'Dinner',      c:COL.green, P:[85,0.5],  S:[70,0.3]},
+  screen:   {n:'Screens',     c:COL.red,   P:[20,0.15], M:[15,0.3],  S:[15,0.25]},
+  free:     {n:'Free time',   c:'#c2d1e5', P:[50,0.05], M:[55,0.05], S:[45,0.05]}
+};
+function daySchedule(sl,pl,sc,bf,tk){
+  const segs=[]; let h=6.5; const add=(k,d)=>{ if(d>0.001){ segs.push({k,a:h,b:h+d}); h+=d; } };
+  add(bf?'breakfast':'rush',0.5); add('walk',0.5); add('school',6); add('walk',0.5);
+  add('play',pl/60); add('homework',1.5);
+  const bed=30.5-sl, free=bed-h-(tk?0.5:0)-0.5-sc; if(free>0) add('free',free);
+  if(tk) add('talk',0.5); add('dinner',0.5); add('screen',sc); const slept=Math.max(0,30.5-h); add('sleep',slept);
+  return {segs,slept,lost:Math.max(0,sl-slept)};
+}
+function clockStr(hr){ const x=((hr%24)+24)%24, H=Math.floor(x), M=Math.floor((x-H)*60); return (H<10?'0':'')+H+':'+(M<10?'0':'')+M; }
+function buildA1(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label>Sleep <span class="val" id="slV"></span></label><input type="range" id="slR" min="5" max="10" step="0.5" value="8.5">
+      <label style="margin-top:8px;">Outdoor play <span class="val" id="plV"></span></label><input type="range" id="plR" min="0" max="120" step="15" value="60">
+      <label style="margin-top:8px;">Screen time <span class="val" id="scV"></span></label><input type="range" id="scR" min="0" max="6" step="0.5" value="1"></div>
+    <div class="control-group">
+      <div class="var-row"><span class="vname">Breakfast</span><div class="toggle-group" id="bfB"><button class="toggle-btn active" data-v="1">Eat</button><button class="toggle-btn" data-v="0">Skip</button></div></div>
+      <div class="var-row"><span class="vname">Family talk</span><div class="toggle-group" id="tkB"><button class="toggle-btn active" data-v="1">Yes</button><button class="toggle-btn" data-v="0">No</button></div></div></div>
+    <div class="toggle-group" style="margin-top:0"><button class="toggle-btn play" id="run" style="padding:10px;">❚❚ Pause</button><button class="toggle-btn" id="spd" style="padding:10px;">Speed ×1</button></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Physical</div><div class="rval" id="r1" style="color:var(--f-green)">—</div></div>
+      <div class="rcard"><div class="rlabel">Mental</div><div class="rval" id="r2" style="color:var(--f-blue)">—</div></div>
+      <div class="rcard"><div class="rlabel">Social</div><div class="rval" id="r3" style="color:var(--f-yellow)">—</div></div>
+      <div class="rcard"><div class="rlabel">Sleep got</div><div class="rval" id="r4">—</div></div></div>
+      <div class="fb hidden" id="fb"></div></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), slR=$('#slR'), plR=$('#plR'), scR=$('#scR');
+  let bf=true, tk=true, run=true, spd=1, t=0, hr=6.5, day=1, cur='', fade=1;
+  const lv={P:60,M:60,S:60}, G={P:{x:60,v:0},M:{x:60,v:0},S:{x:60,v:0}};
+  toggleWire(wrap.querySelectorAll('#bfB button'),b=>bf=b.dataset.v==='1');
+  toggleWire(wrap.querySelectorAll('#tkB button'),b=>tk=b.dataset.v==='1');
+  $('#run').onclick=()=>{ run=!run; $('#run').textContent=run?'❚❚ Pause':'▶ Play'; };
+  $('#spd').onclick=()=>{ spd=spd===1?4:1; $('#spd').textContent='Speed ×'+spd; };
+  const ball={x:0.35,y:0,vx:0,vy:0,rot:0}, pl=[{x:0.2,ph:0,kick:0,f:1},{x:0.8,ph:0,kick:0,f:-1}];
+
+  function scene(ctx,k,sx,sy,sw,sh,dt){
+    const fy=sy+sh*0.88, H=Math.min(sh*0.6,sw*0.22), cx=sx+sw*0.5;
+    line(ctx,sx+8,fy,sx+sw-8,fy,COL.ink,2.4);
+    const eatArm=(ph)=>{ const u=0.5-0.5*Math.cos(ph); return [0.95+0.45*u,0.9+1.5*u]; };
+    if(k==='sleep'){
+      const bx0=cx-H*0.8, bx1=cx+H*0.8, by=fy-H*0.3, br=0.5+0.5*Math.sin(t*Math.PI*2*0.25); // 15 breaths/min
+      line(ctx,bx0,fy,bx0,by-H*0.32,COL.ink,3); line(ctx,bx1,fy,bx1,by-H*0.08,COL.ink,3);
+      rect(ctx,bx0,by,bx1-bx0,H*0.09,COL.ink,'#fff',2.2);
+      ctx.save(); ctx.beginPath(); ctx.ellipse(bx0+H*0.2,by-H*0.05,H*0.16,H*0.06,0,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.8; ctx.stroke(); ctx.restore();
+      circ(ctx,bx0+H*0.24,by-H*0.13,H*0.078,COL.ink,'#fff',2); line(ctx,bx0+H*0.27,by-H*0.14,bx0+H*0.31,by-H*0.14,COL.ink,1.4);
+      const top=by-H*(0.13+0.035*br);
+      ctx.save(); ctx.beginPath(); ctx.moveTo(bx0+H*0.34,by); ctx.bezierCurveTo(bx0+H*0.36,top,bx0+H*0.8,top,bx0+H*0.95,by-H*0.1); ctx.quadraticCurveTo(bx1-H*0.2,by-H*0.12,bx1-H*0.05,by); ctx.closePath();
+      ctx.fillStyle='rgba(47,143,224,0.08)'; ctx.fill(); ctx.strokeStyle=COL.blue; ctx.lineWidth=2.4; ctx.stroke(); ctx.restore();
+      for(let i=0;i<3;i++){ const ph=(t*0.35+i/3)%1; textAt(ctx,'z',bx0+H*0.3+ph*H*0.5,by-H*0.25-ph*H*0.6,{size:10+ph*14,weight:700,color:COL.blue,alpha:1-ph}); }
+    } else if(k==='breakfast'||k==='dinner'){
+      const ty=fy-H*0.45, tx0=cx-H*0.15, tx1=cx+H*0.75;
+      line(ctx,tx0,ty,tx1,ty,COL.ink,3); line(ctx,tx0+H*0.08,ty,tx0+H*0.08,fy,COL.ink,2.2); line(ctx,tx1-H*0.08,ty,tx1-H*0.08,fy,COL.ink,2.2);
+      line(ctx,cx-H*0.6,fy-H*0.26,cx-H*0.3,fy-H*0.26,COL.ink,2.4); line(ctx,cx-H*0.6,fy-H*0.26,cx-H*0.6,fy-H*0.75,COL.ink,2.4); line(ctx,cx-H*0.58,fy-H*0.26,cx-H*0.58,fy,COL.ink,2);
+      const bxw=cx+H*0.12; ctx.save(); ctx.beginPath(); ctx.arc(bxw,ty-H*0.06,H*0.09,0,Math.PI); ctx.closePath(); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.green; ctx.lineWidth=2.2; ctx.stroke(); ctx.restore();
+      for(let i=0;i<3;i++){ ctx.save(); ctx.globalAlpha=0.7; ctx.strokeStyle=COL.mid; ctx.lineWidth=1.3; ctx.beginPath(); for(let q=0;q<=8;q++){ const yy=ty-H*0.09-q*H*0.025-((t*20)%1)*2, xx=bxw-H*0.05+i*H*0.05+Math.sin(q*0.9+t*3+i)*3; q?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy);} ctx.stroke(); ctx.restore(); }
+      const p=person(ctx,cx-H*0.45,fy,H,POSE.sit(eatArm(t*Math.PI*2*0.45),[1.2,0.7],0.12),{face:1,mood:0.6});
+      line(ctx,p.hand.x,p.hand.y,p.hand.x+H*0.08,p.hand.y-H*0.02,COL.mid,2);
+      if(k==='dinner'){ line(ctx,cx+H*1.2,fy-H*0.26,cx+H*0.9,fy-H*0.26,COL.ink,2.4); line(ctx,cx+H*1.2,fy-H*0.26,cx+H*1.2,fy-H*0.8,COL.ink,2.4);
+        person(ctx,cx+H*1.05,fy,H*1.12,POSE.sit(eatArm(t*Math.PI*2*0.4+2),[1.2,0.7],0.1),{face:-1,mood:0.6,col:COL.muted}); }
+    } else if(k==='walk'||k==='rush'){
+      const fast=k==='rush', v=fast?2.4:1.3, pxm=H/1.5, off=(t*v*pxm);
+      for(let i=0;i<14;i++){ const x=sx+sw-((i*sw/10+off)%(sw+40)); line(ctx,x,fy+8,x+14,fy+8,COL.mid,1.6); }
+      for(let i=0;i<3;i++){ const x=sx+sw+H-((i*sw/2.2+off*0.6)%(sw+2*H)); if(x>sx+H*0.4&&x<sx+sw-H*0.4) tree(ctx,x,fy,H*0.9,t,COL.green); }
+      const p=person(ctx,cx,fy,H,fast?POSE.walk(t*Math.PI*2*1.5,1.25):POSE.walk(t*Math.PI*2*0.95),{face:1,mood:fast?-0.5:0.4});
+      ctx.save(); rrect(ctx,p.nk.x-H*0.17,p.nk.y+H*0.03,H*0.12,H*0.2,4); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.blue; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+      if(fast){ for(let i=0;i<2;i++){ const ph=(t*1.5+i*0.5)%1; circ(ctx,p.hd.x-p.hr*0.8,p.hd.y+ph*H*0.3,2.2,COL.blue,COL.blue,1); }
+        ctx.save(); ctx.strokeStyle=COL.red; ctx.lineWidth=1.6; ctx.beginPath(); for(let q=0;q<=20;q++){ const a=q*0.9+t*6, r=H*0.03+q*0.6; const xx=p.hip.x+H*0.12+Math.cos(a)*r*0.4, yy=p.hip.y-H*0.12+Math.sin(a)*r*0.4; q?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy);} ctx.stroke(); ctx.restore();
+        textAt(ctx,'hungry',p.hip.x+H*0.2,p.hip.y-H*0.2,{size:11,weight:700,color:COL.red}); }
+    } else if(k==='school'||k==='homework'){
+      if(k==='school'){ rect(ctx,sx+sw*0.58,sy+sh*0.12,sw*0.34,sh*0.3,COL.ink,'#f3f7f4',2.4);
+        for(let i=0;i<4;i++) line(ctx,sx+sw*0.61,sy+sh*(0.18+i*0.06),sx+sw*(0.61+0.08+0.18*((i*0.37+0.3)%1)),sy+sh*(0.18+i*0.06),COL.green,1.8); }
+      else { line(ctx,cx+H*0.55,fy-H*0.5,cx+H*0.55,fy-H*0.95,COL.ink,2); line(ctx,cx+H*0.55,fy-H*0.95,cx+H*0.35,fy-H*0.85,COL.ink,2); ctx.save(); ctx.beginPath(); ctx.moveTo(cx+H*0.28,fy-H*0.78); ctx.lineTo(cx+H*0.42,fy-H*0.92); ctx.lineTo(cx+H*0.48,fy-H*0.82); ctx.closePath(); ctx.strokeStyle=COL.yellow; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+        ctx.save(); ctx.globalAlpha=0.25; ctx.fillStyle=COL.yellow; ctx.beginPath(); ctx.moveTo(cx+H*0.35,fy-H*0.85); ctx.lineTo(cx-H*0.1,fy-H*0.5); ctx.lineTo(cx+H*0.5,fy-H*0.5); ctx.closePath(); ctx.fill(); ctx.restore(); }
+      const dx=cx-H*0.1, dy=fy-H*0.42;
+      line(ctx,dx-H*0.15,dy,dx+H*0.55,dy,COL.ink,3); line(ctx,dx+H*0.5,dy,dx+H*0.5,fy,COL.ink,2.2);
+      rect(ctx,dx+H*0.02,dy-3,H*0.22,3,COL.mid,'#fff',1.2);
+      const scratch=k==='homework'&&(t%6)<1.2;
+      const p=person(ctx,dx-H*0.35,fy,H,POSE.sit(scratch?[2.7,1.9]:[1.05,0.85+0.08*Math.sin(t*14)],[1.1,0.6],0.22),{face:1,mood:k==='homework'?0:0.3});
+      if(k==='school') person(ctx,dx-H*1.15,fy,H*0.95,POSE.sit([1.05,0.85+0.08*Math.sin(t*12+1)],[1.1,0.6],0.2),{face:1,col:COL.mid,mood:0.3});
+    } else if(k==='play'){
+      const pxm=sw/9, g=9.8*pxm, R=0.11*pxm, X0=sx+sw*0.06, Wd=sw*0.88;
+      // physics: ball with gravity, bounce (e = 0.6) and rolling friction
+      ball.vy-=9.8*dt; ball.y+=ball.vy*dt; ball.x+=ball.vx*dt/9;
+      if(ball.y<0){ ball.y=0; if(ball.vy<-0.6){ ball.vy=-0.6*ball.vy; ball.vx*=0.85; } else { ball.vy=0; ball.vx-=Math.sign(ball.vx)*Math.min(Math.abs(ball.vx),0.3*9.8*dt); } }
+      if(ball.x<0.02){ ball.x=0.02; ball.vx=Math.abs(ball.vx)*0.6; } if(ball.x>0.98){ ball.x=0.98; ball.vx=-Math.abs(ball.vx)*0.6; }
+      ball.rot+=ball.vx*9*dt/0.11;
+      pl.forEach((q,i)=>{
+        const mine=i===0?ball.x<0.5:ball.x>=0.5, home=i===0?0.18:0.82, tgt=mine?clamp(ball.x-q.f*0.035,0.04,0.96):home;
+        const d=tgt-q.x, sp=Math.min(Math.abs(d),dt*4.2/9)*Math.sign(d); q.x+=sp; q.ph+=Math.abs(sp)*9/1.1*Math.PI;
+        q.kick=Math.max(0,q.kick-dt);
+        if(mine && Math.abs(ball.x-(q.x+q.f*0.035))<0.04 && ball.y<0.25 && q.kick===0 && (ball.vx*q.f<=0.3)){
+          const th=(25+Math.random()*25)*Math.PI/180, Rg=9*(0.45+Math.random()*0.25), v=Math.sqrt(Rg*9.8/Math.sin(2*th)); // range R = v²·sin2θ / g
+          ball.vx=q.f*v*Math.cos(th); ball.vy=v*Math.sin(th); q.kick=0.35;
+        }
+        const moving=Math.abs(sp)>1e-4, kp=q.kick>0?Math.sin((0.35-q.kick)/0.35*Math.PI):0;
+        const P=q.kick>0?{lean:-0.1,legs:[[1.1*kp-0.2,0.3*(1-kp)],[-0.15,0.1]],arms:[[-0.6,0.5],[0.7,0.5]]}:moving?POSE.run(q.ph):POSE.stand(t+i);
+        person(ctx,X0+q.x*Wd,fy,H,P,{face:q.f,mood:0.8,col:i?COL.muted:COL.ink});
+      });
+      const bxp=X0+ball.x*Wd, byp=fy-R-ball.y*pxm*0.9;
+      ctx.save(); ctx.globalAlpha=0.25; ctx.beginPath(); ctx.ellipse(bxp,fy,R*(1-clamp(ball.y/3,0,0.6)),R*0.25,0,0,Math.PI*2); ctx.fillStyle=COL.ink; ctx.fill(); ctx.restore();
+      circ(ctx,bxp,byp,R,COL.ink,'#fff',2); for(let q=0;q<5;q++){ const a=ball.rot+q*Math.PI*0.4; line(ctx,bxp+Math.cos(a)*R*0.35,byp+Math.sin(a)*R*0.35,bxp+Math.cos(a)*R,byp+Math.sin(a)*R,COL.ink,1.2); }
+      tree(ctx,sx+sw*0.5,fy,H*1.1,t,COL.green);
+    } else if(k==='talk'){
+      const sofaY=fy-H*0.26; ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.beginPath(); ctx.moveTo(cx-H*1.1,fy); ctx.lineTo(cx-H*1.1,sofaY-H*0.35); ctx.moveTo(cx+H*1.1,fy); ctx.lineTo(cx+H*1.1,sofaY-H*0.35); ctx.moveTo(cx-H*1.1,sofaY); ctx.lineTo(cx+H*1.1,sofaY); ctx.stroke(); ctx.restore();
+      const who=Math.floor(t/2.5)%2, g=Math.sin(t*6);
+      const a=person(ctx,cx-H*0.45,fy,H,POSE.sit(who===0?[1.3+0.3*g,1.2]:[0.4,1.3],[0.3,1.2],0.02),{face:1,mood:0.8});
+      const b=person(ctx,cx+H*0.45,fy,H*1.15,POSE.sit(who===1?[1.3+0.3*g,1.2]:[0.4,1.3],[0.3,1.2],0.02),{face:-1,mood:0.8,col:COL.muted});
+      const sp=who===0?a:b, dir=who===0?1:-1;
+      for(let i=0;i<3;i++){ const ph=(t*1.4+i/3)%1; ctx.save(); ctx.globalAlpha=1-ph; ctx.strokeStyle=COL.yellow; ctx.lineWidth=2.2; ctx.beginPath(); ctx.arc(sp.hd.x+dir*sp.hr,sp.hd.y+sp.hr*0.3,sp.hr*(0.6+ph*1.4),dir>0?-0.6:Math.PI-0.6,dir>0?0.6:Math.PI+0.6); ctx.stroke(); ctx.restore(); }
+    } else if(k==='screen'){
+      rect(ctx,sx+sw*0.72,sy+sh*0.12,sw*0.16,sh*0.26,COL.ink,'#eef2f8',2);
+      ctx.save(); ctx.beginPath(); ctx.arc(sx+sw*0.8,sy+sh*0.22,sh*0.05,0.8,5.2); ctx.strokeStyle=COL.blue; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+      const bx0=cx-H*0.9; rect(ctx,bx0,fy-H*0.3,H*1.1,H*0.08,COL.ink,'#fff',2.2); line(ctx,bx0,fy,bx0,fy-H*0.6,COL.ink,3);
+      const tw=Math.sin(t*16)*0.06;
+      const p=person(ctx,cx-H*0.35,fy,H,{hy:0.3,lean:0.42,head:0.35,legs:[[1.45,1.45],[1.4,1.4]],arms:[[1.0+tw,1.45],[0.9-tw,1.5]]},{face:1,mood:-0.4});
+      const phx=(p.hand.x+p.hand2.x)/2+H*0.02, phy=(p.hand.y+p.hand2.y)/2-H*0.03;
+      ctx.save(); ctx.translate(phx,phy); ctx.rotate(-0.5); rrect(ctx,-H*0.025,-H*0.05,H*0.05,H*0.1,3); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=1.8; ctx.stroke(); ctx.restore();
+      const fl=0.6+0.4*Math.sin(t*9)*Math.sin(t*3.3);
+      for(let i=-2;i<=2;i++){ ctx.save(); ctx.globalAlpha=0.35+0.4*fl; line(ctx,phx,phy,lerp(phx,p.hd.x+p.hr*0.5,0.85)+i*2,lerp(phy,p.hd.y,0.85)+i*3,COL.red,1.4); ctx.restore(); }
+    } else { // free time: stretch and look around
+      const u=0.5-0.5*Math.cos(t*0.9);
+      person(ctx,cx,fy,H,{lean:0,legs:[[0.12,0.02],[-0.12,0.02]],arms:[[0.1+u*2.7,0.2],[-0.1-u*2.7,0.2]]},{face:1,mood:0.4});
+      tree(ctx,sx+sw*0.2,fy,H*1.1,t,COL.green);
+    }
+  }
+
+  animLoop((dt)=>{
+    t+=dt;
+    const sl=+slR.value, pm=+plR.value, sc=+scR.value;
+    $('#slV').textContent=sl+' h'; $('#plV').textContent=pm+' min'; $('#scV').textContent=sc+' h';
+    const S=daySchedule(sl,pm,sc,bf,tk);
+    let seg=S.segs.find(s=>hr>=s.a&&hr<s.b)||S.segs[S.segs.length-1];
+    // clock rate: ≤ 1.5 h/s, but every activity stays on screen ≥ 3 s so it can be watched
+    const dh=run?dt*spd*Math.min(1.5,(seg.b-seg.a)/3):0; hr+=dh; if(hr>=30.5){ hr-=24; day++; }
+    seg=S.segs.find(s=>hr>=s.a&&hr<s.b)||S.segs[S.segs.length-1]; const A=DAYACT[seg.k];
+    ['P','M','S'].forEach(key=>{ const r=A[key]; if(r) lv[key]+=(r[0]-lv[key])*(1-Math.exp(-r[1]*dh)); springTo(G[key],lv[key],30,8,dt); });
+    if(seg.k!==cur){ cur=seg.k; fade=0; } fade=approach(fade,1,6,dt);
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const sx=12, sy=12, sw=w*0.64, sh=h*0.8;
+    const hod=((hr%24)+24)%24, night=hod<6.2||hod>18.8;
+    ctx.save(); rrect(ctx,sx,sy,sw,sh,12); ctx.fillStyle=night?'rgba(26,58,92,0.07)':'#fff'; ctx.fill(); ctx.strokeStyle='#dbe4f0'; ctx.lineWidth=1.4; ctx.stroke(); ctx.clip();
+    // sun / moon travel across the sky with the hour
+    if(!night){ const u=(hod-6.2)/12.6, x=sx+sw*(0.08+0.84*u), y=sy+sh*(0.3-0.22*Math.sin(u*Math.PI));
+      circ(ctx,x,y,12,COL.yellow,'#fff',2.2); for(let i=0;i<8;i++){ const a=i*Math.PI/4+t*0.3; line(ctx,x+Math.cos(a)*16,y+Math.sin(a)*16,x+Math.cos(a)*22,y+Math.sin(a)*22,COL.yellow,1.8); } }
+    else { const u=((hod+24-18.8)%24)/11.4, x=sx+sw*(0.08+0.84*u), y=sy+sh*(0.3-0.22*Math.sin(u*Math.PI));
+      ctx.save(); ctx.beginPath(); ctx.arc(x,y,11,0.6,Math.PI*2-0.6+0.001); ctx.arc(x+7,y-3,9,Math.PI*2-0.9,0.9,true); ctx.strokeStyle=COL.blue; ctx.lineWidth=2; ctx.stroke(); ctx.restore(); }
+    ctx.globalAlpha=fade; scene(ctx,seg.k,sx,sy,sw,sh,dt); ctx.globalAlpha=1;
+    ctx.restore();
+    textAt(ctx,A.n,sx+16,sy+26,{size:15,weight:700,color:A.c===COL.mid||A.c==='#c2d1e5'?COL.ink:A.c});
+
+    // 24-hour dial: the routine as coloured arcs, hand = now
+    const kx=sx+sw+(w-sx-sw)/2, ky=h*0.2, kr=Math.min(h*0.14,(w-sx-sw)*0.3);
+    S.segs.forEach(s=>{ ctx.save(); ctx.strokeStyle=DAYACT[s.k].c; ctx.lineWidth=kr*0.22; ctx.beginPath(); ctx.arc(kx,ky,kr*0.85,(s.a/24)*Math.PI*2-Math.PI/2,(s.b/24)*Math.PI*2-Math.PI/2); ctx.stroke(); ctx.restore(); });
+    circ(ctx,kx,ky,kr,COL.ink,null,2); circ(ctx,kx,ky,kr*0.7,'#dbe4f0',null,1);
+    for(let i=0;i<24;i+=3){ const a=i/24*Math.PI*2-Math.PI/2; textAt(ctx,String(i),kx+Math.cos(a)*kr*1.2,ky+Math.sin(a)*kr*1.2+4,{align:'center',size:10,weight:600,color:COL.muted}); }
+    const ha=hod/24*Math.PI*2-Math.PI/2; line(ctx,kx,ky,kx+Math.cos(ha)*kr*0.95,ky+Math.sin(ha)*kr*0.95,COL.yellow,3); circ(ctx,kx,ky,3,COL.ink,COL.ink,1);
+    textAt(ctx,clockStr(hr),kx,ky+kr*0.35,{align:'center',size:13,weight:700}); textAt(ctx,'Day '+day,kx,ky-kr*0.25,{align:'center',size:11,weight:600,color:COL.muted});
+
+    // three tanks: physical / mental / social, spring-settled with a sloshing surface
+    const names=[['P','Physical',COL.green],['M','Mental',COL.blue],['S','Social',COL.yellow]];
+    const tw=Math.min(40,(w-sx-sw)*0.16), t0=h*0.46, t1=h*0.78;
+    names.forEach(([key,nm,c],i)=>{ const x=sx+sw+(w-sx-sw)*(0.22+i*0.28)-tw/2, v=clamp(G[key].x,0,100)/100, ly=t1-(t1-t0)*v;
+      ctx.save(); rrect(ctx,x,t0,tw,t1-t0,6); ctx.clip(); ctx.beginPath(); ctx.moveTo(x,t1); for(let q=0;q<=10;q++){ ctx.lineTo(x+tw*q/10,ly+Math.sin(q*0.9+t*4+i)*2*Math.min(1,Math.abs(G[key].v)/10+0.3)); } ctx.lineTo(x+tw,t1); ctx.closePath(); ctx.fillStyle=c; ctx.globalAlpha=0.35; ctx.fill(); ctx.restore();
+      ctx.save(); rrect(ctx,x,t0,tw,t1-t0,6); ctx.strokeStyle=c; ctx.lineWidth=2.2; ctx.stroke(); ctx.restore();
+      line(ctx,x-4,t1-(t1-t0)*0.6,x+tw+4,t1-(t1-t0)*0.6,COL.mid,1,[3,3]);
+      textAt(ctx,Math.round(G[key].x)+'%',x+tw/2,t0-6,{align:'center',size:12,weight:700,color:c});
+      textAt(ctx,nm,x+tw/2,t1+16,{align:'center',size:11,weight:700,color:c}); });
+
+    // routine timeline 06:30 → 06:30
+    const lx0=sx, lx1=w-12, ly0=h*0.895, lh=Math.min(22,h*0.04), X=v=>lx0+(v-6.5)/24*(lx1-lx0);
+    S.segs.forEach(s=>{ ctx.save(); ctx.fillStyle=DAYACT[s.k].c; ctx.globalAlpha=s===seg?0.85:0.45; ctx.fillRect(X(s.a),ly0,X(s.b)-X(s.a),lh); ctx.restore();
+      if(X(s.b)-X(s.a)>54) textAt(ctx,DAYACT[s.k].n,(X(s.a)+X(s.b))/2,ly0-5,{align:'center',size:10,weight:600,color:COL.muted}); });
+    rect(ctx,lx0,ly0,lx1-lx0,lh,COL.ink,null,1.2);
+    for(let v=9;v<=30;v+=3) textAt(ctx,String(v%24).padStart(2,'0'),X(v),ly0+lh+13,{align:'center',size:10,color:COL.muted});
+    const cxp=X(hr); ctx.save(); ctx.fillStyle=COL.yellow; ctx.beginPath(); ctx.moveTo(cxp,ly0-1); ctx.lineTo(cxp-6,ly0-10); ctx.lineTo(cxp+6,ly0-10); ctx.closePath(); ctx.fill(); ctx.restore(); line(ctx,cxp,ly0,cxp,ly0+lh,COL.yellow,2.4);
+
+    $('#r1').textContent=Math.round(lv.P)+'%'; $('#r2').textContent=Math.round(lv.M)+'%'; $('#r3').textContent=Math.round(lv.S)+'%';
+    $('#r4').textContent=fmt(S.slept,1)+' h';
+    const fb=$('#fb');
+    if(S.lost>0.01){ fb.className='fb bad'; fb.textContent='Screens ate '+fmt(S.lost,1)+' h of sleep'; }
+    else if(lv.P>60&&lv.M>60&&lv.S>60){ fb.className='fb ok'; fb.textContent='Healthy in body, mind and friendships'; }
+    else fb.className='fb hidden';
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   3.2 HABITS OVER MONTHS — healthy vs unhealthy
+   Energy balance (linear model):  dW/dt = (I − E)/7700   kg/day
+       E = 48.9·W (+300 kcal with 1 h exercise), I = 2200 + habit extras
+       → a 45 kg, 1.55 m teen is steady at 2200 kcal/day.
+   Check: +450 kcal/day junk food → new steady weight 45 + 450/48.9 ≈ 54 kg,
+       time constant 7700/48.9 ≈ 157 days → ≈ +6 kg after 6 months.
+   Resting pulse relaxes to its target with τ ≈ 45 days (training effect);
+   tar from smoking builds up linearly; alertness responds within days.
+   1 month = 1.5 s. Heart drawn beating at the real resting pulse.
+   ===================================================================== */
+const HABITS=[
+  {id:'ex',  t:'🏃 Exercise 1 h',     good:true},
+  {id:'sl',  t:'😴 Sleep 8–9 h',      good:true},
+  {id:'bal', t:'🥗 Balanced meals',   good:true},
+  {id:'wat', t:'💧 Drink water',      good:true},
+  {id:'junk',t:'🍔 Junk food daily',  good:false},
+  {id:'skip',t:'⏭ Skip breakfast',    good:false},
+  {id:'scr', t:'📱 Late-night screens',good:false},
+  {id:'smk', t:'🚬 Smoking',          good:false}];
+function ecg(u){ // one heartbeat, u in 0..1
+  return 0.12*Math.exp(-Math.pow((u-0.14)/0.03,2)) - 0.12*Math.exp(-Math.pow((u-0.27)/0.008,2)) + Math.exp(-Math.pow((u-0.3)/0.012,2)) - 0.25*Math.exp(-Math.pow((u-0.33)/0.01,2)) + 0.25*Math.exp(-Math.pow((u-0.55)/0.05,2));
+}
+const TARDOTS=(()=>{ const R=rng(5), a=[]; for(let i=0;i<60;i++) a.push([R()*2-1,R()*2-1,R()]); return a; })();
+function buildA2(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label style="margin-bottom:4px;">Habits <span class="val" id="sortV"></span></label>
+      <div class="chip-wrap" id="hab">${HABITS.map(h=>`<button class="chip-btn" data-h="${h.id}">${h.t}</button>`).join('')}</div>
+      <div class="hint">Green edge = healthy, red edge = unhealthy — revealed after a month on.</div></div>
+    <div class="toggle-group" style="margin-top:0"><button class="toggle-btn play" id="run" style="padding:10px;">▶ Run 12 months</button><button class="toggle-btn" id="rst" style="padding:10px;">↺ Reset</button></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Weight · BMI</div><div class="rval" id="r1" style="color:var(--f-blue)">—</div></div>
+      <div class="rcard"><div class="rlabel">Resting pulse</div><div class="rval" id="r2" style="color:var(--f-red)">—</div></div>
+      <div class="rcard"><div class="rlabel">Lungs</div><div class="rval" id="r3" style="color:var(--f-blue)">—</div></div>
+      <div class="rcard"><div class="rlabel">Alertness</div><div class="rval" id="r4" style="color:var(--f-green)">—</div></div></div></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas');
+  const on={}, seen={}; HABITS.forEach(h=>{ on[h.id]=false; seen[h.id]=0; });
+  let S, run=false, t=0, bph=0, jog=0;
+  function reset(){ S={mo:0,W:45,hr:78,tar:0,fit:0,al:70,hist:[[0,45]]}; run=false; $('#run').textContent='▶ Run 12 months'; }
+  reset();
+  wrap.querySelectorAll('#hab .chip-btn').forEach(b=>b.onclick=()=>{ on[b.dataset.h]=!on[b.dataset.h]; b.classList.toggle('active',on[b.dataset.h]); });
+  $('#run').onclick=()=>{ if(S.mo>=12) reset(); run=!run; $('#run').textContent=run?'❚❚ Pause':'▶ Run 12 months'; };
+  $('#rst').onclick=reset;
+  const B={W:{x:45,v:0}};
+
+  function body(ctx,cx,top,H,f,br,beat,tar,jp,al,smk){
+    const bob=jp!==null?-Math.abs(Math.sin(jp))*H*0.02:0; top+=bob;
+    const hr=H*0.072, hy=top+hr, ns=top+2*hr+H*0.035, sw=H*0.11*Math.pow(f,0.35), hipY=top+H*0.5, hw=H*0.085*Math.pow(f,0.55), wy=top+H*0.4, bw=H*0.085*f;
+    ctx.save(); ctx.lineCap='round'; ctx.lineJoin='round';
+    // legs (knees lift alternately when jogging)
+    [-1,1].forEach((s,i)=>{ const lift=jp!==null?Math.max(0,Math.sin(jp+i*Math.PI))*H*0.12:0, hx=cx+s*hw*0.55, fy=top+H-bob-lift*0.6, ky=(hipY+fy)/2-lift*0.4;
+      ctx.strokeStyle=COL.ink; ctx.lineWidth=clamp(H*0.012,2.5,5); ctx.beginPath(); ctx.moveTo(hx,hipY); ctx.lineTo(hx+s*H*0.01,ky); ctx.lineTo(hx+s*H*0.005,fy); ctx.stroke(); line(ctx,hx+s*H*0.005,fy,hx+s*H*0.05,fy,COL.ink,clamp(H*0.01,2.5,4.5)); });
+    // arms
+    [-1,1].forEach((s,i)=>{ const sx=cx+s*sw, sy=ns+H*0.01;
+      let ex=sx+s*H*0.03, ey=sy+H*0.14, hx=sx+s*H*0.04, hy2=sy+H*0.28;
+      if(jp!==null){ const sg=Math.sin(jp+i*Math.PI); ex=sx+s*H*0.04; ey=sy+H*0.13; hx=ex+s*H*0.02; hy2=ey+H*0.02-sg*H*0.1; }
+      if(smk&&s>0&&jp===null){ ex=sx+s*H*0.05; ey=sy+H*0.13; hx=sx+s*H*0.02; hy2=sy+H*0.05; }
+      ctx.strokeStyle=COL.ink; ctx.lineWidth=clamp(H*0.011,2.5,4.5); ctx.beginPath(); ctx.moveTo(sx,sy); ctx.lineTo(ex,ey); ctx.lineTo(hx,hy2); ctx.stroke();
+      if(smk&&s>0&&jp===null){ line(ctx,hx,hy2,hx+H*0.05,hy2-H*0.01,COL.mid,3); circ(ctx,hx+H*0.052,hy2-H*0.01,2.2,COL.red,COL.red,1);
+        for(let q=0;q<3;q++){ const ph=(t*0.4+q/3)%1; ctx.save(); ctx.globalAlpha=0.7*(1-ph); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.6; ctx.beginPath(); for(let z=0;z<=10;z++){ const yy=hy2-H*0.02-ph*H*0.25-z*H*0.008, xx=hx+H*0.055+Math.sin(z*0.7+t*3+q*2)*H*0.012*(1+ph*2); z?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy);} ctx.stroke(); ctx.restore(); } } });
+    // torso outline: shoulders → waist (belly) → hips
+    ctx.beginPath(); ctx.moveTo(cx-sw,ns); ctx.quadraticCurveTo(cx-sw*0.95,wy-H*0.08,cx-bw,wy); ctx.quadraticCurveTo(cx-bw*1.02,hipY-H*0.03,cx-hw,hipY);
+    ctx.lineTo(cx+hw,hipY); ctx.quadraticCurveTo(cx+bw*1.02,hipY-H*0.03,cx+bw,wy); ctx.quadraticCurveTo(cx+sw*0.95,wy-H*0.08,cx+sw,ns); ctx.closePath();
+    ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.6; ctx.stroke();
+    line(ctx,cx,top+2*hr,cx,ns,COL.ink,clamp(H*0.014,3,6));
+    // lungs (blue) expand with each breath; tar (grey) builds up with smoking
+    [-1,1].forEach(s=>{ const lx=cx+s*H*0.048, ly=ns+H*0.1, rx=H*0.042*(1+0.07*br), ry=H*0.088*(1+0.05*br);
+      ctx.save(); ctx.beginPath(); ctx.ellipse(lx,ly,rx,ry,s*0.12,0,Math.PI*2); ctx.fillStyle='rgba(47,143,224,0.07)'; ctx.fill(); ctx.strokeStyle=COL.blue; ctx.lineWidth=2; ctx.stroke(); ctx.clip();
+      const n=Math.round(tar*TARDOTS.length); for(let i=0;i<n;i++){ const d=TARDOTS[i]; circ(ctx,lx+d[0]*rx*0.8,ly+d[1]*ry*0.8,1.2+d[2]*1.8,'#5b6570','#5b6570',1); }
+      ctx.restore(); });
+    line(ctx,cx,ns-H*0.01,cx,ns+H*0.04,COL.blue,2); line(ctx,cx,ns+H*0.04,cx-H*0.03,ns+H*0.06,COL.blue,2); line(ctx,cx,ns+H*0.04,cx+H*0.03,ns+H*0.06,COL.blue,2);
+    // heart (red) beats at the resting pulse
+    const hs=H*0.024*(1+0.22*beat), hx=cx+H*0.018, hyy=ns+H*0.14;
+    ctx.save(); ctx.translate(hx,hyy); ctx.beginPath(); ctx.moveTo(0,hs*0.9); ctx.bezierCurveTo(-hs*1.6,-hs*0.2,-hs*0.6,-hs*1.3,0,-hs*0.4); ctx.bezierCurveTo(hs*0.6,-hs*1.3,hs*1.6,-hs*0.2,0,hs*0.9);
+    ctx.fillStyle='rgba(217,67,43,'+(0.15+0.3*beat).toFixed(2)+')'; ctx.fill(); ctx.strokeStyle=COL.red; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+    // stomach
+    ctx.save(); ctx.beginPath(); ctx.ellipse(cx+H*0.02,wy-H*0.015,H*0.04*Math.pow(f,0.5),H*0.025,0.3,0,Math.PI*2); ctx.strokeStyle=COL.yellow; ctx.lineWidth=1.8; ctx.stroke(); ctx.restore();
+    // head + face: eyelids droop with low alertness, a yawn when very tired
+    circ(ctx,cx,hy,hr,COL.ink,'#fff',2.6);
+    const lid=clamp(1-al/100*1.3,0,0.8);
+    [-1,1].forEach(s=>{ const ex=cx+s*hr*0.38, ey=hy-hr*0.1; circ(ctx,ex,ey,hr*0.13,COL.ink,COL.ink,1);
+      if(lid>0.05){ ctx.save(); ctx.fillStyle='#fff'; ctx.fillRect(ex-hr*0.2,ey-hr*0.2,hr*0.4,hr*0.4*lid+hr*0.02); ctx.restore(); line(ctx,ex-hr*0.2,ey-hr*0.2+hr*0.4*lid,ex+hr*0.2,ey-hr*0.2+hr*0.4*lid,COL.ink,1.4); } });
+    const yawn=al<45&&(t%7)<1.4, md=(al-55)/45;
+    if(yawn){ ctx.save(); ctx.beginPath(); ctx.ellipse(cx,hy+hr*0.45,hr*0.14,hr*0.2*Math.sin((t%7)/1.4*Math.PI),0,0,Math.PI*2); ctx.strokeStyle=COL.ink; ctx.lineWidth=1.6; ctx.stroke(); ctx.restore(); }
+    else { ctx.save(); ctx.beginPath(); ctx.moveTo(cx-hr*0.3,hy+hr*0.45-md*hr*0.1); ctx.quadraticCurveTo(cx,hy+hr*0.45+md*hr*0.25,cx+hr*0.3,hy+hr*0.45-md*hr*0.1); ctx.strokeStyle=COL.ink; ctx.lineWidth=1.8; ctx.stroke(); ctx.restore(); }
+    ctx.restore();
+  }
+
+  animLoop((dt)=>{
+    t+=dt;
+    if(run){ const dmo=dt/1.5, dd=dmo*30.4; S.mo+=dmo;
+      const I=2200+(on.junk?450:0)+(on.skip?120:0)+(on.scr?200:0)-(on.bal?100:0), E=48.9*S.W+(on.ex?300:0);
+      S.W+=(I-E)/7700*dd;
+      S.fit+=((on.ex?1:0)-S.fit)*(1-Math.exp(-dd/45));
+      const hrT=78-10*S.fit-(on.sl?3:0)+(on.smk?8:0)+(on.scr?4:0)+(on.junk?3:0);
+      S.hr+=(hrT-S.hr)*(1-Math.exp(-dd/45));
+      if(on.smk) S.tar=Math.min(1,S.tar+dd/365);
+      const alT=clamp(68+(on.sl?14:0)-(on.scr?22:0)+(on.wat?8:0)-(on.skip?12:0)+(on.ex?6:0)+(on.bal?4:0)-(on.junk?5:0),5,100);
+      S.al+=(alT-S.al)*(1-Math.exp(-dd/5));
+      HABITS.forEach(h=>{ if(on[h.id]) seen[h.id]+=dmo; });
+      if(S.hist.length===0||S.mo-S.hist[S.hist.length-1][0]>0.05) S.hist.push([S.mo,S.W]);
+      if(S.mo>=12){ S.mo=12; run=false; $('#run').textContent='↺ Run again'; }
+    }
+    springTo(B.W,S.W,20,7,dt);
+    const lung=clamp(100+6*S.fit-22*S.tar,40,120);
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    // body: breathing 16/min at rest, 30/min while jogging; heart at the resting pulse
+    const exNow=on.ex&&(t%8)<4.5; jog=exNow?jog+dt*Math.PI*2*2.6:jog;
+    const brRate=exNow?0.5:0.27, br=0.5+0.5*Math.sin(t*Math.PI*2*brRate);
+    const pulse=S.hr*(exNow?1.5:1); bph+=dt*pulse/60; const u=bph%1, beat=Math.exp(-Math.pow((u-0.3)/0.07,2));
+    const H=Math.min(h*0.86,w*0.9), cx=w*0.28;
+    body(ctx,cx,h*0.06,H,Math.pow(B.W.x/45,1.4),br,beat,S.tar,exNow?jog:null,S.al,on.smk);
+    line(ctx,cx-H*0.25,h*0.06+H+2,cx+H*0.25,h*0.06+H+2,COL.ink,2.4);
+    // weight graph (blue) with the healthy band (green)
+    const gx0=w*0.56, gx1=w*0.97, gy0=h*0.1, gy1=h*0.42, Wmin=38, Wmax=60, GX=m=>gx0+m/12*(gx1-gx0), GY=v=>gy1-(v-Wmin)/(Wmax-Wmin)*(gy1-gy0);
+    ctx.save(); ctx.fillStyle='rgba(31,157,85,0.09)'; ctx.fillRect(gx0,GY(54),gx1-gx0,GY(39.7)-GY(54)); ctx.restore();
+    textAt(ctx,'healthy range',gx1-4,GY(54)+13,{align:'right',size:10,weight:600,color:COL.green});
+    line(ctx,gx0,gy1,gx1,gy1,COL.ink,1.6); line(ctx,gx0,gy0,gx0,gy1,COL.ink,1.6);
+    for(let v=40;v<=60;v+=5){ textAt(ctx,String(v),gx0-6,GY(v)+4,{align:'right',size:10,color:COL.muted}); line(ctx,gx0,GY(v),gx1,GY(v),'#eef2f8',1); }
+    for(let m=0;m<=12;m+=3) textAt(ctx,String(m),GX(m),gy1+14,{align:'center',size:10,color:COL.muted});
+    textAt(ctx,'weight (kg) · months',gx0,gy0-8,{size:11,weight:700,color:COL.blue});
+    ctx.save(); ctx.strokeStyle=COL.blue; ctx.lineWidth=2.4; ctx.beginPath(); S.hist.forEach((p,i)=>{ i?ctx.lineTo(GX(p[0]),GY(p[1])):ctx.moveTo(GX(p[0]),GY(p[1])); }); ctx.lineTo(GX(S.mo),GY(S.W)); ctx.stroke(); ctx.restore();
+    circ(ctx,GX(S.mo),GY(S.W),4,COL.blue,'#fff',2);
+    // ECG strip (red) — real pulse rate, 25 mm/s style sweep
+    const ex0=w*0.56, ex1=w*0.97, ey=h*0.6, eh=h*0.08, pps=(ex1-ex0)/4;
+    rect(ctx,ex0,ey-eh,ex1-ex0,eh*1.6,'#dbe4f0','#fff',1);
+    ctx.save(); ctx.strokeStyle=COL.red; ctx.lineWidth=2; ctx.beginPath();
+    for(let x=ex0;x<=ex1;x+=2){ const back=(ex1-x)/pps, uu=((bph-back*pulse/60)%1+1)%1; const y=ey+eh*0.35-ecg(uu)*eh*0.85; x===ex0?ctx.moveTo(x,y):ctx.lineTo(x,y); } ctx.stroke(); ctx.restore();
+    textAt(ctx,'♥ '+Math.round(pulse)+' beats/min',ex0,ey-eh-8,{size:11,weight:700,color:COL.red});
+    // lung capacity + alertness bars
+    sparkBar(ctx,w*0.56,h*0.8,w*0.41,lung/120,COL.blue,'Lung capacity '+Math.round(lung)+'%');
+    sparkBar(ctx,w*0.56,h*0.9,w*0.41,S.al/100,COL.green,'Alertness '+Math.round(S.al)+'%');
+    textAt(ctx,'Month '+fmt(S.mo,1),w*0.97,h*0.05,{align:'right',size:14,weight:700});
+    const bmi=S.W/(1.55*1.55);
+    $('#r1').textContent=fmt(S.W,1)+' kg · '+fmt(bmi,1); $('#r2').textContent=Math.round(S.hr)+' /min';
+    $('#r3').textContent=Math.round(lung)+'%'; $('#r4').textContent=Math.round(S.al)+'%';
+    let sorted=0; wrap.querySelectorAll('#hab .chip-btn').forEach(b=>{ const hb=HABITS.find(x=>x.id===b.dataset.h), rev=seen[hb.id]>=1; if(rev) sorted++; b.classList.toggle('ok',rev&&hb.good); b.classList.toggle('bad',rev&&!hb.good); });
+    $('#sortV').textContent='sorted '+sorted+'/8';
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   3.3 CLEAN vs DIRTY PLAYGROUND
+   Mosquito life cycle (per day):
+       dL/dt = 12.5·A·W·(1 − L/3000) − L/8 − m_L·L      larvae in water
+       dA/dt = 0.5·L/8 − A/12                            adults
+     egg → adult ≈ 8 days, adults live ≈ 12 days, ~12 eggs/female/day.
+     W = 1 with standing water; draining it kills larvae (m_L = 2/day).
+   Check: after draining, no new adults and A halves every ≈ 8 days
+     (12·ln2) — mosquitoes linger ~3 weeks, then vanish.
+   Flies breed in garbage: dF/dt = 0.35·F·(1 − F/800)·G − (0.1 or 0.35)·F
+   Smoke: PM2.5 relaxes toward 180 (burning) or 35 µg/m³, τ = 1 day.
+   Swings are real pendulums: T = 2π√(L/g), L = 2 m → 2.8 s.
+   1 day = 2 s.
+   ===================================================================== */
+function buildA3(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label style="margin-bottom:6px;">Clean up the dirty ground</label>
+      <div class="toggle-group"><button class="toggle-btn small" id="cW">💧 Drain puddle</button><button class="toggle-btn small" id="cD">🕳 Cover drain</button></div>
+      <div class="toggle-group"><button class="toggle-btn small" id="cG">🗑 Clear garbage</button><button class="toggle-btn small" id="cS">🏭 Stop smoke</button></div>
+      <button class="toggle-btn navy" id="spot">👁 Show hazards</button></div>
+    <div class="toggle-group" style="margin-top:0"><button class="toggle-btn play" id="run" style="padding:10px;">❚❚ Pause days</button><button class="toggle-btn" id="rst" style="padding:10px;">↺ Reset</button></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Day</div><div class="rval" id="r0">0</div></div>
+      <div class="rcard"><div class="rlabel">Mosquitoes</div><div class="rval" id="r1" style="color:var(--f-red)">—</div></div>
+      <div class="rcard"><div class="rlabel">Flies</div><div class="rval" id="r2" style="color:var(--f-red)">—</div></div>
+      <div class="rcard"><div class="rlabel">Air PM2.5</div><div class="rval" id="r3">—</div></div></div>
+      <table class="log"><thead><tr><th>Disease risk</th><th>Dirty</th><th>Clean</th></tr></thead><tbody id="risk"></tbody></table></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas');
+  const fix={W:false,D:false,G:false,S:false}; let spot=false, run=true, t=0, S;
+  const vis={W:{x:1},D:{x:0},G:{x:1},S:{x:1}};
+  function reset(){ S={day:0,L:2900,A:2200,F:570,PM:180}; ['W','D','G','S'].forEach(k=>{ fix[k]=false; $('#c'+k).classList.remove('active'); }); vis.W.x=1; vis.D.x=0; vis.G.x=1; vis.S.x=1; }
+  reset();
+  ['W','D','G','S'].forEach(k=>$('#c'+k).onclick=()=>{ fix[k]=!fix[k]; $('#c'+k).classList.toggle('active',fix[k]); });
+  $('#spot').onclick=()=>{ spot=!spot; $('#spot').classList.toggle('active',spot); $('#spot').textContent=spot?'👁 Hide hazards':'👁 Show hazards'; };
+  $('#run').onclick=()=>{ run=!run; $('#run').textContent=run?'❚❚ Pause days':'▶ Run days'; };
+  $('#rst').onclick=reset;
+  const bugs=[[],[]], flies=[], smoke=[], tags=[];
+  const slide=[{p:0},{p:0.5}];
+
+  function park(ctx,x0,y0,pw,ph,dirty,dt){
+    const gy=y0+ph*0.72, U=u=>x0+u*pw, m=Math.min(pw/9,ph*0.72/3.4); // m = 1 metre on screen
+    // sky tint: smoke haze
+    if(dirty){ ctx.save(); ctx.fillStyle='rgba(129,149,171,'+(0.22*clamp((S.PM-35)/145,0,1)).toFixed(3)+')'; ctx.fillRect(x0,y0,pw,gy-y0); ctx.restore(); }
+    line(ctx,x0,gy,x0+pw,gy,COL.ink,2.4);
+    tree(ctx,U(0.08),gy,m*2.2,t,COL.green);
+    // factory + chimney smoke (dirty side)
+    if(dirty){ const fx=U(0.86), fw=m*1.3, fh=m*1.1, fb=gy-fh;
+      ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.fillStyle='#fff'; ctx.beginPath(); ctx.moveTo(fx-fw/2,gy); ctx.lineTo(fx-fw/2,fb+fh*0.35); ctx.lineTo(fx-fw/6,fb+fh*0.05); ctx.lineTo(fx-fw/6,fb+fh*0.35); ctx.lineTo(fx+fw/6,fb+fh*0.05); ctx.lineTo(fx+fw/6,fb+fh*0.35); ctx.lineTo(fx+fw/2,fb); ctx.lineTo(fx+fw/2,gy); ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.strokeRect(fx+fw*0.22,gy-m*3,fw*0.14,m*3-fh*0.1); ctx.restore();
+      const cx=fx+fw*0.29, cy=gy-m*3;
+      if(!fix.S && Math.random()<dt*9) smoke.push({x:cx,y:cy,vx:10+Math.random()*8,vy:-22-Math.random()*8,r:4,life:0});
+      ctx.save(); ctx.beginPath(); ctx.rect(x0,y0,pw,ph); ctx.clip();
+      for(let i=smoke.length-1;i>=0;i--){ const p=smoke[i]; p.life+=dt; p.vy*=Math.exp(-0.5*dt); p.x+=(p.vx-12)*dt+gauss()*6*Math.sqrt(dt); p.y+=p.vy*dt; p.r+=5*dt;
+        if(p.life>7){ smoke.splice(i,1); continue; }
+        ctx.globalAlpha=0.55*(1-p.life/7); circ(ctx,p.x,p.y,p.r,COL.mid,'rgba(129,149,171,0.12)',1.4); }
+      ctx.restore(); ctx.globalAlpha=1;
+    }
+    // swing — a real pendulum, θ = θ0·cos(√(g/L)·t), L = 2 m
+    const sx=U(0.33), top=gy-m*2.3, Lp=m*1.95, th=0.5*Math.cos(Math.sqrt(9.8/2)*t+(dirty?1.3:0));
+    ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.beginPath(); ctx.moveTo(sx-m*0.8,gy); ctx.lineTo(sx-m*0.35,top); ctx.lineTo(sx+m*0.35,top); ctx.lineTo(sx+m*0.8,gy); ctx.stroke(); ctx.restore();
+    const px=sx+Math.sin(th)*Lp, py=top+Math.cos(th)*Lp;
+    line(ctx,sx-4,top,px-8,py,COL.mid,1.4); line(ctx,sx+4,top,px+8,py,COL.mid,1.4); line(ctx,px-m*0.22,py,px+m*0.22,py,COL.ink,3);
+    const kidH=m*1.3, dirF=Math.cos(th)>0?1:1;
+    const bite=dirty&&S.A>400&&(t%3)<0.8, cough=dirty&&S.PM>100&&(t%4)<0.5;
+    person(ctx,px,py+kidH*0.26,kidH,{hy:0.26,lean:-th*0.6+(cough?0.35:0),legs:[[1.4-th,1.2-th*0.5],[1.35-th,1.15-th*0.5]],arms:[[bite?2.4:2.9-th*0.3,bite?1.5:0.2],[2.9-th*0.3,0.2]]},{face:dirF,mood:dirty&&(bite||cough)?-0.6:0.8});
+    // slide: kid accelerates down a = g(sinα − μcosα), then climbs back up the ladder
+    const lx=U(0.58), ltop=gy-m*1.6, sEnd=lx+m*2, alpha=Math.atan2(gy-ltop,sEnd-lx);
+    ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.beginPath(); ctx.moveTo(lx,gy); ctx.lineTo(lx,ltop); ctx.lineTo(sEnd,gy); ctx.stroke(); ctx.restore();
+    for(let i=1;i<5;i++) line(ctx,lx-m*0.25,gy-(gy-ltop)*i/5,lx,gy-(gy-ltop)*i/5,COL.ink,1.6); line(ctx,lx-m*0.25,gy,lx-m*0.25,ltop,COL.ink,1.6);
+    if(!dirty||fix.G){ const k=dirty?vis.G.x:0; /* bin appears as garbage is cleared */
+      const bx=U(0.45), bw=m*0.4, bh=m*0.65; ctx.save(); ctx.globalAlpha=dirty?1-k:1; ctx.strokeStyle=COL.green; ctx.lineWidth=2.2; ctx.beginPath(); ctx.moveTo(bx-bw/2,gy-bh); ctx.lineTo(bx-bw*0.4,gy); ctx.lineTo(bx+bw*0.4,gy); ctx.lineTo(bx+bw/2,gy-bh); ctx.stroke(); line(ctx,bx-bw*0.6,gy-bh-3,bx+bw*0.6,gy-bh-3,COL.green,2.6); ctx.restore(); }
+    const sl=slide[dirty?1:0]; sl.p=(sl.p+dt/4.5)%1;
+    const Ls=Math.hypot(sEnd-lx,gy-ltop), a=9.8*(Math.sin(alpha)-0.3*Math.cos(alpha)), Tsl=Math.sqrt(2*2.5/a); // 2.5 m slide
+    let kx,ky,P;
+    if(sl.p<0.3){ const tt=sl.p/0.3*Tsl*1.0, sAl=clamp(0.5*a*tt*tt/2.5,0,1); kx=lx+Math.cos(alpha)*Ls*sAl; ky=ltop+Math.sin(alpha)*Ls*sAl; P={hy:0.26,lean:-0.5,legs:[[1.5-alpha,1.4-alpha],[1.45-alpha,1.35-alpha]],arms:[[2.6,0.2],[2.5,0.2]]}; kx+=kidH*0.05; ky+=kidH*0.2; }
+    else if(sl.p<0.65){ const u=(sl.p-0.3)/0.35; kx=lerp(sEnd+kidH*0.1,lx-kidH*0.2,u); ky=gy; P=POSE.walk(t*9); }
+    else { const u=(sl.p-0.65)/0.35; kx=lx-kidH*0.18; ky=lerp(gy,ltop,u); P={legs:[[0.4*Math.sin(t*8),0.9],[-0.2,0.5]],arms:[[2.6+0.3*Math.sin(t*8),0.3],[2.4,0.3]]}; }
+    person(ctx,kx,ky,kidH,P,{face:sl.p<0.3||sl.p>=0.65?1:-1,mood:0.8,col:COL.muted});
+    if(dirty){
+      // standing water: shrinks when drained, cracked dry mud left behind
+      const wx=U(0.17), wr=m*0.8*vis.W.x;
+      if(vis.W.x>0.02){ ctx.save(); ctx.beginPath(); ctx.ellipse(wx,gy+m*0.06,wr,m*0.14*vis.W.x,0,0,Math.PI*2); ctx.fillStyle='rgba(47,143,224,0.2)'; ctx.fill(); ctx.strokeStyle=COL.blue; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+        for(let i=0;i<2;i++){ const ph2=(t*0.6+i*0.5)%1; ctx.save(); ctx.globalAlpha=1-ph2; ctx.beginPath(); ctx.ellipse(wx+(i?wr*0.3:-wr*0.3),gy+m*0.06,wr*0.4*ph2,m*0.06*ph2,0,0,Math.PI*2); ctx.strokeStyle=COL.blue; ctx.lineWidth=1.2; ctx.stroke(); ctx.restore(); }
+        if(S.L>50) for(let i=0;i<Math.min(6,Math.round(S.L/400));i++){ const lxw=wx+(i-2.5)*wr*0.28, lyw=gy+m*0.06+Math.sin(t*3+i)*2; line(ctx,lxw,lyw-3,lxw+Math.sin(t*9+i)*2,lyw+4,COL.ink,1.4); } }
+      if(fix.W){ ctx.save(); ctx.globalAlpha=1-vis.W.x; ctx.strokeStyle='#8a6a3d'; ctx.lineWidth=1.2; ctx.beginPath(); for(let i=0;i<6;i++){ ctx.moveTo(wx-m*0.7+i*m*0.28,gy+m*0.03); ctx.lineTo(wx-m*0.62+i*m*0.28,gy+m*0.14); } ctx.stroke(); ctx.restore(); }
+      // garbage heap shrinks away when cleared
+      if(vis.G.x>0.02){ const gx=U(0.45), k=vis.G.x, gs=m*0.75*k; ctx.save(); ctx.strokeStyle='#8a6a3d'; ctx.lineWidth=2; ctx.fillStyle='#fff'; ctx.beginPath(); ctx.moveTo(gx-gs,gy); ctx.quadraticCurveTo(gx-gs*0.5,gy-gs*0.9,gx,gy-gs*0.8); ctx.quadraticCurveTo(gx+gs*0.6,gy-gs,gx+gs,gy); ctx.closePath(); ctx.fill(); ctx.stroke();
+        line(ctx,gx-gs*0.4,gy-gs*0.3,gx-gs*0.1,gy-gs*0.55,COL.red,2); ctx.beginPath(); ctx.arc(gx+gs*0.35,gy-gs*0.35,gs*0.14,0,Math.PI*2); ctx.strokeStyle=COL.yellow; ctx.stroke(); ctx.strokeRect(gx-gs*0.05,gy-gs*0.3,gs*0.25,gs*0.18); ctx.restore(); }
+    }
+    // open drain under the ground: flowing dirty water, covered by slabs
+    const dy=gy+(y0+ph-gy)*0.45, dh=m*0.3;
+    if(dirty){ line(ctx,x0,dy,x0+pw,dy,COL.ink,1.8); line(ctx,x0,dy+dh,x0+pw,dy+dh,COL.ink,1.8);
+      ctx.save(); ctx.fillStyle='rgba(138,106,61,0.25)'; ctx.fillRect(x0,dy+dh*0.3,pw,dh*0.7); ctx.restore();
+      for(let i=0;i<10;i++){ const xx=x0+((i/10*pw+t*30)%pw); line(ctx,xx,dy+dh*0.6,xx+10,dy+dh*0.6,'#8a6a3d',1.6); }
+      const n=Math.round(12*vis.D.x); for(let i=0;i<12;i++){ ctx.save(); ctx.globalAlpha=i<n?1:0; rect(ctx,x0+i*pw/12+1,dy-5,pw/12-2,6,COL.ink,'#e3e8ef',1.4); ctx.restore(); }
+    } else { ctx.save(); ctx.fillStyle='#eef2f8'; ctx.fillRect(x0,dy-4,pw,6); ctx.restore(); line(ctx,x0,dy-4,x0+pw,dy-4,COL.ink,1.4); }
+    // insects
+    const want=dirty?Math.round(clamp(S.A/60,0,40)):1, arr=bugs[dirty?1:0];
+    while(arr.length<want) arr.push({x:U(0.17)+gauss()*20,y:gy-20+gauss()*10,vx:0,vy:0,ph:Math.random()*9}); if(arr.length>want) arr.length=want;
+    arr.forEach((q,i)=>{ const hx=i%3===0?px:U(0.17), hy=i%3===0?py-kidH*0.5:gy-m*0.5;
+      q.vx+=(-(q.x-hx)*1.2+gauss()*260)*dt; q.vy+=(-(q.y-hy)*1.2+gauss()*260)*dt; q.vx*=Math.exp(-1.5*dt); q.vy*=Math.exp(-1.5*dt); q.x+=q.vx*dt; q.y+=q.vy*dt;
+      q.x=clamp(q.x,x0+6,x0+pw-6); q.y=clamp(q.y,y0+10,gy-3); mosquito(ctx,q.x,q.y,Math.max(4,m*0.07),t+q.ph,COL.red,Math.atan2(q.vy,q.vx)*0.3); });
+    if(dirty){ const fw=Math.round(S.F/25); while(flies.length<fw) flies.push({a:Math.random()*6,r:10+Math.random()*30,s:2+Math.random()*3,z:Math.random()}); if(flies.length>fw) flies.length=fw;
+      flies.forEach(f=>{ f.a+=f.s*dt*(1+0.5*Math.sin(t*3+f.z*9)); const X=U(0.45)+Math.cos(f.a)*f.r*1.6, Y=gy-m*0.4-Math.abs(Math.sin(f.a*1.3))*f.r; housefly(ctx,X,Y,Math.max(3.5,m*0.05),t+f.z); }); }
+    // hazard spotting: leader-line tags
+    if(dirty&&spot){ const tg=(ok,px2,py2,tx,ty,txt)=>tags.push([px2,py2,tx,ty,(ok?'✓ ':'')+txt,ok?COL.green:COL.red]);
+      tg(fix.W,U(0.17),gy+m*0.06,U(0.22),gy+m*0.75,'Standing water');
+      tg(fix.G,U(0.45),gy-m*0.4,U(0.5),y0+m*0.9,'Garbage');
+      tg(fix.D,U(0.75),dy+dh/2,U(0.5),(gy+dy)/2+4,'Open drain');
+      tg(fix.S,U(0.86)+m*0.2,gy-m*3,U(0.66),y0+m*0.35,'Smoke');
+      if(arr.length>3) tg(false,arr[0].x,arr[0].y,Math.min(arr[0].x+40,U(0.4)),y0+m*0.35,'Mosquitoes'); }
+  }
+
+  animLoop((dt)=>{
+    t+=dt;
+    if(run){ let dd=dt*0.5; S.day+=dd; while(dd>0){ const h=Math.min(dd,0.05); dd-=h;
+      const W=fix.W?0:1, G=fix.G?0:1;
+      const dL=12.5*S.A*W*(1-S.L/3000)-S.L/8-(W?0.05:2)*S.L, dA=0.5*S.L/8-S.A/12;
+      S.L=Math.max(0,S.L+dL*h); S.A=Math.max(0,S.A+dA*h);
+      S.F=Math.max(0,S.F+(0.35*S.F*(1-S.F/800)*G-(G?0.1:0.35)*S.F)*h);
+      S.PM+=((fix.S?35:180)-S.PM)*(1-Math.exp(-h)); } }
+    vis.W.x=approach(vis.W.x,fix.W?0:1,0.8,dt); vis.G.x=approach(vis.G.x,fix.G?0:1,1.2,dt); vis.D.x=approach(vis.D.x,fix.D?1:0,2,dt);
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const pw=w-24, ph=(h-76)/2;
+    tags.length=0;
+    [[26,false],[54+ph,true]].forEach(([y0,d])=>{ ctx.save(); rrect(ctx,12,y0,pw,ph,12); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=d?COL.red:COL.green; ctx.lineWidth=2; ctx.stroke(); ctx.clip(); park(ctx,12,y0,pw,ph,d,dt); ctx.restore();
+      textAt(ctx,d?'Dirty playground':'Clean playground',16,y0-7,{size:14,weight:700,color:d?COL.red:COL.green}); });
+    tags.forEach(g=>tag(ctx,...g));
+    const lev=(v,a,b)=>v>b?['High','r-bad']:v>a?['Medium','r-warn']:['Low','r-ok'];
+    const chol=S.F/570*0.6+(fix.D?0:0.4);
+    const rows=[['Malaria · dengue',lev(S.A,150,600)],['Cholera · typhoid',lev(chol,0.25,0.6)],['Asthma',lev(S.PM,60,100)]];
+    $('#risk').innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td class="${r[1][1]}">${r[1][0]}</td><td class="r-ok">Low</td></tr>`).join('');
+    $('#r0').textContent=Math.floor(S.day); $('#r1').textContent=Math.round(S.A); $('#r2').textContent=Math.round(S.F); $('#r3').textContent=Math.round(S.PM)+' µg/m³';
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   3.4 HOW DISEASES SPREAD — pathogen · route · prevention
+   Cough droplets (TB, COVID-19): diameter 5–200 µm, launched at 9 m/s.
+     Stokes relaxation time τ = ρd²/18μ ; each step, exactly:
+        v → u_air + (v − u_air)·e^(−Δt/τ),  vertical terminal speed g·τ
+     Cough jet u_air = 6·e^(−age/0.5)·0.3/(x + 0.3) m/s, then still air.
+     Small drops evaporate (d² law) to nuclei and float as aerosols.
+   Check: 100 µm → τ ≈ 0.03 s, falls at ≈ 0.3 m/s, lands within ~1–2 m;
+     10 µm → falls at 3 mm/s, drifts across the room.
+   Malaria: female Anopheles carries Plasmodium from a sick person.
+   Cholera: Vibrio from open drains reaches well water; boiling kills it.
+   Diabetes is non-communicable: nothing ever crosses between people.
+   Droplet motion shown at 0.45× real speed.
+   ===================================================================== */
+const DIS={
+  malaria:{n:'Malaria',path:'Plasmodium (protozoa)',route:'Mosquito bite',stop:['net','water']},
+  tb:{n:'Tuberculosis',path:'Mycobacterium (bacteria)',route:'Air — cough droplets',stop:['mask','vaccine']},
+  cholera:{n:'Cholera',path:'Vibrio cholerae (bacteria)',route:'Dirty water',stop:['boil']},
+  covid:{n:'COVID-19',path:'SARS-CoV-2 (virus)',route:'Air — cough droplets',stop:['mask','vaccine']},
+  diabetes:{n:'Diabetes',path:'None — not a germ',route:'Does not spread',stop:['diet']}};
+const PREV={net:'🛏 Mosquito net',water:'💧 Clear standing water',mask:'😷 Face masks',vaccine:'💉 Vaccine',boil:'🔥 Boil water',diet:'🥗 Diet + exercise'};
+function buildA4(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label style="margin-bottom:4px;">Disease</label>
+      <div class="chip-wrap" id="dis">${Object.keys(DIS).map((k,i)=>`<button class="chip-btn${i?'':' active'}" data-d="${k}">${DIS[k].n}</button>`).join('')}</div></div>
+    <div class="control-group"><label style="margin-bottom:4px;">Prevention</label>
+      <div class="chip-wrap" id="prv">${Object.keys(PREV).map(k=>`<button class="chip-btn" data-p="${k}">${PREV[k]}</button>`).join('')}</div>
+      <div class="fb hidden" id="fb"></div></div>
+    <div class="control-group" id="distG"><label>Distance A ↔ B <span class="val" id="dV"></span></label><input type="range" id="dR" min="0.5" max="3" step="0.1" value="1"></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard wide"><div class="rlabel">Pathogen</div><div class="rval" id="r1">—</div></div>
+      <div class="rcard wide"><div class="rlabel">Spreads by</div><div class="rval" id="r2">—</div></div>
+      <div class="rcard"><div class="rlabel">Chain</div><div class="rval" id="r3">—</div></div>
+      <div class="rcard"><div class="rlabel">Person B</div><div class="rval" id="r4">—</div></div></div></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), dR=$('#dR');
+  let dis='malaria', t=0, inf=0, cough=0, drops=[], caught=[], hits=[], mos=[], germs=[], glu=180;
+  const P={}; Object.keys(PREV).forEach(k=>P[k]=false);
+  const lean={x:0,v:0}, DX={x:1,v:0}, net={x:0,v:0}, pond={x:1}, pot={T:28,live:1,phase:0,cyc:0}, bucket={y:0,v:0};
+  function resetDis(){ inf=0; drops=[]; caught=[]; hits=[]; germs=[]; mos=[]; cough=1.5; pot.T=28; pot.cyc=0; }
+  wrap.querySelectorAll('#dis .chip-btn').forEach(b=>b.onclick=()=>{ wrap.querySelectorAll('#dis .chip-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); dis=b.dataset.d; resetDis(); });
+  wrap.querySelectorAll('#prv .chip-btn').forEach(b=>b.onclick=()=>{ P[b.dataset.p]=!P[b.dataset.p]; b.classList.toggle('active',P[b.dataset.p]); });
+  const RHO=1000, MU=1.8e-5, G=9.8;
+
+  function sick(ctx,pp,H){ // fever marks
+    for(let i=0;i<3;i++) line(ctx,pp.hd.x-pp.hr*1.3-i*4,pp.hd.y-pp.hr*0.6+i*6,pp.hd.x-pp.hr*1.7-i*4,pp.hd.y-pp.hr*0.8+i*6,COL.red,1.6);
+  }
+  function inset(ctx,cx,cy,R,dt){
+    eyepiece(ctx,cx,cy,R,0,()=>{
+      const n=Math.round(inf*16);
+      if(dis==='malaria'){ const Rr=rng(3); for(let i=0;i<14;i++){ const x=cx+(Rr()-0.5)*R*1.7+Math.sin(t*0.4+i)*6, y=cy+(Rr()-0.5)*R*1.7+Math.cos(t*0.3+i)*5; circ(ctx,x,y,R*0.13,COL.red,'rgba(217,67,43,0.06)',1.6); circ(ctx,x,y,R*0.06,'rgba(217,67,43,0.35)',null,1);
+          if(i<n){ circ(ctx,x+R*0.04,y-R*0.02,R*0.035,COL.ink,null,1.6); circ(ctx,x+R*0.065,y-R*0.02,1.6,COL.ink,COL.ink,1); } } }
+      else if(dis==='tb'){ const Rr=rng(8); for(let i=0;i<9;i++){ const a=i/9*Math.PI*2, r=i?R*0.5:0; circ(ctx,cx+Math.cos(a)*r,cy+Math.sin(a)*r,R*0.26*(1+0.04*Math.sin(t*1.7)),COL.blue,null,1.6); }
+          for(let i=0;i<n*2;i++){ const x=cx+(Rr()-0.5)*R*1.4, y=cy+(Rr()-0.5)*R*1.4; orgBacillus(ctx,x,y,Rr()*6+t*0.2,R*0.05,2.4,t,false); } }
+      else if(dis==='covid'){ const Rr=rng(9); for(let i=0;i<4;i++){ ctx.save(); ctx.beginPath(); ctx.arc(cx-R*0.6+i*R*0.4,cy+R*0.9,R*0.35,Math.PI,0); ctx.strokeStyle=COL.blue; ctx.lineWidth=2; ctx.stroke(); ctx.restore(); }
+          for(let i=0;i<n*2;i++){ const x=cx+(Rr()-0.5)*R*1.5+Math.sin(t+i)*4, y=cy+(Rr()-0.6)*R*1.2+Math.cos(t*1.3+i)*4, r=R*0.06; circ(ctx,x,y,r,COL.red,'#fff',1.6); for(let q=0;q<8;q++){ const a=q*Math.PI/4+t*0.5; line(ctx,x+Math.cos(a)*r,y+Math.sin(a)*r,x+Math.cos(a)*r*1.5,y+Math.sin(a)*r*1.5,COL.red,1.2); circ(ctx,x+Math.cos(a)*r*1.6,y+Math.sin(a)*r*1.6,1.3,COL.red,COL.red,1); } } }
+      else if(dis==='cholera'){ ctx.save(); ctx.strokeStyle=COL.yellow; ctx.lineWidth=2.2; ctx.beginPath(); for(let x=-R;x<=R;x+=3){ const y=cy+R*0.55-Math.abs(Math.sin((x/R)*Math.PI*2.5))*R*0.5; x===-R?ctx.moveTo(cx+x,y):ctx.lineTo(cx+x,y); } ctx.stroke(); ctx.restore();
+          const Rr=rng(4); for(let i=0;i<n*2;i++){ const x=cx+(Rr()-0.5)*R*1.5+Math.sin(t*2+i)*5, y=cy-R*0.3+(Rr()-0.5)*R*0.8, a=Rr()*6+t; ctx.save(); ctx.translate(x,y); ctx.rotate(a); ctx.beginPath(); ctx.arc(0,0,R*0.07,-0.9,0.9); ctx.strokeStyle=COL.red; ctx.lineWidth=3; ctx.stroke(); ctx.beginPath(); for(let q=0;q<=10;q++){ const xx=R*0.07+q*2, yy=Math.sin(q-t*14)*2; q?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy);} ctx.strokeStyle=COL.mid; ctx.lineWidth=1; ctx.stroke(); ctx.restore(); } }
+      else { line(ctx,cx-R,cy-R*0.35,cx+R,cy-R*0.35,COL.red,2.4); line(ctx,cx-R,cy+R*0.35,cx+R,cy+R*0.35,COL.red,2.4);
+          const k=Math.round(glu/9); for(let i=0;i<k;i++){ const x=cx-R+((i*37.7+t*40)%(2*R)), y=cy+Math.sin(i*2.1)*R*0.25; ctx.save(); ctx.translate(x,y); ctx.rotate(i); ctx.beginPath(); for(let q=0;q<6;q++){ const a=q*Math.PI/3; q?ctx.lineTo(Math.cos(a)*4,Math.sin(a)*4):ctx.moveTo(4,0);} ctx.closePath(); ctx.strokeStyle=COL.yellow; ctx.lineWidth=1.6; ctx.stroke(); ctx.restore(); } }
+    });
+    textAt(ctx,dis==='diabetes'?'Blood sugar · A':'Inside B',cx,cy-R-12,{align:'center',size:12,weight:700,color:COL.muted});
+  }
+
+  animLoop((dt)=>{
+    t+=dt; const D=DIS[dis];
+    $('#distG').classList.toggle('hidden',!(dis==='tb'||dis==='covid'));
+    springTo(DX,+dR.value,30,9,dt); $('#dV').textContent=fmt(+dR.value,1)+' m';
+    const blocked=D.stop.some(k=>P[k]), wrong=Object.keys(P).filter(k=>P[k]&&!D.stop.includes(k));
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const R=Math.min(h*0.18,w*0.13), icx=w-R-18, icy=R+34;
+    const fy=h*0.88, pxm=Math.min((w*0.97-w*0.04)/4.7,h*0.66/1.95), X0=w*0.04, H=1.6*pxm;
+    const Ax=0.7, Bx=Ax+(dis==='tb'||dis==='covid'?DX.x:2.2), SX=m=>X0+m*pxm, SY=m=>fy-m*pxm;
+    line(ctx,X0-10,fy,SX(4.6),fy,COL.ink,2.4);
+    for(let m=0;m<=4;m++){ line(ctx,SX(m),fy,SX(m),fy+6,COL.mid,1.2); textAt(ctx,m+' m',SX(m),fy+19,{align:'center',size:10,color:COL.muted}); }
+    inf=Math.max(0,inf-dt*0.025);
+    springTo(net,P.net&&dis==='malaria'?1:0,40,10,dt); pond.x=approach(pond.x,P.water?0:1,0.8,dt);
+    const coughing=dis==='tb'||dis==='covid';
+    let Aang=null;
+    if(coughing){
+      cough-=dt; if(cough<=0){ cough=3.2; lean.v+=6;
+        const mouth={x:Ax+0.14,y:1.48};
+        for(let i=0;i<120;i++){ const d=5e-6*Math.exp(Math.random()*Math.log(40)), a=-0.12+gauss()*0.14, sp=9*(0.6+Math.random()*0.5);
+          if(P.mask&&Math.random()<0.88){ caught.push({x:mouth.x+0.03,y:mouth.y+gauss()*0.02,life:0}); continue; }
+          drops.push({x:mouth.x,y:mouth.y,vx:sp*Math.cos(a)*(P.mask?0.25:1),vy:sp*Math.sin(a)*(P.mask?0.25:1),d,d0:d,age:0,st:0}); } }
+      springTo(lean,0,60,6,dt);
+      const ds=dt*0.45;
+      drops.forEach(p=>{ if(p.st!==0){ p.age+=dt; return; }
+        p.age+=ds; const xr=Math.max(0,p.x-Ax-0.14), u=6*Math.exp(-p.age/0.5)*0.3/(xr+0.3)+0.04;
+        const tau=RHO*p.d*p.d/(18*MU), e=Math.exp(-ds/tau);
+        p.vx=u+(p.vx-u)*e; p.vy=-G*tau+(p.vy+G*tau)*e;
+        if(p.d0<60e-6) p.d=Math.max(0.35*p.d0,Math.sqrt(Math.max(0,p.d*p.d-1e-9*ds)));
+        p.x+=p.vx*ds+(p.d<25e-6?gauss()*0.04*Math.sqrt(ds):0); p.y+=p.vy*ds+(p.d<25e-6?gauss()*0.03*Math.sqrt(ds):0);
+        if(p.y<=0){ p.y=0; p.st=1; p.age=0; }
+        if(Math.abs(p.x-Bx)<0.12&&p.y>1.35&&p.y<1.68){
+          if(P.mask&&Math.random()<0.7){ p.st=2; p.age=0; }
+          else if(P.vaccine){ p.st=3; p.age=0; hits.push({x:p.x,y:p.y,life:0,ok:true}); }
+          else { p.st=4; p.age=0; inf=Math.min(1,inf+(dis==='covid'?0.03:0.02)); hits.push({x:p.x,y:p.y,life:0,ok:false}); } } });
+      drops=drops.filter(p=>!(p.st===0&&(p.age>9||p.x>4.6))&&!(p.st>0&&p.age>2.5));
+      drops.forEach(p=>{ const r=Math.max(1.8,p.d*1e6/22); ctx.save(); ctx.globalAlpha=p.st===0?0.85:Math.max(0,1-p.age/2.5); circ(ctx,SX(p.x),SY(p.y),r,p.d<25e-6?COL.red:COL.blue,p.d<25e-6?null:'rgba(47,143,224,0.25)',1.1); ctx.restore(); });
+      caught.forEach(c=>c.life+=dt); caught=caught.filter(c=>c.life<2);
+      Aang=lean.x;
+    }
+    // people
+    const aBody=coughing?{lean:0.1+Aang*0.08,head:Aang*0.05,legs:[[0.05,0.03],[-0.05,0.03]],arms:[[0.4+Aang*0.1,1.6],[0.1,0.2]]}:dis==='cholera'?{hy:0.12,lean:1.35,legs:[[1.5,0.1],[1.5,0.1]],arms:[[1.4,0.3],[1.4,0.3]]}:dis==='diabetes'&&P.diet&&(t%6)<3.5?POSE.run(t*10):POSE.stand(t);
+    let A;
+    if(dis==='cholera'){ // A lies sick at home, drain from the house leads to the well
+      house(ctx,SX(0.55),fy,1.1*pxm,1.05*pxm,COL.ink);
+      A=null;
+    } else A=person(ctx,SX(Ax),fy,H,aBody,{face:1,mood:dis==='diabetes'?0.2:-0.5,col:COL.ink});
+    if(A&&dis!=='diabetes') sick(ctx,A,H);
+    if(A&&coughing&&P.mask){ ctx.save(); ctx.beginPath(); ctx.ellipse(A.hd.x+A.hr*0.55,A.hd.y+A.hr*0.35,A.hr*0.45,A.hr*0.5,0,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.green; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+      caught.forEach(c=>circ(ctx,A.hd.x+A.hr*0.8,A.hd.y+A.hr*0.3+(c.y-1.48)*pxm,1.4,COL.blue,COL.blue,1)); }
+    const bSick=inf>0.7;
+    const bPose=dis==='cholera'?null:POSE.stand(t+2);
+    let B=null;
+    if(bPose){ B=person(ctx,SX(Bx),fy,H,bSick?{lean:0.18,head:0.25,legs:[[0.05,0.1],[-0.05,0.1]],arms:[[0.5,1.4],[0.4,1.4]]}:bPose,{face:-1,mood:bSick?-0.6:0.6,col:COL.muted});
+      if(bSick) sick(ctx,{hd:{x:B.hd.x+B.hr*2.4,y:B.hd.y},hr:B.hr},H);
+      if(coughing&&P.mask){ ctx.save(); ctx.beginPath(); ctx.ellipse(B.hd.x-B.hr*0.55,B.hd.y+B.hr*0.35,B.hr*0.45,B.hr*0.5,0,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.green; ctx.lineWidth=2; ctx.stroke(); ctx.restore(); }
+      if(P.vaccine&&(coughing)){ ctx.save(); ctx.setLineDash([6,5]); ctx.lineDashOffset=-t*20; ctx.beginPath(); ctx.ellipse(B.hip.x,(B.hd.y+fy)/2,H*0.26,H*0.58,0,0,Math.PI*2); ctx.strokeStyle=COL.green; ctx.lineWidth=2; ctx.stroke(); ctx.restore(); } }
+    hits.forEach(q=>q.life+=dt); hits=hits.filter(q=>q.life<1);
+    hits.forEach(q=>{ ctx.save(); ctx.globalAlpha=1-q.life; if(q.ok){ for(let i=0;i<4;i++){ const a=i*Math.PI/2+q.life*3, r=6+q.life*16; const x=SX(q.x)+Math.cos(a)*r, y=SY(q.y)+Math.sin(a)*r; line(ctx,x,y,x+Math.cos(a)*5,y+Math.sin(a)*5,COL.green,2); line(ctx,x+Math.cos(a)*5,y+Math.sin(a)*5,x+Math.cos(a+0.6)*9,y+Math.sin(a+0.6)*9,COL.green,2); line(ctx,x+Math.cos(a)*5,y+Math.sin(a)*5,x+Math.cos(a-0.6)*9,y+Math.sin(a-0.6)*9,COL.green,2); } }
+      else circ(ctx,SX(q.x),SY(q.y),4+q.life*14,COL.red,null,2); ctx.restore(); });
+
+    if(dis==='malaria'){
+      // pond breeds mosquitoes; nets are a mesh tent around B
+      const px=SX(1.6+(Bx-1.6)*0.5), pr=0.5*pxm*pond.x;
+      if(pond.x>0.03){ ctx.save(); ctx.beginPath(); ctx.ellipse(px,fy+2,pr,pr*0.18,0,0,Math.PI*2); ctx.fillStyle='rgba(47,143,224,0.2)'; ctx.fill(); ctx.strokeStyle=COL.blue; ctx.lineWidth=2; ctx.stroke(); ctx.restore(); }
+      else { ctx.save(); ctx.strokeStyle='#8a6a3d'; ctx.lineWidth=1.2; ctx.beginPath(); for(let i=0;i<5;i++){ ctx.moveTo(px-24+i*12,fy-1); ctx.lineTo(px-18+i*12,fy+4); } ctx.stroke(); ctx.restore(); }
+      const want=P.water?0:3;
+      if(mos.length<want&&Math.random()<dt*0.8) mos.push({x:1.6+(Bx-1.6)*0.5,y:0.1,vx:0,vy:0,st:'toA',tm:0,par:false,tries:0,dead:0});
+      if(mos.length>want&&!mos.some(m=>m.dead)) { const m=mos.find(q=>!q.dead); if(m) m.dead=0.001; }
+      const nL=Bx-0.45, nR=Bx+0.45, nT=1.95;
+      if(net.x>0.02){ ctx.save(); ctx.globalAlpha=clamp(net.x,0,1); ctx.strokeStyle=COL.green; ctx.lineWidth=1.6;
+        ctx.beginPath(); ctx.moveTo(SX(nL),fy); ctx.lineTo(SX(nL),SY(nT)); ctx.lineTo(SX(nR),SY(nT)); ctx.lineTo(SX(nR),fy); ctx.stroke();
+        ctx.lineWidth=0.7; ctx.beginPath(); for(let m=nL;m<=nR;m+=0.08){ ctx.moveTo(SX(m),SY(nT)); ctx.lineTo(SX(m),fy); } for(let y=0;y<=nT;y+=0.1){ ctx.moveTo(SX(nL),SY(y)); ctx.lineTo(SX(nR),SY(y)); } ctx.stroke(); ctx.restore(); }
+      mos.forEach(m=>{
+        if(m.dead){ m.dead+=dt; m.vy-=G*0.3*dt; m.y=Math.max(0,m.y+m.vy*dt); }
+        else {
+          let tx,ty;
+          if(m.st==='toA'){ tx=Ax+0.15; ty=1.1; } else if(m.st==='toB'){ tx=Bx-0.12; ty=1.1; } else if(m.st==='home'){ tx=1.6+(Bx-1.6)*0.5; ty=0.3; } else { tx=m.bx; ty=m.by; }
+          const dx=tx-m.x, dy=ty-m.y, dist=Math.hypot(dx,dy), sp=0.9;
+          if(m.st==='biteA'||m.st==='biteB'){ m.tm+=dt; m.x=tx+Math.sin(t*20)*0.005; m.y=ty; if(m.tm>1.2){ if(m.st==='biteA'){ m.par=true; m.st='toB'; } else { m.st="home"; inf=Math.min(1,inf+0.35); hits.push({x:m.x,y:m.y,life:0,ok:false}); } m.tm=0; } }
+          else { m.vx+=((dx/Math.max(dist,0.05))*sp-m.vx)*3*dt+gauss()*3*Math.sqrt(dt); m.vy+=((dy/Math.max(dist,0.05))*sp-m.vy)*3*dt+gauss()*3*Math.sqrt(dt); m.x+=m.vx*dt; m.y+=m.vy*dt;
+            if(net.x>0.5&&m.x>nL-0.02&&m.x<nR+0.02&&m.y<nT){ m.x=m.vx>0?nL-0.03:nR+0.03; m.vx=-m.vx*0.8; m.tries++; hits.push({x:m.x,y:m.y,life:0.5,ok:true}); if(m.tries>3){ m.st='home'; m.tries=0; } }
+            if(dist<0.06){ if(m.st==='toA'){ m.st='biteA'; m.bx=tx; m.by=ty; } else if(m.st==='toB'){ m.st='biteB'; m.bx=tx; m.by=ty; } else if(m.st==='home'){ m.st='toA'; m.par=false; } m.tm=0; } } }
+        mosquito(ctx,SX(m.x),SY(m.y),Math.max(6,pxm*0.07),t+m.x,m.dead?COL.mid:COL.ink,m.dead?Math.PI*0.5:0);
+        if(m.par&&!m.dead) circ(ctx,SX(m.x)-3,SY(m.y)+3,2.6,COL.red,COL.red,1); });
+      mos=mos.filter(m=>!(m.dead>2.5));
+    }
+    if(dis==='cholera'){
+      // open drain from A's house → well; B lifts the bucket, (boils), drinks
+      const wx=2.3, wr=0.35;
+      ctx.save(); ctx.strokeStyle='#8a6a3d'; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(SX(1.1),fy-3); ctx.lineTo(SX(wx-wr),fy-3); ctx.stroke(); ctx.restore();
+      for(let i=0;i<6;i++){ const x=SX(1.1)+((i/6+t*0.15)%1)*(SX(wx-wr)-SX(1.1)); line(ctx,x,fy-6,x+8,fy-6,'#8a6a3d',1.6); }
+      rect(ctx,SX(wx-wr),fy-0.6*pxm,wr*2*pxm,0.6*pxm,COL.ink,'#fff',2.4);
+      ctx.save(); ctx.fillStyle='rgba(47,143,224,0.18)'; ctx.fillRect(SX(wx-wr)+2,fy-0.25*pxm,wr*2*pxm-4,0.25*pxm-2); ctx.restore();
+      line(ctx,SX(wx-wr)-6,fy-0.6*pxm,SX(wx-wr)-6,fy-1.5*pxm,COL.ink,2.4); line(ctx,SX(wx+wr)+6,fy-0.6*pxm,SX(wx+wr)+6,fy-1.5*pxm,COL.ink,2.4); line(ctx,SX(wx-wr)-10,fy-1.5*pxm,SX(wx+wr)+10,fy-1.5*pxm,COL.ink,3);
+      if(Math.random()<dt*3) germs.push({u:0,y:0,where:'drain'});
+      germs.forEach(g=>{ if(g.where==='drain'){ g.u+=dt*0.15; if(g.u>=1){ g.where='well'; g.x=wx-wr+Math.random()*wr*2; g.y=0.05+Math.random()*0.15; } } else { g.x+=gauss()*0.05*Math.sqrt(dt); g.x=clamp(g.x,wx-wr+0.03,wx+wr-0.03); } });
+      if(germs.length>40) germs.splice(0,germs.length-40);
+      germs.forEach(g=>{ const X=g.where==='drain'?lerp(SX(1.1),SX(wx-wr),g.u):SX(g.x), Y=g.where==='drain'?fy-6:SY(g.y); ctx.save(); ctx.translate(X,Y); ctx.beginPath(); ctx.arc(0,0,3,-0.9,0.9); ctx.strokeStyle=COL.red; ctx.lineWidth=2; ctx.stroke(); ctx.restore(); });
+      // sick A lying in the house doorway
+      person(ctx,SX(0.55)+0.25*pxm,fy,H*0.8,{hy:0.08,lean:1.5,head:0.1,legs:[[1.55,0.05],[1.5,0.05]],arms:[[1.2,0.3],[1.4,0.3]]},{face:-1,mood:-0.6});
+      // B's cycle: lower bucket → lift → (boil) → drink
+      const Bxc=3.35; pot.cyc+=dt; const cyc=pot.cyc%(P.boil?10:6.5), rope=SX(wx), up=cyc>2.5;
+      springTo(bucket,cyc<2?0.95:0,20,6,dt);
+      const byy=SY(1.45)+bucket.x*1.2*pxm; line(ctx,rope,SY(1.5),rope,byy,COL.mid,1.4); rect(ctx,rope-8,byy,16,14,COL.ink,'#fff',2);
+      if(!up) pot.T=approach(pot.T,28,2,dt);
+      const potX=SX(3.0);
+      if(P.boil){ flame(ctx,potX,fy-4,0.4*pxm,cyc>3&&cyc<7.5?1:0.2,t);
+        rect(ctx,potX-0.2*pxm,fy-0.45*pxm,0.4*pxm,0.3*pxm,COL.ink,'#fff',2.4);
+        if(cyc>3&&cyc<7.5) pot.T=Math.min(100,pot.T+(100-pot.T)*(1-Math.exp(-dt*1.6))+dt*4);
+        if(pot.T>95) for(let i=0;i<4;i++){ const ph=(t*1.5+i/4)%1; circ(ctx,potX-0.12*pxm+i*0.08*pxm,fy-0.18*pxm-ph*0.2*pxm,2+ph*2,COL.blue,null,1.2); }
+        thermo(ctx,potX+0.32*pxm,fy-0.95*pxm,fy-0.3*pxm,pot.T/110,COL.ink,COL.red);
+        textAt(ctx,Math.round(pot.T)+' °C',potX+0.32*pxm,fy-1.02*pxm,{align:'center',size:11,weight:700,color:COL.red});
+        const live=pot.T<70?1:Math.max(0,1-(pot.T-70)/25); for(let i=0;i<5;i++){ ctx.save(); ctx.globalAlpha=live; ctx.translate(potX-0.12*pxm+i*0.06*pxm,fy-0.3*pxm+Math.sin(t*3+i)*3); ctx.beginPath(); ctx.arc(0,0,3,-0.9,0.9); ctx.strokeStyle=COL.red; ctx.lineWidth=2; ctx.stroke(); ctx.restore(); } }
+      const drink=cyc>(P.boil?8:4)&&cyc<(P.boil?9.5:6);
+      if(drink&&!pot.drank){ pot.drank=true; if(!P.boil||pot.T<90) { inf=Math.min(1,inf+0.4); } }
+      if(!drink) pot.drank=false;
+      const arm=drink?[2.6,1.8]:up?[1.3,0.4]:[0.9,0.6];
+      const Bp=person(ctx,SX(Bxc),fy,H,{lean:drink?-0.1:0.05,head:drink?-0.3:0,legs:[[0.05,0.03],[-0.05,0.03]],arms:[arm,[0.2,0.2]]},{face:-1,mood:bSick?-0.6:0.5,col:COL.muted});
+      if(drink) rect(ctx,Bp.hand.x-5,Bp.hand.y-12,10,14,COL.blue,'rgba(47,143,224,0.2)',1.6);
+      if(bSick) sick(ctx,{hd:{x:Bp.hd.x+Bp.hr*2.4,y:Bp.hd.y},hr:Bp.hr},H);
+      B=Bp;
+    }
+    if(dis==='diabetes'){
+      glu=approach(glu,P.diet?110:180,0.3,dt);
+      textAt(ctx,'Nothing passes from A to B',(SX(Ax)+SX(Bx))/2,SY(2.05),{align:'center',size:13,weight:700,color:COL.green});
+      line(ctx,(SX(Ax)+SX(Bx))/2,SY(1.9),(SX(Ax)+SX(Bx))/2,fy,COL.green,1.4,[6,5]);
+      textAt(ctx,Math.round(glu)+' mg/dL',SX(Ax),SY(1.95),{align:'center',size:12,weight:700,color:glu>140?COL.red:COL.green});
+    }
+    textAt(ctx,'A',SX(Ax),fy+36,{align:'center',size:13,weight:700}); textAt(ctx,'B',SX(dis==='cholera'?3.35:Bx),fy+36,{align:'center',size:13,weight:700,color:COL.muted});
+    if(coughing){ line(ctx,SX(Ax),SY(1.95),SX(Bx),SY(1.95),COL.yellow,1.6); arrowHead(ctx,SX(Ax),SY(1.95),Math.PI,COL.yellow,6); arrowHead(ctx,SX(Bx),SY(1.95),0,COL.yellow,6); textAt(ctx,fmt(DX.x,1)+' m',(SX(Ax)+SX(Bx))/2,SY(1.95)-6,{align:'center',size:12,weight:700,color:COL.yellow}); }
+    inset(ctx,icx,icy,R,dt);
+    $('#r1').textContent=D.path; $('#r2').textContent=D.route;
+    const r3=$('#r3'); if(dis==='diabetes'){ r3.textContent='No chain'; r3.style.color='var(--f-green)'; } else { r3.textContent=blocked?'Broken ✓':'Open'; r3.style.color=blocked?'var(--f-green)':'var(--f-red)'; }
+    const r4=$('#r4'); if(dis==='diabetes'){ r4.textContent='Cannot catch it'; r4.style.color='var(--f-green)'; } else { r4.textContent=inf>0.7?'Infected':inf>0.25?'Exposed':'Healthy'; r4.style.color=inf>0.7?'var(--f-red)':inf>0.25?'var(--f-yellow)':'var(--f-green)'; }
+    const fb=$('#fb');
+    if(wrong.length){ fb.className='fb warn'; fb.textContent=wrong.map(k=>PREV[k].replace(/^\S+\s/,'')).join(', ')+' — does not block this route'; }
+    else if(blocked&&dis!=='diabetes'){ fb.className='fb ok'; fb.textContent='Route blocked'; }
+    else if(dis==='diabetes'&&P.diet){ fb.className='fb ok'; fb.textContent='Blood sugar controlled'; }
+    else fb.className='fb hidden';
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   3.5 LIFESTYLE SURVEY — risk factors for non-communicable diseases
+   Risk score = 5 + Σ (factor weights), clamped 5–95 (relative index).
+   Each family member acts out the habit that is switched on; the bars
+   spring (k = 90, c = 9) to the new score so a change visibly lands.
+   Skipping rope hop is a real projectile: h = v·t − ½·g·t², 0.4 s airtime.
+   ===================================================================== */
+const FACT=[
+  {id:'diet',t:'🍔 Junk / sugary diet',r:[40,35,20,0]},
+  {id:'sed', t:'🛋 Little exercise',   r:[35,30,30,0]},
+  {id:'str', t:'🧠 High stress',       r:[10,15,35,10]},
+  {id:'smk', t:'🚬 Smoking at home',   r:[-5,10,25,50]},
+  {id:'pol', t:'🏭 Near a factory',    r:[0,0,5,40]}];
+const RISKS=[['Obesity',COL.yellow],['Diabetes',COL.blue],['High BP',COL.red],['Asthma',COL.muted]];
+function buildA5(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label style="margin-bottom:6px;">Family</label>
+      <div class="toggle-group" id="famB"><button class="toggle-btn active" data-f="0">Sharma</button><button class="toggle-btn" data-f="1">Patel</button><button class="toggle-btn" data-f="2">Sen</button></div></div>
+    <div class="control-group"><label style="margin-bottom:4px;">Their habits</label>
+      <div class="chip-wrap" id="fac">${FACT.map(f=>`<button class="chip-btn" data-k="${f.id}">${f.t}</button>`).join('')}</div></div>
+    <button class="toggle-btn navy" id="rec" style="margin-top:0;padding:10px;flex:0 0 auto;">📋 Record in survey</button>
+    <div class="control-group"><table class="log"><thead><tr><th>Family</th><th>Top risk</th><th>Score</th></tr></thead><tbody id="log"></tbody></table>
+      <div class="hint" id="lh">Record each family to fill the table.</div></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas');
+  const NAMES=['Sharma','Patel','Sen'];
+  const fam=[{diet:1,sed:1,str:1,smk:0,pol:0},{diet:0,sed:0,str:1,smk:0,pol:0},{diet:1,sed:0,str:0,smk:1,pol:1}];
+  let cur=0, t=0; const bars=RISKS.map(()=>({x:5,v:0})), log={}, smoke=[], fsmoke=[];
+  function paint(){ wrap.querySelectorAll('#fac .chip-btn').forEach(b=>b.classList.toggle('active',!!fam[cur][b.dataset.k])); }
+  toggleWire(wrap.querySelectorAll('#famB button'),b=>{ cur=+b.dataset.f; paint(); });
+  wrap.querySelectorAll('#fac .chip-btn').forEach(b=>b.onclick=()=>{ fam[cur][b.dataset.k]=fam[cur][b.dataset.k]?0:1; paint(); });
+  paint();
+  const score=f=>RISKS.map((_,i)=>clamp(5+FACT.reduce((s,x)=>s+(f[x.id]?x.r[i]:0),0),5,95));
+  $('#rec').onclick=()=>{ const s=score(fam[cur]); let k=0; s.forEach((v,i)=>{ if(v>s[k]) k=i; }); log[cur]={top:RISKS[k][0],v:s[k]};
+    $('#log').innerHTML=Object.keys(log).map(i=>{ const L=log[i]; return `<tr><td>${NAMES[i]}</td><td>${L.v>40?L.top:'—'}</td><td class="${L.v>60?'r-bad':L.v>35?'r-warn':'r-ok'}">${Math.round(L.v)}</td></tr>`; }).join('');
+    $('#lh').classList.toggle('hidden',Object.keys(log).length===3); };
+
+  animLoop((dt)=>{
+    t+=dt; const F=fam[cur], S=score(F);
+    bars.forEach((b,i)=>springTo(b,S[i],90,9,dt));
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const x0=w*0.03, x1=w*0.64, fy=h*0.86, H=Math.min(h*0.36,(x1-x0)*0.27), cy=Math.max(h*0.26,fy-H*2.1);
+    // sky: slow clouds, sun
+    circ(ctx,x1-(x1-x0)*0.1,h*0.1,14,COL.yellow,'#fff',2.2);
+    for(let i=0;i<2;i++){ const cxl=x0+(((t*8+i*260)%((x1-x0)+120))-60), cyl=h*(0.08+i*0.06); ctx.save(); ctx.strokeStyle='#c2d1e5'; ctx.lineWidth=2; ctx.beginPath(); ctx.arc(cxl,cyl,12,Math.PI*0.9,Math.PI*2); ctx.arc(cxl+18,cyl-4,15,Math.PI,Math.PI*2); ctx.arc(cxl+36,cyl,11,Math.PI,Math.PI*2.1); ctx.stroke(); ctx.restore(); }
+    // house section
+    ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=3; ctx.lineJoin='round'; ctx.beginPath(); ctx.moveTo(x0,fy); ctx.lineTo(x0,cy); ctx.lineTo((x0+x1)/2,cy-h*0.14); ctx.lineTo(x1,cy); ctx.lineTo(x1,fy); ctx.stroke(); ctx.restore();
+    line(ctx,x0-10,fy,x1+10,fy,COL.ink,3); line(ctx,x0,cy,x1,cy,COL.ink,2);
+    textAt(ctx,'The '+NAMES[cur]+' family',(x0+x1)/2,cy-h*0.03,{align:'center',size:14,weight:700});
+    // window: factory with smoke drifting in, or a tree
+    const wx=x0+(x1-x0)*0.1, wy=cy+(fy-cy)*0.1, ww=(x1-x0)*0.16, wh=(fy-cy)*0.3;
+    rect(ctx,wx,wy,ww,wh,COL.ink,'#f6f9fc',2.4); line(ctx,wx+ww/2,wy,wx+ww/2,wy+wh,COL.ink,1.6);
+    ctx.save(); ctx.beginPath(); ctx.rect(wx,wy,ww,wh); ctx.clip();
+    if(F.pol){ rect(ctx,wx+ww*0.15,wy+wh*0.55,ww*0.5,wh*0.45,COL.ink,'#fff',1.6); rect(ctx,wx+ww*0.5,wy+wh*0.25,ww*0.1,wh*0.35,COL.ink,'#fff',1.6); }
+    else tree(ctx,wx+ww*0.5,wy+wh,wh*0.9,t,COL.green);
+    ctx.restore();
+    if(F.pol&&Math.random()<dt*6) fsmoke.push({x:wx+ww*0.55,y:wy+wh*0.25,vx:14+Math.random()*10,vy:-6,r:3,l:0});
+    for(let i=fsmoke.length-1;i>=0;i--){ const p=fsmoke[i]; p.l+=dt; p.x+=p.vx*dt; p.y+=p.vy*dt+gauss()*8*Math.sqrt(dt); p.vy+=4*dt; p.r+=3*dt; if(p.l>8||p.x>x1-6){ fsmoke.splice(i,1); continue; } ctx.save(); ctx.globalAlpha=0.5*(1-p.l/8); circ(ctx,p.x,p.y,p.r,COL.mid,null,1.4); ctx.restore(); }
+    const slot=i=>x0+(x1-x0)*(0.24+i*0.31);
+    // 1 · father: stressed at laptop (red scribble) or calm stretching
+    { const X=slot(0);
+      if(F.str){ const dy=fy-H*0.42; line(ctx,X+H*0.05,dy,X+H*0.6,dy,COL.ink,3); line(ctx,X+H*0.55,dy,X+H*0.55,fy,COL.ink,2);
+        ctx.save(); ctx.beginPath(); ctx.moveTo(X+H*0.2,dy-2); ctx.lineTo(X+H*0.35,dy-H*0.2); ctx.lineTo(X+H*0.42,dy-H*0.19); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.stroke(); ctx.restore();
+        const p=person(ctx,X-H*0.25,fy,H,POSE.sit([2.9,1.6+0.1*Math.sin(t*3)],[1.1,0.8+0.1*Math.sin(t*18)],0.18),{face:1,mood:-0.7});
+        ctx.save(); ctx.strokeStyle=COL.red; ctx.lineWidth=1.6; ctx.beginPath(); for(let q=0;q<=40;q++){ const a=q*0.7+t*5, r=H*0.06+Math.sin(q*1.3)*H*0.02; const xx=p.hd.x+Math.cos(a)*r*1.4, yy=p.hd.y-H*0.2+Math.sin(a)*r*0.6; q?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy);} ctx.stroke(); ctx.restore();
+        if(F.smk) cig(ctx,p.hand2,H); }
+      else { const u=0.5-0.5*Math.cos(t*0.8); const p=person(ctx,X,fy,H,{legs:[[0.15,0.02],[-0.15,0.02]],arms:[[0.3+u*2.6,0.1],[-0.3-u*2.6,0.1]]},{face:1,mood:0.7}); if(F.smk) cig(ctx,p.hand2,H); } }
+    function cig(ctx,hd,H){ line(ctx,hd.x,hd.y,hd.x+H*0.08,hd.y-H*0.01,COL.mid,3); circ(ctx,hd.x+H*0.085,hd.y-H*0.01,2.2,COL.red,COL.red,1);
+      if(Math.random()<dt*5) smoke.push({x:hd.x+H*0.09,y:hd.y-H*0.02,vx:18+Math.random()*16,vy:-10,r:2,l:0}); }
+    for(let i=smoke.length-1;i>=0;i--){ const p=smoke[i]; p.l+=dt; p.x+=p.vx*dt; p.y+=p.vy*dt+gauss()*6*Math.sqrt(dt); p.vy+=2*dt; p.r+=2.5*dt; if(p.l>7||p.x>x1-6){ smoke.splice(i,1); continue; } ctx.save(); ctx.globalAlpha=0.55*(1-p.l/7); ctx.beginPath(); ctx.arc(p.x,p.y,p.r,0,Math.PI*1.5); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.4; ctx.stroke(); ctx.restore(); }
+    // 2 · mother: junk food or fruit & vegetables at the table
+    { const X=slot(1), ty=fy-H*0.45; line(ctx,X,ty,X+H*0.65,ty,COL.ink,3); line(ctx,X+H*0.6,ty,X+H*0.6,fy,COL.ink,2);
+      const ph=0.5-0.5*Math.cos(t*Math.PI*2*0.5);
+      person(ctx,X-H*0.3,fy,H*1.05,POSE.sit([0.95+0.45*ph,0.9+1.5*ph],[1.2,0.7],0.12),{face:1,mood:F.diet?0.2:0.6,belly:F.diet?0.07:0.035});
+      if(F.diet){ ctx.save(); ctx.strokeStyle=COL.yellow; ctx.lineWidth=2.2; const bx=X+H*0.2;
+        ctx.beginPath(); ctx.arc(bx,ty-H*0.05,H*0.07,Math.PI,0); ctx.stroke(); line(ctx,bx-H*0.075,ty-H*0.04,bx+H*0.075,ty-H*0.04,COL.red,2.4); line(ctx,bx-H*0.07,ty-H*0.015,bx+H*0.07,ty-H*0.015,COL.yellow,2.4);
+        ctx.strokeStyle=COL.red; ctx.strokeRect(X+H*0.38,ty-H*0.16,H*0.08,H*0.16); line(ctx,X+H*0.43,ty-H*0.16,X+H*0.46,ty-H*0.24,COL.ink,1.6); ctx.restore(); }
+      else { const bx=X+H*0.25; ctx.save(); ctx.beginPath(); ctx.arc(bx,ty-H*0.03,H*0.1,0,Math.PI); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+        circ(ctx,bx-H*0.04,ty-H*0.06,H*0.035,COL.red,null,2); circ(ctx,bx+H*0.035,ty-H*0.06,H*0.035,COL.green,null,2); ctx.save(); ctx.beginPath(); ctx.ellipse(bx,ty-H*0.1,H*0.05,H*0.02,-0.5,0,Math.PI*2); ctx.strokeStyle=COL.yellow; ctx.lineWidth=2; ctx.stroke(); ctx.restore(); } }
+    // 3 · child: TV on the sofa, or skipping rope (real hop arc)
+    { const X=slot(2);
+      if(F.sed){ const sy=fy-H*0.22; line(ctx,X-H*0.5,sy,X+H*0.1,sy,COL.ink,3); line(ctx,X-H*0.5,fy,X-H*0.5,sy-H*0.3,COL.ink,3);
+        const tvx=X+H*0.55; rect(ctx,tvx-H*0.02,fy-H*0.75,H*0.3,H*0.22,COL.ink,'#fff',2.4); line(ctx,tvx+H*0.13,fy-H*0.53,tvx+H*0.13,fy,COL.ink,2);
+        const fl=0.5+0.5*Math.sin(t*11)*Math.sin(t*4.1); ctx.save(); ctx.globalAlpha=0.2+0.5*fl; ctx.fillStyle=COL.blue; ctx.fillRect(tvx,fy-H*0.73,H*0.26,H*0.18); ctx.restore();
+        person(ctx,X-H*0.25,fy,H*0.8,{hy:0.28,lean:-0.25,head:0.2,legs:[[1.5,1.5],[1.45,1.45]],arms:[[0.6,1.4],[0.4,0.9+0.05*Math.sin(t*20)]]},{face:1,mood:0,belly:0.06}); }
+      else { const T=0.5, u=(t%T)/T, v0=9.8*T/2*0.35, hop=Math.max(0,v0*u*T-0.5*9.8*0.35*(u*T)*(u*T))*H*1.4; // ½-scale gravity keeps the hop readable
+        const p=person(ctx,X,fy-hop,H*0.8,{legs:[[0.15,0.3],[0.05,0.3]],arms:[[0.5,-0.2],[0.5,-0.2]]},{face:1,mood:0.8});
+        const ang=u*Math.PI*2, rx=H*0.34, ry=H*0.45, cxr=p.hip.x, cyr=p.hip.y-H*0.08;
+        ctx.save(); ctx.strokeStyle=COL.green; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(p.hand.x,p.hand.y);
+        ctx.quadraticCurveTo(cxr+Math.sin(ang)*rx*0.2,cyr+Math.cos(ang)*ry*1.3,p.hand2.x+2,p.hand2.y); ctx.stroke(); ctx.restore(); } }
+    // risk bars
+    const bx0=w*0.71, bx1=w*0.98, by0=h*0.2, by1=h*0.86, bw=(bx1-bx0)/4;
+    textAt(ctx,'Risk index',bx0,by0-18,{size:13,weight:700});
+    for(let v=0;v<=100;v+=25){ const y=by1-(by1-by0)*v/100; line(ctx,bx0,y,bx1,y,'#eef2f8',1); textAt(ctx,String(v),bx0-4,y+4,{align:'right',size:10,color:COL.muted}); }
+    RISKS.forEach(([n,c],i)=>{ const v=clamp(bars[i].x,0,110), x=bx0+bw*i+bw*0.18, ww=bw*0.64, y=by1-(by1-by0)*v/100;
+      ctx.save(); ctx.fillStyle=c; ctx.globalAlpha=0.25; ctx.fillRect(x,y,ww,by1-y); ctx.restore(); line(ctx,x,y,x+ww,y,c,3); line(ctx,x,y,x,by1,c,1.6); line(ctx,x+ww,y,x+ww,by1,c,1.6);
+      textAt(ctx,String(Math.round(S[i])),x+ww/2,y-6,{align:'center',size:12,weight:700,color:c});
+      textAt(ctx,n,x+ww/2,by1+16,{align:'center',size:11,weight:700,color:c}); });
+    line(ctx,bx0,by1,bx1,by1,COL.ink,2);
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   3.6 VILLAGE HEALTH CAMPAIGN — ₹10,000 budget, 60 days
+   Each campaign cuts a disease's cases by its impact:
+       cases = base × Π(1 − impact)      (base: cholera 150, malaria 120, TB 80)
+   Cases arrive on an outbreak curve: cumulative C(d) ∝ 1/(1 + e^−(d−24)/5),
+   each person ill for 10 days → currently ill I(d) = C(d) − C(d − 10).
+   Check: water + mosquito control + BCG camp = ₹9,500 →
+       150·0.15 + 120·0.10 + 80·0.15 = 22.5 + 12 + 12 ≈ 47 cases (< 100 ✓).
+   Village of 1,200 drawn as 70 walkers (1 walker ≈ 17 people).
+   1 day = 0.25 s.
+   ===================================================================== */
+const CAMP=[
+  {id:'water', n:'🚰 Clean water supply',  cost:3000, imp:{ch:85}},
+  {id:'vector',n:'🦟 Mosquito spraying',    cost:2500, imp:{ma:90}},
+  {id:'vacc',  n:'💉 BCG vaccine camp',     cost:4000, imp:{tb:85}},
+  {id:'drain', n:'🕳 Cover open drains',    cost:2000, imp:{ch:30,ma:20}},
+  {id:'post',  n:'📢 Hygiene posters',      cost:1000, imp:{ch:15,tb:10}},
+  {id:'trees', n:'🌳 Plant trees',          cost:1500, imp:{tb:15}}];
+const BASE={ch:150,ma:120,tb:80}, DCOL={ch:COL.blue,ma:COL.red,tb:COL.yellow}, DNAME={ch:'Cholera',ma:'Malaria',tb:'TB'};
+function outbreak(d){ const L=x=>1/(1+Math.exp(-(x-24)/5)); return d<=0?0:(L(d)-L(0))/(L(60)-L(0)); }
+function buildA6(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label>Budget left <span class="val" id="bud">₹10,000</span></label>
+      <div class="chip-wrap" id="cmp">${CAMP.map(c=>`<button class="chip-btn" data-c="${c.id}">${c.n} · ₹${c.cost/1000}k</button>`).join('')}</div>
+      <div class="fb hidden" id="fb"></div></div>
+    <div class="toggle-group" style="margin-top:0"><button class="toggle-btn play" id="go" style="padding:10px;">▶ Run 60 days</button><button class="toggle-btn" id="rst" style="padding:10px;">↺ Reset</button></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Cholera</div><div class="rval" id="r1" style="color:var(--f-blue)">—</div></div>
+      <div class="rcard"><div class="rlabel">Malaria</div><div class="rval" id="r2" style="color:var(--f-red)">—</div></div>
+      <div class="rcard"><div class="rlabel">TB</div><div class="rval" id="r3" style="color:var(--f-yellow)">—</div></div>
+      <div class="rcard"><div class="rlabel">Total cases</div><div class="rval" id="r4">—</div></div></div>
+      <div class="fb hidden" id="fb2"></div></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas');
+  const sel={}; CAMP.forEach(c=>sel[c.id]=false);
+  let t=0, day=0, run=false, locked=null, budget=10000;
+  const grow={}; CAMP.forEach(c=>grow[c.id]={x:0,v:0});
+  const R=rng(11);
+  const HOUSES=[[0.34,0.32],[0.46,0.3],[0.62,0.42],[0.36,0.62],[0.5,0.72],[0.66,0.66],[0.78,0.5],[0.26,0.46]];
+  const SPOTS=[[0.15,0.24],[0.5,0.5],[0.86,0.16],...HOUSES];
+  const ag=Array.from({length:70},(_,i)=>{ const s=SPOTS[Math.floor(R()*SPOTS.length)]; return {x:s[0]+(R()-0.5)*0.05,y:s[1]+(R()-0.5)*0.05,tx:s[0],ty:s[1],sp:0.03+R()*0.03,ph:R()*6,key:R()}; });
+  const order=ag.map((a,i)=>i).sort((a,b)=>ag[a].key-ag[b].key);
+  const fog=[];
+  function cases(s){ const c={...BASE}; CAMP.forEach(k=>{ if(s[k.id]) Object.keys(k.imp).forEach(d=>c[d]*=1-k.imp[d]/100); }); return c; }
+  function paintB(){ $('#bud').textContent='₹'+budget.toLocaleString('en-IN'); wrap.querySelectorAll('#cmp .chip-btn').forEach(b=>b.classList.toggle('active',sel[b.dataset.c])); }
+  wrap.querySelectorAll('#cmp .chip-btn').forEach(b=>b.onclick=()=>{ const c=CAMP.find(x=>x.id===b.dataset.c), fb=$('#fb');
+    if(sel[c.id]){ sel[c.id]=false; budget+=c.cost; fb.className='fb hidden'; }
+    else if(budget<c.cost){ fb.className='fb bad'; fb.textContent='Not enough budget — remove a campaign first'; return; }
+    else { sel[c.id]=true; budget-=c.cost; fb.className='fb hidden'; }
+    paintB(); });
+  $('#go').onclick=()=>{ locked=cases(sel); day=0; run=true; };
+  $('#rst').onclick=()=>{ CAMP.forEach(c=>sel[c.id]=false); budget=10000; locked=null; day=0; run=false; paintB(); $('#fb2').className='fb hidden'; };
+  paintB();
+
+  animLoop((dt)=>{
+    t+=dt;
+    if(run){ day+=dt*4; if(day>=60){ day=60; run=false; } }
+    CAMP.forEach(c=>springTo(grow[c.id],sel[c.id]?1:0,50,8,dt));
+    const now=locked||BASE;
+    const C={}, I={}; Object.keys(BASE).forEach(k=>{ C[k]=now[k]*outbreak(day); I[k]=now[k]*(outbreak(day)-outbreak(day-10)); });
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const mx=12, my=12, mw=w*0.6, mh=h-24, M=(u,v)=>[mx+u*mw,my+v*mh], sc=Math.min(mw,mh);
+    ctx.save(); rrect(ctx,mx,my,mw,mh,12); ctx.fillStyle='#fbfcfa'; ctx.fill(); ctx.strokeStyle='#dbe4f0'; ctx.lineWidth=1.4; ctx.stroke(); ctx.clip();
+    // road + dust (TB/lung irritant), trees cut the dust
+    const [rx0,ry]=M(0,0.9); line(ctx,rx0,ry-10,mx+mw,ry-10,COL.ink,1.6); line(ctx,rx0,ry+10,mx+mw,ry+10,COL.ink,1.6);
+    for(let i=0;i<8;i++){ const x=mx+((i/8*mw+t*60)%mw); line(ctx,x,ry,x+14,ry,COL.mid,1.4,[]); }
+    const dust=1-0.8*clamp(grow.trees.x,0,1);
+    for(let i=0;i<14;i++){ const ph=(t*0.3+i/14)%1, x=mx+((i*97)%mw)+ph*40; ctx.save(); ctx.globalAlpha=0.5*dust*(1-ph); circ(ctx,x,ry-14-ph*40,3+ph*6,'#b09a78',null,1.2); ctx.restore(); }
+    for(let i=0;i<6;i++){ const [x,y]=M(0.08+i*0.17,0.83); const k=clamp(grow.trees.x,0,1.2); if(k>0.02) tree(ctx,x,y,sc*0.1*k,t,COL.green); }
+    // pond + mosquitoes (fogging clears them)
+    const [px,py]=M(0.15,0.24); ctx.save(); ctx.beginPath(); ctx.ellipse(px,py,sc*0.09,sc*0.05,0,0,Math.PI*2); ctx.fillStyle='rgba(47,143,224,0.18)'; ctx.fill(); ctx.strokeStyle=COL.blue; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+    const nm=Math.round(14*(1-0.9*clamp(grow.vector.x,0,1)));
+    for(let i=0;i<nm;i++){ const a=t*(1.5+i*0.13)+i*2.3, r=sc*(0.05+0.04*Math.sin(t*0.7+i)); mosquito(ctx,px+Math.cos(a)*r*1.4,py-sc*0.03+Math.sin(a*1.3)*r*0.7,Math.max(4,sc*0.009),t+i,COL.red,0); }
+    if(sel.vector){ if(Math.random()<dt*20) fog.push({x:px+(Math.random()-0.5)*sc*0.2,y:py+(Math.random()-0.5)*sc*0.1,r:3,l:0}); }
+    for(let i=fog.length-1;i>=0;i--){ const f=fog[i]; f.l+=dt; f.r+=8*dt; f.x+=6*dt; if(f.l>3){ fog.splice(i,1); continue; } ctx.save(); ctx.globalAlpha=0.35*(1-f.l/3); circ(ctx,f.x,f.y,f.r,COL.green,null,1.2); ctx.restore(); }
+    // well + open drain (brown) or covered drain (slabs)
+    const [wx,wy]=M(0.5,0.5); circ(ctx,wx,wy,sc*0.03,COL.ink,'rgba(47,143,224,0.25)',2.4);
+    const dpts=[M(0.36,0.62),M(0.43,0.58),M(0.5,0.53)];
+    ctx.save(); ctx.strokeStyle='#8a6a3d'; ctx.lineWidth=5; ctx.beginPath(); dpts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1])); ctx.stroke(); ctx.restore();
+    const cov=clamp(grow.drain.x,0,1); if(cov>0.02){ ctx.save(); ctx.globalAlpha=cov; ctx.strokeStyle=COL.ink; ctx.lineWidth=9; ctx.setLineDash([10,3]); ctx.beginPath(); dpts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1])); ctx.stroke(); ctx.restore(); }
+    else for(let i=0;i<4;i++){ const u=(t*0.4+i/4)%1, seg=u<0.5?0:1, v=(u%0.5)*2, a=dpts[seg], b=dpts[seg+1]; ctx.save(); ctx.translate(lerp(a[0],b[0],v),lerp(a[1],b[1],v)-6); ctx.beginPath(); ctx.arc(0,0,3,-0.9,0.9); ctx.strokeStyle=COL.red; ctx.lineWidth=2; ctx.stroke(); ctx.restore(); }
+    // houses (+ posters)
+    HOUSES.forEach(([u,v],i)=>{ const [x,y]=M(u,v); house(ctx,x,y,sc*0.07,sc*0.05,COL.ink);
+      const k=clamp(grow.post.x,0,1); if(k>0.02&&i%2===0){ ctx.save(); ctx.translate(x+sc*0.05,y-sc*0.02); ctx.scale(k,k); rect(ctx,-sc*0.014,-sc*0.035,sc*0.028,sc*0.03,COL.yellow,'#fff',1.6); line(ctx,0,-sc*0.005,0,sc*0.02,COL.ink,1.4); ctx.restore(); } });
+    // clean water tank with piped flow
+    const kw=clamp(grow.water.x,0,1); if(kw>0.02){ const [tx,ty]=M(0.64,0.18);
+      ctx.save(); ctx.globalAlpha=kw; rect(ctx,tx-sc*0.035,ty-sc*0.05,sc*0.07,sc*0.05,COL.blue,'rgba(47,143,224,0.15)',2.2); line(ctx,tx-sc*0.03,ty,tx-sc*0.03,ty+sc*0.04,COL.blue,2); line(ctx,tx+sc*0.03,ty,tx+sc*0.03,ty+sc*0.04,COL.blue,2);
+      HOUSES.slice(0,4).forEach(([u,v])=>{ const [hx,hy]=M(u,v); ctx.setLineDash([6,5]); ctx.lineDashOffset=-t*30; ctx.strokeStyle=COL.blue; ctx.lineWidth=1.6; ctx.beginPath(); ctx.moveTo(tx,ty+sc*0.04); ctx.lineTo(hx,hy-sc*0.03); ctx.stroke(); }); ctx.restore(); }
+    // clinic + vaccine camp tent
+    const [cx,cy]=M(0.86,0.16); house(ctx,cx,cy,sc*0.09,sc*0.06,COL.red); line(ctx,cx-6,cy-sc*0.1,cx+6,cy-sc*0.1,COL.red,3); line(ctx,cx,cy-sc*0.1-6,cx,cy-sc*0.1+6,COL.red,3);
+    const kv=clamp(grow.vacc.x,0,1); if(kv>0.02){ const [vx,vy]=M(0.86,0.72); ctx.save(); ctx.globalAlpha=kv; ctx.strokeStyle=COL.green; ctx.lineWidth=2.4; ctx.beginPath(); ctx.moveTo(vx-sc*0.06,vy); ctx.lineTo(vx,vy-sc*0.07); ctx.lineTo(vx+sc*0.06,vy); ctx.closePath(); ctx.stroke(); textAt(ctx,'💉',vx,vy-sc*0.015,{align:'center',size:12}); ctx.restore(); }
+    // villagers: red = ill now, green = recovered, ring = vaccinated
+    const ill=Object.values(I).reduce((a,b)=>a+b,0), rec=Object.values(C).reduce((a,b)=>a+b,0)-ill;
+    const nR=Math.round(ill/17), nG=Math.round(rec/17), vacc=sel.vacc&&locked?Math.round(70*0.6*clamp(day/30,0,1)):0;
+    ag.forEach(a=>{ const dx=a.tx-a.x, dy=a.ty-a.y, d=Math.hypot(dx,dy);
+      if(d<0.01){ const s=(sel.vacc&&R()<0.2)?[0.86,0.72]:SPOTS[Math.floor(R()*SPOTS.length)]; a.tx=s[0]+(R()-0.5)*0.06; a.ty=s[1]+(R()-0.5)*0.06; }
+      else { a.x+=dx/d*a.sp*dt; a.y+=dy/d*a.sp*dt; a.ph+=dt*8; } });
+    order.forEach((idx,rank)=>{ const a=ag[idx], [x,y]=M(a.x,a.y), s=sc*0.012, bob=Math.abs(Math.sin(a.ph))*1.5;
+      const col=rank<nR?COL.red:rank<nR+nG?COL.green:COL.ink;
+      line(ctx,x,y-s*1.2-bob,x,y-bob,col,1.8); line(ctx,x,y-bob,x-s*0.5*Math.sin(a.ph),y+s*0.8,col,1.4); line(ctx,x,y-bob,x+s*0.5*Math.sin(a.ph),y+s*0.8,col,1.4);
+      circ(ctx,x,y-s*1.7-bob,s*0.55,col,rank<nR?'rgba(217,67,43,0.3)':'#fff',1.4);
+      if(idx<vacc) circ(ctx,x,y-s*0.6-bob,s*1.6,COL.green,null,1); });
+    ctx.restore();
+    textAt(ctx,'Day '+Math.floor(day),mx+14,my+24,{size:14,weight:700});
+    // outbreak curves: dashed = no campaign, solid = your campaign
+    const gx0=mx+mw+w*0.06, gx1=w-14, gy0=h*0.08, gy1=h*0.5, GX=d=>gx0+d/60*(gx1-gx0), GY=v=>gy1-v/160*(gy1-gy0);
+    textAt(ctx,'Total cases · days',gx0,gy0-10,{size:12,weight:700});
+    line(ctx,gx0,gy1,gx1,gy1,COL.ink,1.6); line(ctx,gx0,gy0,gx0,gy1,COL.ink,1.6);
+    for(let v=0;v<=150;v+=50){ textAt(ctx,String(v),gx0-5,GY(v)+4,{align:'right',size:10,color:COL.muted}); line(ctx,gx0,GY(v),gx1,GY(v),'#eef2f8',1); }
+    for(let d=0;d<=60;d+=20) textAt(ctx,String(d),GX(d),gy1+14,{align:'center',size:10,color:COL.muted});
+    Object.keys(BASE).forEach(k=>{ ctx.save(); ctx.strokeStyle=DCOL[k]; ctx.lineWidth=1.4; ctx.setLineDash([5,4]); ctx.beginPath(); for(let d=0;d<=60;d+=1){ const y=GY(BASE[k]*outbreak(d)); d?ctx.lineTo(GX(d),y):ctx.moveTo(GX(d),y);} ctx.stroke(); ctx.restore();
+      if(locked){ ctx.save(); ctx.strokeStyle=DCOL[k]; ctx.lineWidth=2.6; ctx.beginPath(); for(let d=0;d<=day;d+=0.5){ const y=GY(locked[k]*outbreak(d)); d?ctx.lineTo(GX(d),y):ctx.moveTo(GX(d),y);} ctx.stroke(); ctx.restore(); circ(ctx,GX(day),GY(C[k]),3.5,DCOL[k],'#fff',2); }
+      textAt(ctx,DNAME[k],gx1-2,GY(BASE[k])-5,{align:'right',size:10.5,weight:700,color:DCOL[k]}); });
+    // total vs target (100) bar
+    const tb0=h*0.66, tbh=Math.min(28,h*0.05), tot=Object.values(C).reduce((a,b)=>a+b,0), X=v=>gx0+v/350*(gx1-gx0);
+    textAt(ctx,'Cases so far',gx0,tb0-10,{size:12,weight:700});
+    rect(ctx,gx0,tb0,gx1-gx0,tbh,COL.ink,'#fff',1.4);
+    let xx=gx0; Object.keys(BASE).forEach(k=>{ const ww=X(C[k])-gx0; ctx.save(); ctx.fillStyle=DCOL[k]; ctx.globalAlpha=0.6; ctx.fillRect(xx,tb0,ww,tbh); ctx.restore(); xx+=ww; });
+    line(ctx,X(100),tb0-6,X(100),tb0+tbh+6,COL.green,2.4); textAt(ctx,'target 100',X(100),tb0+tbh+20,{align:'center',size:10.5,weight:700,color:COL.green});
+    textAt(ctx,Math.round(tot)+' cases',gx1,tb0-10,{align:'right',size:13,weight:700,color:tot<100?COL.green:COL.red});
+    [['r1','ch'],['r2','ma'],['r3','tb']].forEach(([id,k])=>$('#'+id).textContent=Math.round(C[k])+' / '+BASE[k]);
+    $('#r4').textContent=Math.round(tot); $('#r4').style.color=tot<100?'var(--f-green)':'var(--f-red)';
+    const fb2=$('#fb2');
+    if(locked&&day>=60){ fb2.className=tot<100?'fb ok':'fb bad'; fb2.textContent=tot<100?'Village safe — under 100 cases':'Still '+Math.round(tot)+' cases — target the biggest disease'; }
+    else fb2.className='fb hidden';
+    $('#go').textContent=run?'⏳ Day '+Math.floor(day):'▶ Run 60 days';
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   3.7 ANTIBIOTIC COURSE — why finish every dose
+   Drug in blood: each dose adds 12 mg/L, half-life 1.5 h, every 8 h.
+   Kill rate (Emax model): k(C) = 1.2·C²/(C² + MIC²) per hour
+       normal bacteria MIC = 1 mg/L, tougher (resistant) ones MIC = 3.6 mg/L
+   Growth: logistic, r = 0.35 /h (doubling ≈ 2 h), K = 10⁹
+   Immune clearance helps only when few are left: 0.05·20/(20 + N) /h
+   Start: 10⁵ bacteria, 1 in 10⁴ already tougher; treatment from day 1.
+   Check (run numerically): 7-day course → all gone by day 7;
+     stop after 2, 3 or 5 days, or skip doses → the tougher ones regrow
+     and the infection returns resistant (≈10⁹ by day 5–9).
+   1 day = 2 s.
+   ===================================================================== */
+const ABX={r:0.35,K:1e9,Cmax:12,ke:Math.LN2/1.5,E:1.2,micS:1,micR:3.6,im:0.05,imK:20};
+const SKIPPAT=[0,0,1,0,1,0,0,1,0,1,0,0,1,0,0,1,0,1,0,0,1];
+function buildA7(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label>Stop taking after <span class="val" id="cV"></span></label><input type="range" id="cR" min="1" max="7" step="1" value="7">
+      <div class="var-row"><span class="vname">Doses</span><div class="toggle-group" id="skB"><button class="toggle-btn active" data-v="0">All taken</button><button class="toggle-btn" data-v="1">Some skipped</button></div></div></div>
+    <div class="toggle-group" style="margin-top:0"><button class="toggle-btn play" id="go" style="padding:10px;">▶ Start</button><button class="toggle-btn" id="rst" style="padding:10px;">↺ New infection</button></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Day</div><div class="rval" id="r1">0</div></div>
+      <div class="rcard"><div class="rlabel">Bacteria</div><div class="rval" id="r2" style="color:var(--f-blue)">—</div></div>
+      <div class="rcard"><div class="rlabel">Resistant</div><div class="rval" id="r3" style="color:var(--f-red)">—</div></div>
+      <div class="rcard"><div class="rlabel">Fever</div><div class="rval" id="r4" style="color:var(--f-red)">—</div></div></div>
+      <div class="fb hidden" id="fb"></div></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), cR=$('#cR');
+  let skip=false, run=false, t=0, M, bugs=[], pills=[];
+  toggleWire(wrap.querySelectorAll('#skB button'),b=>skip=b.dataset.v==='1');
+  function reset(){ M={h:0,S:1e5,R:10,C:0,next:24,n:0,log:[],hist:[[0,5,1]]}; run=false; bugs=[]; pills=[]; $('#go').textContent='▶ Start'; }
+  reset();
+  $('#go').onclick=()=>{ if(M.h>=288) reset(); run=!run; $('#go').textContent=run?'❚❚ Pause':'▶ Resume'; };
+  $('#rst').onclick=reset;
+  const kill=(C,m)=>ABX.E*C*C/(C*C+m*m);
+  function drawBug(ctx,x,y,a,k,res,split,alpha){
+    ctx.save(); ctx.globalAlpha=alpha; ctx.translate(x,y); ctx.rotate(a);
+    const L=1.4*k, W=0.5*k, p=split||0;
+    ctx.beginPath(); ctx.moveTo(-L+W,-W); ctx.lineTo(-W*0.2,-W); ctx.quadraticCurveTo(0,-W*(1-p),W*0.2,-W); ctx.lineTo(L-W,-W); ctx.arc(L-W,0,W,-Math.PI/2,Math.PI/2);
+    ctx.lineTo(W*0.2,W); ctx.quadraticCurveTo(0,W*(1-p),-W*0.2,W); ctx.lineTo(-L+W,W); ctx.arc(-L+W,0,W,Math.PI/2,Math.PI*1.5); ctx.closePath();
+    ctx.fillStyle=res?'rgba(217,67,43,0.1)':'rgba(47,143,224,0.08)'; ctx.fill(); ctx.strokeStyle=res?COL.red:COL.blue; ctx.lineWidth=res?2.6:1.8; ctx.stroke();
+    ctx.restore();
+  }
+
+  animLoop((dt)=>{
+    t+=dt; const course=+cR.value; $('#cV').textContent=course+(course>1?' days':' day');
+    if(run){ let dh=dt*12; while(dh>0){ const s=Math.min(dh,0.05); dh-=s; M.h+=s;
+        if(M.h>=M.next && M.n<course*3){ const miss=skip&&SKIPPAT[M.n%SKIPPAT.length]; M.log.push(miss?0:1); if(!miss){ M.C+=ABX.Cmax; pills.push({u:0}); } M.n++; M.next+=8; }
+        M.C*=Math.exp(-ABX.ke*s);
+        const N=M.S+M.R, g=ABX.r*(1-N/ABX.K), im=ABX.im*ABX.imK/(ABX.imK+N);
+        M.S*=Math.exp((g-kill(M.C,ABX.micS)-im)*s); M.R*=Math.exp((g-kill(M.C,ABX.micR)-im)*s);
+        if(M.S<0.5) M.S=0; if(M.R<0.5) M.R=0;
+        if(M.h-M.hist[M.hist.length-1][0]>=0.5) M.hist.push([M.h,Math.log10(M.S+1),Math.log10(M.R+1),M.C]);
+        if(M.h>=288){ M.h=288; run=false; $('#go').textContent='↺ Run again'; break; } } }
+    const N=M.S+M.R, day=M.h/24;
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    // --- tissue view: every bacterium drawn; they divide and burst -------
+    const R=Math.min(h*0.3,w*0.2), ex=R+w*0.05, ey=R+24, k=R/22;
+    const vis=N<1?0:Math.round(clamp(Math.log10(N)/9,0,1)*110);
+    const wantR=M.R<1?0:Math.max(1,Math.round(vis*M.R/N)), wantS=Math.max(0,vis-wantR);
+    [[false,wantS],[true,wantR]].forEach(([res,want])=>{
+      const live=bugs.filter(b=>b.res===res&&!b.die);
+      let add=Math.min(4,want-live.length);
+      for(let i=0;i<add;i++){ const par=live.length?live[Math.floor(Math.random()*live.length)]:null;
+        const ra=Math.random()*6.28, rr=Math.sqrt(Math.random())*R*0.8, bx=par?par.x+Math.cos(ra)*k*2:Math.cos(ra)*rr, by=par?par.y+Math.sin(ra)*k*2:Math.sin(ra)*rr, a=par?par.a:Math.random()*6;
+        bugs.push({x:bx,y:by,a,res,sp:par?0:1,die:0}); if(par) par.sp=0; }
+      let rem=Math.min(4,live.length-want);
+      for(let i=0;i<rem;i++){ const c=live.filter(b=>!b.die); if(!c.length) break; c[Math.floor(Math.random()*c.length)].die=0.001; }
+    });
+    eyepiece(ctx,ex,ey,R,0,()=>{
+      ctx.save(); ctx.fillStyle=COL.yellow; ctx.globalAlpha=0.18*clamp(M.C/ABX.Cmax,0,1); ctx.fillRect(ex-R,ey-R,2*R,2*R); ctx.restore();
+      const nd=Math.round(clamp(M.C/ABX.Cmax,0,1)*40); for(let i=0;i<nd;i++){ const a=i*2.4+t*0.6, r=R*((i*0.618)%1); circ(ctx,ex+Math.cos(a)*r,ey+Math.sin(a*1.1)*r,1.8,COL.yellow,COL.yellow,1); }
+      // body tissue cells in the background
+      for(let i=0;i<7;i++){ const a=i/7*Math.PI*2; ctx.save(); ctx.beginPath(); ctx.ellipse(ex+Math.cos(a)*R*0.62,ey+Math.sin(a)*R*0.62,R*0.24,R*0.17,a,0,Math.PI*2); ctx.strokeStyle='#dbe4f0'; ctx.lineWidth=1.6; ctx.stroke(); ctx.restore(); }
+      bugs.forEach(b=>{
+        if(b.sp<1){ b.sp=Math.min(1,b.sp+dt*2); }
+        b.x+=gauss()*30*Math.sqrt(dt); b.y+=gauss()*30*Math.sqrt(dt); b.a+=gauss()*0.6*Math.sqrt(dt);
+        const d=Math.hypot(b.x,b.y); if(d>R*0.88){ b.x*=R*0.88/d; b.y*=R*0.88/d; }
+        const off=(1-b.sp)*k*1.4;
+        if(b.die){ b.die+=dt; const u=clamp(b.die/0.7,0,1);
+          for(let q=0;q<5;q++){ const a=q*1.26+b.a, r=k*(0.6+u*1.8); line(ctx,ex+b.x+Math.cos(a)*r,ey+b.y+Math.sin(a)*r,ex+b.x+Math.cos(a)*(r+k*0.6),ey+b.y+Math.sin(a)*(r+k*0.6),b.res?COL.red:COL.blue,1.6*(1-u)+0.3); } }
+        else drawBug(ctx,ex+b.x+Math.cos(b.a)*off,ey+b.y+Math.sin(b.a)*off,b.a,k,b.res,b.sp<1?1-b.sp:0,1);
+      });
+      bugs=bugs.filter(b=>!(b.die>0.7));
+    });
+    textAt(ctx,'Infected tissue',ex,ey-R-10,{align:'center',size:12,weight:700,color:COL.muted});
+    // --- pill bottle + dose calendar ------------------------------------
+    const cx0=ex+R+w*0.07, cw=w-cx0-18, cy0=h*0.07, cell=Math.min(cw/8.2,h*0.06);
+    textAt(ctx,'Dose calendar (3 a day)',cx0,cy0-6+12,{size:12,weight:700});
+    for(let d=0;d<7;d++){ textAt(ctx,'D'+(d+1),cx0+cell*(d+0.5)+cell*0.9,cy0+30,{align:'center',size:10,color:COL.muted});
+      for(let q=0;q<3;q++){ const i=d*3+q, x=cx0+cell*(d+0.5)+cell*0.9, y=cy0+46+q*cell*0.8, inCourse=d<course;
+        ctx.save(); ctx.translate(x,y); rrect(ctx,-cell*0.32,-cell*0.16,cell*0.64,cell*0.32,cell*0.16);
+        if(i<M.log.length){ ctx.fillStyle=M.log[i]?COL.yellow:'#fff'; ctx.fill(); ctx.strokeStyle=M.log[i]?COL.yellow:COL.red; ctx.lineWidth=2; ctx.stroke(); if(!M.log[i]){ line(ctx,-5,-5,5,5,COL.red,2); line(ctx,-5,5,5,-5,COL.red,2); } }
+        else { ctx.setLineDash(inCourse?[]:[3,3]); ctx.strokeStyle=inCourse?COL.mid:'#dbe4f0'; ctx.lineWidth=1.6; ctx.stroke(); }
+        ctx.restore(); } }
+    const bx=cx0+cell*0.3, by=cy0+46+cell*0.8;
+    rect(ctx,bx-cell*0.35,by-cell*0.2,cell*0.7,cell*1.4,COL.ink,'#fff',2.2); rect(ctx,bx-cell*0.4,by-cell*0.45,cell*0.8,cell*0.25,COL.ink,'#eef2f8',2);
+    // pills fly on a real arc (projectile) from the bottle into the tissue view
+    pills.forEach(p=>{ p.u+=dt/0.8; const u=clamp(p.u,0,1), x=lerp(bx,ex+R*0.5,u), y=by-h*0.12*4*u*(1-u)+(ey-by)*u*u;
+      ctx.save(); ctx.translate(x,y); ctx.rotate(u*8); rrect(ctx,-7,-3.5,14,7,3.5); ctx.fillStyle=COL.yellow; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=1.2; ctx.stroke(); ctx.restore(); });
+    pills=pills.filter(p=>p.u<1);
+    // fever thermometer
+    const fever=N<1?37:37+2.4*clamp((Math.log10(N)-5)/3.5,0,1);
+    const tx=w-30, t0=h*0.33, t1=h*0.58; thermo(ctx,tx,t0,t1,(fever-36)/4,COL.ink,COL.red);
+    textAt(ctx,fmt(fever,1)+' °C',tx-14,t1+30,{align:'center',size:12,weight:700,color:COL.red});
+    // --- chart: log bacteria (blue normal, red resistant) + drug (yellow) --
+    const gx0=40, gx1=w-20, gy0=h*0.68, gy1=h-26, GX=hh=>gx0+hh/288*(gx1-gx0), GY=v=>gy1-v/9*(gy1-gy0), GC=c=>gy1-c/14*(gy1-gy0);
+    ctx.save(); ctx.fillStyle='rgba(217,160,23,0.07)'; ctx.fillRect(GX(24),gy0,GX(24+course*24)-GX(24),gy1-gy0); ctx.restore();
+    textAt(ctx,'course',GX(24)+4,gy0+12,{size:10,weight:700,color:COL.yellow});
+    line(ctx,gx0,gy1,gx1,gy1,COL.ink,1.6); line(ctx,gx0,gy0,gx0,gy1,COL.ink,1.6);
+    for(let v=0;v<=9;v+=3) textAt(ctx,'10^'+v,gx0-4,GY(v)+4,{align:'right',size:9.5,color:COL.muted});
+    for(let d=0;d<=12;d+=2) textAt(ctx,'day '+d,GX(d*24),gy1+14,{align:'center',size:9.5,color:COL.muted});
+    line(ctx,gx0,GC(ABX.micS),gx1,GC(ABX.micS),COL.blue,1,[4,4]); line(ctx,gx0,GC(ABX.micR),gx1,GC(ABX.micR),COL.red,1,[4,4]);
+    [[3,COL.yellow,GC,1.8],[1,COL.blue,GY,2.4],[2,COL.red,GY,2.4]].forEach(([i,c,Y,lw_])=>{ ctx.save(); ctx.strokeStyle=c; ctx.lineWidth=lw_; ctx.beginPath(); M.hist.forEach((p,j)=>{ const v=i===3?(p[3]||0):p[i]; j?ctx.lineTo(GX(p[0]),Y(v)):ctx.moveTo(GX(p[0]),Y(v)); }); ctx.stroke(); ctx.restore(); });
+    line(ctx,GX(M.h),gy0,GX(M.h),gy1,COL.ink,1,[2,3]);
+    textAt(ctx,'normal',gx1-150,gy0+12,{size:10.5,weight:700,color:COL.blue}); textAt(ctx,'resistant',gx1-100,gy0+12,{size:10.5,weight:700,color:COL.red}); textAt(ctx,'drug',gx1-4,gy0+12,{align:'right',size:10.5,weight:700,color:COL.yellow});
+    $('#r1').textContent=fmt(day,1); $('#r2').textContent=N<1?'0':'10^'+fmt(Math.log10(N),1);
+    $('#r3').textContent=N<1?'—':Math.round(100*M.R/N)+'%'; $('#r4').textContent=fmt(fever,1)+' °C';
+    const fb=$('#fb');
+    if(N<1&&M.h>24){ fb.className='fb ok'; fb.textContent='Cured — every bacterium gone'; }
+    else if(M.h>24+course*24&&M.R/N>0.5&&N>1e5){ fb.className='fb bad'; fb.textContent='Infection is back — and resistant'; }
+    else if(M.h>24&&M.h<24+course*24&&N<1e4){ fb.className='fb warn'; fb.textContent='Feeling better — but tough ones remain'; }
+    else fb.className='fb hidden';
+  });
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   INIT
+   --------------------------------------------------------------------- */
+render();
+</script>
+<script src="../../tracking/activity-tracker.js"></script>
+<script src="../../nav/back-button.js"></script>
+</body>
+</html>

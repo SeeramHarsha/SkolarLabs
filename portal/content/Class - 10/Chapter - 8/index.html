@@ -1,0 +1,889 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 10 · Chapter 8 — Heredity | Botclub Labs</title>
+<link href="../../vendor/fonts/fonts.css" rel="stylesheet">
+<style>
+:root{
+  --navy-1:#0f2640; --navy-2:#1a3a5c; --navy-3:#234a73;
+  --accent:#2f8fe0; --accent-2:#5cc8ff;
+  --bg:#eef2f8; --surface-0:#ffffff; --surface-1:#f6f9fc; --surface-2:#eef2f8;
+  --border:#dbe4f0; --border-strong:#c2d1e5;
+  --text-1:#132a44; --text-2:#4c6178; --text-3:#8195ab;
+  --f-red:#d9432b; --f-blue:#2f8fe0; --f-green:#1f9d55; --f-yellow:#d9a017;
+  --radius:14px; --radius-sm:9px;
+  --fs-xs:clamp(10px,0.62vw,12px); --fs-sm:clamp(11px,0.72vw,13.5px);
+  --fs-md:clamp(12.5px,0.85vw,15px); --fs-lg:clamp(15px,1.15vw,19px);
+  --fs-xl:clamp(18px,1.5vw,25px);
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:22px; --sp-6:30px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{ font-family:'Poppins',system-ui,sans-serif; background:var(--bg); color:var(--text-1); overflow:hidden; }
+button, input, select{font-family:inherit;}
+
+.app{height:100vh; display:flex; flex-direction:column; min-height:0;}
+.topbar{
+  flex:0 0 auto; background:linear-gradient(120deg, var(--navy-1) 0%, var(--navy-2) 55%, var(--navy-3) 100%);
+  color:#fff; padding:clamp(9px,1vh,16px) clamp(14px,1.6vw,28px);
+  display:flex; align-items:center; gap:var(--sp-4); box-shadow:0 2px 10px rgba(15,38,64,0.25); z-index:5;
+}
+.topbar .brand-badge{
+  width:clamp(32px,2.4vw,40px); height:clamp(32px,2.4vw,40px); border-radius:10px; background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center;
+  font-size:clamp(15px,1.3vw,20px); flex:0 0 auto;
+}
+.topbar .chip{
+  display:inline-block; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.28);
+  border-radius:6px; padding:2px 9px; font-size:var(--fs-xs); letter-spacing:0.06em; text-transform:uppercase; font-weight:600; margin-bottom:3px;
+}
+.topbar h1{font-size:var(--fs-lg); font-weight:600; line-height:1.2; white-space:nowrap;}
+.topbar .spacer{flex:1;}
+.topbar .legend{display:flex; gap:14px; font-size:var(--fs-xs); color:rgba(255,255,255,0.85); align-items:center;}
+.topbar .legend span{display:inline-flex; align-items:center; gap:5px;}
+.topbar .legend i{width:12px; height:4px; border-radius:2px; display:inline-block;}
+
+.body-wrap{flex:1; display:flex; min-height:0; overflow:hidden;}
+.sidenav{
+  flex:0 0 clamp(170px,13.5vw,230px); background:var(--surface-0); border-right:1px solid var(--border);
+  overflow-y:auto; padding:var(--sp-2); display:flex; flex-direction:column; gap:4px;
+}
+.nav-item{
+  display:flex; align-items:center; gap:8px; text-align:left; width:100%;
+  border:1px solid var(--border); background:var(--surface-1); border-radius:var(--radius-sm); padding:7px 10px; cursor:pointer; transition:all .15s ease;
+}
+.nav-item:hover{background:var(--surface-2); border-color:var(--border-strong);}
+.nav-item.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.nav-item .n-num{font-size:var(--fs-xs); font-weight:700; color:var(--accent); flex:0 0 auto; min-width:26px;}
+.nav-item.active .n-num{color:var(--accent-2);}
+.nav-item .n-title{font-size:var(--fs-sm); font-weight:600; line-height:1.25;}
+
+.content{flex:1; min-width:0; display:flex; flex-direction:column; overflow:hidden;}
+.panel-head{flex:0 0 auto; padding:var(--sp-3) var(--sp-5); border-bottom:1px solid var(--border); background:var(--surface-0); display:flex; align-items:baseline; gap:12px;}
+.panel-badge{background:var(--navy-2); color:#fff; font-size:var(--fs-xs); font-weight:700; padding:3px 10px; border-radius:6px;}
+.panel-head h2{font-size:var(--fs-lg); font-weight:600; color:var(--text-1);}
+.panel-head p{font-size:var(--fs-sm); color:var(--text-2); flex:1; text-align:right;}
+.panel-body{flex:1; min-height:0; overflow:hidden; padding:var(--sp-3) var(--sp-5); display:flex;}
+
+.lab-view{flex:1; display:flex; gap:var(--sp-4); min-height:0; min-width:0;}
+.lab-canvas-wrap{flex:7 1 0; min-width:0; min-height:0; background:#fff; border:1px solid var(--border); border-radius:var(--radius); position:relative; overflow:hidden;}
+.lab-canvas-wrap canvas{width:100%; height:100%; display:block;}
+.lab-side{flex:3 1 0; min-width:230px; display:flex; flex-direction:column; gap:var(--sp-3); min-height:0; overflow-y:auto; padding-right:2px;}
+.side-sub{display:flex; flex-direction:column; gap:var(--sp-3);}
+
+.control-group{background:var(--surface-0); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 12px;}
+.control-group label{font-size:var(--fs-sm); font-weight:600; color:var(--text-1); display:flex; justify-content:space-between;}
+.control-group label .val{color:var(--accent); font-weight:700;}
+.control-group input[type=range]{width:100%; margin-top:7px; accent-color:var(--navy-2); cursor:pointer;}
+.toggle-group{display:flex; gap:6px; margin-top:7px; flex-wrap:wrap;}
+.toggle-btn{flex:1; min-width:56px; padding:7px 5px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:600; cursor:pointer; text-align:center; color:var(--text-2);}
+.toggle-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.toggle-btn.small{font-size:10.5px; padding:6px 3px;}
+.toggle-btn.play{background:var(--f-green); border-color:var(--f-green); color:#fff;}
+.toggle-btn.navy{background:var(--navy-2); border-color:var(--navy-2); color:#fff; width:100%; margin-top:9px;}
+.toggle-btn:disabled{opacity:.5; cursor:not-allowed;}
+.chip-btn{display:inline-flex; align-items:center; gap:5px; padding:6px 11px; margin:3px 3px 0 0; border:1px solid var(--border-strong); background:var(--surface-1); border-radius:18px; cursor:pointer; font-size:var(--fs-sm); font-weight:600; color:var(--text-2);}
+.chip-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.chip-btn.ok{border-color:var(--f-green);} .chip-btn.bad{border-color:var(--f-red);}
+.chip-wrap{display:flex; flex-wrap:wrap; margin-top:3px;}
+
+.role-row{display:flex; align-items:center; gap:8px; margin-top:7px; font-size:var(--fs-sm); font-weight:600;}
+.role-row .rdot{width:10px; height:10px; border-radius:50%; flex:0 0 auto; display:inline-block;}
+.role-row .rname{width:70px; flex:0 0 auto; color:var(--text-2);}
+.role-row select{flex:1; min-width:0; padding:6px 7px; border:1px solid var(--border-strong); border-radius:7px; font-size:var(--fs-sm); background:var(--surface-1); color:var(--text-1); cursor:pointer;}
+
+.step-row{display:flex; gap:5px;}
+.step-pill{flex:1; padding:6px 4px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:10.5px; font-weight:700; color:var(--text-3); cursor:pointer;}
+.step-pill.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.step-pill.done{border-color:var(--f-green); color:var(--f-green);}
+.step-pill.active.done{color:#fff;}
+.opt-btn{display:block; width:100%; text-align:left; margin-top:6px; padding:7px 9px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:500; color:var(--text-1); cursor:pointer; line-height:1.3;}
+.opt-btn.active{border-color:var(--navy-2); background:#e3ecf7; font-weight:600;}
+.var-row{display:flex; align-items:center; gap:6px; margin-top:7px;}
+.var-row .vname{flex:0 0 88px; font-size:var(--fs-sm); font-weight:600;}
+.var-row .toggle-group{margin-top:0; flex:1;}
+
+.result-cards{display:grid; grid-template-columns:1fr 1fr; gap:6px;}
+.result-cards.three{grid-template-columns:1fr 1fr 1fr;}
+.rcard{background:var(--surface-0); border:1px solid var(--border); border-radius:9px; padding:7px 9px;}
+.rcard .rlabel{font-size:9.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--text-3); font-weight:600;}
+.rcard .rval{font-size:var(--fs-md); font-weight:700; color:var(--text-1); margin-top:1px;}
+.rcard.wide{grid-column:1/-1;}
+.hint{font-size:var(--fs-xs); color:var(--text-3); margin-top:6px; line-height:1.4;}
+.fb{font-size:var(--fs-xs); font-weight:600; margin-top:6px; padding:5px 8px; border-radius:7px;}
+.fb.ok{background:#e4f7ec; color:#1f6b3d;}
+.fb.bad{background:#fdece7; color:#a4331c;}
+.fb.warn{background:#fdf4dc; color:#8a6410;}
+.log{width:100%; border-collapse:collapse; font-size:10.5px; margin-top:4px;}
+.log th{text-align:left; color:var(--text-3); font-weight:600; text-transform:uppercase; font-size:9px; letter-spacing:.04em; padding:3px 4px; border-bottom:1px solid var(--border);}
+.log td{padding:4px; border-bottom:1px solid var(--surface-2); color:var(--text-2);}
+.log td.r-ok{color:var(--f-green); font-weight:700;} .log td.r-bad{color:var(--f-red); font-weight:700;} .log td.r-warn{color:var(--f-yellow); font-weight:700;}
+.hidden{display:none !important;}
+
+@media (max-width:1000px) and (orientation:portrait), (max-width:1000px) and (min-height:601px){
+  .body-wrap{flex-direction:column;}
+  .sidenav{flex:0 0 auto; width:100%; height:auto; flex-direction:row; overflow-x:auto; overflow-y:hidden; border-right:none; border-bottom:1px solid var(--border); padding:6px;}
+  .nav-item{flex:0 0 auto; width:150px;}
+  .panel-body{overflow-y:auto;}
+  .lab-view{flex-direction:column;}
+  .lab-canvas-wrap{min-height:320px;}
+  .lab-side{min-width:0;}
+  .content{overflow-y:auto;}
+  .topbar .legend{display:none;}
+  .topbar h1{white-space:normal;}
+}
+::-webkit-scrollbar{width:7px; height:7px;}
+::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand-badge">🧬</div>
+    <div>
+      <div class="chip">Grade 10 · Ch 8</div>
+      <h1>Heredity</h1>
+    </div>
+    <div class="spacer"></div>
+    <div class="legend">
+      <span><i style="background:var(--f-yellow)"></i>What you do</span>
+      <span><i style="background:var(--f-green)"></i>Dominant · T · free lobe</span>
+      <span><i style="background:var(--f-red)"></i>Recessive · t · attached</span>
+      <span><i style="background:var(--f-blue)"></i>Pollen</span>
+    </div>
+  </div>
+  <div class="body-wrap">
+    <nav class="sidenav" id="sideNav"></nav>
+    <main class="content">
+      <div class="panel-head">
+        <div class="panel-badge" id="panelBadge">2.1</div>
+        <h2 id="panelTitle">Select an activity</h2>
+        <p id="panelDesc"></p>
+      </div>
+      <div class="panel-body" id="panelBody"></div>
+    </main>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   GRADE 10 — CHAPTER 8: HEREDITY
+   (NCERT Science, jesc108) — Activities 8.1 – 8.2.
+   Every scene runs a continuous animation loop: controls only set targets.
+   Inheritance is sampled gene copy by gene copy (Mendel’s rules); pea plants
+   grow node by node with real internode lengths; seeds fly on real parabolas.
+   ========================================================================= */
+const COL = {red:'#d9432b', blue:'#2f8fe0', green:'#1f9d55', yellow:'#d9a017', ink:'#132a44', muted:'#4c6178', mid:'#8195ab'};
+
+/* ---------------------------------------------------------------------
+   0. CANVAS HELPERS
+   --------------------------------------------------------------------- */
+function fitCanvas(canvas){
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  const r = canvas.parentElement.getBoundingClientRect();
+  const w = Math.max(200, r.width), h = Math.max(160, r.height);
+  if(canvas._w!==w || canvas._h!==h || canvas._dpr!==dpr){
+    canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr);
+    canvas.style.width = w+'px'; canvas.style.height = h+'px';
+    canvas._w=w; canvas._h=h; canvas._dpr=dpr;
+  }
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, w, h};
+}
+function line(ctx,x1,y1,x2,y2,color,width,dash){
+  ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=width||2;
+  if(dash) ctx.setLineDash(dash); else ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); ctx.restore();
+}
+function arrowHead(ctx,x,y,ang,color,size){
+  size=size||7; ctx.save(); ctx.fillStyle=color; ctx.translate(x,y); ctx.rotate(ang);
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-size,size*0.42); ctx.lineTo(-size,-size*0.42); ctx.closePath(); ctx.fill(); ctx.restore();
+}
+function vec(ctx,x1,y1,x2,y2,color,width){ line(ctx,x1,y1,x2,y2,color,width||2.6); arrowHead(ctx,x2,y2,Math.atan2(y2-y1,x2-x1),color,7); }
+function dimArrow(ctx,x,y1,y2,color){ line(ctx,x,y1,x,y2,color,1.6); arrowHead(ctx,x,y1,-Math.PI/2,color,5); arrowHead(ctx,x,y2,Math.PI/2,color,5); }
+function textAt(ctx,txt,x,y,opts){
+  opts=opts||{}; ctx.save();
+  ctx.font=(opts.weight||500)+' '+(opts.size||12)+'px Poppins, sans-serif';
+  ctx.fillStyle=opts.color||COL.ink; ctx.textAlign=opts.align||'left'; ctx.textBaseline=opts.baseline||'alphabetic';
+  if(opts.alpha!==undefined) ctx.globalAlpha=opts.alpha;
+  ctx.fillText(txt,x,y); ctx.restore();
+}
+function rect(ctx,x,y,w,h,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw===undefined?2.2:lw; if(fill){ctx.fillStyle=fill; ctx.fillRect(x,y,w,h);} if(lw!==0){ctx.strokeStyle=stroke; ctx.strokeRect(x,y,w,h);} ctx.restore(); }
+function circ(ctx,x,y,r,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw||2.2; ctx.beginPath(); ctx.arc(x,y,Math.max(0.1,r),0,Math.PI*2); if(fill){ctx.fillStyle=fill; ctx.fill();} ctx.strokeStyle=stroke; ctx.stroke(); ctx.restore(); }
+function rrect(ctx,x,y,w,h,r){ r=Math.min(r,w/2,h/2); ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function fmt(x,d){ if(!isFinite(x)) return '—'; d=d===undefined?2:d; return Number(x.toFixed(d)).toString(); }
+function gauss(){ return (Math.random()+Math.random()+Math.random()+Math.random()-2)*1.2247; }
+function hexRgb(h){ const n=parseInt(h.slice(1),16); return [n>>16&255, n>>8&255, n&255]; }
+function mixCol(a,b,t){ const A=hexRgb(a),B=hexRgb(b); t=clamp(t,0,1); return 'rgb('+A.map((v,i)=>Math.round(lerp(v,B[i],t))).join(',')+')'; }
+function rampCol(stops,x){ // stops: [[pos,hex],...]
+  if(x<=stops[0][0]) return mixCol(stops[0][1],stops[0][1],0);
+  for(let i=1;i<stops.length;i++){ if(x<=stops[i][0]){ const a=stops[i-1],b=stops[i]; return mixCol(a[1],b[1],(x-a[0])/(b[0]-a[0])); } }
+  const l=stops[stops.length-1][1]; return mixCol(l,l,0);
+}
+function thermo(ctx,x,top,bot,frac,outline,liquid){
+  const br=8;
+  ctx.save(); ctx.lineWidth=2; ctx.strokeStyle=outline; ctx.fillStyle='#fff';
+  rrect(ctx,x-5,top,10,bot-top+2,5); ctx.fill(); ctx.stroke(); ctx.restore();
+  const lh=(bot-top-5)*clamp(frac,0,1);
+  ctx.save(); ctx.fillStyle=liquid; ctx.fillRect(x-2.2,bot-lh,4.4,lh+6); ctx.restore();
+  circ(ctx,x,bot+br,br,outline,'#fff',2); circ(ctx,x,bot+br,br-3.2,liquid,liquid,1);
+  for(let i=0;i<=4;i++){ const yy=top+5+(bot-top-5)*i/4; line(ctx,x+5,yy,x+9,yy,outline,1.1); }
+}
+function flame(ctx,cx,baseY,width,inten,t){
+  const n=5;
+  for(let i=0;i<n;i++){
+    const fx=cx-width/2+width*(i+0.5)/n;
+    const hh=(6+inten*32)*(0.78+0.22*Math.sin(t*13+i*1.7));
+    const sway=Math.sin(t*9+i*2.1)*3;
+    ctx.save(); ctx.lineJoin='round';
+    ctx.strokeStyle=COL.red; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(fx-7,baseY); ctx.quadraticCurveTo(fx-7,baseY-hh*0.55,fx+sway,baseY-hh); ctx.quadraticCurveTo(fx+7,baseY-hh*0.55,fx+7,baseY); ctx.stroke();
+    ctx.strokeStyle=COL.yellow; ctx.lineWidth=1.6;
+    ctx.beginPath(); ctx.moveTo(fx-3.5,baseY); ctx.quadraticCurveTo(fx-3,baseY-hh*0.35,fx+sway*0.5,baseY-hh*0.55); ctx.quadraticCurveTo(fx+3,baseY-hh*0.35,fx+3.5,baseY); ctx.stroke();
+    ctx.restore();
+  }
+}
+
+/* ---------------------------------------------------------------------
+   0b. ANIMATION ENGINE
+   --------------------------------------------------------------------- */
+let activeStops = [];
+function stopAllLoops(){ activeStops.forEach(s=>{ try{ s(); }catch(e){} }); activeStops=[]; }
+function animLoop(tick){
+  let last = performance.now();
+  let raf;
+  function frame(now){
+    const dt = Math.max(0, Math.min(0.04, (now-last)/1000));
+    last = now;
+    try{ tick(dt); }catch(e){ if(window.__errs) __errs.push(String(e&&e.stack||e).slice(0,300)); else console.error(e); }
+    raf = requestAnimationFrame(frame);
+  }
+  raf = requestAnimationFrame(frame);
+  const stop = ()=>cancelAnimationFrame(raf);
+  activeStops.push(stop);
+  return stop;
+}
+/** Exponential ease — frame-rate independent, always smooth. */
+function approach(cur,tgt,rate,dt){ return cur + (tgt-cur)*(1-Math.exp(-rate*dt)); }
+/** Spring-damper — gives natural overshoot and settle. */
+function springTo(state,target,k,damping,dt){
+  const acc = (target-state.x)*k - state.v*damping;
+  state.v += acc*dt;
+  state.x += state.v*dt;
+  return state.x;
+}
+function toggleWire(btns,cb){
+  btns.forEach(b=>b.onclick=()=>{ btns.forEach(x=>x.classList.remove('active')); b.classList.add('active'); cb(b); });
+}
+
+
+/* ---------------------------------------------------------------------
+   0c. CHAPTER-6 HELPERS — virtual stage, labels, a jointed line-drawn
+       teenager whose body really changes with age, sound, cameras
+   --------------------------------------------------------------------- */
+function rng(seed){ let s=(seed>>>0)||1; return ()=>{ s=(Math.imul(s,1664525)+1013904223)>>>0; return s/4294967296; }; }
+function smooth01(a,b,x){ const t=clamp((x-a)/(b-a),0,1); return t*t*(3-2*t); }
+function angDiff(a,b){ return Math.atan2(Math.sin(a-b),Math.cos(a-b)); }
+function ease(x){ x=clamp(x,0,1); return x<0.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2; }
+function spr(x){ return {x:x||0,v:0}; }
+function setv($,id,v){ const e=$('#'+id); if(e&&e.textContent!==v) e.textContent=v; }
+function setc($,id,c){ const e=$('#'+id); if(e&&e.style.color!==c) e.style.color=c; }
+function card(id,l,col){ return `<div class="rcard"><div class="rlabel">${l}</div><div class="rval" id="${id}"${col?` style="color:${col}"`:''}>—</div></div>`; }
+/* every scene draws on an 800 × 500 virtual stage, fitted into the canvas */
+const VW=800, VH=500;
+function stage(ctx,w,h){ const s=Math.min(w/VW,h/VH), ox=(w-VW*s)/2, oy=(h-VH*s)/2; ctx.translate(ox,oy); ctx.scale(s,s); return s; }
+function stepPills(el,names,cur,done,onPick){
+  el.innerHTML=names.map((n,i)=>`<button class="step-pill${i===cur?' active':''}${done[i]?' done':''}" data-i="${i}">${n}</button>`).join('');
+  el.querySelectorAll('.step-pill').forEach(b=>b.onclick=()=>onPick(+b.dataset.i));
+}
+function hexRgb(h){ if(h[0]!=='#') return h.match(/[\d.]+/g).slice(0,3).map(Number); const n=parseInt(h.slice(1),16); return [n>>16&255, n>>8&255, n&255]; }
+function rgba(h,a){ const c=hexRgb(h); return `rgba(${c[0]},${c[1]},${c[2]},${a})`; }
+function fitFont(ctx,txt,maxW,size,weight){
+  let s=size; ctx.font=weight+' '+s+'px Poppins, sans-serif';
+  while(s>9 && ctx.measureText(txt).width>maxW){ s-=0.5; ctx.font=weight+' '+s+'px Poppins, sans-serif'; }
+  return s;
+}
+function tableTop(ctx,x0,x1,y,legs){ ctx.save(); ctx.lineWidth=2.2; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; rrect(ctx,x0,y,x1-x0,12,3); ctx.fill(); ctx.stroke();
+  if(legs){ line(ctx,x0+22,y+12,x0+22,y+legs,COL.ink,2.4); line(ctx,x1-22,y+12,x1-22,y+legs,COL.ink,2.4); } ctx.restore(); }
+function meterV(ctx,x,y,w,h,frac,col,label){ // vertical bar meter, y = top
+  ctx.save(); rrect(ctx,x,y,w,h,5); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=1.6; ctx.stroke();
+  const f=clamp(frac,0,1); ctx.save(); rrect(ctx,x,y,w,h,5); ctx.clip(); ctx.fillStyle=col; ctx.globalAlpha=0.85; ctx.fillRect(x,y+h*(1-f),w,h*f); ctx.restore();
+  if(label) textAt(ctx,label,x+w/2,y+h+16,{align:'center',size:12,weight:700,color:col});
+  ctx.restore();
+}
+function tag(ctx,txt,x,y,col,o){ o=o||{}; ctx.save(); ctx.font=(o.weight||700)+' '+(o.size||13)+'px Poppins, sans-serif';
+  const w=ctx.measureText(txt).width+16, h=(o.size||13)+10; const X=o.align==='left'?x:(o.align==='right'?x-w:x-w/2);
+  ctx.globalAlpha=o.alpha===undefined?1:o.alpha; rrect(ctx,X,y-h/2,w,h,h/2); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=col; ctx.lineWidth=1.8; ctx.stroke();
+  ctx.fillStyle=col; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(txt,X+w/2,y+1); ctx.restore(); }
+function leader(ctx,x1,y1,x2,y2,txt,col,a){ ctx.save(); ctx.globalAlpha=a===undefined?1:a; line(ctx,x1,y1,x2,y2,col||COL.muted,1.3); circ(ctx,x1,y1,2.4,col||COL.muted,col||COL.muted,1);
+  textAt(ctx,txt,x2+(x2>=x1?5:-5),y2+4,{align:x2>=x1?'left':'right',size:12.5,weight:600,color:col||COL.muted}); ctx.restore(); }
+function glow(ctx,x,y,R,col,a){ if(a<=0.01) return; const c=hexRgb(col); ctx.save(); const g=ctx.createRadialGradient(x,y,0,x,y,R);
+  g.addColorStop(0,`rgba(${c},${Math.min(1,a)})`); g.addColorStop(0.35,`rgba(${c},${Math.min(1,a)*0.45})`); g.addColorStop(1,`rgba(${c},0)`);
+  ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,y,R,0,Math.PI*2); ctx.fill(); ctx.restore(); }
+function rayBurst(ctx,x,y,r0,r1,n,col,a,t){ if(a<=0.03) return; ctx.save(); ctx.globalAlpha=Math.min(1,a); ctx.strokeStyle=col; ctx.lineWidth=2.2; ctx.lineCap='round';
+  for(let i=0;i<n;i++){ const an=i/n*Math.PI*2+0.2, f=0.8+0.2*Math.sin(t*6+i*1.7); ctx.beginPath(); ctx.moveTo(x+Math.cos(an)*r0,y+Math.sin(an)*r0); ctx.lineTo(x+Math.cos(an)*(r0+(r1-r0)*f),y+Math.sin(an)*(r0+(r1-r0)*f)); ctx.stroke(); } ctx.restore(); }
+function mark(ctx,x,y,ok,a){ ctx.save(); ctx.globalAlpha=a===undefined?1:a; ctx.lineWidth=4; ctx.lineCap='round'; ctx.strokeStyle=ok?COL.green:COL.red; ctx.beginPath();
+  if(ok){ ctx.moveTo(x-9,y); ctx.lineTo(x-2,y+7); ctx.lineTo(x+10,y-8); } else { ctx.moveTo(x-8,y-8); ctx.lineTo(x+8,y+8); ctx.moveTo(x+8,y-8); ctx.lineTo(x-8,y+8); } ctx.stroke(); ctx.restore(); }
+const SFX={on:true,ctx:null};
+function sfxCtx(){ if(!SFX.on) return null; try{ if(!SFX.ctx) SFX.ctx=new (window.AudioContext||window.webkitAudioContext)(); if(SFX.ctx.state==='suspended') SFX.ctx.resume(); return SFX.ctx; }catch(e){ return null; } }
+function camFit(ctx,w,h,cam){ const cw=cam[2]-cam[0], ch=cam[3]-cam[1], s=Math.min(w/cw,h/ch); ctx.translate((w-cw*s)/2,(h-ch*s)/2); ctx.scale(s,s); ctx.translate(-cam[0],-cam[1]); return s; }
+function timeTagPx(ctx,w,txt){ tag(ctx,txt,w-58,24,COL.mid,{size:11.5,weight:600}); }
+
+function logTable(heads,rows){ return `<table class="log"><tr>${heads.map(h=>`<th>${h}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map(c=>typeof c==='object'?`<td class="${c.c||''}">${c.v}</td>`:`<td>${c}</td>`).join('')}</tr>`).join('')}</table>`; }
+function chipsWire(root,sel,cb){ const bs=[...root.querySelectorAll(sel)]; bs.forEach(b=>b.onclick=()=>{ bs.forEach(x=>x.classList.remove('active')); b.classList.add('active'); cb(b); }); return bs; }
+function setBtn(b,txt,cls){ if(b.textContent!==txt) b.textContent=txt; if(cls!==undefined) b.className='toggle-btn '+cls; }
+
+/* ---------------------------------------------------------------------
+   0g. CHAPTER-8 HEREDITY KIT — a line-drawn head in profile whose
+       earlobe morphs free ↔ attached, a pea plant that grows node by
+       node, genes drawn as a chromosome pair, seeds thrown on real arcs
+   --------------------------------------------------------------------- */
+const SW=800, SH=560;
+function stg(ctx,w,h){ const s=Math.min(w/SW,h/SH), ox=(w-SW*s)/2, oy=(h-SH*s)/2; ctx.translate(ox,oy); ctx.scale(s,s); return s; }
+function dot(ctx,x,y,r,col){ ctx.beginPath(); ctx.arc(x,y,Math.max(0.1,r),0,Math.PI*2); ctx.fillStyle=col; ctx.fill(); }
+function ell(ctx,x,y,rx,ry,a){ ctx.beginPath(); ctx.ellipse(x,y,Math.max(1e-4,rx),Math.max(1e-4,ry),a||0,0,Math.PI*2); }
+function fbSet(el,c,h){ const cls='fb '+c; if(el.className!==cls) el.className=cls; if(el.innerHTML!==h) el.innerHTML=h; }
+function speedSlider(id,label,min,max,val,unit,step){ return `<div class="control-group"><label>${label} <span class="val" id="${id}v">${val} ${unit}</span></label><input type="range" id="${id}" min="${min}" max="${max}" step="${step||1}" value="${val}"></div>`; }
+function blip(f,dur,g,type){ const a=sfxCtx(); if(!a) return; try{ const o=a.createOscillator(), G=a.createGain(); o.type=type||'sine'; o.frequency.value=f;
+  G.gain.setValueAtTime(g||0.08,a.currentTime); G.gain.exponentialRampToValueAtTime(0.0001,a.currentTime+(dur||0.12)); o.connect(G).connect(a.destination); o.start(); o.stop(a.currentTime+(dur||0.12)+0.02); }catch(e){} }
+/* allele colours: dominant = green, recessive = red */
+const DOM=COL.green, REC=COL.red, POL=COL.blue;
+function aCol(ch){ return ch===ch.toUpperCase()?DOM:REC; }
+
+/* ===== EAR — local units: ear height ≈ 1, origin at the ear's centre, face to the right.
+   a = 0 free lobe (hangs below where it joins the cheek), 1 attached (runs straight into the cheek) */
+function earPts(a){
+  const F=[[0.10,-0.40],[0.05,-0.58],[-0.28,-0.58],[-0.36,-0.25],[-0.42,0.0],[-0.32,0.18],[-0.26,0.27],[-0.24,0.44],[-0.15,0.60],[-0.03,0.60],[0.08,0.60],[0.13,0.50],[0.10,0.41],[0.13,0.33]];
+  const A=[[0.10,-0.40],[0.05,-0.58],[-0.28,-0.58],[-0.36,-0.25],[-0.42,0.0],[-0.32,0.18],[-0.25,0.26],[-0.19,0.34],[-0.08,0.40],[0.02,0.42],[0.07,0.43],[0.10,0.44],[0.13,0.45],[0.17,0.53]];
+  return F.map((p,i)=>[lerp(p[0],A[i][0],a),lerp(p[1],A[i][1],a)]);
+}
+function earPath(ctx,P){ ctx.beginPath(); ctx.moveTo(P[0][0],P[0][1]); for(let i=1;i+2<P.length-1;i+=3) ctx.bezierCurveTo(P[i][0],P[i][1],P[i+1][0],P[i+1][1],P[i+2][0],P[i+2][1]); ctx.lineTo(P[13][0],P[13][1]); }
+/* draws the ear at (x,y), height E px; o.lobeCol tints the lobe, o.mark draws the attachment point */
+function earDraw(ctx,x,y,E,a,o){ o=o||{}; const P=earPts(a); ctx.save(); ctx.translate(x,y); ctx.scale(E,E); ctx.lineJoin='round'; ctx.lineCap='round'; const k=1/E;
+  earPath(ctx,P); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=(o.lw||2.4)*k; ctx.stroke();
+  // inner rim (helix), antihelix and the bowl
+  ctx.lineWidth=(o.lw||2.4)*0.62*k; ctx.strokeStyle=COL.muted;
+  ctx.beginPath(); ctx.moveTo(0.02,-0.40); ctx.bezierCurveTo(-0.22,-0.48,-0.30,-0.22,-0.26,0.06); ctx.bezierCurveTo(-0.24,0.16,-0.20,0.22,-0.16,0.26); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(-0.04,-0.30); ctx.bezierCurveTo(-0.18,-0.22,-0.20,0.02,-0.10,0.14); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0.06,-0.02); ctx.bezierCurveTo(-0.02,-0.10,-0.12,0.02,-0.04,0.14); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0.10,0.02); ctx.quadraticCurveTo(0.15,0.08,0.09,0.16); ctx.stroke(); // tragus
+  if(o.lobeCol){ // shade the lobe: everything below the bowl
+    ctx.save(); earPath(ctx,P); ctx.clip(); ctx.fillStyle=rgba(o.lobeCol,0.18); ctx.fillRect(-0.6,0.26,1.2,0.6); ctx.restore();
+    ctx.lineWidth=(o.lw||2.4)*1.05*k; ctx.strokeStyle=o.lobeCol; ctx.beginPath(); ctx.moveTo(P[6][0],P[6][1]);
+    ctx.bezierCurveTo(P[7][0],P[7][1],P[8][0],P[8][1],P[9][0],P[9][1]); ctx.bezierCurveTo(P[10][0],P[10][1],P[11][0],P[11][1],P[12][0],P[12][1]); ctx.stroke(); }
+  if(o.mark){ const q=P[12]; ctx.globalAlpha=o.mark; ctx.beginPath(); ctx.arc(q[0],q[1],0.045,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.yellow; ctx.lineWidth=2.4*k; ctx.stroke(); ctx.globalAlpha=1; }
+  ctx.restore(); return P.map(p=>[x+p[0]*E,y+p[1]*E]); }
+
+/* ===== HEAD in profile, facing right. (x,y) = centre of the head, H = crown-to-chin px.
+   o = {ear 0..1, hair 0..3, sex 'f'|'m', alpha, lobeCol, mark} ; returns the ear centre */
+function headDraw(ctx,x,y,H,o){ o=o||{}; ctx.save(); ctx.globalAlpha=o.alpha===undefined?1:o.alpha; ctx.translate(x,y); ctx.scale(H,H); const k=1/H; ctx.lineJoin='round'; ctx.lineCap='round';
+  const lw=(o.lw||2.6)*k;
+  // shoulders + neck
+  ctx.beginPath(); ctx.moveTo(-0.27,0.32); ctx.lineTo(-0.24,0.62); ctx.quadraticCurveTo(-0.55,0.66,-0.70,0.80); ctx.moveTo(0.18,0.50); ctx.lineTo(0.17,0.64); ctx.quadraticCurveTo(0.45,0.68,0.58,0.80);
+  ctx.strokeStyle=COL.ink; ctx.lineWidth=lw; ctx.stroke();
+  // long hair falls behind the ear and neck
+  if(o.hair===1){ ctx.beginPath(); ctx.moveTo(-0.05,-0.30); ctx.bezierCurveTo(-0.30,-0.30,-0.40,0.10,-0.36,0.62); ctx.lineTo(-0.10,0.62); ctx.bezierCurveTo(-0.14,0.30,-0.10,0.10,-0.02,-0.05); ctx.closePath(); SKh(ctx,lw); }
+  // head outline
+  ctx.beginPath(); ctx.moveTo(-0.28,0.33);
+  ctx.bezierCurveTo(-0.50,0.16,-0.52,-0.34,-0.20,-0.50); ctx.bezierCurveTo(0.05,-0.60,0.30,-0.48,0.33,-0.25);
+  ctx.lineTo(0.37,-0.08); ctx.lineTo(0.355,-0.03); ctx.bezierCurveTo(0.40,0.02,0.46,0.08,0.47,0.11); ctx.bezierCurveTo(0.45,0.14,0.41,0.15,0.38,0.15);
+  ctx.quadraticCurveTo(0.415,0.19,0.39,0.22); ctx.quadraticCurveTo(0.37,0.245,0.395,0.27); ctx.quadraticCurveTo(0.41,0.30,0.37,0.33);
+  ctx.bezierCurveTo(0.40,0.40,0.34,0.46,0.26,0.46); ctx.quadraticCurveTo(0.20,0.47,0.18,0.50);
+  ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=lw; ctx.stroke();
+  // jaw line rising to just below the ear
+  ctx.beginPath(); ctx.moveTo(0.24,0.45); ctx.bezierCurveTo(0.10,0.44,0.02,0.40,-0.02,0.30); ctx.strokeStyle=COL.mid; ctx.lineWidth=lw*0.6; ctx.stroke();
+  // eye, brow, nostril, mouth
+  ctx.strokeStyle=COL.ink; ctx.lineWidth=lw*0.8; ctx.beginPath(); ctx.moveTo(0.22,-0.05); ctx.quadraticCurveTo(0.27,-0.09,0.31,-0.05); ctx.quadraticCurveTo(0.27,-0.02,0.22,-0.05); ctx.stroke();
+  ctx.beginPath(); ctx.arc(0.28,-0.05,0.016,0,Math.PI*2); ctx.fillStyle=COL.ink; ctx.fill();
+  ctx.beginPath(); ctx.moveTo(0.19,-0.13); ctx.quadraticCurveTo(0.27,-0.17,0.34,-0.12); ctx.lineWidth=lw*(o.sex==='m'?1.3:0.9); ctx.stroke();
+  ctx.lineWidth=lw*0.7; ctx.beginPath(); ctx.moveTo(0.40,0.12); ctx.quadraticCurveTo(0.38,0.10,0.36,0.12); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0.38,0.245); ctx.lineTo(0.33,0.25); ctx.stroke();
+  // hair cap
+  const cap=()=>{ ctx.beginPath(); ctx.moveTo(0.31,-0.30); ctx.bezierCurveTo(0.30,-0.56,0.02,-0.66,-0.22,-0.56); ctx.bezierCurveTo(-0.50,-0.44,-0.55,-0.10,-0.44,0.14); ctx.lineTo(-0.34,0.12);
+    ctx.bezierCurveTo(-0.32,-0.08,-0.20,-0.20,-0.04,-0.19); ctx.lineTo(0.02,-0.07); ctx.lineTo(0.06,-0.09); ctx.lineTo(0.06,-0.24); ctx.quadraticCurveTo(0.20,-0.30,0.31,-0.30); ctx.closePath(); };
+  if(o.hair===3){ ctx.fillStyle='#e9eef5'; ctx.strokeStyle=COL.ink; ctx.lineWidth=lw; for(let i=0;i<10;i++){ const a=-3.7+i*0.29; ctx.beginPath(); ctx.arc(-0.07+Math.cos(a)*0.45,-0.10+Math.sin(a)*0.45,0.075,0,Math.PI*2); ctx.fill(); ctx.stroke(); } }
+  if(o.hair===2){ ell(ctx,-0.49,-0.30,0.11,0.12,0); SKh(ctx,lw); }
+  cap(); SKh(ctx,lw);
+  if(o.hair===3){ ctx.save(); cap(); ctx.clip(); ctx.strokeStyle=COL.mid; ctx.lineWidth=lw*0.6; for(let i=0;i<10;i++){ const a=-3.7+i*0.29; ctx.beginPath(); ctx.arc(-0.07+Math.cos(a)*0.40,-0.10+Math.sin(a)*0.40,0.05,0,Math.PI*2); ctx.stroke(); } ctx.restore(); }
+  if(o.sex==='m'&&o.beard){ ctx.beginPath(); ctx.moveTo(-0.01,0.10); ctx.bezierCurveTo(0.02,0.38,0.14,0.47,0.27,0.46); ctx.lineTo(0.36,0.40); ctx.lineTo(0.38,0.30); ctx.strokeStyle=COL.muted; ctx.setLineDash([0.02,0.02]); ctx.lineWidth=lw*0.9; ctx.stroke(); ctx.setLineDash([]); }
+  ctx.restore();
+  const ex=x-0.04*H, ey=y+0.06*H; earDraw(ctx,ex,ey,0.30*H,o.ear||0,{lobeCol:o.lobeCol,mark:o.mark,lw:Math.max(1.4,(o.lw||2.6)*Math.min(1,H/160))});
+  return [ex,ey]; }
+function SKh(ctx,lw){ ctx.fillStyle='#e9eef5'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=lw; ctx.stroke(); }
+
+/* ===== GENES as a chromosome pair: two short rods with allele letters (h = rod length) */
+function genePair(ctx,x,y,g,h,o){ o=o||{}; ctx.save(); ctx.globalAlpha=o.alpha===undefined?1:o.alpha; const w=h*0.36;
+  for(let i=0;i<2;i++){ const xx=x+(i?w*0.65:-w*0.65), ch=g?g[i]:'?', c=g?aCol(ch):COL.mid;
+    rrect(ctx,xx-w/2,y-h/2,w,h,w/2); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=c; ctx.lineWidth=2; ctx.stroke(); line(ctx,xx-w/2+1,y,xx+w/2-1,y,c,1.2);
+    textAt(ctx,ch,xx,y-h*0.08,{align:'center',size:h*0.42,weight:800,color:c,baseline:'middle'}); }
+  ctx.restore(); }
+
+/* ===== PEA PLANT. Growth is node by node (real pea data): the seed sprouts after 6 days, a new node
+   appears every 2.6 days (plastochron), each internode stretches over ≈ 5 days to its final length —
+   tall (Le, active GA-making enzyme) 8.6 cm, dwarf (le) 2.0 cm — so 22 nodes give 1.9 m vs 0.44 m.
+   Flowers open at nodes ≥ 13 after day 45; a pod swells over the 10 days after its flower. */
+const PEA={germ:6, plast:2.6, nodes:22, Ltall:8.6, Ldwarf:2.0, flowerNode:13, flowerDay:45};
+function peaNodes(age){ return clamp((age-PEA.germ)/PEA.plast,0,PEA.nodes); }
+function peaHeight(age,tall){ const n=peaNodes(age), Lm=tall?PEA.Ltall:PEA.Ldwarf; let h=1.5*smooth01(PEA.germ-1,PEA.germ+2,age);
+  for(let i=0;i<Math.ceil(n);i++){ const born=PEA.germ+i*PEA.plast; h+=Lm/(1+Math.exp(-(age-born-2.6)/0.9)); } return h; }
+/* draws a pea plant: base (x,y), px per cm s, age days, tall bool, o = {t, sway, phase, flower:'v'|'w', leaf px, detail 0|1, pods 0..1 extra, alpha} */
+function peaDraw(ctx,x,y,s,age,tall,o){ o=o||{}; if(age<PEA.germ-2) return {top:[x,y],flowers:[]}; const t=o.t||0, Lm=tall?PEA.Ltall:PEA.Ldwarf, n=peaNodes(age), lf=(o.leaf||11)*(tall?1:0.78), det=o.detail===undefined?1:o.detail;
+  ctx.save(); if(o.alpha!==undefined) ctx.globalAlpha=o.alpha; ctx.lineCap='round'; ctx.lineJoin='round';
+  // sprout
+  const sp=smooth01(PEA.germ-2,PEA.germ+2,age); let px=x, py=y, ang=-Math.PI/2; const pts=[[px,py]], nodesAt=[];
+  const sw=(o.sway===undefined?1:o.sway)*(0.022*Math.sin(t*1.25+(o.phase||0))+0.01*Math.sin(t*2.9+(o.phase||0)*1.7));
+  const L0=1.5*sp; px+=Math.cos(ang)*L0*s; py+=Math.sin(ang)*L0*s; pts.push([px,py]);
+  const N=Math.ceil(n);
+  for(let i=0;i<N;i++){ const born=PEA.germ+i*PEA.plast, L=Lm/(1+Math.exp(-(age-born-2.6)/0.9)); ang+=sw*(0.08+i*0.01)+(i%2?0.04:-0.04); px+=Math.cos(ang)*L*s; py+=Math.sin(ang)*L*s; pts.push([px,py]); nodesAt.push({x:px,y:py,i,ang,grow:clamp((age-born)/5,0,1)}); }
+  ctx.strokeStyle=COL.green; ctx.lineWidth=Math.max(1.4,Math.min(3.2,s*1.3)); ctx.beginPath(); pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1])); ctx.stroke();
+  const flowers=[];
+  nodesAt.forEach((nd,j)=>{ const side=nd.i%2?1:-1, g=nd.grow, len=lf*g; if(len<0.6) return;
+    const la=nd.ang+side*1.0; const ex=nd.x+Math.cos(la)*len*1.4, ey=nd.y+Math.sin(la)*len*1.4;
+    // stipule
+    if(det){ ctx.save(); ell(ctx,nd.x+side*len*0.18,nd.y+len*0.05,len*0.22,len*0.14,side*0.5); ctx.fillStyle='#eef8f1'; ctx.fill(); ctx.strokeStyle=COL.green; ctx.lineWidth=1.1; ctx.stroke(); ctx.restore(); }
+    line(ctx,nd.x,nd.y,ex,ey,COL.green,Math.max(1,len*0.11));
+    // two pairs of leaflets along the petiole
+    for(let q=0;q<(det?2:1);q++){ const u=0.45+q*0.45, lx=lerp(nd.x,ex,u), ly=lerp(nd.y,ey,u);
+      for(const sd of [-1,1]){ const a2=la+sd*0.95, cx=lx+Math.cos(a2)*len*0.42, cy=ly+Math.sin(a2)*len*0.42; ctx.save(); ell(ctx,cx,cy,len*0.42,len*0.25,a2); ctx.fillStyle='#e9f6ee'; ctx.fill(); ctx.strokeStyle=COL.green; ctx.lineWidth=Math.max(0.8,len*0.08); ctx.stroke(); ctx.restore(); } }
+    // tendril curl
+    if(det&&len>4){ ctx.save(); ctx.strokeStyle=COL.green; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(ex,ey); for(let k=1;k<=14;k++){ const r=len*0.32*(1-k/18), th=la+k*0.55*side; ctx.lineTo(ex+Math.cos(la)*len*0.25+Math.cos(th)*r,ey+Math.sin(la)*len*0.25+Math.sin(th)*r); } ctx.stroke(); ctx.restore(); }
+    // flower / pod in the axil
+    if(nd.i>=PEA.flowerNode&&age>PEA.flowerDay+(nd.i-PEA.flowerNode)*1.5){ const fa=age-PEA.flowerDay-(nd.i-PEA.flowerNode)*1.5, fx=nd.x-side*lf*0.45, fy=nd.y-lf*0.2;
+      flowers.push({x:fx,y:fy,age:fa,side,pod:Math.min(1,clamp((fa-4)/10,0,1)+(o.pods||0))}); }
+  });
+  // flowers and pods last, so leaves never hide them
+  flowers.forEach((f,j)=>{ const top=flowers.length-1-j<2; // the newest flowers keep opening at the top
+    if(f.age<6||f.pod<0.15||top) peaFlower(ctx,f.x,f.y,lf*0.8*(o.fl||1)*clamp(f.age/1.5,0.3,1),o.flower,f.side,top?1:1-clamp((f.age-4)/2,0,1));
+    if(f.pod>0.05&&!top) podDraw(ctx,f.x,f.y+lf*0.1,lf*1.7*f.pod,Math.PI/2-f.side*0.35,f.pod); });
+  // growing tip
+  if(N<PEA.nodes){ const p=pts[pts.length-1]; ctx.save(); ell(ctx,p[0],p[1]-2,2.6,4,ang+Math.PI/2); ctx.fillStyle='#e9f6ee'; ctx.fill(); ctx.strokeStyle=COL.green; ctx.lineWidth=1.2; ctx.stroke(); ctx.restore(); }
+  ctx.restore(); return {top:pts[pts.length-1],flowers,nodes:nodesAt}; }
+function peaFlower(ctx,x,y,r,kind,side,open){ if(r<0.5) return; ctx.save(); const v=kind==='v'; const st=v?'#7b3fa0':COL.ink, fl=v?'#d9b8ec':'#ffffff';
+  ctx.globalAlpha*=clamp(open+0.15,0,1); ctx.beginPath(); ctx.moveTo(x,y); ctx.bezierCurveTo(x-r*1.1,y-r*1.4,x+r*1.1,y-r*1.4,x,y); ctx.fillStyle=fl; ctx.fill(); ctx.strokeStyle=st; ctx.lineWidth=Math.max(1,r*0.16); ctx.stroke();
+  ell(ctx,x+side*r*0.35,y+r*0.05,r*0.55,r*0.3,side*0.4); ctx.fillStyle=fl; ctx.fill(); ctx.stroke(); ctx.restore(); }
+function podDraw(ctx,x,y,L,ang,g){ ctx.save(); ctx.translate(x,y); ctx.rotate(ang); const w=L*0.2*(0.5+0.5*g);
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.quadraticCurveTo(L*0.5,-w*1.3,L,-w*0.2); ctx.quadraticCurveTo(L*0.55,w*1.1,0,0); ctx.fillStyle='#d3ecdc'; ctx.fill(); ctx.strokeStyle='#14713c'; ctx.lineWidth=Math.max(1.2,L*0.07); ctx.stroke();
+  if(g>0.5) for(let i=1;i<=4;i++){ circ(ctx,L*i/5.2,-w*0.1,w*0.32*(g-0.4),COL.green,null,Math.max(0.6,L*0.03)); }
+  ctx.restore(); }
+/* a seed thrown on a real parabola: p0 → p1 in T seconds under g px/s² */
+function throwNew(x0,y0,x1,y1,T,g,delay){ g=g||1400; return {x0,y0,vx:(x1-x0)/T,vy:(y1-y0-0.5*g*T*T)/T,g,T,t:-(delay||0),x:x0,y:y0,done:false}; }
+function throwStep(o,dt){ o.t+=dt; const t=clamp(o.t,0,o.T); o.x=o.x0+o.vx*t; o.y=o.y0+o.vy*t+0.5*o.g*t*t; if(o.t>=o.T) o.done=true; return o; }
+function seedDraw(ctx,x,y,r,wr){ ctx.save(); ell(ctx,x,y,r,r*0.92,0.3); ctx.fillStyle='#f4f0d8'; ctx.fill(); ctx.strokeStyle=COL.green; ctx.lineWidth=1.6; ctx.stroke(); if(wr){ line(ctx,x-r*0.5,y-r*0.2,x+r*0.4,y+r*0.3,COL.green,1); } dot(ctx,x+r*0.45,y-r*0.1,r*0.18,COL.ink); ctx.restore(); }
+function soil(ctx,x0,x1,y,h){ ctx.save(); line(ctx,x0,y,x1,y,'#8a6a3a',2.6); ctx.fillStyle='#f6efe2'; ctx.fillRect(x0,y+1,x1-x0,h); const R=rng(7); ctx.fillStyle='#c9ad83'; for(let i=0;i<(x1-x0)*h/260;i++) dot(ctx,x0+R()*(x1-x0),y+4+R()*(h-6),1.1,'#c9ad83'); ctx.restore(); }
+function dayLine(ctx,x,y,w,t,tmax,lbl){ line(ctx,x,y,x+w,y,COL.mid,2); for(let d=0;d<=tmax;d++){ const xx=x+w*d/tmax; line(ctx,xx,y-(d%10?2:4),xx,y+(d%10?2:4),COL.mid,1.2); if(tmax<=8||d%(tmax>30?10:2)===0) textAt(ctx,String(d),xx,y+17,{align:'center',size:10.5,weight:600,color:COL.muted}); }
+  const xx=x+w*clamp(t/tmax,0,1); ctx.save(); ctx.fillStyle=COL.yellow; ctx.beginPath(); ctx.moveTo(xx,y-3); ctx.lineTo(xx-7,y-14); ctx.lineTo(xx+7,y-14); ctx.closePath(); ctx.fill(); ctx.restore(); line(ctx,x,y,xx,y,COL.yellow,3);
+  if(lbl) textAt(ctx,lbl,x,y-12,{size:11.5,weight:700,color:COL.ink}); }
+function ttag(ctx,txt){ tag(ctx,txt,788,24,COL.mid,{size:11.5,weight:600,align:'right'}); }
+/* cheap pea for crowded views: adds stem + leaflets to the CURRENT path (caller strokes once);
+   open flowers are pushed to fl[] as [x,y,r] so the caller can fill them in one batch */
+function peaMini(ctx,x,y,s,age,tall,o,fl){ if(age<PEA.germ-1) return; const t=o.t||0, Lm=tall?PEA.Ltall:PEA.Ldwarf, n=peaNodes(age), lf=o.leaf||4, N=Math.ceil(n);
+  const sw=0.022*Math.sin(t*1.25+(o.phase||0)); let px=x, py=y-1.5*s*smooth01(PEA.germ-2,PEA.germ+2,age), ang=-Math.PI/2; ctx.moveTo(x,y); ctx.lineTo(px,py);
+  const tops=[];
+  for(let i=0;i<N;i++){ const born=PEA.germ+i*PEA.plast, L=Lm/(1+Math.exp(-(age-born-2.6)/0.9)); ang+=sw*(0.08+i*0.01)+(i%2?0.04:-0.04); const nx=px+Math.cos(ang)*L*s, ny=py+Math.sin(ang)*L*s;
+    ctx.moveTo(px,py); ctx.lineTo(nx,ny); px=nx; py=ny; const g=clamp((age-born)/5,0,1), len=lf*g*(tall?1:0.78); if(len<0.6) continue; const side=i%2?1:-1, la=ang+side*1.0;
+    const ex=px+Math.cos(la)*len*1.4, ey=py+Math.sin(la)*len*1.4; ctx.moveTo(px,py); ctx.lineTo(ex,ey);
+    for(const sd of [-1,1]){ const a2=la+sd*0.95, mx=lerp(px,ex,0.6); const my=lerp(py,ey,0.6); ctx.moveTo(mx,my); ctx.lineTo(mx+Math.cos(a2)*len*0.75,my+Math.sin(a2)*len*0.75); }
+    if(i>=PEA.flowerNode&&age>PEA.flowerDay+(i-PEA.flowerNode)*1.5) tops.push([px-side*lf*0.45,py-lf*0.2,age-PEA.flowerDay-(i-PEA.flowerNode)*1.5]); }
+  tops.forEach((f,j)=>{ if(f[2]<6||tops.length-1-j<2) fl.push([f[0],f[1],lf*0.8*(o.fl||1)*clamp(f[2]/1.5,0.3,1)]); }); }
+
+/* =====================================================================
+   8.1 FREE OR ATTACHED EARLOBES — survey the class, look at each
+   student's parents, and test a rule for how the trait is inherited.
+   Model: one gene, two versions — E (free lobe) and e (attached lobe).
+   Each parent's two copies are drawn from the town's gene pool (share of
+   e = q, Hardy–Weinberg); the child takes one copy at random from each
+   parent. A single E is enough for a free lobe, so attached = ee only
+   (q = 55 % → 0.55² ≈ 30 % of the class has attached lobes).
+   ===================================================================== */
+function buildA1(){
+  const wrap=labShell(), side=wrap.querySelector('.lab-side');
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const RULES=[
+    {k:'dom', n:'Free is dominant', test:f=>!(f.mom.a&&f.dad.a&&!f.a), why:'both parents attached, child free'},
+    {k:'rec', n:'Attached is dominant', test:f=>!(!f.mom.a&&!f.dad.a&&f.a), why:'both parents free, child attached'},
+    {k:'mom', n:'Child copies mother', test:f=>f.a===f.mom.a, why:'child differs from mother'},
+    {k:'dad', n:'Child copies father', test:f=>f.a===f.dad.a, why:'child differs from father'}];
+  let N=40, q=0.55, per=1.2, playing=false, cls=[], idx=-1, done=0, tmr=0, rule=-1, t=0, focus=-1, seed=11;
+  const ear=spr(0), slide=spr(0), drop=spr(0), barF=spr(0), barA=spr(0), lensPop=spr(1);
+  side.innerHTML=`
+    <div class="control-group"><label>Students in class <span class="val" id="nv">40</span></label><input type="range" id="n" min="20" max="60" step="2" value="40">
+      <label style="margin-top:6px">Attached-lobe gene in town <span class="val" id="qv">55 %</span></label><input type="range" id="q" min="10" max="90" step="5" value="55"></div>
+    ${speedSlider('sp','Time per student',0.3,3,1.2,'s',0.1)}
+    <div class="control-group"><div class="toggle-group" style="margin-top:0"><button class="toggle-btn play" id="pp">▶ Survey</button><button class="toggle-btn" id="nw">↺ New class</button></div></div>
+    <div class="result-cards three">${card('cF','Free',COL.green)}${card('cA','Attached',COL.red)}${card('cN','Surveyed')}</div>
+    <div class="control-group"><label>Parents → child</label><div id="lg"></div></div>
+    <div class="control-group"><label>Suggest a rule</label><div class="chip-wrap">${RULES.map((r,i)=>`<button class="chip-btn" data-i="${i}">${r.n}</button>`).join('')}</div>
+      <div class="toggle-group"><button class="toggle-btn" id="ce" disabled>Show a family that breaks it</button></div><div class="fb hidden" id="fb"></div></div>`;
+  const fb=$('#fb');
+  function person(R,sex){ const g=(R()<q?'e':'E')+(R()<q?'e':'E'); return {g:g.includes('E')?(g[0]==='E'?g:g[1]+g[0]):g, a:g==='ee'?1:0, hair:Math.floor(R()*4), sex, beard:R()<0.4}; }
+  function newClass(){ const R=rng(seed++); cls=[]; for(let i=0;i<N;i++){ const mom=person(R,'f'), dad=person(R,'m'); mom.hair=[1,2,1,3][mom.hair]; dad.hair=[0,0,3,0][dad.hair];
+      const g=mom.g[R()<0.5?0:1]+dad.g[R()<0.5?0:1], c={mom,dad,g,a:g==='ee'?1:0,sex:R()<0.5?'f':'m',hair:0,seen:false,flash:0}; c.hair=c.sex==='f'?[1,2,3,1][Math.floor(R()*4)]:[0,0,3][Math.floor(R()*3)]; cls.push(c); }
+    idx=-1; done=0; tmr=0; focus=-1; playing=false; setBtn($('#pp'),'▶ Survey','play'); updAll(); }
+  const pct=x=>done?Math.round(100*x/done)+' %':'—';
+  function stats(){ const s=cls.filter(c=>c.seen); const rows=[[0,0],[1,0],[1,1]].map(([m,d])=>{ const fam=s.filter(c=>c.mom.a+c.dad.a===m+d); return [fam.length,fam.filter(c=>!c.a).length,fam.filter(c=>c.a).length]; });
+    return {s,rows,free:s.filter(c=>!c.a).length,att:s.filter(c=>c.a).length}; }
+  function updAll(){ const S=stats(); setv($,'cF',pct(S.free)); setv($,'cA',pct(S.att)); setv($,'cN',done+' / '+N);
+    const nm=['Both free','One of each','Both attached'];
+    $('#lg').innerHTML=logTable(['Parents','Families','Child free','Child attached'],S.rows.map((r,i)=>[nm[i],r[0],r[0]?{v:r[1],c:r[1]?'r-ok':''}:'—',r[0]?{v:r[2],c:(i===2&&r[2])||r[2]?'r-bad':''}:'—']));
+    updRule(S); }
+  function breakers(){ return rule<0?[]:cls.map((c,i)=>i).filter(i=>cls[i].seen&&!RULES[rule].test(cls[i])); }
+  function updRule(S){ $('#ce').disabled=rule<0||!breakers().length;
+    if(rule<0){ fbSet(fb,'',done<6?'Run the survey. Each student is shown with their <b>mother</b> and <b>father</b>.':'Look at the table, then pick the rule you think fits.'); return; }
+    const b=breakers(), R=RULES[rule], aa=S.rows[2][0], ff=S.rows[0][0];
+    if(b.length) fbSet(fb,'bad',`<b>${b.length}</b> famil${b.length>1?'ies break':'y breaks'} “${R.n}”: ${R.why}.`);
+    else if(done<N*0.5) fbSet(fb,'warn','No family breaks it <b>yet</b> — survey more students.');
+    else if(R.k==='dom') fbSet(fb,'ok',`No family breaks it. Two attached-lobe parents (${aa} famil${aa===1?'y':'ies'}) never have a free-lobe child, but two free-lobe parents can have an attached-lobe child: <b>free is dominant, attached is recessive</b>.`);
+    else fbSet(fb,'warn','No family breaks it in this class — try a <b>new class</b>.'); }
+  $('#n').oninput=e=>{ N=+e.target.value; setv($,'nv',String(N)); newClass(); };
+  $('#q').oninput=e=>{ q=+e.target.value/100; setv($,'qv',Math.round(q*100)+' %'); newClass(); };
+  $('#sp').oninput=e=>{ per=+e.target.value; setv($,'spv',per.toFixed(1)+' s'); };
+  $('#pp').onclick=()=>{ if(done>=N){ newClass(); } playing=!playing; focus=-1; setBtn($('#pp'),playing?'⏸ Pause':'▶ Survey',playing?'':'play'); };
+  $('#nw').onclick=()=>newClass();
+  chipsWire(wrap,'.chip-btn',b=>{ rule=+b.dataset.i; blip(520,0.08,0.05); updAll(); });
+  let ceI=0; $('#ce').onclick=()=>{ const b=breakers(); if(!b.length) return; playing=false; setBtn($('#pp'),'▶ Survey','play'); show(b[ceI++%b.length]); cls[idx].flash=1.6; };
+  function show(i){ if(i===idx) return; const prev=cls[idx]; idx=i; slide.x=1; slide.v=0; drop.x=1; drop.v=0; lensPop.x=0.55; lensPop.v=0; if(!prev) ear.x=cls[i].a; blip(330+Math.random()*60,0.05,0.03,'triangle'); }
+  function record(i){ const c=cls[i]; if(c.seen) return; c.seen=true; done++; blip(c.a?440:660,0.1,0.05); updAll(); }
+  newClass();
+  /* --- layout (stage 800 × 560) --- */
+  const MOM=[118,96], DAD=[332,96], PH=112, KID=[205,352], KH=205, LENS=[458,332,118], BX=[630,722], BB=200, BHMAX=140;
+  function seatXY(i){ const cols=6, sx=31, sy=Math.min(29,268/Math.ceil(N/cols)); return [616+(i%cols)*sx,276+Math.floor(i/cols)*sy]; }
+  animLoop(dt=>{
+    t+=dt;
+    if(playing){ tmr+=dt; if(idx<0||tmr>per){ tmr=0; let nx=cls.findIndex(c=>!c.seen); if(nx<0){ playing=false; setBtn($('#pp'),'▶ Survey','play'); } else show(nx); } }
+    const c=cls[idx];
+    if(c){ springTo(ear,c.a,140,13,dt); if(playing&&tmr>per*0.55) record(idx); else if(!playing&&!c.seen&&Math.abs(ear.x-c.a)<0.02) record(idx); c.flash=Math.max(0,c.flash-dt); }
+    springTo(slide,0,120,15,dt); springTo(drop,0,90,11,dt); springTo(lensPop,1,160,12,dt);
+    const S=stats(); springTo(barF,done?S.free/done:0,60,10,dt); springTo(barA,done?S.att/done:0,60,10,dt);
+    /* ---------------- draw ---------------- */
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h); ctx.save(); stg(ctx,w,h);
+    if(!c){ textAt(ctx,'Press ▶ Survey',290,280,{align:'center',size:18,weight:600,color:COL.mid}); }
+    else {
+      // parents drop in from above
+      const dy=-drop.x*170, al=clamp(1-drop.x*1.3,0,1);
+      [[MOM,c.mom,'Mother'],[DAD,c.dad,'Father']].forEach(([P,p,lb])=>{ headDraw(ctx,P[0],P[1]+dy,PH,{ear:p.a,hair:p.hair,sex:p.sex,beard:p.beard,alpha:al,lobeCol:p.a?REC:DOM});
+        tag(ctx,lb+' · '+(p.a?'attached':'free'),P[0],P[1]+dy-82,p.a?REC:DOM,{size:11.5,alpha:al}); });
+      textAt(ctx,'×',225,104+dy,{align:'center',size:26,weight:700,color:COL.mid,alpha:al});
+      ctx.save(); ctx.globalAlpha=al; ctx.strokeStyle=COL.mid; ctx.lineWidth=1.8; ctx.beginPath(); ctx.moveTo(MOM[0],198+dy); ctx.lineTo(DAD[0],198+dy); ctx.moveTo(225,198+dy); ctx.lineTo(225,218); ctx.stroke(); ctx.restore();
+      // the student slides in from the right
+      const kx=KID[0]+slide.x*260, ka=clamp(1-slide.x*1.2,0,1);
+      const E=headDraw(ctx,kx,KID[1],KH,{ear:ear.x,hair:c.hair,sex:c.sex,alpha:ka,lobeCol:ear.x>0.5?REC:DOM});
+      if(c.flash>0) circ(ctx,kx,KID[1],KH*0.62+6*Math.sin(t*12),COL.red,null,3*Math.min(1,c.flash));
+      // magnifier on the ear
+      const [lx,ly,lr0]=LENS, lr=lr0*lensPop.x, ER=0.30*KH*0.5;
+      ctx.save(); ctx.globalAlpha=ka*0.7; ctx.strokeStyle=COL.mid; ctx.lineWidth=1.3; ctx.setLineDash([4,4]); ctx.beginPath(); ctx.moveTo(E[0]+ER*0.4,E[1]-ER*1.1); ctx.lineTo(lx-lr*0.5,ly-lr*0.87); ctx.moveTo(E[0]+ER*0.4,E[1]+ER*1.2); ctx.lineTo(lx-lr*0.5,ly+lr*0.87); ctx.stroke(); ctx.restore();
+      circ(ctx,E[0],E[1],ER*1.35,COL.mid,null,1.4);
+      ctx.save(); ctx.beginPath(); ctx.arc(lx,ly,Math.max(1,lr),0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill(); ctx.clip();
+      // cheek / jaw line behind the big ear
+      const EE=lr*1.3, ex=lx-lr*0.08, ey=ly-lr*0.06; ctx.strokeStyle=COL.mid; ctx.lineWidth=2.4; ctx.beginPath(); ctx.moveTo(ex+0.13*EE,ey+0.33*EE); ctx.bezierCurveTo(ex+0.22*EE,ey+0.75*EE,ex+0.5*EE,ey+0.9*EE,ex+0.9*EE,ey+1.0*EE); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(ex+0.10*EE,ey-0.40*EE); ctx.lineTo(ex+0.22*EE,ey-0.75*EE); ctx.stroke();
+      const P=earDraw(ctx,ex,ey,EE,ear.x,{lobeCol:ear.x>0.5?REC:DOM,mark:1,lw:3});
+      ctx.restore(); circ(ctx,lx,ly,lr,COL.ink,null,3); line(ctx,lx+lr*0.7,ly+lr*0.7,lx+lr*0.98,ly+lr*0.98,COL.ink,7);
+      // lobe hanging below the joint? measure it
+      const joint=P[12], low=Math.max(P[8][1],P[9][1],P[10][1]); if(low-joint[1]>6&&lensPop.x>0.8){ dimArrow(ctx,ex-0.30*EE+lr*0.02,joint[1],low,DOM); }
+      tag(ctx,ear.x>0.5?'attached lobe':'free lobe',lx,ly+lr0+24,ear.x>0.5?REC:DOM,{size:13});
+      tag(ctx,'Student '+(idx+1),lx,ly-lr0-20,COL.ink,{size:12});
+    }
+    // tally bars
+    textAt(ctx,'Class tally',706,26,{align:'center',size:12.5,weight:700,color:COL.muted});
+    [[BX[0],barF.x,DOM,'free',S.free],[BX[1],barA.x,REC,'attached',S.att]].forEach(([x,f,col,lb,n])=>{ const hh=BHMAX*clamp(f,0,1.05);
+      rect(ctx,x-26,BB-BHMAX,52,BHMAX,'#dbe4f0',null,1); ctx.save(); ctx.fillStyle=rgba(col,0.16); ctx.fillRect(x-26,BB-hh,52,hh); ctx.restore(); line(ctx,x-26,BB-hh,x+26,BB-hh,col,3);
+      textAt(ctx,done?Math.round(f*100)+'%':'',x,BB-hh-8,{align:'center',size:15,weight:700,color:col}); textAt(ctx,lb+' ('+n+')',x,BB+18,{align:'center',size:11.5,weight:600,color:col}); });
+    line(ctx,598,BB,792,BB,COL.ink,2);
+    // seats
+    textAt(ctx,'Class',616-12,256,{size:12.5,weight:700,color:COL.muted});
+    const bset=new Set(breakers());
+    cls.forEach((s,i)=>{ const [x,y]=seatXY(i), r=9; circ(ctx,x,y,r,s.seen?(s.a?REC:DOM):'#c2d1e5',s.seen?rgba(s.a?REC:DOM,0.15):'#fff',s.seen?2:1.4);
+      if(s.seen){ ctx.save(); ctx.translate(x-1,y+1); earDraw(ctx,0,0,10,s.a,{lw:1.2}); ctx.restore(); }
+      if(bset.has(i)){ const p=0.5+0.5*Math.sin(t*6); circ(ctx,x,y,r+4,COL.red,null,1.5+p); }
+      if(i===idx){ ctx.save(); ctx.fillStyle=COL.yellow; ctx.beginPath(); ctx.moveTo(x,y-r-3); ctx.lineTo(x-6,y-r-12); ctx.lineTo(x+6,y-r-12); ctx.closePath(); ctx.fill(); ctx.restore(); } });
+    tag(ctx,'E free · e attached',560,24,COL.mid,{size:11.5,weight:600,align:'right'});
+    ctx.restore();
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   8.2 CONFIRMING 1 : 2 : 1 — Fig. 8.3 grown for real, then tested.
+   P: pure tall TT × pure short tt (anthers removed, pollen brushed on).
+   F1: every seed is Tt → all tall; peas then self-pollinate inside the
+   closed flower. F2: each seed takes one copy from each Tt parent at
+   random → TT ¼, Tt ½, tt ¼ (tall : short ≈ 3 : 1).
+   Activity 8.2: tall TT and Tt look the same, so grow n seeds from EVERY
+   tall F2 plant (self-pollinated, as Mendel did — or crossed with a
+   short tt plant). A TT parent gives only tall plants; a Tt parent gives
+   some short ones. A Tt parent can still fool you: all n of its seeds
+   come out tall with probability (3/4)ⁿ (self) or (1/2)ⁿ (test cross).
+   Plant height grows node by node (see PEA): tall internodes 8.6 cm,
+   dwarf 2.0 cm — the T gene makes the enzyme for the growth hormone.
+   ===================================================================== */
+function buildA2(){
+  const wrap=labShell(), side=wrap.querySelector('.lab-side');
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  let trait='h', stage=0, unlocked=1, spd=0.1, genes=false, t=0;
+  const U=()=>trait==='h'?'T':'W', Lw=()=>trait==='h'?'t':'w';
+  const dom=g=>g.includes(U()), tallOf=g=>trait==='f'||dom(g), flOf=g=>trait==='f'?(dom(g)?'v':'w'):'w';
+  const word=g=>trait==='h'?(dom(g)?'tall':'short'):(dom(g)?'violet':'white');
+  const pick=g=>g[Math.random()<0.5?0:1], cross=(a,b)=>{ const s=pick(a)+pick(b); return s[0]===U()||s[1]!==U()?s:s[1]+s[0]; };
+  let P,F1,F2,F3,tot;
+  function resetAll(){ P={phase:'ready',tau:0,day:0}; F1={plants:[],throws:[],day:0,play:false}; F2={n:24,plants:[],throws:[],day:0,play:false};
+    F3={method:'self',n:8,trays:[],throws:[],day:0,play:false,stampT:0,counted:false,run:0}; tot={TT:0,Tt:0,tt:0,missed:0,runs:0}; stage=0; unlocked=1; }
+  resetAll();
+  side.innerHTML=`
+    <div class="control-group"><div class="step-row" id="pills"></div></div>
+    <div class="control-group"><label>Trait</label><div class="toggle-group"><button class="toggle-btn active" id="th">Height · T / t</button><button class="toggle-btn" id="tf">Flower · W / w</button></div></div>
+    <div id="sc"></div>
+    ${speedSlider('sp','1 day in',0.04,0.3,0.1,'s',0.02)}
+    <div class="control-group"><div class="toggle-group" style="margin-top:0"><button class="toggle-btn" id="gn">Show hidden genes</button></div></div>
+    <div class="result-cards" id="cards"></div>
+    <div class="fb hidden" id="fb"></div>`;
+  const fb=$('#fb');
+  toggleWire([$('#th'),$('#tf')],b=>{ trait=b.id==='th'?'h':'f'; resetAll(); go(0); });
+  $('#sp').oninput=e=>{ spd=+e.target.value; setv($,'spv',spd.toFixed(2)+' s'); };
+  $('#gn').onclick=()=>{ genes=!genes; $('#gn').classList.toggle('active',genes); };
+  function noCaps(){ wrap.querySelectorAll('.rlabel').forEach(e=>e.style.textTransform='none'); }
+  function pills(){ stepPills($('#pills'),['P cross','F1','F2','8.2 Test'],stage,[unlocked>1,unlocked>2,unlocked>3,F3.counted],i=>{ if(i<unlocked) go(i); }); }
+  function go(i){ stage=i; unlocked=Math.max(unlocked,i+1); pills(); panel(); }
+  /* ---- stage-specific controls ---- */
+  function panel(){ const sc=$('#sc'), c=$('#cards');
+    if(stage===0){ sc.innerHTML=`<div class="control-group"><div class="toggle-group" style="margin-top:0"><button class="toggle-btn play" id="b1">✿ Cross-pollinate</button></div><div class="toggle-group"><button class="toggle-btn navy" id="b2" disabled>Sow the F1 seeds →</button></div></div>`;
+      c.innerHTML=card('k1','Mother (anthers off)')+card('k2','Pollen from'); c.className='result-cards';
+      $('#b1').onclick=()=>{ if(P.phase==='ready'){ P.phase='cross'; P.tau=0; blip(600,0.08,0.05); } };
+      $('#b2').onclick=()=>{ if(P.phase!=='done') return; sowF1(); go(1); }; }
+    if(stage===1){ sc.innerHTML=`<div class="control-group"><div class="toggle-group" style="margin-top:0"><button class="toggle-btn" id="b1">⏸ Pause</button></div><div class="toggle-group"><button class="toggle-btn navy" id="b2" disabled>Harvest & sow F2 →</button></div></div>`;
+      c.innerHTML=card('k1','Day')+card('k2','F1 plants'); c.className='result-cards';
+      $('#b1').onclick=()=>{ F1.play=!F1.play; }; $('#b2').onclick=()=>{ sowF2(); go(2); }; }
+    if(stage===2){ sc.innerHTML=`<div class="control-group"><label>F2 seeds sown <span class="val" id="nv">${F2.n}</span></label><input type="range" id="n2" min="8" max="32" step="1" value="${F2.n}">
+        <div class="toggle-group"><button class="toggle-btn" id="b1">⏸ Pause</button><button class="toggle-btn" id="b3">↺ Sow again</button></div><div class="toggle-group"><button class="toggle-btn navy" id="b2" disabled>Test the ${trait==='h'?'tall':'violet'} plants →</button></div></div>`;
+      c.innerHTML=card('k1','Day')+card('k2',trait==='h'?'Tall : short':'Violet : white')+card('k3',trait==='h'?'Tall':'Violet',DOM)+card('k4',trait==='h'?'Short':'White',REC); c.className='result-cards';
+      $('#n2').oninput=e=>{ F2.n=+e.target.value; setv($,'nv',String(F2.n)); };
+      $('#b1').onclick=()=>{ F2.play=!F2.play; }; $('#b3').onclick=()=>sowF2(); $('#b2').onclick=()=>{ setupF3(); go(3); }; }
+    if(stage===3){ sc.innerHTML=`<div class="control-group"><label>Grow seeds from each ${trait==='h'?'tall':'violet'} F2 plant by</label><div class="toggle-group"><button class="toggle-btn ${F3.method==='self'?'active':''}" id="ms">Self-pollination</button><button class="toggle-btn ${F3.method==='test'?'active':''}" id="mt">Crossing with ${Lw()+Lw()}</button></div>
+        <label style="margin-top:8px">Seeds grown per plant <span class="val" id="nv">${F3.n}</span></label><input type="range" id="n3" min="2" max="10" step="1" value="${F3.n}">
+        <div class="toggle-group"><button class="toggle-btn play" id="b1">▶ Sow & grow F3</button></div><div class="toggle-group"><button class="toggle-btn" id="b3">↺ New F2 field, test again</button></div></div>`;
+      c.innerHTML=card('k1',U()+U()+' (all '+word(U()+U())+')',DOM)+card('k2',U()+Lw()+' (some '+word(Lw()+Lw())+')',COL.ink)+card('k3',Lw()+Lw()+' (from F2)',REC)+card('k4','Ratio')+card('k5','Chance a '+U()+Lw()+' fools you')+card('k6','All runs  '+U()+U()+' : '+U()+Lw()+' : '+Lw()+Lw()); c.className='result-cards';
+      toggleWire([$('#ms'),$('#mt')],b=>{ F3.method=b.id==='ms'?'self':'test'; setupF3(true); });
+      $('#n3').oninput=e=>{ F3.n=+e.target.value; setv($,'nv',String(F3.n)); setupF3(true); };
+      $('#b1').onclick=()=>{ if(!F3.throws.length&&F3.day===0) sowF3(); };
+      $('#b3').onclick=()=>{ sowF2(true); setupF3(); }; }
+    noCaps();
+  }
+  /* ---- sowing: every seed is thrown on a real parabola into its spot ---- */
+  const G1=470, G2=470;
+  function sowF1(){ F1.plants=[]; F1.throws=[]; F1.day=0; F1.play=true; for(let i=0;i<6;i++){ const x=110+i*116; const p={g:U()+Lw(),x,lag:Math.random()*1.2,k:1+0.04*gauss(),ph:Math.random()*6};
+      F1.plants.push(p); F1.throws.push(throwNew(36,70,x,G1,1.0,1400,i*0.12)); } }
+  function sowF2(grown){ const n=F2.n; F2.plants=[]; F2.throws=[]; F2.day=grown?72:0; F2.play=!grown; const sp=700/n;
+    for(let i=0;i<n;i++){ const x=50+sp*(i+0.5); F2.plants.push({g:cross(U()+Lw(),U()+Lw()),x,lag:Math.random()*1.2,k:1+0.04*gauss(),ph:Math.random()*6});
+      if(!grown) F2.throws.push(throwNew(36,70,x,G2,0.9+0.25*i/n,1400,i*0.05)); }
+    F3.trays=[]; F3.counted=false; }
+  /* F3 trays — one per dominant-looking F2 plant */
+  function setupF3(keep){ if(!F2.plants.length) sowF2(true); const D=F2.plants.map((p,i)=>i).filter(i=>dom(F2.plants[i].g)); const K=D.length;
+    const cols=Math.min(K,K>18?8:K>10?6:5), rows=Math.ceil(K/cols), tw=760/cols, th=Math.min(150,350/rows);
+    F3.trays=D.map((pi,k)=>{ const par=F2.plants[pi], kids=[]; for(let j=0;j<F3.n;j++){ const g=F3.method==='self'?cross(par.g,par.g):cross(par.g,Lw()+Lw()); kids.push({g,lag:Math.random()*1.5,k:1+0.05*gauss(),ph:Math.random()*6}); }
+      return {pi,k,par,kids,x:20+(k%cols)*tw,y:188+Math.floor(k/cols)*th,w:tw,h:th,verdict:null,pop:spr(0)}; });
+    F3.throws=[]; F3.day=0; F3.play=false; F3.stampT=0; F3.counted=false; F3.run++; }
+  function sowF3(){ F3.throws=[]; F3.trays.forEach(tr=>{ const px=stripX(tr.par.x); tr.kids.forEach((kd,j)=>{ const x=tr.x+tr.w*(j+0.5)/tr.kids.length, y=tr.y+tr.h-14; kd.x=x;
+      F3.throws.push(throwNew(px,120,x,y,0.8,1400,tr.k*0.05+j*0.025)); }); }); F3.play=true; blip(500,0.06,0.04); }
+  const stripX=x=>40+(x-50)*720/700;
+  const F3END=()=>trait==='h'?38:52;
+  function plant(ctx,p,x,ground,s,age,o){ return peaDraw(ctx,x,ground,s*p.k,age-p.lag,tallOf(p.g),Object.assign({t,phase:p.ph,flower:flOf(p.g)},o||{})); }
+  /* ---- the zoomed, cut-open flower for the P cross. Geometry is shared with the tweezers and brush ---- */
+  function fzGeom(cx,cy,R,pod){ const O=[cx-0.62*R,cy+0.40*R], th=-0.42, L=0.95*R*(1+0.3*pod), E=[O[0]+Math.cos(th)*0.95*R,O[1]+Math.sin(th)*0.95*R], S=[E[0]+0.07*R,E[1]-0.25*R];
+    const anth=[0,1,2,3,4].map(i=>{ const a=Math.PI*(0.6+i*0.17); return [S[0]+Math.cos(a)*0.25*R,S[1]+Math.sin(a)*0.25*R]; });
+    return {O,th,L,E,S,anth}; }
+  function flowerZoom(ctx,cx,cy,R,kind,an,pol,tubes,pod,tw,br){ ctx.save(); ctx.lineJoin='round'; ctx.lineCap='round';
+    const v=kind==='v', st=v?'#7b3fa0':COL.ink, fl=v?'#efe0f7':'#fbfcfe', pa=1-clamp(pod*1.6,0,1), Gm=fzGeom(cx,cy,R,pod), {O,th,L,E,S}=Gm;
+    ctx.globalAlpha=pa; ctx.strokeStyle=v?st:COL.mid; ctx.lineWidth=2.2; ctx.fillStyle=fl;
+    ctx.beginPath(); ctx.moveTo(cx-0.15*R,cy+0.05*R); ctx.bezierCurveTo(cx-0.8*R,cy-0.2*R,cx-0.45*R,cy-0.88*R,cx+0.05*R,cy-0.82*R); ctx.bezierCurveTo(cx+0.55*R,cy-0.8*R,cx+0.72*R,cy-0.35*R,cx+0.38*R,cy+0.02*R); ctx.closePath(); ctx.fill(); ctx.stroke();
+    textAt(ctx,'petals',cx-0.1*R,cy-0.68*R,{align:'center',size:13,weight:600,color:COL.mid});
+    ctx.beginPath(); ctx.moveTo(cx-0.7*R,cy+0.2*R); ctx.quadraticCurveTo(cx-0.1*R,cy+0.85*R,cx+0.62*R,cy+0.1*R); ctx.lineTo(cx+0.5*R,cy+0.04*R); ctx.quadraticCurveTo(cx-0.1*R,cy+0.58*R,cx-0.7*R,cy+0.2*R); ctx.fill(); ctx.stroke();
+    ctx.globalAlpha=1;
+    // ovary → pod with ovules → seeds
+    ctx.save(); ctx.translate(O[0],O[1]); ctx.rotate(th); const wd=0.075*R*(1+1.5*pod);
+    ctx.beginPath(); ctx.moveTo(0,0); ctx.quadraticCurveTo(L*0.5,-wd*1.6,L,0); ctx.quadraticCurveTo(L*0.5,wd*1.6,0,0); ctx.fillStyle='#e4f4ea'; ctx.fill(); ctx.strokeStyle=COL.green; ctx.lineWidth=2.6; ctx.stroke();
+    for(let i=1;i<=6;i++){ const r=0.03*R*(1+pod*1.5), x=L*i/7; circ(ctx,x,0,r,COL.green,pod>0.3?'#f4f0d8':'#fff',1.8); }
+    ctx.restore();
+    if(pod>0.7&&genes) for(let i=1;i<=6;i++){ const x=O[0]+Math.cos(th)*L*i/7, y=O[1]+Math.sin(th)*L*i/7; textAt(ctx,U()+Lw(),x,y-0.13*R,{align:'center',size:11,weight:800,color:DOM}); }
+    // style + stigma, pollen, pollen tubes
+    const sa=1-clamp(pod*2,0,1); ctx.globalAlpha=sa; ctx.strokeStyle=COL.green; ctx.lineWidth=3.4; ctx.beginPath(); ctx.moveTo(E[0],E[1]); ctx.quadraticCurveTo(E[0]+0.1*R,E[1]-0.1*R,S[0],S[1]); ctx.stroke();
+    circ(ctx,S[0],S[1],0.06*R,COL.green,'#e4f4ea',3);
+    for(let i=0;i<pol;i++){ const a=i*2.4; dot(ctx,S[0]+Math.cos(a)*0.05*R,S[1]+Math.sin(a)*0.06*R,3.6,POL); }
+    if(tubes>0){ ctx.strokeStyle=POL; ctx.lineWidth=1.8; for(let k=0;k<3;k++){ const tx=O[0]+Math.cos(th)*L*(3+k)/7, ty=O[1]+Math.sin(th)*L*(3+k)/7, ex=lerp(S[0],tx,tubes), ey=lerp(S[1],ty,tubes); ctx.beginPath(); ctx.moveTo(S[0],S[1]); ctx.quadraticCurveTo(lerp(S[0],E[0],0.6)+4*(k-1),lerp(S[1],E[1],0.6),ex,ey); ctx.stroke(); } }
+    ctx.globalAlpha=1;
+    // anthers on filaments — an[i] = removal progress 0 (on) → 1 (gone)
+    Gm.anth.forEach((A,i)=>{ const r=an[i], bx=O[0]+Math.cos(th)*L*0.35, by=O[1]+Math.sin(th)*L*0.35;
+      if(r<=0){ ctx.save(); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.6; ctx.beginPath(); ctx.moveTo(bx,by); ctx.quadraticCurveTo(A[0]-0.05*R,A[1]+0.15*R,A[0],A[1]+0.05*R); ctx.stroke(); ctx.restore(); }
+      if(r<1){ const fx=lerp(A[0],cx+1.2*R,ease(r)), fy=lerp(A[1],cy-1.1*R,ease(r)); ell(ctx,fx,fy,0.06*R,0.095*R,0.3+r*3); ctx.fillStyle='#fff6d6'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke(); } });
+    if(pa>0.3&&pol===0&&an.every(a=>a<=0)) leader(ctx,Gm.anth[2][0]-0.06*R,Gm.anth[2][1],cx-0.4*R,cy-0.3*R,'anthers',COL.mid);
+    if(pa>0.3) leader(ctx,S[0]+0.04*R,S[1]-0.05*R,S[0]+0.12*R,S[1]-0.32*R,'stigma',COL.green);
+    if(tw){ const [x,y,op]=tw; line(ctx,x,y,x+1.0*R,y-0.5*R-op*0.09*R,COL.yellow,4.5); line(ctx,x,y,x+1.0*R,y-0.4*R+op*0.09*R,COL.yellow,4.5); }
+    if(br){ const [x,y,load]=br; line(ctx,x,y,x+0.9*R,y-0.9*R,COL.yellow,7); ctx.save(); ctx.translate(x,y); ctx.rotate(-Math.PI/4); ell(ctx,-0.07*R,0,0.11*R,0.05*R,0); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+      for(let i=0;i<load;i++) dot(ctx,x-0.06*R+Math.cos(i*2.1)*0.05*R,y+0.03*R+Math.sin(i*2.1)*0.03*R,3,POL); }
+    ctx.restore(); }
+  function brushStage(ctx,x,y,load){ line(ctx,x,y,x+50,y-50,COL.yellow,4); ctx.save(); ctx.translate(x,y); ctx.rotate(-Math.PI/4); ell(ctx,-5,0,8,3.5,0); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=1.6; ctx.stroke(); ctx.restore(); for(let i=0;i<load;i++) dot(ctx,x-4+Math.cos(i*2.1)*4,y+2+Math.sin(i*2.1)*2.5,2,POL); }
+  const bez=(a,b,c,u)=>[(1-u)*(1-u)*a[0]+2*(1-u)*u*b[0]+u*u*c[0],(1-u)*(1-u)*a[1]+2*(1-u)*u*b[1]+u*u*c[1]];
+  function genesAt(ctx,p,x,y,h,known){ genePair(ctx,x,y,(genes||known)?p.g:null,h); }
+  let last={}; pills(); panel();
+  animLoop(dt=>{
+    t+=dt; const dd=dt/spd;
+    /* ---------------- physics / time ---------------- */
+    if(stage===0){ if(P.phase==='cross'){ P.tau+=dt; if(P.tau>5.8){ P.phase='pod'; } } if(P.phase==='pod'){ P.day=Math.min(14,P.day+dd); if(P.day>=14){ P.phase='done'; } } }
+    F1.throws.forEach(o=>throwStep(o,dt)); F2.throws.forEach(o=>throwStep(o,dt)); F3.throws.forEach(o=>throwStep(o,dt));
+    if(stage===1&&F1.play&&F1.throws.every(o=>o.done)) F1.day=Math.min(72,F1.day+dd);
+    if(stage===2&&F2.play&&F2.throws.every(o=>o.done)) F2.day=Math.min(72,F2.day+dd);
+    if(stage===3&&F3.play&&F3.throws.length&&F3.throws.every(o=>o.done)) F3.day=Math.min(F3END(),F3.day+dd);
+    if(stage===3&&F3.day>=F3END()){ F3.stampT+=dt; F3.trays.forEach(tr=>{ if(!tr.verdict&&F3.stampT>tr.k*0.12){ tr.verdict=tr.kids.some(k=>!dom(k.g))?'Tt':'TT'; blip(tr.verdict==='Tt'?440:660,0.06,0.04); } springTo(tr.pop,tr.verdict?1:0,180,12,dt); });
+      if(!F3.counted&&F3.trays.every(tr=>tr.verdict)){ F3.counted=true; const a=F3.trays.filter(r=>r.verdict==='TT').length, b=F3.trays.length-a, c=F2.plants.length-F3.trays.length;
+        tot.TT+=a; tot.Tt+=b; tot.tt+=c; tot.missed+=F3.trays.filter(r=>r.verdict==='TT'&&r.par.g!==U()+U()).length; tot.runs++; pills(); } }
+    /* ---------------- side readouts ---------------- */
+    const bt=n=>{ const b=$('#'+n); return b; };
+    if(stage===0){ setv($,'k1',trait==='h'?'short tt':'white ww'); setv($,'k2',trait==='h'?'tall TT':'violet WW'); const b2=bt('b2'); if(b2) b2.disabled=P.phase!=='done';
+      const b1=bt('b1'); if(b1) b1.disabled=P.phase!=='ready';
+      fbSet(fb,P.phase==='done'?'ok':'',P.phase==='ready'?'Pure-breeding parents. Remove the anthers of the '+(trait==='h'?'short':'white')+' plant\'s flower, then brush on pollen from the '+(trait==='h'?'tall':'violet')+' one.':P.phase==='done'?'The pod is full of F1 seeds — each got <b style="color:#1f9d55">'+U()+'</b> from one parent and <b style="color:#d9432b">'+Lw()+'</b> from the other.':'Day '+Math.floor(P.day)+' after pollination…'); }
+    if(stage===1){ setv($,'k1',Math.floor(F1.day)+' d'); const allD=F1.day>30||trait==='f'&&F1.day>48; setv($,'k2',allD?'all '+word(U()+Lw()):'growing…'); const b2=bt('b2'); if(b2) b2.disabled=F1.day<70; const b1=bt('b1'); if(b1) setBtn(b1,F1.play?'⏸ Pause':'▶ Grow','');
+      fbSet(fb,F1.day>=70?'ok':'',F1.day>=70?'All F1 plants are '+word(U())+' — no in-between. Each pea flower pollinated itself: the pods hold the F2 seeds.':'F1 seeds growing. Watch: is any plant '+(trait==='h'?'medium height':'pale violet')+'?'); }
+    if(stage===2){ const vis=F2.day>(trait==='h'?30:48); const nd=F2.plants.filter(p=>dom(p.g)).length, nr=F2.plants.length-nd; setv($,'k1',Math.floor(F2.day)+' d');
+      setv($,'k3',vis?String(nd):'—'); setv($,'k4',vis?String(nr):'—'); setv($,'k2',vis?(nr?fmt(nd/nr,2)+' : 1':nd+' : 0'):'—'); const b2=bt('b2'); if(b2) b2.disabled=!vis||!nd; const b1=bt('b1'); if(b1) setBtn(b1,F2.play?'⏸ Pause':'▶ Grow','');
+      fbSet(fb,vis?'ok':'',vis?'About ¾ '+word(U())+', ¼ '+word(Lw()+Lw())+'. But which '+word(U())+' plants are <b style="color:#1f9d55">'+U()+U()+'</b> and which are <b>'+U()+Lw()+'</b>? They look the same.':'F2 seeds from the F1 pods, growing…'); }
+    if(stage===3){ const a=F3.trays.filter(r=>r.verdict==='TT').length, b=F3.trays.filter(r=>r.verdict==='Tt').length, c=F2.plants.length-F3.trays.length, N=F2.plants.length;
+      setv($,'k1',F3.counted?String(a):'—'); setv($,'k2',F3.counted?String(b):'—'); setv($,'k3',String(c));
+      setv($,'k4',F3.counted?fmt(4*a/N,1)+' : '+fmt(4*b/N,1)+' : '+fmt(4*c/N,1):'1 : 2 : 1 ?'); const pf=Math.pow(F3.method==='self'?0.75:0.5,F3.n); setv($,'k5',(pf*100<1?fmt(pf*100,2):fmt(pf*100,1))+' %');
+      setv($,'k6',tot.runs?tot.TT+' : '+tot.Tt+' : '+tot.tt:'—'); const b1=bt('b1'); if(b1) b1.disabled=!!F3.throws.length;
+      const mis=F3.trays.filter(r=>r.verdict==='TT'&&r.par.g!==U()+U()).length;
+      fbSet(fb,F3.counted?'ok':'',!F3.throws.length?'Sow '+F3.n+' seeds from each numbered '+word(U())+' plant into its own tray.':!F3.counted?'Growing the F3…':
+        `Expected ${U()+U()} : ${U()+Lw()} : ${Lw()+Lw()} = 1 : 2 : 1 — this field gave ${fmt(4*a/N,1)} : ${fmt(4*b/N,1)} : ${fmt(4*c/N,1)}. ${U()+U()} trays breed true; ${U()+Lw()} trays split ≈ 3 : 1${F3.method==='test'?' (1 : 1 when crossed with '+Lw()+Lw()+')':''}.`+(genes&&mis?` <b style="color:#d9432b">${mis} ${U()+Lw()} tray${mis>1?'s':''} fooled you</b> (no ${word(Lw()+Lw())} plant by chance).`:'')+(tot.runs>=3?` Mendel tested 565 round-seeded F2 plants: 193 bred true, 372 split — 1 : 1.93.`:' Test new fields — the totals close in on 1 : 2 : 1.')); }
+    /* ---------------- draw ---------------- */
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h); ctx.save(); stg(ctx,w,h);
+    if(stage===0) drawP(ctx); else if(stage===1) drawF1(ctx); else if(stage===2) drawF2(ctx); else drawF3(ctx);
+    ctx.restore();
+  });
+  /* ---------------- P cross ---------------- */
+  function drawP(ctx){ const G=505, s=1.85, age=49+P.day, mg=Lw()+Lw(), fg=U()+U();
+    soil(ctx,30,770,G,40);
+    const A=peaDraw(ctx,190,G,s,age,tallOf(fg),{t,phase:1,flower:flOf(fg),leaf:15});
+    const B=peaDraw(ctx,440,G,s,age,tallOf(mg),{t,phase:2.3,flower:flOf(mg),leaf:15});
+    genePair(ctx,190,G+22,fg,26); genePair(ctx,440,G+22,mg,26);
+    tag(ctx,'pure '+word(fg),110,G-14,DOM,{size:12}); tag(ctx,'pure '+word(mg),360,G-14,REC,{size:12});
+    const fa=A.flowers.length?A.flowers[A.flowers.length-1]:{x:190,y:200}, fbF=B.flowers.length?B.flowers[0]:{x:440,y:G-80};
+    // lens on the mother's flower
+    const LX=640, LY=255, LR=125; ctx.save(); ctx.strokeStyle=COL.mid; ctx.setLineDash([4,4]); ctx.lineWidth=1.3; ctx.beginPath(); ctx.moveTo(fbF.x+8,fbF.y-8); ctx.lineTo(LX-LR*0.7,LY-LR*0.7); ctx.moveTo(fbF.x+8,fbF.y+8); ctx.lineTo(LX-LR*0.7,LY+LR*0.7); ctx.stroke(); ctx.restore();
+    circ(ctx,fbF.x,fbF.y,14,COL.mid,null,1.4);
+    ctx.save(); ctx.beginPath(); ctx.arc(LX,LY,LR,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill(); ctx.clip();
+    const tau=P.tau, an=[0,1,2,3,4].map(i=>P.phase==='ready'?0:clamp((tau-0.45-i*0.3)/0.3,0,1.01));
+    const FR=LR*0.95, Gm=fzGeom(LX,LY,FR,0);
+    let tw=null; if(P.phase==='cross'&&tau<2.4){ const i=clamp(Math.floor((tau-0.45)/0.3),0,4), u=((tau-0.45)/0.3)%1, A=Gm.anth[i];
+      const enter=clamp(tau/0.45,0,1), leave=clamp((tau-2.0)/0.4,0,1), off=(1-enter+leave)*LR*1.2; const r=an[i]>0&&an[i]<1?ease(an[i]):0;
+      tw=[lerp(A[0],LX+1.2*FR,r)+off,lerp(A[1],LY-1.1*FR,r)-off*0.6,tau>0.45&&tau<2?(u<0.25?1-u*4:0):1]; }
+    const pol=P.phase==='ready'?0:P.phase==='cross'?Math.round(14*clamp((tau-3.9)/0.6,0,1)):14, tubes=P.phase==='cross'?clamp((tau-4.6)/1.1,0,1):(P.phase==='ready'?0:1);
+    let br=null; if(P.phase==='cross'&&tau>3.6&&tau<5.0){ const S=Gm.S, u=clamp((tau-3.6)/0.4,0,1)-clamp((tau-4.6)/0.4,0,1); const dab=Math.sin(clamp((tau-4.0)/0.6,0,1)*Math.PI*3)*4; br=[S[0]+(1-u)*LR+dab,S[1]-(1-u)*LR+dab,Math.round(14*(1-clamp((tau-3.9)/0.6,0,1)))]; }
+    flowerZoom(ctx,LX,LY,FR,flOf(mg),an,pol,tubes,clamp(P.day/12,0,1),tw,br);
+    ctx.restore(); circ(ctx,LX,LY,LR,COL.ink,null,3);
+    tag(ctx,P.day>4?'pod with F1 seeds':P.phase==='cross'&&P.tau<2.2?'removing anthers':pol?'pollen on stigma':'mother’s flower',LX,LY+LR+22,P.day>4?COL.green:COL.ink,{size:12});
+    // brush in the field: rest → father's flower (load) → arc → mother's flower
+    let bx=310,by=120,load=0; if(P.phase==='cross'){ const tau2=P.tau, rest=[330,110];
+      if(tau2<2.0){ bx=rest[0]; by=rest[1]; }
+      else if(tau2<2.7){ const u=ease((tau2-2.0)/0.7); [bx,by]=bez(rest,[(rest[0]+fa.x)/2,rest[1]-40],[fa.x,fa.y],u); }
+      else if(tau2<3.0){ bx=fa.x+Math.sin((tau2-2.7)*40)*3; by=fa.y; load=Math.round(14*(tau2-2.7)/0.3); }
+      else if(tau2<3.8){ const u=ease((tau2-3.0)/0.8); [bx,by]=bez([fa.x,fa.y],[(fa.x+fbF.x)/2,Math.min(fa.y,fbF.y)-120],[fbF.x,fbF.y],u); load=14; }
+      else if(tau2<4.6){ bx=fbF.x; by=fbF.y; load=Math.round(14*(1-clamp((tau2-3.9)/0.6,0,1))); }
+      else { const u=ease(clamp((tau2-4.6)/0.8,0,1)); [bx,by]=bez([fbF.x,fbF.y],[(fbF.x+rest[0])/2,fbF.y-100],rest,u); } }
+    if(P.phase!=='pod'&&P.phase!=='done') brushStage(ctx,bx,by,load);
+    textAt(ctx,'×',315,G-160,{align:'center',size:30,weight:700,color:COL.mid});
+    if(P.phase==='pod'||P.phase==='done') ttag(ctx,'day '+Math.floor(P.day)+' after pollination');
+  }
+  /* ---------------- F1 ---------------- */
+  function drawF1(ctx){ soil(ctx,30,770,G1,50); textAt(ctx,'F1 seeds',52,75,{size:12,weight:700,color:COL.muted}); seedDraw(ctx,36,70,9);
+    F1.plants.forEach((p,i)=>{ const th=F1.throws[i]; if(th&&!th.done){ if(th.t>0) seedDraw(ctx,th.x,th.y,6); return; }
+      const r=plant(ctx,p,p.x,G1,1.55,F1.day,{leaf:13});
+      if(F1.day>PEA.flowerDay+1) r.flowers.forEach((f,j)=>{ if(f.age<4) for(let k=0;k<3;k++) dot(ctx,f.x+Math.sin(t*7+k*2+j)*4,f.y-3+Math.cos(t*5+k)*3,1.8,POL); });
+      if(F1.day<PEA.germ) seedDraw(ctx,p.x,G1+6,6);
+      genesAt(ctx,p,p.x,G1+28,24,true); });
+    if(F1.day>=70) F1.plants.forEach(p=>tag(ctx,word(p.g),p.x,G1-peaHeight(70-p.lag,tallOf(p.g))*1.55*p.k-26,DOM,{size:11.5}));
+    dayLine(ctx,180,535,440,F1.day,72,'');
+    ttag(ctx,'day '+Math.floor(F1.day)); }
+  /* ---------------- F2 ---------------- */
+  function drawF2(ctx){ soil(ctx,30,770,G2,50); textAt(ctx,'F2 seeds (from F1 pods)',52,75,{size:12,weight:700,color:COL.muted}); seedDraw(ctx,36,70,9);
+    const n=F2.plants.length, lf=clamp(700/n*0.42,6,13), vis=F2.day>(trait==='h'?30:48);
+    F2.plants.forEach((p,i)=>{ const th=F2.throws[i]; if(th&&!th.done){ if(th.t>0) seedDraw(ctx,th.x,th.y,5); return; }
+      plant(ctx,p,p.x,G2,1.42,F2.day,{leaf:lf,detail:n>20?0:1,fl:trait==='f'?1.7:1}); if(F2.day<PEA.germ) seedDraw(ctx,p.x,G2+6,5);
+      const known=vis&&!dom(p.g); genesAt(ctx,p,p.x,G2+26,Math.min(24,700/n*0.9),known);
+      if(vis) line(ctx,p.x-6,G2+46,p.x+6,G2+46,dom(p.g)?DOM:REC,3); });
+    dayLine(ctx,180,535,440,F2.day,72,'');
+    ttag(ctx,'day '+Math.floor(F2.day)); }
+  /* ---------------- F3 (Activity 8.2) ---------------- */
+  function drawF3(ctx){ // the F2 field in a strip, its tall plants numbered
+    line(ctx,30,150,770,150,'#8a6a3a',2); textAt(ctx,'F2 field',30,20,{size:12,weight:700,color:COL.muted});
+    const n=F2.plants.length; let k=0;
+    F2.plants.forEach(p=>{ const x=stripX(p.x); peaDraw(ctx,x,150,0.62*p.k,72-p.lag,tallOf(p.g),{t,phase:p.ph,flower:flOf(p.g),leaf:clamp(720/n*0.3,3,6),detail:0,fl:trait==='f'?2.2:1});
+      if(dom(p.g)){ k++; textAt(ctx,String(k),x,167,{align:'center',size:10.5,weight:700,color:COL.ink}); if(genes) textAt(ctx,p.g,x,180,{align:'center',size:9.5,weight:700,color:p.g===U()+U()?DOM:COL.ink}); }
+      else textAt(ctx,Lw()+Lw(),x,167,{align:'center',size:10.5,weight:700,color:REC}); });
+    const end=F3END(), Hm=peaHeight(end,true);
+    F3.trays.forEach(tr=>{ const {x,y,w:tw,h:th}=tr; ctx.save(); rrect(ctx,x+3,y+3,tw-6,th-6,8); ctx.fillStyle='#fbfcfe'; ctx.fill(); ctx.strokeStyle='#c2d1e5'; ctx.lineWidth=1.4; ctx.stroke(); ctx.restore();
+      const gy=y+th-14; line(ctx,x+8,gy,x+tw-8,gy,'#8a6a3a',1.8);
+      textAt(ctx,'#'+(tr.k+1),x+10,y+18,{size:11,weight:700,color:COL.ink});
+      if(F3.method==='test') textAt(ctx,'× '+Lw()+Lw(),x+40,y+18,{size:9.5,weight:700,color:REC});
+      const s=(th-44)/Hm;
+      if(F3.day>0){ ctx.save(); rrect(ctx,x+4,y+4,tw-8,th-8,7); ctx.clip(); const fv=[], fw=[]; ctx.beginPath(); tr.kids.forEach((kd,j)=>{ const kx=x+tw*(j+0.5)/tr.kids.length; peaMini(ctx,kx,gy,s*kd.k,F3.day-kd.lag,tallOf(kd.g),{t,phase:kd.ph,leaf:clamp(tw/tr.kids.length*0.32,2.5,6),fl:trait==='f'?2.4:1},flOf(kd.g)==='v'?fv:fw); });
+        ctx.strokeStyle=COL.green; ctx.lineWidth=1.3; ctx.lineCap='round'; ctx.stroke(); [[fv,'#d9b8ec','#7b3fa0'],[fw,'#fff',COL.ink]].forEach(([L,f,c])=>{ if(!L.length) return; ctx.beginPath(); L.forEach(p=>{ ctx.moveTo(p[0]+p[2]*0.6,p[1]); ctx.arc(p[0],p[1],p[2]*0.6,0,Math.PI*2); }); ctx.fillStyle=f; ctx.fill(); ctx.strokeStyle=c; ctx.lineWidth=1.2; ctx.stroke(); }); ctx.restore(); }
+      if(tr.verdict){ const sc=tr.pop.x, col=tr.verdict==='TT'?DOM:COL.ink, txt=tr.verdict==='TT'?U()+U():U()+Lw(); ctx.save(); ctx.translate(x+tw-26,y+20); ctx.scale(sc,sc); ctx.rotate(-0.12);
+        rrect(ctx,-20,-11,40,22,6); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=col; ctx.lineWidth=2.4; ctx.stroke(); textAt(ctx,txt,0,5,{align:'center',size:13,weight:800,color:col}); ctx.restore();
+        if(genes&&tr.verdict==='TT'&&tr.par.g!==U()+U()){ ctx.save(); rrect(ctx,x+3,y+3,tw-6,th-6,8); ctx.strokeStyle=COL.red; ctx.lineWidth=3; ctx.setLineDash([6,4]); ctx.stroke(); ctx.restore(); textAt(ctx,'really '+U()+Lw()+'!',x+tw/2,y+th/2,{align:'center',size:12,weight:700,color:COL.red}); } } });
+    F3.throws.forEach(o=>{ if(!o.done&&o.t>0) seedDraw(ctx,o.x,o.y,4); });
+    if(!F3.trays.length) textAt(ctx,'No '+word(U())+' plants in this field',400,330,{align:'center',size:15,color:COL.mid});
+    if(F3.day>0) ttag(ctx,'F3 day '+Math.floor(F3.day));
+  }
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   1. ACTIVITIES + ROUTER
+   --------------------------------------------------------------------- */
+const _b=n=>(typeof window[n]==='function'?window[n]:()=>{ const d=document.createElement('div'); d.textContent='(not built yet)'; return d; });
+const activities = [
+  { num:'8.1', title:'Free or Attached Earlobes', desc:'Survey the class, look at each student’s parents, suggest a rule', build: ()=>_b('buildA1')() },
+  { num:'8.2', title:'Confirming 1 : 2 : 1', desc:'Grow Fig. 8.3 — then test which tall F2 plants are TT and which are Tt', build: ()=>_b('buildA2')() },
+];
+let currentIndex = 0;
+
+function buildNav(){
+  const nav = document.getElementById('sideNav');
+  nav.innerHTML='';
+  activities.forEach((a,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'nav-item'+(i===currentIndex?' active':'');
+    btn.innerHTML = `<span class="n-num">${a.num}</span><span class="n-title">${a.title}</span>`;
+    btn.onclick = ()=>{ currentIndex=i; render(); };
+    nav.appendChild(btn);
+  });
+}
+function render(){
+  stopAllLoops();
+  buildNav();
+  const a = activities[currentIndex];
+  document.getElementById('panelBadge').textContent = a.num;
+  document.getElementById('panelTitle').textContent = a.title;
+  document.getElementById('panelDesc').textContent = a.desc||'';
+  const body = document.getElementById('panelBody');
+  body.innerHTML='';
+  body.appendChild(a.build());
+}
+function labShell(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `<div class="lab-canvas-wrap"><canvas></canvas></div><div class="lab-side"></div>`;
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   INIT
+   --------------------------------------------------------------------- */
+render();
+</script>
+  <script src="../../tracking/activity-tracker.js"></script>
+<script src="../../nav/back-button.js"></script>
+</body>
+</html>

@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 8 · Chapter 1 — The Investigative World of Science | Botclub Labs</title>
+<link href="../../vendor/fonts/fonts.css" rel="stylesheet">
+<style>
+:root{
+  --navy-1:#0f2640; --navy-2:#1a3a5c; --navy-3:#234a73;
+  --accent:#2f8fe0; --accent-2:#5cc8ff;
+  --bg:#eef2f8; --surface-0:#ffffff; --surface-1:#f6f9fc; --surface-2:#eef2f8;
+  --border:#dbe4f0; --border-strong:#c2d1e5;
+  --text-1:#132a44; --text-2:#4c6178; --text-3:#8195ab;
+  --f-red:#d9432b; --f-blue:#2f8fe0; --f-green:#1f9d55; --f-yellow:#d9a017;
+  --radius:14px; --radius-sm:9px;
+  --fs-xs:clamp(10px,0.62vw,12px); --fs-sm:clamp(11px,0.72vw,13.5px);
+  --fs-md:clamp(12.5px,0.85vw,15px); --fs-lg:clamp(15px,1.15vw,19px);
+  --fs-xl:clamp(18px,1.5vw,25px);
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:22px; --sp-6:30px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{ font-family:'Poppins',system-ui,sans-serif; background:var(--bg); color:var(--text-1); overflow:hidden; }
+button, input, select{font-family:inherit;}
+
+.app{height:100vh; display:flex; flex-direction:column; min-height:0;}
+.topbar{
+  flex:0 0 auto; background:linear-gradient(120deg, var(--navy-1) 0%, var(--navy-2) 55%, var(--navy-3) 100%);
+  color:#fff; padding:clamp(9px,1vh,16px) clamp(14px,1.6vw,28px);
+  display:flex; align-items:center; gap:var(--sp-4); box-shadow:0 2px 10px rgba(15,38,64,0.25); z-index:5;
+}
+.topbar .brand-badge{
+  width:clamp(32px,2.4vw,40px); height:clamp(32px,2.4vw,40px); border-radius:10px; background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center;
+  font-size:clamp(15px,1.3vw,20px); flex:0 0 auto;
+}
+.topbar .chip{
+  display:inline-block; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.28);
+  border-radius:6px; padding:2px 9px; font-size:var(--fs-xs); letter-spacing:0.06em; text-transform:uppercase; font-weight:600; margin-bottom:3px;
+}
+.topbar h1{font-size:var(--fs-lg); font-weight:600; line-height:1.2; white-space:nowrap;}
+.topbar .spacer{flex:1;}
+.topbar .legend{display:flex; gap:14px; font-size:var(--fs-xs); color:rgba(255,255,255,0.85); align-items:center;}
+.topbar .legend span{display:inline-flex; align-items:center; gap:5px;}
+.topbar .legend i{width:12px; height:4px; border-radius:2px; display:inline-block;}
+
+.body-wrap{flex:1; display:flex; min-height:0; overflow:hidden;}
+.sidenav{
+  flex:0 0 clamp(170px,13.5vw,230px); background:var(--surface-0); border-right:1px solid var(--border);
+  overflow-y:auto; padding:var(--sp-2); display:flex; flex-direction:column; gap:4px;
+}
+.nav-item{
+  display:flex; align-items:center; gap:8px; text-align:left; width:100%;
+  border:1px solid var(--border); background:var(--surface-1); border-radius:var(--radius-sm); padding:7px 10px; cursor:pointer; transition:all .15s ease;
+}
+.nav-item:hover{background:var(--surface-2); border-color:var(--border-strong);}
+.nav-item.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.nav-item .n-num{font-size:var(--fs-xs); font-weight:700; color:var(--accent); flex:0 0 auto; min-width:26px;}
+.nav-item.active .n-num{color:var(--accent-2);}
+.nav-item .n-title{font-size:var(--fs-sm); font-weight:600; line-height:1.25;}
+
+.content{flex:1; min-width:0; display:flex; flex-direction:column; overflow:hidden;}
+.panel-head{flex:0 0 auto; padding:var(--sp-3) var(--sp-5); border-bottom:1px solid var(--border); background:var(--surface-0); display:flex; align-items:baseline; gap:12px;}
+.panel-badge{background:var(--navy-2); color:#fff; font-size:var(--fs-xs); font-weight:700; padding:3px 10px; border-radius:6px;}
+.panel-head h2{font-size:var(--fs-lg); font-weight:600; color:var(--text-1);}
+.panel-head p{font-size:var(--fs-sm); color:var(--text-2); flex:1; text-align:right;}
+.panel-body{flex:1; min-height:0; overflow:hidden; padding:var(--sp-3) var(--sp-5); display:flex;}
+
+.lab-view{flex:1; display:flex; gap:var(--sp-4); min-height:0; min-width:0;}
+.lab-canvas-wrap{flex:7 1 0; min-width:0; min-height:0; background:#fff; border:1px solid var(--border); border-radius:var(--radius); position:relative; overflow:hidden;}
+.lab-canvas-wrap canvas{width:100%; height:100%; display:block;}
+.lab-side{flex:3 1 0; min-width:230px; display:flex; flex-direction:column; gap:var(--sp-3); min-height:0; overflow-y:auto; padding-right:2px;}
+.side-sub{display:flex; flex-direction:column; gap:var(--sp-3);}
+
+.control-group{background:var(--surface-0); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 12px;}
+.control-group label{font-size:var(--fs-sm); font-weight:600; color:var(--text-1); display:flex; justify-content:space-between;}
+.control-group label .val{color:var(--accent); font-weight:700;}
+.control-group input[type=range]{width:100%; margin-top:7px; accent-color:var(--navy-2); cursor:pointer;}
+.toggle-group{display:flex; gap:6px; margin-top:7px; flex-wrap:wrap;}
+.toggle-btn{flex:1; min-width:56px; padding:7px 5px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:600; cursor:pointer; text-align:center; color:var(--text-2);}
+.toggle-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.toggle-btn.small{font-size:10.5px; padding:6px 3px;}
+.toggle-btn.play{background:var(--f-green); border-color:var(--f-green); color:#fff;}
+.toggle-btn.navy{background:var(--navy-2); border-color:var(--navy-2); color:#fff; width:100%; margin-top:9px;}
+.toggle-btn:disabled{opacity:.5; cursor:not-allowed;}
+.chip-btn{display:inline-flex; align-items:center; gap:5px; padding:6px 11px; margin:3px 3px 0 0; border:1px solid var(--border-strong); background:var(--surface-1); border-radius:18px; cursor:pointer; font-size:var(--fs-sm); font-weight:600; color:var(--text-2);}
+.chip-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.chip-btn.ok{border-color:var(--f-green);} .chip-btn.bad{border-color:var(--f-red);}
+.chip-wrap{display:flex; flex-wrap:wrap; margin-top:3px;}
+
+.role-row{display:flex; align-items:center; gap:8px; margin-top:7px; font-size:var(--fs-sm); font-weight:600;}
+.role-row .rdot{width:10px; height:10px; border-radius:50%; flex:0 0 auto; display:inline-block;}
+.role-row .rname{width:70px; flex:0 0 auto; color:var(--text-2);}
+.role-row select{flex:1; min-width:0; padding:6px 7px; border:1px solid var(--border-strong); border-radius:7px; font-size:var(--fs-sm); background:var(--surface-1); color:var(--text-1); cursor:pointer;}
+
+.step-row{display:flex; gap:5px;}
+.step-pill{flex:1; padding:6px 4px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:10.5px; font-weight:700; color:var(--text-3); cursor:pointer;}
+.step-pill.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.step-pill.done{border-color:var(--f-green); color:var(--f-green);}
+.step-pill.active.done{color:#fff;}
+.opt-btn{display:block; width:100%; text-align:left; margin-top:6px; padding:7px 9px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:500; color:var(--text-1); cursor:pointer; line-height:1.3;}
+.opt-btn.active{border-color:var(--navy-2); background:#e3ecf7; font-weight:600;}
+.var-row{display:flex; align-items:center; gap:6px; margin-top:7px;}
+.var-row .vname{flex:0 0 88px; font-size:var(--fs-sm); font-weight:600;}
+.var-row .toggle-group{margin-top:0; flex:1;}
+
+.result-cards{display:grid; grid-template-columns:1fr 1fr; gap:6px;}
+.result-cards.three{grid-template-columns:1fr 1fr 1fr;}
+.rcard{background:var(--surface-0); border:1px solid var(--border); border-radius:9px; padding:7px 9px;}
+.rcard .rlabel{font-size:9.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--text-3); font-weight:600;}
+.rcard .rval{font-size:var(--fs-md); font-weight:700; color:var(--text-1); margin-top:1px;}
+.rcard.wide{grid-column:1/-1;}
+.hint{font-size:var(--fs-xs); color:var(--text-3); margin-top:6px; line-height:1.4;}
+.fb{font-size:var(--fs-xs); font-weight:600; margin-top:6px; padding:5px 8px; border-radius:7px;}
+.fb.ok{background:#e4f7ec; color:#1f6b3d;}
+.fb.bad{background:#fdece7; color:#a4331c;}
+.fb.warn{background:#fdf4dc; color:#8a6410;}
+.log{width:100%; border-collapse:collapse; font-size:10.5px; margin-top:4px;}
+.log th{text-align:left; color:var(--text-3); font-weight:600; text-transform:uppercase; font-size:9px; letter-spacing:.04em; padding:3px 4px; border-bottom:1px solid var(--border);}
+.log td{padding:4px; border-bottom:1px solid var(--surface-2); color:var(--text-2);}
+.log td.r-ok{color:var(--f-green); font-weight:700;} .log td.r-bad{color:var(--f-red); font-weight:700;} .log td.r-warn{color:var(--f-yellow); font-weight:700;}
+.hidden{display:none !important;}
+
+@media (max-width:1000px) and (orientation:portrait), (max-width:1000px) and (min-height:601px){
+  .body-wrap{flex-direction:column;}
+  .sidenav{flex:0 0 auto; width:100%; height:auto; flex-direction:row; overflow-x:auto; overflow-y:hidden; border-right:none; border-bottom:1px solid var(--border); padding:6px;}
+  .nav-item{flex:0 0 auto; width:150px;}
+  .panel-body{overflow-y:auto;}
+  .lab-view{flex-direction:column;}
+  .lab-canvas-wrap{min-height:320px;}
+  .lab-side{min-width:0;}
+  .content{overflow-y:auto;}
+  .topbar .legend{display:none;}
+  .topbar h1{white-space:normal;}
+}
+::-webkit-scrollbar{width:7px; height:7px;}
+::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand-badge">🔍</div>
+    <div>
+      <div class="chip">Grade 8 · Ch 1</div>
+      <h1>The Investigative World of Science</h1>
+    </div>
+    <div class="spacer"></div>
+    <div class="legend">
+      <span><i style="background:var(--f-yellow)"></i>Changed (independent)</span>
+      <span><i style="background:var(--f-blue)"></i>Measured (dependent)</span>
+      <span><i style="background:var(--f-green)"></i>Kept same (controlled)</span>
+      <span><i style="background:var(--f-red)"></i>Heat</span>
+    </div>
+  </div>
+  <div class="body-wrap">
+    <nav class="sidenav" id="sideNav"></nav>
+    <main class="content">
+      <div class="panel-head">
+        <div class="panel-badge" id="panelBadge">1.1</div>
+        <h2 id="panelTitle">Select an activity</h2>
+        <p id="panelDesc"></p>
+      </div>
+      <div class="panel-body" id="panelBody"></div>
+    </main>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   GRADE 8 — CHAPTER 1: THE INVESTIGATIVE WORLD OF SCIENCE
+   Every activity runs a continuous animation loop: sliders/buttons set a
+   TARGET; the drawn object always eases or physically integrates toward
+   that target every frame, so the response is genuinely simulated motion,
+   never a snap-to-frame redraw.
+   ========================================================================= */
+const COL = {red:'#d9432b', blue:'#2f8fe0', green:'#1f9d55', yellow:'#d9a017', ink:'#132a44', muted:'#4c6178', mid:'#8195ab'};
+
+/* ---------------------------------------------------------------------
+   0. CANVAS HELPERS
+   --------------------------------------------------------------------- */
+function fitCanvas(canvas){
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  const r = canvas.parentElement.getBoundingClientRect();
+  const w = Math.max(200, r.width), h = Math.max(160, r.height);
+  if(canvas._w!==w || canvas._h!==h || canvas._dpr!==dpr){
+    canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr);
+    canvas.style.width = w+'px'; canvas.style.height = h+'px';
+    canvas._w=w; canvas._h=h; canvas._dpr=dpr;
+  }
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, w, h};
+}
+function line(ctx,x1,y1,x2,y2,color,width,dash){
+  ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=width||2;
+  if(dash) ctx.setLineDash(dash); else ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); ctx.restore();
+}
+function arrowHead(ctx,x,y,ang,color,size){
+  size=size||7; ctx.save(); ctx.fillStyle=color; ctx.translate(x,y); ctx.rotate(ang);
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-size,size*0.42); ctx.lineTo(-size,-size*0.42); ctx.closePath(); ctx.fill(); ctx.restore();
+}
+function vec(ctx,x1,y1,x2,y2,color,width){ line(ctx,x1,y1,x2,y2,color,width||2.6); arrowHead(ctx,x2,y2,Math.atan2(y2-y1,x2-x1),color,7); }
+function dimArrow(ctx,x,y1,y2,color){ line(ctx,x,y1,x,y2,color,1.6); arrowHead(ctx,x,y1,-Math.PI/2,color,5); arrowHead(ctx,x,y2,Math.PI/2,color,5); }
+function textAt(ctx,txt,x,y,opts){
+  opts=opts||{}; ctx.save();
+  ctx.font=(opts.weight||500)+' '+(opts.size||12)+'px Poppins, sans-serif';
+  ctx.fillStyle=opts.color||COL.ink; ctx.textAlign=opts.align||'left'; ctx.textBaseline=opts.baseline||'alphabetic';
+  if(opts.alpha!==undefined) ctx.globalAlpha=opts.alpha;
+  ctx.fillText(txt,x,y); ctx.restore();
+}
+function rect(ctx,x,y,w,h,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw===undefined?2.2:lw; if(fill){ctx.fillStyle=fill; ctx.fillRect(x,y,w,h);} if(lw!==0){ctx.strokeStyle=stroke; ctx.strokeRect(x,y,w,h);} ctx.restore(); }
+function circ(ctx,x,y,r,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw||2.2; ctx.beginPath(); ctx.arc(x,y,Math.max(0.1,r),0,Math.PI*2); if(fill){ctx.fillStyle=fill; ctx.fill();} ctx.strokeStyle=stroke; ctx.stroke(); ctx.restore(); }
+function rrect(ctx,x,y,w,h,r){ r=Math.min(r,w/2,h/2); ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function fmt(x,d){ if(!isFinite(x)) return '—'; d=d===undefined?2:d; return Number(x.toFixed(d)).toString(); }
+function gauss(){ return (Math.random()+Math.random()+Math.random()+Math.random()-2)*1.2247; }
+function hexRgb(h){ const n=parseInt(h.slice(1),16); return [n>>16&255, n>>8&255, n&255]; }
+function mixCol(a,b,t){ const A=hexRgb(a),B=hexRgb(b); t=clamp(t,0,1); return 'rgb('+A.map((v,i)=>Math.round(lerp(v,B[i],t))).join(',')+')'; }
+function rampCol(stops,x){ // stops: [[pos,hex],...]
+  if(x<=stops[0][0]) return mixCol(stops[0][1],stops[0][1],0);
+  for(let i=1;i<stops.length;i++){ if(x<=stops[i][0]){ const a=stops[i-1],b=stops[i]; return mixCol(a[1],b[1],(x-a[0])/(b[0]-a[0])); } }
+  const l=stops[stops.length-1][1]; return mixCol(l,l,0);
+}
+function thermo(ctx,x,top,bot,frac,outline,liquid){
+  const br=8;
+  ctx.save(); ctx.lineWidth=2; ctx.strokeStyle=outline; ctx.fillStyle='#fff';
+  rrect(ctx,x-5,top,10,bot-top+2,5); ctx.fill(); ctx.stroke(); ctx.restore();
+  const lh=(bot-top-5)*clamp(frac,0,1);
+  ctx.save(); ctx.fillStyle=liquid; ctx.fillRect(x-2.2,bot-lh,4.4,lh+6); ctx.restore();
+  circ(ctx,x,bot+br,br,outline,'#fff',2); circ(ctx,x,bot+br,br-3.2,liquid,liquid,1);
+  for(let i=0;i<=4;i++){ const yy=top+5+(bot-top-5)*i/4; line(ctx,x+5,yy,x+9,yy,outline,1.1); }
+}
+function flame(ctx,cx,baseY,width,inten,t){
+  const n=5;
+  for(let i=0;i<n;i++){
+    const fx=cx-width/2+width*(i+0.5)/n;
+    const hh=(6+inten*32)*(0.78+0.22*Math.sin(t*13+i*1.7));
+    const sway=Math.sin(t*9+i*2.1)*3;
+    ctx.save(); ctx.lineJoin='round';
+    ctx.strokeStyle=COL.red; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(fx-7,baseY); ctx.quadraticCurveTo(fx-7,baseY-hh*0.55,fx+sway,baseY-hh); ctx.quadraticCurveTo(fx+7,baseY-hh*0.55,fx+7,baseY); ctx.stroke();
+    ctx.strokeStyle=COL.yellow; ctx.lineWidth=1.6;
+    ctx.beginPath(); ctx.moveTo(fx-3.5,baseY); ctx.quadraticCurveTo(fx-3,baseY-hh*0.35,fx+sway*0.5,baseY-hh*0.55); ctx.quadraticCurveTo(fx+3,baseY-hh*0.35,fx+3.5,baseY); ctx.stroke();
+    ctx.restore();
+  }
+}
+
+/* ---------------------------------------------------------------------
+   0b. ANIMATION ENGINE
+   --------------------------------------------------------------------- */
+let activeStops = [];
+function stopAllLoops(){ activeStops.forEach(s=>{ try{ s(); }catch(e){} }); activeStops=[]; }
+function animLoop(tick){
+  let last = performance.now();
+  let raf;
+  function frame(now){
+    const dt = Math.min(0.04, (now-last)/1000);
+    last = now;
+    tick(dt);
+    raf = requestAnimationFrame(frame);
+  }
+  raf = requestAnimationFrame(frame);
+  const stop = ()=>cancelAnimationFrame(raf);
+  activeStops.push(stop);
+  return stop;
+}
+/** Exponential ease — frame-rate independent, always smooth. */
+function approach(cur,tgt,rate,dt){ return cur + (tgt-cur)*(1-Math.exp(-rate*dt)); }
+/** Spring-damper — gives natural overshoot and settle. */
+function springTo(state,target,k,damping,dt){
+  const acc = (target-state.x)*k - state.v*damping;
+  state.v += acc*dt;
+  state.x += state.v*dt;
+  return state.x;
+}
+function toggleWire(btns,cb){
+  btns.forEach(b=>b.onclick=()=>{ btns.forEach(x=>x.classList.remove('active')); b.classList.add('active'); cb(b); });
+}
+
+/* ---------------------------------------------------------------------
+   1. ACTIVITIES + ROUTER
+   --------------------------------------------------------------------- */
+const activities = [
+  { num:'1.1', title:'Asking a Testable Question', desc:'Change one thing · measure one thing · keep the rest same', build: buildA1 },
+  { num:'1.2', title:'Particles of Matter', desc:'Zoom in to the particles', build: buildA2 },
+  { num:'1.3', title:'The Puri Investigation', desc:'Fry, observe, record', build: buildA3 },
+  { num:'1.4', title:"Rohan's Dough Experiment", desc:'Hypothesis → variables → conclusion', build: buildA4 },
+];
+let currentIndex = 0;
+
+function buildNav(){
+  const nav = document.getElementById('sideNav');
+  nav.innerHTML='';
+  activities.forEach((a,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'nav-item'+(i===currentIndex?' active':'');
+    btn.innerHTML = `<span class="n-num">${a.num}</span><span class="n-title">${a.title}</span>`;
+    btn.onclick = ()=>{ currentIndex=i; render(); };
+    nav.appendChild(btn);
+  });
+}
+function render(){
+  stopAllLoops();
+  buildNav();
+  const a = activities[currentIndex];
+  document.getElementById('panelBadge').textContent = a.num;
+  document.getElementById('panelTitle').textContent = a.title;
+  document.getElementById('panelDesc').textContent = a.desc||'';
+  const body = document.getElementById('panelBody');
+  body.innerHTML='';
+  body.appendChild(a.build());
+}
+function labShell(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `<div class="lab-canvas-wrap"><canvas></canvas></div><div class="lab-side"></div>`;
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   SHARED: puri drawing (used in 1.1 and 1.3)
+   (x,y) = centre of the puri's rim at the oil surface.
+   puffH = height of the top dome (px). topT/botT = wall thickness (px).
+   --------------------------------------------------------------------- */
+function drawPuri(ctx,x,y,W,puffH,topT,botT,fill,stroke,lop,rot){
+  ctx.save(); ctx.translate(x,y); ctx.rotate(rot||0);
+  const H=Math.max(0,puffH);
+  const sag=2+botT*0.6+H*0.12;
+  const sh=(lop||0)*W*0.22;
+  // body fill
+  ctx.beginPath(); ctx.moveTo(-W/2,0); ctx.quadraticCurveTo(sh,-H*2-topT*0.5,W/2,0); ctx.quadraticCurveTo(0,sag*2,-W/2,0); ctx.closePath();
+  ctx.fillStyle=fill; ctx.fill();
+  // steam pocket
+  if(H>5){
+    const inset=Math.min(W*0.12,10+topT);
+    ctx.beginPath(); ctx.moveTo(-W/2+inset,0);
+    ctx.quadraticCurveTo(sh,-H*2+topT*1.6+3,W/2-inset,0);
+    ctx.quadraticCurveTo(0,Math.max(0,sag*2-botT*1.6-3),-W/2+inset,0); ctx.closePath();
+    ctx.fillStyle='rgba(255,255,255,0.82)'; ctx.fill();
+  }
+  ctx.lineCap='round'; ctx.strokeStyle=stroke;
+  ctx.lineWidth=Math.max(1,topT); ctx.beginPath(); ctx.moveTo(-W/2,0); ctx.quadraticCurveTo(sh,-H*2-topT*0.5,W/2,0); ctx.stroke();
+  ctx.lineWidth=Math.max(1,botT); ctx.beginPath(); ctx.moveTo(-W/2,0); ctx.quadraticCurveTo(0,sag*2,W/2,0); ctx.stroke();
+  ctx.restore();
+}
+/* kadhai (wok) — quadratic bowl. Returns geometry helpers. */
+function kadhai(cx,rimY,panW,D){
+  const g={cx,rimY,panW,D,bottom:rimY+D};
+  g.path=(ctx)=>{ ctx.beginPath(); ctx.moveTo(cx-panW/2,rimY); ctx.quadraticCurveTo(cx,rimY+2*D,cx+panW/2,rimY); };
+  g.pt=(t)=>({x:cx-panW/2+panW*t, y:rimY+4*D*t*(1-t)});
+  g.slope=(t)=>Math.atan2(4*D*(1-2*t),panW);
+  g.tAtDepth=(dy)=> (1-Math.sqrt(Math.max(0,1-dy/D)))/2;   // left-side param where depth below rim = dy
+  return g;
+}
+function drawKadhai(ctx,g,oilY,oilCol,time,shimmer){
+  // oil
+  ctx.save(); g.path(ctx); ctx.closePath(); ctx.clip();
+  ctx.fillStyle=oilCol; ctx.fillRect(g.cx-g.panW/2,oilY,g.panW,g.D*2);
+  ctx.restore();
+  // oil surface (gently shimmering)
+  const t0=g.tAtDepth(oilY-g.rimY), xl=g.cx-g.panW/2+g.panW*t0, xr=g.cx+g.panW/2-g.panW*t0;
+  ctx.save(); ctx.strokeStyle=COL.yellow; ctx.lineWidth=2; ctx.beginPath();
+  for(let x=xl;x<=xr;x+=4){ const yy=oilY+Math.sin(x*0.08+time*6)*shimmer; x===xl?ctx.moveTo(x,yy):ctx.lineTo(x,yy); }
+  ctx.stroke(); ctx.restore();
+  // pan body + handles
+  ctx.save(); ctx.lineWidth=3; ctx.strokeStyle=COL.ink; g.path(ctx); ctx.stroke(); ctx.restore();
+  circ(ctx,g.cx-g.panW/2-12,g.rimY-2,10,COL.ink,null,2.6);
+  circ(ctx,g.cx+g.panW/2+12,g.rimY-2,10,COL.ink,null,2.6);
+  return {xl,xr};
+}
+
+/* =====================================================================
+   1.1 ASKING A TESTABLE QUESTION
+   Pick the variables → the question assembles itself on the canvas,
+   and the investigation for that wonder runs live.
+   ===================================================================== */
+const MYS = [
+  { id:'puri', tab:'Puri', q:'Why is one side of a puri thinner?',
+    iv:'Rolling thickness', dv:'Side-thickness gap', cv:'Oil temperature',
+    pool:['Rolling thickness','Side-thickness gap','Oil temperature','Puri diameter','Frying time','Flour type'],
+    s:{min:1,max:4,step:0.1,val:2,unit:' mm'} },
+  { id:'bread', tab:'Dough', q:'Why does dough rise?',
+    iv:'Yeast amount', dv:'Dough rise height', cv:'Room temperature',
+    pool:['Yeast amount','Dough rise height','Room temperature','Bowl type','Salt amount','Baking time'],
+    s:{min:1,max:10,step:0.5,val:5,unit:' g'} },
+  { id:'earth', tab:'Earth', q:'Is the Earth getting warmer?',
+    iv:'CO₂ level', dv:'Global temperature', cv:'Sunlight received',
+    pool:['CO₂ level','Global temperature','Sunlight received','Cloud cover','Wind speed','Ocean depth'],
+    s:{min:280,max:800,step:10,val:420,unit:' ppm'} },
+];
+// Dough rise after 1 h (cm): h = 6·(1 − e^(−0.46·y))   (y = grams of yeast)
+function doughRise1h(y,tHr){ return 6*(1-Math.exp(-0.46*y*tHr)); }
+// Equilibrium warming: ΔT = S·log2(C/C0), S ≈ 3 °C per CO₂ doubling, C0 = 280 ppm, baseline 14 °C
+function earthTemp(c){ return 14 + 3*Math.log2(c/280); }
+
+function drawSentence(ctx,parts,cx,y,maxW){
+  let size=16;
+  const measure=()=>{ ctx.font='600 '+size+'px Poppins, sans-serif'; return parts.map(p=>ctx.measureText(p.t).width+(p.blank?16:0)); };
+  let ws=measure(), tot=ws.reduce((a,b)=>a+b,0);
+  while(tot>maxW && size>10){ size-=1; ws=measure(); tot=ws.reduce((a,b)=>a+b,0); }
+  let x=cx-tot/2;
+  parts.forEach((p,i)=>{
+    if(p.blank){
+      ctx.save(); ctx.strokeStyle=p.col; ctx.lineWidth=2; if(!p.filled) ctx.setLineDash([4,3]);
+      ctx.fillStyle=p.filled?'rgba(255,255,255,1)':'rgba(255,255,255,0)';
+      rrect(ctx,x+2,y-size-3,ws[i]-4,size+9,7); ctx.fill(); ctx.stroke(); ctx.restore();
+      textAt(ctx,p.t,x+8,y,{size,weight:700,color:p.filled?p.col:COL.mid});
+    } else textAt(ctx,p.t,x,y,{size,weight:500,color:COL.ink});
+    x+=ws[i];
+  });
+}
+
+function buildA1(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label style="margin-bottom:6px;">Everyday wonder</label>
+      <div class="toggle-group" id="mBtns">${MYS.map((m,i)=>`<button class="toggle-btn${i===0?' active':''}" data-i="${i}">${m.tab}</button>`).join('')}</div>
+      <div class="hint" id="mq"></div></div>
+    <div class="control-group"><label>Build the question</label>
+      <div class="role-row"><i class="rdot" style="background:var(--f-yellow)"></i><span class="rname">Change</span><select id="rI"></select></div>
+      <div class="role-row"><i class="rdot" style="background:var(--f-blue)"></i><span class="rname">Measure</span><select id="rD"></select></div>
+      <div class="role-row"><i class="rdot" style="background:var(--f-green)"></i><span class="rname">Keep same</span><select id="rC"></select></div>
+      <button class="toggle-btn navy" id="chk">Check</button>
+      <div id="fb"></div></div>
+    <div class="control-group"><label><span id="sLab"></span><span class="val" id="sVal"></span></label><input type="range" id="sR"></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel" id="ivL"></div><div class="rval" id="ivV" style="color:var(--f-yellow)"></div></div>
+      <div class="rcard"><div class="rlabel" id="dvL"></div><div class="rval" id="dvV" style="color:var(--f-blue)"></div></div></div></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), sR=$('#sR');
+  const sels={I:$('#rI'),D:$('#rD'),C:$('#rC')};
+  let mi=0;
+
+  // per-scene animated state
+  const S={ thick:{x:2,v:0}, puff:{x:0,v:0}, rise:{x:0,v:0}, temp:{x:15,v:0}, time:0, cyc:0,
+            bubbles:[], photons:[], co2:[], spawn:0 };
+  const doughDots=Array.from({length:44},()=>({u:Math.random()*2-1, v:Math.random()}));
+
+  function loadMystery(i){
+    mi=i; const m=MYS[i];
+    $('#mq').textContent='“'+m.q+'”';
+    const opts=m.pool.slice().sort(()=>Math.random()-0.5);
+    Object.values(sels).forEach(sel=>{ sel.innerHTML='<option value="">— choose —</option>'+opts.map(o=>`<option>${o}</option>`).join(''); });
+    sR.min=m.s.min; sR.max=m.s.max; sR.step=m.s.step; sR.value=m.s.val;
+    $('#sLab').textContent=m.iv; $('#ivL').textContent=m.iv; $('#dvL').textContent=m.dv;
+    $('#fb').innerHTML='';
+    S.cyc=0; S.photons=[]; S.bubbles=[];
+    S.co2=Array.from({length:22},()=>({a:Math.random(), r:Math.random(), da:(Math.random()-0.5)*0.02, rot:Math.random()*6, flash:0}));
+  }
+  toggleWire(wrap.querySelectorAll('#mBtns button'), b=>loadMystery(+b.dataset.i));
+  Object.values(sels).forEach(sel=>sel.onchange=()=>{ $('#fb').innerHTML=''; });
+  sR.oninput=()=>{ if(MYS[mi].id==='bread') S.cyc=0; };
+  $('#chk').onclick=()=>{
+    const m=MYS[mi], I=sels.I.value, D=sels.D.value, C=sels.C.value;
+    if(!I||!D||!C){ $('#fb').innerHTML='<div class="fb warn">Fill all three blanks</div>'; return; }
+    const ok=I===m.iv && D===m.dv && C===m.cv;
+    let msg='✓ Testable question!';
+    if(!ok){
+      if(I!==m.iv) msg='✗ What would you <b>change</b> on purpose?';
+      else if(D!==m.dv) msg='✗ What can you <b>measure</b> as the result?';
+      else msg='✗ What must stay <b>the same</b> for a fair test?';
+    }
+    $('#fb').innerHTML=`<div class="fb ${ok?'ok':'bad'}">${msg}</div>`;
+  };
+  loadMystery(0);
+
+  /* ---- scene: puri in hot oil ---- */
+  function scenePuri(ctx,w,h,dt){
+    const tmm=parseFloat(sR.value);
+    springTo(S.thick,tmm,60,11,dt);
+    const t=S.thick.x, topMm=0.35*t, botMm=0.65*t;
+    // puff cycle: flat → puff (spring) → hold → deflate, loops every 5 s
+    S.cyc=(S.cyc+dt)%5;
+    springTo(S.puff,(S.cyc>0.6&&S.cyc<4.4)?1:0,38,5.5,dt);
+    const g=kadhai(w*0.37,h*0.5,Math.min(w*0.5,440),h*0.27);
+    const oilY=g.rimY+g.D*0.32;
+    line(ctx,g.cx-g.panW*0.22,g.bottom+30,g.cx+g.panW*0.22,g.bottom+30,COL.ink,3);
+    flame(ctx,g.cx,g.bottom+28,g.panW*0.34,0.6,S.time);
+    drawKadhai(ctx,g,oilY,'rgba(217,160,23,0.14)',S.time,1.2);
+    // oil bubbles
+    if(Math.random()<dt*14) S.bubbles.push({x:g.cx+(Math.random()-0.5)*g.panW*0.5, y:g.bottom-4, r:1.5+Math.random()*2.5});
+    S.bubbles=S.bubbles.filter(b=>{ b.y-=dt*(40+b.r*14); b.x+=Math.sin(b.y*0.1)*0.3; if(b.y<oilY) return false; circ(ctx,b.x,b.y,b.r,COL.yellow,null,1.2); return true; });
+    // puri
+    const W=g.panW*0.46, bob=Math.sin(S.time*2.2)*2;
+    const px=3.4; // px per mm for walls
+    drawPuri(ctx,g.cx,oilY+bob,W,S.puff.x*(g.D*0.4),topMm*px,botMm*px,'#f3d9a0','#b7791f',0,0);
+    // controlled: oil temperature (green, locked)
+    const tx=g.cx-g.panW/2-44;
+    thermo(ctx,tx,g.rimY-50,g.rimY+30,0.72,COL.green,COL.red);
+    textAt(ctx,'180 °C',tx,g.rimY+62,{align:'center',size:12,weight:700,color:COL.green});
+    textAt(ctx,'kept same',tx,g.rimY+76,{align:'center',size:10,color:COL.green});
+    // magnified cross-section (the measurement)
+    const mx=w*0.8, my=h*0.58, R=Math.min(w*0.13,h*0.21);
+    const lx=g.cx+W*0.28, ly=oilY-S.puff.x*g.D*0.4;
+    line(ctx,lx,ly,mx-R*0.95,my-R*0.3,COL.mid,1.2,[4,4]);
+    circ(ctx,mx,my,R,COL.ink,'#fff',2.4);
+    ctx.save(); ctx.beginPath(); ctx.arc(mx,my,R-2,0,Math.PI*2); ctx.clip();
+    const k=R*0.14, gap=R*0.42*clamp(S.puff.x,0.15,1.2);
+    const topY=my-gap/2-topMm*k, botY=my+gap/2;
+    ctx.fillStyle='#f3d9a0'; ctx.fillRect(mx-R,topY,R*2,topMm*k); ctx.fillRect(mx-R,botY,R*2,botMm*k);
+    line(ctx,mx-R,topY,mx+R,topY,'#b7791f',1.6); line(ctx,mx-R,topY+topMm*k,mx+R,topY+topMm*k,'#b7791f',1.6);
+    line(ctx,mx-R,botY,mx+R,botY,'#b7791f',1.6); line(ctx,mx-R,botY+botMm*k,mx+R,botY+botMm*k,'#b7791f',1.6);
+    for(let i=0;i<4;i++){ const sx=mx-R*0.5+i*R*0.3, sy=my+Math.sin(S.time*3+i)*gap*0.25; circ(ctx,sx,sy,2.5,COL.mid,null,1); }
+    dimArrow(ctx,mx+R*0.45,topY,topY+topMm*k,COL.blue);
+    dimArrow(ctx,mx+R*0.45,botY,botY+botMm*k,COL.blue);
+    textAt(ctx,fmt(topMm,2)+' mm',mx+R*0.5,topY-4,{size:11,weight:700,color:COL.blue});
+    textAt(ctx,fmt(botMm,2)+' mm',mx+R*0.5,botY+botMm*k+14,{size:11,weight:700,color:COL.blue});
+    ctx.restore();
+    textAt(ctx,'top wall vs bottom wall',mx,my+R+18,{align:'center',size:11,color:COL.muted});
+    $('#ivV').textContent=fmt(tmm,1)+' mm';
+    $('#dvV').textContent=fmt(0.3*tmm,2)+' mm';
+  }
+
+  /* ---- scene: dough rising in a bowl ---- */
+  function sceneBread(ctx,w,h,dt){
+    const y=parseFloat(sR.value);
+    const RUN=5, HOLD=1.4, RESET=0.8;
+    S.cyc+=dt; if(S.cyc>RUN+HOLD+RESET) S.cyc=0;
+    const tHr=clamp(S.cyc/RUN,0,1);
+    const target = S.cyc<RUN+HOLD ? doughRise1h(y,tHr) : 0;
+    springTo(S.rise,target,S.cyc<RUN+HOLD?90:30,S.cyc<RUN+HOLD?18:9,dt);
+    const cx=w*0.42, rimY=h*0.66, bw=Math.min(w*0.4,340), bd=h*0.2, pxcm=h*0.045;
+    // dough dome (drawn first, bowl front masks its lower half)
+    const domeBase=rimY+bd*0.25, ry=10+Math.max(0,S.rise.x)*pxcm, rx=bw*0.44+S.rise.x*2;
+    ctx.save(); ctx.beginPath(); ctx.ellipse(cx,domeBase,rx,ry,0,Math.PI,0); ctx.closePath();
+    ctx.fillStyle='#fbefd3'; ctx.fill(); ctx.strokeStyle='#b7791f'; ctx.lineWidth=2.4; ctx.stroke(); ctx.restore();
+    // CO2 bubbles inside the dough, count ∝ yeast, size ∝ rise
+    const nb=Math.round(y*4.4), grow=clamp(S.rise.x/6,0,1);
+    for(let i=0;i<nb;i++){
+      const d=doughDots[i]; const ang=Math.PI+(d.u*0.5+0.5)*Math.PI;
+      const rr=d.v*0.8; const bx=cx+Math.cos(ang)*rx*rr, by=domeBase+Math.sin(ang)*ry*rr*0.95;
+      circ(ctx,bx,by,1+grow*4*(0.6+0.4*Math.sin(S.time*2+i)),'#c9a15d',null,1.1);
+    }
+    // bowl
+    ctx.save(); ctx.beginPath(); ctx.moveTo(cx-bw/2,rimY); ctx.quadraticCurveTo(cx-bw*0.44,rimY+bd,cx-bw*0.2,rimY+bd);
+    ctx.lineTo(cx+bw*0.2,rimY+bd); ctx.quadraticCurveTo(cx+bw*0.44,rimY+bd,cx+bw/2,rimY); ctx.closePath();
+    ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.8; ctx.stroke(); ctx.restore();
+    line(ctx,cx-bw*0.52,rimY,cx+bw*0.52,rimY,COL.ink,3);
+    line(ctx,cx-bw*0.2,rimY+bd,cx-bw*0.24,rimY+bd+10,COL.ink,2.4); line(ctx,cx+bw*0.2,rimY+bd,cx+bw*0.24,rimY+bd+10,COL.ink,2.4);
+    // blue ruler: measured quantity
+    const rx0=cx+bw/2+34, zeroY=domeBase-10;
+    line(ctx,rx0,zeroY,rx0,zeroY-7*pxcm,COL.blue,2);
+    for(let c=0;c<=7;c++){ const yy=zeroY-c*pxcm; line(ctx,rx0,yy,rx0+(c%2?6:10),yy,COL.blue,1.4); textAt(ctx,c+'',rx0+14,yy+4,{size:9.5,color:COL.blue}); }
+    const topY=domeBase-ry;
+    line(ctx,cx,topY,rx0,topY,COL.blue,1.4,[4,3]); arrowHead(ctx,rx0,topY,0,COL.blue,6);
+    textAt(ctx,fmt(Math.max(0,S.rise.x),1)+' cm',rx0+30,topY+4,{size:13,weight:700,color:COL.blue});
+    // clock (1 hour compressed into 5 s)
+    const kx=w*0.12, ky=h*0.34, kr=Math.min(26,h*0.06);
+    circ(ctx,kx,ky,kr,COL.ink,'#fff',2.4);
+    for(let i=0;i<12;i++){ const a=i/12*Math.PI*2; line(ctx,kx+Math.cos(a)*kr*0.78,ky+Math.sin(a)*kr*0.78,kx+Math.cos(a)*kr*0.92,ky+Math.sin(a)*kr*0.92,COL.ink,1.2); }
+    const ha=-Math.PI/2+tHr*Math.PI*2; line(ctx,kx,ky,kx+Math.cos(ha)*kr*0.75,ky+Math.sin(ha)*kr*0.75,COL.ink,2.2);
+    textAt(ctx,Math.round(tHr*60)+' min',kx,ky+kr+17,{align:'center',size:11.5,weight:700,color:COL.ink});
+    // controlled: room temperature (green)
+    const tx=w*0.12;
+    thermo(ctx,tx,h*0.5,h*0.72,0.45,COL.green,COL.red);
+    textAt(ctx,'25 °C',tx,h*0.72+34,{align:'center',size:12,weight:700,color:COL.green});
+    textAt(ctx,'kept same',tx,h*0.72+48,{align:'center',size:10,color:COL.green});
+    // yeast label (yellow — what we change)
+    textAt(ctx,fmt(y,1)+' g yeast',cx,rimY+bd+30,{align:'center',size:13,weight:700,color:COL.yellow});
+    $('#ivV').textContent=fmt(y,1)+' g';
+    $('#dvV').textContent=fmt(doughRise1h(y,1),1)+' cm in 1 h';
+  }
+
+  /* ---- scene: sunlight, Earth and CO2 ---- */
+  function sceneEarth(ctx,w,h,dt){
+    const C=parseFloat(sR.value);
+    springTo(S.temp,earthTemp(C),6,4.5,dt);
+    const ex=w*0.46, R=w*0.95, ey=h*0.93+R;           // Earth centre far below
+    const atmR=R+h*0.3;
+    const sunX=w*0.1, sunY=h*0.3, sr=Math.min(28,h*0.06);
+    // atmosphere
+    ctx.save(); ctx.beginPath(); ctx.arc(ex,ey,atmR,Math.PI*1.1,Math.PI*1.9); ctx.strokeStyle=COL.mid; ctx.setLineDash([6,5]); ctx.lineWidth=1.4; ctx.stroke(); ctx.restore();
+    textAt(ctx,'atmosphere',ex+w*0.24,ey-atmR+22,{size:10.5,color:COL.mid});
+    // ground
+    ctx.save(); ctx.beginPath(); ctx.arc(ex,ey,R,Math.PI*1.05,Math.PI*1.95); ctx.strokeStyle=COL.ink; ctx.lineWidth=3; ctx.stroke(); ctx.restore();
+    // sun (green = sunlight kept same)
+    circ(ctx,sunX,sunY,sr,COL.yellow,'#fff6dc',2.6);
+    for(let i=0;i<10;i++){ const a=i/10*Math.PI*2+S.time*0.4; line(ctx,sunX+Math.cos(a)*(sr+5),sunY+Math.sin(a)*(sr+5),sunX+Math.cos(a)*(sr+13),sunY+Math.sin(a)*(sr+13),COL.yellow,2); }
+    textAt(ctx,'sunlight: kept same',sunX,sunY+sr+24,{align:'center',size:10.5,weight:600,color:COL.green});
+    // CO2 molecules in the air (count ∝ ppm)
+    const nMol=Math.round(C/38);
+    for(let i=0;i<nMol;i++){
+      const m=S.co2[i]; m.a+=m.da*dt*2; if(m.a<0) m.a+=1; if(m.a>1) m.a-=1; m.rot+=dt*0.8; m.flash=Math.max(0,m.flash-dt*2);
+      const ang=Math.PI*1.12+m.a*Math.PI*0.76, rr=R+h*0.05+m.r*(atmR-R-h*0.08);
+      m.x=ex+Math.cos(ang)*rr; m.y=ey+Math.sin(ang)*rr;
+      const dx=Math.cos(m.rot)*9, dy=Math.sin(m.rot)*9;
+      line(ctx,m.x-dx,m.y-dy,m.x+dx,m.y+dy,COL.ink,1.6);
+      circ(ctx,m.x,m.y,3.5,COL.ink,'#e3e8ef',1.4);
+      circ(ctx,m.x-dx,m.y-dy,4,COL.red,m.flash>0?'#f7b9ab':'#fbe3de',1.4); circ(ctx,m.x+dx,m.y+dy,4,COL.red,m.flash>0?'#f7b9ab':'#fbe3de',1.4);
+    }
+    // photons: yellow sunlight in, red heat (infrared) out, trapped by CO2
+    S.spawn+=dt*5;
+    while(S.spawn>1){ S.spawn-=1;
+      const tx=ex+(Math.random()-0.35)*w*0.6; const tyAng=Math.atan2(0,0);
+      const gx=tx, gy=ey-Math.sqrt(Math.max(0,R*R-(tx-ex)*(tx-ex)));
+      const d=Math.hypot(gx-sunX,gy-sunY);
+      S.photons.push({x:sunX,y:sunY,vx:(gx-sunX)/d*260,vy:(gy-sunY)/d*260,kind:'sun',life:0});
+    }
+    const pAbs=0.9*(C/280);                 // absorption chance per second inside the air layer
+    S.photons=S.photons.filter(p=>{
+      p.x+=p.vx*dt; p.y+=p.vy*dt; p.life+=dt;
+      const dist=Math.hypot(p.x-ex,p.y-ey);
+      if(p.kind==='sun' && dist<=R){ // absorbed by ground → re-emitted as heat
+        const nx=(p.x-ex)/dist, ny=(p.y-ey)/dist, sp=170, jit=(Math.random()-0.5)*0.9;
+        const c=Math.cos(jit), s=Math.sin(jit);
+        p.kind='ir'; p.vx=(nx*c-ny*s)*sp; p.vy=(nx*s+ny*c)*sp; p.x=ex+nx*(R+1); p.y=ey+ny*(R+1);
+      } else if(p.kind==='ir'){
+        if(dist<R){ p.kind='ir'; const nx=(p.x-ex)/dist, ny=(p.y-ey)/dist; p.vx=nx*170; p.vy=ny*170; p.x=ex+nx*(R+1); p.y=ey+ny*(R+1); p.bounced=(p.bounced||0)+1; }
+        else if(dist<atmR && dist>R+h*0.04 && Math.random()<pAbs*dt){ // CO2 absorbs and re-emits downward
+          const nx=(p.x-ex)/dist, ny=(p.y-ey)/dist; const j=(Math.random()-0.5)*0.8, c=Math.cos(j), s=Math.sin(j);
+          p.vx=-(nx*c-ny*s)*170; p.vy=-(nx*s+ny*c)*170;
+          let best=null,bd=1e9; for(let i=0;i<nMol;i++){ const m=S.co2[i]; const dd=Math.hypot(m.x-p.x,m.y-p.y); if(dd<bd){bd=dd;best=m;} } if(best) best.flash=1;
+        }
+      }
+      if(p.life>9 || p.x<-20 || p.x>w+20 || p.y<-20 || (p.bounced||0)>3) return false;
+      const len=p.kind==='sun'?12:10, sp=Math.hypot(p.vx,p.vy);
+      const ux=p.vx/sp, uy=p.vy/sp;
+      if(p.kind==='sun') vec(ctx,p.x-ux*len,p.y-uy*len,p.x,p.y,COL.yellow,2);
+      else { // wavy heat ray
+        ctx.save(); ctx.strokeStyle=COL.red; ctx.lineWidth=1.8; ctx.beginPath();
+        for(let k=0;k<=8;k++){ const f=k/8, wv=Math.sin(f*Math.PI*3+p.life*20)*2.5; const xx=p.x-ux*len*1.6*(1-f)-uy*wv, yy=p.y-uy*len*1.6*(1-f)+ux*wv; k?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy); }
+        ctx.stroke(); ctx.restore(); arrowHead(ctx,p.x,p.y,Math.atan2(uy,ux),COL.red,5);
+      }
+      return true;
+    });
+    // thermometer (blue = measured)
+    const tx=w*0.9, top=h*0.2, bot=h*0.7, frac=(S.temp.x-10)/12;
+    thermo(ctx,tx,top,bot,frac,COL.blue,COL.red);
+    textAt(ctx,fmt(S.temp.x,1)+' °C',tx,bot+36,{align:'center',size:14,weight:700,color:COL.blue});
+    textAt(ctx,'global avg',tx,bot+50,{align:'center',size:10,color:COL.blue});
+    textAt(ctx,Math.round(C)+' ppm CO₂',ex,h*0.97,{align:'center',size:12.5,weight:700,color:COL.yellow});
+    $('#ivV').textContent=Math.round(C)+' ppm';
+    $('#dvV').textContent=fmt(earthTemp(C),1)+' °C';
+  }
+
+  animLoop((dt)=>{
+    S.time+=dt;
+    const m=MYS[mi];
+    $('#sVal').textContent=fmt(parseFloat(sR.value),1)+m.s.unit;
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    // question sentence, assembled from the selections
+    const I=sels.I.value, D=sels.D.value, C=sels.C.value;
+    const blank=(v,c)=>({t:v||'  ?  ',blank:true,col:c,filled:!!v});
+    drawSentence(ctx,[{t:'How does '},blank(I,COL.yellow),{t:' affect '},blank(D,COL.blue)],w/2,h*0.075,w*0.94);
+    drawSentence(ctx,[{t:'while keeping '},blank(C,COL.green),{t:' the same?'}],w/2,h*0.075+32,w*0.94);
+    line(ctx,w*0.06,h*0.075+48,w*0.94,h*0.075+48,'#e6edf5',1);
+    if(m.id==='puri') scenePuri(ctx,w,h,dt);
+    else if(m.id==='bread') sceneBread(ctx,w,h,dt);
+    else sceneEarth(ctx,w,h,dt);
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   1.2 PARTICLES OF MATTER
+   (a) States: Langevin-thermostat particle model of water.
+       Solid = spring to lattice sites · Liquid = gravity + cohesion
+       Gas = free flight, elastic walls. Speed ∝ √(T in kelvin).
+   (b) Element / compound / mixture seen through a magnifier.
+   ===================================================================== */
+const ATOM={ O:{r:9,c:COL.red,f:'#fbe3de'}, H:{r:5.5,c:COL.mid,f:'#ffffff'}, C:{r:8,c:COL.ink,f:'#e3e8ef'}, N:{r:8.5,c:COL.blue,f:'#dcecfb'},
+  Na:{r:8.5,c:COL.yellow,f:'#fdf1d0'}, Cl:{r:10.5,c:COL.green,f:'#dff3e6'}, Au:{r:11,c:COL.yellow,f:'#fdf1d0'}, Fe:{r:11,c:COL.ink,f:'#e3e8ef'} };
+const ATOM_NAME={O:'Oxygen',H:'Hydrogen',C:'Carbon',N:'Nitrogen',Na:'Sodium',Cl:'Chlorine',Au:'Gold',Fe:'Iron'};
+const MOL={ O2:{a:[['O',-6.5,0],['O',6.5,0]],r:13}, N2:{a:[['N',-6.5,0],['N',6.5,0]],r:13}, H2O:{a:[['O',0,-2],['H',-8.5,5],['H',8.5,5]],r:12},
+  CO2:{a:[['O',-13,0],['C',0,0],['O',13,0]],r:20}, Au:{a:[['Au',0,0]],r:11}, Fe:{a:[['Fe',0,0]],r:11}, Na:{a:[['Na',0,0]],r:9}, Cl:{a:[['Cl',0,0]],r:10.5}, SUG:{a:[],r:15,sugar:true} };
+const SUBS=[
+  {id:'gold',  l:'Gold',        type:'element',  motion:'lattice', lattice:['Au']},
+  {id:'oxy',   l:'Oxygen gas',  type:'element',  motion:'gas',     mix:[['O2',10]]},
+  {id:'iron',  l:'Iron nail',   type:'element',  motion:'lattice', lattice:['Fe']},
+  {id:'water', l:'Pure water',  type:'compound', motion:'liquid',  mix:[['H2O',30]]},
+  {id:'salt',  l:'Table salt',  type:'compound', motion:'lattice', lattice:['Na','Cl']},
+  {id:'co2',   l:'Carbon dioxide', type:'compound', motion:'gas',  mix:[['CO2',9]]},
+  {id:'tea',   l:'Sugary tea',  type:'mixture',  motion:'liquid',  mix:[['H2O',24],['SUG',4]]},
+  {id:'air',   l:'Air',         type:'mixture',  motion:'gas',     mix:[['N2',9],['O2',3],['CO2',1]]},
+  {id:'sw',    l:'Salt water',  type:'mixture',  motion:'liquid',  mix:[['H2O',24],['Na',4],['Cl',4]]},
+];
+const TYPE_TXT={element:'ELEMENT · one kind of atom', compound:'COMPOUND · different atoms joined', mixture:'MIXTURE · different particles, not joined'};
+
+function buildA2(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label style="margin-bottom:6px;">View</label>
+      <div class="toggle-group" id="modeBtns"><button class="toggle-btn active" data-m="states">States</button><button class="toggle-btn" data-m="classify">Element · Compound · Mixture</button></div></div>
+    <div class="side-sub" id="gStates">
+      <div class="control-group"><label>Temperature <span class="val" id="tv">20 °C</span></label><input type="range" id="tr" min="-40" max="160" value="20"></div>
+      <div class="control-group"><div class="result-cards">
+        <div class="rcard"><div class="rlabel">State</div><div class="rval" id="stV">—</div></div>
+        <div class="rcard"><div class="rlabel">Particle speed</div><div class="rval" id="spV">—</div></div></div></div>
+      <p class="hint">Water: melts at 0 °C, boils at 100 °C.</p>
+    </div>
+    <div class="side-sub hidden" id="gClass">
+      <div class="control-group"><label style="margin-bottom:4px;">Look inside…</label><div class="chip-wrap" id="subChips"></div></div>
+      <div class="control-group"><label>It is a…</label>
+        <div class="toggle-group" id="ansBtns"><button class="toggle-btn small" data-a="element">Element</button><button class="toggle-btn small" data-a="compound">Compound</button><button class="toggle-btn small" data-a="mixture">Mixture</button></div>
+        <div id="fb2"></div></div>
+      <div class="control-group"><div class="result-cards"><div class="rcard wide"><div class="rlabel">Sorted correctly</div><div class="rval" id="scV">0 / 9</div></div></div></div>
+    </div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), tr=$('#tr');
+  let mode='states', time=0;
+  toggleWire(wrap.querySelectorAll('#modeBtns button'), b=>{ mode=b.dataset.m; $('#gStates').classList.toggle('hidden',mode!=='states'); $('#gClass').classList.toggle('hidden',mode!=='classify'); });
+
+  /* ---------- (a) states of matter ---------- */
+  const VW=400, VH=300, R=10, N=40;
+  const P=Array.from({length:N},(_,i)=>({x:40+(i%10)*32, y:VH-R-Math.floor(i/10)*22, vx:0, vy:0, ax:0, ay:0}));
+  let phase=null, tempDisp=20;
+  function assignAnchors(){
+    const cols=8, rows=5, sp=2*R+1.5, x0=(VW-(cols-1)*sp)/2 - sp*0.25;
+    const anchors=[]; for(let r=0;r<rows;r++) for(let c=0;c<cols;c++) anchors.push({x:x0+c*sp+(r%2?sp*0.5:0), y:VH-R-1-r*sp*0.87});
+    const sorted=P.slice().sort((a,b)=>b.y-a.y);
+    for(let r=0;r<rows;r++){ const row=sorted.slice(r*cols,r*cols+cols).sort((a,b)=>a.x-b.x); row.forEach((p,c)=>{ p.ax=anchors[r*cols+c].x; p.ay=anchors[r*cols+c].y; }); }
+  }
+  function stepStates(hh,T){
+    const st=T<0?'solid':T<100?'liquid':'gas';
+    if(st!==phase){ if(st==='solid') assignAnchors(); phase=st; }
+    const s=Math.sqrt((T+273)/273);
+    const fx=new Float32Array(N), fy=new Float32Array(N);
+    if(st!=='solid'){
+      for(let i=0;i<N;i++) for(let j=i+1;j<N;j++){
+        const dx=P[j].x-P[i].x, dy=P[j].y-P[i].y, d=Math.hypot(dx,dy)||0.01, nx=dx/d, ny=dy/d;
+        let f=0;
+        if(d<2*R) f=-1400*(2*R-d);                              // overlap → push apart
+        else if(st==='liquid' && d<3*R) f=160*(d-2*R);           // cohesion → pull together
+        fx[i]+=f*nx; fy[i]+=f*ny; fx[j]-=f*nx; fy[j]-=f*ny;
+      }
+    }
+    for(let i=0;i<N;i++){
+      const p=P[i];
+      if(st==='solid'){
+        const K=260, gam=8, sig=60+3*(T+40);
+        p.vx+=(K*(p.ax-p.x)-gam*p.vx)*hh+gauss()*sig*Math.sqrt(hh);
+        p.vy+=(K*(p.ay-p.y)-gam*p.vy)*hh+gauss()*sig*Math.sqrt(hh);
+      } else {
+        p.vx+=fx[i]*hh; p.vy+=(fy[i]+(st==='liquid'?380:12))*hh;
+        const vT=st==='liquid'?70*s:230*s;
+        if(st==='liquid'){ p.vx+=gauss()*50*s*Math.sqrt(hh); p.vy+=gauss()*50*s*Math.sqrt(hh); }
+        const sp=Math.hypot(p.vx,p.vy)||1, k=1+(vT/sp-1)*Math.min(1,hh*(st==='gas'?4:2.5));
+        p.vx*=k; p.vy*=k;
+      }
+      p.x+=p.vx*hh; p.y+=p.vy*hh;
+      const e=st==='gas'?1:0.4;
+      if(p.x<R){p.x=R; p.vx=Math.abs(p.vx)*e;} if(p.x>VW-R){p.x=VW-R; p.vx=-Math.abs(p.vx)*e;}
+      if(p.y<R){p.y=R; p.vy=Math.abs(p.vy)*e;} if(p.y>VH-R){p.y=VH-R; p.vy=-Math.abs(p.vy)*e;}
+    }
+  }
+  function drawStates(ctx,w,h,dt){
+    const T=parseFloat(tr.value);
+    $('#tv').textContent=T+' °C';
+    for(let k=0;k<3;k++) stepStates(dt/3,T);
+    tempDisp=approach(tempDisp,T,5,dt);
+    const bw=Math.min(w*0.6,(h*0.66)*4/3), S=bw/VW, bh=VH*S, bx=w*0.44-bw/2, by=h*0.14;
+    const heat=clamp((T+40)/200,0,1);
+    // burner + flame (red = heat)
+    line(ctx,bx+bw*0.3,by+bh+44,bx+bw*0.7,by+bh+44,COL.ink,3);
+    line(ctx,bx+bw*0.5,by+bh+44,bx+bw*0.5,by+bh+60,COL.ink,3);
+    if(T>-20) flame(ctx,bx+bw/2,by+bh+42,bw*0.36,heat,time);
+    // container
+    ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=3; ctx.beginPath();
+    ctx.moveTo(bx-8,by-14); ctx.lineTo(bx-8,by+bh+2); ctx.quadraticCurveTo(bx-8,by+bh+10,bx,by+bh+10); ctx.lineTo(bx+bw,by+bh+10);
+    ctx.quadraticCurveTo(bx+bw+8,by+bh+10,bx+bw+8,by+bh+2); ctx.lineTo(bx+bw+8,by-14); ctx.stroke(); ctx.restore();
+    line(ctx,bx-14,by-14,bx+bw+14,by-14,COL.ink,3,phase==='gas'?null:[8,6]);
+    // bonds (attractions) between neighbours
+    const bondD=phase==='solid'?2.5*R:2.35*R;
+    if(phase!=='gas'){
+      ctx.save(); ctx.strokeStyle=phase==='solid'?'#9fb1c5':'#cfdae6'; ctx.lineWidth=1.2; ctx.beginPath();
+      for(let i=0;i<N;i++) for(let j=i+1;j<N;j++){ const d=Math.hypot(P[i].x-P[j].x,P[i].y-P[j].y); if(d<bondD){ ctx.moveTo(bx+P[i].x*S,by+P[i].y*S); ctx.lineTo(bx+P[j].x*S,by+P[j].y*S); } }
+      ctx.stroke(); ctx.restore();
+    }
+    const pc=mixCol(COL.blue,COL.red,heat), pf=mixCol('#dcecfb','#fbe3de',heat);
+    P.forEach(p=>circ(ctx,bx+p.x*S,by+p.y*S,R*S*0.9,pc,pf,2));
+    // motion trails for gas show speed
+    if(phase==='gas') P.forEach(p=>line(ctx,bx+p.x*S,by+p.y*S,bx+(p.x-p.vx*0.05)*S,by+(p.y-p.vy*0.05)*S,pc,1.2));
+    // thermometer
+    const tx=bx+bw+52;
+    thermo(ctx,tx,by,by+bh-6,(tempDisp+40)/200,COL.ink,COL.red);
+    textAt(ctx,Math.round(tempDisp)+' °C',tx,by+bh+34,{align:'center',size:13,weight:700,color:COL.red});
+    // state label
+    const nm={solid:'SOLID · ice',liquid:'LIQUID · water',gas:'GAS · steam'}[phase];
+    const cap={solid:'held in place — only vibrate',liquid:'close together — slide past each other',gas:'far apart — fly freely, fill the jar'}[phase];
+    textAt(ctx,nm,bx+bw/2,h*0.07,{align:'center',size:16,weight:700,color:COL.ink});
+    textAt(ctx,cap,bx+bw/2,h*0.07+18,{align:'center',size:11.5,color:COL.muted});
+    let vm=0; P.forEach(p=>vm+=Math.hypot(p.vx,p.vy)); vm/=N;
+    $('#stV').textContent=phase[0].toUpperCase()+phase.slice(1);
+    $('#spV').textContent='×'+fmt(Math.sqrt((T+273)/273),2);
+  }
+
+  /* ---------- (b) element / compound / mixture ---------- */
+  const RV=150;
+  let si=0, bodies=[], answered={}, correct=0;
+  function buildBodies(sub){
+    bodies=[];
+    if(sub.motion==='lattice'){
+      const sp=sub.lattice.length>1?21:23;
+      for(let i=-7;i<=7;i++) for(let j=-7;j<=7;j++){
+        const x=i*sp, y=j*sp; if(Math.hypot(x,y)>RV-12) continue;
+        const kind=sub.lattice[(i+j+100)%sub.lattice.length];
+        bodies.push({k:kind,x,y,vx:0,vy:0,ax:x,ay:y,a:0,w:0,r:MOL[kind].r});
+      }
+      return;
+    }
+    sub.mix.forEach(([k,n])=>{ for(let i=0;i<n;i++){
+      let x,y,tries=0; do{ const a=Math.random()*Math.PI*2, rr=Math.sqrt(Math.random())*(RV-MOL[k].r-4); x=Math.cos(a)*rr; y=Math.sin(a)*rr; tries++; }
+      while(tries<40 && bodies.some(b=>Math.hypot(b.x-x,b.y-y)<b.r+MOL[k].r));
+      const sp=sub.motion==='gas'?110:30, ang=Math.random()*Math.PI*2;
+      bodies.push({k,x,y,vx:Math.cos(ang)*sp,vy:Math.sin(ang)*sp,a:Math.random()*6,w:(Math.random()-0.5)*(sub.motion==='gas'?3:1),r:MOL[k].r});
+    }});
+  }
+  function stepBodies(dt){
+    const sub=SUBS[si];
+    if(sub.motion!=='lattice'){
+      for(let i=0;i<bodies.length;i++) for(let j=i+1;j<bodies.length;j++){
+        const A=bodies[i], B=bodies[j], dx=B.x-A.x, dy=B.y-A.y, d=Math.hypot(dx,dy)||0.01, m=A.r+B.r;
+        if(d<m){ const f=(m-d)*(sub.motion==='gas'?30:14)*dt*60/60, nx=dx/d, ny=dy/d; A.vx-=nx*f; A.vy-=ny*f; B.vx+=nx*f; B.vy+=ny*f; A.x-=nx*(m-d)*0.25; A.y-=ny*(m-d)*0.25; B.x+=nx*(m-d)*0.25; B.y+=ny*(m-d)*0.25; }
+      }
+    }
+    bodies.forEach(b=>{
+      if(sub.motion==='lattice'){
+        b.vx+=(300*(b.ax-b.x)-9*b.vx)*dt+gauss()*120*Math.sqrt(dt); b.vy+=(300*(b.ay-b.y)-9*b.vy)*dt+gauss()*120*Math.sqrt(dt);
+      } else if(sub.motion==='liquid'){
+        b.vx+=gauss()*220*Math.sqrt(dt); b.vy+=gauss()*220*Math.sqrt(dt); const d=Math.exp(-2.2*dt); b.vx*=d; b.vy*=d;
+        b.w+=gauss()*5*Math.sqrt(dt); b.w*=Math.exp(-1.5*dt);
+      } else {
+        const sp=Math.hypot(b.vx,b.vy)||1, k=1+(110/sp-1)*Math.min(1,dt*2); b.vx*=k; b.vy*=k;
+      }
+      b.x+=b.vx*dt; b.y+=b.vy*dt; b.a+=b.w*dt;
+      const d=Math.hypot(b.x,b.y), lim=RV-b.r;
+      if(d>lim){ const nx=b.x/d, ny=b.y/d, vn=b.vx*nx+b.vy*ny; if(vn>0){ b.vx-=2*vn*nx; b.vy-=2*vn*ny; } b.x=nx*lim; b.y=ny*lim; }
+    });
+  }
+  function drawBody(ctx,b,cx,cy,S){
+    const m=MOL[b.k], x=cx+b.x*S, y=cy+b.y*S;
+    if(m.sugar){
+      ctx.save(); ctx.translate(x,y); ctx.rotate(b.a); ctx.strokeStyle=COL.green; ctx.lineWidth=2.2; ctx.fillStyle='#eef8f1'; ctx.beginPath();
+      for(let i=0;i<6;i++){ const a=i/6*Math.PI*2; const px=Math.cos(a)*12*S, py=Math.sin(a)*12*S; i?ctx.lineTo(px,py):ctx.moveTo(px,py); }
+      ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore();
+      for(let i=0;i<6;i++){ const a=i/6*Math.PI*2+b.a; circ(ctx,x+Math.cos(a)*12*S,y+Math.sin(a)*12*S,2.4*S,COL.green,'#fff',1.2); }
+      return;
+    }
+    const ca=Math.cos(b.a), sa=Math.sin(b.a);
+    const pts=m.a.map(([el,dx,dy])=>({el,x:x+(dx*ca-dy*sa)*S,y:y+(dx*sa+dy*ca)*S}));
+    for(let i=1;i<pts.length;i++){ const j=m.a.length===3&&pts[0].el==='O'&&pts[1].el==='H'?0:i-1; line(ctx,pts[j].x,pts[j].y,pts[i].x,pts[i].y,COL.ink,2*S); }
+    pts.forEach(p=>{ const A=ATOM[p.el]; circ(ctx,p.x,p.y,A.r*S*0.85,A.c,A.f,1.8); });
+  }
+  function drawChips(){
+    const cw=$('#subChips'); cw.innerHTML='';
+    SUBS.forEach((s,i)=>{ const b=document.createElement('button');
+      const a=answered[s.id]; b.className='chip-btn'+(i===si?' active':'')+(a===undefined?'':(a?' ok':' bad'));
+      b.innerHTML=(a===undefined?'':(a?'✓ ':'✗ '))+s.l;
+      b.onclick=()=>{ si=i; buildBodies(SUBS[si]); drawChips(); showFb(); }; cw.appendChild(b); });
+    $('#scV').textContent=correct+' / '+SUBS.length;
+  }
+  function showFb(){
+    const s=SUBS[si], a=answered[s.id];
+    $('#fb2').innerHTML = a===undefined? '' : `<div class="fb ${a?'ok':'bad'}">${a?'✓ Correct':'✗ It is a '+s.type}</div>`;
+  }
+  wrap.querySelectorAll('#ansBtns button').forEach(b=>b.onclick=()=>{
+    const s=SUBS[si]; if(answered[s.id]!==undefined) return;
+    const ok=b.dataset.a===s.type; answered[s.id]=ok; if(ok) correct++;
+    drawChips(); showFb();
+  });
+  buildBodies(SUBS[0]); drawChips();
+
+  function drawClassify(ctx,w,h,dt){
+    stepBodies(dt);
+    const cx=w*0.43, cy=h*0.5, Rc=Math.min(w*0.3,h*0.36), S=Rc/(RV+8);
+    // magnifier handle (line diagram)
+    const ha=Math.PI*0.25;
+    ctx.save(); ctx.lineCap='round';
+    line(ctx,cx+Math.cos(ha)*(Rc+8),cy+Math.sin(ha)*(Rc+8),cx+Math.cos(ha)*(Rc+Rc*0.55),cy+Math.sin(ha)*(Rc+Rc*0.55),COL.ink,10);
+    line(ctx,cx+Math.cos(ha)*(Rc+8),cy+Math.sin(ha)*(Rc+8),cx+Math.cos(ha)*(Rc+Rc*0.55),cy+Math.sin(ha)*(Rc+Rc*0.55),'#fff',5);
+    ctx.restore();
+    circ(ctx,cx,cy,Rc+6,COL.ink,'#fbfdff',4);
+    ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,Rc,0,Math.PI*2); ctx.clip();
+    bodies.forEach(b=>drawBody(ctx,b,cx,cy,S));
+    ctx.restore();
+    const s=SUBS[si];
+    textAt(ctx,s.l,cx,h*0.065,{align:'center',size:16,weight:700,color:COL.ink});
+    const a=answered[s.id];
+    if(a!==undefined) textAt(ctx,TYPE_TXT[s.type],cx,h*0.065+20,{align:'center',size:12.5,weight:700,color:a?COL.green:COL.red});
+    else textAt(ctx,'element, compound or mixture?',cx,h*0.065+20,{align:'center',size:12,color:COL.muted});
+    // key: atoms present
+    const els=new Set(); bodies.forEach(b=>MOL[b.k].a.forEach(x=>els.add(x[0]))); const hasSugar=bodies.some(b=>MOL[b.k].sugar);
+    const keys=[...els]; const kx=w*0.86; let ky=h*0.26;
+    textAt(ctx,'KEY',kx-10,ky-16,{size:10,weight:700,color:COL.mid});
+    keys.forEach(el=>{ circ(ctx,kx,ky,ATOM[el].r*0.8,ATOM[el].c,ATOM[el].f,1.8); textAt(ctx,ATOM_NAME[el],kx+16,ky+4,{size:11,color:COL.muted}); ky+=28; });
+    if(hasSugar){ circ(ctx,kx,ky,9,COL.green,'#eef8f1',2); textAt(ctx,'Sugar',kx+16,ky+4,{size:11,color:COL.muted}); }
+  }
+
+  animLoop((dt)=>{
+    time+=dt;
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    if(mode==='states') drawStates(ctx,w,h,dt); else drawClassify(ctx,w,h,dt);
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   1.3 THE PURI INVESTIGATION
+   Buoyancy-driven frying model (40 s of frying compressed to 7 s):
+     steam made:   ds/dt = 0.6·((T−100)/80)²      (× 0.35 if pricked)
+     density:      ρ = 1.15 − 0.5·s   (oil ρ = 0.92)  → sinks, then rises
+     motion:       a = g·(ρ − ρ_oil·f)/ρ − drag·v     (f = fraction submerged)
+     browning:     db/dt = 0.15·e^((T−180)/30)
+     puff grows only once floating and steam is trapped.
+   ===================================================================== */
+function buildA3(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label style="margin-bottom:6px;">Flour</label>
+      <div class="toggle-group" id="flB"><button class="toggle-btn active" data-v="atta">Atta</button><button class="toggle-btn" data-v="maida">Maida</button></div></div>
+    <div class="control-group"><label>Dough thickness <span class="val" id="thV">2.0 mm</span></label><input type="range" id="th" min="0.5" max="4" step="0.1" value="2"></div>
+    <div class="control-group"><label>Oil temperature <span class="val" id="otV">180 °C</span></label><input type="range" id="ot" min="120" max="260" step="5" value="180"></div>
+    <div class="control-group"><label style="margin-bottom:6px;">Put it in by</label>
+      <div class="toggle-group" id="teB"><button class="toggle-btn active" data-v="slide">Sliding in</button><button class="toggle-btn" data-v="drop">Dropping</button></div>
+      <label style="margin:10px 0 0;">Prick holes?</label>
+      <div class="toggle-group" id="prB"><button class="toggle-btn active" data-v="no">No</button><button class="toggle-btn" data-v="yes">Yes</button></div></div>
+    <button class="toggle-btn play" id="fry" style="flex:0 0 auto; padding:10px;">▶ Fry puri</button>
+    <div id="res3"></div>
+    <div class="control-group"><label>Notebook</label>
+      <table class="log"><thead><tr><th>Flour</th><th>mm</th><th>°C</th><th>Prick</th><th>Result</th></tr></thead><tbody id="logB"><tr><td colspan="5" style="color:var(--text-3)">No trials yet</td></tr></tbody></table></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), th=$('#th'), ot=$('#ot');
+  let flour='atta', tech='slide', prick=false, time=0, logRows=[];
+  toggleWire(wrap.querySelectorAll('#flB button'),b=>flour=b.dataset.v);
+  toggleWire(wrap.querySelectorAll('#teB button'),b=>tech=b.dataset.v);
+  toggleWire(wrap.querySelectorAll('#prB button'),b=>prick=b.dataset.v==='yes');
+
+  const thk={x:2,v:0}, tempDisp={x:180,v:0};
+  const pu={phase:'idle', t:0, x:0, y:0, vx:0, vy:0, d:0, vd:0, s:0, b:0, oil:0, puff:{x:0,v:0}, floatT:null, rot:0, cfg:null};
+  let splash=[], bubbles=[], wisps=[];
+  const FRY_T=7;
+
+  $('#fry').onclick=()=>{
+    pu.cfg={flour, tech, prick, thick:parseFloat(th.value), T:parseFloat(ot.value)};
+    Object.assign(pu,{phase:'enter', t:0, s:0, b:0, oil:0, d:0, vd:0, floatT:null, rot:0});
+    pu.puff.x=0; pu.puff.v=0; splash=[]; wisps=[];
+    $('#res3').innerHTML=''; $('#fry').disabled=true; $('#fry').textContent='Frying…';
+  };
+
+  function judge(){
+    const c=pu.cfg;
+    let r, cls, msg;
+    if(pu.b>2.6){ r='Burnt'; cls='bad'; msg='Oil too hot — burnt outside before puffing well'; }
+    else if(c.prick){ r='Flat'; cls='bad'; msg='Steam escaped through the holes — no puff'; }
+    else if(pu.floatT===null || pu.floatT>3.2){ r='Soggy'; cls='bad'; msg='Oil too cool — sank, soaked oil, little steam'; }
+    else if(c.thick<1.2){ r='Papad'; cls='warn'; msg='Too thin — crisp and flat'; }
+    else if(c.thick>2.8){ r='Lopsided'; cls='warn'; msg='Puffed, but one wall much thicker'; }
+    else { r='Perfect'; cls='ok'; msg='Golden and fully puffed!'; }
+    logRows.unshift({f:c.flour==='atta'?'Atta':'Maida', t:fmt(c.thick,1), T:c.T, p:c.prick?'Yes':'No', r, cls});
+    logRows=logRows.slice(0,6);
+    $('#logB').innerHTML=logRows.map(x=>`<tr><td>${x.f}</td><td>${x.t}</td><td>${x.T}</td><td>${x.p}</td><td class="r-${x.cls}">${x.r}</td></tr>`).join('');
+    $('#res3').innerHTML=`<div class="fb ${cls}" style="margin-top:0">${r} — ${msg}</div>`;
+    $('#fry').disabled=false; $('#fry').textContent='▶ Fry again';
+  }
+
+  animLoop((dt)=>{
+    time+=dt;
+    const tmm=parseFloat(th.value), T=parseFloat(ot.value);
+    $('#thV').textContent=fmt(tmm,1)+' mm'; $('#otV').textContent=T+' °C';
+    springTo(thk,tmm,70,12,dt); springTo(tempDisp,T,20,9,dt);
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+
+    const g=kadhai(w*0.4,h*0.42,Math.min(w*0.56,500),h*0.3);
+    const oilY=g.rimY+g.D*0.3, heat=clamp((tempDisp.x-100)/160,0,1);
+    // stove + flame (red = heat)
+    line(ctx,g.cx-g.panW*0.26,g.bottom+34,g.cx+g.panW*0.26,g.bottom+34,COL.ink,3);
+    line(ctx,g.cx-g.panW*0.2,g.bottom+34,g.cx-g.panW*0.24,g.bottom+64,COL.ink,2.6);
+    line(ctx,g.cx+g.panW*0.2,g.bottom+34,g.cx+g.panW*0.24,g.bottom+64,COL.ink,2.6);
+    flame(ctx,g.cx,g.bottom+32,g.panW*0.4,heat,time);
+    const oilCol=`rgba(${Math.round(lerp(236,196,heat))},${Math.round(lerp(190,120,heat))},40,${lerp(0.14,0.3,heat)})`;
+    drawKadhai(ctx,g,oilY,oilCol,time,0.5+heat*2.2);
+    // thermometer (yellow outline = the variable you change)
+    const tx=g.cx-g.panW/2-50;
+    thermo(ctx,tx,g.rimY-70,g.rimY+40,(tempDisp.x-100)/170,COL.yellow,COL.red);
+    textAt(ctx,Math.round(tempDisp.x)+' °C',tx,g.rimY+74,{align:'center',size:13,weight:700,color:COL.yellow});
+    // oil bubbles — rate rises steeply with temperature, and around a frying puri
+    const rate=Math.max(0,tempDisp.x-110)/150*26 + (pu.phase==='oil'?pu.cfg.T/12:0);
+    if(Math.random()<rate*dt){
+      const nearP=pu.phase==='oil'&&Math.random()<0.6;
+      bubbles.push({x:nearP? g.cx+pu.x+(Math.random()-0.5)*g.panW*0.3 : g.cx+(Math.random()-0.5)*g.panW*0.55, y:nearP? oilY+pu.d+6 : g.bottom-6, r:1.4+Math.random()*2.4});
+    }
+    bubbles=bubbles.filter(b=>{ b.y-=dt*(30+b.r*16+heat*30); b.x+=Math.sin(b.y*0.12)*0.35; if(b.y<oilY) return false; circ(ctx,b.x,b.y,b.r,COL.yellow,null,1.2); return true; });
+
+    // ------- rolling board: dough being rolled (idle) -------
+    const bx=w*0.86, byy=h*0.8, diam=clamp(Math.sqrt(2/thk.x),0.7,1.4);
+    const rxD=Math.min(w*0.09,90)*diam, ryD=rxD*0.3, tpx=thk.x*2.4;
+    const doughFill=flour==='atta'?'#f1dcac':'#fbf3dd';
+    line(ctx,bx-w*0.12,byy+ryD+tpx+6,bx+w*0.12,byy+ryD+tpx+6,COL.ink,3);
+    if(pu.phase==='idle'){
+      ctx.save(); ctx.fillStyle=doughFill; ctx.strokeStyle='#b7791f'; ctx.lineWidth=2;
+      ctx.beginPath(); ctx.ellipse(bx,byy+tpx,rxD,ryD,0,0,Math.PI); ctx.lineTo(bx-rxD,byy); ctx.ellipse(bx,byy,rxD,ryD,0,Math.PI,0,false); ctx.closePath(); ctx.fill(); ctx.stroke();
+      ctx.beginPath(); ctx.ellipse(bx,byy,rxD,ryD,0,0,Math.PI*2); ctx.fill(); ctx.stroke(); ctx.restore();
+      if(prick) for(let i=0;i<5;i++){ const a=i*1.3+0.4; circ(ctx,bx+Math.cos(a)*rxD*0.5,byy+Math.sin(a)*ryD*0.5,1.6,COL.ink,COL.ink,1); }
+      // rolling pin — rolls back and forth, stripes turn with it
+      const pinX=bx+Math.sin(time*2.2)*rxD*0.45, pinY=byy-6-tpx*0.2, pl=rxD*1.3;
+      ctx.save(); ctx.translate(pinX,pinY); ctx.rotate(-0.35);
+      rrect(ctx,-9,-pl/2,18,pl,8); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.stroke();
+      const roll=Math.sin(time*2.2)*rxD*0.45/9;
+      for(let k=-2;k<=2;k++){ const off=Math.sin(roll+k*0.9)*7; line(ctx,off,-pl/2+6,off,pl/2-6,COL.mid,1); }
+      line(ctx,0,-pl/2,0,-pl/2-14,COL.ink,5); line(ctx,0,pl/2,0,pl/2+14,COL.ink,5);
+      ctx.restore();
+    }
+    textAt(ctx,fmt(thk.x,1)+' mm dough',bx,byy+ryD+tpx+26,{align:'center',size:11.5,weight:700,color:COL.yellow});
+
+    // ------- the puri -------
+    if(pu.phase!=='idle'){
+      const c=pu.cfg, W=g.panW*0.34*clamp(Math.sqrt(2/c.thick),0.75,1.3);
+      const t0=g.tAtDepth(oilY-g.rimY);
+      if(pu.phase==='enter'){
+        pu.t+=dt;
+        if(c.tech==='slide'){
+          const u=clamp(pu.t/0.9,0,1), tt=lerp(0.97,1-t0,u*u);      // accelerates down the pan wall
+          const p=g.pt(tt); pu.x=p.x-g.cx; pu.y=p.y-oilY; pu.rot=g.slope(tt);
+          if(u>=1){ pu.phase='oil'; pu.t=0; pu.d=0; pu.vd=70; pu.vx=-160; pu.rot=0; }
+        } else {
+          if(pu.t<dt*1.5){ pu.x=g.panW*0.05; pu.y=-(oilY-g.rimY)-h*0.24; pu.vy=0; pu.vx=-15; }
+          pu.vy+=900*dt; pu.y+=pu.vy*dt; pu.x+=pu.vx*dt; pu.rot=Math.sin(pu.t*9)*0.12;
+          if(pu.y>=0){ // impact — hot oil splashes on real arcs
+            for(let i=0;i<16;i++) splash.push({x:g.cx+pu.x+(Math.random()-0.5)*W, y:oilY-2, vx:(Math.random()-0.5)*320, vy:-(160+Math.random()*260)});
+            pu.phase='oil'; pu.t=0; pu.d=0; pu.vd=pu.vy*0.35; pu.vx=0; pu.rot=0;
+          }
+        }
+      }
+      if(pu.phase==='oil' || pu.phase==='done'){
+        const frying=pu.phase==='oil';
+        if(frying){
+          pu.t+=dt;
+          if(c.T>100) pu.s+=0.6*Math.pow((c.T-100)/80,2)*(c.prick?0.35:1)*dt;
+          pu.b+=0.15*Math.exp((c.T-180)/30)*(c.flour==='maida'?0.85:1)*dt;
+          if(c.T<150 && pu.d>2) pu.oil=Math.min(1,pu.oil+dt*0.22);
+        }
+        const rho=1.15-0.5*Math.min(pu.s,1.2), f=clamp(1+pu.d/6,0,1);
+        const maxD=(g.bottom-oilY)-8;
+        pu.vd+=(1200*(rho-0.92*f)/rho - 3*pu.vd)*dt; pu.d+=pu.vd*dt;
+        if(pu.d>maxD){ pu.d=maxD; pu.vd=-Math.abs(pu.vd)*0.2; }
+        pu.vx+=(-pu.x*2.2-2.6*pu.vx)*dt; pu.x+=pu.vx*dt;
+        if(pu.floatT===null && rho<0.92 && pu.d<3) pu.floatT=pu.t;
+        let cap = c.prick?0.08 : c.thick<1.2?0.15 : c.thick>2.8?0.75 : (c.flour==='maida'?0.95:1);
+        if(c.T<150) cap*=0.35;
+        const tgt = pu.d<5 ? cap*clamp((pu.s-0.46)/0.5,0,1) : 0;
+        springTo(pu.puff,tgt,36,5,dt);
+        // steam escaping through holes, smoke when burning
+        if(frying && c.prick && pu.d<5 && Math.random()<dt*10) wisps.push({x:g.cx+pu.x+(Math.random()-0.5)*W*0.4, y:oilY-6, t:0, col:COL.mid});
+        if(frying && pu.b>2 && Math.random()<dt*(pu.b-1.8)*6) wisps.push({x:g.cx+pu.x+(Math.random()-0.5)*W*0.5, y:oilY-10, t:0, col:COL.ink});
+        if(frying && pu.t>=FRY_T){ pu.phase='done'; judge(); }
+        pu.y=pu.d + (pu.phase==='done'?Math.sin(time*2.3)*1.5:0);
+      }
+      const col=rampCol(c.flour==='atta'?[[0,'#f1dcac'],[1,'#e0a33a'],[2,'#a8621d'],[3,'#3d220d']]:[[0,'#fbf3dd'],[1,'#ecc36a'],[2,'#b8742a'],[3,'#3d220d']],pu.b);
+      const stroke=rampCol([[0,'#c99a4a'],[1.5,'#9a5a16'],[3,'#1d1006']],pu.b);
+      const lop=c.thick>2.8?0.7:(c.tech==='drop'?0.2:0);
+      const baseT=c.thick*1.25;
+      const topT=c.thick>2.8?baseT*0.45:baseT*0.85, botT=c.thick>2.8?baseT*1.5:baseT*1.1;
+      drawPuri(ctx,g.cx+pu.x,oilY+pu.y,W,pu.puff.x*g.D*0.6,topT,botT,col,stroke,lop,pu.rot);
+      if(pu.oil>0.05){ for(let i=0;i<5;i++){ const ox=g.cx+pu.x+(i-2)*W*0.16; circ(ctx,ox,oilY+pu.y+1,2+pu.oil*2.5,COL.yellow,'rgba(217,160,23,0.5)',1); } }
+      // timer ring
+      if(pu.phase==='oil'){ const rx=g.cx+g.panW/2+40, ry=g.rimY-60; circ(ctx,rx,ry,16,'#e6edf5',null,4);
+        ctx.save(); ctx.strokeStyle=COL.green; ctx.lineWidth=4; ctx.beginPath(); ctx.arc(rx,ry,16,-Math.PI/2,-Math.PI/2+Math.PI*2*pu.t/FRY_T); ctx.stroke(); ctx.restore();
+        textAt(ctx,Math.round(pu.t/FRY_T*40)+' s',rx,ry+4,{align:'center',size:10,weight:700,color:COL.ink}); }
+      // arrows: weight (red) vs buoyant push (blue) while in oil
+      if(pu.phase==='oil' && pu.puff.x<0.3){
+        const px=g.cx+pu.x+W*0.62, py=oilY+pu.y, rho=1.15-0.5*Math.min(pu.s,1.2);
+        vec(ctx,px,py,px,py+26,COL.red,2.4);
+        vec(ctx,px+12,py,px+12,py-26*0.92/rho,COL.blue,2.4);
+      }
+    }
+    // splash droplets (projectile arcs)
+    splash=splash.filter(s=>{ s.vy+=900*dt; s.x+=s.vx*dt; s.y+=s.vy*dt; if(s.y>oilY+4&&s.vy>0) return false; circ(ctx,s.x,s.y,2.4,COL.red,'#fbe3de',1.3); return true; });
+    // steam / smoke wisps
+    wisps=wisps.filter(p=>{ p.t+=dt; if(p.t>1.6) return false; const yy=p.y-p.t*50, xx=p.x+Math.sin(p.t*5+p.x)*6;
+      ctx.save(); ctx.globalAlpha=1-p.t/1.6; ctx.strokeStyle=p.col; ctx.lineWidth=1.6; ctx.beginPath(); ctx.moveTo(xx,yy);
+      ctx.bezierCurveTo(xx-6,yy-6,xx+6,yy-12,xx,yy-18); ctx.stroke(); ctx.restore(); return true; });
+    if(pu.phase==='idle') textAt(ctx,'Set the recipe, then fry',g.cx,h*0.08,{align:'center',size:13,weight:600,color:COL.muted});
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   1.4 ROHAN'S DOUGH EXPERIMENT
+   Yeast activity vs temperature (Q10 ≈ 2.5 up to 37 °C, falls off after, dead ≥ 55 °C)
+   Rise after t hours: h = 6·(1 − e^(−2·r(T)·(y/5)·t))  cm
+   Textbook check: A (4 °C) barely rises, B (24 °C) rises some, C (38 °C) rises most.
+   ===================================================================== */
+function yeastRate(T){ if(T<=37) return Math.pow(2.5,(T-37)/10); if(T>=55) return 0; return 1-Math.pow((T-37)/18,2); }
+function riseAt(T,y,tHr){ return 6*(1-Math.exp(-2*yeastRate(T)*(y/5)*tHr)); }
+
+function buildA4(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group">
+      <div class="step-row" id="steps"><button class="step-pill active" data-s="1">1 Hypothesis</button><button class="step-pill" data-s="2">2 Variables</button><button class="step-pill" data-s="3">3 Conclusion</button></div>
+      <div id="stepBody"></div>
+      <button class="toggle-btn navy" id="stepChk">Check</button>
+      <div id="fb4"></div></div>
+    <div class="control-group"><label>Bowl C temperature <span class="val" id="tcV" style="color:var(--f-yellow)">38 °C</span></label><input type="range" id="tc" min="25" max="60" value="38"></div>
+    <div class="control-group"><label>Yeast in every bowl <span class="val" id="yV" style="color:var(--f-green)">5 g</span></label><input type="range" id="yy" min="1" max="10" step="0.5" value="5"></div>
+    <button class="toggle-btn play" id="run4" style="flex:0 0 auto; padding:10px;">▶ Run 1 hour</button>
+    <div class="control-group"><div class="result-cards three">
+      <div class="rcard"><div class="rlabel">Bowl A</div><div class="rval" id="hA" style="color:var(--f-blue)">—</div></div>
+      <div class="rcard"><div class="rlabel">Bowl B</div><div class="rval" id="hB" style="color:var(--f-blue)">—</div></div>
+      <div class="rcard"><div class="rlabel">Bowl C</div><div class="rval" id="hC" style="color:var(--f-blue)">—</div></div></div></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), tc=$('#tc'), yy=$('#yy');
+
+  /* --- scientific-method steps --- */
+  const STEP={
+    1:{ opts:[['a','Yeast likes warm weather.'],['b','If it is warmer, the dough will rise higher in 1 hour.'],['c','Air pressure makes dough grow.']], ans:'b',
+        bad:'A hypothesis is a testable “If… then…” prediction.' },
+    3:{ opts:[['x','Warmth speeds up yeast → more CO₂ gas → higher rise (until it gets too hot).'],['y','Cold makes flour particles shrink.'],['z','Flour swells when heated.']], ans:'x',
+        bad:'Look at which bowl made the most gas bubbles.' },
+  };
+  const VARS=[['Temperature','ind'],['Rise height','dep'],['Yeast & recipe','con']];
+  let step=1, done={1:false,2:false,3:false}, pick={1:null,3:null}, varPick={}, ran=false;
+  function drawStep(){
+    wrap.querySelectorAll('#steps .step-pill').forEach(p=>{ const s=+p.dataset.s; p.classList.toggle('active',s===step); p.classList.toggle('done',done[s]); p.textContent=(done[s]?'✓ ':'')+p.textContent.replace('✓ ',''); });
+    const body=$('#stepBody');
+    if(step===2){
+      body.innerHTML=VARS.map(([n],i)=>`<div class="var-row"><span class="vname">${n}</span><div class="toggle-group">
+        ${[['ind','Change'],['dep','Measure'],['con','Same']].map(([v,l])=>`<button class="toggle-btn small${varPick[i]===v?' active':''}" data-i="${i}" data-v="${v}">${l}</button>`).join('')}</div></div>`).join('');
+      body.querySelectorAll('button').forEach(b=>b.onclick=()=>{ varPick[b.dataset.i]=b.dataset.v; drawStep(); });
+    } else {
+      body.innerHTML=STEP[step].opts.map(([v,t])=>`<button class="opt-btn${pick[step]===v?' active':''}" data-v="${v}">${t}</button>`).join('');
+      body.querySelectorAll('button').forEach(b=>b.onclick=()=>{ pick[step]=b.dataset.v; drawStep(); });
+    }
+    $('#stepChk').disabled=done[step];
+    $('#stepChk').textContent=done[step]?'✓ Done':'Check';
+  }
+  wrap.querySelectorAll('#steps .step-pill').forEach(p=>p.onclick=()=>{
+    const s=+p.dataset.s; if(s>1 && !done[s-1]){ $('#fb4').innerHTML='<div class="fb warn">Finish the previous step first</div>'; return; }
+    step=s; $('#fb4').innerHTML=''; drawStep();
+  });
+  $('#stepChk').onclick=()=>{
+    let ok=false, bad='';
+    if(step===2){ ok=VARS.every(([,v],i)=>varPick[i]===v); bad='Change = what you vary · Measure = the result · Same = kept fixed'; }
+    else {
+      if(step===3 && !ran){ $('#fb4').innerHTML='<div class="fb warn">Run the 1-hour test first ▶</div>'; return; }
+      ok=pick[step]===STEP[step].ans; bad=STEP[step].bad;
+    }
+    if(ok){ done[step]=true; $('#fb4').innerHTML=`<div class="fb ok">✓ ${step===3?'Investigation complete!':'Correct'}</div>`; if(step<3) step++; }
+    else $('#fb4').innerHTML=`<div class="fb bad">✗ ${bad}</div>`;
+    drawStep();
+  };
+  drawStep();
+
+  /* --- the experiment --- */
+  let tHr=0, running=true, time=0;
+  $('#run4').onclick=()=>{ tHr=0; running=true; };
+  const RUN_S=6;
+  const bowls=[{n:'A',place:'fridge'},{n:'B',place:'table'},{n:'C',place:'incubator'}].map(b=>Object.assign(b,{h:{x:0,v:0},bub:[],flakes:Array.from({length:7},()=>({x:Math.random(),y:Math.random()}))}));
+
+  animLoop((dt)=>{
+    time+=dt;
+    const TC=parseFloat(tc.value), Y=parseFloat(yy.value);
+    $('#tcV').textContent=TC+' °C'; $('#yV').textContent=fmt(Y,1)+' g';
+    if(running){ tHr=Math.min(1,tHr+dt/RUN_S); if(tHr>=1){ running=false; ran=true; } }
+    const temps=[4,24,TC];
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+
+    // clock
+    const kx=w*0.5, ky=h*0.1, kr=Math.min(24,h*0.055);
+    circ(ctx,kx,ky,kr,COL.ink,'#fff',2.4);
+    for(let i=0;i<12;i++){ const a=i/12*Math.PI*2; line(ctx,kx+Math.cos(a)*kr*0.78,ky+Math.sin(a)*kr*0.78,kx+Math.cos(a)*kr*0.92,ky+Math.sin(a)*kr*0.92,COL.ink,1.2); }
+    const ha=-Math.PI/2+tHr*Math.PI*2; line(ctx,kx,ky,kx+Math.cos(ha)*kr*0.75,ky+Math.sin(ha)*kr*0.75,COL.ink,2.2);
+    textAt(ctx,Math.round(tHr*60)+' min',kx+kr+10,ky+5,{size:13,weight:700,color:COL.ink});
+
+    const ew=Math.min(w*0.27,250), eh=h*0.56, floorY=h*0.86, pxcm=eh*0.075;
+    bowls.forEach((B,i)=>{
+      const T=temps[i], sx=w*(0.18+0.32*i), top=floorY-eh;
+      // enclosure line diagrams
+      if(B.place==='fridge'){
+        rect(ctx,sx-ew/2,top,ew,eh,COL.blue,'#f4f9fe',2.4);
+        line(ctx,sx+ew/2-12,top+eh*0.2,sx+ew/2-12,top+eh*0.45,COL.blue,4);
+        B.flakes.forEach(f=>{ f.y=(f.y+dt*0.04)%1; const fx=sx-ew/2+10+f.x*(ew-20), fy=top+8+f.y*(eh*0.45);
+          for(let k=0;k<3;k++){ const a=k*Math.PI/3+time*0.5; line(ctx,fx-Math.cos(a)*4,fy-Math.sin(a)*4,fx+Math.cos(a)*4,fy+Math.sin(a)*4,COL.blue,1); } });
+      } else if(B.place==='incubator'){
+        const glow=0.5+0.5*Math.sin(time*3);
+        rect(ctx,sx-ew/2,top,ew,eh,COL.red,'#fffaf8',2.4);
+        ctx.save(); ctx.strokeStyle=mixCol('#f0a494',COL.red,glow*clamp((T-25)/30,0.2,1)); ctx.lineWidth=2.4; ctx.beginPath();
+        for(let k=0;k<=12;k++){ const xx=sx-ew/2+12+k*(ew-24)/12, yy2=floorY-10+(k%2?-6:6); k?ctx.lineTo(xx,yy2):ctx.moveTo(xx,yy2); } ctx.stroke(); ctx.restore();
+        for(let k=0;k<3;k++){ const wx=sx-ew*0.3+k*ew*0.3, ph=(time*0.6+k*0.33)%1; ctx.save(); ctx.globalAlpha=1-ph; ctx.strokeStyle=COL.red; ctx.lineWidth=1.4; ctx.beginPath();
+          for(let q=0;q<=10;q++){ const yy2=top+eh*0.55-ph*eh*0.35-q*3, xx=wx+Math.sin(q*0.9+time*4)*3; q?ctx.lineTo(xx,yy2):ctx.moveTo(xx,yy2); } ctx.stroke(); ctx.restore(); }
+      } else {
+        line(ctx,sx-ew/2,floorY,sx+ew/2,floorY,COL.ink,3);
+        line(ctx,sx-ew/2+10,floorY,sx-ew/2+10,floorY+h*0.1,COL.ink,2.6); line(ctx,sx+ew/2-10,floorY,sx+ew/2-10,floorY+h*0.1,COL.ink,2.6);
+      }
+      // dough height: formula → spring-damper so it visibly arrives
+      const target=riseAt(T,Y,tHr);
+      springTo(B.h,target,80,16,dt);
+      const bw=ew*0.62, bd=eh*0.16, bcx=sx+ew*0.08, rimY=floorY-14-bd;
+      const domeBase=rimY+bd*0.25, ry=8+Math.max(0,B.h.x)*pxcm, rx=bw*0.44+B.h.x*1.5;
+      ctx.save(); ctx.beginPath(); ctx.ellipse(bcx,domeBase,rx,ry,0,Math.PI,0); ctx.closePath(); ctx.fillStyle='#fbefd3'; ctx.fill(); ctx.strokeStyle='#b7791f'; ctx.lineWidth=2.2; ctx.stroke(); ctx.restore();
+      // CO2 bubbles: produced at yeast rate, rising inside the dough
+      if(running && Math.random()<dt*yeastRate(T)*Y*3) B.bub.push({u:(Math.random()-0.5)*1.4, v:0, r:1+Math.random()*2.5});
+      B.bub=B.bub.filter(b=>{ b.v+=dt*0.35; if(b.v>1) return false; const bx=bcx+b.u*rx*0.6*(1-b.v*0.4), by=domeBase-b.v*ry*0.9; circ(ctx,bx,by,b.r,'#c9a15d',null,1.1); return true; });
+      ctx.save(); ctx.beginPath(); ctx.moveTo(bcx-bw/2,rimY); ctx.quadraticCurveTo(bcx-bw*0.44,rimY+bd,bcx-bw*0.2,rimY+bd); ctx.lineTo(bcx+bw*0.2,rimY+bd); ctx.quadraticCurveTo(bcx+bw*0.44,rimY+bd,bcx+bw/2,rimY); ctx.closePath();
+      ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.stroke(); ctx.restore();
+      line(ctx,bcx-bw*0.52,rimY,bcx+bw*0.52,rimY,COL.ink,2.6);
+      line(ctx,bcx-bw*0.18,rimY+bd,bcx+bw*0.18,rimY+bd,COL.ink,2.6);
+      // measured height (blue)
+      const topY=domeBase-ry;
+      dimArrow(ctx,bcx+bw*0.58,domeBase,topY,COL.blue);
+      textAt(ctx,fmt(Math.max(0,B.h.x),1)+' cm',bcx,topY-8,{align:'center',size:13,weight:700,color:COL.blue});
+      // thermometer + temperature (yellow = changed)
+      const tx=sx-ew/2+16;
+      thermo(ctx,tx,top+eh*0.5,floorY-30,T/60,COL.ink,COL.red);
+      textAt(ctx,T+' °C',tx+14,top+eh*0.5-6,{size:13,weight:700,color:COL.yellow});
+      // labels
+      textAt(ctx,'Bowl '+B.n,sx,top-10,{align:'center',size:13,weight:700,color:COL.ink});
+      textAt(ctx,fmt(Y,1)+' g yeast',bcx,floorY+(B.place==='table'?20:18),{align:'center',size:11,weight:600,color:COL.green});
+      if(i===2 && T>=55 && tHr>0.3) textAt(ctx,'too hot — yeast killed',sx,top+18,{align:'center',size:11,weight:700,color:COL.red});
+      $('#h'+B.n).textContent=fmt(Math.max(0,B.h.x),1)+' cm';
+    });
+    $('#run4').textContent = running? '⏳ Running… '+Math.round(tHr*60)+' min' : '▶ Run 1 hour';
+  });
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   INIT
+   --------------------------------------------------------------------- */
+render();
+</script>
+<script src="../../tracking/activity-tracker.js"></script>
+<script src="../../nav/back-button.js"></script>
+</body>
+</html>

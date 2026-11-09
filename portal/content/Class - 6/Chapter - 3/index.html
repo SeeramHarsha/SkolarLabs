@@ -1,0 +1,1923 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 6 · Chapter 3 — Mindful Eating: A Path to a Healthy Body | Botclub Labs</title>
+<link href="../../vendor/fonts/fonts.css" rel="stylesheet">
+<style>
+:root{
+  --navy-1:#0f2640; --navy-2:#1a3a5c; --navy-3:#234a73;
+  --accent:#2f8fe0; --accent-2:#5cc8ff;
+  --bg:#eef2f8; --surface-0:#ffffff; --surface-1:#f6f9fc; --surface-2:#eef2f8;
+  --border:#dbe4f0; --border-strong:#c2d1e5;
+  --text-1:#132a44; --text-2:#4c6178; --text-3:#8195ab;
+  --f-red:#d9432b; --f-blue:#2f8fe0; --f-green:#1f9d55; --f-yellow:#d9a017;
+  --radius:14px; --radius-sm:9px;
+  --fs-xs:clamp(10px,0.62vw,12px); --fs-sm:clamp(11px,0.72vw,13.5px);
+  --fs-md:clamp(12.5px,0.85vw,15px); --fs-lg:clamp(15px,1.15vw,19px);
+  --fs-xl:clamp(18px,1.5vw,25px);
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:22px; --sp-6:30px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{ font-family:'Poppins',system-ui,sans-serif; background:var(--bg); color:var(--text-1); overflow:hidden; }
+button, input, select{font-family:inherit;}
+
+.app{height:100vh; display:flex; flex-direction:column; min-height:0;}
+.topbar{
+  flex:0 0 auto; background:linear-gradient(120deg, var(--navy-1) 0%, var(--navy-2) 55%, var(--navy-3) 100%);
+  color:#fff; padding:clamp(9px,1vh,16px) clamp(14px,1.6vw,28px);
+  display:flex; align-items:center; gap:var(--sp-4); box-shadow:0 2px 10px rgba(15,38,64,0.25); z-index:5;
+}
+.topbar .brand-badge{
+  width:clamp(32px,2.4vw,40px); height:clamp(32px,2.4vw,40px); border-radius:10px; background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center;
+  font-size:clamp(15px,1.3vw,20px); flex:0 0 auto;
+}
+.topbar .chip{
+  display:inline-block; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.28);
+  border-radius:6px; padding:2px 9px; font-size:var(--fs-xs); letter-spacing:0.06em; text-transform:uppercase; font-weight:600; margin-bottom:3px;
+}
+.topbar h1{font-size:var(--fs-lg); font-weight:600; line-height:1.2; white-space:nowrap;}
+.topbar .spacer{flex:1;}
+.topbar .legend{display:flex; gap:14px; font-size:var(--fs-xs); color:rgba(255,255,255,0.85); align-items:center;}
+.topbar .legend span{display:inline-flex; align-items:center; gap:5px;}
+.topbar .legend i{width:12px; height:4px; border-radius:2px; display:inline-block;}
+
+.body-wrap{flex:1; display:flex; min-height:0; overflow:hidden;}
+.sidenav{
+  flex:0 0 clamp(170px,13.5vw,230px); background:var(--surface-0); border-right:1px solid var(--border);
+  overflow-y:auto; padding:var(--sp-2); display:flex; flex-direction:column; gap:4px;
+}
+.nav-item{
+  display:flex; align-items:center; gap:8px; text-align:left; width:100%;
+  border:1px solid var(--border); background:var(--surface-1); border-radius:var(--radius-sm); padding:7px 10px; cursor:pointer; transition:all .15s ease;
+}
+.nav-item:hover{background:var(--surface-2); border-color:var(--border-strong);}
+.nav-item.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.nav-item .n-num{font-size:var(--fs-xs); font-weight:700; color:var(--accent); flex:0 0 auto; min-width:26px;}
+.nav-item.active .n-num{color:var(--accent-2);}
+.nav-item .n-title{font-size:var(--fs-sm); font-weight:600; line-height:1.25;}
+
+.content{flex:1; min-width:0; display:flex; flex-direction:column; overflow:hidden;}
+.panel-head{flex:0 0 auto; padding:var(--sp-3) var(--sp-5); border-bottom:1px solid var(--border); background:var(--surface-0); display:flex; align-items:baseline; gap:12px;}
+.panel-badge{background:var(--navy-2); color:#fff; font-size:var(--fs-xs); font-weight:700; padding:3px 10px; border-radius:6px;}
+.panel-head h2{font-size:var(--fs-lg); font-weight:600; color:var(--text-1);}
+.panel-head p{font-size:var(--fs-sm); color:var(--text-2); flex:1; text-align:right;}
+.panel-body{flex:1; min-height:0; overflow:hidden; padding:var(--sp-3) var(--sp-5); display:flex;}
+
+.lab-view{flex:1; display:flex; gap:var(--sp-4); min-height:0; min-width:0;}
+.lab-canvas-wrap{flex:7 1 0; min-width:0; min-height:0; background:#fff; border:1px solid var(--border); border-radius:var(--radius); position:relative; overflow:hidden;}
+.lab-canvas-wrap canvas{width:100%; height:100%; display:block;}
+.lab-side{flex:3 1 0; min-width:230px; display:flex; flex-direction:column; gap:var(--sp-3); min-height:0; overflow-y:auto; padding-right:2px;}
+.side-sub{display:flex; flex-direction:column; gap:var(--sp-3);}
+
+.control-group{background:var(--surface-0); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 12px;}
+.control-group label{font-size:var(--fs-sm); font-weight:600; color:var(--text-1); display:flex; justify-content:space-between;}
+.control-group label .val{color:var(--accent); font-weight:700;}
+.control-group input[type=range]{width:100%; margin-top:7px; accent-color:var(--navy-2); cursor:pointer;}
+.toggle-group{display:flex; gap:6px; margin-top:7px; flex-wrap:wrap;}
+.toggle-btn{flex:1; min-width:56px; padding:7px 5px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:600; cursor:pointer; text-align:center; color:var(--text-2);}
+.toggle-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.toggle-btn.small{font-size:10.5px; padding:6px 3px;}
+.toggle-btn.play{background:var(--f-green); border-color:var(--f-green); color:#fff;}
+.toggle-btn.navy{background:var(--navy-2); border-color:var(--navy-2); color:#fff; width:100%; margin-top:9px;}
+.toggle-btn:disabled{opacity:.5; cursor:not-allowed;}
+.chip-btn{display:inline-flex; align-items:center; gap:5px; padding:6px 11px; margin:3px 3px 0 0; border:1px solid var(--border-strong); background:var(--surface-1); border-radius:18px; cursor:pointer; font-size:var(--fs-sm); font-weight:600; color:var(--text-2);}
+.chip-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.chip-btn.ok{border-color:var(--f-green);} .chip-btn.bad{border-color:var(--f-red);}
+.chip-wrap{display:flex; flex-wrap:wrap; margin-top:3px;}
+
+.role-row{display:flex; align-items:center; gap:8px; margin-top:7px; font-size:var(--fs-sm); font-weight:600;}
+.role-row .rdot{width:10px; height:10px; border-radius:50%; flex:0 0 auto; display:inline-block;}
+.role-row .rname{width:70px; flex:0 0 auto; color:var(--text-2);}
+.role-row select{flex:1; min-width:0; padding:6px 7px; border:1px solid var(--border-strong); border-radius:7px; font-size:var(--fs-sm); background:var(--surface-1); color:var(--text-1); cursor:pointer;}
+
+.step-row{display:flex; gap:5px;}
+.step-pill{flex:1; padding:6px 4px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:10.5px; font-weight:700; color:var(--text-3); cursor:pointer;}
+.step-pill.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.step-pill.done{border-color:var(--f-green); color:var(--f-green);}
+.step-pill.active.done{color:#fff;}
+.opt-btn{display:block; width:100%; text-align:left; margin-top:6px; padding:7px 9px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:500; color:var(--text-1); cursor:pointer; line-height:1.3;}
+.opt-btn:disabled{opacity:.55; cursor:not-allowed;}
+.opt-btn.active{border-color:var(--navy-2); background:#e3ecf7; font-weight:600;}
+.var-row{display:flex; align-items:center; gap:6px; margin-top:7px;}
+.var-row .vname{flex:0 0 88px; font-size:var(--fs-sm); font-weight:600;}
+.var-row .toggle-group{margin-top:0; flex:1;}
+
+.result-cards{display:grid; grid-template-columns:1fr 1fr; gap:6px;}
+.result-cards.three{grid-template-columns:1fr 1fr 1fr;}
+.rcard{background:var(--surface-0); border:1px solid var(--border); border-radius:9px; padding:7px 9px;}
+.rcard .rlabel{font-size:9.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--text-3); font-weight:600;}
+.rcard .rval{font-size:var(--fs-md); font-weight:700; color:var(--text-1); margin-top:1px;}
+.rcard.wide{grid-column:1/-1;}
+.hint{font-size:var(--fs-xs); color:var(--text-3); margin-top:6px; line-height:1.4;}
+.fb{font-size:var(--fs-xs); font-weight:600; margin-top:6px; padding:5px 8px; border-radius:7px;}
+.fb.ok{background:#e4f7ec; color:#1f6b3d;}
+.fb.bad{background:#fdece7; color:#a4331c;}
+.fb.warn{background:#fdf4dc; color:#8a6410;}
+.log{width:100%; border-collapse:collapse; font-size:10.5px; margin-top:4px;}
+.log th{text-align:left; color:var(--text-3); font-weight:600; text-transform:uppercase; font-size:9px; letter-spacing:.04em; padding:3px 4px; border-bottom:1px solid var(--border);}
+.log td{padding:4px; border-bottom:1px solid var(--surface-2); color:var(--text-2);}
+.log td.r-ok{color:var(--f-green); font-weight:700;} .log td.r-bad{color:var(--f-red); font-weight:700;} .log td.r-warn{color:var(--f-yellow); font-weight:700;}
+.qa-input{width:100%; margin-top:7px; padding:8px 10px; border:1px solid var(--border-strong); border-radius:8px; font-size:var(--fs-sm); color:var(--text-1); background:var(--surface-1);}
+.qa-input:focus{outline:none; border-color:var(--accent); background:#fff;}
+.nav-item .n-num{line-height:1.15; text-align:center;}
+.hidden{display:none !important;}
+
+@media (max-width:1000px) and (orientation:portrait), (max-width:1000px) and (min-height:601px){
+  .body-wrap{flex-direction:column;}
+  .sidenav{flex:0 0 auto; width:100%; height:auto; flex-direction:row; overflow-x:auto; overflow-y:hidden; border-right:none; border-bottom:1px solid var(--border); padding:6px;}
+  .nav-item{flex:0 0 auto; width:150px;}
+  .panel-body{overflow-y:auto;}
+  .lab-view{flex-direction:column;}
+  .lab-canvas-wrap{min-height:320px;}
+  .lab-side{min-width:0;}
+  .content{overflow-y:auto;}
+  .topbar .legend{display:none;}
+  .topbar h1{white-space:normal;}
+}
+::-webkit-scrollbar{width:7px; height:7px;}
+::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand-badge">🍲</div>
+    <div>
+      <div class="chip">Grade 6 · Ch 3</div>
+      <h1>Mindful Eating: A Path to a Healthy Body</h1>
+    </div>
+    <div class="spacer"></div>
+    <div class="legend">
+      <span><i style="background:var(--f-yellow)"></i>What you do · energy (carbs, fats)</span>
+      <span><i style="background:var(--f-red)"></i>Protein · heat · symptom</span>
+      <span><i style="background:var(--f-green)"></i>Vitamins · minerals · fibre · present</span>
+      <span><i style="background:var(--f-blue)"></i>Water · iodine</span>
+    </div>
+  </div>
+  <div class="body-wrap">
+    <nav class="sidenav" id="sideNav"></nav>
+    <main class="content">
+      <div class="panel-head">
+        <div class="panel-badge" id="panelBadge">3.1</div>
+        <h2 id="panelTitle">Select an activity</h2>
+        <p id="panelDesc"></p>
+      </div>
+      <div class="panel-body" id="panelBody"></div>
+    </main>
+  </div>
+</div>
+
+<script>
+
+/* =========================================================================
+   GRADE 6 — CHAPTER 3: MINDFUL EATING — A PATH TO A HEALTHY BODY
+   Activities 3.1–3.9. Every scene runs on a continuous animation loop:
+   sliders and buttons only set a TARGET; food flies on real arcs and
+   lands with a wobble, crops grow and sway, pots heat by m·c·ΔT, the
+   batta rolls and grains break, drops fall and spread, oil wicks into
+   paper, test tubes shake and turn violet, nutrients fill jars, bodies
+   recover over (compressed) weeks — all eased, never jumping.
+   Colour rule: yellow = what you do · energy-giving (carbohydrates, fats)
+   red = protein (body-building) · heat · symptom
+   green = protective (vitamins, minerals) · fibre · test positive
+   blue = water · iodine.
+   ========================================================================= */
+const COL = {red:'#d9432b', blue:'#2f8fe0', green:'#1f9d55', yellow:'#d9a017', ink:'#132a44', muted:'#4c6178', mid:'#8195ab', navy:'#1a3a5c'};
+
+/* ---------------------------------------------------------------------
+   0. CANVAS HELPERS
+   --------------------------------------------------------------------- */
+function fitCanvas(canvas){
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  const r = canvas.parentElement.getBoundingClientRect();
+  const w = Math.max(200, r.width), h = Math.max(160, r.height);
+  if(canvas._w!==w || canvas._h!==h || canvas._dpr!==dpr){
+    canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr);
+    canvas.style.width = w+'px'; canvas.style.height = h+'px';
+    canvas._w=w; canvas._h=h; canvas._dpr=dpr;
+  }
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, w, h};
+}
+function line(ctx,x1,y1,x2,y2,color,width,dash){
+  ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=width||2;
+  if(dash) ctx.setLineDash(dash); else ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); ctx.restore();
+}
+function arrowHead(ctx,x,y,ang,color,size){
+  size=size||7; ctx.save(); ctx.fillStyle=color; ctx.translate(x,y); ctx.rotate(ang);
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-size,size*0.42); ctx.lineTo(-size,-size*0.42); ctx.closePath(); ctx.fill(); ctx.restore();
+}
+function vec(ctx,x1,y1,x2,y2,color,width){ line(ctx,x1,y1,x2,y2,color,width||2.6); arrowHead(ctx,x2,y2,Math.atan2(y2-y1,x2-x1),color,7); }
+function dimArrow(ctx,x,y1,y2,color){ line(ctx,x,y1,x,y2,color,1.6); arrowHead(ctx,x,y1,-Math.PI/2,color,5); arrowHead(ctx,x,y2,Math.PI/2,color,5); }
+function textAt(ctx,txt,x,y,opts){
+  opts=opts||{}; ctx.save();
+  ctx.font=(opts.weight||500)+' '+(opts.size||12)+'px Poppins, sans-serif';
+  ctx.fillStyle=opts.color||COL.ink; ctx.textAlign=opts.align||'left'; ctx.textBaseline=opts.baseline||'alphabetic';
+  if(opts.alpha!==undefined) ctx.globalAlpha=opts.alpha;
+  ctx.fillText(txt,x,y); ctx.restore();
+}
+function rect(ctx,x,y,w,h,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw===undefined?2.2:lw; if(fill){ctx.fillStyle=fill; ctx.fillRect(x,y,w,h);} if(lw!==0){ctx.strokeStyle=stroke; ctx.strokeRect(x,y,w,h);} ctx.restore(); }
+function circ(ctx,x,y,r,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw||2.2; ctx.beginPath(); ctx.arc(x,y,Math.max(0.1,r),0,Math.PI*2); if(fill){ctx.fillStyle=fill; ctx.fill();} ctx.strokeStyle=stroke; ctx.stroke(); ctx.restore(); }
+function rrect(ctx,x,y,w,h,r){ r=Math.min(r,w/2,h/2); ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function fmt(x,d){ if(!isFinite(x)) return '—'; d=d===undefined?2:d; return Number(x.toFixed(d)).toString(); }
+function gauss(){ return (Math.random()+Math.random()+Math.random()+Math.random()-2)*1.2247; }
+function hexRgb(h){ const n=parseInt(h.slice(1),16); return [n>>16&255, n>>8&255, n&255]; }
+function mixCol(a,b,t){ const A=hexRgb(a),B=hexRgb(b); t=clamp(t,0,1); return 'rgb('+A.map((v,i)=>Math.round(lerp(v,B[i],t))).join(',')+')'; }
+function rampCol(stops,x){ // stops: [[pos,hex],...]
+  if(x<=stops[0][0]) return mixCol(stops[0][1],stops[0][1],0);
+  for(let i=1;i<stops.length;i++){ if(x<=stops[i][0]){ const a=stops[i-1],b=stops[i]; return mixCol(a[1],b[1],(x-a[0])/(b[0]-a[0])); } }
+  const l=stops[stops.length-1][1]; return mixCol(l,l,0);
+}
+function thermo(ctx,x,top,bot,frac,outline,liquid){
+  const br=8;
+  ctx.save(); ctx.lineWidth=2; ctx.strokeStyle=outline; ctx.fillStyle='#fff';
+  rrect(ctx,x-5,top,10,bot-top+2,5); ctx.fill(); ctx.stroke(); ctx.restore();
+  const lh=(bot-top-5)*clamp(frac,0,1);
+  ctx.save(); ctx.fillStyle=liquid; ctx.fillRect(x-2.2,bot-lh,4.4,lh+6); ctx.restore();
+  circ(ctx,x,bot+br,br,outline,'#fff',2); circ(ctx,x,bot+br,br-3.2,liquid,liquid,1);
+  for(let i=0;i<=4;i++){ const yy=top+5+(bot-top-5)*i/4; line(ctx,x+5,yy,x+9,yy,outline,1.1); }
+}
+function flame(ctx,cx,baseY,width,inten,t){
+  const n=5;
+  for(let i=0;i<n;i++){
+    const fx=cx-width/2+width*(i+0.5)/n;
+    const hh=(6+inten*32)*(0.78+0.22*Math.sin(t*13+i*1.7));
+    const sway=Math.sin(t*9+i*2.1)*3;
+    ctx.save(); ctx.lineJoin='round';
+    ctx.strokeStyle=COL.red; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(fx-7,baseY); ctx.quadraticCurveTo(fx-7,baseY-hh*0.55,fx+sway,baseY-hh); ctx.quadraticCurveTo(fx+7,baseY-hh*0.55,fx+7,baseY); ctx.stroke();
+    ctx.strokeStyle=COL.yellow; ctx.lineWidth=1.6;
+    ctx.beginPath(); ctx.moveTo(fx-3.5,baseY); ctx.quadraticCurveTo(fx-3,baseY-hh*0.35,fx+sway*0.5,baseY-hh*0.55); ctx.quadraticCurveTo(fx+3,baseY-hh*0.35,fx+3.5,baseY); ctx.stroke();
+    ctx.restore();
+  }
+}
+
+/* ---------------------------------------------------------------------
+   0b. ANIMATION ENGINE
+   --------------------------------------------------------------------- */
+let activeStops = [];
+function stopAllLoops(){ activeStops.forEach(s=>{ try{ s(); }catch(e){} }); activeStops=[]; }
+function animLoop(tick){
+  let last = performance.now();
+  let raf;
+  function frame(now){
+    const dt = Math.max(0, Math.min(0.04, (now-last)/1000));
+    last = now;
+    tick(dt);
+    raf = requestAnimationFrame(frame);
+  }
+  raf = requestAnimationFrame(frame);
+  const stop = ()=>cancelAnimationFrame(raf);
+  activeStops.push(stop);
+  return stop;
+}
+/** Exponential ease — frame-rate independent, always smooth. */
+function approach(cur,tgt,rate,dt){ return cur + (tgt-cur)*(1-Math.exp(-rate*dt)); }
+/** Spring-damper — gives natural overshoot and settle. */
+function springTo(state,target,k,damping,dt){
+  const acc = (target-state.x)*k - state.v*damping;
+  state.v += acc*dt;
+  state.x += state.v*dt;
+  return state.x;
+}
+function toggleWire(btns,cb){
+  btns.forEach(b=>b.onclick=()=>{ btns.forEach(x=>x.classList.remove('active')); b.classList.add('active'); cb(b); });
+}
+
+
+
+/* ---------------------------------------------------------------------
+   0c. SHARED HELPERS — virtual stage, Q→A banner, stick figures,
+       cat, cups, particles (all line diagrams, all animated)
+   --------------------------------------------------------------------- */
+function rng(seed){ let s=(seed>>>0)||1; return ()=>{ s=(Math.imul(s,1664525)+1013904223)>>>0; return s/4294967296; }; }
+function smooth01(a,b,x){ const t=clamp((x-a)/(b-a),0,1); return t*t*(3-2*t); }
+function angDiff(a,b){ return Math.atan2(Math.sin(a-b),Math.cos(a-b)); }
+function ease(x){ x=clamp(x,0,1); return x<0.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2; }
+function spr(x){ return {x:x||0,v:0}; }
+function fitFont(ctx,txt,maxW,size,weight){
+  let s=size; ctx.font=weight+' '+s+'px Poppins, sans-serif';
+  while(s>9 && ctx.measureText(txt).width>maxW){ s-=0.5; ctx.font=weight+' '+s+'px Poppins, sans-serif'; }
+  return s;
+}
+/* every scene draws on an 800 × 470 virtual stage, fitted into the canvas */
+const VW=800, VH=520, BANNER=46;
+function stage(ctx,w,h){
+  const s=Math.min(w/VW,(h-BANNER-6)/VH), ox=(w-VW*s)/2, oy=BANNER+Math.max(0,(h-BANNER-VH*s)/2);
+  ctx.translate(ox,oy); ctx.scale(s,s); return s;
+}
+/* stick figure — feet on (x,y), height s. angles from straight-down, + = toward +x */
+function stick(ctx,x,y,s,o){
+  o=o||{}; const c=o.col||COL.ink, W=o.lw||Math.max(2,s*0.02);
+  const th=0.25*s, sh=0.25*s, ua=0.17*s, fa=0.16*s;
+  const LL=o.legL||[-0.12,-0.02], LR=o.legR||[0.12,0.02];
+  const drop=Math.max(Math.cos(LL[0])*th+Math.cos(LL[1])*sh, Math.cos(LR[0])*th+Math.cos(LR[1])*sh);
+  const hip=[x+(o.dx||0), y-drop];
+  const lean=o.lean||0;
+  const neck=[hip[0]+Math.sin(lean)*0.34*s, hip[1]-Math.cos(lean)*0.34*s];
+  const hd=[neck[0]+Math.sin(lean+(o.nod||0))*0.11*s, neck[1]-Math.cos(lean+(o.nod||0))*0.11*s];
+  ctx.save(); ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle=c; ctx.lineWidth=W;
+  const limb=(p,a,l1,l2)=>{ const k=[p[0]+Math.sin(a[0])*l1,p[1]+Math.cos(a[0])*l1], e=[k[0]+Math.sin(a[1])*l2,k[1]+Math.cos(a[1])*l2];
+    ctx.beginPath(); ctx.moveTo(p[0],p[1]); ctx.lineTo(k[0],k[1]); ctx.lineTo(e[0],e[1]); ctx.stroke(); return e; };
+  const fL=limb(hip,LL,th,sh), fR=limb(hip,LR,th,sh);
+  ctx.beginPath(); ctx.moveTo(hip[0],hip[1]); ctx.lineTo(neck[0],neck[1]); ctx.stroke();
+  const sho=[lerp(hip[0],neck[0],0.92),lerp(hip[1],neck[1],0.92)];
+  const hL=limb(sho,o.armL||[-0.25,-0.1],ua,fa), hR=limb(sho,o.armR||[0.25,0.1],ua,fa);
+  ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(hd[0],hd[1],0.075*s,0,Math.PI*2); ctx.fill(); ctx.stroke();
+  const f=o.face===undefined?1:o.face;
+  if(f){ const ex=hd[0]+f*0.025*s, ey=hd[1]-0.012*s;
+    ctx.fillStyle=c; ctx.beginPath(); ctx.arc(ex,ey,Math.max(1.2,s*0.008),0,7); ctx.arc(ex+f*0.03*s,ey,Math.max(1.2,s*0.008),0,7); ctx.fill();
+    ctx.lineWidth=Math.max(1.2,W*0.6); ctx.beginPath();
+    const my=hd[1]+0.03*s, mood=o.mood===undefined?1:o.mood;
+    ctx.moveTo(ex-0.005*s*f,my); ctx.quadraticCurveTo(ex+f*0.015*s,my+mood*0.02*s,ex+f*0.04*s,my); ctx.stroke(); }
+  ctx.restore();
+  return {hip,neck,head:hd,handL:hL,handR:hR,footL:fL,footR:fR};
+}
+/* simple particle list: gravity-driven drops / crumbs / splash */
+function parts(){ return []; }
+function stepParts(P,dt,g,floorY,bounce){
+  for(const p of P){ p.vy+=(p.g===undefined?g:p.g)*dt; p.x+=p.vx*dt; p.y+=p.vy*dt; p.life-=dt;
+    if(floorY!==undefined && p.y>floorY){ if(bounce){ p.y=floorY; p.vy*=-bounce; p.vx*=0.7; } else p.life=0; } }
+  for(let i=P.length-1;i>=0;i--) if(P[i].life<=0) P.splice(i,1);
+}
+function splash(P,x,y,n,col,sp){ for(let i=0;i<n;i++){ const a=-Math.PI*(0.15+0.7*Math.random()); const v=(sp||120)*(0.5+Math.random()); P.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,life:0.5+Math.random()*0.4,r:1.5+Math.random()*2,c:col}); } }
+function drawParts(ctx,P,col){ ctx.save(); for(const p of P){ ctx.globalAlpha=clamp(p.life*2,0,1); ctx.fillStyle=p.c||col; ctx.beginPath(); ctx.arc(p.x,p.y,p.r||2.5,0,7); ctx.fill(); } ctx.restore(); }
+/* speech bubble */
+function bubble(ctx,x,y,txt,col,size,alpha){
+  if(alpha!==undefined && alpha<=0.01) return;
+  ctx.save(); if(alpha!==undefined) ctx.globalAlpha=clamp(alpha,0,1);
+  ctx.font='700 '+(size||15)+'px Poppins, sans-serif'; const tw=ctx.measureText(txt).width, hh=(size||15)*1.9;
+  rrect(ctx,x-tw/2-12,y-hh,tw+24,hh,hh/2); ctx.fillStyle='#fff'; ctx.fill(); ctx.lineWidth=2; ctx.strokeStyle=col; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x-6,y-1); ctx.lineTo(x,y+9); ctx.lineTo(x+6,y-1); ctx.fillStyle='#fff'; ctx.fill();
+  ctx.beginPath(); ctx.moveTo(x-6,y); ctx.lineTo(x,y+9); ctx.lineTo(x+6,y); ctx.stroke();
+  textAt(ctx,txt,x,y-hh*0.33,{align:'center',size:size||15,weight:700,color:col}); ctx.restore();
+}
+function ground(ctx,x0,x1,y){ line(ctx,x0,y,x1,y,COL.ink,2); ctx.save(); ctx.strokeStyle='#c2d1e5'; ctx.lineWidth=1.2; ctx.beginPath(); for(let x=x0+6;x<x1;x+=16){ ctx.moveTo(x,y+2); ctx.lineTo(x-8,y+10); } ctx.stroke(); ctx.restore(); }
+function tableTop(ctx,x0,x1,y,legs){ ctx.save(); ctx.lineWidth=2.2; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; rrect(ctx,x0,y,x1-x0,12,3); ctx.fill(); ctx.stroke();
+  if(legs){ line(ctx,x0+22,y+12,x0+22,y+legs,COL.ink,2.4); line(ctx,x1-22,y+12,x1-22,y+legs,COL.ink,2.4); } ctx.restore(); }
+function meterV(ctx,x,y,w,h,frac,col,label){ // vertical bar meter, y = top
+  ctx.save(); rrect(ctx,x,y,w,h,5); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=1.6; ctx.stroke();
+  const f=clamp(frac,0,1); ctx.save(); rrect(ctx,x,y,w,h,5); ctx.clip(); ctx.fillStyle=col; ctx.globalAlpha=0.85; ctx.fillRect(x,y+h*(1-f),w,h*f); ctx.restore();
+  if(label) textAt(ctx,label,x+w/2,y+h+16,{align:'center',size:12,weight:700,color:col});
+  ctx.restore();
+}
+/* line-drawn cup/mug; (cx,by) = bottom centre */
+function mug(ctx,cx,by,wTop,wBot,hgt,level,fill,t){
+  ctx.save(); ctx.lineJoin='round';
+  const yT=by-hgt;
+  if(level>0){ const ly=by-hgt*clamp(level,0,1), f=(by-ly)/hgt, wl=lerp(wBot,wTop,f);
+    ctx.beginPath(); ctx.moveTo(cx-wBot/2+3,by-3); ctx.lineTo(cx-wl/2+3,ly); ctx.lineTo(cx+wl/2-3,ly); ctx.lineTo(cx+wBot/2-3,by-3); ctx.closePath(); ctx.fillStyle=fill; ctx.fill();
+    ctx.beginPath(); ctx.ellipse(cx,ly,wl/2-3,5,0,0,7); ctx.strokeStyle='rgba(19,42,68,0.35)'; ctx.lineWidth=1.2; ctx.stroke(); }
+  ctx.strokeStyle=COL.ink; ctx.lineWidth=2.6;
+  ctx.beginPath(); ctx.moveTo(cx-wTop/2,yT); ctx.lineTo(cx-wBot/2,by); ctx.lineTo(cx+wBot/2,by); ctx.lineTo(cx+wTop/2,yT); ctx.stroke();
+  ctx.beginPath(); ctx.ellipse(cx,yT,wTop/2,7,0,0,7); ctx.stroke();
+  const hx=cx+lerp(wBot,wTop,0.55)/2;
+  ctx.beginPath(); ctx.moveTo(hx-2,yT+hgt*0.2); ctx.bezierCurveTo(hx+46,yT+hgt*0.12,hx+46,yT+hgt*0.72,hx-6,yT+hgt*0.74); ctx.stroke();
+  ctx.restore();
+}
+function steam(ctx,cx,y,wid,inten,t){
+  if(inten<=0.02) return;
+  ctx.save(); ctx.strokeStyle=COL.mid; ctx.lineWidth=2; ctx.lineCap='round';
+  for(let i=0;i<3;i++){ const x0=cx+(i-1)*wid*0.28, ph=(t*0.7+i*0.33)%1; ctx.globalAlpha=clamp(inten,0,1)*(1-ph)*0.9;
+    ctx.beginPath(); for(let k=0;k<=12;k++){ const yy=y-ph*30-k*6, xx=x0+Math.sin(k*0.6+t*3+i)*6; if(k) ctx.lineTo(xx,yy); else ctx.moveTo(xx,yy); } ctx.stroke(); }
+  ctx.restore();
+}
+/* thermometer with a scale, value in °C; (x,top,bot) */
+function thermoScale(ctx,x,top,bot,T,T0,T1,marks,safe){
+  const f=(T-T0)/(T1-T0);
+  if(safe!==undefined){ const ys=bot-(bot-top-5)*(safe-T0)/(T1-T0); line(ctx,x-18,ys,x+26,ys,COL.green,2,[5,3]); }
+  thermo(ctx,x,top,bot,f,COL.ink,COL.red);
+  marks.forEach(m=>{ const yy=bot-(bot-top-5)*(m-T0)/(T1-T0); textAt(ctx,m+'°',x+13,yy+4,{size:11,weight:600,color:COL.muted}); });
+}
+/* tiny x–y chart; pts = [[x,y],...] in data coords */
+function miniChart(ctx,x,y,w,h,xr,yr,series,o){
+  o=o||{}; ctx.save(); rrect(ctx,x,y,w,h,8); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle='#dbe4f0'; ctx.lineWidth=1.2; ctx.stroke();
+  const px=v=>x+34+(w-44)*(v-xr[0])/(xr[1]-xr[0]), py=v=>y+h-24-(h-36)*(v-yr[0])/(yr[1]-yr[0]);
+  line(ctx,px(xr[0]),py(yr[0]),px(xr[1]),py(yr[0]),COL.mid,1.2); line(ctx,px(xr[0]),py(yr[0]),px(xr[0]),py(yr[1]),COL.mid,1.2);
+  if(o.band){ ctx.fillStyle='rgba(31,157,85,0.1)'; const a=py(o.band[1]), b=py(o.band[0]); ctx.fillRect(px(xr[0]),a,px(xr[1])-px(xr[0]),b-a); }
+  (o.yt||[]).forEach(v=>textAt(ctx,String(v),px(xr[0])-5,py(v)+4,{align:'right',size:10,color:COL.muted}));
+  (o.xt||[]).forEach(v=>textAt(ctx,String(v),px(v),py(yr[0])+14,{align:'center',size:10,color:COL.muted}));
+  if(o.xl) textAt(ctx,o.xl,px(xr[1]),py(yr[0])+14,{align:'right',size:10,weight:600,color:COL.muted});
+  if(o.yl) textAt(ctx,o.yl,x+8,y+14,{size:10,weight:600,color:COL.muted});
+  series.forEach(s=>{ if(s.pts.length<2) return; ctx.strokeStyle=s.col; ctx.lineWidth=s.lw||2.2; if(s.dash) ctx.setLineDash(s.dash); else ctx.setLineDash([]);
+    ctx.beginPath(); s.pts.forEach((p,i)=>{ const X=px(clamp(p[0],xr[0],xr[1])), Y=py(clamp(p[1],yr[0],yr[1])); if(i) ctx.lineTo(X,Y); else ctx.moveTo(X,Y); }); ctx.stroke(); });
+  ctx.setLineDash([]); ctx.restore(); return {px,py};
+}
+
+
+/* ---------------------------------------------------------------------
+   SHARED ACTIVITY SHELL
+   scene = { q, html, cards, tail, wire($), tick(dt,ctx,t,$), found(), fb() }
+   q is the textbook's question; found() returns the answer once the
+   scene has actually produced it — it then springs into the banner.
+   --------------------------------------------------------------------- */
+function card(id,l,col){ return `<div class="rcard"><div class="rlabel">${l}</div><div class="rval" id="${id}"${col?` style="color:${col}"`:''}>—</div></div>`; }
+function setv($,id,v){ const e=$('#'+id); if(e&&e.textContent!==v) e.textContent=v; }
+function setFb($,f){ const e=$('#fb'); if(!e) return; const c=f?'fb '+f[0]:'fb hidden', tx=f?f[1]:''; if(e.className!==c) e.className=c; if(e.textContent!==tx) e.textContent=tx; }
+function optList(id,opts){ return `<div id="${id}">${opts.map((o,i)=>`<button class="opt-btn" data-i="${i}">${o}</button>`).join('')}</div>`; }
+function wireOpts(wrap,id,cb){ const bs=[...wrap.querySelectorAll('#'+id+' .opt-btn')]; bs.forEach(b=>b.onclick=()=>{ if(b.disabled) return; bs.forEach(x=>x.classList.toggle('active',x===b)); cb(+b.dataset.i); }); return bs; }
+function chipList(id,opts,act){ return `<div class="chip-wrap" id="${id}">${opts.map((o,i)=>`<button class="chip-btn${i===act?' active':''}" data-i="${i}">${o}</button>`).join('')}</div>`; }
+function wireChips(wrap,id,cb){ const bs=[...wrap.querySelectorAll('#'+id+' .chip-btn')]; bs.forEach(b=>b.onclick=()=>{ if(b.disabled) return; bs.forEach(x=>x.classList.toggle('active',x===b)); cb(+b.dataset.i); }); return bs; }
+function setActive(bs,i){ bs.forEach((b,k)=>b.classList.toggle('active',k===i)); }
+function slider(id,label,min,max,step,val){ return `<div class="control-group"><label>${label} <span class="val" id="${id}V"></span></label><input type="range" id="${id}" min="${min}" max="${max}" step="${step}" value="${val}"></div>`; }
+function logTable(id,heads){ return `<table class="log"><thead><tr>${heads.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody id="${id}"></tbody></table>`; }
+/* rows: [[cell | {t,c}] ...]; only rewritten when it changes */
+function setLog($,id,rows){
+  const e=$('#'+id); if(!e) return;
+  const html=rows.map(r=>'<tr>'+r.map(c=>typeof c==='object'?`<td class="${c.c||''}">${c.t}</td>`:`<td>${c}</td>`).join('')+'</tr>').join('');
+  if(e._h!==html){ e._h=html; e.innerHTML=html; }
+}
+function foundBanner(ctx,w,q,ans,pop,t){
+  ctx.save();
+  ctx.fillStyle='#f6f9fc'; ctx.fillRect(0,0,w,BANNER-2); line(ctx,0,BANNER-2,w,BANNER-2,'#dbe4f0',1);
+  const p=clamp(pop.x,0,1.25), got=!!ans;
+  const r=12*(got?0.8+0.2*p:1), cx=24, cy=BANNER/2-1;
+  circ(ctx,cx,cy,r,got?COL.green:COL.mid,got?COL.green:'#fff',1.8);
+  textAt(ctx,got?'✓':'?',cx,cy+5,{align:'center',size:13,weight:700,color:got?'#fff':COL.mid});
+  const txt=got?ans:q, mw=w-60; const s=fitFont(ctx,txt,mw,14.5,got?700:600);
+  ctx.globalAlpha=got?clamp(0.3+0.7*p,0,1):1;
+  textAt(ctx,txt,44,cy+5,{size:s,weight:got?700:600,color:got?'#1f6b3d':COL.muted});
+  ctx.restore();
+}
+function buildScene(factory){
+  const wrap=labShell(), S=factory(wrap);
+  wrap.querySelector('.lab-side').innerHTML = S.html+`
+    <div class="control-group"><div class="result-cards">${S.cards||''}</div><div class="fb hidden" id="fb"></div></div>`+(S.tail||'');
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), pop=spr(0);
+  S.wire($);
+  let t=0, lastAns='';
+  animLoop(dt=>{
+    t+=dt;
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    ctx.save(); ctx.beginPath(); ctx.rect(0,BANNER,w,h-BANNER); ctx.clip(); stage(ctx,w,h); S.tick(dt,ctx,t,$); ctx.restore();
+    const ans=S.found?S.found()||'':'';
+    if(ans!==lastAns){ lastAns=ans; pop.x=0; pop.v=0; }
+    springTo(pop,ans?1:0,170,11,dt);
+    foundBanner(ctx,w,S.q||'',ans,pop,t);
+    setFb($,S.fb?S.fb():null);
+  });
+  return wrap;
+}
+/* scene backdrop helpers */
+function sky(ctx,y1,top,bot){ const g=ctx.createLinearGradient(0,0,0,y1); g.addColorStop(0,top||'#e3f1fd'); g.addColorStop(1,bot||'#f7fbff'); ctx.fillStyle=g; ctx.fillRect(-400,-200,1600,y1+200); }
+function soilBand(ctx,x0,x1,y,h,col){ ctx.save(); ctx.fillStyle=col||'#f4ead8'; ctx.fillRect(x0,y,x1-x0,h); ctx.restore(); ground(ctx,x0,x1,y); }
+function cloud(ctx,x,y,s,col){ ctx.save(); ctx.strokeStyle=col||'#c2d1e5'; ctx.fillStyle='#fff'; ctx.lineWidth=2; ctx.beginPath();
+  ctx.arc(x,y,s*0.5,Math.PI*0.5,Math.PI*1.5); ctx.arc(x+s*0.55,y-s*0.35,s*0.6,Math.PI,Math.PI*1.95); ctx.arc(x+s*1.2,y,s*0.5,Math.PI*1.5,Math.PI*0.5); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore(); }
+function sunIcon(ctx,x,y,r,t){ circ(ctx,x,y,r,COL.yellow,'#fff6d6',2.4); for(let k=0;k<10;k++){ const a=k/10*6.283+t*0.2; line(ctx,x+Math.cos(a)*(r+5),y+Math.sin(a)*(r+5),x+Math.cos(a)*(r+13),y+Math.sin(a)*(r+13),COL.yellow,2); } }
+/* magnifier lens: draws contents via fn() clipped into a circle */
+function lens(ctx,cx,cy,r,fn,col,label){
+  ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,r,0,7); ctx.fillStyle='#fff'; ctx.fill(); ctx.clip(); fn(); ctx.restore();
+  circ(ctx,cx,cy,r,col||COL.ink,null,3); const a=0.78; line(ctx,cx+Math.cos(a)*r,cy+Math.sin(a)*r,cx+Math.cos(a)*(r+30),cy+Math.sin(a)*(r+30),col||COL.ink,7);
+  if(label) textAt(ctx,label,cx,cy-r-8,{align:'center',size:12,weight:700,color:col||COL.ink});
+}
+
+/* ---------------------------------------------------------------------
+   FOOD LIBRARY — line-drawn foods, a nutrient table, test chemistry
+   food(ctx,key,x,y,s,o)  draws food `key` centred on (x,y), about s px wide.
+   NUT[key]  per serving: g, kcal, C carb g, P protein g, F fat g, fib g,
+             A vit-A µg, Cv vit-C mg, Ca mg, Fe mg, W water mL
+             (approx. IFCT 2017 / NIN values, rounded)
+   TEST[key] per 100 g: st starch %, ft fat %, pr protein %, wa water %
+   --------------------------------------------------------------------- */
+const INK='#3b2a14';
+function blob(ctx,pts,fill,stroke,lw){ ctx.beginPath(); pts.forEach((p,i)=>{ const q=pts[(i+1)%pts.length], mx=(p[0]+q[0])/2, my=(p[1]+q[1])/2; if(!i) ctx.moveTo(mx,my); else ctx.quadraticCurveTo(p[0],p[1],mx,my); }); const p=pts[0],q=pts[1]; ctx.quadraticCurveTo(p[0],p[1],(p[0]+q[0])/2,(p[1]+q[1])/2); ctx.closePath(); if(fill){ ctx.fillStyle=fill; ctx.fill(); } if(stroke){ ctx.strokeStyle=stroke; ctx.lineWidth=lw||2; ctx.stroke(); } }
+function ell(ctx,x,y,rx,ry,fill,stroke,lw,rot){ ctx.beginPath(); ctx.ellipse(x,y,Math.max(0.1,rx),Math.max(0.1,ry),rot||0,0,7); if(fill){ ctx.fillStyle=fill; ctx.fill(); } if(stroke){ ctx.strokeStyle=stroke; ctx.lineWidth=lw||2; ctx.stroke(); } }
+/* bowl seen slightly from above; content colour + optional bits */
+function bowlDraw(ctx,s,fill,bits,mound){
+  const r=s*0.48;
+  ctx.beginPath(); ctx.moveTo(-r,-s*0.05); ctx.quadraticCurveTo(-r*0.95,s*0.42,0,s*0.42); ctx.quadraticCurveTo(r*0.95,s*0.42,r,-s*0.05); ctx.closePath(); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke();
+  if(mound){ ctx.beginPath(); ctx.moveTo(-r*0.92,-s*0.05); ctx.quadraticCurveTo(0,-s*0.42,r*0.92,-s*0.05); ctx.closePath(); ctx.fillStyle=fill; ctx.fill(); ctx.strokeStyle='rgba(0,0,0,0.25)'; ctx.lineWidth=1.2; ctx.stroke(); }
+  else ell(ctx,0,-s*0.05,r*0.9,s*0.12,fill,'rgba(0,0,0,0.25)',1.2);
+  ell(ctx,0,-s*0.05,r,s*0.14,null,COL.ink,2);
+  if(bits){ const rr=rng(7); for(let i=0;i<bits[1];i++){ const a=rr()*6.28, q=Math.sqrt(rr()); const bx=Math.cos(a)*r*0.75*q, by=-s*0.05+Math.sin(a)*s*0.09*q-(mound?s*0.12*(1-q):0); ell(ctx,bx,by,s*0.035*bits[2],s*0.025*bits[2],bits[0],null,0,a); } }
+}
+function glassDraw(ctx,s,fill,level,froth){
+  const w=s*0.5, h=s*0.9;
+  ctx.beginPath(); ctx.moveTo(-w/2,-h/2); ctx.lineTo(-w*0.4,h/2); ctx.lineTo(w*0.4,h/2); ctx.lineTo(w/2,-h/2); ctx.strokeStyle=COL.ink; ctx.lineWidth=2;
+  if(level>0){ ctx.save(); const ly=h/2-h*level; ctx.beginPath(); ctx.moveTo(-w*0.4+1,h/2-1); ctx.lineTo(-lerp(w*0.4,w/2,level)+1,ly); ctx.lineTo(lerp(w*0.4,w/2,level)-1,ly); ctx.lineTo(w*0.4-1,h/2-1); ctx.closePath(); ctx.fillStyle=fill; ctx.fill(); if(froth){ ctx.fillStyle='#fff'; ctx.fillRect(-w/2,ly,w,h*0.08); } ctx.restore(); }
+  ctx.beginPath(); ctx.moveTo(-w/2,-h/2); ctx.lineTo(-w*0.4,h/2); ctx.lineTo(w*0.4,h/2); ctx.lineTo(w/2,-h/2); ctx.stroke();
+}
+function plateDraw(ctx,s){ ell(ctx,0,s*0.12,s*0.55,s*0.2,'#fff',COL.ink,2); ell(ctx,0,s*0.12,s*0.4,s*0.13,null,'#c2d1e5',1.2); }
+function leafShape(ctx,x,y,l,w,a,fill,stroke){ ctx.save(); ctx.translate(x,y); ctx.rotate(a); ctx.beginPath(); ctx.moveTo(0,0); ctx.quadraticCurveTo(l*0.5,-w,l,0); ctx.quadraticCurveTo(l*0.5,w,0,0); ctx.fillStyle=fill; ctx.fill(); ctx.strokeStyle=stroke; ctx.lineWidth=1.6; ctx.stroke(); ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(l*0.85,0); ctx.lineWidth=1; ctx.stroke(); ctx.restore(); }
+const FD={
+  roti:(c,s)=>{ ell(c,0,0,s*0.46,s*0.4,'#f3dcab','#a7782f',2); const r=rng(3); for(let i=0;i<9;i++){ const a=r()*6.28,q=Math.sqrt(r())*0.8; ell(c,Math.cos(a)*s*0.4*q,Math.sin(a)*s*0.33*q,s*0.035,s*0.025,'#b88947'); } },
+  paratha:(c,s)=>{ ell(c,s*0.04,s*0.04,s*0.46,s*0.38,'#e9c37d','#a7782f',2); ell(c,0,0,s*0.46,s*0.38,'#f0cf8b','#a7782f',2); for(let k=1;k<3;k++) ell(c,0,0,s*0.14*k,s*0.12*k,null,'rgba(167,120,47,0.6)',1.2); },
+  makki:(c,s)=>{ ell(c,0,0,s*0.46,s*0.4,'#f4cf55','#b3860f',2); const r=rng(5); for(let i=0;i<8;i++){ const a=r()*6.28,q=Math.sqrt(r())*0.8; ell(c,Math.cos(a)*s*0.4*q,Math.sin(a)*s*0.33*q,s*0.035,s*0.025,'#c98f1c'); } },
+  bhature:(c,s)=>{ ell(c,0,0,s*0.48,s*0.36,'#f6e2b4','#a7782f',2); ell(c,-s*0.1,-s*0.08,s*0.18,s*0.1,'#fbeed0','rgba(167,120,47,0.5)',1.2); },
+  rice:(c,s)=>{ bowlDraw(c,s,'#fbfbf6',['#e3e3d5',22,1],1); },
+  dal:(c,s)=>{ bowlDraw(c,s,'#f2c14e',['#e0a52a',6,1]); },
+  sambhar:(c,s)=>{ bowlDraw(c,s,'#d9823b',['#9ccf6a',6,1.3]); },
+  rasam:(c,s)=>{ bowlDraw(c,s,'#e2683c',null); },
+  sabzi:(c,s)=>{ bowlDraw(c,s,'#a8d46f',['#e9a23b',8,1.4],1); },
+  saag:(c,s)=>{ bowlDraw(c,s,'#5f9e4a',['#3f7a30',8,1.2],1); },
+  curd:(c,s)=>{ bowlDraw(c,s,'#fdfdf8',null); },
+  kheer:(c,s)=>{ bowlDraw(c,s,'#fbf1d6',['#c99a5b',7,0.9]); },
+  halwa:(c,s)=>{ bowlDraw(c,s,'#e8a64c',['#a7782f',6,1],1); },
+  chhole:(c,s)=>{ bowlDraw(c,s,'#a5602b',['#e7c48a',9,1.6]); },
+  khichdi:(c,s)=>{ bowlDraw(c,s,'#efd47a',['#9ccf6a',6,1],1); },
+  eromba:(c,s)=>{ bowlDraw(c,s,'#7f9a4a',['#c0392b',5,1]); },
+  utti:(c,s)=>{ bowlDraw(c,s,'#e5cf5a',['#5aa04a',7,1.2]); },
+  kangsoi:(c,s)=>{ bowlDraw(c,s,'#b9d98a',['#5f9e4a',8,1.3]); },
+  singju:(c,s)=>{ plateDraw(c,s); for(let i=0;i<7;i++) leafShape(c,-s*0.3+i*s*0.09,s*0.06,s*0.2,s*0.05,-0.6+i*0.2,'#bfe3a2','#3f7a30'); },
+  sprouts:(c,s)=>{ bowlDraw(c,s,'#cfe7a8',null,1); const r=rng(9); for(let i=0;i<9;i++){ const x=(r()-0.5)*s*0.6, y=-s*0.12+(r()-0.5)*s*0.12; ell(c,x,y,s*0.05,s*0.04,'#6fae4a','#3f7a30',1); c.beginPath(); c.moveTo(x,y); c.quadraticCurveTo(x+s*0.06,y-s*0.08,x+s*0.1,y-s*0.04); c.strokeStyle='#f3f0d0'; c.lineWidth=1.6; c.stroke(); } },
+  idli:(c,s)=>{ plateDraw(c,s); for(const dx of [-0.2,0.2]){ c.beginPath(); c.moveTo(dx*s-s*0.2,s*0.1); c.quadraticCurveTo(dx*s,-s*0.22,dx*s+s*0.2,s*0.1); c.closePath(); c.fillStyle='#fff'; c.fill(); c.strokeStyle=COL.ink; c.lineWidth=1.8; c.stroke(); } },
+  dosa:(c,s)=>{ plateDraw(c,s); c.beginPath(); c.moveTo(-s*0.5,s*0.05); c.lineTo(s*0.45,-s*0.12); c.quadraticCurveTo(s*0.55,s*0.05,s*0.45,s*0.2); c.closePath(); c.fillStyle='#f0bd59'; c.fill(); c.strokeStyle='#a7782f'; c.lineWidth=2; c.stroke(); },
+  poha:(c,s)=>{ plateDraw(c,s); const r=rng(11); for(let i=0;i<26;i++) ell(c,(r()-0.5)*s*0.62,s*0.1+(r()-0.5)*s*0.2,s*0.04,s*0.018,i%6?'#f2d65a':'#6fae4a',null,0,r()*3); },
+  upma:(c,s)=>{ plateDraw(c,s); c.beginPath(); c.ellipse(0,s*0.05,s*0.32,s*0.16,0,Math.PI,0); c.fillStyle='#f3e7b8'; c.fill(); c.strokeStyle='#a7782f'; c.lineWidth=1.6; c.stroke(); },
+  mudde:(c,s)=>{ plateDraw(c,s); ell(c,0,-s*0.02,s*0.24,s*0.22,'#8a5a3b','#5a3520',2); ell(c,-s*0.07,-s*0.09,s*0.06,s*0.04,'rgba(255,255,255,0.25)'); },
+  milk:(c,s)=>{ glassDraw(c,s,'#fdfdf8',0.8); },
+  lassi:(c,s)=>{ glassDraw(c,s,'#f7f3e3',0.85,1); },
+  chhach:(c,s)=>{ glassDraw(c,s,'#f1f5ea',0.8,1); },
+  water:(c,s)=>{ glassDraw(c,s,'#cfe6fb',0.8); },
+  soda:(c,s)=>{ rrect(c,-s*0.2,-s*0.42,s*0.4,s*0.84,s*0.08); c.fillStyle='#e8584a'; c.fill(); c.strokeStyle=COL.ink; c.lineWidth=2; c.stroke(); line(c,-s*0.2,-s*0.3,s*0.2,-s*0.3,COL.ink,1.4); c.save(); c.translate(0,s*0.05); c.rotate(-0.4); ell(c,0,0,s*0.12,s*0.06,null,'#fff',2); c.restore(); },
+  tea:(c,s)=>{ c.beginPath(); c.moveTo(-s*0.3,-s*0.2); c.lineTo(-s*0.24,s*0.28); c.lineTo(s*0.24,s*0.28); c.lineTo(s*0.3,-s*0.2); c.closePath(); c.fillStyle='#fff'; c.fill(); c.strokeStyle=COL.ink; c.lineWidth=2; c.stroke(); ell(c,0,-s*0.2,s*0.3,s*0.07,'#c8915a',COL.ink,2); c.beginPath(); c.arc(s*0.32,s*0.02,s*0.12,-1.4,1.4); c.stroke(); },
+  coffee:(c,s)=>{ FD.tea(c,s); ell(c,0,-s*0.2,s*0.26,s*0.05,'#8a5a3b'); },
+  banana:(c,s)=>{ c.beginPath(); c.moveTo(-s*0.45,-s*0.2); c.quadraticCurveTo(-s*0.1,s*0.35,s*0.45,-s*0.12); c.quadraticCurveTo(-s*0.05,s*0.15,-s*0.45,-s*0.2); c.fillStyle='#ffe066'; c.fill(); c.strokeStyle='#b3860f'; c.lineWidth=2; c.stroke(); line(c,-s*0.45,-s*0.2,-s*0.5,-s*0.26,'#5a3520',3); },
+  apple:(c,s)=>{ c.beginPath(); c.moveTo(0,-s*0.28); c.bezierCurveTo(s*0.45,-s*0.5,s*0.55,s*0.3,0,s*0.38); c.bezierCurveTo(-s*0.55,s*0.3,-s*0.45,-s*0.5,0,-s*0.28); c.fillStyle='#f28b7a'; c.fill(); c.strokeStyle='#b03a2e'; c.lineWidth=2; c.stroke(); line(c,0,-s*0.28,s*0.04,-s*0.42,'#5a3520',2); leafShape(c,s*0.04,-s*0.38,s*0.2,s*0.07,-0.5,'#bfe3a2','#3f7a30'); },
+  mango:(c,s)=>{ c.beginPath(); c.moveTo(-s*0.1,-s*0.38); c.bezierCurveTo(s*0.5,-s*0.4,s*0.45,s*0.4,-s*0.05,s*0.36); c.bezierCurveTo(-s*0.4,s*0.3,-s*0.42,-s*0.3,-s*0.1,-s*0.38); c.fillStyle='#ffb84d'; c.fill(); c.strokeStyle='#c9761c'; c.lineWidth=2; c.stroke(); leafShape(c,-s*0.08,-s*0.38,s*0.24,s*0.07,-0.3,'#bfe3a2','#3f7a30'); },
+  orange:(c,s)=>{ ell(c,0,0,s*0.38,s*0.36,'#ffa94d','#c9761c',2); const r=rng(4); for(let i=0;i<10;i++) ell(c,(r()-0.5)*s*0.5,(r()-0.5)*s*0.5,1.2,1.2,'#e08a2a'); leafShape(c,0,-s*0.35,s*0.18,s*0.06,-0.6,'#bfe3a2','#3f7a30'); },
+  lemon:(c,s)=>{ ell(c,0,0,s*0.38,s*0.27,'#fff07a','#b3a10f',2); ell(c,s*0.39,0,s*0.04,s*0.04,'#fff07a','#b3a10f',1.6); },
+  guava:(c,s)=>{ c.beginPath(); c.arc(0,s*0.05,s*0.34,0,7); c.fillStyle='#c6e88a'; c.fill(); c.strokeStyle='#5f8f2a'; c.lineWidth=2; c.stroke(); ell(c,0,-s*0.3,s*0.06,s*0.04,'#8fbf4a','#5f8f2a',1.5); },
+  amla:(c,s)=>{ for(const [dx,dy] of [[-0.18,0.05],[0.16,0.08],[0,-0.14]]){ ell(c,dx*s,dy*s,s*0.2,s*0.19,'#d7f0a0','#6f9a2a',2); c.beginPath(); c.moveTo(dx*s,dy*s-s*0.18); c.lineTo(dx*s,dy*s+s*0.18); c.strokeStyle='rgba(111,154,42,0.6)'; c.lineWidth=1; c.stroke(); } },
+  papaya:(c,s)=>{ c.beginPath(); c.ellipse(0,0,s*0.48,s*0.3,0,0,7); c.fillStyle='#ffa45c'; c.fill(); c.strokeStyle='#4f8f2a'; c.lineWidth=3; c.stroke(); ell(c,0,0,s*0.26,s*0.12,'#fff3e0'); const r=rng(2); for(let i=0;i<12;i++) ell(c,(r()-0.5)*s*0.4,(r()-0.5)*s*0.16,s*0.025,s*0.025,'#2b2b2b'); },
+  pomegranate:(c,s)=>{ ell(c,0,s*0.04,s*0.38,s*0.36,'#e2595a','#9b2335',2); c.beginPath(); c.moveTo(-s*0.1,-s*0.3); c.lineTo(-s*0.06,-s*0.44); c.lineTo(0,-s*0.34); c.lineTo(s*0.06,-s*0.44); c.lineTo(s*0.1,-s*0.3); c.strokeStyle='#9b2335'; c.lineWidth=2; c.stroke(); },
+  carrot:(c,s)=>{ c.beginPath(); c.moveTo(-s*0.14,-s*0.3); c.quadraticCurveTo(0,-s*0.36,s*0.14,-s*0.3); c.lineTo(s*0.02,s*0.45); c.closePath(); c.fillStyle='#ff9640'; c.fill(); c.strokeStyle='#c9611c'; c.lineWidth=2; c.stroke(); for(const a of [-0.4,0,0.4]) leafShape(c,0,-s*0.32,s*0.22,s*0.05,-Math.PI/2+a,'#bfe3a2','#3f7a30'); for(let i=1;i<4;i++) line(c,-s*0.12+i*0.025*s,-s*0.2+i*s*0.15,-s*0.04+i*0.025*s,-s*0.2+i*s*0.15,'#c9611c',1.2); },
+  potato:(c,s)=>{ blob(c,[[-s*0.4,-s*0.05],[-s*0.25,-s*0.3],[s*0.15,-s*0.28],[s*0.42,-s*0.08],[s*0.35,s*0.24],[-s*0.1,s*0.3],[-s*0.38,s*0.2]],'#e6c58d','#8a5a2b',2); for(const [x,y] of [[-0.15,-0.08],[0.12,0.05],[0.2,-0.15],[-0.2,0.12]]) ell(c,x*s,y*s,s*0.025,s*0.018,'#8a5a2b'); },
+  cucumber:(c,s)=>{ rrect(c,-s*0.48,-s*0.13,s*0.96,s*0.26,s*0.13); c.fillStyle='#8cc95c'; c.fill(); c.strokeStyle='#3f7a30'; c.lineWidth=2; c.stroke(); for(let i=0;i<5;i++) ell(c,-s*0.3+i*s*0.15,-s*0.03*(i%2?1:-1),1.4,1.4,'#3f7a30'); },
+  tomato:(c,s)=>{ ell(c,0,s*0.04,s*0.38,s*0.32,'#f2624f','#a8321f',2); for(const a of [-1,0,1]) leafShape(c,0,-s*0.26,s*0.14,s*0.04,-Math.PI/2+a*0.9,'#bfe3a2','#3f7a30'); },
+  beetroot:(c,s)=>{ c.beginPath(); c.arc(0,s*0.08,s*0.3,0,7); c.fillStyle='#a8325e'; c.fill(); c.strokeStyle='#5e1736'; c.lineWidth=2; c.stroke(); line(c,0,s*0.38,s*0.04,s*0.5,'#5e1736',2); for(const a of [-0.4,0.3]) leafShape(c,0,-s*0.2,s*0.26,s*0.07,-Math.PI/2+a,'#bfe3a2','#5e1736'); },
+  spinach:(c,s)=>{ for(let i=0;i<5;i++) leafShape(c,0,s*0.35,s*0.6,s*0.17,-Math.PI/2+(i-2)*0.32,'#7cc05a','#2f6b22'); },
+  bread:(c,s)=>{ c.beginPath(); c.moveTo(-s*0.36,s*0.38); c.lineTo(-s*0.36,-s*0.08); c.bezierCurveTo(-s*0.52,-s*0.22,-s*0.42,-s*0.44,-s*0.1,-s*0.4); c.bezierCurveTo(0,-s*0.48,s*0.12,-s*0.48,s*0.18,-s*0.4); c.bezierCurveTo(s*0.46,-s*0.44,s*0.52,-s*0.2,s*0.36,-s*0.08); c.lineTo(s*0.36,s*0.38); c.closePath(); c.fillStyle='#f6e4bd'; c.fill(); c.strokeStyle='#a7782f'; c.lineWidth=3.2; c.stroke(); },
+  chapati:(c,s)=>FD.roti(c,s),
+  butter:(c,s)=>{ c.beginPath(); c.moveTo(-s*0.4,-s*0.05); c.lineTo(-s*0.2,-s*0.22); c.lineTo(s*0.42,-s*0.22); c.lineTo(s*0.22,-s*0.05); c.closePath(); c.fillStyle='#fff3a8'; c.fill(); c.strokeStyle='#b3a10f'; c.lineWidth=2; c.stroke(); c.beginPath(); c.rect(-s*0.4,-s*0.05,s*0.62,s*0.26); c.fillStyle='#ffe97a'; c.fill(); c.stroke(); c.beginPath(); c.moveTo(s*0.22,-s*0.05); c.lineTo(s*0.42,-s*0.22); c.lineTo(s*0.42,s*0.04); c.lineTo(s*0.22,s*0.21); c.closePath(); c.fillStyle='#f2d54f'; c.fill(); c.stroke(); },
+  ghee:(c,s)=>FD.butter(c,s),
+  coconut:(c,s)=>{ c.beginPath(); c.arc(0,-s*0.02,s*0.42,0,Math.PI); c.closePath(); c.fillStyle='#8a5a3b'; c.fill(); c.strokeStyle='#5a3520'; c.lineWidth=2; c.stroke(); c.beginPath(); c.arc(0,-s*0.02,s*0.34,0,Math.PI); c.closePath(); c.fillStyle='#fffdf6'; c.fill(); c.strokeStyle='#d8cdb5'; c.lineWidth=1.4; c.stroke(); ell(c,0,-s*0.02,s*0.42,s*0.08,'#fffdf6','#5a3520',2); },
+  peanuts:(c,s)=>{ const r=rng(13); for(let i=0;i<9;i++){ const x=(r()-0.5)*s*0.7, y=(r()-0.5)*s*0.4; ell(c,x,y,s*0.09,s*0.065,'#e8b88a','#8a5a2b',1.5,r()*3); } },
+  chana:(c,s)=>{ const r=rng(17); for(let i=0;i<12;i++){ const x=(r()-0.5)*s*0.72, y=(r()-0.5)*s*0.42+Math.abs(x)*0.25; ell(c,x,y,s*0.07,s*0.065,'#c98a4b','#7a4a1f',1.4); } },
+  gram:(c,s)=>{ bowlDraw(c,s,'#e7c48a',['#c99a5b',10,1.6],1); },
+  soya:(c,s)=>{ const r=rng(19); for(let i=0;i<14;i++){ const x=(r()-0.5)*s*0.7, y=(r()-0.5)*s*0.4; ell(c,x,y,s*0.06,s*0.055,'#f3dd9a','#b3860f',1.3); } },
+  peas:(c,s)=>{ c.beginPath(); c.moveTo(-s*0.46,s*0.05); c.quadraticCurveTo(0,-s*0.3,s*0.46,s*0.05); c.quadraticCurveTo(0,s*0.2,-s*0.46,s*0.05); c.fillStyle='#bfe3a2'; c.fill(); c.strokeStyle='#3f7a30'; c.lineWidth=2; c.stroke(); for(let i=0;i<5;i++) ell(c,-s*0.28+i*s*0.14,-s*0.0,s*0.065,s*0.065,'#7cc05a','#3f7a30',1.2); },
+  egg:(c,s)=>{ c.beginPath(); c.moveTo(0,-s*0.38); c.bezierCurveTo(s*0.34,-s*0.38,s*0.36,s*0.34,0,s*0.34); c.bezierCurveTo(-s*0.36,s*0.34,-s*0.34,-s*0.38,0,-s*0.38); c.fillStyle='#fffaf0'; c.fill(); c.strokeStyle='#a7782f'; c.lineWidth=2; c.stroke(); },
+  paneer:(c,s)=>{ c.beginPath(); c.moveTo(-s*0.3,-s*0.1); c.lineTo(-s*0.12,-s*0.28); c.lineTo(s*0.3,-s*0.28); c.lineTo(s*0.3,s*0.15); c.lineTo(s*0.12,s*0.32); c.lineTo(-s*0.3,s*0.32); c.closePath(); c.fillStyle='#fffdf2'; c.fill(); c.strokeStyle=COL.ink; c.lineWidth=2; c.stroke(); line(c,-s*0.3,-s*0.1,s*0.12,-s*0.1,COL.ink,1.6); line(c,s*0.12,-s*0.1,s*0.3,-s*0.28,COL.ink,1.6); line(c,s*0.12,-s*0.1,s*0.12,s*0.32,COL.ink,1.6); },
+  fish:(c,s)=>{ c.beginPath(); c.moveTo(-s*0.3,0); c.quadraticCurveTo(0,-s*0.28,s*0.32,0); c.quadraticCurveTo(0,s*0.28,-s*0.3,0); c.moveTo(-s*0.3,0); c.lineTo(-s*0.48,-s*0.16); c.lineTo(-s*0.48,s*0.16); c.closePath(); c.fillStyle='#cfe3f5'; c.fill(); c.strokeStyle='#2f5f8f'; c.lineWidth=2; c.stroke(); ell(c,s*0.18,-s*0.04,2,2,'#2f5f8f'); },
+  chicken:(c,s)=>{ c.save(); c.rotate(-0.6); ell(c,s*0.05,0,s*0.3,s*0.2,'#e3a46a','#8a5a2b',2); line(c,-s*0.25,0,-s*0.45,0,'#8a5a2b',5); ell(c,-s*0.47,-s*0.04,s*0.05,s*0.05,'#fff','#8a5a2b',1.6); ell(c,-s*0.47,s*0.04,s*0.05,s*0.05,'#fff','#8a5a2b',1.6); c.restore(); },
+  mushroom:(c,s)=>{ c.beginPath(); c.moveTo(-s*0.1,s*0.4); c.lineTo(-s*0.08,-s*0.02); c.lineTo(s*0.08,-s*0.02); c.lineTo(s*0.1,s*0.4); c.closePath(); c.fillStyle='#fff'; c.fill(); c.strokeStyle=COL.ink; c.lineWidth=2; c.stroke(); c.beginPath(); c.moveTo(-s*0.42,0); c.quadraticCurveTo(0,-s*0.55,s*0.42,0); c.closePath(); c.fillStyle='#e7d3b5'; c.fill(); c.stroke(); },
+  laddoo:(c,s)=>{ ell(c,0,0,s*0.34,s*0.32,'#f0a83c','#b3700f',2); const r=rng(21); for(let i=0;i<14;i++) ell(c,(r()-0.5)*s*0.44,(r()-0.5)*s*0.44,1.3,1.3,'#b3700f'); },
+  chips:(c,s)=>{ c.beginPath(); c.moveTo(-s*0.32,-s*0.42); c.lineTo(s*0.32,-s*0.42); c.lineTo(s*0.36,s*0.42); c.lineTo(-s*0.36,s*0.42); c.closePath(); c.fillStyle='#ffd43b'; c.fill(); c.strokeStyle=COL.ink; c.lineWidth=2; c.stroke(); for(const y of [-0.42,0.42]){ c.beginPath(); for(let i=0;i<=8;i++) c.lineTo(-s*0.34+i*s*0.085,y*s+(i%2?3:-3)*(y<0?1:-1)); c.stroke(); } ell(c,0,s*0.04,s*0.2,s*0.14,'#ffe9a0','#c9761c',1.6); },
+  chanapack:(c,s)=>{ FD.chips(c,s); ell(c,0,s*0.04,s*0.2,s*0.14,'#f2e4cf','#7a4a1f',1.6); },
+  candy:(c,s)=>{ rrect(c,-s*0.46,-s*0.14,s*0.92,s*0.28,4); c.fillStyle='#8a4a2b'; c.fill(); c.strokeStyle=COL.ink; c.lineWidth=2; c.stroke(); c.fillStyle='#e8584a'; c.fillRect(-s*0.2,-s*0.14,s*0.4,s*0.28); c.strokeRect(-s*0.2,-s*0.14,s*0.4,s*0.28); },
+  oil:(c,s)=>{ c.beginPath(); c.moveTo(-s*0.2,s*0.42); c.lineTo(-s*0.2,-s*0.12); c.lineTo(-s*0.08,-s*0.3); c.lineTo(-s*0.08,-s*0.42); c.lineTo(s*0.08,-s*0.42); c.lineTo(s*0.08,-s*0.3); c.lineTo(s*0.2,-s*0.12); c.lineTo(s*0.2,s*0.42); c.closePath(); c.fillStyle='#fff3a0'; c.fill(); c.strokeStyle=COL.ink; c.lineWidth=2; c.stroke(); },
+  almonds:(c,s)=>{ const r=rng(23); for(let i=0;i<6;i++){ const x=(r()-0.5)*s*0.6, y=(r()-0.5)*s*0.4; ell(c,x,y,s*0.12,s*0.07,'#d79a62','#7a4a1f',1.5,r()*3); } },
+  salt:(c,s)=>{ rrect(c,-s*0.3,-s*0.4,s*0.6,s*0.8,4); c.fillStyle='#fff'; c.fill(); c.strokeStyle=COL.blue; c.lineWidth=2; c.stroke(); textAt(c,'SALT',0,-s*0.05,{align:'center',size:Math.max(7,s*0.16),weight:700,color:COL.blue}); textAt(c,'+ iodine',0,s*0.18,{align:'center',size:Math.max(6,s*0.12),weight:600,color:COL.green}); },
+  millet:(c,s)=>{ for(let i=0;i<3;i++){ const x=(i-1)*s*0.2; c.beginPath(); c.moveTo(x,s*0.45); c.quadraticCurveTo(x+s*0.05,0,x+s*0.1,-s*0.4); c.strokeStyle='#8a6410'; c.lineWidth=1.6; c.stroke(); for(let k=0;k<6;k++) ell(c,x+s*0.06+k*s*0.007,-s*0.38+k*s*0.08,s*0.05,s*0.03,'#e8c45a','#8a6410',1); } },
+};
+const FN={roti:'Roti',paratha:'Paratha',makki:'Makki di roti',bhature:'Bhature',rice:'Rice',dal:'Dal',sambhar:'Sambhar',rasam:'Rasam',sabzi:'Sabzi',saag:'Sarson da saag',curd:'Curd',kheer:'Kheer',halwa:'Halwa',chhole:'Chhole',khichdi:'Khichdi',eromba:'Eromba',utti:'Utti',kangsoi:'Kangsoi',singju:'Singju',sprouts:'Sprouts',idli:'Idli',dosa:'Dosa',poha:'Poha',upma:'Upma',mudde:'Ragi mudde',milk:'Milk',lassi:'Lassi',chhach:'Buttermilk',water:'Water',soda:'Cola',tea:'Tea',coffee:'Coffee',banana:'Banana',apple:'Apple',mango:'Mango',orange:'Orange',lemon:'Lemon',guava:'Guava',amla:'Amla',papaya:'Papaya',pomegranate:'Pomegranate',carrot:'Carrot',potato:'Potato',cucumber:'Cucumber',tomato:'Tomato',beetroot:'Beetroot',spinach:'Spinach',bread:'Bread',chapati:'Chapati',butter:'Butter',ghee:'Ghee',coconut:'Coconut',peanuts:'Peanuts',chana:'Roasted chana',gram:'Boiled gram',soya:'Soya bean',peas:'Peas',egg:'Egg',paneer:'Paneer',fish:'Fish',chicken:'Chicken',mushroom:'Mushroom',laddoo:'Laddoo',chips:'Potato wafers',chanapack:'Roasted chana',candy:'Candy bar',oil:'Oil',almonds:'Almonds',salt:'Iodised salt',millet:'Millet'};
+function food(ctx,key,x,y,s,o){ const f=FD[key]; if(!f) return; o=o||{}; ctx.save(); ctx.translate(x,y); if(o.rot) ctx.rotate(o.rot); if(o.sx) ctx.scale(o.sx,o.sy||o.sx); if(o.alpha!==undefined) ctx.globalAlpha=clamp(o.alpha,0,1); ctx.lineJoin='round'; ctx.lineCap='round'; f(ctx,s,o); ctx.restore(); }
+/* per serving */
+const NUT={
+  roti:{g:40,C:20,P:3.5,F:1,fib:3,A:0,Cv:0,Ca:12,Fe:1.2,W:12}, paratha:{g:80,C:36,P:6,F:9,fib:5,A:30,Cv:0,Ca:25,Fe:2,W:20}, makki:{g:60,C:38,P:5,F:3,fib:4,A:10,Cv:0,Ca:8,Fe:1.3,W:15},
+  rice:{g:150,C:42,P:4,F:0.4,fib:0.6,A:0,Cv:0,Ca:15,Fe:0.3,W:100}, dal:{g:150,C:20,P:9,F:3,fib:5,A:15,Cv:2,Ca:30,Fe:2,W:110}, sambhar:{g:150,C:15,P:5,F:3,fib:4,A:150,Cv:10,Ca:40,Fe:1.5,W:120},
+  sabzi:{g:100,C:10,P:2.5,F:4.5,fib:3.5,A:300,Cv:15,Ca:40,Fe:1,W:80}, saag:{g:100,C:5,P:3,F:4,fib:3,A:450,Cv:10,Ca:100,Fe:2.5,W:85}, curd:{g:100,C:4.5,P:3.5,F:3.3,fib:0,A:30,Cv:0,Ca:120,Fe:0.1,W:85},
+  chhole:{g:150,C:30,P:10,F:6,fib:8,A:10,Cv:3,Ca:60,Fe:3,W:90}, khichdi:{g:200,C:40,P:9,F:4,fib:4,A:20,Cv:2,Ca:40,Fe:1.5,W:140}, sprouts:{g:100,C:6,P:3,F:0.2,fib:1.8,A:2,Cv:13,Ca:13,Fe:0.9,W:90},
+  idli:{g:80,C:23,P:3.5,F:0.4,fib:1.5,A:0,Cv:0,Ca:15,Fe:0.6,W:50}, dosa:{g:80,C:28,P:4,F:4,fib:1.5,A:0,Cv:0,Ca:15,Fe:0.8,W:40}, poha:{g:150,C:45,P:4,F:6,fib:2,A:20,Cv:5,Ca:20,Fe:3,W:80},
+  mudde:{g:150,C:48,P:5,F:1.3,fib:6,A:0,Cv:0,Ca:230,Fe:2.5,W:90}, milk:{g:200,C:9.5,P:6.5,F:7,fib:0,A:90,Cv:0,Ca:240,Fe:0.1,W:175}, chhach:{g:200,C:4.8,P:3.3,F:1,fib:0,A:15,Cv:0,Ca:115,Fe:0.1,W:190},
+  water:{g:250,C:0,P:0,F:0,fib:0,A:0,Cv:0,Ca:0,Fe:0,W:250}, soda:{g:300,C:32,P:0,F:0,fib:0,A:0,Cv:0,Ca:0,Fe:0,W:268}, tea:{g:150,C:8,P:1.5,F:2,fib:0,A:15,Cv:0,Ca:50,Fe:0.1,W:140},
+  banana:{g:100,C:23,P:1,F:0.3,fib:2.6,A:3,Cv:9,Ca:5,Fe:0.3,W:75}, apple:{g:150,C:21,P:0.4,F:0.2,fib:3.6,A:5,Cv:7,Ca:9,Fe:0.2,W:128}, orange:{g:130,C:15,P:1.2,F:0.2,fib:3,A:15,Cv:70,Ca:50,Fe:0.1,W:113},
+  guava:{g:100,C:14,P:2.5,F:1,fib:5.4,A:30,Cv:220,Ca:18,Fe:0.3,W:81}, mango:{g:150,C:22,P:1.2,F:0.6,fib:2.4,A:80,Cv:55,Ca:16,Fe:0.2,W:125}, papaya:{g:150,C:15,P:0.7,F:0.4,fib:2.5,A:70,Cv:90,Ca:30,Fe:0.4,W:132},
+  amla:{g:50,C:5,P:0.4,F:0.1,fib:2,A:5,Cv:300,Ca:25,Fe:0.6,W:40}, pomegranate:{g:100,C:19,P:1.7,F:1.2,fib:4,A:0,Cv:10,Ca:10,Fe:0.3,W:78}, carrot:{g:80,C:8,P:0.7,F:0.2,fib:2.2,A:670,Cv:5,Ca:26,Fe:0.2,W:70},
+  cucumber:{g:100,C:3.6,P:0.7,F:0.1,fib:0.5,A:5,Cv:3,Ca:16,Fe:0.3,W:95}, beetroot:{g:80,C:8,P:1.3,F:0.1,fib:2.2,A:2,Cv:4,Ca:13,Fe:0.6,W:70}, bread:{g:50,C:25,P:4.5,F:1.6,fib:1.4,A:0,Cv:0,Ca:75,Fe:1.8,W:18},
+  butter:{g:10,C:0,P:0.1,F:8.1,fib:0,A:68,Cv:0,Ca:2,Fe:0,W:1.6}, peanuts:{g:30,C:5,P:7.7,F:14.8,fib:2.5,A:0,Cv:0,Ca:28,Fe:1.4,W:2}, chana:{g:30,C:17.6,P:5.6,F:1.9,fib:5,A:3,Cv:0,Ca:20,Fe:1.6,W:2},
+  egg:{g:50,C:0.4,P:6.3,F:5,fib:0,A:80,Cv:0,Ca:28,Fe:0.9,W:38}, paneer:{g:50,C:1.5,P:9,F:10,fib:0,A:60,Cv:0,Ca:240,Fe:0.1,W:25}, fish:{g:100,C:2,P:20,F:7,fib:0,A:20,Cv:0,Ca:30,Fe:1,W:70},
+  chicken:{g:100,C:0,P:25,F:9,fib:0,A:15,Cv:0,Ca:15,Fe:1,W:65}, laddoo:{g:40,C:20,P:3.5,F:10,fib:1.5,A:10,Cv:0,Ca:15,Fe:1,W:2}, chips:{g:30,C:15.9,P:2.1,F:10.5,fib:1.4,A:0,Cv:2,Ca:7,Fe:0.4,W:1},
+  candy:{g:40,C:24,P:2.5,F:11,fib:1,A:5,Cv:0,Ca:50,Fe:0.6,W:1}, almonds:{g:20,C:4,P:4.2,F:10,fib:2.5,A:0,Cv:0,Ca:50,Fe:0.9,W:1}, spinach:{g:100,C:4,P:2.9,F:0.4,fib:2.2,A:470,Cv:28,Ca:99,Fe:2.7,W:91}
+};
+function kcalOf(n){ return 4*n.C+4*n.P+9*n.F; }
+/* per 100 g, for the three tests */
+const TEST={
+  potato:{st:15,ft:0.1,pr:2,wa:79}, cucumber:{st:0,ft:0.1,pr:0.7,wa:95}, rice:{st:26,ft:0.3,pr:2.7,wa:68}, gram:{st:15,ft:2.6,pr:8.9,wa:60},
+  peanuts:{st:2,ft:49,pr:26,wa:6}, bread:{st:45,ft:3.3,pr:9,wa:36}, butter:{st:0,ft:81,pr:0.9,wa:16}, coconut:{st:0,ft:33,pr:3.3,wa:47},
+  oil:{st:0,ft:100,pr:0,wa:0}, soya:{st:1,ft:20,pr:36,wa:10}, peas:{st:6,ft:0.4,pr:5.4,wa:79}
+};
+const TEST_KEYS=['potato','cucumber','rice','gram','peanuts','bread','butter','coconut','oil','soya','peas'];
+const TEST_NAME={potato:'Potato',cucumber:'Cucumber',rice:'Boiled rice',gram:'Boiled gram',peanuts:'Peanuts',bread:'Bread',butter:'Butter',coconut:'Coconut',oil:'Oil',soya:'Soya bean',peas:'Peas'};
+/* how strongly each test shows (0..1): iodine–starch blue-black, translucent oily patch, biuret violet */
+const showS=k=>1-Math.exp(-TEST[k].st/6), showF=k=>1-Math.exp(-TEST[k].ft/12), showP=k=>1-Math.exp(-TEST[k].pr/6);
+/* Table 3.3 — shared by 3.5, 3.6, 3.7 */
+const T33={}; TEST_KEYS.forEach(k=>T33[k]={ps:null,pf:null,pp:null,s:null,f:null,p:null});
+function t33Rows(col){ const yn=v=>v===null?'…':v?{t:'Yes',c:'r-ok'}:{t:'No',c:'r-bad'}, pn=v=>v===null?'—':v?'Yes':'No';
+  return TEST_KEYS.filter(k=>T33[k][col]!==null||T33[k]['p'+col]!==null).map(k=>[TEST_NAME[k],pn(T33[k]['p'+col]),yn(T33[k][col])]); }
+
+/* ---------------------------------------------------------------------
+   FRONT-VIEW PERSON — line drawn, for symptoms and diets
+   body(ctx,x,footY,H,o): o.age 0 child..1 adult, o.sex 'f'|'m', o.wide (1 = normal),
+   o.neck goitre swelling 0..1, o.bow bowed legs 0..1, o.feet swollen feet 0..1,
+   o.pale 0..1, o.breath 0..1 chest rise, o.mouth 'smile'|'open'|'flat'|'sad',
+   o.armL/armR angles from down (+ outward), o.legL/legR swing, o.eyes 0 shut..1, o.gums bleed 0..1
+   returns key points
+   --------------------------------------------------------------------- */
+function tube(ctx,pts,T,fill,col,lw){ ctx.save(); ctx.lineCap='round'; ctx.lineJoin='round'; ctx.beginPath(); pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1])); ctx.strokeStyle=col; ctx.lineWidth=T; ctx.stroke(); ctx.strokeStyle=fill; ctx.lineWidth=Math.max(0.5,T-2*lw); ctx.stroke(); ctx.restore(); }
+function body(ctx,x,fy,H,o){
+  o=o||{}; const W=o.wide||1, lw=Math.max(1.6,H*0.009), col=o.col||COL.ink;
+  const head=H*0.16, hy=fy-H+head*0.5, neckY=hy+head*0.48, shY=neckY+H*0.045, hipY=fy-H*0.46;
+  const shW=H*0.105*(o.sex==='f'?0.92:1), hipW=H*0.075*(o.sex==='f'?1.1:1)*lerp(1,W,0.8), belly=H*0.1*(W-1);
+  const skin=mixCol('#fbe3cf','#f1efe9',o.pale||0), cloth=o.shirt||'#eaf3fc', pants=o.pants||'#dfe6ef';
+  ctx.save(); ctx.lineCap='round'; ctx.lineJoin='round';
+  /* legs (bow = rickets) */
+  const LT=H*0.062*lerp(1,W,0.8);
+  const leg=(sd,sw)=>{ const hx=x+sd*hipW*0.5, ky=fy-H*0.24, kx=hx+sd*(o.bow||0)*H*0.075+sw*H*0.05, fx=x+sd*hipW*0.45+sw*H*0.11, fyy=fy-H*0.025;
+    tube(ctx,[[hx,hipY-H*0.02],[kx,ky],[fx,fyy]],LT,pants,col,lw);
+    const fw=H*0.04*(1+(o.feet||0)*0.7); ell(ctx,fx+sd*fw*0.35,fy-fw*0.38,fw,fw*0.42*(1+(o.feet||0)*0.5),o.feet>0.15?mixCol('#fbe3cf','#f2a493',o.feet):skin,col,lw); return [fx,fy]; };
+  const fL=leg(-1,o.legL||0), fR=leg(1,o.legR||0);
+  /* arms behind torso edge */
+  const AT=H*0.045*lerp(1,W,0.5);
+  const hr0=head*0.5, mouthY=hy+hr0*0.62;
+  const arm=(sd,a)=>{ const sx=x+sd*(shW-AT*0.35), sy=shY+AT*0.45, l1=H*0.15, l2=H*0.14; let ex=sx+Math.sin(a)*sd*l1, ey=sy+Math.cos(a)*l1, a2=a*(o.bend||1.15), hx=ex+Math.sin(a2)*sd*l2, hy2=ey+Math.cos(a2)*l2;
+    const u=sd<0?o.reachL:o.reachR;
+    if(u>0.001){ /* two-segment IK: hand goes from rest toward the mouth */
+      const tx=lerp(hx,x+sd*hr0*0.35,u), ty=lerp(hy2,mouthY,u), dxx=tx-sx, dyy=ty-sy, d=Math.min(Math.hypot(dxx,dyy),(l1+l2)*0.999), th=Math.atan2(dyy,dxx), al=Math.acos(clamp((l1*l1+d*d-l2*l2)/(2*l1*d),-1,1));
+      const c1=[sx+Math.cos(th+al)*l1,sy+Math.sin(th+al)*l1], c2=[sx+Math.cos(th-al)*l1,sy+Math.sin(th-al)*l1], e=(c1[1]>c2[1])?c1:c2;
+      ex=e[0]; ey=e[1]; hx=sx+Math.cos(th)*d; hy2=sy+Math.sin(th)*d; }
+    tube(ctx,[[sx,sy],[ex,ey]],AT,cloth,col,lw); tube(ctx,[[ex,ey],[hx,hy2]],AT*0.85,skin,col,lw); ell(ctx,hx,hy2,AT*0.55,AT*0.55,skin,col,lw); return [hx,hy2]; };
+  const rL=o.reachL>0.001, rR=o.reachR>0.001;
+  let hL=rL?null:arm(-1,o.armL===undefined?0.12:o.armL), hR=rR?null:arm(1,o.armR===undefined?0.12:o.armR);
+  /* torso with breathing and belly */
+  const br=(o.breath||0)*H*0.012;
+  ctx.beginPath(); ctx.moveTo(x-H*0.03,neckY+H*0.01);
+  ctx.quadraticCurveTo(x-shW,shY-H*0.005,x-shW-br,shY+H*0.06);
+  ctx.quadraticCurveTo(x-shW-belly*1.1,(shY+hipY)/2+H*0.06,x-hipW-belly*0.4,hipY);
+  ctx.lineTo(x+hipW+belly*0.4,hipY);
+  ctx.quadraticCurveTo(x+shW+belly*1.1,(shY+hipY)/2+H*0.06,x+shW+br,shY+H*0.06);
+  ctx.quadraticCurveTo(x+shW,shY-H*0.005,x+H*0.03,neckY+H*0.01); ctx.closePath();
+  ctx.fillStyle=cloth; ctx.fill(); ctx.strokeStyle=col; ctx.lineWidth=lw; ctx.stroke();
+  line(ctx,x-hipW-belly*0.4,hipY-H*0.035,x+hipW+belly*0.4,hipY-H*0.035,col,lw*0.8);
+  /* a reaching arm crosses in front of the body */
+  if(rL) hL=arm(-1,o.armL===undefined?0.12:o.armL); if(rR) hR=arm(1,o.armR===undefined?0.12:o.armR);
+  /* neck + goitre */
+  ctx.beginPath(); ctx.rect(x-H*0.024,neckY-H*0.02,H*0.048,H*0.04); ctx.fillStyle=skin; ctx.fill(); line(ctx,x-H*0.024,neckY-H*0.02,x-H*0.024,neckY+H*0.02,col,lw); line(ctx,x+H*0.024,neckY-H*0.02,x+H*0.024,neckY+H*0.02,col,lw);
+  if(o.neck>0.02){ const g=o.neck; ell(ctx,x,neckY+H*0.01,H*0.03*(0.8+g*0.9),H*0.02*(0.7+g*0.9),'#f6c3ae',COL.red,lw); }
+  /* head */
+  const hr=head*0.5;
+  ell(ctx,x,hy,hr*0.86*lerp(1,W,0.25),hr,skin,col,lw);
+  if(o.hair!==false){ const hc=o.hairCol||'#3b2a14'; ctx.beginPath(); ctx.ellipse(x,hy,hr*0.9*lerp(1,W,0.25),hr*1.04,0,Math.PI*1.02,Math.PI*1.98); ctx.quadraticCurveTo(x,hy-hr*0.55,x-hr*0.88,hy-hr*0.1); ctx.fillStyle=hc; ctx.fill();
+    if(o.sex==='f'){ tube(ctx,[[x-hr*0.86,hy-hr*0.2],[x-hr*0.92,hy+hr*0.8]],hr*0.22,hc,hc,0.5); tube(ctx,[[x+hr*0.86,hy-hr*0.2],[x+hr*0.92,hy+hr*0.8]],hr*0.22,hc,hc,0.5); } }
+  const ey=hy+hr*0.02, eo=o.eyes===undefined?1:o.eyes;
+  for(const sd of [-1,1]){ const exx=x+sd*hr*0.34; if(eo>0.3) ell(ctx,exx,ey,hr*0.08,hr*0.1*eo,col); else line(ctx,exx-hr*0.1,ey,exx+hr*0.1,ey,col,lw*0.8); }
+  const my=hy+hr*0.48, m=o.mouth||'smile'; ctx.lineWidth=lw*0.9; ctx.strokeStyle=col; ctx.beginPath();
+  if(m==='smile'){ ctx.moveTo(x-hr*0.24,my-hr*0.04); ctx.quadraticCurveTo(x,my+hr*0.16,x+hr*0.24,my-hr*0.04); ctx.stroke(); }
+  else if(m==='sad'){ ctx.moveTo(x-hr*0.22,my+hr*0.06); ctx.quadraticCurveTo(x,my-hr*0.1,x+hr*0.22,my+hr*0.06); ctx.stroke(); }
+  else if(m==='open'){ ell(ctx,x,my,hr*0.17,hr*0.1*(0.7+(o.breath||0)*0.8),'#8a2f2f',col,lw*0.8); }
+  else { ctx.moveTo(x-hr*0.2,my); ctx.lineTo(x+hr*0.2,my); ctx.stroke(); }
+  ctx.restore();
+  return {head:[x,hy],headR:hr,neck:[x,neckY+H*0.01],chest:[x,(shY+hipY)/2],shY,hipY,handL:hL,handR:hR,footL:fL,footR:fR,mouth:[x,my],eyeY:ey,knee:fy-H*0.24};
+}
+/* colour parser that also accepts rgb()/rgba() strings, so mixed colours can be mixed again */
+function hexRgb(h){ if(h[0]==='#'){ const n=parseInt(h.slice(1),16); return [n>>16&255, n>>8&255, n&255]; } const m=String(h).match(/[\d.]+/g)||[0,0,0]; return m.slice(0,3).map(Number); }
+
+/* =====================================================================
+   3.1  LET US RECORD — food items over a week (Table 3.1)
+   Each food is tossed from the kitchen hatch to its plate on a real
+   ballistic arc (g = 900 px/s², flight time 0.55–0.8 s), lands with a
+   squash-and-settle spring and makes the plate wobble (damped rotation).
+   "Compare with a friend" sends every distinct food into a Venn diagram
+   (me only · both · friend only) on spring paths.
+   WEEK is shared with 3.8 (is my diet balanced?).
+   ===================================================================== */
+const DAYS=['Mon','Tue','Wed','Thu','Fri','Sat','Sun'], MEALS=['Breakfast','Lunch','Dinner'];
+const WEEK=DAYS.map(()=>MEALS.map(()=>[]));
+const WEEK_TPL=[[['poha','tea'],['roti','dal','sabzi'],['rice','dal','curd']],[['paratha','curd'],['rice','sambhar','sabzi'],['roti','chhole']],[['idli','sambhar'],['roti','dal','sabzi'],['khichdi','curd']],
+  [['bread','egg','milk'],['rice','dal','sabzi'],['roti','sabzi','dal']],[['dosa','chhach'],['roti','chhole','curd'],['rice','fish']],[['poha','banana'],['rice','dal'],['roti','paneer']],[['paratha','milk'],['rice','chhole'],['khichdi']]];
+const FRIENDS=[{n:'Aman',foods:['paratha','lassi','makki','saag','chhole','roti','dal','curd','kheer','milk','rice','sabzi']},{n:'Meera',foods:['idli','dosa','sambhar','rice','rasam','mudde','coffee','chhach','curd','banana','dal','poha']}];
+function buildA1(){ return buildScene(wrap=>{
+  const S={q:'What do I eat in a week — the same food every meal, or different?'};
+  const CH=['roti','rice','dal','sabzi','paratha','poha','idli','dosa','sambhar','chhole','khichdi','curd','milk','tea','egg','fish','paneer','banana','apple','bread'];
+  let day=0, meal=0, friend=-1, auto=null, autoT=0, shake=0;
+  const G=900, items=[], wob=DAYS.map(()=>MEALS.map(()=>spr(0))), venn=[];
+  const X0=150, CW=132, Y0=96, RH=60, HX=330, HY=40;  /* grid + kitchen hatch */
+  const cell=(d,m)=>[X0+m*CW, Y0+d*RH+26];
+  const slotPos=(d,m,i,n)=>{ const [cx,cy]=cell(d,m); return [cx+(i-(n-1)/2)*30, cy-6]; };
+  /* rebuild WEEK from the items list (items with ph 'leave' are gone) */
+  function sync(){ WEEK.forEach(r=>r.forEach(c=>c.length=0)); items.filter(it=>it.ph!=='leave').forEach(it=>WEEK[it.d][it.m].push(it.k)); }
+  function toss(k,d,m){
+    const n=items.filter(it=>it.d===d&&it.m===m&&it.ph!=='leave').length; if(n>=3){ shake=1; return; }
+    const it={k,d,m,ph:'fly',x:HX,y:HY,vx:0,vy:0,t:0,T:0.55+0.04*Math.abs(m-1)+0.03*d,sq:spr(1),tx:0,ty:0};
+    const [tx,ty]=slotPos(d,m,n,n+1); it.tx=tx; it.ty=ty; it.vx=(tx-HX)/it.T; it.vy=(ty-HY-0.5*G*it.T*it.T)/it.T; it.x0=HX; it.y0=HY;
+    items.push(it); sync(); }
+  function remove(k,d,m){ const it=items.find(i=>i.d===d&&i.m===m&&i.k===k&&i.ph!=='leave'); if(!it) return;
+    it.ph='leave'; it.t=0; it.x0=it.x; it.y0=it.y; it.T=0.6; it.vx=(HX-it.x)/it.T; it.vy=(HY-it.y-0.5*G*it.T*it.T)/it.T; sync(); }
+  S.html=`
+    <div class="control-group"><label>Day</label>${chipList('dC',DAYS,0)}</div>
+    <div class="control-group"><label>Meal</label>${chipList('mC',MEALS,0)}</div>
+    <div class="control-group"><label>Tap a food to put it on the plate (again to take it off)</label>${chipList('fC',CH.map(k=>FN[k]),-1)}</div>
+    <div class="control-group"><div class="toggle-group"><button class="toggle-btn play" id="aB">🍽 Fill a typical week</button><button class="toggle-btn" id="xB">✕ Clear</button></div>
+      <div class="toggle-group"><button class="toggle-btn" id="f0">Compare with Aman</button><button class="toggle-btn" id="f1">Compare with Meera</button></div></div>`;
+  S.cards=card('cM','Meals recorded')+card('cV','Different foods',COL.green)+card('cS','Same food every meal?')+card('cF','Common with friend',COL.blue);
+  let fbs=[];
+  S.wire=$=>{
+    const ds=wireChips(wrap,'dC',i=>{ day=i; }), ms=wireChips(wrap,'mC',i=>{ meal=i; });
+    fbs=wireChips(wrap,'fC',i=>{ const k=CH[i]; if(WEEK[day][meal].includes(k)) remove(k,day,meal); else toss(k,day,meal); });
+    S._ds=ds; S._ms=ms;
+    $('#aB').onclick=()=>{ auto=[]; WEEK_TPL.forEach((r,d)=>r.forEach((c,m)=>c.forEach(k=>{ if(!WEEK[d][m].includes(k)) auto.push([k,d,m]); }))); autoT=0; };
+    $('#xB').onclick=()=>{ items.slice().forEach(it=>{ if(it.ph!=='leave') remove(it.k,it.d,it.m); }); friend=-1; venn.length=0; auto=null; };
+    [0,1].forEach(f=>$('#f'+f).onclick=()=>{ friend=f; buildVenn(); });
+  };
+  /* Venn: me-only (left lobe), both (middle), friend-only (right lobe) */
+  const VX=655, VY=330, VR=95;
+  function buildVenn(){
+    const mine=[...new Set(items.filter(i=>i.ph!=='leave').map(i=>i.k))], fr=FRIENDS[friend].foods;
+    const groups={L:mine.filter(k=>!fr.includes(k)),M:mine.filter(k=>fr.includes(k)),R:fr.filter(k=>!mine.includes(k))};
+    const old=new Map(venn.map(v=>[v.k,v])); venn.length=0;
+    const place=(list,cx,cols)=>list.forEach((k,i)=>{ const r=Math.floor(i/cols), c=i%cols, n=Math.min(cols,list.length-r*cols);
+      const tx=cx+(c-(n-1)/2)*28, ty=VY-72+r*28; const o=old.get(k);
+      const src=items.find(it=>it.k===k&&it.ph!=='leave');
+      venn.push({k,g:'',x:o?o.x:spr(src?src.x:800),y:o?o.y:spr(src?src.y:VY),tx,ty}); });
+    place(groups.L,VX-78,2); place(groups.M,VX,2); place(groups.R,VX+78,2);
+    venn.forEach(v=>v.g=groups.M.includes(v.k)?'M':groups.L.includes(v.k)?'L':'R');
+  }
+  S.tick=(dt,ctx,t,$)=>{
+    /* auto-fill: one toss every 0.12 s */
+    if(auto&&auto.length){ autoT+=dt; while(autoT>0.12&&auto.length){ autoT-=0.12; const [k,d,m]=auto.shift(); toss(k,d,m); } } else auto=null;
+    shake=Math.max(0,shake-dt*2.5);
+    /* kitchen hatch */
+    ctx.save(); rrect(ctx,HX-60,HY-28,120,40,8); ctx.fillStyle='#fdf6e7'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+    textAt(ctx,'KITCHEN',HX,HY-2,{align:'center',size:12,weight:700,color:COL.yellow}); steam(ctx,HX+40,HY-22,30,0.7,t);
+    /* grid */
+    MEALS.forEach((m,j)=>textAt(ctx,m,X0+j*CW,Y0-8,{align:'center',size:12,weight:700,color:j===meal?COL.yellow:COL.muted}));
+    DAYS.forEach((d,i)=>{ textAt(ctx,d,52,Y0+i*RH+32,{align:'center',size:13,weight:700,color:i===day?COL.yellow:COL.ink});
+      if(i) line(ctx,30,Y0+i*RH-4,X0+2*CW+66,Y0+i*RH-4,'#e6edf5',1); });
+    for(let d=0;d<7;d++) for(let m=0;m<3;m++){ const [cx,cy]=cell(d,m), w=wob[d][m]; springTo(w,0,160,5,dt);
+      const sel=d===day&&m===meal;
+      ctx.save(); ctx.translate(cx,cy); ctx.rotate(w.x*0.08+(sel?Math.sin(t*40)*shake*0.04:0));
+      ell(ctx,0,6,56,15,sel?'#fff8e1':'#fff',sel?COL.yellow:COL.ink,sel?2.6:1.6); ell(ctx,0,6,40,9,null,'#dbe4f0',1); ctx.restore(); }
+    /* items */
+    for(let i=items.length-1;i>=0;i--){ const it=items[i];
+      if(it.ph==='fly'||it.ph==='leave'){ it.t+=dt; const tt=Math.min(it.t,it.T); it.x=it.x0+it.vx*tt; it.y=it.y0+it.vy*tt+0.5*G*tt*tt;
+        if(it.t>=it.T){ if(it.ph==='leave'){ items.splice(i,1); continue; } it.ph='sit'; it.sq.x=0.55; it.sq.v=0; wob[it.d][it.m].v+=(Math.random()<0.5?-1:1)*6; } }
+      else { const sib=items.filter(o=>o.d===it.d&&o.m===it.m&&o.ph!=='leave'), n=sib.length, idx=sib.indexOf(it); const [tx,ty]=slotPos(it.d,it.m,idx,n);
+        it.x=approach(it.x,tx,12,dt); it.y=approach(it.y,ty,12,dt); springTo(it.sq,1,260,9,dt); } }
+    items.forEach(it=>{ const sq=it.ph==='sit'?it.sq.x:1, rot=it.ph==='sit'?0:it.t*7;
+      if(it.ph!=='sit'){ ctx.save(); ctx.globalAlpha=0.25; ell(ctx,it.x,Math.max(it.y,it.ty||it.y)+14,10,3,COL.mid); ctx.restore(); }
+      food(ctx,it.k,it.x,it.y+ (1-sq)*8,28,{rot,sx:1/Math.sqrt(Math.max(0.3,sq)),sy:sq}); });
+    /* Venn */
+    ctx.save(); ctx.globalAlpha=0.9;
+    circ(ctx,VX-45,VY,VR,COL.yellow,'rgba(217,160,23,0.06)',2.4); circ(ctx,VX+45,VY,VR,COL.blue,'rgba(47,143,224,0.06)',2.4); ctx.restore();
+    textAt(ctx,'Me',VX-95,VY-VR-10,{align:'center',size:13,weight:700,color:COL.yellow});
+    textAt(ctx,friend>=0?FRIENDS[friend].n:'Friend',VX+95,VY-VR-10,{align:'center',size:13,weight:700,color:COL.blue});
+    textAt(ctx,'both',VX,VY+VR+16,{align:'center',size:11,weight:700,color:COL.green});
+    if(friend<0) textAt(ctx,'compare with a friend →',VX,VY+4,{align:'center',size:12,weight:600,color:COL.mid});
+    venn.forEach(v=>{ springTo(v.x,v.tx,70,10,dt); springTo(v.y,v.ty,70,10,dt); food(ctx,v.k,v.x.x,v.y.x,24); if(v.g==='M') circ(ctx,v.x.x,v.y.x,15,COL.green,null,1.6); });
+    /* variety bar: kinds of food per day */
+    const kinds=new Set(), perDay=WEEK.map(r=>new Set(r.flat()).size); WEEK.forEach(r=>r.forEach(c=>c.forEach(k=>kinds.add(k))));
+    textAt(ctx,'different foods each day',VX,108,{align:'center',size:11,weight:700,color:COL.muted});
+    perDay.forEach((n,i)=>{ const bx=VX-84+i*24, hgt=n*9; ctx.save(); ctx.fillStyle=i===day?COL.yellow:'rgba(31,157,85,0.7)'; ctx.fillRect(bx,200-hgt,16,hgt); ctx.restore(); textAt(ctx,DAYS[i][0],bx+8,214,{align:'center',size:10,color:COL.muted}); });
+    line(ctx,VX-90,200,VX+90,200,COL.ink,1.4);
+    /* readouts */
+    const meals=WEEK.flat().filter(c=>c.length).length, sigs=new Set(WEEK.flat().filter(c=>c.length).map(c=>c.slice().sort().join('+')));
+    const same=meals>1?(sigs.size===1?'Yes':'No — it varies'):'—';
+    setv($,'cM',meals+' / 21'); setv($,'cV',String(kinds.size)); setv($,'cS',same);
+    const common=friend>=0?venn.filter(v=>v.g==='M').map(v=>FN[v.k]):[]; setv($,'cF',friend>=0?common.length+' foods':'—');
+    fbs.forEach((b,i)=>b.classList.toggle('active',WEEK[day][meal].includes(CH[i])));
+    if(S._ds){ setActive(S._ds,day); setActive(S._ms,meal); }
+    S.st={meals,kinds:kinds.size,same:sigs.size===1,friend,common:common.length};
+    if(friend>=0&&venn.length&&Math.abs(venn.filter(v=>v.g!=='R').length-new Set(items.filter(i=>i.ph!=='leave').map(i=>i.k)).size)>0) buildVenn();
+  };
+  S.found=()=>S.st&&S.st.meals>=14&&S.st.kinds>=6&&S.st.friend>=0?'Our food varies from meal to meal and day to day — and from friend to friend':'';
+  S.fb=()=>{ const s=S.st||{meals:0};
+    if(s.meals<14) return ['warn','Record at least 14 meals ('+s.meals+' so far).'];
+    if(s.friend<0) return ['warn','Now compare with a friend.'];
+    return ['ok','✓ '+s.common+' foods in common, many different.']; };
+  return S;
+}); }
+
+/* =====================================================================
+   3.2  LET US EXPLORE — food in different regions (Table 3.2)
+   Each crop's suitability = Gaussian in log(rainfall) × Gaussian in mean
+   temperature (rough agronomic optima, e.g. rice ≈ 1800 mm / 26 °C,
+   wheat ≈ 650 mm / 23 °C, millet ≈ 700 mm / 29 °C). A crop "is grown"
+   when suitability > 0.5. Choosing a state springs the two sliders to
+   its climate and replays a growing season (logistic growth, ≈ 4 s);
+   raindrops fall at a density ∝ rainfall, plants sway at a natural
+   frequency ∝ 1/√height. "Harvest & cook" throws grain on ballistic
+   arcs into the pot, then the state's traditional dishes pop onto the
+   thali. Crops/dishes for Punjab, Karnataka, Manipur follow Table 3.2.
+   ===================================================================== */
+const CROPS={
+  wheat:{n:'Wheat',r:650,sr:0.4,T:23,sT:3.5,h:95,c:'#d9a017'}, rice:{n:'Rice',r:1800,sr:0.45,T:26,sT:5,h:85,c:'#e9d9a0'},
+  maize:{n:'Maize',r:800,sr:0.4,T:25,sT:4,h:150,c:'#f2c64a'}, millet:{n:'Millet (ragi/bajra)',r:700,sr:0.6,T:29,sT:4,h:135,c:'#a8743f'},
+  pulses:{n:'Pulses (gram, urad)',r:600,sr:0.6,T:25,sT:5,h:60,c:'#c98a4b'}, mustard:{n:'Mustard',r:500,sr:0.45,T:24,sT:4.5,h:110,c:'#ffd43b'},
+  soya:{n:'Soya bean',r:1100,sr:0.5,T:22,sT:3,h:70,c:'#f3dd9a'}, coconut:{n:'Coconut',r:2000,sr:0.6,T:27.5,sT:2.5,h:215,c:'#8a5a3b'},
+  bamboo:{n:'Bamboo',r:2000,sr:0.5,T:22,sT:5,h:160,c:'#9cc56a'}};
+const CROP_KEYS=Object.keys(CROPS);
+const suitOf=(k,rain,T)=>{ const c=CROPS[k], a=Math.log(rain/c.r)/c.sr, b=(T-c.T)/c.sT; return Math.exp(-0.5*a*a)*Math.exp(-0.5*b*b); };
+const STATES=[
+  {n:'Punjab',lon:75.4,lat:30.9,rain:650,T:24,food:['makki','saag','chhole','bhature','paratha','halwa','kheer'],drink:['lassi','chhach','milk','tea']},
+  {n:'Karnataka',lon:76,lat:14.5,rain:1150,T:26,food:['idli','dosa','sambhar','mudde','rasam','rice'],drink:['chhach','coffee','tea']},
+  {n:'Manipur',lon:93.9,lat:24.7,rain:1450,T:21,food:['rice','eromba','utti','singju','kangsoi'],drink:['tea']},
+  {n:'Kerala',lon:76.3,lat:10.3,rain:3000,T:27,food:['rice','fish','sambhar','banana','coconut'],drink:['tea','coffee']},
+  {n:'Rajasthan',lon:73.5,lat:26.5,rain:400,T:28,food:['roti','dal','khichdi','laddoo'],drink:['chhach','milk','tea']},
+  {n:'West Bengal',lon:87.9,lat:23,rain:1750,T:27,food:['rice','fish','dal','sabzi','kheer'],drink:['tea']}];
+const DISH_LOCAL={wheat:'roti',rice:'rice',maize:'makki',millet:'mudde',pulses:'dal',mustard:'saag',soya:'sprouts',coconut:'coconut',bamboo:'kangsoi'};
+const INDIA=[[75.5,37],[77.8,35.5],[79.5,32.5],[81,30.2],[84,28.4],[88.1,27.9],[89.8,26.7],[92,26.9],[95.5,28.2],[97,27.5],[95,26.5],[94.5,25],[93.5,23.8],[92.5,22],[91.9,23.6],[91.3,24.2],[90,25.2],[88.5,26.3],[88.2,25],[88.8,24.2],[89,22],[87,21.5],[86.7,20.3],[85,19.4],[83.5,18],[82.2,16.6],[80.3,15.5],[80.2,13.2],[79.8,11.2],[79.4,10.3],[78.3,8.9],[77.5,8.1],[76.6,8.9],[76.2,10.2],[75.3,12.3],[74.6,13.8],[73.9,15.5],[73.3,17.3],[72.8,19.2],[72.8,20.8],[72.1,21.2],[70.8,20.7],[69,22.3],[70.2,23],[68.6,23.6],[69.6,24.3],[71.1,25.4],[70.4,25.7],[69.6,27.2],[70.6,28],[72,28.7],[73.4,29.9],[74.6,31],[74.8,32.5],[73.8,34.6],[74.5,35]];
+function drawCrop(ctx,k,x,gy,h,hl,t,sw){
+  if(h<0.02) return; const c=CROPS[k], H=c.h*h, green=mixCol('#2f8f3a','#b08a4a',1-hl), lw=1.8, droop=(1-hl)*0.9;
+  ctx.save(); ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle=green; ctx.lineWidth=lw;
+  const stalk=(dx,hh,a)=>{ const tx=x+dx+Math.sin(a+sw)*hh, ty=gy-Math.cos(a+sw)*hh; ctx.beginPath(); ctx.moveTo(x+dx,gy); ctx.quadraticCurveTo(x+dx+Math.sin(a+sw*0.4)*hh*0.5,gy-hh*0.55,tx,ty); ctx.stroke(); return [tx,ty]; };
+  const lf=(px,py,l,a)=>{ ctx.save(); ctx.translate(px,py); ctx.rotate(a); ctx.beginPath(); ctx.moveTo(0,0); ctx.quadraticCurveTo(l*0.5,-l*0.16,l,l*0.12+droop*l*0.5); ctx.quadraticCurveTo(l*0.5,l*0.1,0,0); ctx.fillStyle=mixCol('#cfeec0','#eadcb8',1-hl); ctx.fill(); ctx.stroke(); ctx.restore(); };
+  if(k==='wheat'||k==='rice'){ for(let i=-2;i<=2;i++){ const p=stalk(i*4,H*(1-Math.abs(i)*0.08),i*0.12);
+      if(k==='wheat'){ ctx.save(); ctx.translate(p[0],p[1]); ctx.rotate(i*0.12+sw); for(let j=0;j<5;j++){ ell(ctx,-2.5,-j*4.2,2.4,3.2,h>0.6?c.c:'#bfe3a2',null); ell(ctx,2.5,-j*4.2-2,2.4,3.2,h>0.6?c.c:'#bfe3a2',null); } ctx.restore(); }
+      else { ctx.beginPath(); ctx.moveTo(p[0],p[1]); ctx.quadraticCurveTo(p[0]+8+sw*10,p[1]-4,p[0]+12+sw*10,p[1]+12+droop*6); ctx.strokeStyle=h>0.6?'#c9a93a':green; ctx.stroke(); for(let j=1;j<5;j++) ell(ctx,p[0]+j*3+sw*8,p[1]-3+j*3,1.6,2.4,h>0.6?'#e9d9a0':'#cfeec0',null); ctx.strokeStyle=green; }
+      if(i%2===0) lf(x+i*4,gy-H*0.3,H*0.4,-1.2+i*0.5); } }
+  else if(k==='maize'||k==='millet'){ const p=stalk(0,H,0); ctx.lineWidth=3; stalk(0,H,0); ctx.lineWidth=lw;
+    for(let j=1;j<5;j++){ const yy=gy-H*j/5.5, xx=x+Math.sin(sw)*H*j/5.5; lf(xx,yy,H*0.32,(j%2?-1:1)*0.5+(j%2?Math.PI:0)*1); }
+    if(k==='maize'){ if(h>0.55){ ctx.save(); ctx.translate(x+Math.sin(sw)*H*0.45+5,gy-H*0.45); ctx.rotate(0.35); ell(ctx,0,0,4.5,13,c.c,'#b3860f',1.4); ctx.restore(); } for(let j=0;j<4;j++) line(ctx,p[0],p[1],p[0]+(j-1.5)*4,p[1]-9,'#c9a93a',1.4); }
+    else if(h>0.5){ ctx.save(); ctx.translate(p[0],p[1]); ctx.rotate(sw); rrect(ctx,-4,-28,8,30,4); ctx.fillStyle=c.c; ctx.fill(); ctx.strokeStyle='#6a4520'; ctx.lineWidth=1.2; ctx.stroke(); ctx.restore(); } }
+  else if(k==='pulses'||k==='soya'){ for(let i=-3;i<=3;i++){ const p=stalk(i*2,H*(0.7+0.3*Math.cos(i*0.5)),i*0.28); lf(p[0],p[1],10,-Math.PI/2+i*0.5);
+      if(h>0.6&&i%2) ell(ctx,p[0]+3,p[1]+10,k==='soya'?3:4,k==='soya'?7:5,k==='soya'?'#b9d98a':'#9ccf6a',green,1); } }
+  else if(k==='mustard'){ for(let i=-2;i<=2;i++){ const p=stalk(i*3,H*(1-Math.abs(i)*0.1),i*0.15); if(i%2===0) lf(x+i*3,gy-H*0.25,H*0.3,-2.2+i*0.6);
+      if(h>0.5) for(let j=0;j<4;j++) ell(ctx,p[0]+Math.cos(j*1.6)*4,p[1]+Math.sin(j*1.6)*3,2.6,2.6,'#ffd43b','#b3a10f',0.8); } }
+  else if(k==='coconut'){ ctx.lineWidth=5; ctx.strokeStyle=mixCol('#8a6a4a','#b09a7a',1-hl); const p=stalk(0,H,0.12); ctx.lineWidth=lw; ctx.strokeStyle=green;
+    for(let j=0;j<7;j++){ const a=-Math.PI+j*Math.PI/6+sw*1.5; ctx.beginPath(); ctx.moveTo(p[0],p[1]); const L=34*Math.min(1,h*1.4); ctx.quadraticCurveTo(p[0]+Math.cos(a)*L*0.6,p[1]+Math.sin(a)*L*0.6-12,p[0]+Math.cos(a)*L,p[1]+Math.sin(a)*L*0.4+8+droop*20); ctx.lineWidth=2.4; ctx.stroke(); }
+    if(h>0.6) for(let j=0;j<3;j++) ell(ctx,p[0]-5+j*5,p[1]+6,4,4,'#7a5a2a','#4a3010',1); }
+  else if(k==='bamboo'){ for(let i=-1;i<=1;i++){ ctx.lineWidth=3.2; const p=stalk(i*6,H*(1-Math.abs(i)*0.15),i*0.06); ctx.lineWidth=1.2;
+      for(let j=1;j<7;j++){ const yy=gy-H*(1-Math.abs(i)*0.15)*j/7, xx=x+i*6+Math.sin(i*0.06+sw)*(gy-yy); line(ctx,xx-3,yy,xx+3,yy,green,1.2); if(j>3) lf(xx,yy,12,j%2?-0.4:-2.7); } } }
+  ctx.restore();
+}
+function buildA2(){ return buildScene(wrap=>{
+  const S={q:'Why is traditional food different in different states?'};
+  let st=0, rain=spr(650), temp=spr(24), tRain=650, tTemp=24, season=0, cook=0, cooked=false, custom=false;
+  const grow=CROP_KEYS.map(()=>({h:0,sw:spr(0)})), grains=[], dishes=[], drops=[], visited=new Map();
+  const MX=18, MY=62, MK=7.6, mp=(lon,lat)=>[MX+(lon-68)*MK, MY+(37-lat)*MK*1.05];
+  const GY=300, FX=292, FP=57, POT=[340,438], THALI=[600,452];
+  S.html=`
+    <div class="control-group"><label>Choose a state</label>${chipList('sC',STATES.map(s=>s.n),0)}</div>
+    ${slider('rR','Rainfall (mm / year)',200,3500,10,650)}
+    ${slider('tR','Average temperature (°C)',10,32,0.5,24)}
+    <div class="control-group"><div class="toggle-group"><button class="toggle-btn play" id="hB">🌾 Harvest &amp; cook</button><button class="toggle-btn" id="gB">↻ Grow again</button></div></div>`;
+  S.cards=card('cG','Crops that grow here',COL.green)+card('cC','Food common to visited states',COL.blue);
+  S.tail=`<div class="control-group"><label>Table 3.2 · Traditional food</label>${logTable('tL',['State','Crops','Food','Drinks'])}</div>`;
+  let sBs=[];
+  function pickState(i){ st=i; custom=false; tRain=STATES[i].rain; tTemp=STATES[i].T; season=0; cook=0; cooked=false; dishes.length=0; grains.length=0; grow.forEach(g=>g.h=0); }
+  S.wire=$=>{
+    sBs=wireChips(wrap,'sC',pickState);
+    const rr=$('#rR'), tr=$('#tR');
+    rr.oninput=()=>{ tRain=+rr.value; custom=true; cooked=false; dishes.length=0; setActive(sBs,-1); };
+    tr.oninput=()=>{ tTemp=+tr.value; custom=true; cooked=false; dishes.length=0; setActive(sBs,-1); };
+    $('#hB').onclick=()=>{ if(season<0.8||cook>0) return; cook=0.001; dishes.length=0; cooked=false;
+      CROP_KEYS.forEach((k,i)=>{ if(suitOf(k,rain.x,temp.x)<0.5) return; const x0=FX+i*FP, y0=GY-CROPS[k].h*grow[i].h*0.85;
+        for(let j=0;j<7;j++){ const T=0.7+j*0.05+Math.random()*0.15, tx=POT[0]+(Math.random()-0.5)*40, ty=POT[1]-30; grains.push({x0,y0,vx:(tx-x0)/T,vy:(ty-y0-0.5*900*T*T)/T,t:-j*0.06-i*0.05,T,c:CROPS[k].c}); } }); };
+    $('#gB').onclick=()=>{ season=0; cook=0; cooked=false; dishes.length=0; grow.forEach(g=>g.h=0); };
+  };
+  S.tick=(dt,ctx,t,$)=>{
+    springTo(rain,tRain,30,9,dt); springTo(temp,tTemp,30,9,dt); rain.x=clamp(rain.x,150,4000);
+    if(!custom){ $('#rR').value=rain.x; $('#tR').value=temp.x; }
+    season=Math.min(1,season+dt*0.25);
+    const suit=CROP_KEYS.map(k=>suitOf(k,rain.x,temp.x)), grown=CROP_KEYS.filter((k,i)=>suit[i]>=0.5);
+    /* ---- map ---- */
+    ctx.save(); ctx.beginPath(); INDIA.forEach((p,i)=>{ const q=mp(p[0],p[1]); i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]); }); ctx.closePath(); ctx.fillStyle='#f7f9fc'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=1.8; ctx.stroke(); ctx.restore();
+    textAt(ctx,'INDIA',mp(79,20)[0],mp(79,20)[1],{align:'center',size:11,weight:700,color:COL.mid});
+    STATES.forEach((s,i)=>{ const [x,y]=mp(s.lon,s.lat), on=i===st&&!custom, seen=visited.has(s.n);
+      if(on){ const r=8+3*Math.sin(t*4); circ(ctx,x,y,r+6,COL.yellow,null,1.5); }
+      circ(ctx,x,y,5,on?COL.yellow:seen?COL.green:COL.ink,on?COL.yellow:seen?COL.green:'#fff',2);
+      textAt(ctx,s.n,x+(s.lon>85?-8:9),y+4,{align:s.lon>85?'right':'left',size:10.5,weight:on?700:500,color:on?COL.ink:COL.muted}); });
+    /* ---- field: sky, sun, cloud, rain ---- */
+    const wet=clamp((Math.log(rain.x)-Math.log(200))/(Math.log(3500)-Math.log(200)),0,1), hot=clamp((temp.x-10)/22,0,1);
+    ctx.save(); rrect(ctx,262,58,530,GY-58+30,10); ctx.clip();
+    sky(ctx,GY,mixCol('#eaf4fd','#c9d6e2',wet*0.6),'#f7fbff');
+    sunIcon(ctx,742,96,14+hot*12,t); textAt(ctx,fmt(temp.x,1)+' °C',742,140,{align:'center',size:12,weight:700,color:COL.red});
+    const nCl=1+Math.round(wet*4); for(let i=0;i<nCl;i++) cloud(ctx,300+i*90+Math.sin(t*0.3+i)*10,82+(i%2)*14,28+wet*10,mixCol('#c2d1e5','#7d8fa5',wet));
+    const rate=rain.x/3500*120; for(let k=0;k<rate*dt;k++) drops.push({x:290+Math.random()*420,y:90+Math.random()*20,v:420+Math.random()*80});
+    if(Math.random()<rate*dt%1) drops.push({x:290+Math.random()*420,y:95,v:450});
+    ctx.strokeStyle=COL.blue; ctx.lineWidth=1.4; ctx.beginPath(); for(let i=drops.length-1;i>=0;i--){ const d=drops[i]; d.y+=d.v*dt; if(d.y>GY){ drops.splice(i,1); continue; } ctx.moveTo(d.x,d.y); ctx.lineTo(d.x-1.5,d.y-8); } ctx.stroke();
+    textAt(ctx,Math.round(rain.x)+' mm rain / year',300,140,{size:12,weight:700,color:COL.blue});
+    /* soil + paddy water */
+    ctx.fillStyle=mixCol('#f2e3c6','#d9c39b',wet); ctx.fillRect(262,GY,530,30); ground(ctx,262,792,GY);
+    ctx.restore();
+    CROP_KEYS.forEach((k,i)=>{ const g=grow[i], x=FX+i*FP, s=suit[i];
+      const target=season*(0.25+0.75*clamp(s*1.4,0,1)); g.h=approach(g.h,target,3,dt);
+      const f=1.6/Math.sqrt(CROPS[k].h/60); g.sw.x=0.06*Math.sin(t*f*2+i)*(0.5+wet*0.5);
+      if(k==='rice'&&rain.x>1000){ ctx.save(); ctx.fillStyle='rgba(47,143,224,0.18)'; ctx.fillRect(x-26,GY-6,52,6); ctx.restore(); line(ctx,x-26,GY-6,x+26,GY-6,COL.blue,1.2); }
+      drawCrop(ctx,k,x,GY,g.h,clamp(s*1.6,0,1),t,g.sw.x);
+      const ok=s>=0.5; textAt(ctx,CROPS[k].n.split(' ')[0],x,GY+16,{align:'center',size:10.5,weight:700,color:ok?COL.green:COL.mid});
+      ctx.save(); ctx.fillStyle=ok?COL.green:'#dbe4f0'; ctx.fillRect(x-20,GY+21,40*clamp(s,0,1),4); ctx.restore(); rect(ctx,x-20,GY+21,40,4,'#c2d1e5',null,0.8); });
+    /* ---- kitchen ---- */
+    ctx.save(); rrect(ctx,262,340,530,172,10); ctx.fillStyle='#fdf9f0'; ctx.fill(); ctx.strokeStyle='#e6dccb'; ctx.lineWidth=1.5; ctx.stroke(); ctx.restore();
+    textAt(ctx,'Kitchen',276,360,{size:12,weight:700,color:COL.yellow});
+    /* pot on fire */
+    if(cook>0){ cook+=dt; }
+    const heat=cook>0?clamp(cook/0.8,0,1)*(cooked?0.5:1):0;
+    flame(ctx,POT[0],POT[1]+52,60,0.3+heat*0.6,t);
+    ctx.save(); ctx.beginPath(); ctx.moveTo(POT[0]-55,POT[1]-25); ctx.quadraticCurveTo(POT[0]-55,POT[1]+45,POT[0],POT[1]+45); ctx.quadraticCurveTo(POT[0]+55,POT[1]+45,POT[0]+55,POT[1]-25); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.6; ctx.stroke();
+    ell(ctx,POT[0],POT[1]-25,55,10,'#f4ead8',COL.ink,2.6); line(ctx,POT[0]-55,POT[1]-18,POT[0]-72,POT[1]-24,COL.ink,3); line(ctx,POT[0]+55,POT[1]-18,POT[0]+72,POT[1]-24,COL.ink,3); ctx.restore();
+    steam(ctx,POT[0],POT[1]-36,60,heat,t);
+    for(let i=grains.length-1;i>=0;i--){ const g=grains[i]; g.t+=dt; if(g.t<0) continue; const tt=Math.min(g.t,g.T); const x=g.x0+g.vx*tt, y=g.y0+g.vy*tt+450*tt*tt; ell(ctx,x,y,3.4,2.6,g.c,'#6a4520',1); if(g.t>=g.T) grains.splice(i,1); }
+    if(cook>1.4&&!cooked&&!grains.length){ cooked=true; const s=STATES[st];
+      const list=custom?[...new Set(grown.map(k=>DISH_LOCAL[k]))]:s.food, dr=custom?['water']:s.drink;
+      list.forEach((k,j)=>dishes.push({k,sc:spr(0),d:j*0.18,x:THALI[0]+((j%4)-1.5)*70,y:THALI[1]-28+Math.floor(j/4)*48}));
+      dr.forEach((k,j)=>dishes.push({k,sc:spr(0),d:(list.length+j)*0.18,x:772,y:392+j*36,s:24}));
+      if(!custom) visited.set(s.n,{crops:grown.map(k=>CROPS[k].n.split(' ')[0]),food:s.food,drink:s.drink}); }
+    ell(ctx,THALI[0],THALI[1],150,52,'#fff',COL.ink,2.4); ell(ctx,THALI[0],THALI[1],132,42,null,'#dbe4f0',1.2);
+    dishes.forEach(d=>{ d.d-=dt; if(d.d<=0) springTo(d.sc,1,220,10,dt); if(d.sc.x>0.02){ food(ctx,d.k,d.x,d.y,(d.s||40)*d.sc.x); if(d.sc.x>0.8) textAt(ctx,FN[d.k],d.s?d.x-16:d.x,d.y+(d.s?4:28),{align:d.s?'right':'center',size:9,weight:600,color:COL.muted}); } });
+    if(!dishes.length) textAt(ctx,cook>0?'cooking…':'harvest the crops that grow here →',THALI[0],THALI[1]+5,{align:'center',size:12,weight:600,color:COL.mid});
+    textAt(ctx,custom?'Your own place':STATES[st].n,THALI[0],366,{align:'center',size:13,weight:700,color:COL.ink});
+    /* ---- readouts ---- */
+    setv($,'rRV',Math.round(rain.x)+' mm'); setv($,'tRV',fmt(temp.x,1)+' °C');
+    setv($,'cG',grown.map(k=>CROPS[k].n.split(' ')[0]).join(', ')||'none');
+    const lists=[...visited.values()].map(v=>v.food); const common=lists.length>1?[...new Set(lists.flat())].filter(k=>lists.filter(l=>l.includes(k)).length>1):[];
+    setv($,'cC',lists.length<2?'visit 2+ states':(common.map(k=>FN[k]).join(', ')||'none yet'));
+    setLog($,'tL',[...visited.entries()].map(([n,v])=>[n,v.crops.join(', '),v.food.map(k=>common.includes(k)?`<b style="color:${COL.blue}">${FN[k]}</b>`:FN[k]).join(', '),v.drink.map(k=>FN[k]).join(', ')]));
+    $('#hB').disabled=season<0.8||(cook>0&&!cooked)||!grown.length;
+    S.st={n:visited.size,common:common.length};
+  };
+  S.found=()=>S.st&&S.st.n>=3?'Traditional food is made from the crops that grow locally — and crops depend on soil and climate':'';
+  S.fb=()=>{ const s=S.st||{n:0}; if(s.n<1) return ['warn','Let the crops grow, then harvest & cook.'];
+    if(s.n<3) return ['warn','Visit '+(3-s.n)+' more state'+(s.n===2?'':'s')+'.'];
+    return ['ok','✓ '+s.n+' states · '+s.common+' food(s) shared.']; };
+  return S;
+}); }
+
+/* =====================================================================
+   3.3  LET US INTERACT AND FIND OUT — cooking practices then and now
+   Cooking: 1 kg water, c = 4186 J/kg·K, from 25 °C. Losses h·A = 3 W/K.
+     Chulha: wood burns at 1 kg/h × (load/0.5 kg)^0.7, 16 MJ/kg, only
+     12 % reaches the pot → ≈ 600 W at 0.6 kg, falling as wood burns → boils in ≈ 12 min.
+     Gas: 1.8 kW burner × knob, 60 % reaches the pot → ≈ 1.1 kW → ≈ 5 min.
+     Kitchen smoke: dC/dt = E·burn − C/τ, τ = 5 min (≈ 1000 µg/m³ chulha).
+     Time ×30 (1 real minute = 2 s).
+   Grinding: the batta rolls x = A·sin(2π·0.8 t); every time it passes a
+     grain the grain shrinks to 88 % → fine paste in ≈ 5 min.
+     Grinder: blade 18 000 rpm, grains swirl in the jar's vortex and are
+     hit 3–9 times/s (speed 1–3) → fine in ≈ ½ min.
+   Interview: grandma answers with animated scenes (tools change over
+     the years; trucks, machines, phones as causes; older ways).
+   ===================================================================== */
+function chulhaDraw(ctx,x,y,s,fire,t,wood){
+  ctx.save(); ctx.translate(x,y); ctx.scale(s,s); ctx.lineJoin='round';
+  ctx.beginPath(); ctx.moveTo(-90,0); ctx.lineTo(-80,-70); ctx.quadraticCurveTo(-60,-78,-40,-70); ctx.lineTo(-34,-30); ctx.quadraticCurveTo(0,-62,34,-30); ctx.lineTo(40,-70); ctx.quadraticCurveTo(60,-78,80,-70); ctx.lineTo(90,0); ctx.closePath();
+  ctx.fillStyle='#e9c9a4'; ctx.fill(); ctx.strokeStyle='#8a5a2b'; ctx.lineWidth=2.4; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(-34,0); ctx.lineTo(-34,-30); ctx.quadraticCurveTo(0,-62,34,-30); ctx.lineTo(34,0); ctx.fillStyle='#4a3324'; ctx.fill(); ctx.stroke();
+  if(wood>0){ for(let i=0;i<Math.min(3,Math.ceil(wood*3));i++){ ctx.save(); ctx.translate(-6+i*6,-8-i*3); ctx.rotate(-0.12+i*0.1); rrect(ctx,-10,-4,90,8,4); ctx.fillStyle='#a0703f'; ctx.fill(); ctx.strokeStyle='#5a3520'; ctx.lineWidth=1.6; ctx.stroke(); ctx.restore(); } }
+  if(fire>0.02) flame(ctx,0,-6,46,fire,t);
+  ctx.restore();
+}
+function gasDraw(ctx,x,y,s,flameF,t){
+  ctx.save(); ctx.translate(x,y); ctx.scale(s,s);
+  ctx.beginPath(); rrect(ctx,-110,-36,220,36,6); ctx.fillStyle='#eef2f7'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.stroke();
+  circ(ctx,-70,-18,8,COL.ink,'#fff',2); line(ctx,-70,-18,-70+Math.cos(-1.6+flameF*2.2)*7,-18+Math.sin(-1.6+flameF*2.2)*7,COL.yellow,2.4);
+  ell(ctx,0,-40,34,6,'#cfd8e3',COL.ink,2);
+  if(flameF>0.02){ const n=14; for(let i=0;i<n;i++){ const a=i/n*Math.PI*2, bx=Math.cos(a)*30, by=-40+Math.sin(a)*5, hh=(5+flameF*16)*(0.85+0.15*Math.sin(t*20+i*2));
+      ctx.beginPath(); ctx.moveTo(bx-3,by); ctx.quadraticCurveTo(bx,by-hh,bx+3,by); ctx.strokeStyle=COL.blue; ctx.lineWidth=1.8; ctx.stroke(); } }
+  line(ctx,-80,-46,80,-46,COL.ink,2.6); line(ctx,-60,-46,-30,-40,COL.ink,2); line(ctx,60,-46,30,-40,COL.ink,2);
+  ctx.restore();
+}
+function cylinderDraw(ctx,x,y,s){ ctx.save(); ctx.translate(x,y); ctx.scale(s,s); rrect(ctx,-24,-90,48,90,18); ctx.fillStyle='#f6d0c8'; ctx.fill(); ctx.strokeStyle=COL.red; ctx.lineWidth=2.4; ctx.stroke(); rect(ctx,-10,-104,20,14,COL.ink,'#fff',2); textAt(ctx,'LPG',0,-40,{align:'center',size:12,weight:700,color:COL.red}); ctx.restore(); }
+function potDraw(ctx,x,y,w,h,T,t,level){
+  ctx.save(); ctx.beginPath(); ctx.moveTo(x-w/2,y-h); ctx.quadraticCurveTo(x-w/2,y,x,y); ctx.quadraticCurveTo(x+w/2,y,x+w/2,y-h); ctx.closePath(); ctx.fillStyle='#fff'; ctx.fill();
+  ctx.save(); ctx.clip(); const ly=y-h*(level||0.75); ctx.fillStyle=mixCol('#d8ebfb','#f6d6cc',clamp((T-25)/75,0,1)*0.6); ctx.fillRect(x-w/2,ly,w,y-ly);
+  if(T>70){ const n=Math.round((T-70)/30*14), r=rng(Math.floor(t*6)); for(let i=0;i<n;i++){ const bx=x+(r()-0.5)*w*0.7, ph=(t*1.5+r())%1, by=y-6-ph*(y-6-ly); circ(ctx,bx,by,1.5+ph*2.5*(T>=99.5?1.5:1),COL.blue,null,1.2); } }
+  line(ctx,x-w/2,ly,x+w/2,ly,COL.blue,1.6); ctx.restore();
+  ctx.beginPath(); ctx.moveTo(x-w/2,y-h); ctx.quadraticCurveTo(x-w/2,y,x,y); ctx.quadraticCurveTo(x+w/2,y,x+w/2,y-h); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.6; ctx.stroke(); ell(ctx,x,y-h,w/2,6,null,COL.ink,2.4); ctx.restore();
+}
+function silDraw(ctx,x,y,s,bx,grains,hands){
+  ctx.save(); ctx.translate(x,y); ctx.scale(s,s);
+  ctx.beginPath(); ctx.moveTo(-160,0); ctx.lineTo(-140,-34); ctx.lineTo(160,-34); ctx.lineTo(140,0); ctx.closePath(); ctx.fillStyle='#d9d4cc'; ctx.fill(); ctx.strokeStyle='#5f5a52'; ctx.lineWidth=2.4; ctx.stroke();
+  ctx.beginPath(); ctx.rect(-160,0,300,22); ctx.fillStyle='#c4beb5'; ctx.fill(); ctx.stroke();
+  if(grains) grains();
+  /* batta: a long cylinder lying across the slab, seen end-on; it rolls without slipping (angle = x / r) */
+  const R=17, fx=bx, fy=-4-R, kx=bx+30, ky=-30-R, ang=bx/R;
+  ctx.beginPath(); ctx.moveTo(fx-R*0.6,fy-R*0.8); ctx.lineTo(kx-R*0.6,ky-R*0.8); ctx.lineTo(kx+R*0.8,ky+R*0.6); ctx.lineTo(fx+R*0.8,fy+R*0.6); ctx.closePath(); ctx.fillStyle='#bdb6ab'; ctx.fill(); ctx.strokeStyle='#5f5a52'; ctx.lineWidth=2.2; ctx.stroke();
+  circ(ctx,kx,ky,R,'#5f5a52','#bdb6ab',2.2); circ(ctx,fx,fy,R,'#5f5a52','#cfc9bf',2.2);
+  line(ctx,fx,fy,fx+Math.cos(ang)*R*0.85,fy+Math.sin(ang)*R*0.85,'#5f5a52',2); line(ctx,fx,fy,fx-Math.cos(ang)*R*0.85,fy-Math.sin(ang)*R*0.85,'#5f5a52',1.2);
+  if(hands){ for(const [hx,hy,sx,sy] of [[fx-2,fy-R-4,bx-150,-190],[kx-2,ky-R-4,bx-120,-215]]){ ctx.save(); ctx.lineCap='round'; ctx.strokeStyle=COL.ink; ctx.lineWidth=12; ctx.beginPath(); ctx.moveTo(sx,sy); ctx.quadraticCurveTo((sx+hx)/2+10,(sy+hy)/2-30,hx,hy); ctx.stroke(); ctx.strokeStyle='#fbe3cf'; ctx.lineWidth=8; ctx.stroke(); ctx.restore(); ell(ctx,hx,hy,11,7,'#fbe3cf',COL.ink,2); } }
+  ctx.restore();
+}
+function mixieDraw(ctx,x,y,s,ang,on,inside){
+  ctx.save(); ctx.translate(x,y); ctx.scale(s,s); ctx.lineJoin='round';
+  ctx.beginPath(); ctx.moveTo(-70,0); ctx.lineTo(-60,-70); ctx.lineTo(60,-70); ctx.lineTo(70,0); ctx.closePath(); ctx.fillStyle='#eef2f7'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.stroke();
+  circ(ctx,0,-35,12,COL.ink,'#fff',2); line(ctx,0,-35,Math.cos(-1.6+(on||0)*1.2)*10,-35+Math.sin(-1.6+(on||0)*1.2)*10,COL.yellow,2.6);
+  ctx.beginPath(); ctx.moveTo(-50,-74); ctx.lineTo(-62,-230); ctx.lineTo(62,-230); ctx.lineTo(50,-74); ctx.closePath(); ctx.fillStyle='rgba(225,236,247,0.5)'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.stroke();
+  rect(ctx,-66,-246,132,16,COL.ink,'#dfe6ef',2.2); line(ctx,50,-110,90,-120,COL.ink,3); line(ctx,90,-120,92,-190,COL.ink,3); line(ctx,92,-190,58,-200,COL.ink,3);
+  if(inside) inside();
+  /* blade (seen from the side as a rotating bar) */
+  const L=Math.cos(ang)*40; line(ctx,0,-86,0,-100,COL.ink,3); line(ctx,-L,-100,L,-100,COL.red,3.4); line(ctx,-Math.sin(ang)*30,-94,Math.sin(ang)*30,-106,COL.red,2.4);
+  if(on>0.3){ ctx.save(); ctx.globalAlpha=0.25; ell(ctx,0,-100,42,6,null,COL.red,2); ctx.restore(); }
+  ctx.restore();
+}
+function buildA3(){ return buildScene(wrap=>{
+  const S={q:'How have cooking practices changed over time — and why?'};
+  let sc=0; const done={cook:false,grind:false,why:false};
+  /* cooking state */
+  const ck={on:false,t:0,wood:0.6,Tc:25,Tg:25,knob:1,smoke:0,boilC:0,boilG:0};
+  /* grinding state */
+  const gr={hand:false,mix:false,ph:0,ts:0,tm:0,spd:3,ang:0,strokes:0,lastB:0};
+  let G1=[], G2=[];
+  function resetGrains(){ const r=rng(5); G1=[]; G2=[]; for(let i=0;i<34;i++){ G1.push({x:-100+r()*200,y:-24+r()*14,r:5+r()*1.5,lastSide:0}); G2.push({a:r()*6.28,h:r(),r:5+r()*1.5,rr:r()}); } gr.ts=0; gr.tm=0; gr.strokes=0; gr.dS=0; gr.dM=0; }
+  resetGrains();
+  /* interview */
+  let q=-1, talk=0, yr=spr(1960), vT=0;
+  const QS=['What kind of food do you still eat, and what is new?','What has changed in cooking?','What has caused these changes?','What other ways of cooking and grinding were there?'];
+  const AN=['We still eat roti, dal, saag, buttermilk. New: bread, chips, cold drinks.','Chulha → gas stove. Sil-batta → grinder. Clay pot → pressure cooker.','New machines, trucks that bring gas and food, TV and phones.','Tandoor, okhli-musal for pounding, and a stone chakki.'];
+  S.html=`
+    <div class="control-group"><label>Compare</label>${chipList('sC',['🔥 Cooking','🪨 Grinding','👵 Ask grandma'],0)}</div>
+    <div id="pC"><div class="control-group"><div class="toggle-group"><button class="toggle-btn play" id="lB">🔥 Light both stoves</button><button class="toggle-btn" id="wB">🪵 Add wood</button></div></div>
+      ${slider('kR','Gas knob',0.2,1,0.05,1)}</div>
+    <div id="pG" class="hidden"><div class="control-group"><div class="toggle-group"><button class="toggle-btn play" id="hB">✋ Grind by hand</button><button class="toggle-btn play" id="mB">⚡ Switch on grinder</button></div></div>
+      ${slider('gR','Grinder speed',1,3,1,3)}
+      <div class="control-group"><div class="toggle-group"><button class="toggle-btn" id="rB">↻ Fresh grains</button></div></div></div>
+    <div id="pI" class="hidden"><div class="control-group"><label>Ask a question</label>${optList('qO',QS)}</div></div>`;
+  S.cards=card('c1','Then (traditional)',COL.yellow)+card('c2','Now (modern)',COL.blue)+`<div class="rcard wide"><div class="rlabel" id="c3L">Difference</div><div class="rval" id="c3">—</div></div>`;
+  S.wire=$=>{
+    wireChips(wrap,'sC',i=>{ sc=i; $('#pC').classList.toggle('hidden',i!==0); $('#pG').classList.toggle('hidden',i!==1); $('#pI').classList.toggle('hidden',i!==2); });
+    $('#lB').onclick=()=>{ if(ck.on){ ck.on=false; return; } Object.assign(ck,{on:true,t:0,wood:0.6,Tc:25,Tg:25,smoke:ck.smoke,boilC:0,boilG:0}); };
+    $('#wB').onclick=()=>{ ck.wood=Math.min(1.5,ck.wood+0.4); };
+    const kr=$('#kR'); kr.oninput=()=>{ ck.knob=+kr.value; };
+    $('#hB').onclick=()=>{ gr.hand=!gr.hand; }; $('#mB').onclick=()=>{ gr.mix=!gr.mix; };
+    const g=$('#gR'); g.oninput=()=>{ gr.spd=+g.value; };
+    $('#rB').onclick=()=>{ resetGrains(); gr.hand=false; gr.mix=false; };
+    wireOpts(wrap,'qO',i=>{ q=i; talk=2.6; vT=0; yr.x=1960; yr.v=0; if(i===2) done.why=true; });
+  };
+  const fine=list=>list.reduce((a,g)=>a+g.r,0)/list.length;
+  S.tick=(dt,ctx,t,$)=>{
+    /* ---------- physics always runs ---------- */
+    const K=30, sdt=dt*K;
+    if(ck.on){ ck.t+=sdt;
+      const burn=ck.wood>0.01?(1/3600)*Math.pow(ck.wood/0.5,0.7):0; ck.wood=Math.max(0,ck.wood-burn*sdt);
+      const Pc=burn*16e6*0.12, Pg=1800*ck.knob*0.6;
+      ck.Tc=Math.min(100,ck.Tc+(Pc-3*(ck.Tc-25))*sdt/4186); ck.Tg=Math.min(100,ck.Tg+(Pg-3*(ck.Tg-25))*sdt/4186);
+      if(ck.Tc>=99.9&&!ck.boilC) ck.boilC=ck.t; if(ck.Tg>=99.9&&!ck.boilG) ck.boilG=ck.t;
+      ck.smoke+=(burn*3600*1000/300-ck.smoke/300)*sdt;
+      if(ck.boilC&&ck.boilG) done.cook=true;
+    } else ck.smoke=Math.max(0,ck.smoke-ck.smoke/300*sdt);
+    const cfire=ck.on&&ck.wood>0.01?clamp(0.35+ck.wood*0.5,0,1):0, gfire=ck.on?ck.knob:0;
+    /* grinding */
+    if(gr.hand){ gr.ph+=dt*0.8*6.283; gr.ts+=dt*K; }
+    const bx=Math.sin(gr.ph)*92;
+    if(gr.hand){ const s=Math.sign(Math.cos(gr.ph)); if(s!==gr.lastB){ gr.strokes+=0.5; gr.lastB=s; } }
+    G1.forEach(g=>{ const side=Math.sign(g.x-bx); if(gr.hand&&g.lastSide&&side!==g.lastSide) g.r=Math.max(0.6,g.r*0.88); g.lastSide=side; if(gr.hand&&Math.abs(g.x-bx)<20) g.x+=Math.cos(gr.ph)*0.8*6.283*92*dt*0.15; g.x=clamp(g.x,-108,112); });
+    gr.ang+=dt*(gr.mix?gr.spd*40:0);
+    if(gr.mix){ gr.tm+=dt*K; G2.forEach(g=>{ g.a+=dt*(4+gr.spd*3)*(1.2-g.h*0.5); if(Math.random()<dt*gr.spd*3) g.r=Math.max(0.6,g.r*0.8); g.h=clamp(g.h+(Math.random()-0.5)*dt*2,0,1); }); }
+    const f1=fine(G1), f2=fine(G2); if(f1<1.2&&!gr.dS) gr.dS=gr.ts; if(f2<1.2&&!gr.dM) gr.dM=gr.tm; if(gr.dS&&gr.dM) done.grind=true;
+    /* ---------- draw ---------- */
+    if(sc<2){ line(ctx,400,62,400,505,'#dbe4f0',1.5);
+      textAt(ctx,'THEN',200,80,{align:'center',size:15,weight:700,color:COL.yellow}); textAt(ctx,'NOW',600,80,{align:'center',size:15,weight:700,color:COL.blue}); }
+    if(sc===0){
+      /* smoke haze in the left kitchen */
+      const haze=clamp(ck.smoke/1400,0,0.55); ctx.save(); ctx.fillStyle='rgba(110,110,110,'+haze+')'; ctx.fillRect(12,90,380,420); ctx.restore();
+      ctx.save(); ctx.strokeStyle='rgba(90,90,90,0.5)'; ctx.lineWidth=2; for(let i=0;i<5;i++){ const ph=(t*0.35+i/5)%1; if(!cfire) break; ctx.globalAlpha=(1-ph)*0.7; ctx.beginPath(); for(let k=0;k<10;k++){ const yy=330-ph*220-k*9, xx=200+(i-2)*14+Math.sin(k*0.7+t*2+i)*8+ph*40*(i-2); k?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy); } ctx.stroke(); } ctx.restore();
+      chulhaDraw(ctx,200,470,1.2,cfire,t,ck.wood);
+      potDraw(ctx,200,388,120,70,ck.Tc,t); steam(ctx,200,312,80,clamp((ck.Tc-60)/40,0,1),t);
+      thermoScale(ctx,300,190,300,ck.Tc,20,100,[25,50,75,100]);
+      const cough=haze>0.25?Math.max(0,Math.sin(t*5))*0.25:0;
+      stick(ctx,70,490,120,{lean:0.25+cough,nod:cough,armR:[0.9,0.3],legL:[0.9,-0.6],legR:[0.6,-0.9],mood:haze>0.25?-1:1});
+      if(haze>0.25) textAt(ctx,'cough!',95,350,{size:12,weight:700,color:COL.red,alpha:cough*3});
+      cylinderDraw(ctx,740,480,1); line(ctx,720,440,690,450,COL.ink,2);
+      gasDraw(ctx,590,470,1.2,gfire,t); potDraw(ctx,590,410,120,70,ck.Tg,t); steam(ctx,590,334,80,clamp((ck.Tg-60)/40,0,1),t);
+      thermoScale(ctx,690,190,300,ck.Tg,20,100,[25,50,75,100]);
+      const mm=s=>Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
+      textAt(ctx,'⏱ '+mm(ck.t)+' min',400,110,{align:'center',size:14,weight:700,color:COL.ink});
+      textAt(ctx,'wood left '+fmt(ck.wood,2)+' kg',200,505,{align:'center',size:11,weight:600,color:'#8a5a2b'});
+      textAt(ctx,'smoke '+Math.round(ck.smoke)+' µg/m³',90,120,{size:12,weight:700,color:ck.smoke>250?COL.red:COL.muted});
+      textAt(ctx,'smoke '+Math.round(ck.smoke*0.03)+' µg/m³',600,120,{align:'center',size:12,weight:700,color:COL.muted});
+      if(ck.on&&ck.wood<0.02&&!ck.boilC) textAt(ctx,'fire is dying — add wood',200,150,{align:'center',size:13,weight:700,color:COL.red});
+      setv($,'c1',ck.boilC?'boiled in '+mm(ck.boilC):fmt(ck.Tc,0)+' °C'); setv($,'c2',ck.boilG?'boiled in '+mm(ck.boilG):fmt(ck.Tg,0)+' °C');
+      setv($,'c3',ck.boilC&&ck.boilG?'Gas is '+fmt(ck.boilC/ck.boilG,1)+'× faster, with almost no smoke':'Light both and wait for the water to boil');
+      $('#lB').textContent=ck.on?'⏹ Put out':'🔥 Light both stoves';
+    }
+    if(sc===1){
+      silDraw(ctx,205,420,1.15,bx,()=>{ G1.forEach(g=>{ const k=clamp((g.r-0.6)/5,0,1); ell(ctx,g.x,g.y,g.r*1.3,g.r,mixCol('#7fbf5a','#5f9e4a',1-k),k>0.15?'#2f6b22':null,1); });
+          const paste=clamp(1-(f1-0.6)/5,0,1); if(paste>0.3){ ctx.save(); ctx.globalAlpha=(paste-0.3)*0.8; ell(ctx,bx*0.2,-18,120,10,'#8cc56a'); ctx.restore(); } },gr.hand);
+      mixieDraw(ctx,600,490,1.15,gr.ang,gr.mix?gr.spd/3:0,()=>{ G2.forEach(g=>{ g.lift=approach(g.lift||0,gr.mix?1:0,gr.mix?6:3,dt); const yy=lerp(-108-g.rr*18,-110-g.h*90,g.lift), rx=lerp(46,54,g.h), xx=Math.cos(g.a)*rx*(0.4+0.6*g.rr), z=Math.sin(g.a); ctx.globalAlpha=0.6+0.4*z; ell(ctx,xx,yy,g.r*1.3,g.r,mixCol('#7fbf5a','#5f9e4a',clamp(1-(g.r-0.6)/5,0,1)),g.r>1.2?'#2f6b22':null,1); ctx.globalAlpha=1; });
+          { const p=clamp(1-(f2-0.6)/5,0,1); if(p>0.15){ const lv=-78-p*34, dip=gr.mix?gr.spd*6:0; ctx.save(); ctx.beginPath(); ctx.moveTo(-50,-76); ctx.lineTo(-51-(p*34)*0.07,lv); ctx.quadraticCurveTo(0,lv+dip*2,51+(p*34)*0.07,lv); ctx.lineTo(50,-76); ctx.closePath(); ctx.globalAlpha=0.35+p*0.5; ctx.fillStyle='#8cc56a'; ctx.fill(); ctx.restore(); } }
+          if(gr.mix){ ctx.save(); ctx.strokeStyle='rgba(31,157,85,0.3)'; ctx.lineWidth=1.5; for(let i=0;i<3;i++){ ctx.beginPath(); ctx.ellipse(0,-130-i*30,40-i*4,7,0,0,7); ctx.stroke(); } ctx.restore(); } });
+      const mm=s=>Math.floor(s/60)+':'+String(Math.floor(s%60)).padStart(2,'0');
+      textAt(ctx,'grain size '+fmt(f1*0.8,1)+' mm',200,130,{align:'center',size:13,weight:700,color:COL.green});
+      textAt(ctx,'grain size '+fmt(f2*0.8,1)+' mm',600,130,{align:'center',size:13,weight:700,color:COL.green});
+      textAt(ctx,'⏱ '+mm(gr.ts)+' · '+Math.floor(gr.strokes)+' strokes',200,108,{align:'center',size:12,weight:600,color:COL.ink});
+      textAt(ctx,'⏱ '+mm(gr.tm)+' · '+fmt(0.5*gr.tm/3600*1000,1)+' Wh',600,108,{align:'center',size:12,weight:600,color:COL.ink});
+      if(gr.mix) textAt(ctx,(6000*gr.spd)+' rpm',690,300,{size:12,weight:700,color:COL.red});
+      setv($,'c1',gr.dS?'paste in '+mm(gr.dS):fmt(f1*0.8,1)+' mm'); setv($,'c2',gr.dM?'paste in '+mm(gr.dM):fmt(f2*0.8,1)+' mm');
+      setv($,'c3',gr.dS&&gr.dM?'Grinder: '+fmt(gr.dS/Math.max(1,gr.dM),0)+'× faster, needs electricity':'Grind both to a fine paste');
+      $('#hB').textContent=gr.hand?'⏸ Stop':'✋ Grind by hand'; $('#mB').textContent=gr.mix?'⏸ Switch off':'⚡ Switch on grinder';
+    }
+    if(sc===2){
+      talk=Math.max(0,talk-dt); vT+=dt;
+      const b=body(ctx,120,500,250,{sex:'f',hairCol:'#b9bec6',shirt:'#f6e7d6',mouth:talk>0&&Math.sin(t*14)>0?'open':'smile',armR:talk>0?0.7+0.2*Math.sin(t*3):0.15});
+      body(ctx,700,500,190,{sex:'m',shirt:'#eaf3fc',mouth:'smile',armL:q>=0?0.15:0.9});
+      ctx.save(); rrect(ctx,220,70,410,290,12); ctx.fillStyle='#fbfcfe'; ctx.fill(); ctx.strokeStyle='#dbe4f0'; ctx.lineWidth=1.5; ctx.stroke(); ctx.restore();
+      if(q<0) textAt(ctx,'Ask grandma a question →',425,220,{align:'center',size:15,weight:600,color:COL.mid});
+      if(q===0){ textAt(ctx,'Still eat',320,100,{align:'center',size:13,weight:700,color:COL.green}); textAt(ctx,'New',530,100,{align:'center',size:13,weight:700,color:COL.red});
+        ['roti','dal','saag','chhach','mango','millet'].forEach((k,i)=>{ const p=clamp((vT-i*0.25)*3,0,1), y=140+Math.floor(i/2)*70; food(ctx,k,280+(i%2)*80,y-(1-ease(p))*60,48,{alpha:p}); });
+        ['bread','chips','soda','candy'].forEach((k,i)=>{ const p=clamp((vT-1.6-i*0.25)*3,0,1), y=140+Math.floor(i/2)*70; food(ctx,k,490+(i%2)*80,y-(1-ease(p))*60,48,{alpha:p}); }); }
+      if(q===1||q===3){ springTo(yr,2025,2.2,2.6,dt); }
+      if(q===1){ const Y=clamp(yr.x,1960,2025), fx=(a)=>clamp((Y-a)/8,0,1);
+        textAt(ctx,'Year '+Math.round(Y),425,98,{align:'center',size:15,weight:700,color:COL.ink});
+        ctx.save(); ctx.globalAlpha=1-fx(1985); chulhaDraw(ctx,300,230,0.6,0.8,t,0.5); ctx.restore(); ctx.save(); ctx.globalAlpha=fx(1985); gasDraw(ctx,300,230,0.6,0.9,t); ctx.restore();
+        ctx.save(); ctx.globalAlpha=1-fx(1992); silDraw(ctx,430,232,0.38,Math.sin(t*5)*90,null,false); ctx.restore(); ctx.save(); ctx.globalAlpha=fx(1992); mixieDraw(ctx,430,240,0.45,t*30,1); ctx.restore();
+        ctx.save(); ctx.globalAlpha=1-fx(1978); potDraw(ctx,555,230,70,50,60,t); ctx.restore();
+        ctx.save(); ctx.globalAlpha=fx(1978); potDraw(ctx,555,230,70,56,100,t,0.5); rect(ctx,545,160,20,14,COL.ink,'#fff',2); steam(ctx,555,158,20,Math.max(0,Math.sin(t*1.5)),t); ctx.restore();
+        ['stove','grinding','pot'].forEach((n,i)=>textAt(ctx,n,[300,430,555][i],270,{align:'center',size:11,weight:600,color:COL.muted}));
+        const x0=250, x1=600, px=x0+(Y-1960)/65*(x1-x0); line(ctx,x0,320,x1,320,COL.ink,1.6); [1960,1980,2000,2020].forEach(v=>{ const xx=x0+(v-1960)/65*(x1-x0); line(ctx,xx,316,xx,324,COL.ink,1.4); textAt(ctx,String(v),xx,340,{align:'center',size:10,color:COL.muted}); }); circ(ctx,px,320,6,COL.yellow,COL.yellow,2); }
+      if(q===2){ /* technology gear · transport truck · communication tower */
+        ctx.save(); ctx.translate(290,170); ctx.rotate(t*1.2); ctx.beginPath(); for(let i=0;i<20;i++){ const a=i/20*6.283, r=i%2?26:34; ctx.lineTo(Math.cos(a)*r,Math.sin(a)*r); } ctx.closePath(); ctx.fillStyle='#eef2f7'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke(); circ(ctx,0,0,9,COL.ink,'#fff',2); ctx.restore();
+        textAt(ctx,'technology',290,230,{align:'center',size:12,weight:700,color:COL.ink});
+        const tx=240+((vT*70)%460); line(ctx,230,320,620,320,COL.ink,1.6); ctx.save(); ctx.beginPath(); ctx.rect(222,250,406,90); ctx.clip(); ctx.translate(tx-60,0);
+        rect(ctx,0,272,70,36,COL.ink,'#fff',2); rect(ctx,70,284,30,24,COL.ink,'#eaf3fc',2); cylinderDraw(ctx,22,304,0.3); cylinderDraw(ctx,48,304,0.3);
+        for(const wx of [16,84]){ circ(ctx,wx,312,8,COL.ink,'#fff',2); const a=-vT*70/8; line(ctx,wx,312,wx+Math.cos(a)*7,312+Math.sin(a)*7,COL.ink,1.4); } ctx.restore();
+        textAt(ctx,'transport',425,345,{align:'center',size:12,weight:700,color:COL.ink});
+        line(ctx,560,220,545,120,COL.ink,2); line(ctx,560,220,575,120,COL.ink,2); line(ctx,548,150,572,150,COL.ink,1.4); line(ctx,551,180,569,180,COL.ink,1.4);
+        for(let i=0;i<3;i++){ const r=((vT*40+i*20)%60)+8; ctx.save(); ctx.globalAlpha=1-r/68; ctx.beginPath(); ctx.arc(560,118,r,-2.4,-0.7); ctx.strokeStyle=COL.blue; ctx.lineWidth=2; ctx.stroke(); ctx.restore(); }
+        textAt(ctx,'communication',560,240,{align:'center',size:12,weight:700,color:COL.ink}); }
+      if(q===3){ /* tandoor, okhli-musal, chakki */
+        ctx.save(); ctx.beginPath(); ctx.moveTo(250,300); ctx.lineTo(262,170); ctx.quadraticCurveTo(300,158,338,170); ctx.lineTo(350,300); ctx.closePath(); ctx.fillStyle='#e9c9a4'; ctx.fill(); ctx.strokeStyle='#8a5a2b'; ctx.lineWidth=2.4; ctx.stroke(); ell(ctx,300,170,36,8,'#4a3324','#8a5a2b',2); ctx.restore();
+        const glow=0.5+0.5*Math.sin(t*3); ctx.save(); ctx.globalAlpha=0.3+0.3*glow; ell(ctx,300,170,26,5,COL.red); ctx.restore(); textAt(ctx,'tandoor',300,322,{align:'center',size:12,weight:700,color:COL.ink});
+        const up=Math.abs(Math.sin(t*3)); ctx.save(); ctx.beginPath(); ctx.moveTo(395,300); ctx.lineTo(400,250); ctx.lineTo(450,250); ctx.lineTo(455,300); ctx.closePath(); ctx.fillStyle='#d9d4cc'; ctx.fill(); ctx.strokeStyle='#5f5a52'; ctx.lineWidth=2.2; ctx.stroke(); ctx.restore();
+        rect(ctx,420,150-up*60,10,110,'#5a3520','#a0703f',1.8); for(let i=0;i<5;i++){ const jy=250-Math.max(0,Math.sin(t*6+i))*12*(up<0.2?1:0.2); ell(ctx,408+i*8,jy-4,3,2.4,'#e8c45a','#8a6410',1); }
+        textAt(ctx,'okhli-musal',425,322,{align:'center',size:12,weight:700,color:COL.ink});
+        ell(ctx,560,280,58,16,'#c4beb5','#5f5a52',2.2); ell(ctx,560,262,58,16,'#d9d4cc','#5f5a52',2.2); const ha=t*1.6; const hx=560+Math.cos(ha)*40, hy=262+Math.sin(ha)*11; line(ctx,hx,hy,hx,hy-36,'#5a3520',4); ell(ctx,560,262,8,3,'#5f5a52');
+        textAt(ctx,'chakki',560,322,{align:'center',size:12,weight:700,color:COL.ink}); }
+      if(q>=0){ ctx.save(); const tw=410; rrect(ctx,220,372,tw,46,10); ctx.fillStyle='#fffaf0'; ctx.fill(); ctx.strokeStyle=COL.yellow; ctx.lineWidth=2; ctx.stroke(); ctx.beginPath(); ctx.moveTo(221,386); ctx.lineTo(172,b.head[1]+12); ctx.lineTo(221,404); ctx.fillStyle='#fffaf0'; ctx.fill(); ctx.strokeStyle=COL.yellow; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+        const sz=fitFont(ctx,AN[q],tw-20,13,600); textAt(ctx,AN[q],230,400,{size:sz,weight:600,color:COL.ink}); }
+      setv($,'c1',q===1?'chulha, sil-batta, clay pot':q===0?'roti, dal, saag':q===3?'tandoor, okhli, chakki':'—');
+      setv($,'c2',q===1?'gas, grinder, cooker':q===0?'bread, chips, soda':q===2?'machines · transport':'—');
+      setv($,'c3',done.why?'Causes: technology, transport, communication':'Ask: what has caused these changes?');
+    }
+    S.st=done;
+  };
+  S.found=()=>S.st&&S.st.cook&&S.st.grind&&S.st.why?'Chulha → gas stove, sil-batta → grinder: faster and less smoky — because of technology, transport and communication':'';
+  S.fb=()=>{ const d=S.st||{}; if(!d.cook) return ['warn','Cooking: boil the water on both stoves.']; if(!d.grind) return ['warn','Grinding: grind both to a fine paste.']; if(!d.why) return ['warn','Ask grandma what caused the changes.']; return ['ok','✓ Interview complete.']; };
+  return S;
+}); }
+
+/* =====================================================================
+   3.4  LET US CONDUCT A SURVEY — deficiency diseases (Fig. 3.5)
+   Seven neighbours, each short of one vitamin or mineral (incl. Case 1,
+   Lind's sailor 1746, and Case 2, a Himalayan village before iodised salt).
+   Body store L (0..1):  dL/dt = (intake − L)/τL
+   Symptom S (0..1):     dS/dt = (clamp((0.5 − L)/0.35) − S)/τS
+   τ in weeks — vit C 1.5/2, vit A 2/1, B1 2/3, iron 6/6, iodine 4/26,
+   vit D 6/26, calcium 8/20 (tooth cavities stay — see a dentist).
+   Time runs 2 weeks per second. Symptoms are drawn on the body:
+   dark-room vision, bleeding gums, swollen tingling feet, bowed legs,
+   tooth decay, neck swelling, pale skin with fast breathing.
+   ===================================================================== */
+const DEF={
+  A:{n:'Vitamin A',src:'Papaya, carrot, mango, milk',dis:'Night blindness',sym:'Poor vision in the dark',tL:2,tS:1,boost:{carrot:1,papaya:0.6,mango:0.5,milk:0.3,spinach:0.7}},
+  B1:{n:'Vitamin B1',src:'Legumes, nuts, whole grains, milk',dis:'Beriberi',sym:'Swelling, tingling in feet, breathless',tL:2,tS:3,boost:{roti:0.4,dal:0.45,peanuts:0.4,milk:0.2,sprouts:0.3}},
+  C:{n:'Vitamin C',src:'Amla, guava, orange, lemon',dis:'Scurvy',sym:'Bleeding gums, slow healing',tL:1.5,tS:2,boost:{amla:1.2,guava:1,orange:0.8,lemon:0.5,tomato:0.3}},
+  D:{n:'Vitamin D',src:'Sunlight, milk, butter, fish, eggs',dis:'Rickets',sym:'Soft and bent bones',tL:6,tS:26,boost:{sun:1,fish:0.5,egg:0.3,milk:0.2,butter:0.15}},
+  Ca:{n:'Calcium',src:'Milk, curd, cheese, paneer',dis:'Bone and tooth decay',sym:'Weak bones, tooth decay',tL:8,tS:20,boost:{milk:0.5,curd:0.4,paneer:0.5,mudde:0.4}},
+  I:{n:'Iodine',src:'Seaweed, singhada, iodised salt',dis:'Goitre',sym:'Swelling at the front of the neck',tL:4,tS:26,boost:{salt:1.2}},
+  Fe:{n:'Iron',src:'Green leafy veg, beetroot, pomegranate',dis:'Anaemia',sym:'Weakness, shortness of breath',tL:6,tS:6,boost:{spinach:0.5,beetroot:0.3,pomegranate:0.2,dal:0.3,mudde:0.3}}};
+const DEF_KEYS=Object.keys(DEF);
+function buildA4(){ return buildScene(wrap=>{
+  const S={q:'Why do these neighbours show these symptoms — and how can their diet fix it?'};
+  const P=[{n:'Ravi',k:'A',sex:'m',diet:['rice','dal','tea']},{n:'Sailor (1746)',k:'C',sex:'m',diet:['bread','chicken','water']},{n:'Asha',k:'B1',sex:'f',diet:['rice','tea']},
+    {n:'Kiran',k:'D',sex:'m',child:1,diet:['rice','dal']},{n:'Dadi',k:'Ca',sex:'f',old:1,diet:['rice','tea','sabzi']},{n:'Tashi (hills)',k:'I',sex:'m',diet:['rice','dal','sabzi']},{n:'Meena',k:'Fe',sex:'f',diet:['rice','tea','bread']}];
+  P.forEach(p=>Object.assign(p,{L:0.15,Sy:1,add:[],dx:false,wk:0,hist:[[0,0.15,1]],fly:[],shake:0}));
+  const FOODS=['carrot','papaya','mango','milk','spinach','roti','dal','peanuts','amla','guava','orange','lemon','sun','egg','fish','curd','paneer','salt','beetroot','pomegranate'];
+  let cur=0, run=false, doc=spr(0), docOn=false, docEver=false, wrong=0, drops=[];
+  S.html=`
+    <div class="control-group"><label>Visit a neighbour</label>${chipList('pC',P.map(p=>p.n),0)}</div>
+    <div class="control-group"><label>Which nutrient is lacking?</label>${optList('dO',DEF_KEYS.map(k=>DEF[k].n+' → '+DEF[k].dis))}</div>
+    <div class="control-group"><label>Add to their diet</label>${chipList('fC',FOODS.map(k=>k==='sun'?'☀ Sunlight':FN[k]),-1)}</div>
+    <div class="control-group"><div class="toggle-group"><button class="toggle-btn play" id="rB">▶ Let weeks pass</button><button class="toggle-btn" id="dB">👩‍⚕️ Suggest a doctor</button></div></div>`;
+  S.cards=card('cL','Store in body',COL.green)+card('cS','Symptoms',COL.red)+card('cW','Weeks')+card('cD','Diagnosis');
+  S.tail=`<div class="control-group"><label>Fig. 3.5 · What we found</label>${logTable('tL',['Nutrient','Sources','Disease','Symptoms'])}</div>`;
+  let dOs=[], fBs=[];
+  S.wire=$=>{
+    wireChips(wrap,'pC',i=>{ cur=i; run=false; docOn=false; drops=[]; setActive(dOs,-1); });
+    dOs=wireOpts(wrap,'dO',i=>{ const p=P[cur]; if(DEF_KEYS[i]===p.k){ p.dx=true; wrong=0; } else { p.shake=1; wrong=1.5; } });
+    fBs=wireChips(wrap,'fC',i=>{ const p=P[cur], k=FOODS[i]; if(p.add.includes(k)){ p.add=p.add.filter(x=>x!==k); return; } p.add.push(k);
+      if(k!=='sun') p.fly.push({k,t:0,T:0.7,x0:800,y0:60+Math.random()*30}); });
+    $('#rB').onclick=()=>{ run=!run; };
+    $('#dB').onclick=()=>{ docOn=!docOn; if(docOn) docEver=true; };
+  };
+  const plateXY=(i,n)=>[615+((i%5)-2)*50, 128+Math.floor(i/5)*44];
+  S.tick=(dt,ctx,t,$)=>{
+    const p=P[cur], D=DEF[p.k];
+    /* ---- physiology ---- */
+    const intake=clamp(0.15+p.add.reduce((a,k)=>a+(D.boost[k]||0),0),0,1);
+    if(run){ const w=dt*2; p.wk+=w; p.L+=(intake-p.L)*(1-Math.exp(-w/D.tL)); const tgt=clamp((0.5-p.L)/0.35,0,1); p.Sy+=(tgt-p.Sy)*(1-Math.exp(-w/D.tS));
+      if(p.wk-p.hist[p.hist.length-1][0]>0.25) p.hist.push([p.wk,p.L,p.Sy]); }
+    const s=clamp(p.Sy,0,1); p.shake=Math.max(0,p.shake-dt*2); wrong=Math.max(0,wrong-dt);
+    const X=210+Math.sin(t*40)*p.shake*5, FY=500, H=p.child?300:385;
+    /* ---- scene backgrounds ---- */
+    let light=1, look={sex:p.sex,hairCol:p.old?'#b9bec6':undefined,shirt:p.k==='C'?'#e3edf7':'#eaf3fc'};
+    if(p.k==='A'){ light=0.5+0.5*Math.sin(t*0.55); ctx.save(); ctx.fillStyle='rgba(15,38,64,'+(1-light)*0.75+')'; ctx.fillRect(10,50,420,470); ctx.restore();
+      if(light>0.5) sunIcon(ctx,60,100,16,t); else { circ(ctx,60,100,15,'#c9d6e2','#f4f7fb',2); circ(ctx,68,94,13,'rgba(15,38,64,0.75)','rgba(15,38,64,0.75)',1); } }
+    if(p.k==='C'){ const rk=Math.sin(t*0.9)*0.05; ctx.save(); ctx.strokeStyle=COL.blue; ctx.lineWidth=2; ctx.beginPath(); for(let x=10;x<=430;x+=6) ctx.lineTo(x,FY+12+Math.sin(x*0.05+t*2)*4); ctx.stroke(); ctx.restore(); ctx.save(); ctx.translate(X,FY); ctx.rotate(rk); line(ctx,-180,0,180,0,'#8a5a2b',5); ctx.restore(); }
+    if(p.add.includes('sun')){ sunIcon(ctx,380,100,20,t); for(let i=0;i<4;i++){ const a=2.2+i*0.12; ctx.save(); ctx.globalAlpha=0.35; line(ctx,370,115,370+Math.cos(a)*260,115+Math.sin(a)*260,COL.yellow,3,[8,8]); ctx.restore(); } }
+    if(p.k!=='C') ground(ctx,20,420,FY);
+    /* ---- the body ---- */
+    const br=0.5+0.5*Math.sin(t*6.283*(0.3+((p.k==='Fe'||p.k==='B1')?s*0.9:0)));
+    let o=Object.assign({},look,{mouth:s>0.5?'sad':'smile'});
+    if(p.k==='A'){ o.eyes=light<0.35&&s>0.3?0.3:1; }
+    if(p.k==='B1'){ o.feet=s; o.breath=s*br; if(s>0.5) o.mouth='open'; }
+    if(p.k==='D'){ o.bow=s; }
+    if(p.k==='I'){ o.neck=s; }
+    if(p.k==='Fe'){ o.pale=s; o.breath=s*br; if(s>0.5) o.mouth='open'; }
+    const sway=p.k==='A'?Math.sin(t*3)*14*s*(1-light):0;
+    const b=body(ctx,X+sway,FY,H,o);
+    /* ---- symptom overlays ---- */
+    if(p.k==='B1'&&s>0.1){ const r=rng(Math.floor(t*10)); for(const [fx,fy] of [b.footL,b.footR,b.handL,b.handR]) for(let i=0;i<3;i++) if(r()<s){ const a=r()*6.28, d=10+r()*12; line(ctx,fx+Math.cos(a)*d,fy-8+Math.sin(a)*d,fx+Math.cos(a)*(d+7),fy-8+Math.sin(a)*(d+7),COL.yellow,2); } }
+    if(p.k==='C'){ const wl=40*s; if(wl>2){ line(ctx,b.handR[0]-wl*0.6,b.handR[1]-48,b.handR[0]-wl*0.6+wl*0.4,b.handR[1]-48-wl*0.6,COL.red,3); } }
+    /* lens (zoom) for gums, teeth, blood, vision */
+    const LX=355, LY=150, LR=62;
+    if(p.k==='A') lens(ctx,LX,LY,LR,()=>{ const vis=clamp(light*(0.25+0.75*(1-s))*2.2,0.03,1); ctx.fillStyle=mixCol('#ffffff','#0f2640',1-light); ctx.fillRect(LX-70,LY-70,140,140);
+        ctx.save(); ctx.globalAlpha=vis; rect(ctx,LX-38,LY-30,30,56,COL.ink,'#f4ead8',2); circ(ctx,LX-14,LY,2.5,COL.ink,COL.ink,1); line(ctx,LX+10,LY+10,LX+40,LY+10,COL.ink,3); line(ctx,LX+12,LY+10,LX+12,LY+34,COL.ink,2.4); line(ctx,LX+38,LY+10,LX+38,LY+34,COL.ink,2.4); line(ctx,LX+38,LY+10,LX+38,LY-18,COL.ink,2.4); ctx.restore(); },COL.yellow,'what '+p.n+' sees');
+    if(p.k==='C') lens(ctx,LX,LY,LR,()=>{ ctx.fillStyle='#fff'; ctx.fillRect(LX-70,LY-70,140,140); ctx.beginPath(); ctx.moveTo(LX-60,LY-10); ctx.quadraticCurveTo(LX,LY+10,LX+60,LY-10); ctx.lineTo(LX+60,LY-40); ctx.lineTo(LX-60,LY-40); ctx.closePath(); ctx.fillStyle=mixCol('#f7b2b8','#d9434b',s); ctx.fill();
+        for(let i=0;i<6;i++){ const tx=LX-50+i*20; rrect(ctx,tx-8,LY-8+Math.abs(i-2.5)*2,16,26,5); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=1.4; ctx.stroke(); }
+        if(Math.random()<dt*8*s) drops.push({x:LX-50+Math.random()*100,y:LY+2,vy:0}); drops.forEach(d=>{ d.vy+=300*dt; d.y+=d.vy*dt; ell(ctx,d.x,d.y,2.5,3.5,COL.red); }); drops=drops.filter(d=>d.y<LY+70); },COL.red,'gums');
+    if(p.k==='Ca') lens(ctx,LX,LY,LR,()=>{ ctx.fillStyle='#fff'; ctx.fillRect(LX-70,LY-70,140,140); const dec=Math.max(s,0.25*(p.wk>0||s>0.2?1:0));
+        for(let i=0;i<6;i++){ const tx=LX-50+i*20; rrect(ctx,tx-8,LY-14,16,30,5); ctx.fillStyle='#fffdf6'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=1.4; ctx.stroke(); if((i*37%10)/10<dec) ell(ctx,tx,LY-2+(i%2)*6,3+dec*3,3+dec*2,'#7a4a1f'); }
+        textAt(ctx,'bone strength',LX,LY+40,{align:'center',size:10,weight:700,color:COL.muted}); ctx.fillStyle=COL.green; ctx.fillRect(LX-40,LY+46,80*(1-s*0.7),7); rect(ctx,LX-40,LY+46,80,7,COL.ink,null,1); },COL.red,'teeth');
+    if(p.k==='Fe') lens(ctx,LX,LY,LR,()=>{ ctx.fillStyle='#fff6f4'; ctx.fillRect(LX-70,LY-70,140,140); const n=Math.round(26*(1-0.55*s)), r=rng(3);
+        for(let i=0;i<n;i++){ const x=LX-60+((r()*120+t*20*(0.5+r()))%120), y=LY-50+r()*100; ell(ctx,x,y,8,5.5,mixCol('#d9434b','#f3c0bd',s),'#9b2335',1.2); ell(ctx,x,y,3,2,'rgba(255,255,255,0.5)'); } },COL.red,'blood');
+    if(p.k==='B1'||p.k==='Fe') textAt(ctx,'breaths '+Math.round(16*(1+s*0.9))+' / min',X+90,b.chest[1],{size:11,weight:700,color:s>0.4?COL.red:COL.muted});
+    if(p.k==='D'&&s>0.2){ dimArrow(ctx,X-60,b.knee-40,b.knee+40,COL.red); textAt(ctx,'bent legs',X-66,b.knee-48,{align:'right',size:11,weight:700,color:COL.red}); }
+    if(p.k==='I'&&s>0.2){ vec(ctx,X+90,b.neck[1]-20,X+28,b.neck[1],COL.red,1.8); textAt(ctx,'swelling',X+94,b.neck[1]-22,{size:11,weight:700,color:COL.red}); }
+    textAt(ctx,p.n,X,FY+18,{align:'center',size:13,weight:700,color:COL.ink});
+    /* ---- plate ---- */
+    ell(ctx,615,150,170,60,'#fff',COL.ink,2.4); ell(ctx,615,150,150,48,null,'#dbe4f0',1.2); textAt(ctx,'What '+p.n+' eats',615,78,{align:'center',size:12,weight:700,color:COL.ink});
+    const onPlate=p.diet.concat(p.add.filter(k=>k!=='sun'&&!p.fly.some(f=>f.k===k)));
+    onPlate.forEach((k,i)=>{ const [x,y]=plateXY(i,onPlate.length); food(ctx,k,x,y,38); if(i>=p.diet.length&&(D.boost[k]||0)>0) circ(ctx,x,y,24,COL.green,null,2); });
+    for(let i=p.fly.length-1;i>=0;i--){ const f=p.fly[i]; f.t+=dt; const n=onPlate.length+(p.fly.length-1-i), [tx,ty]=plateXY(Math.min(n,14),0), u=clamp(f.t/f.T,0,1);
+      const x=lerp(f.x0,tx,u), y=lerp(f.y0,ty,u)-Math.sin(u*Math.PI)*70; food(ctx,f.k,x,y,38,{rot:u*6}); if(u>=1) p.fly.splice(i,1); }
+    /* ---- chart ---- */
+    const span=Math.max(26,Math.ceil(p.wk/13)*13);
+    const ch=miniChart(ctx,450,226,340,168,[0,span],[0,1.15],[{pts:p.hist.map(h=>[h[0],h[1]]),col:COL.green},{pts:p.hist.map(h=>[h[0],h[2]]),col:COL.red}],{xt:[0,span/2],yt:[0,0.5,1],xl:span+' weeks',yl:'store (green) · symptoms (red)'});
+    line(ctx,ch.px(0),ch.py(0.5),ch.px(span),ch.py(0.5),COL.mid,1,[4,4]);
+    /* ---- doctor ---- */
+    springTo(doc,docOn?1:0,40,9,dt);
+    if(doc.x>0.02){ const dx=lerp(900,750,doc.x); body(ctx,dx,512,112,{sex:'f',shirt:'#ffffff',mouth:'smile',armL:0.5}); ctx.save(); ctx.strokeStyle=COL.blue; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(dx-9,512-112*0.78); ctx.quadraticCurveTo(dx,512-112*0.62,dx+9,512-112*0.78); ctx.stroke(); ctx.restore();
+      if(doc.x>0.8){ const adv=p.dx?'Eat '+D.src.split(',')[0].toLowerCase()+' etc. — check again in 4 weeks':'Let me examine first…'; const sz=fitFont(ctx,adv,250,12,600); ctx.save(); rrect(ctx,442,430,262,30,8); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.blue; ctx.lineWidth=1.6; ctx.stroke(); ctx.restore(); textAt(ctx,adv,450,450,{size:sz,weight:600,color:COL.ink}); } }
+    /* ---- readouts ---- */
+    setv($,'cL',Math.round(p.L*100)+' %'); setv($,'cS',s>0.66?'severe':s>0.33?'some':s>0.12?'mild':'gone'); setv($,'cW',fmt(p.wk,0)); setv($,'cD',p.dx?D.n:'?');
+    $('#rB').textContent=run?'⏸ Pause':'▶ Let weeks pass';
+    fBs.forEach((bt,i)=>bt.classList.toggle('active',p.add.includes(FOODS[i])));
+    dOs.forEach((bt,i)=>{ bt.classList.toggle('active',p.dx&&DEF_KEYS[i]===p.k); });
+    const found=P.filter(q=>q.dx); setLog($,'tL',DEF_KEYS.filter(k=>found.some(q=>q.k===k)).map(k=>[{t:DEF[k].n,c:'r-ok'},DEF[k].src,DEF[k].dis,DEF[k].sym]));
+    S.st={cured:P.filter(q=>q.dx&&q.Sy<0.15).length,dx:found.length,doc:docEver,p};
+  };
+  S.found=()=>S.st&&S.st.cured>=3&&S.st.doc?'A lack of vitamins or minerals causes deficiency diseases — eating their sources (and seeing a doctor) cures them':'';
+  S.fb=()=>{ const st=S.st; if(!st) return null; const p=st.p;
+    if(wrong>0) return ['bad','Not this one — look at the symptom again.'];
+    if(!p.dx) return ['warn','Look at the symptoms. Which nutrient is missing?'];
+    if(p.Sy>0.15&&!p.add.some(k=>DEF[p.k].boost[k])) return ['warn','Add a food rich in '+DEF[p.k].n+'.'];
+    if(p.Sy>0.15) return ['warn','Let the weeks pass…'];
+    if(st.cured<3) return ['ok','✓ Recovered! Visit '+(3-st.cured)+' more.'];
+    if(!st.doc) return ['warn','Also suggest a doctor visit.'];
+    return ['ok','✓ Survey done.']; };
+  return S;
+}); }
+
+/* =====================================================================
+   3.5  LET US INVESTIGATE — test for starch (iodine → blue-black)
+   Starch per 100 g: potato 15, cucumber 0, boiled rice 26, boiled gram 15,
+   peanuts 2, bread 45, butter 0, coconut 0, oil 0, soya 1, peas 6.
+   Blue-black strength f = (1 − e^(−starch/6)) · (1 − e^(−t/1.2 s)),
+   so 2–3 drops of dilute iodine turn starchy food blue-black within
+   seconds while the rest stay iodine brown. A drop forms at the tip,
+   falls freely (g scaled), splashes and spreads into the food
+   (r = r_max·(1 − e^(−t/0.8 s)), r_max bigger for porous food;
+   it beads up on oil and butter). The zoom strip shows starch grains
+   darkening from the outside in as iodine diffuses into them.
+   ===================================================================== */
+function testPiece(ctx,k,x,y,s){
+  ctx.save(); ctx.translate(x,y); ctx.lineJoin='round'; const r=rng(k.length*7+3);
+  if(k==='potato'){ ell(ctx,0,0,s*0.42,s*0.3,'#f6ecc8','#a7782f',2.2); ell(ctx,0,0,s*0.34,s*0.23,null,'rgba(167,120,47,0.25)',1); }
+  else if(k==='cucumber'){ ell(ctx,0,0,s*0.4,s*0.3,'#f4fbe8','#3f7a30',3.4); for(let i=0;i<7;i++) ell(ctx,(r()-0.5)*s*0.3,(r()-0.5)*s*0.2,2,1.2,'#d7e9b8'); }
+  else if(k==='rice'){ for(let i=0;i<22;i++){ const a=r()*6.28, q=Math.sqrt(r()); ell(ctx,Math.cos(a)*s*0.34*q,Math.sin(a)*s*0.22*q,s*0.06,s*0.025,'#fbfbf6','#bdbdae',1,r()*3); } }
+  else if(k==='gram'){ for(let i=0;i<10;i++){ const a=r()*6.28, q=Math.sqrt(r()); ell(ctx,Math.cos(a)*s*0.3*q,Math.sin(a)*s*0.2*q,s*0.075,s*0.07,'#e7c48a','#8a5a2b',1.2); } }
+  else if(k==='peanuts'){ for(let i=0;i<16;i++){ const a=r()*6.28, q=Math.sqrt(r()); ctx.save(); ctx.translate(Math.cos(a)*s*0.32*q,Math.sin(a)*s*0.2*q); ctx.rotate(r()*3); ctx.beginPath(); ctx.moveTo(-5,-3); ctx.lineTo(4,-4); ctx.lineTo(5,3); ctx.lineTo(-3,4); ctx.closePath(); ctx.fillStyle='#ecc59a'; ctx.fill(); ctx.strokeStyle='#8a5a2b'; ctx.lineWidth=1; ctx.stroke(); ctx.restore(); } }
+  else if(k==='bread'){ ctx.scale(0.8,0.62); FD.bread(ctx,s); }
+  else if(k==='butter'){ FD.butter(ctx,s*0.8); }
+  else if(k==='coconut'){ for(let i=0;i<18;i++){ const a=r()*6.28, q=Math.sqrt(r()); ell(ctx,Math.cos(a)*s*0.32*q,Math.sin(a)*s*0.2*q,s*0.05,s*0.03,'#fffdf6','#cfc3a8',1,r()*3); } }
+  else if(k==='oil'){ ell(ctx,0,0,s*0.38,s*0.2,'rgba(255,236,120,0.7)','#c9a93a',1.6); ell(ctx,-s*0.12,-s*0.05,s*0.08,s*0.03,'rgba(255,255,255,0.8)'); }
+  else if(k==='soya'){ FD.soya(ctx,s); }
+  else if(k==='peas'){ for(let i=0;i<9;i++){ const a=r()*6.28, q=Math.sqrt(r()); ell(ctx,Math.cos(a)*s*0.28*q,Math.sin(a)*s*0.18*q,s*0.07,s*0.07,'#7cc05a','#3f7a30',1.2); } }
+  ctx.restore();
+}
+const PIECE_R={potato:[0.42,0.3],cucumber:[0.4,0.3],rice:[0.38,0.25],gram:[0.34,0.24],peanuts:[0.36,0.24],bread:[0.36,0.3],butter:[0.3,0.18],coconut:[0.36,0.24],oil:[0.38,0.2],soya:[0.36,0.22],peas:[0.32,0.2]};
+function dropperDraw(ctx,x,tipY,squeeze,level,col){
+  ctx.save(); ctx.lineJoin='round';
+  ctx.beginPath(); ctx.moveTo(x-2.5,tipY); ctx.lineTo(x-7,tipY-22); ctx.lineTo(x-7,tipY-100); ctx.lineTo(x+7,tipY-100); ctx.lineTo(x+7,tipY-22); ctx.lineTo(x+2.5,tipY); ctx.closePath(); ctx.fillStyle='rgba(235,243,251,0.8)'; ctx.fill();
+  ctx.save(); ctx.clip(); ctx.fillStyle=col; ctx.fillRect(x-8,tipY-22-level*70,16,level*70+22); ctx.restore();
+  ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke();
+  const sq=1-squeeze*0.35; ell(ctx,x,tipY-118,13*(1+squeeze*0.25),20*sq,'#f2b9a8',COL.ink,2.2); rect(ctx,x-9,tipY-104,18,6,COL.ink,'#e08a7a',1.6);
+  if(squeeze>0.05){ ctx.save(); ctx.lineCap='round'; ctx.strokeStyle=COL.yellow; ctx.lineWidth=2.4; line(ctx,x-28-squeeze*-6,tipY-118,x-17+squeeze*4,tipY-118,COL.yellow,2.4); arrowHead(ctx,x-15+squeeze*4,tipY-118,0,COL.yellow,6); line(ctx,x+28,tipY-118,x+17-squeeze*4,tipY-118,COL.yellow,2.4); arrowHead(ctx,x+15-squeeze*4,tipY-118,Math.PI,COL.yellow,6); ctx.restore(); }
+  ctx.restore();
+}
+function swatch(c){ return `<span style="display:inline-block;width:14px;height:11px;border-radius:3px;border:1px solid #c2d1e5;background:${c};vertical-align:middle"></span>`; }
+const BASE_COL={potato:'#f6ecc8',cucumber:'#f4fbe8',rice:'#fbfbf6',gram:'#e7c48a',peanuts:'#ecc59a',bread:'#f6e4bd',butter:'#ffe97a',coconut:'#fffdf6',oil:'#fff0a0',soya:'#f3dd9a',peas:'#7cc05a'};
+function buildA5(){ return buildScene(wrap=>{
+  const S={q:'Which food items contain starch?'};
+  const K=TEST_KEYS, pos=K.map((k,i)=>i<6?[85+i*126,212]:[148+(i-6)*126,336]);
+  const st=K.map(()=>({n:0,te:0,spots:[]}));
+  let sel=0, dx=spr(pos[0][0]), dy=spr(pos[0][1]-62), sq=spr(0), drop=null, queue=0, qT=0, parts=[], level=0.8;
+  S.html=`
+    <div class="control-group"><label>Food item</label>${chipList('kC',K.map(k=>TEST_NAME[k]),0)}</div>
+    <div class="control-group"><label>Predict first: starch present?</label><div class="toggle-group"><button class="toggle-btn" id="pY">Yes</button><button class="toggle-btn" id="pN">No</button></div></div>
+    <div class="control-group"><div class="toggle-group"><button class="toggle-btn play" id="d1">💧 1 drop of iodine</button><button class="toggle-btn" id="d3">💧💧💧 3 drops</button></div>
+      <div class="toggle-group"><button class="toggle-btn" id="cB">↻ Fresh piece</button></div></div>`;
+  S.cards=card('cN','Drops')+card('cC','Colour now')+card('cP','Prediction')+card('cO','Starch present?',COL.green);
+  S.tail=`<div class="control-group"><label>Table 3.3 · Starch test</label>${logTable('tL',['Food','Before','After','Predicted','Starch'])}</div>`;
+  let kBs=[];
+  S.wire=$=>{
+    kBs=wireChips(wrap,'kC',i=>{ sel=i; queue=0; if(drop&&drop.ph==='form') drop.ph='fall'; });
+    $('#pY').onclick=()=>{ T33[K[sel]].ps=true; }; $('#pN').onclick=()=>{ T33[K[sel]].ps=false; };
+    $('#d1').onclick=()=>{ queue+=1; }; $('#d3').onclick=()=>{ queue+=3; };
+    $('#cB').onclick=()=>{ st[sel]={n:0,te:0,spots:[]}; T33[K[sel]].s=null; };
+  };
+  const colOf=i=>{ const s=st[i], k=K[i]; if(!s.n) return null; const f=showS(k)*(1-Math.exp(-s.te/1.2))*Math.min(1,s.n/2); return {f,c:rampCol([[0,'#c8762a'],[0.5,'#5a3550'],[1,'#1d1d3b']],f)}; };
+  S.tick=(dt,ctx,t,$)=>{
+    const [px,py]=pos[sel], tipY=py-58;
+    springTo(dx,px,60,11,dt); springTo(dy,tipY,60,11,dt);
+    /* squeeze → drop forms → falls */
+    const near=Math.abs(dx.x-px)<3&&Math.abs(dy.x-tipY)<3;
+    if(queue>0&&!drop&&near){ qT+=dt; if(qT>0.25){ qT=0; queue--; drop={ph:'form',r:0,x:px,y:tipY,vy:0,i:sel}; } }
+    springTo(sq,drop&&drop.ph==='form'?1:0,200,14,dt);
+    if(drop){ if(drop.ph==='form'){ drop.r+=dt*14; drop.y=pos[drop.i][1]-58+drop.r; if(drop.r>=4.2){ drop.ph='fall'; level=Math.max(0.1,level-0.02); } }
+      else { drop.vy+=1400*dt; drop.y+=drop.vy*dt; const [qx,qy]=pos[drop.i];
+        if(drop.y>=qy-4){ const s=st[drop.i], R=PIECE_R[K[drop.i]]; s.n++; s.te=0; s.spots.push({x:(Math.random()-0.5)*56*R[0],y:(Math.random()-0.5)*56*R[1],age:0});
+          for(let k=0;k<7;k++){ const a=-Math.PI*(0.1+0.8*Math.random()); parts.push({x:drop.x,y:qy-4,vx:Math.cos(a)*90,vy:Math.sin(a)*120,life:0.4,r:1.6,c:'#c8762a'}); }
+          drop=null; } } }
+    stepParts(parts,dt,900);
+    st.forEach(s=>{ if(s.n){ s.te+=dt; s.spots.forEach(p=>p.age+=dt); } });
+    /* ---- tray + dishes ---- */
+    ctx.save(); rrect(ctx,20,160,760,230,14); ctx.fillStyle='#f7f9fc'; ctx.fill(); ctx.strokeStyle='#c2d1e5'; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+    K.forEach((k,i)=>{ const [x,y]=pos[i], on=i===sel; ell(ctx,x,y,56,20,'#fff',on?COL.yellow:COL.ink,on?2.8:1.8); ell(ctx,x,y-2,50,16,null,'#dbe4f0',1);
+      testPiece(ctx,k,x,y-3,64);
+      const c=colOf(i), R=PIECE_R[k], porous=k==='oil'||k==='butter'?0.35:k==='cucumber'?0.7:1;
+      if(c){ ctx.save(); ctx.beginPath(); ctx.ellipse(x,y-3,64*R[0]+2,64*R[1]+2,0,0,7); ctx.clip(); ctx.globalAlpha=0.85;
+        st[i].spots.forEach(p=>{ const rr=(8+10*porous)*(1-Math.exp(-p.age/0.8))*(porous<0.5?0.6:1); blob(ctx,[...Array(8)].map((_,j)=>{ const a=j/8*6.283, w=rr*(0.85+0.15*Math.sin(j*2.3+p.x)); return [x+p.x+Math.cos(a)*w,y-3+p.y+Math.sin(a)*w*0.7]; }),c.c,null); });
+        ctx.restore(); if(porous<0.5) st[i].spots.forEach(p=>ell(ctx,x+p.x-2,y-5+p.y,1.6,1,'rgba(255,255,255,0.8)')); }
+      textAt(ctx,TEST_NAME[k],x,y+38,{align:'center',size:11,weight:on?700:600,color:on?COL.ink:COL.muted});
+      const T=T33[k]; if(T.s!==null) textAt(ctx,T.s?'✓ starch':'✗',x,y+52,{align:'center',size:10.5,weight:700,color:T.s?COL.green:COL.mid}); });
+    /* ---- dropper + drop ---- */
+    dropperDraw(ctx,dx.x,dy.x,sq.x,level,'#c8762a');
+    textAt(ctx,'dilute iodine',dx.x+16,dy.x-70,{size:10.5,weight:700,color:'#a0581c'});
+    if(drop) ell(ctx,drop.x,drop.y,drop.r*0.85,drop.r*(drop.ph==='fall'?1.25:1),'#c8762a','#8a4a10',1);
+    drawParts(ctx,parts);
+    /* ---- zoom strip: starch grains ---- */
+    const k=K[sel], c=colOf(sel), sp=TEST[k].st;
+    ctx.save(); rrect(ctx,20,404,760,108,12); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke(); ctx.clip();
+    const r=rng(sel*13+5), n=Math.round(sp*1.6), soak=c?clamp(st[sel].te/1.2,0,1)*Math.min(1,st[sel].n/2):0;
+    ctx.fillStyle=BASE_COL[k]; ctx.globalAlpha=0.35; ctx.fillRect(150,404,630,108); ctx.globalAlpha=1;
+    for(let i=0;i<n;i++){ const gx=170+r()*590, gy=418+r()*82, gr=6+r()*7, inside=clamp(soak*1.6-(gx-170)/590*0.6,0,1);
+      ell(ctx,gx,gy,gr,gr*0.78,rampCol([[0,'#fbf6e8'],[0.5,'#5a3550'],[1,'#1d1d3b']],inside),'#8a7a5a',1.1); ell(ctx,gx-gr*0.2,gy-gr*0.15,gr*0.25,gr*0.18,'rgba(255,255,255,'+(0.6*(1-inside))+')'); }
+    if(!n) textAt(ctx,'no starch grains',465,463,{align:'center',size:13,weight:600,color:COL.mid});
+    if(c){ ctx.save(); ctx.globalAlpha=0.18*(1-soak*0.5); ctx.fillStyle='#c8762a'; ctx.fillRect(150,404,630*soak+40,108); ctx.restore(); }
+    ctx.restore();
+    textAt(ctx,'ZOOM ×400',30,424,{size:11,weight:700,color:COL.ink}); textAt(ctx,TEST_NAME[k],30,442,{size:12,weight:700,color:COL.yellow}); textAt(ctx,sp+' g starch',30,460,{size:11,color:COL.muted}); textAt(ctx,'in 100 g',30,474,{size:11,color:COL.muted});
+    /* ---- record ---- */
+    st.forEach((s,i)=>{ if(s.n>=2&&s.te>1.6) T33[K[i]].s=colOf(i).f>0.45; });
+    const cc=c?(c.f>0.45?'blue-black':c.f>0.15?'darker spots':'brown (iodine)'):'—';
+    setv($,'cN',String(st[sel].n)); setv($,'cC',cc); const T=T33[k]; setv($,'cP',T.ps===null?'?':T.ps?'Yes':'No'); setv($,'cO',T.s===null?(st[sel].n<2?'add 2–3 drops':'wait…'):T.s?'Yes':'No');
+    $('#pY').classList.toggle('active',T.ps===true); $('#pN').classList.toggle('active',T.ps===false);
+    setLog($,'tL',K.filter(k=>T33[k].s!==null).map(k=>{ const i=K.indexOf(k), cc=colOf(i); return [TEST_NAME[k],swatch(BASE_COL[k]),swatch(cc?cc.c:'#fff'),T33[k].ps===null?'—':T33[k].ps?'Yes':'No',T33[k].s?{t:'Yes',c:'r-ok'}:{t:'No',c:'r-bad'}]; }));
+    S.st={done:K.filter(k=>T33[k].s!==null).length, ps:T.ps, sel};
+  };
+  S.found=()=>S.st&&S.st.done>=6?'Blue-black with iodine means starch — potato, rice, bread, gram have it; cucumber, oil, butter, coconut do not':'';
+  S.fb=()=>{ const s=S.st; if(!s) return null; const T=T33[K[s.sel]];
+    if(T.ps===null&&T.s===null) return ['warn','Predict first, then add iodine.'];
+    if(T.s===null) return ['warn','Add 2–3 drops and watch the colour.'];
+    if(T.ps!==null&&T.ps!==T.s) return ['bad','Your prediction did not match — that is how we learn!'];
+    if(s.done<6) return ['ok','✓ Recorded. Test '+(6-s.done)+' more.'];
+    return ['ok','✓ '+s.done+' foods tested.']; };
+  return S;
+}); }
+
+/* =====================================================================
+   3.6  LET US INVESTIGATE — test for fats (oily patch on paper)
+   Fat per 100 g: potato 0.1, cucumber 0.1, rice 0.3, gram 2.6, peanuts 49,
+   bread 3.3, butter 81, coconut 33, oil 100, soya 20, peas 0.4.
+   Pressing transfers oil ∝ fat% · (1 − e^(−F/F₀)) and water ∝ water% · same.
+   Both wick into the paper: r(t) = r_max·√(1 − e^(−t/τ)) (capillary
+   spreading slows down, Washburn-like). Water evaporates while the paper
+   dries (W = e^(−t/τ_dry)); oil does not. Paper lets 25 % of light through;
+   oil fills the pores and raises it towards 85 % — the patch glows when
+   held against a lamp. Wet paper is translucent too, so it must dry first.
+   ===================================================================== */
+function buildA6(){ return buildScene(wrap=>{
+  const S={q:'Which food items contain fat?'};
+  const K=TEST_KEYS; let sel=0, F=2;
+  const fresh=()=>({ph:'ready',th:spr(0),hand:spr(0),lift:0,oil:0,wat:0,W:1,tw:0,dry:0,light:false,done:false});
+  let P=fresh(); const hung=[], LP=spr(0);
+  const CX=400, FY=300, PW=340, PH=118;
+  S.html=`
+    <div class="control-group"><label>Food item</label>${chipList('kC',K.map(k=>TEST_NAME[k]),0)}</div>
+    <div class="control-group"><label>Predict first: fat present?</label><div class="toggle-group"><button class="toggle-btn" id="pY">Yes</button><button class="toggle-btn" id="pN">No</button></div></div>
+    ${slider('fR','How hard you press',1,3,0.5,2)}
+    <div class="control-group"><div class="toggle-group"><button class="toggle-btn play" id="s1">📄 Wrap &amp; press</button><button class="toggle-btn" id="s2">↩ Unwrap</button></div>
+      <div class="toggle-group"><button class="toggle-btn" id="s3">🌬 Let it dry</button><button class="toggle-btn" id="s4">💡 Hold against light</button></div></div>`;
+  S.cards=card('cO','Patch after drying')+card('cL','Light through patch',COL.yellow)+card('cP','Prediction')+card('cF','Fat present?',COL.green);
+  S.tail=`<div class="control-group"><label>Table 3.3 · Fat test</label>${logTable('tL',['Food','Predicted','Oily patch','Fat'])}</div>`;
+  S.wire=$=>{
+    wireChips(wrap,'kC',i=>{ sel=i; P=fresh(); });
+    $('#pY').onclick=()=>{ T33[K[sel]].pf=true; }; $('#pN').onclick=()=>{ T33[K[sel]].pf=false; };
+    const fr=$('#fR'); fr.oninput=()=>{ F=+fr.value; };
+    $('#s1').onclick=()=>{ if(P.ph==='ready') P.ph='fold'; };
+    $('#s2').onclick=()=>{ if(P.ph==='pressed') P.ph='unfold'; };
+    $('#s3').onclick=()=>{ if(P.ph==='wet') P.ph='drying'; };
+    $('#s4').onclick=()=>{ if(P.ph==='wet'||P.ph==='drying'||P.ph==='dry') P.light=!P.light; };
+  };
+  const tOil=k=>1-Math.exp(-TEST[k].ft/12);   /* how much the paper pores fill with oil */
+  S.tick=(dt,ctx,t,$)=>{
+    const k=K[sel];
+    /* ---- step machine ---- */
+    if(P.ph==='fold'){ springTo(P.th,Math.PI,30,9,dt); if(P.th.x>3.05) P.ph='press'; }
+    else if(P.ph==='press'){ springTo(P.hand,1,40,9,dt); if(P.hand.x>0.97){ P.tw+=dt; if(P.tw>0.6){ const pf=1-Math.exp(-F/1.5); P.oil=tOil(k)*pf; P.wat=TEST[k].wa/100*pf; P.ph='release'; P.tw=0; } } }
+    else if(P.ph==='release'){ springTo(P.hand,0,30,8,dt); if(P.hand.x<0.05) P.ph='pressed'; }
+    else if(P.ph==='unfold'){ springTo(P.th,0,30,9,dt); if(P.th.x<0.05){ P.ph='lift'; } }
+    else if(P.ph==='lift'){ P.lift=Math.min(1,P.lift+dt*1.4); if(P.lift>=1) P.ph='wet'; }
+    else springTo(P.th,P.ph==='ready'?0:P.th.x,30,9,dt);
+    if(P.ph!=='press'&&P.ph!=='release') springTo(P.hand,0,30,8,dt);
+    if(P.ph==='drying'){ P.dry+=dt; P.W=Math.exp(-P.dry/1.6); if(P.W<0.03){ P.W=0; P.ph='dry'; } }
+    if(P.oil>0||P.wat>0) P.tw+=dt;
+    const spread=Math.sqrt(1-Math.exp(-P.tw/1.2));
+    const rOil=52*Math.sqrt(P.oil)*spread, rWat=46*Math.sqrt(P.wat)*spread*Math.sqrt(P.W);
+    const trans=0.25+0.6*P.oil+0.35*P.wat*P.W;
+    springTo(LP,P.light?1:0,30,9,dt);
+    /* record once dry */
+    if(P.ph==='dry'&&!P.done){ P.done=true; T33[k].f=P.oil>0.4; const h=hung.find(x=>x.k===k); if(h){ h.oil=P.oil; } else hung.push({k,oil:P.oil,sw:spr(0.3)}); }
+    /* ---- background: lamp behind ---- */
+    const L=LP.x;
+    if(L>0.01){ ctx.save(); ctx.fillStyle='rgba(15,38,64,'+0.82*L+')'; ctx.fillRect(-100,-50,1000,700); ctx.restore();
+      const g=ctx.createRadialGradient(CX,FY,10,CX,FY,330); g.addColorStop(0,'rgba(255,236,150,'+0.9*L+')'); g.addColorStop(1,'rgba(255,236,150,0)'); ctx.fillStyle=g; ctx.fillRect(CX-340,FY-340,680,680); }
+    /* ---- drying line gallery ---- */
+    line(ctx,20,70,780,70,L>0.5?'#8195ab':COL.ink,1.6);
+    hung.forEach((h,i)=>{ const hx=60+i*66; springTo(h.sw,0,20,1.2,dt); ctx.save(); ctx.translate(hx,70); ctx.rotate(h.sw.x*0.3+Math.sin(t*1.2+i)*0.03);
+      rect(ctx,-22,8,44,34,'#c2d1e5','#fff',1.4); if(h.oil>0.05){ ctx.save(); ctx.globalAlpha=clamp(h.oil,0,1)*0.8; ell(ctx,0,25,6+12*Math.sqrt(h.oil),5+9*Math.sqrt(h.oil),'#f3dd8a'); ctx.restore(); }
+      line(ctx,-6,0,-6,12,COL.ink,2); line(ctx,6,0,6,12,COL.ink,2); ctx.restore();
+      textAt(ctx,TEST_NAME[h.k].split(' ').pop(),hx,124,{align:'center',size:9.5,weight:600,color:L>0.5?'#c9d6e2':COL.muted}); });
+    /* ---- the paper ---- */
+    const paperCol=L>0.01?mixCol('#ffffff','#9c8f6a',L*0.7):'#ffffff';
+    const patch=(cy,flip)=>{ /* patches centred under where the food sat, mirrored on the folded half */
+      if(rWat>1){ ctx.save(); ctx.globalAlpha=0.55; blob(ctx,[...Array(10)].map((_,j)=>{ const a=j/10*6.283, w=rWat*(0.88+0.12*Math.sin(j*2.1)); return [CX+Math.cos(a)*w*1.3,cy+Math.sin(a)*w*0.7*flip]; }),L>0.01?'rgba(230,220,170,0.9)':'#c9dbea',null); ctx.restore(); }
+      if(rOil>1){ const glow=L>0.01?mixCol('#f3dd8a','#fffbe6',L):'#f3dd8a'; ctx.save(); ctx.globalAlpha=L>0.01?0.75+0.25*L:0.75; if(L>0.01){ ctx.shadowColor='rgba(255,240,170,'+L+')'; ctx.shadowBlur=18*L*clamp(P.oil*1.5,0,1); } blob(ctx,[...Array(10)].map((_,j)=>{ const a=j/10*6.283, w=rOil*(0.85+0.15*Math.sin(j*2.7+1)); return [CX+Math.cos(a)*w*1.3,cy+Math.sin(a)*w*0.7*flip]; }),glow,'rgba(201,169,58,0.6)',1.2); ctx.restore(); } };
+    ctx.save(); rect(ctx,CX-PW/2,FY,PW,PH,COL.ink,paperCol,2); ctx.restore(); patch(FY+62,1);
+    /* food on the bottom half (until lifted away) */
+    const lf=P.lift; if(lf<1){ const fx=CX+lf*260, fy=FY+60-Math.sin(lf*Math.PI)*120; testPiece(ctx,k,fx,fy,P.ph==='press'||P.ph==='release'?70*(1+0.15*P.hand.x):70); }
+    /* top half folding over the crease: drawn with height ∝ cos θ */
+    const th=P.th.x, c=Math.cos(th), hh=PH*c, bulge=P.ph==='fold'||P.ph==='press'||P.ph==='release'||P.ph==='pressed'||P.ph==='unfold'?clamp(1-c,0,1)*(1-P.hand.x*0.7)*10:0;
+    ctx.save(); ctx.beginPath(); ctx.moveTo(CX-PW/2,FY); ctx.lineTo(CX-PW/2+ (1-Math.abs(c))*6,FY-hh); ctx.lineTo(CX+PW/2-(1-Math.abs(c))*6,FY-hh); ctx.lineTo(CX+PW/2,FY); ctx.closePath();
+    ctx.fillStyle=c<0?mixCol(paperCol,'#e6edf5',0.5):paperCol; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+    if(c>0.2) { ctx.save(); ctx.beginPath(); ctx.rect(CX-PW/2,FY-hh,PW,hh); ctx.clip(); ctx.translate(0,FY); ctx.scale(1,c); ctx.translate(0,-FY); patch(FY-62,1); ctx.restore(); }
+    if(bulge>0.5){ ell(ctx,CX,FY+60,70,22+bulge,null,'rgba(19,42,68,0.25)',1.4); }
+    line(ctx,CX-PW/2,FY,CX+PW/2,FY,'#c2d1e5',1.2,[5,4]);
+    /* pressing hand (palm seen from above) */
+    const hp=P.hand.x; if(hp>0.03){ const hy=lerp(150,FY+30,hp); ctx.save(); ctx.globalAlpha=clamp((hp-0.03)*4,0,1);
+      ctx.beginPath(); ctx.ellipse(CX,hy,62,40,0,0,7); ctx.fillStyle='#fbe3cf'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.stroke();
+      for(let i=0;i<4;i++){ const fx=CX-42+i*28; rrect(ctx,fx-10,hy-86+Math.abs(i-1.5)*8,20,52,10); ctx.fillStyle='#fbe3cf'; ctx.fill(); ctx.stroke(); }
+      ctx.save(); ctx.translate(CX+64,hy+4); ctx.rotate(-0.7); rrect(ctx,-10,-40,20,46,10); ctx.fillStyle='#fbe3cf'; ctx.fill(); ctx.stroke(); ctx.restore(); ctx.restore();
+      if(hp>0.6){ for(let i=0;i<3;i++) vec(ctx,CX-60+i*60,hy-120,CX-60+i*60,hy-96,COL.yellow,2.4); textAt(ctx,['gentle','firm','hard'][Math.round((F-1))]||'firm',CX+110,hy-100,{size:12,weight:700,color:COL.yellow}); } }
+    /* lamp + light meter */
+    if(L>0.01){ ctx.save(); ctx.globalAlpha=L; circ(ctx,120,250,20,COL.yellow,'#fff6c8',2.4); for(let i=0;i<8;i++){ const a=i/8*6.283+t*0.3; line(ctx,120+Math.cos(a)*25,250+Math.sin(a)*25,120+Math.cos(a)*34,250+Math.sin(a)*34,COL.yellow,2); } textAt(ctx,'lamp behind',120,292,{align:'center',size:11,weight:700,color:'#fff6c8'});
+      meterV(ctx,690,180,26,180,(rOil>1?trans:0.25),COL.yellow,''); textAt(ctx,'light through',703,384,{align:'center',size:11,weight:700,color:'#fff6c8'}); textAt(ctx,Math.round((rOil>1?trans:0.25)*100)+' %',703,174,{align:'center',size:12,weight:700,color:'#fff6c8'}); ctx.restore(); }
+    textAt(ctx,TEST_NAME[k],CX,FY+PH+26,{align:'center',size:14,weight:700,color:L>0.5?'#fff':COL.ink});
+    const stepTxt={ready:'Place food on paper',fold:'Folding…',press:'Pressing…',release:'Pressing…',pressed:'Now unwrap',unfold:'Unwrapping…',lift:'Removing the food…',wet:'Wet patch — let it dry',drying:'Drying…',dry:P.light?'Light shines through the oily patch':'Dry. Hold it against the light'}[P.ph];
+    textAt(ctx,stepTxt,CX,FY+PH+46,{align:'center',size:12,weight:600,color:L>0.5?'#c9d6e2':COL.muted});
+    if(P.ph==='drying'||P.ph==='wet') textAt(ctx,'water left '+Math.round(P.W*100)+' %',CX+PW/2-4,FY+PH-8,{align:'right',size:11,weight:700,color:COL.blue});
+    /* ---- readouts ---- */
+    const T=T33[k], dry=P.ph==='dry';
+    setv($,'cO',dry?(P.oil>0.4?'oily patch':P.oil>0.15?'faint mark':'none'):(P.ph==='wet'||P.ph==='drying')?'still wet…':'—');
+    setv($,'cL',(P.ph==='wet'||P.ph==='drying'||dry)?Math.round(trans*100)+' %':'—'); setv($,'cP',T.pf===null?'?':T.pf?'Yes':'No'); setv($,'cF',T.f===null?'—':T.f?'Yes':'No');
+    $('#pY').classList.toggle('active',T.pf===true); $('#pN').classList.toggle('active',T.pf===false);
+    $('#s1').disabled=P.ph!=='ready'; $('#s2').disabled=P.ph!=='pressed'; $('#s3').disabled=P.ph!=='wet'; $('#s4').disabled=!(P.ph==='wet'||P.ph==='drying'||dry);
+    $('#s4').textContent=P.light?'💡 Lamp off':'💡 Hold against light';
+    setLog($,'tL',K.filter(k=>T33[k].f!==null).map(k=>[TEST_NAME[k],T33[k].pf===null?'—':T33[k].pf?'Yes':'No',T33[k].f?'translucent':'none',T33[k].f?{t:'Yes',c:'r-ok'}:{t:'No',c:'r-bad'}]));
+    S.st={done:K.filter(k=>T33[k].f!==null).length,k,ph:P.ph,light:P.light};
+  };
+  S.found=()=>S.st&&S.st.done>=6?'A translucent oily patch means fat — peanuts, butter, coconut and oil have fat':'';
+  S.fb=()=>{ const s=S.st; if(!s) return null; const T=T33[s.k];
+    if(T.pf===null&&s.ph==='ready') return ['warn','Predict first, then wrap and press.'];
+    if(s.ph==='wet') return ['warn','Wet paper also looks see-through — let it dry first.'];
+    if(s.ph==='dry'&&!s.light) return ['warn','Hold it against the light.'];
+    if(T.f!==null&&T.pf!==null&&T.pf!==T.f) return ['bad','Prediction did not match — interesting!'];
+    if(s.done<6) return s.ph==='dry'?['ok','✓ Recorded. Test '+(6-s.done)+' more.']:['warn','Follow the steps.'];
+    return ['ok','✓ '+s.done+' foods tested.']; };
+  return S;
+}); }
+
+/* =====================================================================
+   3.7  LET US INVESTIGATE — test for proteins (teacher demonstration)
+   Protein per 100 g: potato 2, cucumber 0.7, rice 2.7, gram 8.9, peanuts 26,
+   bread 9, butter 0.9, coconut 3.3, oil 0, soya 36, peas 5.4.
+   Copper sulfate turns the liquid pale blue; caustic soda makes it
+   alkaline, and copper then binds the protein's peptide bonds → violet.
+   Violet strength f = (1 − e^(−protein/6)) · (1 − e^(−t/τ)), τ ≈ 40 s
+   ("leave for a few minutes"); time shown ×30. Without caustic soda
+   nothing turns violet. Every action is animated: the pestle circles
+   and the food breaks to powder, a spoon arcs into the tube, water
+   pours, drops fall, the tube swings on a damped pendulum while the
+   added layer mixes in.
+   ===================================================================== */
+function tubeDraw(ctx,x,top,bot,w,level,colTop,colBot,mix,ang,cloud){
+  ctx.save(); ctx.translate(x,top); ctx.rotate(ang||0);
+  const H=bot-top, r=w/2;
+  ctx.beginPath(); ctx.moveTo(-r,0); ctx.lineTo(-r,H-r); ctx.arc(0,H-r,r,Math.PI,0,true); ctx.lineTo(r,0); ctx.fillStyle='rgba(240,246,252,0.7)'; ctx.fill();
+  if(level>0.005){ ctx.save(); ctx.clip(); const ly=H-level*(H-4), g=ctx.createLinearGradient(0,ly,0,H); const m=clamp(mix,0,1);
+    g.addColorStop(0,colTop); g.addColorStop(clamp(0.05+0.9*m,0,1),mixCol(colTop,colBot,1-m)); g.addColorStop(1,colBot); ctx.fillStyle=g; ctx.fillRect(-r-2,ly,w+4,H-ly+2);
+    if(cloud>0){ const rr=rng(9); ctx.fillStyle='rgba(255,255,255,'+0.45*cloud+')'; for(let i=0;i<26;i++) ctx.fillRect(-r+rr()*w,ly+rr()*(H-ly),2,2); }
+    line(ctx,-r,ly,r,ly,'rgba(19,42,68,0.35)',1.2); ctx.restore(); }
+  ctx.beginPath(); ctx.moveTo(-r,0); ctx.lineTo(-r,H-r); ctx.arc(0,H-r,r,Math.PI,0,true); ctx.lineTo(r,0); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.stroke();
+  ell(ctx,0,0,r+2,3,null,COL.ink,2);
+  ctx.restore();
+}
+function bottleDraw(ctx,x,y,col,label,warn){
+  ctx.save(); ctx.beginPath(); ctx.moveTo(x-22,y); ctx.lineTo(x-22,y-52); ctx.quadraticCurveTo(x-22,y-64,x-8,y-66); ctx.lineTo(x-8,y-78); ctx.lineTo(x+8,y-78); ctx.lineTo(x+8,y-66); ctx.quadraticCurveTo(x+22,y-64,x+22,y-52); ctx.lineTo(x+22,y); ctx.closePath();
+  ctx.fillStyle='rgba(240,246,252,0.8)'; ctx.fill(); ctx.save(); ctx.clip(); ctx.fillStyle=col; ctx.fillRect(x-24,y-40,48,42); ctx.restore(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+  rect(ctx,x-18,y-34,36,16,COL.ink,'#fff',1.2); textAt(ctx,label,x,y-22,{align:'center',size:8.5,weight:700,color:COL.ink});
+  if(warn){ ctx.save(); ctx.beginPath(); ctx.moveTo(x,y-14); ctx.lineTo(x+9,y+1-14+14); ctx.lineTo(x-9,y+1); ctx.closePath(); ctx.restore(); }
+}
+function buildA7(){ return buildScene(wrap=>{
+  const S={q:'Which food items contain protein?'};
+  const K=TEST_KEYS; let sel=0;
+  const fresh=()=>({ph:'start',grind:0,phi:0,spoon:-1,food:0,water:0,pour:0,cu:0,na:0,mix:1,cl:0,sh:{x:0,v:0},shT:0,wait:0,q:0,qT:0,drop:null,who:null,rec:false});
+  let P=fresh(); const rack=[], drops=[];
+  const MX=150, MY=430, TX=470, TT=170, TB=420, BCX=650, BNX=730, BY=470;
+  const dr={x:spr(BCX),y:spr(BY-90),sq:spr(0)};
+  S.html=`
+    <div class="control-group"><label>Food item</label>${chipList('kC',K.map(k=>TEST_NAME[k]),0)}</div>
+    <div class="control-group"><label>Predict first: protein present?</label><div class="toggle-group"><button class="toggle-btn" id="pY">Yes</button><button class="toggle-btn" id="pN">No</button></div></div>
+    <div class="control-group"><label>Steps (teacher demonstration)</label>
+      <div class="toggle-group"><button class="toggle-btn play" id="b1">1 Grind</button><button class="toggle-btn" id="b2">2 ½ tsp into tube</button></div>
+      <div class="toggle-group"><button class="toggle-btn" id="b3">3 Water + shake</button><button class="toggle-btn" id="b4">4 Copper sulfate ×2</button></div>
+      <div class="toggle-group"><button class="toggle-btn" id="b5">5 Caustic soda ×10</button><button class="toggle-btn" id="b6">6 Shake &amp; wait</button></div></div>`;
+  S.cards=card('cC','Colour')+card('cT','Waited')+card('cP','Prediction')+card('cR','Protein present?',COL.green);
+  S.tail=`<div class="control-group"><label>Table 3.3 · All three tests</label>${logTable('tL',['Food','Starch','Fat','Protein'])}</div>`;
+  S.wire=$=>{
+    wireChips(wrap,'kC',i=>{ sel=i; P=fresh(); });
+    $('#pY').onclick=()=>{ T33[K[sel]].pp=true; }; $('#pN').onclick=()=>{ T33[K[sel]].pp=false; };
+    $('#b1').onclick=()=>{ if(P.ph==='start') P.ph='grind'; };
+    $('#b2').onclick=()=>{ if(P.ph==='ground'){ P.ph='spoon'; P.spoon=0; } };
+    $('#b3').onclick=()=>{ if(P.ph==='intube'){ P.ph='water'; } };
+    $('#b4').onclick=()=>{ if(P.ph==='mixed'){ P.ph='cu'; P.q=2; P.who='cu'; } };
+    $('#b5').onclick=()=>{ if(P.ph==='cudone'){ P.ph='na'; P.q=10; P.who='na'; } };
+    $('#b6').onclick=()=>{ if(P.ph==='nadone'){ P.ph='shake2'; P.shT=0; P.sh.v=3; } };
+  };
+  const lvl=()=>clamp(0.06*P.food+0.42*P.water+0.004*P.cu+0.012*P.na,0,0.7);
+  S.tick=(dt,ctx,t,$)=>{
+    const k=K[sel], f0=showP(k);
+    /* ---- step machine ---- */
+    if(P.ph==='grind'){ P.phi+=dt*7; P.grind=Math.min(1,P.grind+dt*0.35); if(P.grind>=1) P.ph='ground'; }
+    if(P.ph==='spoon'){ P.spoon=Math.min(1,P.spoon+dt*0.8); if(P.spoon>=1){ P.food=1; P.ph='intube'; P.spoon=-1; } }
+    if(P.ph==='water'){ P.pour+=dt; P.water=Math.min(1,P.pour/1.4); if(P.water>=1){ P.ph='shake1'; P.shT=0; P.sh.v=3; } }
+    if(P.ph==='shake1'||P.ph==='shake2'){ P.shT+=dt; if(P.shT<1.6) P.sh.v+=Math.sin(P.shT*18)*40*dt; P.mix=Math.min(1,P.mix+dt*1.2); P.cl=Math.max(P.cl,P.ph==='shake1'?1:P.cl);
+      if(P.shT>2.2){ if(P.ph==='shake1') P.ph='mixed'; else { P.ph='wait'; } } }
+    springTo(P.sh,0,60,3.5,dt);
+    /* dropper: goes to its bottle, then over the tube, releases P.q drops */
+    const bottleX=P.who==='na'?BNX:BCX, overTube=(P.ph==='cu'||P.ph==='na')&&P.q>0;
+    springTo(dr.x,overTube?TX:bottleX,50,11,dt); springTo(dr.y,overTube?TT-34:BY-96,50,11,dt);
+    if(overTube&&Math.abs(dr.x.x-TX)<3){ P.qT+=dt; if(P.qT>(P.who==='na'?0.16:0.35)){ P.qT=0; P.q--; drops.push({x:TX,y:TT-30,vy:0,c:P.who==='cu'?'#3d8fd8':'#dfe9f3',who:P.who}); } }
+    springTo(dr.sq,P.qT>0.1&&overTube?1:0,200,14,dt);
+    for(let i=drops.length-1;i>=0;i--){ const d=drops[i]; d.vy+=1400*dt; d.y+=d.vy*dt; const surf=TB-lvl()*(TB-TT-4);
+      if(d.y>=surf){ if(d.who==='cu') P.cu++; else P.na++; P.mix=Math.max(0,P.mix-0.25); drops.splice(i,1); } }
+    if(P.ph==='cu'&&P.q===0&&!drops.length) P.ph='cudone';
+    if(P.ph==='na'&&P.q===0&&!drops.length) P.ph='nadone';
+    if(P.ph==='wait') P.wait+=dt;
+    /* colours */
+    const susp=mixCol('#fbf8ef',k==='peas'?'#d7ecc0':'#f3ead6',0.5);
+    const cuCol='#a9d3f2', baseBlue='#7fb6e6', violet='#7b3fa6';
+    const vf=P.na>0&&P.cu>0?f0*(1-Math.exp(-(P.wait+(P.ph==='shake2'?P.shT*0.3:0))/2)):0;
+    let colBot=P.water>0?susp:'#fff', colTop=colBot;
+    if(P.cu>0){ colBot=mixCol(susp,cuCol,0.8); colTop=colBot; }
+    if(P.na>0){ colBot=rampCol([[0,baseBlue],[1,violet]],vf); colTop=colBot; }
+    if(P.ph==='cu'&&P.cu>0) colTop='#3d8fd8'; if(P.ph==='cu'&&P.cu===0) colTop=colBot;
+    if(P.ph==='na'||P.ph==='nadone'){ colTop=mixCol(colBot,'#e6f0fa',0.4); }
+    /* ---- precaution strip ---- */
+    textAt(ctx,'Teacher demonstration · harmful chemicals — do not touch, taste or smell',400,72,{align:'center',size:11.5,weight:700,color:COL.red});
+    /* ---- rack of finished tubes ---- */
+    rect(ctx,20,96,300,8,COL.ink,'#eef2f7',1.6); textAt(ctx,'Rack',326,104,{size:10.5,weight:700,color:COL.muted});
+    rack.forEach((r,i)=>{ const x=40+i*34; tubeDraw(ctx,x,84,150,14,0.5,r.c,r.c,1,0,0); textAt(ctx,TEST_NAME[r.k].split(' ').pop().slice(0,7),x,164+(i%2)*11,{align:'center',size:8.5,weight:600,color:COL.muted}); });
+    /* ---- mortar & pestle ---- */
+    const g=P.grind;
+    ctx.save(); ctx.beginPath(); ctx.moveTo(MX-80,MY-50); ctx.quadraticCurveTo(MX-78,MY+20,MX,MY+22); ctx.quadraticCurveTo(MX+78,MY+20,MX+80,MY-50); ctx.closePath(); ctx.fillStyle='#e9e5de'; ctx.fill(); ctx.strokeStyle='#5f5a52'; ctx.lineWidth=2.6; ctx.stroke(); ell(ctx,MX,MY-50,80,14,'#f4f1ec','#5f5a52',2.6); ctx.restore();
+    if(P.food<1){ ctx.save(); ctx.beginPath(); ctx.ellipse(MX,MY-46,72,11,0,0,7); ctx.clip();
+      if(g<0.6) testPiece(ctx,k,MX,MY-42,lerp(70,40,g)); const r=rng(sel+1), n=Math.round(g*70), pc=BASE_COL[k];
+      for(let i=0;i<n;i++){ ell(ctx,MX+(r()-0.5)*120+Math.sin(t*9+i)*g*1.5,MY-46+(r()-0.5)*14,1.8,1.4,pc,'rgba(0,0,0,0.25)',0.6); } ctx.restore(); }
+    const tipx=MX+Math.cos(P.phi)*36*(P.ph==='grind'?1:0.2), tipy=MY-38+Math.sin(P.phi)*6;
+    ctx.save(); ctx.lineCap='round'; ctx.strokeStyle='#5f5a52'; ctx.lineWidth=16; ctx.beginPath(); ctx.moveTo(tipx,tipy); ctx.lineTo(tipx+30+Math.cos(P.phi)*14,tipy-120); ctx.stroke(); ctx.strokeStyle='#d9d4cc'; ctx.lineWidth=11; ctx.stroke(); ctx.restore();
+    textAt(ctx,'mortar & pestle',MX,MY+44,{align:'center',size:11,weight:700,color:COL.muted});
+    if(P.ph==='grind'||P.ph==='ground') textAt(ctx,P.ph==='grind'?'grinding '+Math.round(g*100)+' %':'fine powder ✓',MX,MY-150,{align:'center',size:12,weight:700,color:COL.yellow});
+    /* spoon arc from mortar to tube */
+    if(P.spoon>=0){ const u=P.spoon, x=lerp(MX,TX,u), y=lerp(MY-60,TT-20,u)-Math.sin(u*Math.PI)*120, tilt=u>0.85?(u-0.85)*8:0;
+      ctx.save(); ctx.translate(x,y); ctx.rotate(-0.2+tilt); ell(ctx,0,0,14,7,'#e6edf5',COL.ink,2); line(ctx,-14,0,-60,-14,COL.ink,3); if(u<0.9) ell(ctx,0,-2,9,3,BASE_COL[k]); ctx.restore();
+      if(u>0.88){ for(let i=0;i<6;i++){ const yy=TT-14+((u-0.88)*900+i*14)%(TB-TT-30); ell(ctx,TX+(i%3-1)*3,yy,1.6,1.6,BASE_COL[k],'rgba(0,0,0,0.3)',0.6); } } }
+    /* water pouring from a beaker */
+    if(P.ph==='water'){ const a=Math.min(1,P.pour*2.5); ctx.save(); ctx.translate(TX+70,TT-60); ctx.rotate(-a*1.1); rect(ctx,-16,-40,32,44,COL.ink,'rgba(207,230,251,0.8)',2); ctx.restore();
+      if(a>=1&&P.water<1){ ctx.save(); ctx.strokeStyle=COL.blue; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(TX+40,TT-70); ctx.quadraticCurveTo(TX+10,TT-60,TX+2,TB-lvl()*(TB-TT-4)); ctx.stroke(); ctx.restore(); } }
+    /* ---- the tube (swings on a damped pendulum when shaken) ---- */
+    const ang=P.sh.x*0.12;
+    tubeDraw(ctx,TX,TT,TB,48,lvl(),colTop,colBot,P.mix,ang,P.food&&P.ph!=='start'?P.cl*(P.na?0.3:1):0);
+    if(P.food&&!P.water){ const r=rng(4); for(let i=0;i<30;i++) ell(ctx,TX+(r()-0.5)*36,TB-8-r()*14,1.8,1.4,BASE_COL[k],'rgba(0,0,0,0.25)',0.6); }
+    textAt(ctx,TEST_NAME[k],TX,TB+30,{align:'center',size:14,weight:700,color:COL.ink});
+    /* ---- reagent bottles + dropper ---- */
+    bottleDraw(ctx,BCX,BY,'#3d8fd8','CuSO₄'); bottleDraw(ctx,BNX,BY,'#e6f0fa','NaOH');
+    textAt(ctx,'copper sulfate',BCX,BY+16,{align:'center',size:10,weight:700,color:COL.blue}); textAt(ctx,'caustic soda',BNX,BY+16,{align:'center',size:10,weight:700,color:COL.red});
+    dropperDraw(ctx,dr.x.x,dr.y.x,dr.sq.x,0.6,P.who==='na'?'#dfe9f3':'#3d8fd8');
+    drops.forEach(d=>ell(ctx,d.x,d.y,3.4,4.4,d.c,COL.ink,1));
+    /* clock while waiting */
+    if(P.ph==='wait'){ const cx=TX+110, cy=TT+70; circ(ctx,cx,cy,26,COL.ink,'#fff',2); const a=-Math.PI/2+P.wait*1.2; line(ctx,cx,cy,cx+Math.cos(a)*20,cy+Math.sin(a)*20,COL.yellow,2.4); textAt(ctx,fmt(P.wait*30/60,1)+' min',cx,cy+44,{align:'center',size:11,weight:700,color:COL.ink}); }
+    /* ---- record ---- */
+    if(P.ph==='wait'&&P.wait>4&&!P.rec){ P.rec=true; T33[k].p=vf>0.5; const i=rack.findIndex(r=>r.k===k); const e={k,c:colBot}; if(i>=0) rack[i]=e; else rack.push(e); }
+    /* ---- readouts ---- */
+    const nm=P.na>0?(vf>0.5?'violet':vf>0.25?'faint lilac':'blue'):P.cu>0?'pale blue':P.water?'cloudy':'—';
+    setv($,'cC',nm); setv($,'cT',P.ph==='wait'?fmt(P.wait*30/60,1)+' min':'—'); const T=T33[k]; setv($,'cP',T.pp===null?'?':T.pp?'Yes':'No'); setv($,'cR',T.p===null?'—':T.p?'Yes':'No');
+    $('#pY').classList.toggle('active',T.pp===true); $('#pN').classList.toggle('active',T.pp===false);
+    const en={b1:'start',b2:'ground',b3:'intube',b4:'mixed',b5:'cudone',b6:'nadone'}; for(const id in en){ const b=$('#'+id); b.disabled=P.ph!==en[id]; b.classList.toggle('play',P.ph===en[id]); }
+    const yn=v=>v===null?'…':v?{t:'Yes',c:'r-ok'}:{t:'No',c:'r-bad'};
+    setLog($,'tL',K.filter(k=>T33[k].s!==null||T33[k].f!==null||T33[k].p!==null).map(k=>[TEST_NAME[k],yn(T33[k].s),yn(T33[k].f),yn(T33[k].p)]));
+    S.st={done:K.filter(k=>T33[k].p!==null).length,pea:T33.peanuts.p!==null,k,ph:P.ph};
+  };
+  S.found=()=>S.st&&S.st.done>=5&&S.st.pea?'Violet means protein — peanuts show both protein and fat: one food can have many nutrients':'';
+  S.fb=()=>{ const s=S.st; if(!s) return null; const T=T33[s.k];
+    if(T.pp===null&&s.ph==='start') return ['warn','Predict first, then follow the steps.'];
+    if(s.ph==='wait'&&T.p===null) return ['warn','Leave it undisturbed for a few minutes…'];
+    if(T.p!==null&&T.pp!==null&&T.p!==T.pp) return ['bad','Prediction did not match — look at Table 3.3.'];
+    if(s.done<5) return T.p!==null?['ok','✓ Recorded. Test '+(5-s.done)+' more.']:['warn','Follow steps 1 → 6.'];
+    if(!s.pea) return ['warn','Test peanuts too.'];
+    return ['ok','✓ Which foods show more than one nutrient?']; };
+  return S;
+}); }
+
+/* =====================================================================
+   3.8  LET US FIND OUT — is my diet balanced?
+   Takes a day from the week recorded in 3.1 (or a typical week).
+   Intake = Σ servings × portion (approx. IFCT values, see NUT).
+   Needs per day (approx. ICMR-NIN):
+     child 11 y   2000 kcal · carbs 260 g · protein 32 g · fat 50 g · fibre 30 g
+                  vit A 600 µg · vit C 50 mg · Ca 800 mg · Fe 16 mg · water 2 L
+     sportsperson 3000 kcal · 400 · 70 · 75 · 40 · 700 · 70 · 1000 · 20 · 3.2 L
+     grandparent  1700 kcal · 220 · 55 · 40 · 30 · 700 · 80 · 1200 · 17 · 2.2 L
+   Seven jars fill to intake/need (springy level, sloshing); coloured
+   particles stream from the plate into each jar while it is filling.
+   Balanced = every jar between 85 % and 150 % (protein up to 250 %).
+   ===================================================================== */
+function buildA8(){ return buildScene(wrap=>{
+  const S={q:'Does my day\'s food have all the nutrients, roughage and water I need?'};
+  const WHO=[{n:'Me (11 years)',H:270,need:{kcal:2000,C:260,P:32,F:50,fib:30,A:600,Cv:50,Ca:800,Fe:16,W:2000}},
+    {n:'Sportsperson',H:310,shirt:'#fde3dd',need:{kcal:3000,C:400,P:70,F:75,fib:40,A:700,Cv:70,Ca:1000,Fe:20,W:3200}},
+    {n:'Grandparent',H:290,old:1,shirt:'#f6e7d6',need:{kcal:1700,C:220,P:55,F:40,fib:30,A:700,Cv:80,Ca:1200,Fe:17,W:2200}}];
+  const JARS=[{k:'C',n:'Carbo-\nhydrates',c:COL.yellow},{k:'P',n:'Proteins',c:COL.red},{k:'F',n:'Fats',c:'#e8a33a'},{k:'V',n:'Vitamins',c:COL.green},{k:'M',n:'Minerals',c:'#5aa04a'},{k:'fib',n:'Fibre',c:'#3f7a30'},{k:'W',n:'Water',c:COL.blue}];
+  const EXTRA=['banana','orange','guava','apple','milk','curd','sprouts','egg','dal','roti','rice','spinach','peanuts','water','chips','soda','candy'];
+  let who=0, day=0, portion=1.6, extra=[], fly=[];
+  const lev=JARS.map(()=>spr(0)), parts=[], bounce=spr(0);
+  S.html=`
+    <div class="control-group"><label>Whose diet?</label>${chipList('wC',WHO.map(w=>w.n),0)}</div>
+    <div class="control-group"><label>Day from my food week (3.1)</label>${chipList('dC',DAYS,0)}</div>
+    ${slider('pR','Portion size',0.5,2.5,0.1,1.6)}
+    <div class="control-group"><label>Add to the day (tap again for more)</label>${chipList('eC',EXTRA.map(k=>'+ '+FN[k]),-1)}
+      <div class="toggle-group"><button class="toggle-btn" id="uB">↺ Remove extras</button></div></div>`;
+  S.cards=card('cE','Energy')+card('cM','Missing',COL.red)+card('cX','Too much',COL.yellow)+card('cB','Balanced?',COL.green);
+  S.wire=$=>{
+    wireChips(wrap,'wC',i=>{ who=i; }); wireChips(wrap,'dC',i=>{ day=i; extra=[]; });
+    const pr=$('#pR'); pr.oninput=()=>{ portion=+pr.value; };
+    const es=wireChips(wrap,'eC',i=>{ extra.push(EXTRA[i]); fly.push({k:EXTRA[i],t:0}); setTimeout(()=>es.forEach(b=>b.classList.remove('active')),0); });
+    $('#uB').onclick=()=>{ extra=[]; fly=[]; };
+  };
+  const dayFoods=()=>{ const any=WEEK.some(r=>r.some(c=>c.length)); return (any?WEEK[day]:WEEK_TPL[day]).flat(); };
+  const PX=470, PY=150;
+  S.tick=(dt,ctx,t,$)=>{
+    const W=WHO[who], need=W.need, base=dayFoods(), all=base.concat(extra);
+    const sum={C:0,P:0,F:0,fib:0,A:0,Cv:0,Ca:0,Fe:0,W:0};
+    base.forEach(k=>{ const n=NUT[k]; if(n) for(const q in sum) sum[q]+=(n[q]||0)*portion; });
+    extra.forEach(k=>{ const n=NUT[k]; if(n) for(const q in sum) sum[q]+=(n[q]||0); });
+    const kcal=4*sum.C+4*sum.P+9*sum.F;
+    const ratio={C:sum.C/need.C,P:sum.P/need.P,F:sum.F/need.F,V:(Math.min(1.6,sum.A/need.A)+Math.min(1.6,sum.Cv/need.Cv))/2,M:(Math.min(1.6,sum.Ca/need.Ca)+Math.min(1.6,sum.Fe/need.Fe))/2,fib:sum.fib/need.fib,W:sum.W/need.W};
+    const hi=k=>k==='P'?2.5:1.5;
+    /* ---- plate ---- */
+    ell(ctx,PX,PY,200,72,'#fff',COL.ink,2.4); ell(ctx,PX,PY,180,58,null,'#dbe4f0',1.2);
+    textAt(ctx,DAYS[day]+' · '+(WEEK.some(r=>r.some(c=>c.length))?'from my week':'a typical week'),PX,66,{align:'center',size:12,weight:700,color:COL.ink});
+    const shown=base.concat(extra.slice(0,Math.max(0,extra.length-fly.length))).slice(0,24);
+    shown.forEach((k,i)=>{ const row=Math.floor(i/8), col=i%8, n=Math.min(8,shown.length-row*8); food(ctx,k,PX+(col-(n-1)/2)*44,PY-30+row*34,32); });
+    for(let i=fly.length-1;i>=0;i--){ const f=fly[i]; f.t+=dt*1.6; const u=clamp(f.t,0,1), x=lerp(790,PX+60,u), y=lerp(80,PY,u)-Math.sin(u*Math.PI)*60; if(u<1) food(ctx,f.k,x,y,32,{rot:u*5}); else fly.splice(i,1); }
+    /* ---- jars ---- */
+    const JX=262, JS=78, JY=500, JH=150, JW=50;
+    JARS.forEach((j,i)=>{ const x=JX+i*JS, r=ratio[j.k], L=lev[i]; const tgt=clamp(r,0,1.75)/1.75;
+      const prev=L.x; springTo(L,tgt,22,6,dt);
+      if(tgt-L.x>0.01&&Math.random()<dt*40) parts.push({sx:PX+(Math.random()-0.5)*200,sy:PY+20,ex:x,ey:JY-JH*L.x-6,t:0,c:j.c});
+      const top=JY-JH, fillY=JY-JH*clamp(L.x,0,1);
+      ctx.save(); ctx.beginPath(); ctx.moveTo(x-JW/2,top); ctx.lineTo(x-JW/2,JY-6); ctx.quadraticCurveTo(x-JW/2,JY,x-JW/2+6,JY); ctx.lineTo(x+JW/2-6,JY); ctx.quadraticCurveTo(x+JW/2,JY,x+JW/2,JY-6); ctx.lineTo(x+JW/2,top); ctx.fillStyle='#fbfcfe'; ctx.fill(); ctx.clip();
+      const slosh=(L.v)*0.04; ctx.beginPath(); ctx.moveTo(x-JW/2,fillY+slosh*JW); ctx.lineTo(x+JW/2,fillY-slosh*JW); ctx.lineTo(x+JW/2,JY+2); ctx.lineTo(x-JW/2,JY+2); ctx.closePath(); ctx.globalAlpha=0.75; ctx.fillStyle=j.c; ctx.fill(); ctx.globalAlpha=1;
+      /* target band */
+      const b0=JY-JH*0.85/1.75, b1=JY-JH*hi(j.k)/1.75; ctx.fillStyle='rgba(31,157,85,0.12)'; ctx.fillRect(x-JW/2,b1,JW,b0-b1); ctx.restore();
+      line(ctx,x-JW/2-4,JY-JH/1.75,x+JW/2+4,JY-JH/1.75,COL.green,2,[4,3]);
+      ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.beginPath(); ctx.moveTo(x-JW/2,top); ctx.lineTo(x-JW/2,JY-6); ctx.quadraticCurveTo(x-JW/2,JY,x-JW/2+6,JY); ctx.lineTo(x+JW/2-6,JY); ctx.quadraticCurveTo(x+JW/2,JY,x+JW/2,JY-6); ctx.lineTo(x+JW/2,top); ctx.stroke(); ctx.restore();
+      const ok=r>=0.85&&r<=hi(j.k), low=r<0.85;
+      if(r>hi(j.k)){ for(let k=0;k<2;k++){ const ph=(t*1.5+k*0.5)%1; ell(ctx,x+JW/2+3,top+ph*30,2.5,3.5,j.c); } }
+      j.n.split('\n').forEach((s,q)=>textAt(ctx,s,x,top-26+q*12-(j.n.includes('\n')?6:0),{align:'center',size:10.5,weight:700,color:j.c}));
+      textAt(ctx,Math.round(r*100)+' %',x,top-6+ (j.n.includes('\n')?6:0)-6,{align:'center',size:11,weight:700,color:ok?COL.green:low?COL.red:COL.yellow});
+      textAt(ctx,ok?'✓':low?'low':'high',x,JY+16,{align:'center',size:11,weight:700,color:ok?COL.green:low?COL.red:COL.yellow}); });
+    textAt(ctx,'need',JX-JW/2-8,JY-JH/1.75+4,{align:'right',size:10,weight:700,color:COL.green});
+    /* particles plate → jar */
+    for(let i=parts.length-1;i>=0;i--){ const p=parts[i]; p.t+=dt*1.4; const u=p.t; if(u>=1){ parts.splice(i,1); continue; }
+      const mx=(p.sx+p.ex)/2, my=Math.min(p.sy,p.ey)-30, x=(1-u)*(1-u)*p.sx+2*(1-u)*u*mx+u*u*p.ex, y=(1-u)*(1-u)*p.sy+2*(1-u)*u*my+u*u*p.ey; ell(ctx,x,y,3,3,p.c); }
+    /* ---- the person ---- */
+    const en=Math.min(ratio.C,1.3)*0.6+Math.min(ratio.F,1.3)*0.4, lively=clamp((en-0.6)/0.4,0,1);
+    const hop=Math.abs(Math.sin(t*4.5))*16*lively; springTo(bounce,hop,200,14,dt);
+    const thirsty=ratio.W<0.7, weak=ratio.M<0.7, X=110;
+    const b=body(ctx,X,500-bounce.x,W.H,{sex:who===2?'f':'m',hairCol:W.old?'#b9bec6':undefined,shirt:W.shirt,mouth:lively>0.5&&!thirsty?'smile':'sad',pale:weak?0.6:0,armL:0.2+lively*0.9*Math.abs(Math.sin(t*4.5)),armR:0.2+lively*0.9*Math.abs(Math.sin(t*4.5)),wide:ratio.F>1.6||(kcal/need.kcal)>1.4?1.35:1});
+    ground(ctx,20,200,500);
+    if(thirsty) bubble(ctx,X+40,b.head[1]-b.headR-8,'thirsty',COL.blue,12);
+    else if(lively<0.3) bubble(ctx,X+40,b.head[1]-b.headR-8,'tired',COL.red,12);
+    textAt(ctx,W.n,X,520,{align:'center',size:12,weight:700,color:COL.ink});
+    /* ---- readouts ---- */
+    setv($,'pRV','×'+fmt(portion,1));
+    const name={C:'carbs',P:'protein',F:'fat',V:'vitamins',M:'minerals',fib:'fibre',W:'water'};
+    const miss=JARS.filter(j=>ratio[j.k]<0.85).map(j=>name[j.k]), much=JARS.filter(j=>ratio[j.k]>hi(j.k)).map(j=>name[j.k]);
+    setv($,'cE',Math.round(kcal)+' / '+need.kcal+' kcal'); setv($,'cM',miss.join(', ')||'none'); setv($,'cX',much.join(', ')||'none'); setv($,'cB',!miss.length&&!much.length?'Yes ✓':'Not yet');
+    S.st={bal:!miss.length&&!much.length,miss,much,junk:extra.some(k=>k==='chips'||k==='soda'||k==='candy')};
+  };
+  S.found=()=>S.st&&S.st.bal?'A balanced diet has every nutrient, roughage and water in the right amount — for this person':'';
+  S.fb=()=>{ const s=S.st; if(!s) return null; if(s.bal) return ['ok','✓ Balanced! Try another person — needs differ.'];
+    if(s.miss.length) return ['warn','Add foods rich in '+s.miss[0]+'.'];
+    return ['bad','Too much '+s.much[0]+(s.junk?' — skip the junk food.':' — reduce the portion.')]; };
+  return S;
+}); }
+
+/* =====================================================================
+   3.9  LET US COMPARE — potato wafers vs roasted chana (labels per 100 g)
+   Wafers: 536 kcal · fat 35.0 · carbs 53.0 · protein 7.0 · fibre 4.8 g
+   Chana:  355 kcal · fat 6.26 · carbs 58.58 · protein 18.64 · fibre 16.8 g
+   "Read the labels": 100 g of each pours out as 5 g blocks that fall
+   under gravity, land on the stack and settle on a spring; an energy
+   gauge fills by 9 kcal/g fat + 4 kcal/g carbs and protein.
+   "Eat until full": fullness per gram = 0.04·protein + 0.06·fibre +
+   0.0013·kcal (protein and fibre fill you up). Each bite is 5 g, taken
+   hand-to-mouth; each child stops when the stomach is full. Wafers need
+   ≈ 80 g (≈ 430 kcal), chana ≈ 45 g (≈ 160 kcal). Burning it off by
+   cycling at ≈ 6 kcal/min is shown too.
+   ===================================================================== */
+const SNACK={chips:{n:'Potato wafers',kcal:536,F:35,C:53,P:7,fib:4.8,col:'#ffd43b'},chana:{n:'Roasted chana',kcal:355,F:6.26,C:58.58,P:18.64,fib:16.8,col:'#e7c9a0'}};
+function packetDraw(ctx,x,y,s,key,lab){
+  ctx.save(); ctx.translate(x,y); const W=150*s, H=210*s;
+  ctx.beginPath(); ctx.moveTo(-W/2,-H/2); for(let i=0;i<=10;i++) ctx.lineTo(-W/2+i*W/10,-H/2+(i%2?-5:0)); ctx.lineTo(W/2+6,H/2); for(let i=10;i>=0;i--) ctx.lineTo(-W/2-6+i*(W+12)/10,H/2+(i%2?5:0)); ctx.closePath();
+  ctx.fillStyle=key==='chips'?'#fff1a8':'#f6e8d2'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.stroke();
+  textAt(ctx,SNACK[key].n,0,-H/2+24*s,{align:'center',size:14*s,weight:700,color:key==='chips'?'#b3700f':'#7a4a1f'});
+  if(key==='chips'){ for(let i=0;i<3;i++) ell(ctx,(i-1)*30*s,-H/2+50*s,14*s,10*s,'#ffe066','#c9761c',1.4,i*0.4); } else { for(let i=0;i<7;i++) ell(ctx,(i-3)*13*s,-H/2+50*s+(i%2)*6*s,6*s,5.5*s,'#c98a4b','#7a4a1f',1.2); }
+  if(lab){ const lx=-W/2+10*s, ly=-H/2+72*s, lw=W-20*s; rect(ctx,lx,ly,lw,128*s,COL.ink,'#fff',1.4);
+    textAt(ctx,'Nutritional information',lx+6*s,ly+14*s,{size:9.5*s,weight:700}); textAt(ctx,'(per 100 g)',lx+6*s,ly+26*s,{size:9*s,color:COL.muted}); line(ctx,lx,ly+31*s,lx+lw,ly+31*s,COL.ink,1);
+    const S=SNACK[key], rows=[['Energy',S.kcal+' kcal',COL.ink],['Fats',S.F+' g','#e8a33a'],['Carbohydrates',S.C+' g',COL.yellow],['Proteins',S.P+' g',COL.red],['Dietary fibre',S.fib+' g',COL.green]];
+    rows.forEach((r,i)=>{ const yy=ly+46*s+i*17*s; textAt(ctx,r[0],lx+6*s,yy,{size:9.5*s,weight:600,color:r[2]}); textAt(ctx,r[1],lx+lw-6*s,yy,{align:'right',size:9.5*s,weight:700,color:r[2]}); }); }
+  ctx.restore();
+}
+function buildA9(){ return buildScene(wrap=>{
+  const S={q:'Which snack would you choose — and which one is junk food?'};
+  let mode=0, choose=-1, junk=-1;
+  /* labels mode: falling blocks */
+  const LAYERS=[['C',COL.yellow,'carbs'],['F','#e8a33a','fat'],['P',COL.red,'protein'],['fib',COL.green,'fibre']];
+  const col={chips:{x:320,blocks:[],q:[],e:spr(0),done:false},chana:{x:480,blocks:[],q:[],e:spr(0),done:false}};
+  const BASE=470, PXG=3.2, BW=70;
+  function pour(){ for(const k of ['chips','chana']){ const c=col[k]; c.blocks=[]; c.q=[]; c.e.x=0; c.e.v=0; c.done=false; let y=0;
+      LAYERS.forEach(L=>{ let g=SNACK[k][L[0]]; while(g>0.01){ const piece=Math.min(5,g); c.q.push({g:piece,c:L[1],k:L[0]}); g-=piece; } }); } qT=0; }
+  let qT=0;
+  /* eating mode */
+  const eat={on:false,kids:{chips:{g:0,full:0,arm:0,bite:null,t:0,stop:false},chana:{g:0,full:0,arm:0,bite:null,t:0,stop:false}}};
+  const fullPerG=k=>{ const s=SNACK[k]; return (0.04*s.P+0.06*s.fib+0.0013*s.kcal)/100; };
+  S.html=`
+    <div class="control-group"><label>Compare</label>${chipList('mC',['📋 Read the labels','😋 Eat until full'],0)}</div>
+    <div id="pL"><div class="control-group"><div class="toggle-group"><button class="toggle-btn play" id="pB">▶ Pour out 100 g of each</button></div></div></div>
+    <div id="pE" class="hidden"><div class="control-group"><div class="toggle-group"><button class="toggle-btn play" id="eB">▶ Start eating</button><button class="toggle-btn" id="rB">↻ Again</button></div></div></div>
+    <div class="control-group"><label>Which would you choose?</label>${optList('cO',['Potato wafers','Roasted chana'])}</div>
+    <div class="control-group"><label>Which is junk food?</label>${optList('jO',['Potato wafers','Roasted chana'])}</div>`;
+  S.cards=card('cW','Wafers')+card('cH','Chana')+`<div class="rcard wide"><div class="rlabel">What it means</div><div class="rval" id="cI" style="font-size:12px">—</div></div>`;
+  S.wire=$=>{
+    wireChips(wrap,'mC',i=>{ mode=i; $('#pL').classList.toggle('hidden',i!==0); $('#pE').classList.toggle('hidden',i!==1); });
+    $('#pB').onclick=pour;
+    const reset=()=>{ for(const k in eat.kids) Object.assign(eat.kids[k],{g:0,full:0,arm:0,bite:null,t:0,stop:false}); };
+    $('#eB').onclick=()=>{ if(!eat.on){ reset(); eat.on=true; } }; $('#rB').onclick=()=>{ reset(); eat.on=false; };
+    wireOpts(wrap,'cO',i=>{ choose=i; }); wireOpts(wrap,'jO',i=>{ junk=i; });
+  };
+  S.tick=(dt,ctx,t,$)=>{
+    if(mode===0){
+      packetDraw(ctx,120,250,1.15,'chips',true); packetDraw(ctx,680,250,1.15,'chana',true);
+      qT+=dt;
+      for(const k of ['chips','chana']){ const c=col[k], h=c.blocks.reduce((a,b)=>a+b.g*PXG,0);
+        /* release next block every 0.12 s from the packet mouth on a ballistic arc */
+        if(c.q.length&&qT>0.12){ const b=c.q.shift(), sx=k==='chips'?175:625, sy=150, tx=c.x, landY=BASE-h-b.g*PXG/2, T=0.55;
+          c.blocks.push(Object.assign(b,{x:sx,y:sy,vx:(tx-sx)/T,vy:(landY-sy-0.5*1200*T*T)/T,t:0,T,land:landY,sq:spr(1),on:false})); }
+        let acc=0; c.blocks.forEach(b=>{ const bh=b.g*PXG; if(!b.on){ b.t+=dt; const tt=Math.min(b.t,b.T); b.x=(k==='chips'?175:625)+b.vx*tt; b.y=150+b.vy*tt+600*tt*tt; if(b.t>=b.T){ b.on=true; b.sq.x=0.6; c.e.v+=0; } }
+          else { springTo(b.sq,1,300,10,dt); b.x=c.x; b.y=BASE-acc-bh/2; acc+=bh; }
+          const sq=b.on?b.sq.x:1; ctx.save(); ctx.translate(b.x,b.y+(1-sq)*bh*0.5); ctx.scale(1/Math.sqrt(sq),sq); rect(ctx,-BW/2+2,-bh/2,BW-4,bh,COL.ink,b.c,1.2); ctx.restore(); });
+        const landed=c.blocks.filter(b=>b.on), sc=SNACK[k].kcal/(9*SNACK[k].F+4*SNACK[k].C+4*SNACK[k].P), E=sc*landed.reduce((a,b)=>a+(b.k==='F'?9:b.k==='fib'?0:4)*b.g,0);
+        springTo(c.e,E,60,12,dt);
+        /* glass column */
+        ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.beginPath(); ctx.moveTo(c.x-BW/2-2,BASE-100*PXG-6); ctx.lineTo(c.x-BW/2-2,BASE+2); ctx.lineTo(c.x+BW/2+2,BASE+2); ctx.lineTo(c.x+BW/2+2,BASE-100*PXG-6); ctx.stroke(); ctx.restore();
+        for(let g=0;g<=100;g+=20){ const yy=BASE-g*PXG; line(ctx,c.x-BW/2-2,yy,c.x-BW/2+6,yy,COL.mid,1); if(k==='chips') textAt(ctx,g+' g',c.x-BW/2-8,yy+4,{align:'right',size:9.5,color:COL.muted}); }
+        /* energy gauge (dial) */
+        const gx=k==='chips'?225:575, gy=BASE-20, fr=clamp(c.e.x/600,0,1); ctx.save(); ctx.beginPath(); ctx.arc(gx,gy,26,Math.PI,0); ctx.strokeStyle='#dbe4f0'; ctx.lineWidth=8; ctx.stroke(); ctx.beginPath(); ctx.arc(gx,gy,26,Math.PI,Math.PI+fr*Math.PI); ctx.strokeStyle=COL.red; ctx.stroke(); ctx.restore();
+        const na=Math.PI+fr*Math.PI; line(ctx,gx,gy,gx+Math.cos(na)*22,gy+Math.sin(na)*22,COL.ink,2); textAt(ctx,Math.round(c.e.x)+' kcal',gx,gy+16,{align:'center',size:11,weight:700,color:COL.red});
+        if(!c.q.length&&c.blocks.length&&c.blocks.every(b=>b.on)) c.done=true;
+        /* layer labels */
+        if(c.done){ let a=0; LAYERS.forEach(L=>{ const g=SNACK[k][L[0]], hh=g*PXG; if(hh>12) textAt(ctx,L[2]+' '+fmt(g,1)+' g',c.x,BASE-a-hh/2+4,{align:'center',size:10,weight:700,color:COL.ink}); a+=hh; }); }
+      }
+      if(qT>0.12) qT=0;
+      textAt(ctx,'100 g of each, sorted',400,95,{align:'center',size:12,weight:700,color:COL.muted});
+    }
+    if(mode===1){
+      for(const k of ['chips','chana']){ const kd=eat.kids[k], X=k==='chips'?220:580, s=SNACK[k];
+        if(eat.on&&!kd.stop){ kd.t+=dt; const per=0.9; const ph=(kd.t%per)/per; kd.arm=Math.sin(ph*Math.PI);
+          if(ph<kd.lastPh){ kd.g+=5; kd.full+=5*fullPerG(k); if(kd.full>=1){ kd.full=1; kd.stop=true; } } kd.lastPh=ph; }
+        else kd.arm=approach(kd.arm,0,6,dt);
+        const kcal=kd.g*s.kcal/100;
+        packetDraw(ctx,X+(k==='chips'?-140:140),330,0.6,k,false);
+        const b=body(ctx,X,500,300,{sex:k==='chips'?'m':'f',shirt:'#eaf3fc',reachL:k==='chips'?kd.arm:0,reachR:k==='chana'?kd.arm:0,mouth:kd.arm>0.8?'open':'smile'});
+        /* bite travelling hand-to-mouth */
+        const hand=k==='chips'?b.handL:b.handR; if(eat.on&&!kd.stop&&kd.arm>0.15){ if(k==='chips') ell(ctx,hand[0],hand[1]-6,7,5,'#ffe066','#c9761c',1.2); else ell(ctx,hand[0],hand[1]-6,5,4.5,'#c98a4b','#7a4a1f',1.2); }
+        /* stomach fill */
+        const sx=X+6, sy=b.chest[1]+18, rx=34, ry=24; ctx.save(); ctx.beginPath(); ctx.ellipse(sx,sy,rx,ry,-0.2,0,7); ctx.fillStyle='#fff'; ctx.fill(); ctx.clip(); ctx.fillStyle=k==='chips'?'#ffe9a0':'#e7c9a0'; const fy=sy+ry-2*ry*kd.full; ctx.fillRect(sx-rx,fy,2*rx,2*ry); ctx.restore();
+        ctx.save(); ctx.beginPath(); ctx.ellipse(sx,sy,rx,ry,-0.2,0,7); ctx.strokeStyle=kd.stop?COL.green:COL.ink; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+        textAt(ctx,kd.stop?'full!':'stomach',sx,sy+ry+14,{align:'center',size:10.5,weight:700,color:kd.stop?COL.green:COL.muted});
+        /* tallies */
+        const tx=X, ty=92; textAt(ctx,s.n,tx,ty,{align:'center',size:14,weight:700,color:k==='chips'?'#b3700f':'#7a4a1f'});
+        textAt(ctx,Math.round(kd.g)+' g eaten · '+Math.round(kcal)+' kcal',tx,ty+20,{align:'center',size:12,weight:700,color:COL.red});
+        textAt(ctx,'protein '+fmt(kd.g*s.P/100,1)+' g · fibre '+fmt(kd.g*s.fib/100,1)+' g · fat '+fmt(kd.g*s.F/100,1)+' g',tx,ty+38,{align:'center',size:10.5,weight:600,color:COL.muted});
+        if(kd.stop){ textAt(ctx,'🚲 '+Math.round(kcal/6)+' min of cycling to burn it',tx,ty+58,{align:'center',size:12,weight:700,color:COL.yellow}); }
+      }
+      line(ctx,400,80,400,505,'#dbe4f0',1.5); ground(ctx,20,780,500);
+    }
+    /* ---- readouts ---- */
+    const kc=eat.kids.chips, kh=eat.kids.chana;
+    setv($,'cW',mode===0?'536 kcal · fat 35 g':Math.round(kc.g*5.36)+' kcal eaten'); setv($,'cH',mode===0?'355 kcal · fibre 16.8 g':Math.round(kh.g*3.55)+' kcal eaten');
+    const labelsDone=col.chips.done&&col.chana.done, eatDone=kc.stop&&kh.stop;
+    setv($,'cI',eatDone?'Wafers: more fat, less protein & fibre — you eat more before feeling full':labelsDone?'Wafers have 5× the fat; chana has 2.7× the protein, 3.5× the fibre':'—');
+    S.st={labelsDone,eatDone,choose,junk};
+  };
+  S.found=()=>{ const s=S.st; return s&&s.labelsDone&&s.eatDone&&s.choose===1&&s.junk===0?'Roasted chana — more protein and fibre, less fat. Potato wafers are junk food: high fat and energy, low nutrients':''; };
+  S.fb=()=>{ const s=S.st; if(!s) return null;
+    if(s.choose===0) return ['bad','Look again: compare fat, protein and fibre.'];
+    if(s.junk===1) return ['bad','Chana has lots of protein and fibre — not junk.'];
+    if(!s.labelsDone) return ['warn','Pour out 100 g of each and compare.'];
+    if(!s.eatDone) return ['warn','Now let both eat until full.'];
+    if(s.choose<0||s.junk<0) return ['warn','Answer the two questions.'];
+    return ['ok','✓ Eat a balanced diet, avoid junk food.']; };
+  return S;
+}); }
+
+
+/* ---------------------------------------------------------------------
+   ACTIVITIES + ROUTER
+   --------------------------------------------------------------------- */
+function _b(name){ return typeof window[name]==='function'?window[name]:()=>{ const d=document.createElement('div'); d.textContent='(not built)'; return d; }; }
+const activities = [
+  { num:'3.1', tag:'', title:'My Food Week', desc:'Let us record · Table 3.1', build:_b('buildA1') },
+  { num:'3.2', tag:'', title:'Food Across States', desc:'Let us explore · crops, climate and food · Table 3.2', build:_b('buildA2') },
+  { num:'3.3', tag:'', title:'Then and Now', desc:'Let us interact · chulha, gas stove, sil-batta, grinder', build:_b('buildA3') },
+  { num:'3.4', tag:'', title:'Deficiency Survey', desc:'Let us conduct a survey · Fig. 3.5', build:_b('buildA4') },
+  { num:'3.5', tag:'', title:'Test for Starch', desc:'Iodine solution · blue-black', build:_b('buildA5') },
+  { num:'3.6', tag:'', title:'Test for Fats', desc:'Paper press · oily patch', build:_b('buildA6') },
+  { num:'3.7', tag:'', title:'Test for Proteins', desc:'Copper sulfate + caustic soda · violet · Table 3.3', build:_b('buildA7') },
+  { num:'3.8', tag:'', title:'Is My Diet Balanced?', desc:'Let us find out · nutrients, roughage, water', build:_b('buildA8') },
+  { num:'3.9', tag:'', title:'Wafers or Chana?', desc:'Let us compare · nutrition labels · junk food', build:_b('buildA9') },
+];
+if(typeof buildGal==='function') activities.unshift({num:'G',tag:'',title:'Gallery',desc:'',build:buildGal});
+let currentIndex = 0;
+
+function buildNav(){
+  const nav = document.getElementById('sideNav');
+  nav.innerHTML='';
+  activities.forEach((a,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'nav-item'+(i===currentIndex?' active':'');
+    btn.innerHTML = `<span class="n-num">${a.num}${a.tag?'<br>'+a.tag:''}</span><span class="n-title">${a.title}</span>`;
+    btn.onclick = ()=>{ currentIndex=i; render(); };
+    nav.appendChild(btn);
+  });
+}
+function render(){
+  stopAllLoops();
+  buildNav();
+  const a = activities[currentIndex];
+  document.getElementById('panelBadge').textContent = a.num+(a.tag?' '+a.tag:'');
+  document.getElementById('panelTitle').textContent = a.title;
+  document.getElementById('panelDesc').textContent = a.desc||'';
+  const body = document.getElementById('panelBody');
+  body.innerHTML='';
+  body.appendChild(a.build());
+}
+function labShell(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `<div class="lab-canvas-wrap"><canvas></canvas></div><div class="lab-side"></div>`;
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   INIT
+   --------------------------------------------------------------------- */
+render();
+
+</script>
+<script src="../../tracking/activity-tracker.js"></script>
+<script src="../../nav/back-button.js"></script>
+</body>
+</html>

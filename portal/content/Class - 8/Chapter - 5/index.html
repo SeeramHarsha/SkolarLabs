@@ -1,0 +1,1826 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 8 · Chapter 5 — Exploring Forces | Botclub Labs</title>
+<link href="../../vendor/fonts/fonts.css" rel="stylesheet">
+<style>
+:root{
+  --navy-1:#0f2640; --navy-2:#1a3a5c; --navy-3:#234a73;
+  --accent:#2f8fe0; --accent-2:#5cc8ff;
+  --bg:#eef2f8; --surface-0:#ffffff; --surface-1:#f6f9fc; --surface-2:#eef2f8;
+  --border:#dbe4f0; --border-strong:#c2d1e5;
+  --text-1:#132a44; --text-2:#4c6178; --text-3:#8195ab;
+  --f-red:#d9432b; --f-blue:#2f8fe0; --f-green:#1f9d55; --f-yellow:#d9a017;
+  --radius:14px; --radius-sm:9px;
+  --fs-xs:clamp(10px,0.62vw,12px); --fs-sm:clamp(11px,0.72vw,13.5px);
+  --fs-md:clamp(12.5px,0.85vw,15px); --fs-lg:clamp(15px,1.15vw,19px);
+  --fs-xl:clamp(18px,1.5vw,25px);
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:22px; --sp-6:30px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{ font-family:'Poppins',system-ui,sans-serif; background:var(--bg); color:var(--text-1); overflow:hidden; }
+button, input, select{font-family:inherit;}
+
+.app{height:100vh; display:flex; flex-direction:column; min-height:0;}
+.topbar{
+  flex:0 0 auto; background:linear-gradient(120deg, var(--navy-1) 0%, var(--navy-2) 55%, var(--navy-3) 100%);
+  color:#fff; padding:clamp(9px,1vh,16px) clamp(14px,1.6vw,28px);
+  display:flex; align-items:center; gap:var(--sp-4); box-shadow:0 2px 10px rgba(15,38,64,0.25); z-index:5;
+}
+.topbar .brand-badge{
+  width:clamp(32px,2.4vw,40px); height:clamp(32px,2.4vw,40px); border-radius:10px; background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center;
+  font-size:clamp(15px,1.3vw,20px); flex:0 0 auto;
+}
+.topbar .chip{
+  display:inline-block; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.28);
+  border-radius:6px; padding:2px 9px; font-size:var(--fs-xs); letter-spacing:0.06em; text-transform:uppercase; font-weight:600; margin-bottom:3px;
+}
+.topbar h1{font-size:var(--fs-lg); font-weight:600; line-height:1.2; white-space:nowrap;}
+.topbar .spacer{flex:1;}
+.topbar .legend{display:flex; gap:14px; font-size:var(--fs-xs); color:rgba(255,255,255,0.85); align-items:center;}
+.topbar .legend span{display:inline-flex; align-items:center; gap:5px;}
+.topbar .legend i{width:12px; height:4px; border-radius:2px; display:inline-block;}
+
+.body-wrap{flex:1; display:flex; min-height:0; overflow:hidden;}
+.sidenav{
+  flex:0 0 clamp(170px,13.5vw,230px); background:var(--surface-0); border-right:1px solid var(--border);
+  overflow-y:auto; padding:var(--sp-2); display:flex; flex-direction:column; gap:4px;
+}
+.nav-item{
+  display:flex; align-items:center; gap:8px; text-align:left; width:100%;
+  border:1px solid var(--border); background:var(--surface-1); border-radius:var(--radius-sm); padding:7px 10px; cursor:pointer; transition:all .15s ease;
+}
+.nav-item:hover{background:var(--surface-2); border-color:var(--border-strong);}
+.nav-item.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.nav-item .n-num{font-size:var(--fs-xs); font-weight:700; color:var(--accent); flex:0 0 auto; min-width:26px;}
+.nav-item.active .n-num{color:var(--accent-2);}
+.nav-item .n-title{font-size:var(--fs-sm); font-weight:600; line-height:1.25;}
+
+.content{flex:1; min-width:0; display:flex; flex-direction:column; overflow:hidden;}
+.panel-head{flex:0 0 auto; padding:var(--sp-3) var(--sp-5); border-bottom:1px solid var(--border); background:var(--surface-0); display:flex; align-items:baseline; gap:12px;}
+.panel-badge{background:var(--navy-2); color:#fff; font-size:var(--fs-xs); font-weight:700; padding:3px 10px; border-radius:6px;}
+.panel-head h2{font-size:var(--fs-lg); font-weight:600; color:var(--text-1);}
+.panel-head p{font-size:var(--fs-sm); color:var(--text-2); flex:1; text-align:right;}
+.panel-body{flex:1; min-height:0; overflow:hidden; padding:var(--sp-3) var(--sp-5); display:flex;}
+
+.lab-view{flex:1; display:flex; gap:var(--sp-4); min-height:0; min-width:0;}
+.lab-canvas-wrap{flex:7 1 0; min-width:0; min-height:0; background:#fff; border:1px solid var(--border); border-radius:var(--radius); position:relative; overflow:hidden;}
+.lab-canvas-wrap canvas{width:100%; height:100%; display:block;}
+.lab-side{flex:3 1 0; min-width:230px; display:flex; flex-direction:column; gap:var(--sp-3); min-height:0; overflow-y:auto; padding-right:2px;}
+.side-sub{display:flex; flex-direction:column; gap:var(--sp-3);}
+
+.control-group{background:var(--surface-0); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 12px;}
+.control-group label{font-size:var(--fs-sm); font-weight:600; color:var(--text-1); display:flex; justify-content:space-between;}
+.control-group label .val{color:var(--accent); font-weight:700;}
+.control-group input[type=range]{width:100%; margin-top:7px; accent-color:var(--navy-2); cursor:pointer;}
+.toggle-group{display:flex; gap:6px; margin-top:7px; flex-wrap:wrap;}
+.toggle-btn{flex:1; min-width:56px; padding:7px 5px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:600; cursor:pointer; text-align:center; color:var(--text-2);}
+.toggle-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.toggle-btn.small{font-size:10.5px; padding:6px 3px;}
+.toggle-btn.play{background:var(--f-green); border-color:var(--f-green); color:#fff;}
+.toggle-btn.navy{background:var(--navy-2); border-color:var(--navy-2); color:#fff; width:100%; margin-top:9px;}
+.toggle-btn:disabled{opacity:.5; cursor:not-allowed;}
+.chip-btn{display:inline-flex; align-items:center; gap:5px; padding:6px 11px; margin:3px 3px 0 0; border:1px solid var(--border-strong); background:var(--surface-1); border-radius:18px; cursor:pointer; font-size:var(--fs-sm); font-weight:600; color:var(--text-2);}
+.chip-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.chip-btn.ok{border-color:var(--f-green);} .chip-btn.bad{border-color:var(--f-red);}
+.chip-wrap{display:flex; flex-wrap:wrap; margin-top:3px;}
+
+.role-row{display:flex; align-items:center; gap:8px; margin-top:7px; font-size:var(--fs-sm); font-weight:600;}
+.role-row .rdot{width:10px; height:10px; border-radius:50%; flex:0 0 auto; display:inline-block;}
+.role-row .rname{width:70px; flex:0 0 auto; color:var(--text-2);}
+.role-row select{flex:1; min-width:0; padding:6px 7px; border:1px solid var(--border-strong); border-radius:7px; font-size:var(--fs-sm); background:var(--surface-1); color:var(--text-1); cursor:pointer;}
+
+.step-row{display:flex; gap:5px;}
+.step-pill{flex:1; padding:6px 4px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:10.5px; font-weight:700; color:var(--text-3); cursor:pointer;}
+.step-pill.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.step-pill.done{border-color:var(--f-green); color:var(--f-green);}
+.step-pill.active.done{color:#fff;}
+.opt-btn{display:block; width:100%; text-align:left; margin-top:6px; padding:7px 9px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:500; color:var(--text-1); cursor:pointer; line-height:1.3;}
+.opt-btn.active{border-color:var(--navy-2); background:#e3ecf7; font-weight:600;}
+.var-row{display:flex; align-items:center; gap:6px; margin-top:7px;}
+.var-row .vname{flex:0 0 88px; font-size:var(--fs-sm); font-weight:600;}
+.var-row .toggle-group{margin-top:0; flex:1;}
+
+.result-cards{display:grid; grid-template-columns:1fr 1fr; gap:6px;}
+.result-cards.three{grid-template-columns:1fr 1fr 1fr;}
+.rcard{background:var(--surface-0); border:1px solid var(--border); border-radius:9px; padding:7px 9px;}
+.rcard .rlabel{font-size:9.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--text-3); font-weight:600;}
+.rcard .rval{font-size:var(--fs-md); font-weight:700; color:var(--text-1); margin-top:1px;}
+.rcard.wide{grid-column:1/-1;}
+.hint{font-size:var(--fs-xs); color:var(--text-3); margin-top:6px; line-height:1.4;}
+.fb{font-size:var(--fs-xs); font-weight:600; margin-top:6px; padding:5px 8px; border-radius:7px;}
+.fb.ok{background:#e4f7ec; color:#1f6b3d;}
+.fb.bad{background:#fdece7; color:#a4331c;}
+.fb.warn{background:#fdf4dc; color:#8a6410;}
+.log{width:100%; border-collapse:collapse; font-size:10.5px; margin-top:4px;}
+.log th{text-align:left; color:var(--text-3); font-weight:600; text-transform:uppercase; font-size:9px; letter-spacing:.04em; padding:3px 4px; border-bottom:1px solid var(--border);}
+.log td{padding:4px; border-bottom:1px solid var(--surface-2); color:var(--text-2);}
+.log td.r-ok{color:var(--f-green); font-weight:700;} .log td.r-bad{color:var(--f-red); font-weight:700;} .log td.r-warn{color:var(--f-yellow); font-weight:700;}
+.hidden{display:none !important;}
+
+@media (max-width:1000px) and (orientation:portrait), (max-width:1000px) and (min-height:601px){
+  .body-wrap{flex-direction:column;}
+  .sidenav{flex:0 0 auto; width:100%; height:auto; flex-direction:row; overflow-x:auto; overflow-y:hidden; border-right:none; border-bottom:1px solid var(--border); padding:6px;}
+  .nav-item{flex:0 0 auto; width:150px;}
+  .panel-body{overflow-y:auto;}
+  .lab-view{flex-direction:column;}
+  .lab-canvas-wrap{min-height:320px;}
+  .lab-side{min-width:0;}
+  .content{overflow-y:auto;}
+  .topbar .legend{display:none;}
+  .topbar h1{white-space:normal;}
+}
+::-webkit-scrollbar{width:7px; height:7px;}
+::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand-badge">🧲</div>
+    <div>
+      <div class="chip">Grade 8 · Ch 5</div>
+      <h1>Exploring Forces</h1>
+    </div>
+    <div class="spacer"></div>
+    <div class="legend">
+      <span><i style="background:var(--f-yellow)"></i>Your force · what you change</span>
+      <span><i style="background:var(--f-red)"></i>Weight · + charge</span>
+      <span><i style="background:var(--f-blue)"></i>Friction · upthrust · − charge</span>
+      <span><i style="background:var(--f-green)"></i>Motion</span>
+    </div>
+  </div>
+  <div class="body-wrap">
+    <nav class="sidenav" id="sideNav"></nav>
+    <main class="content">
+      <div class="panel-head">
+        <div class="panel-badge" id="panelBadge">5.1</div>
+        <h2 id="panelTitle">Select an activity</h2>
+        <p id="panelDesc"></p>
+      </div>
+      <div class="panel-body" id="panelBody"></div>
+    </main>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   GRADE 8 — CHAPTER 5: EXPLORING FORCES
+   Every activity runs a continuous animation loop: sliders/buttons set a
+   TARGET or an initial condition; the drawn object is moved by the real
+   equation of motion (friction deceleration, spring-damper, projectile,
+   Coulomb / magnetic / buoyant force) every frame — never an instant jump.
+   g is taken as 10 N/kg, as in the textbook (1 kg ↔ 10 N).
+   ========================================================================= */
+const COL = {red:'#d9432b', blue:'#2f8fe0', green:'#1f9d55', yellow:'#d9a017', ink:'#132a44', muted:'#4c6178', mid:'#8195ab'};
+
+/* ---------------------------------------------------------------------
+   0. CANVAS HELPERS
+   --------------------------------------------------------------------- */
+function fitCanvas(canvas){
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  const r = canvas.parentElement.getBoundingClientRect();
+  const w = Math.max(200, r.width), h = Math.max(160, r.height);
+  if(canvas._w!==w || canvas._h!==h || canvas._dpr!==dpr){
+    canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr);
+    canvas.style.width = w+'px'; canvas.style.height = h+'px';
+    canvas._w=w; canvas._h=h; canvas._dpr=dpr;
+  }
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, w, h};
+}
+function line(ctx,x1,y1,x2,y2,color,width,dash){
+  ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=width||2;
+  if(dash) ctx.setLineDash(dash); else ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); ctx.restore();
+}
+function arrowHead(ctx,x,y,ang,color,size){
+  size=size||7; ctx.save(); ctx.fillStyle=color; ctx.translate(x,y); ctx.rotate(ang);
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-size,size*0.42); ctx.lineTo(-size,-size*0.42); ctx.closePath(); ctx.fill(); ctx.restore();
+}
+function vec(ctx,x1,y1,x2,y2,color,width){ line(ctx,x1,y1,x2,y2,color,width||2.6); arrowHead(ctx,x2,y2,Math.atan2(y2-y1,x2-x1),color,7); }
+function dimArrow(ctx,x,y1,y2,color){ line(ctx,x,y1,x,y2,color,1.6); arrowHead(ctx,x,y1,-Math.PI/2,color,5); arrowHead(ctx,x,y2,Math.PI/2,color,5); }
+function textAt(ctx,txt,x,y,opts){
+  opts=opts||{}; ctx.save();
+  ctx.font=(opts.weight||500)+' '+(opts.size||12)+'px Poppins, sans-serif';
+  ctx.fillStyle=opts.color||COL.ink; ctx.textAlign=opts.align||'left'; ctx.textBaseline=opts.baseline||'alphabetic';
+  if(opts.alpha!==undefined) ctx.globalAlpha=opts.alpha;
+  ctx.fillText(txt,x,y); ctx.restore();
+}
+function rect(ctx,x,y,w,h,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw===undefined?2.2:lw; if(fill){ctx.fillStyle=fill; ctx.fillRect(x,y,w,h);} if(lw!==0){ctx.strokeStyle=stroke; ctx.strokeRect(x,y,w,h);} ctx.restore(); }
+function circ(ctx,x,y,r,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw||2.2; ctx.beginPath(); ctx.arc(x,y,Math.max(0.1,r),0,Math.PI*2); if(fill){ctx.fillStyle=fill; ctx.fill();} ctx.strokeStyle=stroke; ctx.stroke(); ctx.restore(); }
+function rrect(ctx,x,y,w,h,r){ r=Math.min(r,w/2,h/2); ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function fmt(x,d){ if(!isFinite(x)) return '—'; d=d===undefined?2:d; return Number(x.toFixed(d)).toString(); }
+function gauss(){ return (Math.random()+Math.random()+Math.random()+Math.random()-2)*1.2247; }
+function hexRgb(h){ const n=parseInt(h.slice(1),16); return [n>>16&255, n>>8&255, n&255]; }
+function mixCol(a,b,t){ const A=hexRgb(a),B=hexRgb(b); t=clamp(t,0,1); return 'rgb('+A.map((v,i)=>Math.round(lerp(v,B[i],t))).join(',')+')'; }
+function rampCol(stops,x){ // stops: [[pos,hex],...]
+  if(x<=stops[0][0]) return mixCol(stops[0][1],stops[0][1],0);
+  for(let i=1;i<stops.length;i++){ if(x<=stops[i][0]){ const a=stops[i-1],b=stops[i]; return mixCol(a[1],b[1],(x-a[0])/(b[0]-a[0])); } }
+  const l=stops[stops.length-1][1]; return mixCol(l,l,0);
+}
+function thermo(ctx,x,top,bot,frac,outline,liquid){
+  const br=8;
+  ctx.save(); ctx.lineWidth=2; ctx.strokeStyle=outline; ctx.fillStyle='#fff';
+  rrect(ctx,x-5,top,10,bot-top+2,5); ctx.fill(); ctx.stroke(); ctx.restore();
+  const lh=(bot-top-5)*clamp(frac,0,1);
+  ctx.save(); ctx.fillStyle=liquid; ctx.fillRect(x-2.2,bot-lh,4.4,lh+6); ctx.restore();
+  circ(ctx,x,bot+br,br,outline,'#fff',2); circ(ctx,x,bot+br,br-3.2,liquid,liquid,1);
+  for(let i=0;i<=4;i++){ const yy=top+5+(bot-top-5)*i/4; line(ctx,x+5,yy,x+9,yy,outline,1.1); }
+}
+function flame(ctx,cx,baseY,width,inten,t){
+  const n=5;
+  for(let i=0;i<n;i++){
+    const fx=cx-width/2+width*(i+0.5)/n;
+    const hh=(6+inten*32)*(0.78+0.22*Math.sin(t*13+i*1.7));
+    const sway=Math.sin(t*9+i*2.1)*3;
+    ctx.save(); ctx.lineJoin='round';
+    ctx.strokeStyle=COL.red; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(fx-7,baseY); ctx.quadraticCurveTo(fx-7,baseY-hh*0.55,fx+sway,baseY-hh); ctx.quadraticCurveTo(fx+7,baseY-hh*0.55,fx+7,baseY); ctx.stroke();
+    ctx.strokeStyle=COL.yellow; ctx.lineWidth=1.6;
+    ctx.beginPath(); ctx.moveTo(fx-3.5,baseY); ctx.quadraticCurveTo(fx-3,baseY-hh*0.35,fx+sway*0.5,baseY-hh*0.55); ctx.quadraticCurveTo(fx+3,baseY-hh*0.35,fx+3.5,baseY); ctx.stroke();
+    ctx.restore();
+  }
+}
+
+/* ---------------------------------------------------------------------
+   0b. ANIMATION ENGINE
+   --------------------------------------------------------------------- */
+let activeStops = [];
+function stopAllLoops(){ activeStops.forEach(s=>{ try{ s(); }catch(e){} }); activeStops=[]; }
+function animLoop(tick){
+  let last = performance.now();
+  let raf;
+  function frame(now){
+    const dt = Math.max(0, Math.min(0.04, (now-last)/1000));
+    last = now;
+    tick(dt);
+    raf = requestAnimationFrame(frame);
+  }
+  raf = requestAnimationFrame(frame);
+  const stop = ()=>cancelAnimationFrame(raf);
+  activeStops.push(stop);
+  return stop;
+}
+/** Exponential ease — frame-rate independent, always smooth. */
+function approach(cur,tgt,rate,dt){ return cur + (tgt-cur)*(1-Math.exp(-rate*dt)); }
+/** Spring-damper — gives natural overshoot and settle. */
+function springTo(state,target,k,damping,dt){
+  const acc = (target-state.x)*k - state.v*damping;
+  state.v += acc*dt;
+  state.x += state.v*dt;
+  return state.x;
+}
+function toggleWire(btns,cb){
+  btns.forEach(b=>b.onclick=()=>{ btns.forEach(x=>x.classList.remove('active')); b.classList.add('active'); cb(b); });
+}
+
+
+/* ---------------------------------------------------------------------
+   0c. CHAPTER-5 HELPERS — people, boxes, springs, balances (line diagrams)
+   --------------------------------------------------------------------- */
+const G = 10;                       // N/kg — textbook value
+function smooth01(a,b,x){ const t=clamp((x-a)/(b-a),0,1); return t*t*(3-2*t); }
+function angDiff(a,b){ return Math.atan2(Math.sin(a-b),Math.cos(a-b)); }
+function rng(seed){ let s=(seed>>>0)||1; return ()=>{ s=(Math.imul(s,1664525)+1013904223)>>>0; return s/4294967296; }; }
+function sgn(x){ return x>0?1:x<0?-1:0; }
+
+/* labelled force arrow; skipped when tiny */
+function force(ctx,x,y,dx,dy,col,label,side){
+  const L=Math.hypot(dx,dy); if(L<4) return;
+  vec(ctx,x,y,x+dx,y+dy,col,3);
+  if(label && side==='b'){ textAt(ctx,label,x+dx/2,y+dy+18,{size:12,weight:700,color:col,align:'center'}); return; }
+  if(label){ const ox=side==='l'?-8:8; textAt(ctx,label,x+dx+(Math.abs(dx)>Math.abs(dy)?0:ox),y+dy+(Math.abs(dx)>Math.abs(dy)?-9:(dy>0?14:-4)),{size:12,weight:700,color:col,align:Math.abs(dx)>Math.abs(dy)?'center':(side==='l'?'right':'left')}); }
+}
+function ground(ctx,x0,x1,y){
+  line(ctx,x0,y,x1,y,COL.ink,2.4);
+  ctx.save(); ctx.strokeStyle='#c2d1e5'; ctx.lineWidth=1.1; ctx.beginPath();
+  for(let x=x0+8;x<x1;x+=14){ ctx.moveTo(x,y+2); ctx.lineTo(x-8,y+10); } ctx.stroke(); ctx.restore();
+}
+/* two-bone inverse kinematics → joint + reachable end */
+function ik2(sx,sy,tx,ty,l1,l2,bend){
+  const dx=tx-sx, dy=ty-sy, d0=Math.max(1e-6,Math.hypot(dx,dy)), d=Math.min(d0,l1+l2-0.01);
+  const ux=dx/d0, uy=dy/d0, a=(l1*l1-l2*l2+d*d)/(2*d), hh=Math.sqrt(Math.max(0,l1*l1-a*a));
+  return {jx:sx+ux*a-uy*hh*bend, jy:sy+uy*a+ux*hh*bend, ex:sx+ux*d, ey:sy+uy*d};
+}
+/* Stick figure.
+   P = {x: hip x, g: ground y, H: height px, face: ±1, lean: rad (+ forward), crouch 0..1,
+        phase: walk phase, stride 0..1, hands:[{x,y},{x,y}] | null, feet:[x,x] | null, jit} */
+function person(ctx,P){
+  const H=P.H, f=P.face||1, lwd=clamp(H*0.024,1.8,4.2);
+  const th=0.25*H, sh=0.24*H, tor=0.29*H, hr=0.068*H, ua=0.165*H, fa=0.16*H;
+  const ph=P.phase||0, st=P.stride||0, cr=P.crouch||0, jit=P.jit||0;
+  const bob=st*Math.abs(Math.sin(ph))*0.018*H;
+  const hx=P.x+jit, hy=P.hipY!==undefined?P.hipY:P.g-(th+sh)*(1-0.42*cr)-bob+(st>0?0.01*H*st:0);
+  const lean=P.lean||0;
+  const shx=hx+f*Math.sin(lean)*tor, shy=hy-Math.cos(lean)*tor;
+  const nx=shx+f*Math.sin(lean)*(hr+0.03*H), ny=shy-Math.cos(lean)*(hr+0.03*H);
+  ctx.save(); ctx.lineCap='round'; ctx.lineJoin='round';
+  const limb=(ax,ay,bx,by,cx,cy,col)=>{ ctx.strokeStyle=col; ctx.lineWidth=lwd; ctx.beginPath(); ctx.moveTo(ax,ay); ctx.lineTo(bx,by); ctx.lineTo(cx,cy); ctx.stroke(); };
+  // legs (far leg drawn lighter)
+  for(let i=1;i>=0;i--){
+    const p=ph+i*Math.PI;
+    let fx, fy=P.g;
+    if(P.feetXY){ fx=P.feetXY[i][0]; fy=P.feetXY[i][1]; }
+    else if(P.feet){ fx=P.feet[i]; }
+    else { fx=hx+f*st*0.17*H*Math.sin(p)+(st?0:(i?-1:1)*0.05*H); fy=P.g-Math.max(0,Math.cos(p))*0.07*H*st; }
+    const k=ik2(hx,hy,fx,fy,th,sh,-f);
+    limb(hx,hy,k.jx,k.jy,k.ex,k.ey,i?COL.mid:COL.ink);
+    line(ctx,k.ex,k.ey,k.ex+f*0.06*H,k.ey,i?COL.mid:COL.ink,lwd);
+  }
+  // torso + head
+  line(ctx,hx,hy,shx,shy,COL.ink,lwd*1.15);
+  circ(ctx,nx,ny,hr,COL.ink,'#fff',lwd);
+  circ(ctx,nx+f*hr*0.45,ny-hr*0.1,Math.max(1,lwd*0.45),COL.ink,COL.ink,1);
+  // arms
+  for(let i=1;i>=0;i--){
+    let tx,ty;
+    if(P.hands&&P.hands[i]){ tx=P.hands[i].x; ty=P.hands[i].y; }
+    else { const sw=Math.sin(ph+(i?0:Math.PI))*st; tx=shx-f*sw*0.14*H+f*0.02*H; ty=shy+(ua+fa)*0.95; }
+    const k=ik2(shx,shy,tx,ty,ua,fa,f);
+    limb(shx,shy,k.jx,k.jy,k.ex,k.ey,i?COL.mid:COL.ink);
+    circ(ctx,k.ex,k.ey,lwd*0.9,i?COL.mid:COL.ink,'#fff',lwd*0.6);
+  }
+  ctx.restore();
+  return {hx,hy,shx,shy,headX:nx,headY:ny};
+}
+/* hip x that lets a figure of height H (lean, crouch) reach a hand point in front of it */
+function hipForReach(handX,handY,g,H,f,lean,crouch){
+  const hy=g-0.49*H*(1-0.42*(crouch||0)), shy=hy-Math.cos(lean)*0.29*H, reach=0.325*H*0.93;
+  const dy=handY-shy, dx=Math.sqrt(Math.max(0,reach*reach-dy*dy));
+  return handX-f*(dx+Math.sin(lean)*0.29*H);
+}
+/* cardboard box — (x,y) = bottom-left corner */
+function cardBox(ctx,x,y,w,h,alpha){
+  ctx.save(); if(alpha!==undefined) ctx.globalAlpha=alpha;
+  rect(ctx,x,y-h,w,h,COL.ink,'#fff',2.4);
+  line(ctx,x,y-h+h*0.16,x+w,y-h+h*0.16,COL.mid,1.3);
+  line(ctx,x+w*0.5,y-h,x+w*0.5,y-h+h*0.16,COL.mid,1.3);
+  ctx.save(); rrect(ctx,x+w*0.36,y-h+h*0.32,w*0.28,h*0.1,h*0.05); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.3; ctx.stroke(); ctx.restore();
+  ctx.restore();
+}
+/* vertical coil spring from y1 (top) to y2 (bottom) */
+function coil(ctx,x,y1,y2,n,wd,col,lwd){
+  const L=y2-y1, lead=Math.min(12,Math.abs(L)*0.1), body=L-2*lead, N=n*24;
+  ctx.save(); ctx.strokeStyle=col; ctx.lineWidth=lwd||2; ctx.lineJoin='round'; ctx.beginPath();
+  ctx.moveTo(x,y1); ctx.lineTo(x,y1+lead);
+  const pitch=body/n;
+  for(let i=0;i<=N;i++){ const u=i/N, a=u*n*Math.PI*2;
+    ctx.lineTo(x+Math.sin(a)*wd/2, y1+lead+body*u - Math.cos(a)*Math.min(pitch*0.35,wd*0.18) + Math.min(pitch*0.35,wd*0.18)); }
+  ctx.lineTo(x,y2); ctx.stroke(); ctx.restore();
+}
+/* hand seen from the side: palm facing `dir` (±1), fingertips at (x,y) */
+function hand(ctx,x,y,dir,armLen,armAng){
+  const a=armAng===undefined?(dir>0?Math.PI:0):armAng;
+  const bx=x-dir*18, by=y;
+  ctx.save(); ctx.lineCap='round'; ctx.lineJoin='round';
+  line(ctx,bx,by,bx+Math.cos(a)*armLen,by+Math.sin(a)*armLen,COL.ink,9);
+  line(ctx,bx,by,bx+Math.cos(a)*armLen,by+Math.sin(a)*armLen,'#fff',5);
+  ctx.beginPath(); ctx.moveTo(bx,by-10); ctx.lineTo(x-dir*2,by-9); ctx.quadraticCurveTo(x+dir*2,by-8,x+dir*1,by); ctx.quadraticCurveTo(x+dir*2,by+8,x-dir*2,by+9); ctx.lineTo(bx,by+10); ctx.closePath();
+  ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke();
+  ctx.restore();
+}
+/* hand pressing downward: fingertip at (x,y) */
+function handDown(ctx,x,y,armLen){
+  ctx.save(); ctx.lineCap='round';
+  line(ctx,x,y-16,x+armLen*0.25,y-16-armLen,COL.ink,10); line(ctx,x,y-16,x+armLen*0.25,y-16-armLen,'#fff',6);
+  ctx.beginPath(); rrect(ctx,x-12,y-22,24,22,8); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke();
+  line(ctx,x-5,y-8,x-5,y-1,COL.mid,1.2); line(ctx,x+3,y-8,x+3,y-1,COL.mid,1.2);
+  ctx.restore();
+}
+function magnifier(ctx,cx,cy,R,draw,label){
+  ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fillStyle='#fbfdff'; ctx.fill(); ctx.clip(); draw(); ctx.restore();
+  circ(ctx,cx,cy,R,COL.ink,null,3);
+  if(label) textAt(ctx,label,cx,cy+R+16,{align:'center',size:11,weight:600,color:COL.muted});
+}
+/* jagged surface profile (friction close-up) */
+function roughProfile(seed,rough,n){ const R=rng(seed), a=[]; for(let i=0;i<n;i++) a.push((R()-0.5)*2*rough*(0.6+0.4*R())); return a; }
+
+/* ---------- spring balance (line diagram) ----------
+   cfg = {max, major, div}  · reading in N (drawn pointer) · returns hook tip point
+   Scale length Ls px covers 0 → max. Mass scale (g) on the left uses g = 10 N/kg. */
+function springBalance(ctx,cx,topY,Ls,cfg,reading,opts){
+  opts=opts||{};
+  const bw=Math.max(58,Ls*0.2), y0=topY+44, y1=y0+Ls, bh=Ls+86;
+  // ring + body
+  circ(ctx,cx,topY+6,9,COL.ink,'#fff',2.4);
+  ctx.save(); rrect(ctx,cx-bw/2,topY+16,bw,bh,12); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.6; ctx.stroke(); ctx.restore();
+  // slot
+  ctx.save(); rrect(ctx,cx-7,y0-18,14,Ls+40,6); ctx.fillStyle='#f3f6fa'; ctx.fill(); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.2; ctx.stroke(); ctx.restore();
+  const shown=clamp(reading,0,cfg.max*1.04), py=y0+Ls*shown/cfg.max;
+  coil(ctx,cx,y0-16,py-4,9,11,opts.over?COL.red:COL.blue,1.8);
+  // scales
+  const nMaj=Math.round(cfg.max/cfg.major);
+  for(let i=0;i<=nMaj;i++){
+    const y=y0+Ls*i/nMaj;
+    line(ctx,cx+9,y,cx+bw/2-8,y,COL.ink,1.8);
+    textAt(ctx,fmt(i*cfg.major,1),cx+bw/2-7,y-3,{align:'right',size:clamp(Ls/30,9,12),weight:700,color:opts.hiMax&&i===nMaj?COL.yellow:COL.ink});
+    line(ctx,cx-bw/2+8,y,cx-9,y,COL.muted,1.5);
+    textAt(ctx,String(Math.round(i*cfg.major/G*1000)),cx-bw/2+7,y-3,{size:clamp(Ls/34,8,11),weight:600,color:COL.muted});
+    if(i<nMaj) for(let j=1;j<cfg.div;j++){ const yy=y+Ls/nMaj*j/cfg.div; line(ctx,cx+9,yy,cx+(j===cfg.div/2?19:15),yy,COL.ink,1.1); line(ctx,cx-9,yy,cx-15,yy,COL.mid,1); }
+  }
+  textAt(ctx,'N',cx+bw/2-8,y1+20,{align:'right',size:11,weight:700,color:COL.ink});
+  textAt(ctx,'g',cx-bw/2+8,y1+20,{size:11,weight:700,color:COL.muted});
+  // pointer
+  line(ctx,cx-bw/2+6,py,cx+bw/2-6,py,COL.red,2.4); arrowHead(ctx,cx+bw/2-4,py,0,COL.red,7);
+  // rod + hook
+  const hy=topY+16+bh+34+(py-y0);
+  line(ctx,cx,py,cx,hy-10,COL.ink,2.6);
+  ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.6; ctx.beginPath(); ctx.moveTo(cx,hy-10); ctx.lineTo(cx,hy); ctx.arc(cx+7,hy,7,Math.PI,Math.PI*0.1,true); ctx.stroke(); ctx.restore();
+  return {hx:cx+7, hy:hy+7, py, y0, y1, bw, bottom:topY+16+bh};
+}
+
+/* ---------------------------------------------------------------------
+   1. ACTIVITIES + ROUTER
+   --------------------------------------------------------------------- */
+const activities = [
+  { num:'5.1',  title:'Move the Box', desc:'Push · pull · lift · carry', build: buildA1 },
+  { num:'5.2',  title:'What a Force Does', desc:'Start · stop · turn · squash', build: buildA2 },
+  { num:'5.3',  title:'Why It Stops', desc:'Push the box and let go', build: buildA3 },
+  { num:'5.4',  title:'Different Surfaces', desc:'Same push, five surfaces', build: buildA4 },
+  { num:'5.5',  title:'Floating Ring Magnet', desc:'Like poles · unlike poles', build: buildA5 },
+  { num:'5.6',  title:'Charged Scale', desc:'Rub it · bring it near paper', build: buildA6 },
+  { num:'5.7',  title:'Charged Balloons', desc:'Rub both · bring the cloth near', build: buildA7 },
+  { num:'5.8',  title:'Throw It Up', desc:'Throw harder · watch it return', build: buildA8 },
+  { num:'5.9',  title:'Stretch a Spring', desc:'Hang different objects', build: buildA9 },
+  { num:'5.10', title:'Range of a Balance', desc:'How much can it measure?', build: buildA10 },
+  { num:'5.11', title:'Smallest Division', desc:'Count the small marks', build: buildA11 },
+  { num:'5.12', title:'Measure Weight', desc:'Hang · read · record', build: buildA12 },
+  { num:'5.13', title:'Upthrust', desc:'Push a bottle into water · let go', build: buildA13 },
+];
+let currentIndex = 0;
+
+function buildNav(){
+  const nav = document.getElementById('sideNav');
+  nav.innerHTML='';
+  activities.forEach((a,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'nav-item'+(i===currentIndex?' active':'');
+    btn.innerHTML = `<span class="n-num">${a.num}</span><span class="n-title">${a.title}</span>`;
+    btn.onclick = ()=>{ currentIndex=i; render(); };
+    nav.appendChild(btn);
+  });
+}
+function render(){
+  stopAllLoops();
+  buildNav();
+  const a = activities[currentIndex];
+  document.getElementById('panelBadge').textContent = a.num;
+  document.getElementById('panelTitle').textContent = a.title;
+  document.getElementById('panelDesc').textContent = a.desc||'';
+  const body = document.getElementById('panelBody');
+  body.innerHTML='';
+  body.appendChild(a.build());
+}
+function labShell(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `<div class="lab-canvas-wrap"><canvas></canvas></div><div class="lab-side"></div>`;
+  return wrap;
+}
+
+/* =====================================================================
+   5.1 MOVE THE BOX — push, pull, lift (pull up), carry
+   Horizontal:  box starts only if F > μs·m·g  (μs = 0.5), then
+                m·a = F·(1 − v/vmax) − μk·m·g   (μk = 0.4, vmax = 2.2 m/s —
+                muscles push less hard the faster you move)
+   Vertical:    box rises only if F > m·g;  a = (F − m·g)/m, with the
+                lifter easing off near waist height (spring-damper hold).
+   ===================================================================== */
+function buildA1(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label style="margin-bottom:6px;">Way to move it</label>
+      <div class="toggle-group" id="mdB"><button class="toggle-btn active" data-m="push">Push</button><button class="toggle-btn" data-m="pull">Pull</button><button class="toggle-btn" data-m="lift">Lift</button><button class="toggle-btn" data-m="carry">Carry</button></div></div>
+    <div class="control-group"><label>Your force <span class="val" id="fV"></span></label><input type="range" id="fR" min="0" max="400" step="5" value="120"></div>
+    <div class="control-group"><label style="margin-bottom:6px;">What's inside</label>
+      <div class="toggle-group" id="msB"><button class="toggle-btn" data-k="5">Empty · 5 kg</button><button class="toggle-btn active" data-k="15">Books · 15 kg</button><button class="toggle-btn" data-k="30">Full · 30 kg</button></div></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Force on box</div><div class="rval" id="r1" style="color:var(--f-yellow)">—</div></div>
+      <div class="rcard"><div class="rlabel" id="r2l">Friction</div><div class="rval" id="r2" style="color:var(--f-blue)">—</div></div>
+      <div class="rcard"><div class="rlabel">Box speed</div><div class="rval" id="r3" style="color:var(--f-green)">—</div></div>
+      <div class="rcard"><div class="rlabel">Box</div><div class="rval" id="r4">—</div></div></div>
+      <div class="fb warn hidden" id="fbk"></div></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), fR=$('#fR');
+  let mode='push', m=15, t=0;
+  const MUS=0.5, MUK=0.4, VMAX=2.2, BW=0.85, BH=0.8, HOLD=0.5;
+  const S={bx:1.3, v:0, y:0, vy:0, phase:0, fade:1, fading:false, cyc:'lift', ct:0, px:0};
+  function reset(){ S.bx=mode==='pull'?0.9:1.3; S.v=0; S.y=0; S.vy=0; S.cyc='lift'; S.ct=0; }
+  toggleWire(wrap.querySelectorAll('#mdB button'),b=>{ mode=b.dataset.m; S.fading=true; });
+  toggleWire(wrap.querySelectorAll('#msB button'),b=>{ m=+b.dataset.k; });
+
+  animLoop((dt)=>{
+    t+=dt;
+    const F=parseFloat(fR.value); $('#fV').textContent=F+' N';
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const ppm=Math.min(w/4.8,h*0.62/1.75), gY=h*0.78, x0=w*0.03, Wm=(w*0.94)/ppm;
+    const X=xm=>x0+xm*ppm, Hp=1.65*ppm;
+    const mg=m*G;
+    let Fapp=0, fric=0, moving=false, strain=false, lifted=false;
+
+    // fade-out → reset → fade-in (keeps the scene looping)
+    if(S.fading){ S.fade=approach(S.fade,0,9,dt); if(S.fade<0.03){ reset(); S.fading=false; } }
+    else S.fade=approach(S.fade,1,6,dt);
+
+    if(mode==='push'||mode==='pull'){
+      S.y=0;
+      if(Math.abs(S.v)<1e-3 && F<=MUS*mg){ S.v=0; fric=F; Fapp=F; strain=F>0; }
+      else { Fapp=F*Math.max(0,1-S.v/VMAX); fric=MUK*mg; S.v+=(Fapp-fric)/m*dt; if(S.v<0) S.v=0; moving=S.v>0.01; }
+      S.bx+=S.v*dt; S.phase+=S.v*dt/0.36*(mode==='pull'?-1:1);
+      const endX=mode==='push'?S.bx+BW+0.2:S.bx+BW+1.9;
+      if(endX>Wm && !S.fading) S.fading=true;
+    } else {
+      // vertical: lifter PD-controls towards waist height but can never exceed F
+      S.ct+=dt;
+      const tgt=(S.cyc==='lift'||S.cyc==='hold'||S.cyc==='walk')?HOLD:0;
+      const want=m*(G+40*(tgt-S.y)-11*S.vy);
+      Fapp=clamp(want,0,F);
+      if(S.y<=0 && Fapp<=mg){ S.y=0; S.vy=0; strain=S.cyc==='lift'&&F>0; if(S.cyc==='lower'&&S.ct>0.6){ S.cyc='rest'; S.ct=0; } }
+      else { S.vy+=(Fapp-mg)/m*dt; S.y+=S.vy*dt; if(S.y<0){ S.y=0; S.vy=0; } }
+      lifted=S.y>0.02;
+      if(S.cyc==='lift' && Math.abs(S.y-HOLD)<0.03 && Math.abs(S.vy)<0.15){ S.cyc=mode==='carry'?'walk':'hold'; S.ct=0; }
+      else if(S.cyc==='hold' && S.ct>1.2){ S.cyc='lower'; S.ct=0; }
+      else if(S.cyc==='rest' && S.ct>0.9){ S.cyc='lift'; S.ct=0; }
+      if(S.cyc==='walk'){ const vt=1.4*Math.sqrt(Math.max(0,1-mg/F)); S.v=approach(S.v,vt,3,dt); S.bx+=S.v*dt; S.phase+=S.v*dt/0.36; moving=S.v>0.02; if(S.bx+BW+0.3>Wm && !S.fading) S.fading=true; }
+      else S.v=approach(S.v,0,8,dt);
+    }
+
+    ground(ctx,0,w,gY);
+    // distance ticks on the floor
+    for(let xm=0;xm<Wm;xm+=0.5){ line(ctx,X(xm),gY+28,X(xm),gY+(xm%1<0.01?38:34),COL.mid,1); if(xm%1<0.01) textAt(ctx,xm+' m',X(xm),gY+50,{align:'center',size:10,color:COL.mid}); }
+
+    ctx.save(); ctx.globalAlpha=S.fade;
+    const bxp=X(S.bx), bw=BW*ppm, bh=BH*ppm, by=gY-S.y*ppm;
+    const jit=strain?Math.sin(t*47)*1.6:0;
+    const walkSt=moving?clamp(S.v/1.2,0.35,1):0;
+    if(mode==='push'){
+      const lean=0.95+(strain?0.1:0), f=1, cr=0.32;
+      const hy=by-bh*0.7;
+      const hipX=hipForReach(bxp,hy,gY,Hp,f,lean,cr)+jit;
+      person(ctx,{x:hipX,g:gY,H:Hp,face:f,lean,crouch:cr,phase:S.phase,stride:walkSt,
+        feet:moving?null:[hipX-0.3*Hp,hipX+0.1*Hp],hands:[{x:bxp+jit,y:hy},{x:bxp+jit,y:hy+0.04*Hp}]});
+      cardBox(ctx,bxp+jit,by,bw,bh);
+      force(ctx,bxp+4,by-bh-14,Fapp/400*140,0,COL.yellow,'push');
+      force(ctx,bxp+bw*0.5,gY-5,-fric/400*140,0,COL.blue,'friction','b');
+    } else if(mode==='pull'){
+      const lean=-0.34-(strain?0.1:0), f=-1, ropeL=1.0*ppm;
+      const hy=by-bh*0.5, handX=bxp+bw+ropeL+jit;
+      const hipX=handX+0.3*Hp-Math.sin(lean)*0.29*Hp*0.2;
+      // rope (taut) from handle to hands
+      line(ctx,bxp+bw,hy,handX,hy-0.02*Hp,COL.ink,2.2);
+      person(ctx,{x:hipX,g:gY,H:Hp,face:f,lean,phase:S.phase,stride:walkSt,
+        feet:moving?null:[hipX+0.3*Hp,hipX-0.1*Hp],hands:[{x:handX,y:hy-0.02*Hp},{x:handX+0.05*Hp,y:hy-0.03*Hp}]});
+      cardBox(ctx,bxp+jit,by,bw,bh);
+      circ(ctx,bxp+bw,hy,3,COL.ink,'#fff',2);
+      force(ctx,bxp+bw+4,hy+14,Fapp/400*140,0,COL.yellow,'pull');
+      force(ctx,bxp+bw*0.5,gY-5,-fric/400*140,0,COL.blue,'friction','b');
+    } else {
+      const reach=clamp(1-S.y/HOLD,0,1);
+      const hipX=bxp-0.2*Hp+jit;
+      const crouch=0.1+0.75*reach, lean=0.18+0.5*reach;
+      person(ctx,{x:hipX,g:gY,H:Hp,face:1,lean,crouch,phase:S.phase,stride:walkSt,
+        feet:moving?null:[hipX-0.1*Hp,hipX+0.08*Hp],hands:[{x:bxp+bw*0.18+jit,y:by-bh*0.75},{x:bxp+bw*0.1+jit,y:by-bh*0.85}]});
+      cardBox(ctx,bxp+jit,by,bw,bh);
+      force(ctx,bxp+bw*0.72,by-bh*0.5,0,-Fapp/400*140,COL.yellow,'lift','r');
+      force(ctx,bxp+bw*0.72,by,0,mg/400*140,COL.red,'weight','r');
+      if(S.y>0.01) line(ctx,bxp+bw*0.3,gY,bxp+bw*0.3,by,COL.yellow,1.5,[4,4]);
+    }
+    if(S.v>0.03) force(ctx,bxp+bw*0.5-S.v/2.2*55,by-bh-48,S.v/2.2*110,0,COL.green,'motion');
+    ctx.restore();
+
+    const isV=mode==='lift'||mode==='carry';
+    $('#r1').textContent=Math.round(Fapp)+' N';
+    $('#r2l').textContent=isV?'Weight':'Friction'; $('#r2').style.color=isV?'var(--f-red)':'var(--f-blue)';
+    $('#r2').textContent=Math.round(isV?mg:fric)+' N';
+    $('#r3').textContent=fmt(S.v,2)+' m/s';
+    $('#r4').textContent=isV?(lifted?'Lifted':'On floor'):(moving?'Moving':'At rest');
+    const fb=$('#fbk');
+    const need=isV?mg:MUS*mg;
+    if(F<=need){ fb.classList.remove('hidden'); fb.textContent='Needs more than '+Math.round(need)+' N'; } else fb.classList.add('hidden');
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   5.2 WHAT A FORCE DOES
+   Kick (start):     v = F·Δt / m      (Δt = 0.012 s, football m = 0.45 kg),
+                     then rolls with a = −0.6 m/s² (grass).
+   Hold (stop):      a = −F / M        (bicycle + rider M = 60 kg, v₀ = 4 m/s)
+                     stopping distance s = v₀² / 2a.
+   Bat (direction):  v_out = 0.4·v_in + F·Δt / m  (cricket ball m = 0.16 kg,
+                     Δt = 0.004 s), launched at the bat angle → projectile.
+   Press (shape):    squash δ = F / k (k = 400 N/m) via spring-damper.
+   Scenes run in slow motion (×0.6) and loop.
+   ===================================================================== */
+function drawBicycle(ctx,x,gy,s,wheelAng,crank){
+  // x = rear-wheel centre; s = px per metre
+  const r=0.33*s, wb=1.05*s, rx=x, fx=x+wb, cy=gy-r;
+  for(const wx of [rx,fx]){ circ(ctx,wx,cy,r,COL.ink,null,2.6); circ(ctx,wx,cy,3,COL.ink,COL.ink,1);
+    for(let i=0;i<6;i++){ const a=wheelAng+i*Math.PI/3; line(ctx,wx,cy,wx+Math.cos(a)*r*0.95,cy+Math.sin(a)*r*0.95,COL.mid,1); } }
+  const bb={x:rx+0.42*s,y:cy+0.04*s}, seat={x:rx+0.3*s,y:cy-0.55*s}, head={x:fx-0.2*s,y:cy-0.62*s};
+  ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.6; ctx.lineJoin='round'; ctx.beginPath();
+  ctx.moveTo(rx,cy); ctx.lineTo(bb.x,bb.y); ctx.lineTo(seat.x,seat.y); ctx.lineTo(rx,cy);
+  ctx.moveTo(bb.x,bb.y); ctx.lineTo(head.x,head.y); ctx.lineTo(seat.x,seat.y);
+  ctx.moveTo(head.x,head.y); ctx.lineTo(fx,cy); ctx.moveTo(head.x,head.y); ctx.lineTo(head.x-0.04*s,head.y-0.14*s); ctx.lineTo(head.x+0.1*s,head.y-0.16*s);
+  ctx.moveTo(seat.x-0.12*s,seat.y-0.04*s); ctx.lineTo(seat.x+0.1*s,seat.y-0.04*s); ctx.stroke(); ctx.restore();
+  const cl=0.17*s, p1={x:bb.x+Math.cos(crank)*cl,y:bb.y+Math.sin(crank)*cl}, p2={x:bb.x-Math.cos(crank)*cl,y:bb.y-Math.sin(crank)*cl};
+  line(ctx,p1.x,p1.y,p2.x,p2.y,COL.ink,2.4); circ(ctx,bb.x,bb.y,0.07*s,COL.ink,'#fff',2);
+  return {seat:{x:seat.x,y:seat.y-0.06*s}, bar:{x:head.x+0.08*s,y:head.y-0.16*s}, p1, p2, rear:{x:rx-r*0.4,y:cy-0.45*s}};
+}
+function football(ctx,x,y,r,ang){
+  circ(ctx,x,y,r,COL.ink,'#fff',2.4);
+  ctx.save(); ctx.translate(x,y); ctx.rotate(ang);
+  ctx.beginPath(); for(let i=0;i<5;i++){ const a=i*Math.PI*2/5-Math.PI/2; ctx[i?'lineTo':'moveTo'](Math.cos(a)*r*0.36,Math.sin(a)*r*0.36); } ctx.closePath(); ctx.fillStyle=COL.ink; ctx.fill();
+  for(let i=0;i<5;i++){ const a=i*Math.PI*2/5-Math.PI/2; line(ctx,Math.cos(a)*r*0.36,Math.sin(a)*r*0.36,Math.cos(a)*r*0.95,Math.sin(a)*r*0.95,COL.ink,1.4); }
+  ctx.restore();
+}
+function buildA2(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label style="margin-bottom:6px;">Situation</label>
+      <div class="toggle-group" id="scB"><button class="toggle-btn active" data-s="start">Kick a ball</button><button class="toggle-btn" data-s="stop">Hold a bicycle</button></div>
+      <div class="toggle-group" id="scB2"><button class="toggle-btn" data-s="turn">Hit with bat</button><button class="toggle-btn" data-s="shape">Press balloon</button></div></div>
+    <div class="control-group"><label>Force <span class="val" id="fV"></span></label><input type="range" id="fR" min="50" max="600" step="10" value="250"></div>
+    <div class="control-group" id="angG"><label>Bat angle <span class="val" id="aV"></span></label><input type="range" id="aR" min="5" max="60" step="1" value="30"></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel" id="l1">Before</div><div class="rval" id="r1">—</div></div>
+      <div class="rcard"><div class="rlabel" id="l2">After</div><div class="rval" id="r2" style="color:var(--f-green)">—</div></div>
+      <div class="rcard wide"><div class="rlabel">Effect of the force</div><div class="rval" id="r3" style="color:var(--f-red)">—</div></div></div></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), fR=$('#fR'), aR=$('#aR');
+  let scene='start', t=0;
+  const btns=[...wrap.querySelectorAll('#scB button, #scB2 button')];
+  const S={};
+  function reset(){ Object.assign(S,{T:0, cam:0, x:0, v:0, y:0, vy:0, hit:false, ang:0, fade:1, done:false, sq:{x:0,v:0}, trail:[], vin:0, vout:0}); }
+  reset();
+  toggleWire(btns,b=>{ scene=b.dataset.s; reset(); });
+  const SLOW=0.6;
+
+  animLoop((dt0)=>{
+    t+=dt0; const dt=dt0*SLOW;
+    const F=parseFloat(fR.value), th=parseFloat(aR.value)*Math.PI/180;
+    $('#fV').textContent=F+' N'; $('#aV').textContent=aR.value+'°';
+    $('#angG').classList.toggle('hidden',scene!=='turn');
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    S.T+=dt;
+    const gY=h*0.8;
+    if(S.done){ S.fade=approach(S.fade,0,6,dt0); if(S.fade<0.03) reset(); }
+    else S.fade=approach(S.fade,1,6,dt0);
+    // camera follows the moving object; ground marks scroll past so motion is visible
+    let s=1;
+    const X=xm=>(xm-S.cam)*s+w*0.04;
+    const groundM=()=>{ ground(ctx,0,w,gY); for(let xm=Math.floor(S.cam);xm<S.cam+w/s;xm++){ const x=X(xm); line(ctx,x,gY+14,x,gY+22,COL.mid,1.2); textAt(ctx,xm+' m',x,gY+36,{align:'center',size:10,color:COL.mid}); } };
+
+    if(scene==='start'){
+      s=Math.min(w/5.2,h*0.64/1.75); const Hp=1.65*s, hipM=0.7, r=0.11*s, bxM=hipM+0.55;
+      const m=0.45, DT=0.012, DEC=1.5;
+      // leg: wind back (0–0.6 s), swing through (0.6–0.72 s), follow-through
+      const T=S.T; let a;
+      if(T<0.6) a=lerp(0,-0.9,smooth01(0,0.6,T));
+      else if(T<0.72) a=lerp(-0.9,0.35,(T-0.6)/0.12);
+      else a=lerp(0.35,0.9,smooth01(0.72,1.0,T))*(1-smooth01(1.2,1.8,T));
+      if(T>=0.72 && !S.hit){ S.hit=true; S.v=F*DT/m; }
+      if(S.hit){ S.v=Math.max(0,S.v-DEC*dt); S.x+=S.v*dt; if((S.v<=0.001&&S.T>2.5)||S.x>16) S.done=true; }
+      S.cam=approach(S.cam,Math.max(0,bxM+S.x-0.62*w/s),3,dt0);
+      groundM();
+      const hip=X(hipM), Lg=0.49*Hp, hipY=gY-Lg;
+      const kf=[hip+Math.sin(a)*Lg*0.98,hipY+Math.cos(a)*Lg*0.98];
+      person(ctx,{x:hip,g:gY,H:Hp,face:1,lean:0.12-a*0.1,feetXY:[kf,[hip-0.03*s,gY]],hands:[{x:hip-0.25*s-a*20,y:hipY-0.1*s},{x:hip+0.35*s,y:hipY-0.25*s}]});
+      const bx=X(bxM+S.x);
+      football(ctx,bx,gY-r,r,S.x/0.11);
+      if(!S.hit) textAt(ctx,'at rest',bx,gY-2*r-12,{align:'center',size:13,weight:600,color:COL.muted});
+      if(S.hit && S.T<0.85) force(ctx,bx-r-70,gY-r,62,0,COL.yellow,'kick');
+      if(S.v>0.05) force(ctx,bx,gY-2*r-16,clamp(S.v*12,10,150),0,COL.green,fmt(S.v,1)+' m/s');
+      $('#l1').textContent='Speed before'; $('#r1').textContent='0 m/s';
+      $('#l2').textContent='Speed after kick'; $('#r2').textContent=fmt(F*DT/m,1)+' m/s';
+      $('#r3').textContent='Starts moving from rest';
+    }
+    else if(scene==='stop'){
+      s=Math.min(w/4.4,h*0.62/2.0); const M=60, v0=4, a=F/M, xg=4;
+      // bike rear-wheel x (m); friend grabs the carrier at xg
+      if(!S.hit){ S.v=v0; if(S.x>=xg){ S.hit=true; } }
+      else { S.v=Math.max(0,S.v-a*dt); if(S.v<=0 && !S.done){ S.ang=S.ang||S.T; if(S.T-S.ang>1.4) S.done=true; } }
+      S.x+=S.v*dt; S.y+=S.v*dt/0.33; S.vy+=S.v*dt/0.33*0.5;
+      S.cam=approach(S.cam,Math.max(0,S.x-0.25*w/s),4,dt0);
+      groundM();
+      const B=drawBicycle(ctx,X(S.x),gY,s,S.y,S.vy);
+      const Hp=1.6*s;
+      person(ctx,{x:B.seat.x,g:gY,H:Hp,face:1,lean:0.55,hipY:B.seat.y,feetXY:[[B.p1.x,B.p1.y],[B.p2.x,B.p2.y]],hands:[{x:B.bar.x,y:B.bar.y},{x:B.bar.x+3,y:B.bar.y-2}]});
+      // friend: waits at xg, then grabs the carrier and is dragged along, leaning back
+      const fX=S.hit?X(S.x)-0.55*s:X(xg)-0.55*s;
+      const pulling=S.hit&&S.v>0;
+      person(ctx,{x:fX,g:gY,H:1.55*s,face:1,lean:S.hit?-0.3:0,phase:S.x/0.3,stride:pulling?0.6:0,feet:pulling?null:[fX-0.2*s,fX+0.15*s],
+        hands:S.hit?[{x:B.rear.x,y:B.rear.y},{x:B.rear.x+4,y:B.rear.y-3}]:null});
+      if(S.hit){ force(ctx,B.rear.x-8,B.rear.y+18,-F/600*120-10,0,COL.yellow,'pull back');
+        const sd=v0*v0/(2*a); line(ctx,X(xg),gY+46,X(xg+sd),gY+46,COL.yellow,2.4); line(ctx,X(xg),gY+40,X(xg),gY+52,COL.yellow,2.4); arrowHead(ctx,X(xg+sd),gY+46,0,COL.yellow,7);
+        textAt(ctx,fmt(sd,1)+' m to stop',(X(xg)+X(xg+sd))/2,gY+64,{align:'center',size:13,weight:700,color:COL.yellow}); }
+      if(S.v>0.05) force(ctx,X(S.x)+0.5*s,gY-1.95*s,S.v*30,0,COL.green,fmt(S.v,1)+' m/s');
+      $('#l1').textContent='Speed before'; $('#r1').textContent=v0+' m/s';
+      $('#l2').textContent='Slowing rate'; $('#r2').textContent=fmt(a,1)+' m/s²';
+      $('#r3').textContent='Slows down and stops';
+    }
+    else if(scene==='turn'){
+      s=Math.min(w/6,h*0.6/1.9); const m=0.16, DT=0.004, vin=12, Hp=1.65*s;
+      const hipM=0.6, xc=hipM+0.75, cH=0.72, x0=xc+w/s*1.05;
+      const vout=0.4*vin+F*DT/m;
+      const tArr=(x0-xc)/vin;
+      if(!S.hit){ S.x=x0-vin*S.T; S.y=cH; if(S.x<=xc){ S.hit=true; S.x=xc; S.v=vout*Math.cos(th); S.vy=vout*Math.sin(th); S.ang=S.T; } }
+      else { S.vy-=G*dt; S.x+=S.v*dt; S.y+=S.vy*dt; if(S.y<0.035){ S.y=0.035; S.vy=-S.vy*0.35; S.v*=0.7; } if((S.T-S.ang>3.2||X(S.x)>w+30) && !S.done) S.done=true; }
+      if(S.T%0.04<dt) S.trail.push([S.x,S.y]); if(S.trail.length>90) S.trail.shift();
+      S.cam=0;
+      const top=Math.max(cH,S.y);
+      groundM();
+      // bat swing about the hands: from back-lift to follow-through, contact at tArr
+      const u=clamp((S.T-(tArr-0.16))/0.3,0,1), ba=lerp(-2.4,0.9,u*u*(3-2*u));
+      const hipX=X(hipM), hx=hipX+0.3*s, hy=gY-cH*s-0.18*s, bl=0.85*s;
+      person(ctx,{x:hipX,g:gY,H:Hp,face:1,lean:0.25,crouch:0.15,feet:[hipX-0.25*s,hipX+0.25*s],hands:[{x:hx,y:hy},{x:hx-6,y:hy-4}]});
+      ctx.save(); ctx.translate(hx,hy); ctx.rotate(ba); line(ctx,0,0,bl*0.3,0,COL.ink,4); rrect(ctx,bl*0.3,-5,bl*0.7,12,4); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.stroke(); ctx.restore();
+      S.trail.forEach(p=>circ(ctx,X(p[0]),gY-p[1]*s,2,COL.mid,COL.mid,1));
+      // tall flights leave the top of the frame: keep the ball visible with an edge marker
+      const bx=X(S.x), by=gY-S.y*s, br=Math.max(6,0.036*s*1.8);
+      if(by>br) circ(ctx,bx,by,br,COL.red,'#fff',2.6);
+      else { arrowHead(ctx,bx,8,-Math.PI/2,COL.red,10); textAt(ctx,fmt(S.y,1)+' m high',bx+10,20,{size:11,weight:700,color:COL.red}); }
+      const vx=S.hit?S.v:-vin, vy=S.hit?S.vy:0, sp=Math.hypot(vx,vy);
+      if(by>br) force(ctx,bx,by-16,vx*6,-vy*6,COL.green,fmt(sp,1)+' m/s');
+      if(S.hit && S.T-S.ang<0.3) force(ctx,X(xc)+14,gY-cH*s+12,Math.cos(th)*60,-Math.sin(th)*60,COL.yellow,'hit');
+      $('#l1').textContent='Before'; $('#r1').textContent=vin+' m/s ←';
+      $('#l2').textContent='After'; $('#r2').textContent=fmt(vout,1)+' m/s ↗';
+      $('#r3').textContent='Direction of motion changes';
+    }
+    else {
+      // press the balloon: force profile rises, holds, releases — balloon squashes, then wobbles back
+      ground(ctx,0,w,gY);
+      s=Math.min(w/1.45,h*0.6/0.8); const R=0.3*s, k=400, cyc=S.T%3.4;
+      const p=smooth01(0,0.8,cyc)*(1-smooth01(1.8,2.05,cyc));
+      const Fn=F*p, dT=Math.min(Fn/k,0.2);           // m
+      springTo(S.sq,dT,160,7,dt);
+      const d=clamp(S.sq.x,-0.05,0.22)*s;
+      const cx=w*0.45, ry=R-d/2, rx=R*Math.sqrt(R/Math.max(ry,R*0.3)), cy=gY-ry;
+      ctx.save(); ctx.beginPath(); ctx.ellipse(cx,cy,rx,ry,0,0,Math.PI*2); ctx.fillStyle='#fdf3f1'; ctx.fill(); ctx.strokeStyle=COL.red; ctx.lineWidth=2.8; ctx.stroke(); ctx.restore();
+      ctx.save(); ctx.beginPath(); ctx.ellipse(cx-rx*0.4,cy-ry*0.45,rx*0.14,ry*0.08,-0.5,0,Math.PI*2); ctx.strokeStyle='#f0b3a8'; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+      // knot
+      ctx.save(); ctx.beginPath(); ctx.moveTo(cx+rx,cy); ctx.lineTo(cx+rx+12,cy-7); ctx.lineTo(cx+rx+12,cy+7); ctx.closePath(); ctx.strokeStyle=COL.red; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+      const top=cy-ry, lift=(1-p)*0.25*s;
+      // palm pressing
+      ctx.save(); rrect(ctx,cx-R*0.5,top-lift-26,R,26,12); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.stroke(); ctx.restore();
+      line(ctx,cx+R*0.2,top-lift-26,cx+R*0.55,top-lift-140,COL.ink,12); line(ctx,cx+R*0.2,top-lift-26,cx+R*0.55,top-lift-140,'#fff',7);
+      force(ctx,cx-R*0.75,top-lift-60,0,Fn/600*80+(Fn>1?10:0),COL.yellow,'press','l');
+      // original outline (dashed) + squash dimension
+      ctx.save(); ctx.beginPath(); ctx.ellipse(cx,gY-R,R,R,0,0,Math.PI*2); ctx.strokeStyle=COL.mid; ctx.setLineDash([5,5]); ctx.lineWidth=1.2; ctx.stroke(); ctx.restore();
+      if(d>3){ const x=cx+R+34; line(ctx,x,gY-2*R,x,top,COL.yellow,2); arrowHead(ctx,x,top,Math.PI/2,COL.yellow,6); textAt(ctx,fmt(S.sq.x*100,1)+' cm',x+8,(gY-2*R+top)/2+4,{size:12,weight:700,color:COL.yellow}); }
+      $('#l1').textContent='Height before'; $('#r1').textContent=fmt(0.6*100,0)+' cm';
+      $('#l2').textContent='Squashed by'; $('#r2').textContent=fmt(Math.min(F/k,0.2)*100,1)+' cm';
+      $('#r3').textContent='Shape changes';
+    }
+    ctx.restore();
+    textAt(ctx,'slow motion ×'+SLOW,w-10,18,{align:'right',size:11,color:COL.mid});
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   5.3 WHY IT STOPS · 5.4 DIFFERENT SURFACES — sliding friction
+   After the hand lets go:  a = −μ·g   →   v(t) = v₀ − μg·t
+   Stopping distance  s = v₀² / (2μg),  stopping time  t = v₀ / (μg).
+   Check: v₀ = 1.5 m/s on a wooden table (μ = 0.3) → s = 2.25/6 = 0.375 m,
+   t = 0.5 s. Shown in slow motion (×0.35) so the slide is watchable.
+   ===================================================================== */
+const SURF=[
+  {k:'glass', name:'Glass', mu:0.12, col:COL.blue},
+  {k:'tile',  name:'Tile',  mu:0.2,  col:COL.muted},
+  {k:'wood',  name:'Wood',  mu:0.3,  col:COL.yellow},
+  {k:'cloth', name:'Cloth', mu:0.45, col:COL.green},
+  {k:'sand',  name:'Sand',  mu:0.7,  col:COL.red},
+];
+/* one slider box: hand pushes over PUSHD metres, lets go, friction stops it */
+const PUSHD=0.05;
+function slideNew(x){ return {x, v:0, ph:'idle', dir:1, t:0, x0:x, xr:x, hand:0, dist:null}; }
+function slideStart(b,dir){ if(b.ph==='push'||b.ph==='slide'||b.ph==='reach') return false; b.ph='reach'; b.dir=dir; b.t=0; b.x0=b.x; b.dist=null; b.v=0; return true; }
+function slideStep(b,mu,v0,dt){
+  const aF=mu*G;
+  if(b.ph==='reach'){ b.t+=dt; b.hand=smooth01(0,0.25,b.t); if(b.t>=0.25){ b.ph='push'; } }
+  else if(b.ph==='push'){ // hand accelerates the box uniformly to v0 over PUSHD
+    const a=v0*v0/(2*PUSHD); b.v+=a*dt; b.x+=b.dir*b.v*dt;
+    if(Math.abs(b.x-b.x0)>=PUSHD || b.v>=v0){ b.v=v0; b.ph='slide'; b.xr=b.x; }
+  } else if(b.ph==='slide'){
+    b.v-=aF*dt; if(b.v<=0){ b.v=0; b.ph='stop'; b.dist=Math.abs(b.x-b.xr); } else b.x+=b.dir*b.v*dt;
+    b.hand=Math.max(0,b.hand-dt*4);
+  } else if(b.ph==='stop'){ b.hand=Math.max(0,b.hand-dt*4); }
+  return b;
+}
+/* close-up of the two touching surfaces; offset in px slides the top one */
+function frictionCloseup(ctx,cx,cy,R,rough,off,moving,t){
+  const n=64, bot=roughProfile(9,rough,n), top=roughProfile(23,rough,n), step=(2*R)/(n/2);
+  const ride=moving?rough*0.35*(0.5+0.5*Math.sin(off*0.35)):0;
+  ctx.save();
+  // lower surface
+  ctx.beginPath(); ctx.moveTo(cx-R-10,cy+R+10);
+  for(let i=0;i<n;i++){ const x=cx-R-10+i*step; ctx.lineTo(x,cy+6+bot[i]); }
+  ctx.lineTo(cx+R+10,cy+R+10); ctx.closePath(); ctx.fillStyle='#f1f4f8'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.stroke();
+  // upper surface (the box), slid by `off`
+  const o=((off%(n*step))+n*step)%(n*step);
+  ctx.beginPath(); ctx.moveTo(cx-R-10,cy-R-10);
+  for(let i=0;i<n*2;i++){ const x=cx-R-10-n*step+i*step+o; ctx.lineTo(x,cy-6-ride-top[i%n]*0.9); }
+  ctx.lineTo(cx+R+10,cy-R-10); ctx.closePath(); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.stroke();
+  ctx.restore();
+}
+function buildA3(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label>Push strength <span class="val" id="vV"></span></label><input type="range" id="vR" min="0.6" max="1.7" step="0.05" value="1.5">
+      <div class="toggle-group"><button class="toggle-btn play" id="pL">◀ Push</button><button class="toggle-btn play" id="pR">Push ▶</button></div>
+      <button class="toggle-btn navy" id="rs">↺ Box to centre</button></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Speed now</div><div class="rval" id="r1" style="color:var(--f-green)">—</div></div>
+      <div class="rcard"><div class="rlabel">Friction</div><div class="rval" id="r2" style="color:var(--f-blue)">—</div></div>
+      <div class="rcard"><div class="rlabel">Slid</div><div class="rval" id="r3">—</div></div>
+      <div class="rcard"><div class="rlabel">Time to stop</div><div class="rval" id="r4">—</div></div></div>
+      <table class="log" id="lg"><thead><tr><th>Push</th><th>Speed</th><th>Slid</th></tr></thead><tbody></tbody></table></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), vR=$('#vR');
+  const MU=0.3, M=0.3, L=1.5, SLOW=0.35;
+  let b=slideNew(L/2), t=0, logged=true, lastV=1.5;
+  const rows=[];
+  $('#pL').onclick=()=>{ if(slideStart(b,-1)){ logged=false; lastV=+vR.value; } };
+  $('#pR').onclick=()=>{ if(slideStart(b,1)){ logged=false; lastV=+vR.value; } };
+  $('#rs').onclick=()=>{ b=slideNew(L/2); };
+
+  animLoop((dt0)=>{
+    t+=dt0; const dt=dt0*SLOW;
+    const v0=+vR.value; $('#vV').textContent=fmt(v0,2)+' m/s';
+    slideStep(b,MU,b.ph==='idle'||b.ph==='stop'?v0:lastV,dt);
+    if(b.x<0.15||b.x>L-0.15){ b.x=clamp(b.x,0.15,L-0.15); if(b.ph==='slide'){ b.v=0; b.ph='stop'; b.dist=Math.abs(b.x-b.xr); } }
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const ppm=w*0.9/L, X=xm=>w*0.05+xm*ppm, tY=h*0.6;
+    // table
+    rect(ctx,X(0),tY,L*ppm,14,COL.ink,'#fbf6ec',2.4);
+    for(let i=0;i<9;i++) line(ctx,X(0)+10,tY+3+i*1.2,X(L)-10,tY+3+i*1.2+Math.sin(i)*2,'#ecdcbc',0.8);
+    line(ctx,X(0.08),tY+14,X(0.08),h*0.97,COL.ink,5); line(ctx,X(L-0.08),tY+14,X(L-0.08),h*0.97,COL.ink,5);
+    ground(ctx,0,w,h*0.97);
+    // ruler on the table edge (cm from centre)
+    for(let c=-70;c<=70;c+=10){ const x=X(L/2+c/100); line(ctx,x,tY+14,x,tY+(c%50===0?30:22),COL.mid,1.2); if(c%20===0) textAt(ctx,c+' cm',x,tY+42,{align:'center',size:10,color:COL.mid}); }
+    // lunch box
+    const bw=0.24*ppm, bh=0.09*ppm, bx=X(b.x)-bw/2;
+    ctx.save(); rrect(ctx,bx,tY-bh,bw,bh,6); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.stroke(); ctx.restore();
+    line(ctx,bx+4,tY-bh+bh*0.3,bx+bw-4,tY-bh+bh*0.3,COL.mid,1.4);
+    rect(ctx,bx+bw*0.42,tY-bh-5,bw*0.16,5,COL.ink,'#fff',1.6);
+    // hand
+    if(b.hand>0.01){
+      const face=b.dir>0?bx:bx+bw, off=(1-b.hand)*90;
+      hand(ctx,face-b.dir*(off+2),tY-bh*0.5,b.dir,160,b.dir>0?Math.PI+0.15:-0.15);
+    }
+    // stop marker + release marker
+    if(b.ph==='slide'||b.ph==='stop'){
+      line(ctx,X(b.xr),tY-bh-30,X(b.xr),tY,COL.mid,1.2,[4,4]);
+      const d=Math.abs(b.x-b.xr);
+      line(ctx,X(b.xr),tY-bh-22,X(b.x),tY-bh-22,COL.yellow,2);
+      if(d>0.02) arrowHead(ctx,X(b.x),tY-bh-22,b.dir>0?0:Math.PI,COL.yellow,6);
+      textAt(ctx,fmt(d*100,1)+' cm',(X(b.xr)+X(b.x))/2,tY-bh-30,{align:'center',size:12,weight:700,color:COL.yellow});
+    }
+    const moving=b.ph==='push'||b.ph==='slide';
+    if(moving){
+      const fl=MU*M*G*65; force(ctx,X(b.x),tY-3,-b.dir*fl,0,COL.blue,'');
+      textAt(ctx,'friction',X(b.x)-b.dir*(fl+6),tY-4,{align:b.dir>0?'right':'left',size:12,weight:700,color:COL.blue});
+      if(b.v>0.02) force(ctx,X(b.x)-b.dir*bw*0.3,tY-bh-54,b.dir*b.v*55,0,COL.green,'motion');
+    }
+    if(b.ph==='push') force(ctx,b.dir>0?bx-4:bx+bw+4,tY-bh*0.5-16,b.dir*50,0,COL.yellow,'push');
+    // close-up
+    const R=Math.min(h*0.19,w*0.14), cx=w*0.5, cy=h*0.23;
+    magnifier(ctx,cx,cy,R,()=>{ frictionCloseup(ctx,cx,cy,R,9,b.x*ppm*3,moving,t);
+      if(moving) force(ctx,cx,cy+2,-b.dir*R*0.55,0,COL.blue,''); },'surfaces up close');
+    line(ctx,cx,cy+R,X(b.x),tY-4,COL.mid,1,[3,4]);
+    if(b.ph==='stop'&&!logged){ logged=true; rows.unshift([b.dir>0?'▶':'◀',fmt(lastV,2)+' m/s',fmt(b.dist*100,1)+' cm']); if(rows.length>6) rows.pop();
+      $('#lg tbody').innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join(''); }
+    textAt(ctx,'slow motion ×'+SLOW,w-10,18,{align:'right',size:11,color:COL.mid});
+    const vv=b.ph==='idle'||b.ph==='stop'?v0:lastV;
+    $('#r1').textContent=fmt(b.v,2)+' m/s';
+    $('#r2').textContent=fmt(MU*M*G,2)+' N';
+    $('#r3').textContent=b.dist!=null?fmt(b.dist*100,1)+' cm':'—';
+    $('#r4').textContent=fmt(vv/(MU*G),2)+' s';
+  });
+  return wrap;
+}
+
+function surfaceStrip(ctx,k,x0,x1,y,hh,R){
+  const W=x1-x0;
+  if(k==='glass'){ rect(ctx,x0,y,W,hh,COL.blue,'#eef6fe',2); for(let x=x0+30;x<x1;x+=90){ line(ctx,x,y+hh-3,x+14,y+3,'#b9d8f5',1.4); line(ctx,x+8,y+hh-3,x+18,y+3,'#b9d8f5',1); } }
+  else if(k==='tile'){ rect(ctx,x0,y,W,hh,COL.ink,'#fff',2); for(let x=x0+60;x<x1;x+=60) line(ctx,x,y,x,y+hh,COL.mid,1.4); }
+  else if(k==='wood'){ rect(ctx,x0,y,W,hh,COL.ink,'#fdf6e6',2); for(let j=1;j<3;j++){ ctx.save(); ctx.strokeStyle=COL.yellow; ctx.lineWidth=1; ctx.beginPath(); for(let x=x0;x<=x1;x+=6) ctx.lineTo(x,y+hh*j/3+Math.sin(x*0.03+j*2)*1.8); ctx.stroke(); ctx.restore(); } }
+  else if(k==='cloth'){ rect(ctx,x0,y,W,hh,COL.green,'#f1faf4',2); ctx.save(); ctx.strokeStyle='#9fd3b3'; ctx.lineWidth=1; ctx.beginPath(); for(let x=x0+3;x<x1;x+=6){ ctx.moveTo(x,y+2); ctx.lineTo(x+3,y+hh-2); ctx.moveTo(x+3,y+2); ctx.lineTo(x,y+hh-2); } ctx.stroke(); ctx.restore(); }
+  else { rect(ctx,x0,y,W,hh,COL.ink,'#fbf3e3',2); const r=rng(4); ctx.save(); ctx.fillStyle='#b99a5e'; for(let i=0;i<W*0.5;i++){ ctx.fillRect(x0+r()*W,y+2+r()*(hh-4),1.6,1.6); } ctx.restore();
+    ctx.save(); ctx.fillStyle='#b99a5e'; for(let x=x0;x<x1;x+=5) ctx.fillRect(x,y-1.5-(Math.sin(x*0.7)>0.3?1.5:0),2,2); ctx.restore(); }
+}
+function buildA4(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label>Push strength (same for all) <span class="val" id="vV"></span></label><input type="range" id="vR" min="0.6" max="1.6" step="0.05" value="1.3">
+      <button class="toggle-btn play" id="go" style="width:100%;margin-top:9px;padding:9px;">▶ Push all five</button></div>
+    <div class="control-group"><label style="margin-bottom:6px;">Look up close at</label>
+      <div class="chip-wrap" id="zB">${SURF.map((s,i)=>`<button class="chip-btn${i===4?' active':''}" data-i="${i}">${s.name}</button>`).join('')}</div></div>
+    <div class="control-group"><table class="log"><thead><tr><th>Surface</th><th>Slid</th><th>Friction</th></tr></thead><tbody id="tb"></tbody></table></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), vR=$('#vR');
+  const M=0.3, L=1.3, SLOW=0.35;
+  let zi=4, t=0, lastV=1.3;
+  let boxes=SURF.map(()=>slideNew(0.14));
+  toggleWire(wrap.querySelectorAll('#zB button'),b=>zi=+b.dataset.i);
+  $('#go').onclick=()=>{ if(boxes.some(b=>b.ph==='push'||b.ph==='slide'||b.ph==='reach')) return; lastV=+vR.value; boxes=SURF.map(()=>slideNew(0.14)); boxes.forEach(b=>slideStart(b,1)); };
+
+  animLoop((dt0)=>{
+    t+=dt0; const dt=dt0*SLOW;
+    const v0=+vR.value; $('#vV').textContent=fmt(v0,2)+' m/s';
+    boxes.forEach((b,i)=>{ slideStep(b,SURF[i].mu,lastV,dt); if(b.x>L-0.02&&b.ph==='slide'){ b.x=L-0.02; b.v=0; b.ph='stop'; b.dist=b.x-b.xr; } });
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const lx0=w*0.1, lx1=w*0.7, ppm=(lx1-lx0)/L, X=xm=>lx0+xm*ppm;
+    const top=h*0.08, lh=(h*0.86)/SURF.length;
+    // pusher bar — one ruler pushes every box at once (fair test)
+    const hb=boxes[0].hand, bar=X(boxes[0].x0)-0.1*ppm/2-(1-hb)*40-4+(boxes[0].ph==='push'?(boxes[0].x-boxes[0].x0)*ppm:0);
+    SURF.forEach((s,i)=>{
+      const b=boxes[i], y=top+lh*i+lh*0.62, sh=Math.max(8,lh*0.16);
+      surfaceStrip(ctx,s.k,lx0-0.04*ppm,lx1,y,sh);
+      textAt(ctx,s.name,lx0-0.06*ppm,y+sh/2+4,{align:'right',size:12,weight:700,color:i===zi?COL.ink:COL.muted});
+      const bw=0.13*ppm, bh=Math.min(lh*0.4,bw*0.5), bx=X(b.x)-bw/2;
+      ctx.save(); rrect(ctx,bx,y-bh,bw,bh,5); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.stroke(); ctx.restore();
+      line(ctx,bx+3,y-bh*0.7,bx+bw-3,y-bh*0.7,COL.mid,1.2);
+      if(b.ph==='slide') force(ctx,X(b.x),y-2,-s.mu*M*G*28,0,COL.blue,'');
+      if(b.ph==='slide' && b.v>0.02) force(ctx,X(b.x)+bw*0.6,y-bh*0.55,b.v*30,0,COL.green,'');
+      if(b.dist!=null||b.ph==='slide'){ const d=b.x-b.xr; line(ctx,X(b.xr),y+sh+5,X(b.x),y+sh+5,s.col,2.4); line(ctx,X(b.x),y+sh+1,X(b.x),y+sh+9,s.col,2.4);
+        textAt(ctx,fmt(d*100,0)+' cm',X(b.x)+6,y+sh+10,{size:12,weight:700,color:s.col}); }
+    });
+    if(hb>0.01){ const bt=top+lh*0.3, bb=top+lh*(SURF.length-1)+lh*0.62;
+      rect(ctx,bar-7,bt,7,bb-bt,COL.ink,'#fff',2); hand(ctx,bar-7,(bt+bb)/2,1,120,Math.PI);
+      if(boxes[0].ph==='push') force(ctx,bar-20,bt-4,40,0,COL.yellow,'same push'); }
+    // close-up of the chosen surface
+    const R=Math.min(w*0.13,h*0.26), cx=w*0.855, cy=h*0.42, bz=boxes[zi], mv=bz.ph==='push'||bz.ph==='slide';
+    magnifier(ctx,cx,cy,R,()=>{ frictionCloseup(ctx,cx,cy,R,[2,4,7,11,16][zi],bz.x*ppm*3,mv,t); if(mv) force(ctx,cx,cy+2,-R*0.25-SURF[zi].mu*R*0.6,0,COL.blue,''); },SURF[zi].name+' up close');
+    textAt(ctx,'slow motion ×'+SLOW,w-10,18,{align:'right',size:11,color:COL.mid});
+    $('#tb').innerHTML=SURF.map((s,i)=>`<tr><td style="color:${s.col};font-weight:700">${s.name}</td><td>${boxes[i].dist!=null?fmt(boxes[i].dist*100,1)+' cm':'—'}</td><td>${fmt(s.mu*M*G,2)} N</td></tr>`).join('');
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   5.5 FLOATING RING MAGNET
+   Near-field force between facing ring magnets (gap d):
+        F = ± C / (d + ε)³       (+ like poles repel, − unlike poles attract)
+   C is set so a 25 g magnet floats at d₀ = 2.8 cm.  Top magnet:
+        m·d″ = F − m·g − c·d′     (c = small friction on the stick)
+   Floating gap:  d = (C / m g)^(1/3) − ε  → coins make it float lower.
+   Bounce period ≈ 2π·√(d/3g) ≈ 0.2 s, so it is shown in slow motion ×0.2.
+   ===================================================================== */
+function ringMagnet(ctx,cx,yb,W,T,topPole,scaleY){
+  // yb = bottom face (px); topPole 'N'|'S'; scaleY for flip animation
+  const s=scaleY===undefined?1:scaleY, hT=T*Math.abs(s), yTop=yb-hT, hole=W*0.24;
+  const up=s>=0?topPole:(topPole==='N'?'S':'N'), dn=up==='N'?'S':'N';
+  const cU=up==='N'?COL.red:COL.blue, cD=dn==='N'?COL.red:COL.blue;
+  const fU=up==='N'?'#fdece7':'#e6f1fc', fD=dn==='N'?'#fdece7':'#e6f1fc';
+  for(const side of [-1,1]){
+    const x0=side<0?cx-W/2:cx+hole/2, ww=W/2-hole/2;
+    rect(ctx,x0,yTop,ww,hT/2,cU,fU,2.2); rect(ctx,x0,yTop+hT/2,ww,hT/2,cD,fD,2.2);
+  }
+  if(hT>14){
+    textAt(ctx,up,cx-W/2+W*0.18,yTop+hT*0.25+5,{align:'center',size:Math.min(14,hT*0.4),weight:700,color:cU});
+    textAt(ctx,dn,cx-W/2+W*0.18,yTop+hT*0.75+5,{align:'center',size:Math.min(14,hT*0.4),weight:700,color:cD});
+    textAt(ctx,up,cx+W/2-W*0.18,yTop+hT*0.25+5,{align:'center',size:Math.min(14,hT*0.4),weight:700,color:cU});
+    textAt(ctx,dn,cx+W/2-W*0.18,yTop+hT*0.75+5,{align:'center',size:Math.min(14,hT*0.4),weight:700,color:cD});
+  }
+}
+function buildA5(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label style="margin-bottom:6px;">Top magnet</label>
+      <button class="toggle-btn play" id="push" style="width:100%;padding:9px;">👇 Push it down, let go</button>
+      <button class="toggle-btn navy" id="flip">⟲ Flip the top magnet</button></div>
+    <div class="control-group"><label>Coins on top <span class="val" id="cV"></span></label><input type="range" id="cR" min="0" max="6" step="1" value="0"></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Poles facing</div><div class="rval" id="r0">—</div></div>
+      <div class="rcard"><div class="rlabel">Gap</div><div class="rval" id="r1" style="color:var(--f-yellow)">—</div></div>
+      <div class="rcard"><div class="rlabel">Magnetic force</div><div class="rval" id="r2" style="color:var(--f-blue)">—</div></div>
+      <div class="rcard"><div class="rlabel">Weight</div><div class="rval" id="r3" style="color:var(--f-red)">—</div></div></div>
+      <div class="fb" id="fbk"></div></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), cR=$('#cR');
+  const T=0.015, D=0.06, ST=0.13, EPS=0.004, M0=0.025, D0=0.028, C=M0*G*Math.pow(D0+EPS,3), SLOW=0.2;
+  let like=true, t=0;
+  const S={d:0.12, v:0, fing:null, flip:null};
+  $('#push').onclick=()=>{ if(!S.fing&&!S.flip) S.fing={T:0,y:null}; };
+  $('#flip').onclick=()=>{ if(!S.flip&&!S.fing) S.flip={T:0,d0:S.d}; };
+
+  animLoop((dt0)=>{
+    t+=dt0; const dt=dt0*SLOW;
+    const n=+cR.value; $('#cV').textContent=n+' × 5 g';
+    const m=M0+n*0.005, mg=m*G;
+    const Fm=d=>(like?1:-1)*C/Math.pow(Math.max(d,0)+EPS,3);
+    const dMax=ST-2*T-0.004;
+    let hold=null, Fhand=0;
+    // finger push: comes down (0–0.5 s), presses to 6 mm (0.5–1.4 s), holds, lets go at 1.9 s
+    if(S.fing){ const f=S.fing; f.T+=dt0;
+      const dStart=Math.min(S.d,dMax), press=lerp(dStart,0.006,smooth01(0.5,1.4,f.T));
+      if(f.T<1.9){ if(f.T>0.45){ hold=Math.min(S.d,press); } }
+      if(f.T>2.6) S.fing=null;
+      f.y=f.T<0.5?lerp(dMax+0.05,S.d,smooth01(0,0.5,f.T)):f.T<1.9?(hold!==null?hold:S.d):S.d+(f.T-1.9)*0.18;
+    }
+    // flip: lift off the stick, turn over, set back on top and let go
+    let flipScale=1, liftD=null;
+    if(S.flip){ const f=S.flip; f.T+=dt0;
+      const up=dMax+0.025;
+      if(f.T<0.6) liftD=lerp(f.d0,up,smooth01(0,0.6,f.T));
+      else if(f.T<1.3){ liftD=up; flipScale=Math.cos(Math.PI*smooth01(0.6,1.3,f.T)); if(f.T>0.95 && !f.sw){ f.sw=true; like=!like; } }
+      else if(f.T<1.7){ liftD=lerp(up,dMax,smooth01(1.3,1.7,f.T)); flipScale=-1; }
+      else { S.flip=null; S.d=dMax; S.v=0; }
+      if(f.T>=0.95&&f.T<1.7) flipScale=-flipScale;
+      if(liftD!==null){ S.d=liftD; S.v=0; }
+    }
+    if(liftD===null){
+      // integrate with small sub-steps (stiff near contact)
+      const nsub=8, h2=dt/nsub, c=2*0.06*m*Math.sqrt(3*G/(D0+EPS));
+      for(let i=0;i<nsub;i++){
+        const a=(Fm(S.d)-mg-c*S.v)/m; S.v+=a*h2; S.d+=S.v*h2;
+        if(S.d<0){ S.d=0; S.v=S.v<-0.08?-S.v*0.25:0; }
+        if(S.d>dMax){ S.d=dMax; S.v=Math.min(0,S.v); }
+        if(hold!==null && S.d>hold){ S.d=hold; S.v=Math.min(0,S.v); }
+      }
+      if(hold!==null) Fhand=Math.max(0,Fm(S.d)-mg);
+    }
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const ppm=h*0.8/(ST+0.03), baseY=h*0.9, cx=w*0.42, Y=ym=>baseY-ym*ppm;
+    // table + stick
+    rect(ctx,w*0.08,baseY,w*0.72,16,COL.ink,'#fbf6ec',2.4);
+    rect(ctx,cx-4,Y(ST),8,ST*ppm,COL.ink,'#fdf6e6',2);
+    const Wp=D*ppm, Tp=T*ppm;
+    ringMagnet(ctx,cx,Y(0),Wp,Tp,'N',1);
+    const yb=Y(T+S.d);
+    ringMagnet(ctx,cx,yb,Wp,Tp,like?'S':'N',flipScale);
+    // coins
+    for(let i=0;i<n;i++){ ctx.save(); ctx.beginPath(); ctx.ellipse(cx+Wp*0.28,yb-Tp*Math.abs(flipScale)-3-i*4.5,Wp*0.13,3.4,0,0,Math.PI*2); ctx.fillStyle='#fff8e6'; ctx.fill(); ctx.strokeStyle=COL.yellow; ctx.lineWidth=1.6; ctx.stroke(); ctx.restore(); }
+    // finger
+    if(S.fing && S.fing.y!==null) handDown(ctx,cx-Wp*0.28,Y(T+S.fing.y+T),150);
+    if(S.flip && liftD!==null) hand(ctx,cx+Wp/2+14,yb-Tp/2,-1,150,-0.1);
+    // gap dimension
+    const gx=cx-Wp/2-28;
+    if(S.d>0.002){ line(ctx,gx,Y(T),gx,yb,COL.yellow,2); arrowHead(ctx,gx,Y(T),Math.PI/2,COL.yellow,6); arrowHead(ctx,gx,yb,-Math.PI/2,COL.yellow,6);
+      textAt(ctx,fmt(S.d*100,1)+' cm',gx-8,(Y(T)+yb)/2+4,{align:'right',size:13,weight:700,color:COL.yellow}); }
+    // forces on the top magnet
+    const fx=cx+Wp/2+30, fy=yb-Tp/2, Fk=70/(M0*G);
+    const Fnow=S.d<=0.0005&&!like? -mg : (liftD===null?Fm(S.d):0);
+    const wl=mg*Fk; vec(ctx,fx,fy,fx,fy+wl,COL.red,3);
+    textAt(ctx,'weight '+fmt(mg,2)+' N',fx+8,fy+wl*0.6+4,{size:12,weight:700,color:COL.red});
+    if(liftD===null){ const Fshow=clamp(Fm(S.d)*Fk,-150,150); if(Math.abs(Fshow)>4){ vec(ctx,fx,fy-Tp*0.1,fx,fy-Tp*0.1-Fshow,COL.blue,3);
+      textAt(ctx,(like?'push apart ':'pull together ')+fmt(Math.abs(Fm(S.d)),2)+' N',fx+8,fy-Tp*0.1-Fshow*0.6+4,{size:12,weight:700,color:COL.blue}); } }
+    if(Fhand>0.01) force(ctx,cx-Wp*0.28,yb-Tp-70,0,Math.min(60,Fhand*Fk),COL.yellow,'');
+    textAt(ctx,'slow motion ×'+SLOW,w-10,18,{align:'right',size:11,color:COL.mid});
+
+    $('#r0').textContent=like?'Like poles':'Unlike poles';
+    $('#r1').textContent=fmt(S.d*100,1)+' cm';
+    $('#r2').textContent=liftD===null?fmt(Math.abs(Fm(S.d)),2)+' N':'—';
+    $('#r3').textContent=fmt(mg,2)+' N';
+    const fb=$('#fbk');
+    if(S.fing&&Fhand>0.01){ fb.className='fb warn'; fb.textContent='You feel it push back: '+fmt(Fhand,2)+' N'; }
+    else if(like){ fb.className='fb ok'; fb.textContent='Floats — no contact needed'; }
+    else { fb.className='fb bad'; fb.textContent='Pulled down — sticks to the lower magnet'; }
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   5.6 CHARGED SCALE PICKS UP PAPER
+   Each rub stroke adds charge:  Q ← Q + (1 − Q)·0.22   (saturates)
+   Charge slowly leaks away:     Q(t) = Q₀·e^(−t/40 s)
+   A charged scale pulls an uncharged scrap (induced charge) with a
+   force that grows very fast as the gap r shrinks:
+        a = g·[ Q²·(3 cm / r)⁴ / s − 1 ] − k·v|v|   (s = scrap heaviness,
+                                                      k = air drag on paper)
+   → a scrap jumps only when that pull beats its weight. Slow motion ×0.3.
+   ===================================================================== */
+function buildA6(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group">
+      <button class="toggle-btn play" id="rub" style="width:100%;padding:9px;">✋ Rub with polythene</button>
+      <button class="toggle-btn navy" id="tch">☝ Touch it with a finger</button></div>
+    <div class="control-group"><label>Scale height above paper <span class="val" id="hV"></span></label><input type="range" id="hR" min="1" max="9" step="0.1" value="6"></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Charge on scale</div><div class="rval" id="r1" style="color:var(--f-red)">0%</div></div>
+      <div class="rcard"><div class="rlabel">Scraps lifted</div><div class="rval" id="r2" style="color:var(--f-green)">0</div></div></div>
+      <div class="hint">Lower the scale slowly after rubbing.</div></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), hR=$('#hR');
+  const SLOW=0.3, DREF=3, KD=0.1, L=30;
+  let Q=0, t=0, rub=null, touch=null, Hs=6;
+  const R=rng(12), bits=[];
+  for(let i=0;i<12;i++) bits.push({x:-6.4+i*1.15+(R()-0.5)*0.3, y:0, vy:0, s:0.55+R()*0.9, rot:(R()-0.5)*0.6, wr:(R()-0.5)*2, sz:0.7+R()*0.5, stuck:false, pts:[[-1,-0.35],[1,-0.5+R()*0.2],[0.9,0.4],[-0.8,0.45]].map(p=>[p[0]*(0.8+R()*0.3),p[1]])});
+  $('#rub').onclick=()=>{ if(!rub&&!touch) rub={T:0,k:0}; };
+  $('#tch').onclick=()=>{ if(!rub&&!touch) touch={T:0}; };
+
+  animLoop((dt0)=>{
+    t+=dt0; const dt=dt0*SLOW;
+    Hs=approach(Hs,+hR.value,6,dt0); $('#hV').textContent=fmt(+hR.value,1)+' cm';
+    // rubbing: 8 strokes in 2.4 s
+    let rubX=null;
+    if(rub){ rub.T+=dt0; const k=Math.floor(rub.T/0.3); if(k>rub.k){ rub.k=k; Q+=(1-Q)*0.22; } rubX=0.5+Math.sin(rub.T/0.3*Math.PI)*4.5; if(rub.T>2.4) rub=null; }
+    if(touch){ touch.T+=dt0; if(touch.T>0.4&&touch.T<0.7) Q*=Math.exp(-dt0*25); if(touch.T>1.2) touch=null; }
+    Q*=Math.exp(-dt/40);
+    // scraps
+    let lifted=0;
+    bits.forEach(b=>{
+      const dx=Math.max(0,-7.5-b.x), gap=Math.hypot(Math.max(0.05,Hs-0.25-b.y),dx);
+      const pull=Q*Q*Math.pow(DREF/gap,4)/b.s;
+      if(b.stuck){ if(pull<1.05||Hs-0.25-b.y>0.4){ b.stuck=false; } else { b.y=Hs-0.25-0.02; b.vy=0; lifted++; return; } }
+      let a=G*100*(Math.min(pull,400)-1)-KD*b.vy*Math.abs(b.vy);
+      if(b.y<=0 && a<=0){ b.y=0; b.vy=0; b.rot=approach(b.rot,b.rot>0?0.05:-0.05,4,dt); return; }
+      b.vy+=a*dt; b.y+=b.vy*dt; b.rot+=b.wr*b.vy*dt*0.08;
+      if(b.y<0){ b.y=0; b.vy=0; }
+      if(b.y>=Hs-0.27){ b.y=Hs-0.27; b.vy=0; b.stuck=true; }
+      if(b.y>0.05) lifted++;
+    });
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const pc=Math.min(w*0.92/16,h*0.7/9.5), tY=h*0.86, X=x=>w*0.06+(x+8)*pc, Y=y=>tY-y*pc;
+    rect(ctx,X(-8),tY,w,16,COL.ink,'#fbf6ec',2.4);
+    // paper scraps
+    bits.forEach(b=>{ ctx.save(); ctx.translate(X(b.x),Y(b.y)-2); ctx.rotate(b.stuck?Math.sin(t*3+b.x)*0.08:b.rot); ctx.beginPath(); ctx.lineJoin='round';
+      b.pts.forEach((p,i)=>ctx[i?'lineTo':'moveTo'](p[0]*b.sz*pc*0.42,p[1]*b.sz*pc*0.2)); ctx.closePath();
+      ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=1.6; ctx.stroke(); ctx.restore(); });
+    // plastic scale (a ruler)
+    const sy=Y(Hs), sh=Math.max(10,0.45*pc);
+    rect(ctx,X(-7.5),sy-sh,L*pc,sh,COL.ink,'rgba(255,255,255,0.9)',2.4);
+    for(let c=0;c<=30;c++) line(ctx,X(-7.5+c),sy-sh,X(-7.5+c),sy-sh+(c%5?sh*0.3:sh*0.55),COL.mid,1);
+    // + charges on the scale (red), count ∝ Q
+    const nq=Math.round(Q*12);
+    for(let i=0;i<nq;i++){ const x=X(-7.5+(i+0.5)*16/nq)+Math.sin(t*2+i)*1; textAt(ctx,'+',x,sy+13,{align:'center',size:14,weight:700,color:COL.red}); }
+    // holding hand at the right end
+    // polythene rubbing
+    if(rub){ const px=X(rubX), py=sy-sh-10; ctx.save(); ctx.beginPath(); ctx.moveTo(px-50,py+8); for(let x=-50;x<=50;x+=10) ctx.lineTo(px+x,py-6+Math.sin(x*0.2+t*20)*3); ctx.lineTo(px+50,py+8); ctx.closePath();
+      ctx.fillStyle='rgba(47,143,224,0.12)'; ctx.fill(); ctx.strokeStyle=COL.blue; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+      for(let i=0;i<4;i++) textAt(ctx,'−',px-30+i*20,py-12,{align:'center',size:15,weight:700,color:COL.blue});
+      hand(ctx,px,py-24,1,90,-Math.PI/2-0.6); force(ctx,px-20,py-50,Math.cos(rub.T/0.3*Math.PI)*60,0,COL.yellow,''); }
+    if(touch){ const u=smooth01(0,0.4,touch.T)*(1-smooth01(0.8,1.2,touch.T)); handDown(ctx,X(3),sy-sh-(1-u)*80,140); }
+    // height dimension
+    const gx=X(-7.5)-10; line(ctx,gx,tY,gx,sy,COL.yellow,2); arrowHead(ctx,gx,tY,Math.PI/2,COL.yellow,6); arrowHead(ctx,gx,sy,-Math.PI/2,COL.yellow,6);
+    textAt(ctx,fmt(Hs,1)+' cm',gx+8,(tY+sy)/2+4,{size:13,weight:700,color:COL.yellow});
+    // pull arrow on the scrap under the middle
+    const b0=bits.reduce((a,b)=>Math.abs(b.x)<Math.abs(a.x)&&!b.stuck?b:a,bits.find(b=>!b.stuck)||bits[0]);
+    if(Q>0.05&&!b0.stuck){ const gap=Math.max(0.05,Hs-0.25-b0.y), pull=Q*Q*Math.pow(DREF/gap,4)/b0.s; force(ctx,X(b0.x)+pc*0.9,Y(b0.y)-6,0,-clamp(pull*28,4,80),COL.blue,'pull','r'); force(ctx,X(b0.x)-pc*0.9,Y(b0.y)+2,0,28,COL.red,'weight','l'); }
+    textAt(ctx,'slow motion ×'+SLOW,w-10,18,{align:'right',size:11,color:COL.mid});
+    $('#r1').textContent=Math.round(Q*100)+'%';
+    $('#r2').textContent=lifted+' / '+bits.length;
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   5.7 CHARGED BALLOONS
+   Each balloon is a pendulum (ℓ = 0.62 m, m = 4 g) acted on by Coulomb's law
+        F = K·q₁·q₂ / r²        (like charges repel, unlike attract)
+   ℓ·θ″ = (F·t̂)/m − g·sinθ − c·ℓ·θ′       t̂ = (cosθ, −sinθ)
+   K is chosen so two fully rubbed balloons settle ≈ 20° apart each:
+        tanθ = F / mg.  The wool gets the opposite charge (+).
+   ===================================================================== */
+function woolCloth(ctx,x,y,W,H,t,q){
+  ctx.save(); ctx.beginPath();
+  for(let i=0;i<=10;i++){ const u=i/10; ctx.lineTo(x-W/2+u*W,y-H/2+Math.sin(u*9+t*2)*3); }
+  for(let i=10;i>=0;i--){ const u=i/10; ctx.lineTo(x-W/2+u*W,y+H/2+Math.sin(u*9+t*2+1)*3); }
+  ctx.closePath(); ctx.fillStyle='#fdf6e6'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.stroke();
+  ctx.clip(); ctx.strokeStyle='#ead9b0'; ctx.lineWidth=1;
+  for(let k=-H;k<W+H;k+=7){ ctx.beginPath(); ctx.moveTo(x-W/2+k,y-H/2); ctx.lineTo(x-W/2+k-H,y+H/2); ctx.stroke(); }
+  ctx.restore();
+  const n=Math.round(clamp(q,0,2)*5);
+  for(let i=0;i<n;i++) textAt(ctx,'+',x-W/2+W*(i%5+0.5)/5,y-H/4+Math.floor(i/5)*H/2+5,{align:'center',size:14,weight:700,color:COL.red});
+}
+function balloon(ctx,x,y,r,q,side,t){
+  ctx.save(); ctx.beginPath(); ctx.ellipse(x,y,r*0.9,r,0,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.6; ctx.stroke(); ctx.restore();
+  ctx.save(); ctx.beginPath(); ctx.ellipse(x-r*0.35,y-r*0.45,r*0.12,r*0.2,0.5,0,Math.PI*2); ctx.strokeStyle='#dbe4f0'; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+  ctx.save(); ctx.beginPath(); ctx.moveTo(x,y-r); ctx.lineTo(x-5,y-r-8); ctx.lineTo(x+5,y-r-8); ctx.closePath(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+  const n=Math.round(clamp(q,0,1)*10);
+  for(let i=0;i<n;i++){ const a=(i/10)*Math.PI*2+0.3; textAt(ctx,'−',x+Math.cos(a)*r*0.62,y+Math.sin(a)*r*0.62+5,{align:'center',size:16,weight:700,color:COL.blue}); }
+}
+function buildA7(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group">
+      <button class="toggle-btn play" id="rub" style="width:100%;padding:9px;">🧶 Rub both with wool</button>
+      <button class="toggle-btn navy" id="dis">☝ Touch to discharge</button></div>
+    <div class="control-group"><label>Wool cloth distance <span class="val" id="dV"></span></label><input type="range" id="dR" min="4" max="60" step="1" value="60"></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Balloons</div><div class="rval" id="r1">—</div></div>
+      <div class="rcard"><div class="rlabel">Gap between them</div><div class="rval" id="r2" style="color:var(--f-yellow)">—</div></div>
+      <div class="rcard"><div class="rlabel">Balloon charge</div><div class="rval" id="r3" style="color:var(--f-blue)">0</div></div>
+      <div class="rcard"><div class="rlabel">Wool charge</div><div class="rval" id="r4" style="color:var(--f-red)">0</div></div></div></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), dR=$('#dR');
+  const r=0.14, ell=0.62, a=r+0.012, m=0.004, K=0.009, C=1.5;
+  const B=[{th:0,om:0,q:0,px:-a},{th:0,om:0,q:0,px:a}];
+  let t=0, rub=null, dis=null, cloth={x:a+r+0.6, y:ell}, cd=0.6;
+  $('#rub').onclick=()=>{ if(!rub) rub={T:0}; };
+  $('#dis').onclick=()=>{ if(!dis) dis={T:0}; };
+  const pos=b=>({x:b.px+ell*Math.sin(b.th), y:ell*Math.cos(b.th)});
+
+  animLoop((dt)=>{
+    t+=dt;
+    const away=+dR.value>=60; cd=approach(cd,away?1.6:+dR.value/100,away?2:5,dt); $('#dV').textContent=away?'put away':dR.value+' cm';
+    const pB=pos(B[1]), pA=pos(B[0]);
+    let tgt={x:B[1].px+r+0.03+cd, y:ell};
+    // rubbing sequence: to A (left side) · rub · to B (right side) · rub · back
+    if(rub){ rub.T+=dt; const T=rub.T;
+      const atA={x:pA.x-r-0.05,y:pA.y}, atB={x:pB.x+r+0.05,y:pB.y};
+      if(T<0.6) tgt=atA;
+      else if(T<1.6){ tgt={x:atA.x+Math.sin(T*22)*0.015,y:atA.y+Math.sin(T*11)*0.07}; B[0].q=Math.min(1,B[0].q+dt*1.1); }
+      else if(T<2.4){ tgt={x:atA.x, y:ell+r+0.18}; if(T>2.0) tgt=atB; }
+      else if(T<3.4){ tgt={x:atB.x+Math.sin(T*22)*0.015,y:atB.y+Math.sin(T*11)*0.07}; B[1].q=Math.min(1,B[1].q+dt*1.1); }
+      else if(T>4.2) rub=null;
+    }
+    if(dis){ dis.T+=dt; if(dis.T>0.3&&dis.T<0.8){ B.forEach(b=>b.q*=Math.exp(-dt*14)); } if(dis.T>1.2) dis=null; }
+    const qc=B[0].q+B[1].q, qcEff=qc*(1-smooth01(0.6,1.4,cloth.x-B[1].px-r));
+    // the cloth moves smoothly (held in a hand); during a rub the quick jiggle is followed directly
+    const k=rub&&((rub.T>0.6&&rub.T<1.6)||(rub.T>2.4&&rub.T<3.4))?30:5;
+    cloth.x=approach(cloth.x,tgt.x,k,dt); cloth.y=approach(cloth.y,tgt.y,k,dt);
+    // pendulum dynamics
+    const nsub=6, h2=dt/nsub;
+    for(let s=0;s<nsub;s++){
+      const P=B.map(pos);
+      B.forEach((b,i)=>{
+        let Fx=0, Fy=0;
+        const o=P[1-i], dx=P[i].x-o.x, dy=P[i].y-o.y, d=Math.max(0.05,Math.hypot(dx,dy));
+        const f=K*b.q*B[1-i].q/(d*d); Fx+=f*dx/d; Fy+=f*dy/d;
+        const cx=P[i].x-cloth.x, cy=P[i].y-cloth.y, dc=Math.max(r*0.8,Math.hypot(cx,cy));
+        const fc=-K*b.q*qcEff/(dc*dc); Fx+=fc*cx/dc; Fy+=fc*cy/dc;
+        // air drag scaled so balloons move like balloons, not stones
+        const al=(Fx*Math.cos(b.th)-Fy*Math.sin(b.th))/(m*ell) - (G/ell)*Math.sin(b.th) - C*b.om;
+        b.om+=al*h2; b.th+=b.om*h2;
+      });
+      // contact: balloons can't overlap each other or the cloth
+      const Q=B.map(pos), dd=Math.hypot(Q[0].x-Q[1].x,Q[0].y-Q[1].y);
+      if(dd<2*r){ const ov=(2*r-dd)/2/ell; B[0].th-=ov; B[1].th+=ov; const avg=(B[0].om+B[1].om)/2; B[0].om=Math.min(B[0].om,avg); B[1].om=Math.max(B[1].om,avg); }
+      B.forEach(b=>{ const p=pos(b), dx=p.x-cloth.x, dy=p.y-cloth.y, dc=Math.hypot(dx,dy), lim=r+0.035;
+        if(dc<lim){ const push=(lim-dc)/ell*sgn(dx||1); b.th+=push; b.om*=0.3; } });
+    }
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const ppm=Math.min(h*0.85/(ell+r+0.12),w*0.9/1.3), ox=w*0.37, oy=h*0.08, X=x=>ox+x*ppm, Y=y=>oy+y*ppm;
+    // support rod
+    line(ctx,X(-0.4),Y(0),X(0.4),Y(0),COL.ink,5); line(ctx,X(-0.4),Y(0),X(-0.4),Y(0)-30,COL.ink,3); line(ctx,X(0.4),Y(0),X(0.4),Y(0)-30,COL.ink,3);
+    const P=B.map(pos);
+    // cloth + hand
+    const cw=0.16*ppm, chh=0.2*ppm;
+    const cX=X(cloth.x), cY=Y(cloth.y);
+    const fromRight=!rub||rub.T<0.4||rub.T>2.0;
+    hand(ctx,fromRight?cX+cw/2+4:cX-cw/2-4,cY,fromRight?-1:1,200,fromRight?-0.15:Math.PI+0.15);
+    woolCloth(ctx,cX,cY,cw,chh,t,qc);
+    // vertical reference + angle arcs
+    B.forEach((b,i)=>{ line(ctx,X(b.px),Y(0),X(b.px),Y(ell-r),'#dbe4f0',1.2,[4,4]);
+      if(Math.abs(b.th)>0.02){ ctx.save(); ctx.strokeStyle=COL.yellow; ctx.lineWidth=2; ctx.beginPath(); const R0=ppm*0.18; ctx.arc(X(b.px),Y(0),R0,Math.PI/2-b.th*(b.th>0?1:1),Math.PI/2,b.th<0); ctx.stroke(); ctx.restore(); } });
+    B.forEach((b,i)=>{ const p=P[i], tx=X(b.px)+(Math.sin(b.th)*(ell-r))*ppm, ty=Y(0)+(Math.cos(b.th)*(ell-r))*ppm;
+      line(ctx,X(b.px),Y(0),tx,ty-8,COL.ink,1.6); });
+    B.forEach((b,i)=>{ const p=P[i]; ctx.save(); ctx.translate(X(p.x),Y(p.y)); ctx.rotate(-b.th); balloon(ctx,0,0,r*ppm,b.q,i,t); ctx.restore(); });
+    // force arrows on balloons
+    B.forEach((b,i)=>{ if(b.q<0.05) return; const o=P[1-i], dx=P[i].x-o.x, dy=P[i].y-o.y, d=Math.hypot(dx,dy), f=K*b.q*B[1-i].q/(d*d);
+      if(f>0.001) force(ctx,X(P[i].x)+sgn(dx)*r*ppm*0.95,Y(P[i].y)+r*ppm*0.2,sgn(dx)*clamp(f/0.04*50,6,90),0,COL.blue,'push'); });
+    const cx=P[1].x-cloth.x, cy=P[1].y-cloth.y, dc=Math.hypot(cx,cy), fc=K*B[1].q*qcEff/(dc*dc);
+    if(fc>0.002) force(ctx,X(P[1].x)+r*ppm*0.95,Y(P[1].y)-r*ppm*0.3,clamp(fc/0.04*50,6,90),0,COL.blue,'pull');
+    if(dis){ const u=smooth01(0,0.3,dis.T)*(1-smooth01(0.8,1.2,dis.T)); B.forEach((b,i)=>{ const p=P[i]; hand(ctx,X(p.x),Y(p.y)+r*ppm+4+(1-u)*80,1,100,Math.PI/2); }); }
+    // gap label
+    const gap=Math.hypot(P[0].x-P[1].x,P[0].y-P[1].y)-2*r*0.9;
+    const gy=Y(Math.max(P[0].y,P[1].y))+r*ppm+26;
+    line(ctx,X(P[0].x)+r*ppm*0.9,gy,X(P[1].x)-r*ppm*0.9,gy,COL.yellow,2);
+    textAt(ctx,fmt(Math.max(0,gap)*100,0)+' cm',(X(P[0].x)+X(P[1].x))/2,gy+18,{align:'center',size:12,weight:700,color:COL.yellow});
+    const qb=(B[0].q+B[1].q)/2;
+    $('#r1').textContent=fc>0.01&&B[1].th>0.05?'Pulled to wool':(qb>0.1&&B[1].th-B[0].th>0.1?'Repel':'Hang straight');
+    $('#r2').textContent=fmt(Math.max(0,gap)*100,0)+' cm';
+    $('#r3').textContent=qb>0.02?'− '+Math.round(qb*100)+'%':'0';
+    $('#r4').textContent=qc>0.02?'+ '+Math.round(qc/2*100)+'%':'0';
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   5.8 THROW IT UP — vertical motion under gravity (g = 10 m/s²)
+        y(t) = y₀ + u·t − ½·g·t²      v(t) = u − g·t
+   Highest point:  h = u² / 2g     Time to top:  t = u / g
+   Check: u = 10 m/s → h = 5 m, top reached in 1 s, back in the hand at 2 s.
+   Real time. Flash-photo dots every 0.1 s show it slowing going up and
+   speeding up coming down.
+   ===================================================================== */
+function buildA8(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label style="margin-bottom:6px;">Motion</label>
+      <div class="toggle-group" id="mdB"><button class="toggle-btn active" data-m="up">Throw up</button><button class="toggle-btn" data-m="drop">Drop</button></div></div>
+    <div class="control-group" id="spG"><label>Throw speed <span class="val" id="uV"></span></label><input type="range" id="uR" min="3" max="20" step="0.5" value="10"></div>
+    <div class="control-group"><button class="toggle-btn play" id="go" style="width:100%;padding:9px;">▶ Throw</button>
+      <div class="toggle-group" id="auB"><button class="toggle-btn active" data-a="1">Keep repeating</button><button class="toggle-btn" data-a="0">Once</button></div></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Highest point</div><div class="rval" id="r1" style="color:var(--f-yellow)">—</div></div>
+      <div class="rcard"><div class="rlabel">Time to top</div><div class="rval" id="r2">—</div></div>
+      <div class="rcard"><div class="rlabel">Speed now</div><div class="rval" id="r3" style="color:var(--f-green)">—</div></div>
+      <div class="rcard"><div class="rlabel">Going</div><div class="rval" id="r4">—</div></div></div></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), uR=$('#uR');
+  const HR=1.95, HOLD=1.15, DROPH=6;
+  let mode='up', auto=true, t=0, Hv=6.5;
+  const S={ph:'hold', T:0, y:HOLD, v:0, u:10, hand:HOLD, hv:0, strobe:[], st:0, peaks:[], maxY:0};
+  function start(){ if(S.ph==='hold'){ S.ph=mode==='up'?'wind':'drop'; S.T=0; S.u=+uR.value; S.strobe=[]; S.st=0; S.maxY=0; } }
+  $('#go').onclick=start;
+  toggleWire(wrap.querySelectorAll('#mdB button'),b=>{ mode=b.dataset.m; S.ph='hold'; S.T=0; S.y=mode==='up'?HOLD:DROPH+1.3; S.v=0; S.strobe=[]; $('#go').textContent=mode==='up'?'▶ Throw':'▶ Let go'; $('#spG').classList.toggle('hidden',mode!=='up'); });
+  toggleWire(wrap.querySelectorAll('#auB button'),b=>auto=b.dataset.a==='1');
+
+  animLoop((dt)=>{
+    t+=dt; S.T+=dt;
+    const u=+uR.value; $('#uV').textContent=fmt(u,1)+' m/s';
+    const base=mode==='up'?0:DROPH;       // ground level of the thrower's feet
+    if(mode==='up'){
+      if(S.ph==='hold'){ S.hand=approach(S.hand,HOLD,6,dt); S.y=S.hand; if(auto&&S.T>0.9) start(); }
+      else if(S.ph==='wind'){ S.hand=lerp(HOLD,0.85,smooth01(0,0.25,S.T)); S.y=S.hand; if(S.T>=0.25){ S.ph='throw'; S.T=0; } }
+      else if(S.ph==='throw'){ // hand speeds the ball up to u over the last 0.15 s
+        S.hand=lerp(0.85,HR,Math.pow(clamp(S.T/0.15,0,1),1.6)); S.y=S.hand;
+        if(S.T>=0.15){ S.ph='fly'; S.T=0; S.y=HR; S.v=S.u; S.hand=HR; }
+      }
+      else if(S.ph==='fly'){
+        S.v-=G*dt; S.y+=S.v*dt; S.maxY=Math.max(S.maxY,S.y);
+        S.hand=approach(S.hand,HR-0.1,3,dt);
+        if(S.v<0 && S.y<=S.hand){ S.ph='catch'; S.T=0; S.hv=S.v; S.y=S.hand; S.peaks.unshift({h:S.maxY,u:S.u}); if(S.peaks.length>4) S.peaks.pop(); }
+      }
+      else if(S.ph==='catch'){ // hand gives way and stops the ball (spring-damper)
+        const a=(HOLD-S.hand)*60-S.hv*9; S.hv+=a*dt; S.hand+=S.hv*dt; S.y=S.hand;
+        if(S.T>0.9){ S.ph='hold'; S.T=0; }
+      }
+    } else {
+      if(S.ph==='hold'){ S.y=DROPH+1.3; S.v=0; if(auto&&S.T>1) start(); }
+      else if(S.ph==='drop'){ S.v-=G*dt; S.y+=S.v*dt; if(S.y<0.12){ S.y=0.12; S.v=-S.v*0.55; if(S.v<1){ S.v=0; S.ph='rest'; S.T=0; } } }
+      else if(S.ph==='rest'){ if(S.T>1.2){ S.ph='hold'; S.T=0; S.strobe=[]; } }
+    }
+    const flying=S.ph==='fly'||S.ph==='drop';
+    if(flying){ S.st+=dt; if(S.st>=0.1){ S.st-=0.1; S.strobe.push(S.y); } }
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const need=mode==='up'?Math.max(3.4,(HR+u*u/(2*G))*1.12):DROPH+2.6;
+    Hv=approach(Hv,need,2.5,dt);
+    const ppm=h*0.86/Hv, gY=h*0.93, Y=y=>gY-y*ppm, px=w*0.36;
+    ground(ctx,0,w,gY);
+    // height ruler
+    const nice=[0.5,1,2,5,10]; let stp=nice[0]; for(const n of nice) if(n*ppm>=36){ stp=n; break; }
+    line(ctx,w*0.08,Y(0),w*0.08,Y(Hv*0.98),COL.mid,1.4);
+    for(let y=stp;y<=Hv*0.98;y+=stp){ line(ctx,w*0.08,Y(y),w*0.08+8,Y(y),COL.mid,1.4); textAt(ctx,y+' m',w*0.08-6,Y(y)+4,{align:'right',size:11,color:COL.mid}); }
+    // drop tower
+    if(mode==='drop'){ rect(ctx,px-0.9*ppm,Y(DROPH),1.1*ppm,DROPH*ppm,COL.ink,'#f6f9fc',2.4); for(let y=1;y<DROPH;y+=1) line(ctx,px-0.9*ppm,Y(y),px+0.2*ppm,Y(y),'#dbe4f0',1); }
+    // thrower
+    const Hp=1.65*ppm, bx=px+0.32*ppm;
+    const handPt={x:bx-0.02*ppm, y:Y(base+S.hand)+0.05*ppm};
+    if(mode==='up') person(ctx,{x:px-0.1*ppm,g:Y(base),H:Hp,face:1,lean:S.ph==='wind'?0.12:0,crouch:S.ph==='wind'?0.25*smooth01(0,0.25,S.T):S.ph==='throw'?0.25*(1-clamp(S.T/0.15,0,1)):0,hands:[handPt,null]});
+    else person(ctx,{x:px-0.35*ppm,g:Y(base),H:Hp,face:1,lean:0.1,hands:[S.ph==='hold'?{x:bx,y:Y(S.y)+0.08*ppm}:{x:bx-0.1*ppm,y:Y(base+1.2)},null]});
+    // highest-point marks of earlier throws
+    S.peaks.forEach((p,i)=>{ const y=Y(p.h); line(ctx,bx-40,y,bx+40,y,COL.yellow,2-i*0.35,[5,4]); textAt(ctx,fmt(p.h,1)+' m  ('+fmt(p.u,1)+' m/s)',bx+46,y+4,{size:11,weight:600,color:COL.yellow,alpha:1-i*0.2}); });
+    // flash-photo dots (offset to the right)
+    S.strobe.forEach(y=>circ(ctx,bx+0.9*ppm+24,Y(y),Math.max(3,0.07*ppm),COL.mid,'#fff',1.4));
+    if(S.strobe.length) textAt(ctx,'every 0.1 s',bx+0.9*ppm+24,Y(0)+16,{align:'center',size:10,color:COL.mid});
+    // ball + arrows
+    const br=Math.max(9,0.11*ppm), by=Y(S.y);
+    circ(ctx,bx,by-br*0.3,br,COL.ink,'#fff',2.6); line(ctx,bx-br,by-br*0.3,bx+br,by-br*0.3,COL.mid,1.2);
+    if(flying){
+      force(ctx,bx-br-6,by,0,34,COL.red,'gravity','l');
+      if(Math.abs(S.v)>0.3) force(ctx,bx+br+8,by,0,-clamp(S.v*6,-130,130),COL.green,fmt(Math.abs(S.v),1)+' m/s','r');
+      else textAt(ctx,'stops for an instant',bx+br+10,by+4,{size:12,weight:700,color:COL.green});
+    }
+    $('#r1').textContent=mode==='up'?fmt(u*u/(2*G),2)+' m':'—';
+    $('#r2').textContent=mode==='up'?fmt(u/G,2)+' s':'—';
+    $('#r3').textContent=fmt(Math.abs(flying?S.v:0),1)+' m/s';
+    $('#r4').textContent=flying?(S.v>0.3?'Up · slowing':S.v<-0.3?'Down · speeding':'At the top'):'In hand';
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   5.9 STRETCH A SPRING — hang, let go, it bounces and settles
+        m·x″ = m·g − k·x − c·x′          (k = 40 N/m, ζ = 0.12)
+   Settled stretch  x = m·g / k    → heavier object, bigger stretch.
+   Check: tiffin 0.5 kg → weight 5 N → x = 5/40 = 12.5 cm.
+   Let go from the unstretched length, it overshoots to ≈ 2x first.
+   Period 2π√(m/k) ≈ 0.7 s → shown in slow motion ×0.5.
+   ===================================================================== */
+const HANG=[
+  {k:'pencil', name:'Pencil box', m:0.2,  col:COL.green},
+  {k:'tiffin', name:'Tiffin box', m:0.5,  col:COL.blue},
+  {k:'stone',  name:'Stone',      m:0.8,  col:COL.red},
+];
+function drawHangObj(ctx,k,x,y,s){
+  // (x,y) = hook point at the top of the object; s = px per metre
+  ctx.save(); ctx.lineJoin='round';
+  line(ctx,x,y,x,y+0.02*s,COL.ink,2);
+  const y0=y+0.02*s;
+  if(k==='pencil'){ const W=0.2*s, H=0.05*s; ctx.beginPath(); ctx.moveTo(x-W*0.25,y0+H*0.1); ctx.lineTo(x,y0); ctx.lineTo(x+W*0.25,y0+H*0.1); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.6; ctx.stroke();
+    rect(ctx,x-W/2,y0+H*0.1,W,H,COL.ink,'#fff',2.4); line(ctx,x-W/2+6,y0+H*0.1+H*0.35,x+W/2-6,y0+H*0.1+H*0.35,COL.mid,1.2); return y0+H*1.1; }
+  if(k==='tiffin'){ const W=0.12*s, H=0.14*s; line(ctx,x-W*0.3,y0+6,x+W*0.3,y0+6,COL.ink,2.4); line(ctx,x-W*0.3,y0+6,x-W*0.3,y0+H*0.2,COL.ink,2); line(ctx,x+W*0.3,y0+6,x+W*0.3,y0+H*0.2,COL.ink,2);
+    for(let i=0;i<3;i++){ ctx.save(); rrect(ctx,x-W/2,y0+H*0.2+i*H*0.27,W,H*0.27,4); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.stroke(); ctx.restore(); }
+    return y0+H*1.01; }
+  // stone in a string net
+  const R=0.055*s; const pts=[[-1,0.1],[-0.8,-0.6],[-0.1,-0.95],[0.7,-0.7],[1,0],[0.75,0.7],[0,0.95],[-0.7,0.75]];
+  const cy=y0+R*1.35;
+  line(ctx,x,y0,x-R*0.7,cy-R*0.6,COL.mid,1.4); line(ctx,x,y0,x+R*0.7,cy-R*0.6,COL.mid,1.4);
+  ctx.beginPath(); pts.forEach((p,i)=>ctx[i?'lineTo':'moveTo'](x+p[0]*R*1.15,cy+p[1]*R)); ctx.closePath(); ctx.fillStyle='#f3f5f8'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.stroke();
+  line(ctx,x-R*0.4,cy-R*0.2,x+R*0.1,cy+R*0.1,COL.mid,1.2);
+  ctx.restore(); return cy+R;
+}
+function buildA9(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label style="margin-bottom:6px;">Hang</label>
+      <div class="toggle-group" id="obB"><button class="toggle-btn active" data-i="-1">Nothing</button>${HANG.map((o,i)=>`<button class="toggle-btn" data-i="${i}">${o.name}</button>`).join('')}</div>
+      <button class="toggle-btn play" id="re" style="width:100%;margin-top:9px;padding:9px;">↺ Lift and let go again</button></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Stretch</div><div class="rval" id="r1" style="color:var(--f-yellow)">0 cm</div></div>
+      <div class="rcard"><div class="rlabel">Earth's pull</div><div class="rval" id="r2" style="color:var(--f-red)">0 N</div></div></div>
+      <table class="log"><thead><tr><th>Object</th><th>Stretch</th></tr></thead><tbody id="tb"></tbody></table></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas');
+  const K=40, L0=0.16, SLOW=0.5;
+  let cur=-1, t=0;
+  const S={x:0, v:0, swap:null};
+  const seen={};
+  function hangNew(i){ S.swap={T:0, from:cur, to:i, x0:S.x}; }
+  toggleWire(wrap.querySelectorAll('#obB button'),b=>{ const i=+b.dataset.i; hangNew(i); });
+  $('#re').onclick=()=>hangNew(cur);
+
+  animLoop((dt0)=>{
+    t+=dt0; const dt=dt0*SLOW;
+    const m=cur>=0?HANG[cur].m:0.01;
+    let handY=null;
+    if(S.swap){ const sw=S.swap; sw.T+=dt0;
+      // hand lifts the spring end back to its natural length, swaps the object, holds, lets go
+      if(sw.T<0.6){ S.x=lerp(sw.x0,0,smooth01(0,0.6,sw.T)); S.v=0; handY=S.x; }
+      else if(sw.T<1.0){ if(cur!==sw.to){ cur=sw.to; } S.x=0; S.v=0; handY=0; }
+      else { S.swap=null; }
+    } else {
+      const c=2*0.12*Math.sqrt(K*m);
+      const nsub=4, h2=dt/nsub;
+      for(let i=0;i<nsub;i++){ const a=(m*G-K*S.x-c*S.v)/m; S.v+=a*h2; S.x+=S.v*h2; if(S.x<-0.05){ S.x=-0.05; S.v=0; } }
+      if(cur>=0 && m*S.v*S.v+K*Math.pow(S.x-m*G/K,2)<K*0.015*0.015 && !seen[cur]){ seen[cur]=true; }
+    }
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const ppm=Math.min(h*0.82/(L0+0.44),w*1.5), topY=h*0.08, cx=w*0.42;
+    // beam + nail
+    rect(ctx,cx-w*0.25,topY-18,w*0.5,18,COL.ink,'#fbf6ec',2.4);
+    line(ctx,cx,topY,cx,topY+10,COL.ink,3); circ(ctx,cx,topY+4,3,COL.ink,COL.ink,1);
+    const endY=topY+14+(L0+S.x)*ppm;
+    coil(ctx,cx,topY+10,endY,12,0.045*ppm,COL.blue,2.2);
+    ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.beginPath(); ctx.arc(cx,endY+6,6,-Math.PI/2,Math.PI*1.2); ctx.stroke(); ctx.restore();
+    let botY=endY+12;
+    if(cur>=0) botY=drawHangObj(ctx,HANG[cur].k,cx,endY+12,ppm);
+    if(handY!==null){ hand(ctx,cx+0.05*ppm+18,endY+18,-1,160,-0.2); }
+    // ruler: 0 at the unstretched end
+    const rx=cx+0.14*ppm, z=topY+14+L0*ppm;
+    rect(ctx,rx,z-0.02*ppm,0.03*ppm,0.36*ppm,COL.ink,'#fff',1.8);
+    for(let c=0;c<=34;c++){ const y=z+c/100*ppm; line(ctx,rx,y,rx+(c%5?0.008:0.014)*ppm,y,COL.ink,1); if(c%5===0) textAt(ctx,c+'',rx+0.032*ppm+4,y+4,{size:11,color:COL.muted}); }
+    textAt(ctx,'cm',rx+0.032*ppm+4,z-0.03*ppm,{size:11,weight:700,color:COL.muted});
+    // settled-stretch marks for each object tried
+    HANG.forEach((o,i)=>{ if(!seen[i]) return; const y=z+o.m*G/K*ppm; line(ctx,rx-0.05*ppm,y,rx,y,o.col,3); textAt(ctx,o.name,rx-0.055*ppm,y+4,{align:'right',size:11,weight:700,color:o.col}); });
+    // pointer at spring end
+    line(ctx,cx+8,endY,rx,endY,COL.yellow,2,[4,3]); arrowHead(ctx,rx,endY,0,COL.yellow,6);
+    // forces on the object
+    if(cur>=0 && !S.swap){ const my=(endY+botY)/2+8; force(ctx,cx-0.1*ppm,my,0,m*G*9,COL.red,'weight '+fmt(m*G,0)+' N','l'); force(ctx,cx-0.1*ppm-40,endY+10,0,-K*S.x*9,COL.blue,'spring','l'); }
+    textAt(ctx,'slow motion ×'+SLOW,w-10,18,{align:'right',size:11,color:COL.mid});
+    $('#r1').textContent=fmt(Math.max(0,S.x)*100,1)+' cm';
+    $('#r2').textContent=cur>=0?fmt(m*G,0)+' N':'0 N';
+    $('#tb').innerHTML=HANG.map((o,i)=>seen[i]?`<tr><td style="color:${o.col};font-weight:700">${o.name}</td><td>${fmt(o.m*G/K*100,1)} cm</td></tr>`:'').join('');
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   5.10 · 5.11 · 5.12 THE SPRING BALANCE
+   Scale: 0 → max newton on the right, matching grams on the left
+   (g = 10 N/kg, so 10 N ↔ 1000 g).
+   Smallest division = (value between two big marks) ÷ (number of small
+   divisions).  Textbook check (Fig. 5.13): 1 N ÷ 5 = 0.2 N.
+   Balance spring: k = max / 10 cm  → m·x″ = m·g − k·x − c·x′, the pointer
+   bangs against a stop just past the maximum.
+   ===================================================================== */
+const BAL=[
+  {name:'0–10 N', max:10, major:1, div:5},
+  {name:'0–5 N',  max:5,  major:1, div:10},
+  {name:'0–20 N', max:20, major:2, div:4},
+];
+function stand(ctx,x,topY,baseY,armX){
+  rect(ctx,x-60,baseY,120,12,COL.ink,'#fff',2.4);
+  line(ctx,x,baseY,x,topY,COL.ink,4);
+  line(ctx,x,topY,armX,topY,COL.ink,4);
+  line(ctx,armX,topY,armX,topY+10,COL.ink,2.4);
+}
+function buildA10(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label style="margin-bottom:6px;">Spring balance</label>
+      <div class="toggle-group" id="bB">${BAL.map((b,i)=>`<button class="toggle-btn${i?'':' active'}" data-i="${i}">${b.name}</button>`).join('')}</div></div>
+    <div class="control-group"><label>Pull on the hook <span class="val" id="fV"></span></label><input type="range" id="fR" min="0" max="30" step="0.1" value="4"></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Range</div><div class="rval" id="r1" style="color:var(--f-yellow)">—</div></div>
+      <div class="rcard"><div class="rlabel">Maximum</div><div class="rval" id="r2">—</div></div>
+      <div class="rcard wide"><div class="rlabel">Pointer shows</div><div class="rval" id="r3" style="color:var(--f-red)">—</div></div></div>
+      <div class="fb hidden" id="fbk"></div></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), fR=$('#fR');
+  let bi=0, t=0;
+  const P={x:0,v:0};
+  toggleWire(wrap.querySelectorAll('#bB button'),b=>{ bi=+b.dataset.i; fR.max=BAL[bi].max*1.5; });
+  fR.max=15;
+  animLoop((dt)=>{
+    t+=dt;
+    const B=BAL[bi], F=Math.min(+fR.value,B.max*1.5); $('#fV').textContent=fmt(F,1)+' N';
+    const over=F>B.max*1.02;
+    // pointer follows the pull (spring-damper), but a stop holds it just past max
+    springTo(P,Math.min(F,B.max*1.03),90,12,dt);
+    if(P.x>B.max*1.03){ P.x=B.max*1.03; P.v=-P.v*0.3; }
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const Ls=Math.max(160,h*0.43-62), cx=w*0.42, topY=h*0.05;
+    stand(ctx,w*0.14,topY-2,h*0.96,cx);
+    const shake=over?Math.sin(t*50)*1.2:0;
+    const r=springBalance(ctx,cx+shake,topY+6,Ls,B,P.x,{over,hiMax:true});
+    // range bracket (yellow) along the newton scale
+    const bx=cx+r.bw/2+16;
+    line(ctx,bx,r.y0,bx,r.y1,COL.yellow,3); line(ctx,bx-6,r.y0,bx,r.y0,COL.yellow,3); line(ctx,bx-6,r.y1,bx,r.y1,COL.yellow,3);
+    textAt(ctx,'range 0 – '+B.max+' N',bx+10,(r.y0+r.y1)/2+4,{size:13,weight:700,color:COL.yellow});
+    circ(ctx,cx+r.bw/2-14,r.y1,12,COL.yellow,null,2.2);
+    textAt(ctx,'max',bx+10,r.y1+4,{size:12,weight:700,color:COL.yellow});
+    // hand pulling the hook
+    const hy=r.hy+6;
+    line(ctx,r.hx,r.hy-2,r.hx,hy+6,COL.ink,2);
+    hand(ctx,r.hx,hy+20,1,120,Math.PI*0.62);
+    force(ctx,r.hx+34,hy+10,0,clamp(F*6,0,110),COL.yellow,fmt(F,1)+' N','r');
+    $('#r1').textContent='0 – '+B.max+' N';
+    $('#r2').textContent=B.max+' N ('+B.max/G*1000+' g)';
+    $('#r3').textContent=over?'stuck at the end':fmt(P.x,1)+' N';
+    const fb=$('#fbk');
+    if(over){ fb.className='fb bad'; fb.textContent='Beyond the range — the spring can be damaged'; } else fb.className='fb hidden';
+  });
+  return wrap;
+}
+
+function buildA11(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label style="margin-bottom:6px;">Spring balance</label>
+      <div class="toggle-group" id="bB">${BAL.map((b,i)=>`<button class="toggle-btn${i?'':' active'}" data-i="${i}">${b.name}</button>`).join('')}</div></div>
+    <div class="control-group"><button class="toggle-btn play" id="cnt" style="width:100%;padding:9px;">▶ Count the small divisions</button>
+      <div class="toggle-group"><button class="toggle-btn" id="dn">− 1 division</button><button class="toggle-btn" id="up">+ 1 division</button></div></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Big marks differ by</div><div class="rval" id="r1">—</div></div>
+      <div class="rcard"><div class="rlabel">Small divisions</div><div class="rval" id="r2" style="color:var(--f-yellow)">—</div></div>
+      <div class="rcard"><div class="rlabel">One division</div><div class="rval" id="r3" style="color:var(--f-green)">—</div></div>
+      <div class="rcard"><div class="rlabel">Reading</div><div class="rval" id="r4" style="color:var(--f-red)">—</div></div></div></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas');
+  let bi=0, t=0, steps=17, cnt=null, counted={};
+  const P={x:3.4,v:0}, Z={x:3.4};
+  toggleWire(wrap.querySelectorAll('#bB button'),b=>{ bi=+b.dataset.i; const B=BAL[bi]; steps=Math.round(clamp(P.x,0,B.max)/(B.major/B.div)); cnt=null; });
+  $('#cnt').onclick=()=>{ cnt={T:0}; };
+  $('#up').onclick=()=>{ const B=BAL[bi]; steps=Math.min(steps+1,B.max/B.major*B.div); };
+  $('#dn').onclick=()=>{ steps=Math.max(steps-1,0); };
+  animLoop((dt)=>{
+    t+=dt;
+    const B=BAL[bi], lc=B.major/B.div, target=steps*lc;
+    springTo(P,target,70,10,dt);
+    Z.x=approach(Z.x,P.x,4,dt);
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const Ls=Math.max(160,h*0.43-62), bx=w*0.17, topY=h*0.05;
+    const r=springBalance(ctx,bx,topY,Ls,B,P.x,{});
+    // magnified window on the part of the scale around the pointer
+    const R=Math.min(h*0.44,w*0.3), mx=w*0.64, my=h*0.48;
+    const y0p=r.y0+Ls*Z.x/B.max;
+    line(ctx,bx+r.bw/2,y0p,mx-R*0.98,my,COL.mid,1,[3,4]);
+    circ(ctx,bx+r.bw/2-12,y0p,14,COL.mid,null,1.4);
+    const a0=Math.floor(clamp(P.x,0,B.max-1e-6)/B.major)*B.major;
+    const kN=R*1.25/B.major, Yv=v=>my+(v-Z.x)*kN;
+    if(cnt){ cnt.T+=dt; if(cnt.T>B.div*0.45+1.2){ counted[bi]=true; cnt=null; } }
+    magnifier(ctx,mx,my,R,()=>{
+      ctx.save(); rrect(ctx,mx-R*0.5,my-R*1.2,R*1.1,R*2.4,10); ctx.fillStyle='#fff'; ctx.fill(); ctx.restore();
+      // count highlight: division i lights up one by one
+      if(cnt){ const k=Math.min(B.div,Math.floor(cnt.T/0.45)+1);
+        for(let i=0;i<k;i++){ const ya=Yv(a0+i*lc), yb=Yv(a0+(i+1)*lc); ctx.save(); ctx.fillStyle='rgba(217,160,23,'+(i===k-1?0.35:0.15)+')'; ctx.fillRect(mx-R*0.36,ya,R*0.5,yb-ya); ctx.restore();
+          textAt(ctx,String(i+1),mx-R*0.42,(ya+yb)/2+6,{align:'right',size:clamp(kN*lc*0.55,11,22),weight:700,color:COL.yellow}); } }
+      for(let v=Math.floor((Z.x-B.major*1.2)/lc)*lc; v<=Z.x+B.major*1.2; v+=lc){
+        if(v<-1e-6||v>B.max+1e-6) continue;
+        const y=Yv(v), big=Math.abs(v/B.major-Math.round(v/B.major))<1e-6;
+        line(ctx,mx-R*0.36,y,mx-R*0.36+(big?R*0.5:R*0.22),y,COL.ink,big?3.2:1.8);
+        if(big) textAt(ctx,fmt(v,1)+' N',mx+R*0.2,y+7,{size:clamp(R*0.1,13,22),weight:700,color:COL.ink});
+      }
+      const py=Yv(P.x); line(ctx,mx-R*0.5,py,mx+R*0.12,py,COL.red,3.4); arrowHead(ctx,mx+R*0.15,py,0,COL.red,11);
+    },'magnified scale');
+    if(counted[bi]&&!cnt) textAt(ctx,fmt(B.major,0)+' N ÷ '+B.div+' = '+fmt(lc,2)+' N',mx,my+R+44,{align:'center',size:18,weight:700,color:COL.green});
+    $('#r1').textContent=B.major+' N';
+    $('#r2').textContent=cnt?String(Math.min(B.div,Math.floor(cnt.T/0.45)+1)):String(B.div);
+    $('#r3').textContent=fmt(lc,2)+' N';
+    $('#r4').textContent=fmt(target,1)+' N';
+  });
+  return wrap;
+}
+
+const OBJ12=[
+  {k:'pencil', name:'Pencil box', m:0.35},
+  {k:'bottle', name:'Water bottle', m:null},
+  {k:'stone',  name:'Stone', m:0.62},
+  {k:'tiffin', name:'Tiffin box', m:0.8},
+];
+const PLACES=[ {name:'Earth',g:10}, {name:'Moon',g:1.6}, {name:'Mars',g:3.8}, {name:'Venus',g:9}, {name:'Jupiter',g:25.4} ];
+function waterBottle(ctx,x,y,s,fill,tilt){
+  const W=0.075*s, H=0.22*s, y0=y+0.02*s;
+  line(ctx,x,y,x,y0,COL.ink,2);
+  const body=()=>{ ctx.beginPath(); ctx.moveTo(x-W*0.2,y0); ctx.lineTo(x+W*0.2,y0); ctx.lineTo(x+W*0.2,y0+H*0.08); ctx.quadraticCurveTo(x+W/2,y0+H*0.14,x+W/2,y0+H*0.25);
+    ctx.lineTo(x+W/2,y0+H); ctx.lineTo(x-W/2,y0+H); ctx.lineTo(x-W/2,y0+H*0.25); ctx.quadraticCurveTo(x-W/2,y0+H*0.14,x-W*0.2,y0+H*0.08); ctx.closePath(); };
+  ctx.save(); body(); ctx.fillStyle='#fff'; ctx.fill(); ctx.clip();
+  const lv=y0+H-(H*0.72)*fill; ctx.beginPath(); ctx.moveTo(x-W,lv+tilt*W); ctx.lineTo(x+W,lv-tilt*W); ctx.lineTo(x+W,y0+H+2); ctx.lineTo(x-W,y0+H+2); ctx.closePath();
+  ctx.fillStyle='rgba(47,143,224,0.2)'; ctx.fill(); ctx.strokeStyle=COL.blue; ctx.lineWidth=1.8; ctx.beginPath(); ctx.moveTo(x-W,lv+tilt*W); ctx.lineTo(x+W,lv-tilt*W); ctx.stroke(); ctx.restore();
+  ctx.save(); body(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.stroke(); ctx.restore();
+  rect(ctx,x-W*0.22,y0-2,W*0.44,6,COL.ink,'#fff',2);
+  return y0+H;
+}
+function buildA12(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label style="margin-bottom:6px;">Hang</label>
+      <div class="toggle-group" id="oB">${OBJ12.map((o,i)=>`<button class="toggle-btn small${i?'':' active'}" data-i="${i}">${o.name}</button>`).join('')}</div>
+      <div id="wG"><label style="margin-top:10px;">Water in bottle <span class="val" id="wV"></span></label><input type="range" id="wR" min="0" max="600" step="10" value="300"></div></div>
+    <div class="control-group"><label style="margin-bottom:6px;">Where</label>
+      <div class="toggle-group" id="pB">${PLACES.map((p,i)=>`<button class="toggle-btn small${i?'':' active'}" data-i="${i}">${p.name}</button>`).join('')}</div></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Weight (N scale)</div><div class="rval" id="r1" style="color:var(--f-red)">—</div></div>
+      <div class="rcard"><div class="rlabel">Mass</div><div class="rval" id="r2">—</div></div></div>
+      <button class="toggle-btn navy" id="rec">＋ Record reading</button>
+      <div class="fb hidden" id="fbk"></div>
+      <table class="log"><thead><tr><th>Object</th><th>Where</th><th>Weight</th></tr></thead><tbody id="tb"></tbody></table></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), wR=$('#wR');
+  const B=BAL[0], K=B.max/0.1, SLOW=0.5;
+  let oi=0, pi=0, t=0, cur=0;
+  const S={x:0,v:0,a:0,swap:{T:0,x0:0}, tilt:{x:0,v:0}};
+  const rows=[];
+  const massOf=i=>OBJ12[i].m!==null?OBJ12[i].m:0.06+(+wR.value)/1000;
+  toggleWire(wrap.querySelectorAll('#oB button'),b=>{ oi=+b.dataset.i; S.swap={T:0,x0:S.x}; });
+  toggleWire(wrap.querySelectorAll('#pB button'),b=>{ pi=+b.dataset.i; });
+  $('#rec').onclick=()=>{ const set=!S.swap&&Math.abs(S.v)<0.01; if(!set) return;
+    const rd=Math.round(Math.min(K*S.x,B.max)/0.2)*0.2; rows.unshift([OBJ12[cur].name,PLACES[pi].name,K*S.x>B.max*1.01?'> 10 N':fmt(rd,1)+' N']); if(rows.length>7) rows.pop();
+    $('#tb').innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td></tr>`).join(''); };
+  animLoop((dt0)=>{
+    t+=dt0; const dt=dt0*SLOW;
+    $('#wG').classList.toggle('hidden',oi!==1); $('#wV').textContent=wR.value+' g';
+    const g=PLACES[pi].g;
+    let holdX=null;
+    if(S.swap){ const sw=S.swap; sw.T+=dt0;
+      if(sw.T<0.5){ S.x=lerp(sw.x0,0,smooth01(0,0.5,sw.T)); holdX=S.x; }
+      else if(sw.T<0.8){ cur=oi; S.x=0; holdX=0; }
+      else S.swap=null;
+      S.v=0;
+    } else {
+      const m=massOf(cur), c=2*0.18*Math.sqrt(K*m), xs=B.max*1.03/K;
+      const nsub=4, h2=dt/nsub;
+      for(let i=0;i<nsub;i++){ const a=(m*g-K*S.x-c*S.v)/m; S.a=a; S.v+=a*h2; S.x+=S.v*h2; if(S.x>xs){ S.x=xs; S.v=-S.v*0.2; } if(S.x<0){ S.x=0; S.v=0; } }
+    }
+    springTo(S.tilt,clamp(-S.a*0.012,-0.5,0.5),120,6,dt);
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const Ls=Math.max(140,h*0.34-50), cx=w*0.45, topY=h*0.04;
+    stand(ctx,w*0.16,topY-2,h*0.96,cx);
+    const rN=K*S.x, over=rN>B.max*1.01;
+    const r=springBalance(ctx,cx,topY+6,Ls,B,rN,{over});
+    let bottom;
+    const o=OBJ12[cur], s=Math.min(h*0.75,w*1.2);
+    if(o.k==='bottle') bottom=waterBottle(ctx,r.hx,r.hy,s,(+wR.value)/600,S.tilt.x);
+    else bottom=drawHangObj(ctx,o.k==='pencil'?'pencil':o.k==='tiffin'?'tiffin':'stone',r.hx,r.hy,s);
+    if(holdX!==null) hand(ctx,r.hx+30,(r.hy+bottom)/2,-1,150,-0.3);
+    // settled reading label next to the pointer
+    const settled=!S.swap&&Math.abs(S.v)<0.01;
+    const rd=Math.round(Math.min(rN,B.max)/0.2)*0.2;
+    textAt(ctx,over?'too heavy!':settled?fmt(rd,1)+' N':'…',cx+r.bw/2+14,r.py+5,{size:15,weight:700,color:over?COL.red:COL.ink});
+    if(!S.swap){ const m=massOf(cur); force(ctx,r.hx-0.12*s,(r.hy+bottom)/2,0,clamp(m*g*9,4,140),COL.red,'weight','l'); }
+    textAt(ctx,PLACES[pi].name,w-12,h-14,{align:'right',size:15,weight:700,color:COL.muted});
+    textAt(ctx,'slow motion ×'+SLOW,w-10,18,{align:'right',size:11,color:COL.mid});
+    const m=massOf(cur);
+    $('#r1').textContent=over?'> 10 N':settled?fmt(rd,1)+' N':'…';
+    $('#r2').textContent=Math.round(m*1000)+' g';
+    const fb=$('#fbk');
+    if(over){ fb.className='fb bad'; fb.textContent='Heavier than 10 N — take it off'; } else if(pi>0){ fb.className='fb warn'; fb.textContent='Same mass, different weight'; } else fb.className='fb hidden';
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   5.13 UPTHRUST — push a closed bottle into water, then let go
+   Bottle lies on its side: cylinder r = 4 cm, length 22 cm (V ≈ 1.1 L).
+   Upthrust = weight of water pushed aside:  B = ρ·g·V_sub
+        V_sub = L·[ r²·acos((r−s)/r) − (r−s)·√(2rs − s²) ]   (s = depth sunk)
+   (m + ½ρV_sub)·y″ = B − m·g − ½·ρ·Cd·A·y′|y′| − b·y′  (b: wave damping)
+   Floats where B = m·g; sinks if even fully under, B < m·g.
+   Check: empty bottle 40 g needs only 40 cm³ under water; 1.1 L fully
+   under gives B ≈ 11 N — that is the push you feel. Slow motion ×0.4.
+   ===================================================================== */
+function buildA13(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label style="margin-bottom:6px;">Inside the bottle</label>
+      <div class="toggle-group" id="cB"><button class="toggle-btn active" data-i="0">Air (empty)</button><button class="toggle-btn" data-i="1">Half water</button><button class="toggle-btn" data-i="2">Sand</button></div></div>
+    <div class="control-group"><label>Push it down <span class="val" id="pV"></span></label><input type="range" id="pR" min="0" max="100" step="1" value="60">
+      <button class="toggle-btn play" id="rel" style="width:100%;margin-top:9px;padding:9px;">✋ Let go</button></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Upthrust</div><div class="rval" id="r1" style="color:var(--f-blue)">—</div></div>
+      <div class="rcard"><div class="rlabel">Weight</div><div class="rval" id="r2" style="color:var(--f-red)">—</div></div>
+      <div class="rcard"><div class="rlabel">Your push</div><div class="rval" id="r3" style="color:var(--f-yellow)">—</div></div>
+      <div class="rcard"><div class="rlabel">Bottle</div><div class="rval" id="r4">—</div></div></div></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), pR=$('#pR');
+  const RHO=1000, r=0.04, L=0.22, V=Math.PI*r*r*L, DEPTH=0.34, AREA=0.09, SLOW=0.4, CD=0.8, WAVE=1.5;
+  const MASS=[0.04, 0.04+V*RHO*0.5, 0.04+V*1600];
+  let ci=0, t=0, held=true;
+  // y = height of bottle centre above the (undisturbed) water surface, m
+  const S={y:-0.1, v:0, handY:-0.1, waves:[]};
+  toggleWire(wrap.querySelectorAll('#cB button'),b=>{ ci=+b.dataset.i; held=true; });
+  pR.oninput=()=>{ held=true; };
+  $('#rel').onclick=()=>{ held=false; };
+  function vsub(s){ s=clamp(s,0,2*r); return L*(r*r*Math.acos((r-s)/r)-(r-s)*Math.sqrt(Math.max(0,2*r*s-s*s))); }
+
+  animLoop((dt0)=>{
+    t+=dt0; const dt=dt0*SLOW;
+    const m=MASS[ci], W=m*G;
+    const push=+pR.value/100; $('#pV').textContent=Math.round(push*100)+'%';
+    const yTarget=lerp(r*0.2,-(DEPTH-r-0.01),push);
+    let Fhand=0, Bf=0;
+    const nsub=6, h2=dt/nsub;
+    for(let i=0;i<nsub;i++){
+      const lvl=vsub(r-S.y)/AREA;                     // water level rise in the bucket
+      const sunk=r-(S.y-lvl), Vs=vsub(sunk);
+      Bf=RHO*G*Vs;
+      const madd=m+0.5*RHO*Vs;
+      const drag=0.5*RHO*CD*(2*r*L)*clamp(Vs/V,0.05,1)*S.v*Math.abs(S.v)+(Vs>0?WAVE*S.v:0);   // + energy carried off by surface waves
+      if(held){
+        // the hand drives the bottle towards the chosen depth; the hand supplies whatever force is needed
+        S.handY=approach(S.handY,yTarget,5,h2);
+        const want=madd*(60*(S.handY-S.y)-14*S.v);
+        Fhand=Bf-W-drag-want;                          // + pushes down, − holds it up
+        const net=Bf-W-Fhand-drag;
+        S.v+=net/madd*h2; S.y+=S.v*h2;
+      } else {
+        const net=Bf-W-drag; S.v+=net/madd*h2; S.y+=S.v*h2;
+        S.handY=approach(S.handY,0.28,4,h2);
+      }
+      const floor=-(DEPTH-r-0.004);
+      if(S.y<floor){ S.y=floor; S.v=S.v<-0.15?-S.v*0.2:0; }
+    }
+    // surface waves are kicked by the bottle crossing the surface
+    if(Math.abs(S.y)<r*1.3 && Math.abs(S.v)>0.2 && (S.waves.length===0||t-S.waves[S.waves.length-1].t0>0.12)) S.waves.push({t0:t, A:clamp(Math.abs(S.v)*0.012,0,0.025)});
+    S.waves=S.waves.filter(wv=>t-wv.t0<3);
+    const lvl=vsub(r-S.y)/AREA;
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const ppm=Math.min(h*0.72/(DEPTH+0.14),w*0.62/0.6), cx=w*0.52, surfY=Math.max(h*0.3,h*0.56-0.12*Math.min(h*0.72/(DEPTH+0.14),w*0.62/0.6)), X=x=>cx+x*ppm, Y=y=>surfY-y*ppm;
+    const bw0=0.3, bw1=0.26, botY=Y(-DEPTH);
+    // bucket (trapezoid) + water
+    const wl=Y(lvl);
+    ctx.save(); ctx.beginPath(); ctx.moveTo(X(-bw0),Y(0.1)); ctx.lineTo(X(-bw1),botY); ctx.lineTo(X(bw1),botY); ctx.lineTo(X(bw0),Y(0.1)); ctx.clip();
+    ctx.beginPath(); ctx.moveTo(X(-bw0-0.05),botY+2);
+    for(let x=-bw0-0.05;x<=bw0+0.05;x+=0.01){ let dy=0; S.waves.forEach(wv=>{ const age=t-wv.t0, d=Math.abs(x-(0)), front=age*0.35; dy+=wv.A*Math.exp(-age*1.1)*Math.exp(-Math.pow((d-front)/0.05,2))*Math.cos((d-front)*60); }); ctx.lineTo(X(x),wl-dy*ppm); }
+    ctx.lineTo(X(bw0+0.05),botY+2); ctx.closePath(); ctx.fillStyle='rgba(47,143,224,0.14)'; ctx.fill(); ctx.strokeStyle=COL.blue; ctx.lineWidth=2.2; ctx.stroke(); ctx.restore();
+    ctx.save(); ctx.beginPath(); ctx.moveTo(X(-bw0),Y(0.1)); ctx.lineTo(X(-bw1),botY); ctx.lineTo(X(bw1),botY); ctx.lineTo(X(bw0),Y(0.1)); ctx.strokeStyle=COL.ink; ctx.lineWidth=3; ctx.stroke(); ctx.restore();
+    ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.beginPath(); ctx.ellipse(X(0),Y(0.1),(bw0)*ppm,8,0,Math.PI,0); ctx.stroke(); ctx.restore();
+    ground(ctx,0,w,botY);
+    // bottle (lying on its side), with sand or water inside
+    const by=Y(S.y), br=r*ppm, bl=L*ppm;
+    ctx.save(); ctx.beginPath(); rrect(ctx,X(-L/2),by-br,bl*0.82,2*br,br*0.35);
+    ctx.moveTo(X(-L/2)+bl*0.82,by-br*0.5); ctx.lineTo(X(L/2)-bl*0.06,by-br*0.35); ctx.lineTo(X(L/2)-bl*0.06,by+br*0.35); ctx.lineTo(X(-L/2)+bl*0.82,by+br*0.5);
+    ctx.fillStyle='rgba(255,255,255,0.85)'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.stroke(); ctx.restore();
+    rect(ctx,X(L/2)-bl*0.06,by-br*0.4,bl*0.07,br*0.8,COL.ink,'#fff',2.2);
+    if(ci===1){ ctx.save(); rrect(ctx,X(-L/2)+3,by,bl*0.82-6,br-3,br*0.3); ctx.fillStyle='rgba(47,143,224,0.3)'; ctx.fill(); ctx.restore(); line(ctx,X(-L/2)+4,by,X(-L/2)+bl*0.82-4,by,COL.blue,1.6); }
+    if(ci===2){ ctx.save(); rrect(ctx,X(-L/2)+3,by-br+3,bl*0.82-6,2*br-6,br*0.3); ctx.fillStyle='#e9d9b4'; ctx.fill(); ctx.restore(); const R0=rng(3); ctx.save(); ctx.fillStyle='#b99a5e'; for(let i=0;i<120;i++) ctx.fillRect(X(-L/2)+5+R0()*(bl*0.82-10),by-br+5+R0()*(2*br-10),1.8,1.8); ctx.restore(); }
+    // hand on top of the bottle
+    const hy=Y(S.handY)-br;
+    if(held || S.handY<0.25) handDown(ctx,X(-0.02),held?by-br:hy,170);
+    // forces
+    const k=70/12;
+    force(ctx,X(-L/2)-18,by,0,-Bf*k-(Bf>0.05?6:0),COL.blue,'upthrust '+fmt(Bf,1)+' N','l');
+    force(ctx,X(L/2)+22,by,0,Math.max(16,W*k),COL.red,'weight '+fmt(W,1)+' N','r');
+    if(held&&Math.abs(Fhand)>0.05) force(ctx,X(-0.08),Fhand>0?by-br-20-Fhand*k:by-br-20,0,Fhand>0?Fhand*k:Fhand*k,COL.yellow,'');
+    // water level rise marker
+    line(ctx,X(-bw0)-30,Y(0),X(-bw0)-6,Y(0),COL.mid,1.2,[3,3]);
+    if(lvl*ppm>2){ line(ctx,X(-bw0)-18,Y(0),X(-bw0)-18,wl,COL.blue,2); textAt(ctx,'water rises '+fmt(lvl*100,1)+' cm',X(-bw0)+10,wl-10,{size:11,weight:700,color:COL.blue}); }
+    textAt(ctx,'slow motion ×'+SLOW,w-10,18,{align:'right',size:11,color:COL.mid});
+    const full=RHO*G*V;
+    $('#r1').textContent=fmt(Bf,1)+' N';
+    $('#r2').textContent=fmt(W,1)+' N';
+    $('#r3').textContent=held?(Fhand>=0?fmt(Fhand,1)+' N ↓':fmt(-Fhand,1)+' N ↑'):'0 N';
+    $('#r4').textContent=!held?(full<W?'Sinks':(Math.abs(S.v)<0.02?'Floats':'Bobbing')):'Held under';
+  });
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   INIT
+   --------------------------------------------------------------------- */
+render();
+</script>
+<script src="../../tracking/activity-tracker.js"></script>
+<script src="../../nav/back-button.js"></script>
+</body>
+</html>

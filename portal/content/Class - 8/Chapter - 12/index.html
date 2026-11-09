@@ -1,0 +1,2042 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 8 · Chapter 12 — How Nature Works in Harmony | Botclub Labs</title>
+<link href="../../vendor/fonts/fonts.css" rel="stylesheet">
+<style>
+:root{
+  --navy-1:#0f2640; --navy-2:#1a3a5c; --navy-3:#234a73;
+  --accent:#2f8fe0; --accent-2:#5cc8ff;
+  --bg:#eef2f8; --surface-0:#ffffff; --surface-1:#f6f9fc; --surface-2:#eef2f8;
+  --border:#dbe4f0; --border-strong:#c2d1e5;
+  --text-1:#132a44; --text-2:#4c6178; --text-3:#8195ab;
+  --f-red:#d9432b; --f-blue:#2f8fe0; --f-green:#1f9d55; --f-yellow:#d9a017;
+  --radius:14px; --radius-sm:9px;
+  --fs-xs:clamp(10px,0.62vw,12px); --fs-sm:clamp(11px,0.72vw,13.5px);
+  --fs-md:clamp(12.5px,0.85vw,15px); --fs-lg:clamp(15px,1.15vw,19px);
+  --fs-xl:clamp(18px,1.5vw,25px);
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:22px; --sp-6:30px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{ font-family:'Poppins',system-ui,sans-serif; background:var(--bg); color:var(--text-1); overflow:hidden; }
+button, input, select{font-family:inherit;}
+
+.app{height:100vh; display:flex; flex-direction:column; min-height:0;}
+.topbar{
+  flex:0 0 auto; background:linear-gradient(120deg, var(--navy-1) 0%, var(--navy-2) 55%, var(--navy-3) 100%);
+  color:#fff; padding:clamp(9px,1vh,16px) clamp(14px,1.6vw,28px);
+  display:flex; align-items:center; gap:var(--sp-4); box-shadow:0 2px 10px rgba(15,38,64,0.25); z-index:5;
+}
+.topbar .brand-badge{
+  width:clamp(32px,2.4vw,40px); height:clamp(32px,2.4vw,40px); border-radius:10px; background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center;
+  font-size:clamp(15px,1.3vw,20px); flex:0 0 auto;
+}
+.topbar .chip{
+  display:inline-block; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.28);
+  border-radius:6px; padding:2px 9px; font-size:var(--fs-xs); letter-spacing:0.06em; text-transform:uppercase; font-weight:600; margin-bottom:3px;
+}
+.topbar h1{font-size:var(--fs-lg); font-weight:600; line-height:1.2; white-space:nowrap;}
+.topbar .spacer{flex:1;}
+.topbar .legend{display:flex; gap:14px; font-size:var(--fs-xs); color:rgba(255,255,255,0.85); align-items:center;}
+.topbar .legend span{display:inline-flex; align-items:center; gap:5px;}
+.topbar .legend i{width:12px; height:4px; border-radius:2px; display:inline-block;}
+
+.body-wrap{flex:1; display:flex; min-height:0; overflow:hidden;}
+.sidenav{
+  flex:0 0 clamp(170px,13.5vw,230px); background:var(--surface-0); border-right:1px solid var(--border);
+  overflow-y:auto; padding:var(--sp-2); display:flex; flex-direction:column; gap:4px;
+}
+.nav-item{
+  display:flex; align-items:center; gap:8px; text-align:left; width:100%;
+  border:1px solid var(--border); background:var(--surface-1); border-radius:var(--radius-sm); padding:7px 10px; cursor:pointer; transition:all .15s ease;
+}
+.nav-item:hover{background:var(--surface-2); border-color:var(--border-strong);}
+.nav-item.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.nav-item .n-num{font-size:var(--fs-xs); font-weight:700; color:var(--accent); flex:0 0 auto; min-width:26px;}
+.nav-item.active .n-num{color:var(--accent-2);}
+.nav-item .n-title{font-size:var(--fs-sm); font-weight:600; line-height:1.25;}
+
+.content{flex:1; min-width:0; display:flex; flex-direction:column; overflow:hidden;}
+.panel-head{flex:0 0 auto; padding:var(--sp-3) var(--sp-5); border-bottom:1px solid var(--border); background:var(--surface-0); display:flex; align-items:baseline; gap:12px;}
+.panel-badge{background:var(--navy-2); color:#fff; font-size:var(--fs-xs); font-weight:700; padding:3px 10px; border-radius:6px;}
+.panel-head h2{font-size:var(--fs-lg); font-weight:600; color:var(--text-1);}
+.panel-head p{font-size:var(--fs-sm); color:var(--text-2); flex:1; text-align:right;}
+.panel-body{flex:1; min-height:0; overflow:hidden; padding:var(--sp-3) var(--sp-5); display:flex;}
+
+.lab-view{flex:1; display:flex; gap:var(--sp-4); min-height:0; min-width:0;}
+.lab-canvas-wrap{flex:7 1 0; min-width:0; min-height:0; background:#fff; border:1px solid var(--border); border-radius:var(--radius); position:relative; overflow:hidden;}
+.lab-canvas-wrap canvas{width:100%; height:100%; display:block;}
+.lab-side{flex:3 1 0; min-width:230px; display:flex; flex-direction:column; gap:var(--sp-3); min-height:0; overflow-y:auto; padding-right:2px;}
+.side-sub{display:flex; flex-direction:column; gap:var(--sp-3);}
+
+.control-group{background:var(--surface-0); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 12px;}
+.control-group label{font-size:var(--fs-sm); font-weight:600; color:var(--text-1); display:flex; justify-content:space-between;}
+.control-group label .val{color:var(--accent); font-weight:700;}
+.control-group input[type=range]{width:100%; margin-top:7px; accent-color:var(--navy-2); cursor:pointer;}
+.toggle-group{display:flex; gap:6px; margin-top:7px; flex-wrap:wrap;}
+.toggle-btn{flex:1; min-width:56px; padding:7px 5px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:600; cursor:pointer; text-align:center; color:var(--text-2);}
+.toggle-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.toggle-btn.small{font-size:10.5px; padding:6px 3px;}
+.toggle-btn.play{background:var(--f-green); border-color:var(--f-green); color:#fff;}
+.toggle-btn.navy{background:var(--navy-2); border-color:var(--navy-2); color:#fff; width:100%; margin-top:9px;}
+.toggle-btn:disabled{opacity:.5; cursor:not-allowed;}
+.chip-btn{display:inline-flex; align-items:center; gap:5px; padding:6px 11px; margin:3px 3px 0 0; border:1px solid var(--border-strong); background:var(--surface-1); border-radius:18px; cursor:pointer; font-size:var(--fs-sm); font-weight:600; color:var(--text-2);}
+.chip-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.chip-btn.ok{border-color:var(--f-green);} .chip-btn.bad{border-color:var(--f-red);}
+.chip-wrap{display:flex; flex-wrap:wrap; margin-top:3px;}
+
+.role-row{display:flex; align-items:center; gap:8px; margin-top:7px; font-size:var(--fs-sm); font-weight:600;}
+.role-row .rdot{width:10px; height:10px; border-radius:50%; flex:0 0 auto; display:inline-block;}
+.role-row .rname{width:70px; flex:0 0 auto; color:var(--text-2);}
+.role-row select{flex:1; min-width:0; padding:6px 7px; border:1px solid var(--border-strong); border-radius:7px; font-size:var(--fs-sm); background:var(--surface-1); color:var(--text-1); cursor:pointer;}
+
+.step-row{display:flex; gap:5px;}
+.step-pill{flex:1; padding:6px 4px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:10.5px; font-weight:700; color:var(--text-3); cursor:pointer;}
+.step-pill.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.step-pill.done{border-color:var(--f-green); color:var(--f-green);}
+.step-pill.active.done{color:#fff;}
+.opt-btn{display:block; width:100%; text-align:left; margin-top:6px; padding:7px 9px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:500; color:var(--text-1); cursor:pointer; line-height:1.3;}
+.opt-btn.active{border-color:var(--navy-2); background:#e3ecf7; font-weight:600;}
+.var-row{display:flex; align-items:center; gap:6px; margin-top:7px;}
+.var-row .vname{flex:0 0 88px; font-size:var(--fs-sm); font-weight:600;}
+.var-row .toggle-group{margin-top:0; flex:1;}
+
+.result-cards{display:grid; grid-template-columns:1fr 1fr; gap:6px;}
+.result-cards.three{grid-template-columns:1fr 1fr 1fr;}
+.rcard{background:var(--surface-0); border:1px solid var(--border); border-radius:9px; padding:7px 9px;}
+.rcard .rlabel{font-size:9.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--text-3); font-weight:600;}
+.rcard .rval{font-size:var(--fs-md); font-weight:700; color:var(--text-1); margin-top:1px;}
+.rcard.wide{grid-column:1/-1;}
+.hint{font-size:var(--fs-xs); color:var(--text-3); margin-top:6px; line-height:1.4;}
+.fb{font-size:var(--fs-xs); font-weight:600; margin-top:6px; padding:5px 8px; border-radius:7px;}
+.fb.ok{background:#e4f7ec; color:#1f6b3d;}
+.fb.bad{background:#fdece7; color:#a4331c;}
+.fb.warn{background:#fdf4dc; color:#8a6410;}
+.log{width:100%; border-collapse:collapse; font-size:10.5px; margin-top:4px;}
+.log th{text-align:left; color:var(--text-3); font-weight:600; text-transform:uppercase; font-size:9px; letter-spacing:.04em; padding:3px 4px; border-bottom:1px solid var(--border);}
+.log td{padding:4px; border-bottom:1px solid var(--surface-2); color:var(--text-2);}
+.log td.r-ok{color:var(--f-green); font-weight:700;} .log td.r-bad{color:var(--f-red); font-weight:700;} .log td.r-warn{color:var(--f-yellow); font-weight:700;}
+.hidden{display:none !important;}
+
+@media (max-width:1000px) and (orientation:portrait), (max-width:1000px) and (min-height:601px){
+  .body-wrap{flex-direction:column;}
+  .sidenav{flex:0 0 auto; width:100%; height:auto; flex-direction:row; overflow-x:auto; overflow-y:hidden; border-right:none; border-bottom:1px solid var(--border); padding:6px;}
+  .nav-item{flex:0 0 auto; width:150px;}
+  .panel-body{overflow-y:auto;}
+  .lab-view{flex-direction:column;}
+  .lab-canvas-wrap{min-height:320px;}
+  .lab-side{min-width:0;}
+  .content{overflow-y:auto;}
+  .topbar .legend{display:none;}
+  .topbar h1{white-space:normal;}
+}
+::-webkit-scrollbar{width:7px; height:7px;}
+::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand-badge">🌿</div>
+    <div>
+      <div class="chip">Grade 8 · Ch 12</div>
+      <h1>How Nature Works in Harmony</h1>
+    </div>
+    <div class="spacer"></div>
+    <div class="legend">
+      <span><i style="background:var(--f-yellow)"></i>What you change · Sun</span>
+      <span><i style="background:var(--f-green)"></i>Plants · living</span>
+      <span><i style="background:var(--f-red)"></i>Eats → · animals affected</span>
+      <span><i style="background:var(--f-blue)"></i>Water · non-living</span>
+    </div>
+  </div>
+  <div class="body-wrap">
+    <nav class="sidenav" id="sideNav"></nav>
+    <main class="content">
+      <div class="panel-head">
+        <div class="panel-badge" id="panelBadge">12.1</div>
+        <h2 id="panelTitle">Select an activity</h2>
+        <p id="panelDesc"></p>
+      </div>
+      <div class="panel-body" id="panelBody"></div>
+    </main>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   GRADE 8 — CHAPTER 12: HOW NATURE WORKS IN HARMONY
+   Every activity runs a continuous animation loop: sliders/buttons set a
+   TARGET; populations follow real rate equations (logistic growth,
+   predator–prey, first-order relaxation) and every animal on screen
+   moves with a gait, a flap, a hop or a swim — never a static picture.
+   ========================================================================= */
+const COL = {red:'#d9432b', blue:'#2f8fe0', green:'#1f9d55', yellow:'#d9a017', ink:'#132a44', muted:'#4c6178', mid:'#8195ab'};
+
+/* ---------------------------------------------------------------------
+   0. CANVAS HELPERS
+   --------------------------------------------------------------------- */
+function fitCanvas(canvas){
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  const r = canvas.parentElement.getBoundingClientRect();
+  const w = Math.max(200, r.width), h = Math.max(160, r.height);
+  if(canvas._w!==w || canvas._h!==h || canvas._dpr!==dpr){
+    canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr);
+    canvas.style.width = w+'px'; canvas.style.height = h+'px';
+    canvas._w=w; canvas._h=h; canvas._dpr=dpr;
+  }
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, w, h};
+}
+function line(ctx,x1,y1,x2,y2,color,width,dash){
+  ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=width||2;
+  if(dash) ctx.setLineDash(dash); else ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); ctx.restore();
+}
+function arrowHead(ctx,x,y,ang,color,size){
+  size=size||7; ctx.save(); ctx.fillStyle=color; ctx.translate(x,y); ctx.rotate(ang);
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-size,size*0.42); ctx.lineTo(-size,-size*0.42); ctx.closePath(); ctx.fill(); ctx.restore();
+}
+function vec(ctx,x1,y1,x2,y2,color,width){ line(ctx,x1,y1,x2,y2,color,width||2.6); arrowHead(ctx,x2,y2,Math.atan2(y2-y1,x2-x1),color,7); }
+function dimArrow(ctx,x,y1,y2,color){ line(ctx,x,y1,x,y2,color,1.6); arrowHead(ctx,x,y1,-Math.PI/2,color,5); arrowHead(ctx,x,y2,Math.PI/2,color,5); }
+function textAt(ctx,txt,x,y,opts){
+  opts=opts||{}; ctx.save();
+  ctx.font=(opts.weight||500)+' '+(opts.size||12)+'px Poppins, sans-serif';
+  ctx.fillStyle=opts.color||COL.ink; ctx.textAlign=opts.align||'left'; ctx.textBaseline=opts.baseline||'alphabetic';
+  if(opts.alpha!==undefined) ctx.globalAlpha=opts.alpha;
+  ctx.fillText(txt,x,y); ctx.restore();
+}
+function rect(ctx,x,y,w,h,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw===undefined?2.2:lw; if(fill){ctx.fillStyle=fill; ctx.fillRect(x,y,w,h);} if(lw!==0){ctx.strokeStyle=stroke; ctx.strokeRect(x,y,w,h);} ctx.restore(); }
+function circ(ctx,x,y,r,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw||2.2; ctx.beginPath(); ctx.arc(x,y,Math.max(0.1,r),0,Math.PI*2); if(fill){ctx.fillStyle=fill; ctx.fill();} ctx.strokeStyle=stroke; ctx.stroke(); ctx.restore(); }
+function rrect(ctx,x,y,w,h,r){ r=Math.min(r,w/2,h/2); ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function fmt(x,d){ if(!isFinite(x)) return '—'; d=d===undefined?2:d; return Number(x.toFixed(d)).toString(); }
+function gauss(){ return (Math.random()+Math.random()+Math.random()+Math.random()-2)*1.2247; }
+function hexRgb(h){ const n=parseInt(h.slice(1),16); return [n>>16&255, n>>8&255, n&255]; }
+function mixCol(a,b,t){ const A=hexRgb(a),B=hexRgb(b); t=clamp(t,0,1); return 'rgb('+A.map((v,i)=>Math.round(lerp(v,B[i],t))).join(',')+')'; }
+function rampCol(stops,x){ // stops: [[pos,hex],...]
+  if(x<=stops[0][0]) return mixCol(stops[0][1],stops[0][1],0);
+  for(let i=1;i<stops.length;i++){ if(x<=stops[i][0]){ const a=stops[i-1],b=stops[i]; return mixCol(a[1],b[1],(x-a[0])/(b[0]-a[0])); } }
+  const l=stops[stops.length-1][1]; return mixCol(l,l,0);
+}
+function thermo(ctx,x,top,bot,frac,outline,liquid){
+  const br=8;
+  ctx.save(); ctx.lineWidth=2; ctx.strokeStyle=outline; ctx.fillStyle='#fff';
+  rrect(ctx,x-5,top,10,bot-top+2,5); ctx.fill(); ctx.stroke(); ctx.restore();
+  const lh=(bot-top-5)*clamp(frac,0,1);
+  ctx.save(); ctx.fillStyle=liquid; ctx.fillRect(x-2.2,bot-lh,4.4,lh+6); ctx.restore();
+  circ(ctx,x,bot+br,br,outline,'#fff',2); circ(ctx,x,bot+br,br-3.2,liquid,liquid,1);
+  for(let i=0;i<=4;i++){ const yy=top+5+(bot-top-5)*i/4; line(ctx,x+5,yy,x+9,yy,outline,1.1); }
+}
+function flame(ctx,cx,baseY,width,inten,t){
+  const n=5;
+  for(let i=0;i<n;i++){
+    const fx=cx-width/2+width*(i+0.5)/n;
+    const hh=(6+inten*32)*(0.78+0.22*Math.sin(t*13+i*1.7));
+    const sway=Math.sin(t*9+i*2.1)*3;
+    ctx.save(); ctx.lineJoin='round';
+    ctx.strokeStyle=COL.red; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(fx-7,baseY); ctx.quadraticCurveTo(fx-7,baseY-hh*0.55,fx+sway,baseY-hh); ctx.quadraticCurveTo(fx+7,baseY-hh*0.55,fx+7,baseY); ctx.stroke();
+    ctx.strokeStyle=COL.yellow; ctx.lineWidth=1.6;
+    ctx.beginPath(); ctx.moveTo(fx-3.5,baseY); ctx.quadraticCurveTo(fx-3,baseY-hh*0.35,fx+sway*0.5,baseY-hh*0.55); ctx.quadraticCurveTo(fx+3,baseY-hh*0.35,fx+3.5,baseY); ctx.stroke();
+    ctx.restore();
+  }
+}
+
+/* ---------------------------------------------------------------------
+   0b. ANIMATION ENGINE
+   --------------------------------------------------------------------- */
+let activeStops = [];
+function stopAllLoops(){ activeStops.forEach(s=>{ try{ s(); }catch(e){} }); activeStops=[]; }
+function animLoop(tick){
+  let last = performance.now();
+  let raf;
+  function frame(now){
+    const dt = Math.max(0, Math.min(0.04, (now-last)/1000));
+    last = now;
+    tick(dt);
+    raf = requestAnimationFrame(frame);
+  }
+  raf = requestAnimationFrame(frame);
+  const stop = ()=>cancelAnimationFrame(raf);
+  activeStops.push(stop);
+  return stop;
+}
+/** Exponential ease — frame-rate independent, always smooth. */
+function approach(cur,tgt,rate,dt){ return cur + (tgt-cur)*(1-Math.exp(-rate*dt)); }
+/** Spring-damper — gives natural overshoot and settle. */
+function springTo(state,target,k,damping,dt){
+  const acc = (target-state.x)*k - state.v*damping;
+  state.v += acc*dt;
+  state.x += state.v*dt;
+  return state.x;
+}
+function toggleWire(btns,cb){
+  btns.forEach(b=>b.onclick=()=>{ btns.forEach(x=>x.classList.remove('active')); b.classList.add('active'); cb(b); });
+}
+
+
+/* ---------------------------------------------------------------------
+   0c. CHAPTER-12 HELPERS — line-drawn living things. Every organism is
+       drawn in local units (body ≈ 1 long, facing +x, feet at y = 0) and
+       is animated by t / a gait phase, so nothing ever stands frozen.
+   --------------------------------------------------------------------- */
+function rng(seed){ let s=(seed>>>0)||1; return ()=>{ s=(Math.imul(s,1664525)+1013904223)>>>0; return s/4294967296; }; }
+function smooth01(a,b,x){ const t=clamp((x-a)/(b-a),0,1); return t*t*(3-2*t); }
+function angDiff(a,b){ return Math.atan2(Math.sin(a-b),Math.cos(a-b)); }
+function tag(ctx,px,py,tx,ty,txt,col){
+  const W=ctx.canvas._w||800;
+  ctx.save(); ctx.font='700 12px Poppins, sans-serif'; const tw=ctx.measureText(txt).width; ctx.restore();
+  const right=tx>px; let bx=right?tx+4:tx-tw-12;
+  if(bx+tw+10>W-4) bx=W-tw-14; if(bx<4) bx=4;
+  line(ctx,px,py,right?bx:bx+tw+8,ty,col,1.6); circ(ctx,px,py,3,col,col,1);
+  ctx.save(); rrect(ctx,bx,ty-10,tw+10,20,6); ctx.fillStyle='rgba(255,255,255,0.94)'; ctx.fill(); ctx.strokeStyle=col; ctx.lineWidth=1.4; ctx.stroke(); ctx.restore();
+  textAt(ctx,txt,bx+5,ty+4,{size:12,weight:700,color:col});
+}
+function pill(ctx,txt,x,y,col,opts){ opts=opts||{};
+  ctx.save(); ctx.font='700 '+(opts.size||12)+'px Poppins, sans-serif'; const tw=ctx.measureText(txt).width; ctx.restore();
+  const bw=tw+14, bh=(opts.size||12)+10;
+  ctx.save(); if(opts.alpha!==undefined) ctx.globalAlpha=opts.alpha; rrect(ctx,x-bw/2,y-bh/2,bw,bh,bh/2); ctx.fillStyle=opts.fill||'rgba(255,255,255,0.95)'; ctx.fill(); ctx.strokeStyle=col; ctx.lineWidth=1.6; ctx.stroke(); ctx.restore();
+  textAt(ctx,txt,x,y+(opts.size||12)*0.36,{align:'center',size:opts.size||12,weight:700,color:opts.tcol||col,alpha:opts.alpha});
+  return bw;
+}
+/* curved arrow a→b with bend; returns the curve for pulses */
+function curveArrow(ctx,ax,ay,bx,by,bend,col,lw,dash,shrinkA,shrinkB){
+  const mx=(ax+bx)/2, my=(ay+by)/2, dx=bx-ax, dy=by-ay, L=Math.hypot(dx,dy)||1;
+  const cx=mx-dy/L*bend, cy=my+dx/L*bend;
+  const pt=u=>[(1-u)*(1-u)*ax+2*(1-u)*u*cx+u*u*bx,(1-u)*(1-u)*ay+2*(1-u)*u*cy+u*u*by];
+  const u0=(shrinkA||0)/L, u1=1-(shrinkB||0)/L;
+  ctx.save(); ctx.strokeStyle=col; ctx.lineWidth=lw||2.2; if(dash) ctx.setLineDash(dash);
+  ctx.beginPath(); for(let i=0;i<=24;i++){ const p=pt(lerp(u0,u1,i/24)); i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1]); } ctx.stroke(); ctx.restore();
+  const p1=pt(u1), p0=pt(u1-0.02); arrowHead(ctx,p1[0],p1[1],Math.atan2(p1[1]-p0[1],p1[0]-p0[0]),col,8+(lw||2.2));
+  return u=>pt(lerp(u0,u1,u));
+}
+/* local-frame drawing: s = px per unit, dir = ±1 (facing), u = 1px in local units */
+function G(ctx,x,y,s,dir,fn){ ctx.save(); ctx.translate(x,y); ctx.scale((dir||1)*s,s); ctx.lineJoin='round'; ctx.lineCap='round'; fn(1/s); ctx.restore(); }
+function SK(ctx,col,w,fill){ if(fill){ ctx.fillStyle=fill; ctx.fill(); } ctx.strokeStyle=col; ctx.lineWidth=w; ctx.stroke(); }
+function segs(ctx,pts){ ctx.beginPath(); pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1])); }
+function dot(ctx,x,y,r,col){ ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fillStyle=col; ctx.fill(); }
+function ell(ctx,x,y,rx,ry,a){ ctx.beginPath(); ctx.ellipse(x,y,Math.max(1e-4,rx),Math.max(1e-4,ry),a||0,0,Math.PI*2); }
+
+/* ---------- plants (green) ---------- */
+function drawGrass(ctx,x,y,s,t,wind,col,n){
+  n=n||5; const sw=(wind||0.3)*(0.6+0.4*Math.sin(t*1.7+x*0.05));
+  G(ctx,x,y,s,1,u=>{ ctx.beginPath();
+    for(let i=0;i<n;i++){ const f=(i/(n-1||1))-0.5, hgt=0.7+0.3*Math.cos(i*2.3), lean=f*0.5+sw*0.35*hgt;
+      ctx.moveTo(f*0.25,0); ctx.quadraticCurveTo(f*0.3,-hgt*0.6,f*0.3+lean,-hgt); }
+    SK(ctx,col||COL.green,1.8*u); });
+}
+function drawTree(ctx,x,y,s,t,wind,o){ o=o||{}; const sw=(wind||0.2)*Math.sin(t*1.3+x*0.01)*0.04;
+  G(ctx,x,y,s,1,u=>{
+    ctx.beginPath(); ctx.moveTo(-0.07,0); ctx.quadraticCurveTo(-0.05,-0.35,-0.06+sw,-0.62); ctx.moveTo(0.07,0); ctx.quadraticCurveTo(0.05,-0.35,0.06+sw,-0.62);
+    ctx.moveTo(0.02+sw*0.8,-0.5); ctx.lineTo(0.2+sw,-0.7); ctx.moveTo(-0.03+sw*0.8,-0.45); ctx.lineTo(-0.2+sw,-0.66);
+    SK(ctx,COL.ink,2.2*u);
+    const blobs=o.blobs||[[0,-0.95,0.34],[-0.28,-0.8,0.25],[0.28,-0.8,0.25],[-0.16,-1.14,0.22],[0.18,-1.12,0.22]];
+    ctx.save(); ctx.beginPath(); blobs.forEach(b=>{ ctx.moveTo(b[0]+sw*1.6+b[2],b[1]); ctx.arc(b[0]+sw*1.6,b[1],b[2],0,Math.PI*2); }); ctx.fillStyle=o.fill||'#f1faf4'; ctx.fill(); ctx.restore();
+    blobs.forEach(b=>{ ctx.beginPath(); ctx.arc(b[0]+sw*1.6,b[1],b[2],0,Math.PI*2); ctx.strokeStyle=o.col||COL.green; ctx.lineWidth=2.2*u; ctx.stroke(); });
+    ctx.save(); ctx.beginPath(); blobs.forEach(b=>{ ctx.moveTo(b[0]+sw*1.6+b[2]-0.012,b[1]); ctx.arc(b[0]+sw*1.6,b[1],b[2]-0.012,0,Math.PI*2); }); ctx.fillStyle=o.fill||'#f1faf4'; ctx.fill(); ctx.restore();
+    if(o.fruit) o.fruit.forEach(f=>{ ell(ctx,f[0]+sw*1.6,f[1],0.035,0.035); SK(ctx,COL.red,1.6*u,'#fff'); });
+  });
+}
+function drawFlower(ctx,x,y,s,t,wind,o){ o=o||{}; const sw=(wind||0.2)*Math.sin(t*1.9+x*0.07)*0.08, h=o.h||1, bloom=o.bloom===undefined?1:o.bloom;
+  G(ctx,x,y,s,1,u=>{
+    ctx.beginPath(); ctx.moveTo(0,0); ctx.quadraticCurveTo(0,-h*0.5,sw,-h); SK(ctx,COL.green,2*u);
+    ell(ctx,sw*0.35+0.09,-h*0.4,0.1,0.035,-0.5); SK(ctx,COL.green,1.6*u,'#f1faf4');
+    ell(ctx,sw*0.35-0.09,-h*0.55,0.1,0.035,0.5); SK(ctx,COL.green,1.6*u,'#f1faf4');
+    const cx=sw, cy=-h;
+    if(o.seeds>0){ ell(ctx,cx,cy,0.1,0.13); SK(ctx,COL.green,1.8*u,'#f1faf4'); const R=rng(o.seed||5);
+      for(let i=0;i<Math.min(24,o.seeds);i++){ const a=R()*6.28, r=Math.sqrt(R())*0.075; dot(ctx,cx+Math.cos(a)*r,cy+Math.sin(a)*r*1.3,0.018,COL.green); } return; }
+    for(let i=0;i<5;i++){ const a=i*1.2566+t*0.1; ell(ctx,cx+Math.cos(a)*0.1*bloom,cy+Math.sin(a)*0.1*bloom,0.08*bloom,0.045*bloom,a); SK(ctx,COL.ink,1.4*u,'#fff4c9'); }
+    dot(ctx,cx,cy,0.04,COL.ink);
+  });
+}
+function drawMillet(ctx,x,y,s,t,wind,o){ o=o||{}; const sw=(wind||0.25)*Math.sin(t*1.5+x*0.04)*0.1, grain=o.grain===undefined?1:o.grain;
+  G(ctx,x,y,s,1,u=>{
+    ctx.beginPath(); ctx.moveTo(0,0); ctx.quadraticCurveTo(0,-0.55,sw,-1); SK(ctx,COL.green,2*u);
+    [[-0.3,-1],[-0.5,1],[-0.7,-1]].forEach(([yy,sd])=>{ ctx.beginPath(); ctx.moveTo(sw*(-yy),yy); ctx.quadraticCurveTo(sd*0.2,yy-0.1,sd*0.34+sw,yy+0.08); SK(ctx,COL.green,1.8*u); });
+    // drooping panicle
+    ctx.beginPath(); ctx.moveTo(sw,-1); ctx.quadraticCurveTo(sw+0.16,-1.12,sw+0.2,-0.9); SK(ctx,COL.green,2*u);
+    for(let i=0;i<7;i++){ const q=i/6, px=sw+0.03+q*0.17+Math.sin(q*3)*0.02, py=-1.04+q*0.14-Math.sin(q*3)*0.05;
+      ell(ctx,px,py,0.035*grain+0.01,0.025*grain+0.008,0.8); SK(ctx,COL.green,1.2*u,'#fff'); }
+  });
+}
+function drawLotus(ctx,x,y,s,t){ const bob=Math.sin(t*1.4+x*0.03)*0.03;
+  G(ctx,x,y+bob*s,s,1,u=>{
+    ell(ctx,-0.35,0.02,0.32,0.07); SK(ctx,COL.green,1.8*u,'#f1faf4');
+    ctx.beginPath(); ctx.moveTo(-0.35,0.02); ctx.lineTo(-0.1,0.02); SK(ctx,COL.green,1.2*u);
+    ctx.beginPath(); ctx.moveTo(0.1,0.04); ctx.lineTo(0.1,0.6); SK(ctx,COL.green,1.6*u);
+    [-0.6,-0.3,0,0.3,0.6].forEach((a,i)=>{ ctx.save(); ctx.translate(0.1,-0.02); ctx.rotate(a); ell(ctx,0,-0.2,0.07,0.2); ctx.restore(); SK(ctx,COL.ink,1.6*u,i===2?'#fff':'#fdf2f4'); });
+  });
+}
+function drawMushroom(ctx,x,y,s,t,g){ g=g===undefined?1:g;
+  G(ctx,x,y,s*Math.max(0.05,g),1,u=>{
+    ctx.beginPath(); ctx.moveTo(-0.08,0); ctx.lineTo(-0.06,-0.45); ctx.lineTo(0.06,-0.45); ctx.lineTo(0.08,0); SK(ctx,COL.ink,2*u,'#fff');
+    ctx.beginPath(); ctx.moveTo(-0.4,-0.42); ctx.quadraticCurveTo(-0.38,-0.85,0,-0.88); ctx.quadraticCurveTo(0.38,-0.85,0.4,-0.42); ctx.closePath(); SK(ctx,COL.ink,2*u,'#fff');
+    for(let i=-3;i<=3;i++){ ctx.beginPath(); ctx.moveTo(i*0.1,-0.43); ctx.lineTo(i*0.06,-0.47); SK(ctx,COL.mid,1*u); }
+    [[-0.18,-0.65],[0.12,-0.72],[0.24,-0.56]].forEach(p=>{ ell(ctx,p[0],p[1],0.04,0.03); SK(ctx,COL.mid,1.2*u); });
+  });
+}
+function drawSun(ctx,x,y,r,t){
+  for(let i=0;i<12;i++){ const a=i*Math.PI/6+t*0.25, l=r*(0.35+0.12*Math.sin(t*3+i)); line(ctx,x+Math.cos(a)*(r+5),y+Math.sin(a)*(r+5),x+Math.cos(a)*(r+5+l),y+Math.sin(a)*(r+5+l),COL.yellow,2.4); }
+  circ(ctx,x,y,r,COL.yellow,'#fff8e1',2.6);
+}
+function drawCloud(ctx,x,y,s){
+  G(ctx,x,y,s,1,u=>{ ctx.beginPath(); ctx.moveTo(-0.5,0); ctx.arc(-0.28,-0.08,0.22,Math.PI*0.9,Math.PI*1.75); ctx.arc(0.02,-0.2,0.28,Math.PI*1.1,Math.PI*1.9); ctx.arc(0.32,-0.05,0.2,Math.PI*1.3,Math.PI*2.1); ctx.lineTo(-0.5,0.08); ctx.closePath(); SK(ctx,COL.mid,1.8*u,'#fff'); });
+}
+function waterSurface(ctx,x0,x1,y,amp,t,k,col){
+  ctx.save(); ctx.strokeStyle=col||COL.blue; ctx.lineWidth=2.2; ctx.beginPath();
+  for(let x=x0;x<=x1;x+=4){ const yy=y+Math.sin(x*(k||0.05)-t*2.6)*amp+Math.sin(x*0.13+t*1.7)*amp*0.35; x===x0?ctx.moveTo(x,yy):ctx.lineTo(x,yy); }
+  ctx.stroke(); ctx.restore();
+}
+
+/* ---------- small animals ---------- */
+function drawFish(ctx,x,y,s,dir,t,o){ o=o||{}; const w=Math.sin(t*(o.fast?16:8)+x*0.02)*0.1;
+  G(ctx,x,y,s,dir,u=>{
+    ctx.beginPath(); ctx.moveTo(0.5,0); ctx.quadraticCurveTo(0.22,-0.27,-0.24,-0.07+w*0.3); ctx.lineTo(-0.5,-0.2+w); ctx.lineTo(-0.43,w*0.8); ctx.lineTo(-0.5,0.2+w); ctx.lineTo(-0.24,0.07+w*0.3); ctx.quadraticCurveTo(0.22,0.27,0.5,0); ctx.closePath();
+    SK(ctx,o.col||COL.ink,2*u,o.fill||'#fff');
+    ctx.beginPath(); ctx.moveTo(0.05,-0.18); ctx.quadraticCurveTo(-0.05,-0.3,-0.14,-0.14); SK(ctx,o.col||COL.ink,1.6*u);
+    ctx.beginPath(); ctx.arc(0.22,0,0.12,-0.9,0.9); SK(ctx,COL.mid,1.2*u);
+    dot(ctx,0.33,-0.05,0.035,COL.ink);
+  });
+}
+function drawFrog(ctx,x,y,s,dir,t,o){ o=o||{}; const ex=o.leap||0, br=Math.sin(t*3)*0.012;
+  G(ctx,x,y,s,dir,u=>{
+    const c=o.col||COL.ink;
+    const hip=[-0.28,-0.2], knee=[lerp(0.02,-0.55,ex),lerp(-0.12,-0.3,ex)], ank=[lerp(-0.34,-0.9,ex),lerp(-0.02,-0.2,ex)], toe=[lerp(-0.02,-1.12,ex),lerp(0,-0.12,ex)];
+    segs(ctx,[hip,knee,ank,toe]); SK(ctx,c,2.4*u);
+    ctx.beginPath(); ctx.moveTo(-0.4,-0.14); ctx.quadraticCurveTo(-0.38,-0.5-br,0.04,-0.46-br); ctx.quadraticCurveTo(0.3,-0.43,0.43,-0.3); ctx.quadraticCurveTo(0.5,-0.22,0.4,-0.17); ctx.quadraticCurveTo(0.1,-0.07,-0.4,-0.14); ctx.closePath(); SK(ctx,c,2.2*u,o.fill||'#fff');
+    segs(ctx,[[0.22,-0.2],[lerp(0.3,0.45,ex),lerp(-0.05,-0.12,ex)],[lerp(0.38,0.6,ex),0]]); SK(ctx,c,2*u);
+    ell(ctx,0.2,-0.47,0.075,0.07); SK(ctx,c,1.8*u,'#fff'); dot(ctx,0.22,-0.48,0.03,COL.ink);
+    ctx.beginPath(); ctx.moveTo(0.44,-0.25); ctx.quadraticCurveTo(0.3,-0.26,0.2,-0.3); SK(ctx,c,1.2*u);
+    if(o.tongue>0){ const a=o.tAng||0; segs(ctx,[[0.44,-0.25],[0.44+Math.cos(a)*o.tongue,-0.25+Math.sin(a)*o.tongue]]); SK(ctx,COL.red,2.4*u); dot(ctx,0.44+Math.cos(a)*o.tongue,-0.25+Math.sin(a)*o.tongue,0.03,COL.red); }
+  });
+}
+function drawDragonfly(ctx,x,y,s,dir,t,o){ o=o||{}; const fl=0.35+0.65*Math.abs(Math.sin(t*47+x));
+  G(ctx,x,y,s,dir,u=>{
+    ctx.save(); ctx.globalAlpha=0.85;
+    [[0.08,-1],[0.08,1],[-0.04,-1],[-0.04,1]].forEach(([wx,sd],i)=>{ ctx.save(); ctx.translate(wx,0); ctx.rotate(sd*(i<2?1.35:1.75)); ctx.scale(1,fl); ell(ctx,0.22,0,0.22,0.055); ctx.restore(); SK(ctx,COL.mid,1.2*u,'rgba(255,255,255,0.8)'); });
+    ctx.restore();
+    segs(ctx,[[0.12,0],[-0.6,0]]); SK(ctx,o.col||COL.ink,3.2*u);
+    for(let i=1;i<6;i++){ segs(ctx,[[-0.1-i*0.09,-0.025],[-0.1-i*0.09,0.025]]); SK(ctx,'#fff',1*u); }
+    ell(ctx,0.05,0,0.09,0.05); SK(ctx,o.col||COL.ink,2*u,'#fff');
+    ell(ctx,0.19,0,0.06,0.065); SK(ctx,o.col||COL.ink,2*u,'#fff');
+  });
+}
+function drawLarva(ctx,x,y,s,dir,t){ G(ctx,x,y,s,dir,u=>{ const w=Math.sin(t*4+x)*0.04;
+  ell(ctx,0,0,0.5,0.14,w); SK(ctx,COL.ink,1.8*u,'#fff'); ell(ctx,0.44,0,0.1,0.1); SK(ctx,COL.ink,1.6*u,'#fff');
+  for(let i=0;i<3;i++){ segs(ctx,[[0.1-i*0.12,0.1],[0.2-i*0.12+Math.sin(t*9+i)*0.05,0.3]]); SK(ctx,COL.ink,1.4*u); }
+  for(let i=1;i<5;i++){ segs(ctx,[[-0.4+i*0.14,-0.12],[-0.4+i*0.14,0.12]]); SK(ctx,COL.mid,1*u); } }); }
+function drawBee(ctx,x,y,s,dir,t,o){ o=o||{}; const fl=0.3+0.7*Math.abs(Math.sin(t*53+x));
+  G(ctx,x,y,s,dir,u=>{
+    ctx.save(); ctx.scale(1,fl); ell(ctx,-0.05,-0.3,0.2,0.28,-0.3); ctx.restore(); SK(ctx,COL.mid,1.2*u,'rgba(255,255,255,0.85)');
+    ell(ctx,-0.05,0,0.36,0.22); SK(ctx,COL.ink,2*u,'#fff6d6');
+    for(let i=0;i<3;i++){ ctx.beginPath(); ctx.moveTo(-0.22+i*0.13,-0.2); ctx.quadraticCurveTo(-0.26+i*0.13,0,-0.22+i*0.13,0.2); SK(ctx,COL.ink,3*u); }
+    ell(ctx,0.36,0,0.1,0.1); SK(ctx,COL.ink,1.8*u,'#fff');
+    segs(ctx,[[-0.41,0],[-0.5,0]]); SK(ctx,COL.ink,1.6*u);
+    if(o.pollen) dot(ctx,0.05,0.26,0.07,COL.yellow);
+  });
+}
+function drawButterfly(ctx,x,y,s,dir,t){ const f=Math.cos(t*13+x*0.1);
+  G(ctx,x,y,s,dir,u=>{
+    ctx.save(); ctx.scale(1,0.25+0.75*Math.abs(f));
+    ell(ctx,0.08,-0.3,0.26,0.3,0.4); SK(ctx,COL.ink,1.8*u,'#fdf2f4');
+    ell(ctx,-0.14,-0.22,0.2,0.22,-0.4); SK(ctx,COL.ink,1.8*u,'#fdf2f4');
+    ell(ctx,0.08,-0.35,0.08,0.08); SK(ctx,COL.mid,1.2*u);
+    ctx.restore();
+    ell(ctx,0,0,0.3,0.05); SK(ctx,COL.ink,2*u,'#fff');
+    segs(ctx,[[0.28,-0.02],[0.42,-0.2]]); SK(ctx,COL.ink,1.2*u);
+  });
+}
+function drawInsect(ctx,x,y,s,dir,t,o){ o=o||{}; // small pest / fly
+  G(ctx,x,y,s,dir,u=>{ const fl=o.fly?0.3+0.7*Math.abs(Math.sin(t*50+x)):1;
+    if(o.fly){ ctx.save(); ctx.scale(1,fl); ell(ctx,-0.05,-0.28,0.14,0.24,-0.2); ctx.restore(); SK(ctx,COL.mid,1*u,'rgba(255,255,255,0.8)'); }
+    for(let i=0;i<3;i++){ const ph=Math.sin(t*14+i*2)*0.08; segs(ctx,[[-0.15+i*0.15,0.05],[-0.2+i*0.15+ph,0.3]]); SK(ctx,o.col||COL.ink,1.4*u); }
+    ell(ctx,-0.1,0,0.28,0.16); SK(ctx,o.col||COL.ink,1.8*u,'#fff'); ell(ctx,0.26,-0.02,0.1,0.09); SK(ctx,o.col||COL.ink,1.6*u,'#fff');
+    segs(ctx,[[0.33,-0.08],[0.5,-0.3]]); SK(ctx,o.col||COL.ink,1.2*u);
+  });
+}
+function drawBeetle(ctx,x,y,s,dir,t){ G(ctx,x,y,s,dir,u=>{
+  for(let i=0;i<3;i++){ const ph=Math.sin(t*12+i*2)*0.07; segs(ctx,[[-0.2+i*0.2,0.02],[-0.26+i*0.2+ph,0.12]]); SK(ctx,COL.ink,1.4*u); }
+  ctx.beginPath(); ctx.arc(0,0,0.36,Math.PI,0); ctx.closePath(); SK(ctx,COL.ink,2*u,'#fdece7');
+  segs(ctx,[[0,-0.36],[0,0]]); SK(ctx,COL.ink,1.2*u);
+  [[-0.17,-0.15],[0.15,-0.2],[0.2,-0.08],[-0.08,-0.26]].forEach(p=>dot(ctx,p[0],p[1],0.045,COL.ink));
+  ell(ctx,0.4,-0.08,0.09,0.08); SK(ctx,COL.ink,1.6*u,'#fff'); }); }
+function drawGrasshopper(ctx,x,y,s,dir,t,o){ o=o||{}; const ex=o.leap||0, ch=Math.sin(t*6)*0.03;
+  G(ctx,x,y,s,dir,u=>{ const c=o.col||COL.ink;
+    segs(ctx,[[-0.05,-0.18],[lerp(-0.2,-0.35,ex),lerp(-0.42,-0.3,ex)],[lerp(-0.45,-0.75,ex),lerp(0,-0.05,ex)]]); SK(ctx,c,2*u);
+    for(let i=0;i<2;i++){ segs(ctx,[[0.2+i*0.1,-0.12],[0.24+i*0.12,0]]); SK(ctx,c,1.4*u); }
+    ctx.beginPath(); ctx.moveTo(-0.5,-0.14); ctx.quadraticCurveTo(-0.1,-0.28,0.3,-0.2); ctx.quadraticCurveTo(0.45,-0.2,0.45,-0.1); ctx.quadraticCurveTo(0.2,-0.05,-0.5,-0.14); ctx.closePath(); SK(ctx,c,1.8*u,'#fff');
+    ctx.beginPath(); ctx.moveTo(-0.4,-0.18); ctx.quadraticCurveTo(-0.05,-0.3,0.2,-0.22); SK(ctx,COL.mid,1.2*u);
+    dot(ctx,0.38,-0.17,0.025,COL.ink);
+    ctx.beginPath(); ctx.moveTo(0.4,-0.2); ctx.quadraticCurveTo(0.55,-0.5,0.2+ch,-0.6); SK(ctx,c,1.2*u);
+  });
+}
+function drawSnail(ctx,x,y,s,dir,t){ G(ctx,x,y,s,dir,u=>{ const st=Math.sin(t*2)*0.03;
+  ctx.beginPath(); ctx.moveTo(-0.45,0); ctx.lineTo(0.35+st,0); ctx.quadraticCurveTo(0.5+st,-0.02,0.45+st,-0.12); ctx.quadraticCurveTo(0.3,-0.1,-0.3,-0.08); ctx.closePath(); SK(ctx,COL.ink,1.8*u,'#fff');
+  segs(ctx,[[0.42+st,-0.1],[0.52+st,-0.3]]); SK(ctx,COL.ink,1.4*u); dot(ctx,0.52+st,-0.3,0.025,COL.ink);
+  ctx.beginPath(); for(let i=0;i<=40;i++){ const a=i/40*Math.PI*4.2, r=0.28*(1-i/48); const px=-0.08+Math.cos(a)*r, py=-0.32+Math.sin(a)*r; i?ctx.lineTo(px,py):ctx.moveTo(px,py);} SK(ctx,COL.ink,1.8*u); }); }
+function drawWorm(ctx,x,y,s,dir,t,o){ o=o||{}; const n=14;
+  G(ctx,x,y,s,dir,u=>{ const pts=[];
+    for(let i=0;i<=n;i++){ const q=i/n; const ext=1+0.12*Math.sin(t*4-q*6); pts.push([(q-0.5)*ext, Math.sin(q*5+t*1.5)*0.06+(o.bend||0)*q*q]); }
+    segs(ctx,pts); SK(ctx,COL.ink,0.13,undefined); segs(ctx,pts); SK(ctx,'#fdecec',0.13-4*u);
+    for(let i=1;i<n;i++){ const p=pts[i]; segs(ctx,[[p[0],p[1]-0.05],[p[0],p[1]+0.05]]); SK(ctx,COL.mid,1*u); }
+    ell(ctx,pts[3][0],pts[3][1],0.06,0.07); SK(ctx,COL.ink,1.2*u,'#f7d6d6');
+  });
+}
+
+/* ---------- quadrupeds: one rig, many species ---------- */
+const QUAD={
+  deer:{L:1,bh:0.19,leg:0.55,neck:0.4,head:0.24,ear:0.12,antler:1,tail:'short',col:COL.ink},
+  fox:{L:0.9,bh:0.14,leg:0.3,neck:0.16,head:0.24,ear:0.12,snout:1,tail:'bushy',col:COL.ink},
+  mouse:{L:0.55,bh:0.13,leg:0.07,neck:0.04,head:0.17,ear:0.07,round:1,tail:'thin',col:COL.ink},
+  hare:{L:0.6,bh:0.16,leg:0.12,neck:0.06,head:0.16,ear:0.3,round:1,tail:'puff',col:COL.ink},
+  squirrel:{L:0.5,bh:0.11,leg:0.09,neck:0.05,head:0.14,ear:0.06,round:1,tail:'up',col:COL.ink},
+  cow:{L:1.1,bh:0.24,leg:0.42,neck:0.2,head:0.26,ear:0.1,horn:1,tail:'thin',col:COL.ink,lw:0.09},
+};
+/* st: phase (gait, rad), move 0..1, graze 0..1, stretch 0..1 (leap), chew
+   Legs are jointed: front = shoulder→elbow→knee→hoof, hind = hip→stifle
+   →hock (bends backwards)→hoof. A leg lifts only in its swing phase
+   (cos φ > 0), so stance feet stay planted on the ground. */
+function drawQuad(ctx,x,y,s,dir,t,sp,st){ st=st||{}; const c=st.col||sp.col;
+  G(ctx,x,y,s,dir,u=>{
+    const L=sp.L, H=sp.leg, bh=sp.bh, ph=st.phase||0, mv=st.move||0, ex=st.stretch||0;
+    const bob=mv*Math.abs(Math.sin(ph))*0.015*H/0.3, by=-H-bh*0.55+bob-ex*0.05;
+    const lwd=Math.max(3*u,sp.lw||L*0.055);
+    function leg(hx,hy,front,p,col){
+      let a=Math.sin(p)*0.42*mv, lift=Math.max(0,Math.cos(p))*mv;
+      if(ex>0){ a=front?0.95*ex:-0.95*ex; lift=0.3*ex; }
+      const th=front?[a*0.8-0.08, a-lift*1.2, a-lift*1.2+0.3]:[a+0.55+lift*0.2, a-0.5-lift*0.5, a+0.08+lift*0.9];
+      const ws=front?[0.38,0.45,0.17]:[0.34,0.36,0.3];
+      const rest=front?[-0.08,0,0.3]:[0.55,-0.5,0.08]; let vs=0; for(let i=0;i<3;i++) vs+=ws[i]*Math.cos(rest[i]);
+      const k=(-hy)/vs; let px=hx, py=hy; const pts=[[px,py]];
+      for(let i=0;i<3;i++){ px+=Math.sin(th[i])*ws[i]*k; py+=Math.cos(th[i])*ws[i]*k; pts.push([px,py]); }
+      const dy=Math.max(0,py); pts.forEach(p=>p[1]-=dy*0); if(pts[3][1]>0) pts[3][1]=0;
+      segs(ctx,pts); SK(ctx,col,lwd); segs(ctx,pts); SK(ctx,'#fff',Math.max(0.5*u,lwd-4*u));
+      const f=pts[3]; segs(ctx,[[f[0]-lwd*0.45,f[1]],[f[0]+lwd*0.8,f[1]]]); SK(ctx,col,2.2*u);
+    }
+    const hipX=-L*0.33, shX=L*0.3, jy=by+bh*0.2;
+    // far legs first (grey), then body, then near legs
+    leg(shX,jy,true,ph+0.9+Math.PI,COL.mid); leg(hipX,jy,false,ph,COL.mid);
+    // tail
+    const tw=Math.sin(t*3)*0.05;
+    if(sp.tail==='bushy'){ ctx.beginPath(); ctx.moveTo(-L*0.46,by-bh*0.5); ctx.quadraticCurveTo(-L*0.8,by-bh*0.2+tw,-L*1.02,by+bh*0.5+tw); ctx.quadraticCurveTo(-L*0.75,by+bh*0.9,-L*0.46,by+bh*0.1); SK(ctx,c,2*u,'#fff'); segs(ctx,[[-L*0.93,by+bh*0.2+tw],[-L*0.97,by+bh*0.75+tw]]); SK(ctx,COL.mid,1.2*u); }
+    else if(sp.tail==='thin'){ ctx.beginPath(); ctx.moveTo(-L*0.48,by-bh*0.3); ctx.quadraticCurveTo(-L*0.8,by-bh*0.2+tw,-L*1.05,by+bh*0.6-tw); SK(ctx,c,1.6*u); }
+    else if(sp.tail==='up'){ ctx.beginPath(); ctx.moveTo(-L*0.42,by+bh*0.3); ctx.quadraticCurveTo(-L*1.0,by-0.05,-L*0.75+tw,by-0.4); ctx.quadraticCurveTo(-L*0.5,by-0.5,-L*0.55,by-0.25); ctx.quadraticCurveTo(-L*0.7,by-0.1,-L*0.4,by-bh*0.2); SK(ctx,c,1.8*u,'#fff'); }
+    else if(sp.tail==='puff'){ ell(ctx,-L*0.5,by-bh*0.3,0.06,0.06); SK(ctx,c,1.6*u,'#fff'); }
+    else { ctx.beginPath(); ctx.moveTo(-L*0.47,by-bh*0.7); ctx.quadraticCurveTo(-L*0.56,by-bh*0.6+tw,-L*0.55,by-bh*0.1+tw); SK(ctx,c,2.2*u); }
+    // neck (drawn as a closed, filled shape so it joins the body cleanly)
+    const g=st.graze||0, chew=st.chew?Math.sin(t*10)*0.012:0;
+    const hx=lerp(L*0.5+sp.neck*0.5, L*0.6+sp.neck*0.4, g), hy=lerp(by-bh-sp.neck*0.95, -sp.head*(sp.round?0.6:0.3), g)+chew;
+    const ha=lerp(0.3,sp.round?0.7:1.25,g);
+    if(sp.neck>0.1){ ctx.beginPath(); ctx.moveTo(L*0.18,by-bh*0.85);
+      ctx.quadraticCurveTo(lerp(L*0.42,L*0.45,g),lerp(hy+sp.neck*0.2,by-bh,g),hx-sp.head*0.25,hy-sp.head*0.12);
+      ctx.lineTo(hx+sp.head*0.05,hy+sp.head*0.25);
+      ctx.quadraticCurveTo(lerp(L*0.58,L*0.62,g),lerp(by-bh*0.1,by+bh*0.2,g),L*0.46,by+bh*0.3); ctx.closePath(); SK(ctx,c,2.2*u,'#fff'); }
+    // body
+    if(sp.round){ ctx.beginPath(); ctx.moveTo(-L*0.5,by+bh*0.6); ctx.quadraticCurveTo(-L*0.55,by-bh*1.5,L*0.1,by-bh*1.1); ctx.quadraticCurveTo(L*0.5,by-bh*0.8,L*0.5,by+bh*0.4); ctx.quadraticCurveTo(0,by+bh*1.1,-L*0.5,by+bh*0.6); ctx.closePath(); }
+    else { ctx.beginPath(); ctx.moveTo(-L*0.5,by-bh*0.2);
+      ctx.quadraticCurveTo(-L*0.48,by-bh*1.0,-L*0.3,by-bh*0.95); ctx.quadraticCurveTo(0,by-bh*0.8,L*0.25,by-bh*1.05);
+      ctx.quadraticCurveTo(L*0.52,by-bh*0.9,L*0.5,by+bh*0.1); ctx.quadraticCurveTo(L*0.48,by+bh*0.95,L*0.25,by+bh*0.95);
+      ctx.quadraticCurveTo(0,by+bh*0.7,-L*0.3,by+bh*0.8); ctx.quadraticCurveTo(-L*0.52,by+bh*0.7,-L*0.5,by-bh*0.2); ctx.closePath(); }
+    SK(ctx,c,2.2*u,st.fill||'#fff');
+    if(sp.neck>0.1){ ctx.save(); ctx.beginPath(); ctx.moveTo(L*0.2,by-bh*0.8); ctx.lineTo(L*0.45,by+bh*0.2); ctx.strokeStyle='#fff'; ctx.lineWidth=5*u; ctx.restore(); }
+    leg(shX,jy,true,ph+0.9,c); leg(hipX,jy,false,ph+Math.PI,c);
+    // head
+    const hl=sp.head;
+    ctx.save(); ctx.translate(hx,hy); ctx.rotate(ha);
+    if(sp.snout){ ctx.beginPath(); ctx.moveTo(-hl*0.45,-hl*0.38); ctx.quadraticCurveTo(hl*0.3,-hl*0.3,hl*0.95,-hl*0.02); ctx.lineTo(hl*0.95,hl*0.06); ctx.quadraticCurveTo(hl*0.2,hl*0.35,-hl*0.45,hl*0.3); ctx.closePath(); SK(ctx,c,2*u,'#fff'); dot(ctx,hl*0.95,0.01,0.022,COL.ink); }
+    else if(sp.round){ ell(ctx,hl*0.2,0,hl*0.62,hl*0.45); SK(ctx,c,2*u,'#fff'); dot(ctx,hl*0.8,0.01,0.018,COL.ink); }
+    else { ctx.beginPath(); ctx.moveTo(-hl*0.4,-hl*0.3); ctx.quadraticCurveTo(0,-hl*0.45,hl*0.35,-hl*0.2); ctx.quadraticCurveTo(hl*0.85,-hl*0.12,hl*0.95,hl*0.08); ctx.quadraticCurveTo(hl*0.8,hl*0.26,hl*0.35,hl*0.22); ctx.quadraticCurveTo(-hl*0.1,hl*0.35,-hl*0.4,hl*0.2); ctx.closePath(); SK(ctx,c,2*u,'#fff'); dot(ctx,hl*0.9,0.02,0.02,COL.ink); }
+    dot(ctx,hl*0.08,-hl*0.12,0.022,COL.ink);
+    const ea=sp.ear>0.2?-2.2+Math.sin(t*2)*0.08:-2.0+Math.sin(t*1.3)*0.1;
+    ctx.save(); ctx.translate(-hl*0.28,-hl*0.25); ctx.rotate(ea); ell(ctx,sp.ear*0.5,0,sp.ear*0.5,sp.round?sp.ear*0.3:sp.ear*0.22); ctx.restore(); SK(ctx,c,1.8*u,'#fff');
+    if(sp.antler){ segs(ctx,[[-hl*0.1,-hl*0.35],[-hl*0.3,-hl*1.3],[-hl*0.75,-hl*1.85]]); SK(ctx,c,2*u); segs(ctx,[[-hl*0.26,-hl*1.0],[hl*0.25,-hl*1.45]]); SK(ctx,c,2*u); segs(ctx,[[-hl*0.47,-hl*1.52],[-hl*0.15,-hl*2.0]]); SK(ctx,c,2*u); }
+    if(sp.horn){ ctx.beginPath(); ctx.moveTo(-hl*0.2,-hl*0.35); ctx.quadraticCurveTo(-hl*0.1,-hl*0.8,hl*0.2,-hl*0.8); SK(ctx,c,2.2*u); }
+    if(sp.round && sp.L<0.6){ for(let q=-1;q<=1;q++){ segs(ctx,[[hl*0.75,0.01],[hl*1.25,q*0.05+0.01]]); SK(ctx,COL.mid,1*u); } }
+    ctx.restore();
+  });
+}
+
+/* ---------- birds: soaring, flapping or perched ---------- */
+const BIRD={
+  small:{s:0.6,hook:0,tail:0.22,span:0.9},
+  shikra:{s:0.8,hook:1,tail:0.35,span:1.2},
+  hawk:{s:1,hook:1,tail:0.32,span:1.5},
+  eagle:{s:1.1,hook:1,tail:0.3,span:1.8},
+  vulture:{s:1.1,hook:1,tail:0.25,span:1.9,bare:1},
+  owl:{s:0.9,hook:1,tail:0.2,span:1.3,owl:1},
+  duck:{s:0.8,duck:1,tail:0.15,span:1.1},
+};
+/* st: flap phase (rad) or undefined; perch true; glide 0..1 */
+function drawBird(ctx,x,y,s,dir,t,sp,st){ st=st||{}; const c=st.col||COL.ink;
+  G(ctx,x,y,s,dir,u=>{
+    if(st.perch){
+      if(!sp.duck){ segs(ctx,[[-0.02,0.12],[-0.02,0.3]]); SK(ctx,c,1.8*u); segs(ctx,[[0.08,0.12],[0.08,0.3]]); SK(ctx,c,1.8*u); }
+      if(sp.owl){ ell(ctx,0,-0.05,0.24,0.34); SK(ctx,c,2.2*u,'#fff'); ell(ctx,0,-0.42,0.2,0.18); SK(ctx,c,2.2*u,'#fff');
+        const bl=(Math.sin(t*0.8)>0.97)?0.2:1; [-0.08,0.08].forEach(ex=>{ ell(ctx,ex,-0.44,0.065,0.065); SK(ctx,c,1.6*u,'#fff'); ell(ctx,ex,-0.44,0.03,0.03*bl); ctx.fillStyle=COL.ink; ctx.fill(); });
+        ctx.beginPath(); ctx.moveTo(-0.03,-0.36); ctx.lineTo(0,-0.3); ctx.lineTo(0.03,-0.36); SK(ctx,c,1.6*u);
+        segs(ctx,[[-0.14,-0.56],[-0.18,-0.66]]); SK(ctx,c,1.6*u); segs(ctx,[[0.14,-0.56],[0.18,-0.66]]); SK(ctx,c,1.6*u);
+        for(let i=0;i<3;i++){ ctx.beginPath(); ctx.arc(0,-0.02+i*0.09,0.07,0.3,Math.PI-0.3); SK(ctx,COL.mid,1*u); } return; }
+      ctx.beginPath(); ctx.moveTo(-0.3,0.02); ctx.lineTo(-0.3-sp.tail,0.2); ctx.lineTo(-0.24-sp.tail*0.8,0.24); ctx.lineTo(-0.2,0.08); SK(ctx,c,1.8*u,'#fff');
+      ell(ctx,-0.02,0,0.32,0.16,-0.25); SK(ctx,c,2.2*u,'#fff');
+      ell(ctx,-0.06,-0.02,0.22,0.09,-0.2); SK(ctx,c,1.6*u);
+      const hx=0.26, hy=-0.2+(st.peck?Math.max(0,Math.sin(t*9))*0.18:0);
+      if(sp.bare){ ctx.beginPath(); ctx.moveTo(0.18,-0.08); ctx.quadraticCurveTo(0.26,-0.14,hx,hy); SK(ctx,c,2*u); ctx.beginPath(); ctx.arc(0.18,-0.07,0.08,Math.PI,0); SK(ctx,c,1.4*u); }
+      ell(ctx,hx,hy,0.1,0.09); SK(ctx,c,2*u,'#fff'); dot(ctx,hx+0.03,hy-0.02,0.022,COL.ink);
+      if(sp.duck){ ell(ctx,hx+0.14,hy+0.03,0.08,0.03); SK(ctx,c,1.6*u,'#fff'); }
+      else if(sp.hook){ ctx.beginPath(); ctx.moveTo(hx+0.08,hy-0.04); ctx.quadraticCurveTo(hx+0.2,hy-0.03,hx+0.16,hy+0.07); ctx.lineTo(hx+0.08,hy+0.03); SK(ctx,c,1.6*u,'#fff'); }
+      else { ctx.beginPath(); ctx.moveTo(hx+0.08,hy-0.03); ctx.lineTo(hx+0.2,hy); ctx.lineTo(hx+0.08,hy+0.03); SK(ctx,c,1.4*u,'#fff'); }
+      return;
+    }
+    // flying (side view): wing tip rises and falls with the flap phase
+    const f=st.flap===undefined?Math.sin(t*9):Math.sin(st.flap), gl=st.glide||0, amp=lerp(1,0.15,gl);
+    const tipY=-sp.span*0.45*f*amp - gl*0.08, wx=0.02;
+    ctx.beginPath(); ctx.moveTo(wx-0.14,-0.02); ctx.quadraticCurveTo(wx-0.1,tipY*0.6,wx-0.3,tipY); ctx.quadraticCurveTo(wx+0.05,tipY*0.5,wx+0.14,-0.02); SK(ctx,COL.mid,1.8*u,'#fff');
+    ctx.beginPath(); ctx.moveTo(-0.3,0); ctx.lineTo(-0.32-sp.tail,-0.08); ctx.lineTo(-0.32-sp.tail,0.08); ctx.closePath(); SK(ctx,c,1.8*u,'#fff');
+    ell(ctx,0,0,0.33,0.1); SK(ctx,c,2.2*u,'#fff');
+    const hx=0.36, hy=-0.04;
+    ell(ctx,hx,hy,0.09,0.08); SK(ctx,c,2*u,'#fff'); dot(ctx,hx+0.03,hy-0.02,0.02,COL.ink);
+    if(sp.hook){ ctx.beginPath(); ctx.moveTo(hx+0.07,hy-0.04); ctx.quadraticCurveTo(hx+0.19,hy-0.02,hx+0.15,hy+0.06); ctx.lineTo(hx+0.07,hy+0.03); SK(ctx,c,1.6*u,'#fff'); }
+    else if(sp.duck){ ell(ctx,hx+0.13,hy+0.02,0.07,0.03); SK(ctx,c,1.6*u,'#fff'); }
+    else { ctx.beginPath(); ctx.moveTo(hx+0.07,hy-0.03); ctx.lineTo(hx+0.18,hy); ctx.lineTo(hx+0.07,hy+0.03); SK(ctx,c,1.4*u,'#fff'); }
+    ctx.beginPath(); ctx.moveTo(wx+0.14,-0.02); ctx.quadraticCurveTo(wx+0.08,tipY*0.7+0.02,wx-0.22,tipY*0.95+0.04); ctx.quadraticCurveTo(wx-0.02,tipY*0.35,wx-0.16,0.02); SK(ctx,c,2*u,'#fff');
+    if(st.talons){ segs(ctx,[[0.05,0.08],[0.15,0.24]]); SK(ctx,c,2*u); segs(ctx,[[0.15,0.24],[0.22,0.26]]); SK(ctx,c,1.6*u); }
+  });
+}
+/* soaring bird seen from below (a "V" silhouette) — used for distant birds */
+function drawSoar(ctx,x,y,s,t,col){ const f=Math.sin(t*5+x*0.03)*0.15;
+  G(ctx,x,y,s,1,u=>{ ctx.beginPath(); ctx.moveTo(-0.5,-0.1-f); ctx.quadraticCurveTo(-0.25,-0.25-f,0,0); ctx.quadraticCurveTo(0.25,-0.25-f,0.5,-0.1-f); SK(ctx,col||COL.ink,2*u); });
+}
+function drawSnake(ctx,x,y,s,dir,t,o){ o=o||{}; const n=26, sp=o.speed===undefined?1:o.speed;
+  G(ctx,x,y,s,dir,u=>{ const pts=[];
+    const strike=o.strike||0, coil=o.coil||0;
+    for(let i=0;i<=n;i++){ const q=i/n; const a=(q*9-t*5*sp);
+      const px=(q-1)*0.9*(1-coil*0.4)+strike*q*q*0.5, py=Math.sin(a)*0.07*(0.3+q*0.7)*(1-strike)-(o.raise||0)*q*q*0.25; pts.push([px,py]); }
+    const hd=pts[n];
+    segs(ctx,pts); SK(ctx,o.col||COL.ink,0.075);
+    segs(ctx,pts); SK(ctx,'#fff',0.075-4*u);
+    for(let i=2;i<n;i+=2){ const p=pts[i]; dot(ctx,p[0],p[1],0.012,COL.mid); }
+    ctx.save(); ctx.translate(hd[0],hd[1]); const pp=pts[n-1]; ctx.rotate(Math.atan2(hd[1]-pp[1],hd[0]-pp[0]));
+    ell(ctx,0.04,0,0.08,0.05); SK(ctx,o.col||COL.ink,2*u,'#fff'); dot(ctx,0.06,-0.02,0.013,COL.ink);
+    if(Math.sin(t*6)>0.4){ segs(ctx,[[0.12,0],[0.2,0],[0.23,-0.02]]); SK(ctx,COL.red,1.2*u); segs(ctx,[[0.2,0],[0.23,0.02]]); SK(ctx,COL.red,1.2*u); }
+    ctx.restore();
+  });
+}
+function drawPerson(ctx,x,y,s,dir,t,o){ o=o||{}; const ph=o.phase||0, mv=o.move||0;
+  G(ctx,x,y,s,dir,u=>{ const c=COL.ink;
+    const hipY=-0.48, shY=-0.9;
+    [0,Math.PI].forEach((off,i)=>{ const a=Math.sin(ph+off)*0.4*mv; segs(ctx,[[0,hipY],[Math.sin(a)*0.24,hipY+Math.cos(a)*0.24],[Math.sin(a)*0.24+Math.sin(a*0.4)*0.24,Math.min(0,hipY+Math.cos(a)*0.24+0.24)]]); SK(ctx,i?COL.mid:c,2.4*u); });
+    segs(ctx,[[0,hipY],[0.02,shY]]); SK(ctx,c,2.6*u);
+    ell(ctx,0.03,shY-0.12,0.09,0.1); SK(ctx,c,2.2*u,'#fff');
+    ctx.beginPath(); ctx.moveTo(-0.14,shY-0.18); ctx.lineTo(0.2,shY-0.18); ctx.moveTo(-0.07,shY-0.18); ctx.quadraticCurveTo(0.03,shY-0.34,0.13,shY-0.18); SK(ctx,c,1.8*u,'#fff');
+    if(o.tank){ rrect(ctx,-0.2,shY+0.02,0.14,0.3,0.04); SK(ctx,c,1.8*u,'#fff'); }
+    const arm=o.arm===undefined?0.6:o.arm;
+    segs(ctx,[[0.02,shY+0.04],[0.1+Math.cos(arm)*0.1,shY+0.04+Math.sin(arm)*0.18],[0.14+Math.cos(arm)*0.28,shY+Math.sin(arm)*0.16]]); SK(ctx,c,2.2*u);
+    if(o.tank){ segs(ctx,[[-0.13,shY+0.3],[0.02,shY+0.24],[0.14+Math.cos(arm)*0.28,shY+Math.sin(arm)*0.16],[0.3+Math.cos(arm)*0.3,shY+Math.sin(arm)*0.16+0.08]]); SK(ctx,COL.mid,1.4*u); }
+  });
+}
+/* ground strip, soil speckles */
+function groundLine(ctx,x0,x1,y,col){ line(ctx,x0,y,x1,y,col||COL.ink,2.4); }
+function soilDots(ctx,x0,x1,y0,y1,seed,col,n){ const R=rng(seed); ctx.save(); ctx.fillStyle=col||'#b9a88c';
+  for(let i=0;i<(n||60);i++){ const x=lerp(x0,x1,R()), y=lerp(y0,y1,R()); ctx.beginPath(); ctx.arc(x,y,1+R()*1.6,0,Math.PI*2); ctx.fill(); } ctx.restore(); }
+function stepPills(wrap,names,cb){ wrap.querySelectorAll('#steps .step-pill').forEach(b=>b.onclick=()=>cb(+b.dataset.s)); }
+/* soaring raptor, seen from below-front: broad fingered wings in a
+   shallow V; flap bends the wing tips (dihedral). Used when gliding. */
+function drawRaptor(ctx,x,y,s,dir,t,sp,st){ st=st||{}; const c=st.col||COL.ink;
+  const f=st.flap===undefined?Math.sin(t*3):Math.sin(st.flap), amp=lerp(0.35,0.08,st.glide||0);
+  G(ctx,x,y,s,1,u=>{
+    const span=sp.span*0.55;
+    [-1,1].forEach(sd=>{ const tipY=-0.12-f*amp*1.2, midY=-0.05-f*amp*0.4;
+      ctx.beginPath(); ctx.moveTo(0.02*sd,-0.05); ctx.quadraticCurveTo(span*0.45*sd,midY-0.1,span*sd,tipY);
+      for(let k=0;k<4;k++){ const fx=span*(1-k*0.06)*sd, fy=tipY+0.04+k*0.045; ctx.lineTo(fx+0.07*sd,fy+0.03); ctx.lineTo(fx-0.02*sd,fy+0.04); }
+      ctx.quadraticCurveTo(span*0.4*sd,midY+0.16,0.05*sd,0.1); ctx.closePath(); SK(ctx,c,2*u,'#fff');
+      segs(ctx,[[0.1*sd,0.02],[span*0.55*sd,midY+0.02]]); SK(ctx,COL.mid,1.2*u); });
+    ctx.beginPath(); ctx.moveTo(-0.06,0.16); ctx.lineTo(-0.1,0.36); ctx.lineTo(0.1,0.36); ctx.lineTo(0.06,0.16); ctx.closePath(); SK(ctx,c,1.8*u,'#fff');
+    ell(ctx,0,0.06,0.08,0.16); SK(ctx,c,2*u,'#fff');
+    const hx=0.05*dir; ell(ctx,hx,-0.12,0.07,0.065); SK(ctx,c,1.8*u,'#fff'); dot(ctx,hx+0.03*dir,-0.13,0.016,COL.ink);
+    ctx.beginPath(); ctx.moveTo(hx+0.06*dir,-0.13); ctx.quadraticCurveTo(hx+0.12*dir,-0.12,hx+0.09*dir,-0.07); SK(ctx,c,1.6*u);
+    if(sp.bare){ ctx.beginPath(); ctx.arc(0,-0.04,0.08,Math.PI*1.1,Math.PI*1.9); SK(ctx,c,1.4*u); }
+  });
+}
+
+
+/* =====================================================================
+   12.1 LET US EXPLORE — two habitats, living vs non-living
+   The Sun follows its daily arc: elevation e = sin(π·(hour − 6)/12).
+   Shadow length of a tree of height H: s = H / tan(e) (real geometry).
+   Air temperature relaxes toward 18 + 16·e °C with a 1.5-hour lag
+   (first-order: dT/dt = (T_eq − T)/τ). Wind sets sway and ripples.
+   The survey lens springs from item to item (k = 26, c = 9) and tracks
+   moving animals while it looks.
+   ===================================================================== */
+function buildA1(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label style="margin-bottom:6px;">Habitat</label>
+      <div class="toggle-group" id="habB"><button class="toggle-btn active" data-h="pond">Pond</button><button class="toggle-btn" data-h="forest">Forest</button><button class="toggle-btn" data-h="farm">Farm</button><button class="toggle-btn" data-h="banyan">Banyan tree</button></div></div>
+    <div class="control-group"><label>Time of day <span class="val" id="hV"></span></label><input type="range" id="hR" min="6.5" max="17.5" step="0.1" value="10"></div>
+    <div class="control-group"><label>Wind <span class="val" id="wV"></span></label><input type="range" id="wR" min="0" max="10" step="0.5" value="3"></div>
+    <div class="toggle-group" style="margin-top:0"><button class="toggle-btn play" id="go" style="padding:10px;">🔍 Survey</button><button class="toggle-btn" id="rs" style="padding:10px;">↺ Reset</button></div>
+    <div class="control-group"><label>Table 12.1 <span class="val" id="nV">0 / 0</span></label>
+      <table class="log"><thead><tr><th style="color:var(--f-green)">Living</th><th style="color:var(--f-blue)">Non-living</th></tr></thead><tbody id="tb"></tbody></table></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), hR=$('#hR'), wR=$('#wR');
+  let hab='pond', t=0, run=false, idx=0, dwell=0, Tair=24;
+  const lens={x:{x:0,v:0},y:{x:0,v:0},r:{x:0,v:0}};
+  let found={};           // name → true
+  let items=[];           // [{name,living,x,y}] rebuilt every frame by the scene
+  const ORDER={pond:['Sunlight','Water','Fish','Lotus','Frog','Air','Duck','Soil','Dragonfly','Stone','Snail','Grass','Temperature'],
+    forest:['Sunlight','Tree','Deer','Soil','Bird','Air','Grass','Mushroom','Stone','Hare','Water','Temperature'],
+    farm:['Sunlight','Millet crop','Soil','Cow','Water','Earthworm','Air','Grasshopper','Sparrow','Farmer','Temperature'],
+    banyan:['Sunlight','Banyan tree','Squirrel','Owl','Soil','Myna','Ants','Air','Stone','Temperature']};
+  function reset(){ found={}; idx=0; dwell=0; run=false; table(); $('#go').textContent='🔍 Survey'; }
+  toggleWire(wrap.querySelectorAll('#habB button'),b=>{ hab=b.dataset.h; reset(); });
+  $('#go').onclick=()=>{ if(idx>=ORDER[hab].length) reset(); run=!run; $('#go').textContent=run?'⏸ Pause':'🔍 Survey'; };
+  $('#rs').onclick=reset;
+  function table(){
+    const L=ORDER[hab].filter(n=>found[n]&&items.find(i=>i.name===n&&i.living)), N=ORDER[hab].filter(n=>found[n]&&!L.includes(n));
+    let html=''; for(let i=0;i<Math.max(L.length,N.length,1);i++) html+=`<tr><td class="r-ok">${L[i]||''}</td><td style="color:var(--f-blue);font-weight:700">${N[i]||''}</td></tr>`;
+    $('#tb').innerHTML=html; $('#nV').textContent=Object.keys(found).length+' / '+ORDER[hab].length;
+  }
+  const add=(name,living,x,y)=>{ if(!items.find(i=>i.name===name)) items.push({name,living,x,y}); };
+
+  /* ---------- scene painters: pure functions of (t, wind, sun) ---------- */
+  function sky(ctx,w,h,S,sun,wind,rec){
+    const e=sun.e;
+    if(e>0){ const g=ctx.createRadialGradient(sun.x,sun.y,0,sun.x,sun.y,S*3); g.addColorStop(0,'rgba(217,160,23,0.16)'); g.addColorStop(1,'rgba(217,160,23,0)'); ctx.fillStyle=g; ctx.fillRect(0,0,w,h); }
+    
+    // sunbeams (yellow) reaching the ground
+    ctx.save(); ctx.globalAlpha=0.35*e; for(let i=0;i<3;i++) line(ctx,sun.x,sun.y,sun.x+(w*0.5-sun.x)*0.7+(i-1)*S*1.4,h*0.64,COL.yellow,1.4,[4,8]); ctx.restore();
+    for(let i=0;i<2;i++){ const cx=((i*0.47+t*0.004*(1+wind))%1.2-0.1)*w; drawCloud(ctx,cx,h*(0.1+i*0.07),S*(0.9+i*0.3)); }
+    drawSun(ctx,sun.x,sun.y,S*0.3,t);
+    // air — wind streaks drift at a speed set by the slider
+    const ax=w*0.3, ay=h*0.2;
+    for(let i=0;i<3;i++){ const ph=((t*0.12*(0.4+wind)+i*0.33)%1); const x0=ax-S*1.2+ph*S*2.4, y0=ay+i*S*0.25;
+      ctx.save(); ctx.globalAlpha=Math.sin(ph*Math.PI)*(0.3+0.07*wind); ctx.strokeStyle=COL.blue; ctx.lineWidth=1.8; ctx.beginPath(); ctx.moveTo(x0,y0); ctx.bezierCurveTo(x0+S*0.3,y0-S*0.1,x0+S*0.5,y0+S*0.1,x0+S*0.8,y0); ctx.stroke(); ctx.restore(); }
+    if(rec){ add('Sunlight',false,sun.x,sun.y); add('Air',false,ax,ay+S*0.25); }
+  }
+  function thermoItem(ctx,x,y,S,rec){
+    thermo(ctx,x,y-S*1.1,y-S*0.25,(Tair-10)/30,COL.ink,COL.red);
+    textAt(ctx,fmt(Tair,0)+' °C',x,y-S*1.25,{align:'center',size:12,weight:700,color:COL.red});
+    if(rec) add('Temperature',false,x,y-S*0.6);
+  }
+  function stone(ctx,x,y,S,rec,nm){ ctx.save(); ctx.beginPath(); ctx.moveTo(x-S*0.35,y); ctx.quadraticCurveTo(x-S*0.32,y-S*0.3,x,y-S*0.28); ctx.quadraticCurveTo(x+S*0.35,y-S*0.25,x+S*0.38,y); ctx.closePath(); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.stroke(); ctx.restore();
+    line(ctx,x-S*0.1,y-S*0.2,x+S*0.05,y-S*0.12,COL.mid,1.2); if(rec) add(nm||'Stone',false,x,y-S*0.15); }
+  function shadow(ctx,x,gy,H,sun,dirX){ if(sun.e<0.05) return; const L=clamp(H/Math.tan(Math.asin(sun.e)),0,H*5);
+    ctx.save(); ctx.globalAlpha=0.18; ctx.fillStyle=COL.ink; ctx.beginPath(); ctx.ellipse(x+dirX*L/2,gy+3,L/2,4,0,0,Math.PI*2); ctx.fill(); ctx.restore(); }
+
+  function scene(ctx,w,h,rec){
+    const S=Math.min(w/7.5,h/5.2), wind=+wR.value/10, gy=hab==='pond'?h*0.6:h*0.74;
+    const hr=+hR.value, ph=(hr-6)/12, e=Math.sin(Math.PI*ph);
+    const sun={x:w*(0.06+0.88*ph), y:gy-S*0.6-e*(gy-S*1.3), e};
+    const sdx=sun.x<w/2?1:-1;
+    sky(ctx,w,h,S,sun,wind,rec);
+    if(hab==='pond'){
+      const x0=w*0.2, x1=w*0.82, bot=h*0.97, sl=gy;
+      // basin + water
+      ctx.save(); ctx.beginPath(); ctx.moveTo(x0,gy); ctx.bezierCurveTo(x0+S*0.6,bot,x1-S*0.6,bot,x1,gy); ctx.closePath(); ctx.fillStyle='#eef6fe'; ctx.fill(); ctx.restore();
+      soilDots(ctx,0,x0,gy+6,h,3,'#c9b89b',40); soilDots(ctx,x1,w,gy+6,h,4,'#c9b89b',40);
+      ctx.save(); ctx.beginPath(); ctx.moveTo(0,gy); ctx.lineTo(x0,gy); ctx.bezierCurveTo(x0+S*0.6,bot,x1-S*0.6,bot,x1,gy); ctx.lineTo(w,gy); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.6; ctx.stroke(); ctx.restore();
+      const amp=1+wind*4;
+      waterSurface(ctx,x0+4,x1-4,sl,amp,t,0.045);
+      if(rec){ add('Water',false,w*0.5,h*0.84); add('Soil',false,w*0.08,gy+S*0.5); }
+      // fish
+      for(let i=0;i<3;i++){ const cx=w*(0.38+i*0.12), A=S*(0.9-i*0.2), om=0.35+i*0.12, x=cx+A*Math.sin(t*om+i*2), dir=Math.cos(t*om+i*2)>=0?1:-1, y=h*(0.71+i*0.06)+Math.sin(t*1.3+i)*6;
+        drawFish(ctx,x,y,S*0.8,dir,t); if(rec&&i===1) add('Fish',true,x,y); }
+      // lotus, lily pad + frog, duck
+      const sy=v=>sl+Math.sin(v*0.045-t*2.6)*amp;
+      drawLotus(ctx,w*0.66,sy(w*0.66),S*0.8,t); if(rec) add('Lotus',true,w*0.66,sy(w*0.66)-S*0.15);
+      const fx=w*0.3; ell(ctx,fx,sy(fx)+2,S*0.4,S*0.08); SK(ctx,COL.green,1.8,'#f1faf4');
+      const hop=Math.max(0,Math.sin(t*0.5))>0.985?1:0;
+      drawFrog(ctx,fx,sy(fx),S*0.7,1,t,{tongue:Math.max(0,Math.sin(t*2.4))>0.93?0.6:0,tAng:-0.6});
+      if(rec) add('Frog',true,fx,sy(fx)-S*0.12);
+      const dx=w*0.5+Math.sin(t*0.18)*w*0.13, ddir=Math.cos(t*0.18)>=0?1:-1;
+      drawBird(ctx,dx,sy(dx)-S*0.12,S*0.85,ddir,t,BIRD.duck,{perch:true,peck:Math.sin(t*0.7)>0.6});
+      if(rec) add('Duck',true,dx,sy(dx)-S*0.2);
+      const dfx=w*0.5+Math.sin(t*0.9)*S*1.5, dfy=gy-S*1.2+Math.sin(t*1.8)*S*0.3;
+      drawDragonfly(ctx,dfx,dfy,S*0.7,Math.cos(t*0.9)>=0?1:-1,t); if(rec) add('Dragonfly',true,dfx,dfy);
+      stone(ctx,w*0.9,gy,S,rec);
+      const snx=w*0.86+Math.sin(t*0.1)*S*0.2; drawSnail(ctx,snx,gy,S*0.5,1,t); if(rec) add('Snail',true,snx,gy-S*0.1);
+      for(let i=0;i<5;i++) drawGrass(ctx,w*(0.03+i*0.035),gy,S*0.45,t,wind);
+      if(rec) add('Grass',true,w*0.1,gy-S*0.2);
+      thermoItem(ctx,w*0.95,gy-S*0.3,S,rec);
+    }
+    else if(hab==='forest'){
+      soilDots(ctx,0,w,gy+6,h,5,'#c9b89b',90); groundLine(ctx,0,w,gy);
+      [[0.1,2.3],[0.28,1.8],[0.84,2.4]].forEach(([fx,sc],i)=>{ shadow(ctx,w*fx,gy,S*sc*1.2,sun,-sdx); drawTree(ctx,w*fx,gy,S*sc,t,wind*1.5); if(rec&&i===0) add('Tree',true,w*fx,gy-S*sc*0.9); });
+      for(let i=0;i<14;i++) drawGrass(ctx,w*(0.04+i*0.07),gy,S*0.4,t,wind); if(rec) add('Grass',true,w*0.46,gy-S*0.15);
+      // deer walks, stops, grazes
+      const cyc=(t*0.06)%1; let dxp,ddir,walking,gz=0;
+      if(cyc<0.35){ dxp=smooth01(0,0.35,cyc); ddir=1; walking=true; }
+      else if(cyc<0.5){ dxp=1; ddir=1; walking=false; gz=Math.sin((cyc-0.35)/0.15*Math.PI); }
+      else if(cyc<0.85){ dxp=1-smooth01(0.5,0.85,cyc); ddir=-1; walking=true; }
+      else { dxp=0; ddir=-1; walking=false; gz=Math.sin((cyc-0.85)/0.15*Math.PI); }
+      const dxx=w*(0.36+0.16*dxp);
+      drawQuad(ctx,dxx,gy,S*1.15,ddir,t,QUAD.deer,{phase:ddir*dxx/(S*0.5),move:walking?1:0,graze:gz,chew:gz>0.6});
+      if(rec) add('Deer',true,dxx,gy-S*0.7);
+      const hq=(t*0.6)%1, hx=w*0.64+Math.sin(t*0.12)*S*0.8, hy=gy-Math.sin(hq*Math.PI)*S*0.25;
+      drawQuad(ctx,hx,hy,S*0.6,Math.cos(t*0.12)>=0?1:-1,t,QUAD.hare,{stretch:Math.sin(hq*Math.PI)});
+      if(rec) add('Hare',true,hx,hy-S*0.15);
+      for(let i=0;i<2;i++){ const bx=((t*0.05+i*0.45)%1.2-0.1)*w, by=h*(0.18+i*0.1)+Math.sin(t+i)*8; drawBird(ctx,bx,by,S*0.45,1,t+i,BIRD.small,{flap:t*12+i}); if(rec&&i===0) add('Bird',true,bx,by); }
+      // fallen log + mushroom growing
+      const lx=w*0.52; ell(ctx,lx,gy-S*0.12,S*0.6,S*0.12); SK(ctx,COL.ink,2.2,'#fff'); ell(ctx,lx+S*0.58,gy-S*0.12,S*0.05,S*0.11); SK(ctx,COL.ink,1.6,'#fff');
+      drawMushroom(ctx,lx-S*0.2,gy-S*0.22,S*0.4,t,1); drawMushroom(ctx,lx+S*0.1,gy-S*0.22,S*0.3,t,1);
+      if(rec) add('Mushroom',true,lx-S*0.2,gy-S*0.45);
+      stone(ctx,w*0.7,gy,S,rec);
+      const px=w*0.94; ell(ctx,px,gy+S*0.1,S*0.35,S*0.08); SK(ctx,COL.blue,2,'#eef6fe'); waterSurface(ctx,px-S*0.3,px+S*0.3,gy+S*0.08,0.6+wind,t,0.2);
+      if(rec){ add('Water',false,px,gy+S*0.08); add('Soil',false,w*0.25,gy+S*0.6); }
+      thermoItem(ctx,w*0.03+10,gy-S*0.2,S,rec);
+    }
+    else if(hab==='farm'){
+      // soil cut-away shows an earthworm working
+      soilDots(ctx,0,w,gy+6,h,6,'#c9b89b',110); groundLine(ctx,0,w,gy);
+      const ch=w*0.32; ctx.save(); ctx.fillStyle='#eef6fe'; ctx.fillRect(ch-S*0.25,gy,S*0.5,S*0.22); ctx.restore(); line(ctx,ch-S*0.25,gy,ch-S*0.25,gy+S*0.22,COL.ink,2); line(ctx,ch+S*0.25,gy,ch+S*0.25,gy+S*0.22,COL.ink,2); line(ctx,ch-S*0.25,gy+S*0.22,ch+S*0.25,gy+S*0.22,COL.ink,2);
+      waterSurface(ctx,ch-S*0.23,ch+S*0.23,gy+S*0.05,0.5+wind*0.5,t,0.3);
+      if(rec) add('Water',false,ch,gy+S*0.1);
+      const wx=w*0.18+Math.sin(t*0.3)*S*0.4; drawWorm(ctx,wx,gy+S*0.75,S*0.6,Math.cos(t*0.3)>=0?1:-1,t); if(rec) add('Earthworm',true,wx,gy+S*0.75);
+      if(rec) add('Soil',false,w*0.6,gy+S*0.7);
+      for(let r=0;r<2;r++) for(let i=0;i<9;i++){ const mx=w*(0.42+i*0.062)+r*S*0.2; drawMillet(ctx,mx,gy-r*3,S*(1.05-r*0.15),t,wind*1.4); }
+      if(rec) add('Millet crop',true,w*0.6,gy-S*0.8);
+      drawQuad(ctx,w*0.17,gy,S*0.95,1,t,QUAD.cow,{graze:0.5+0.5*Math.sin(t*0.6),chew:true}); if(rec) add('Cow',true,w*0.17,gy-S*0.45);
+      const gq=(t*0.5)%1, gxx=w*0.5+((t*0.08)%1)*w*0.4, gyy=gy-S*0.9-Math.sin(gq*Math.PI)*S*0.4;
+      drawGrasshopper(ctx,gxx,gyy,S*0.55,1,t,{leap:Math.sin(gq*Math.PI)}); if(rec) add('Grasshopper',true,gxx,gyy);
+      const spx=w*0.38; drawBird(ctx,spx,gy-S*0.28,S*0.4,-1,t,BIRD.small,{perch:true,peck:true}); if(rec) add('Sparrow',true,spx,gy-S*0.3);
+      const fpx=w*0.93-S*0.9*(0.5-0.5*Math.cos(t*0.25)), fdir=Math.sin(t*0.25)>0?-1:1;
+      drawPerson(ctx,fpx,gy,S*1.2,fdir,t,{phase:fdir*fpx/(S*0.3),move:clamp(Math.abs(Math.sin(t*0.25))*3,0,1),arm:0.9}); if(rec) add('Farmer',true,fpx,gy-S*0.7);
+      thermoItem(ctx,w*0.3,gy-S*0.4,S,rec);
+    }
+    else { // banyan
+      soilDots(ctx,0,w,gy+6,h,7,'#c9b89b',90); groundLine(ctx,0,w,gy);
+      const bx=w*0.48, H=S*2.4;
+      shadow(ctx,bx,gy,H*0.9,sun,-sdx);
+      drawTree(ctx,bx,gy,H,t,wind*0.7,{blobs:[[0,-0.9,0.36],[-0.45,-0.78,0.3],[0.45,-0.78,0.3],[-0.8,-0.68,0.22],[0.8,-0.68,0.22],[-0.2,-1.12,0.26],[0.22,-1.1,0.26]],fruit:[[-0.5,-0.6],[0.3,-0.62],[0.62,-0.58],[-0.1,-0.7],[0.75,-0.52]]});
+      // prop roots hang from the branches
+      for(let i=0;i<7;i++){ const rx=bx+(i-3)*H*0.24; const sw=Math.sin(t*1.2+i)*wind*3; line(ctx,rx,gy-H*0.55,rx+sw,i%3===0?gy:gy-H*0.2,COL.ink,1.4); }
+      if(rec) add('Banyan tree',true,bx-H*0.05,gy-H*0.35);
+      const mx=bx+H*0.3, my=gy-H*0.62; drawBird(ctx,mx,my,S*0.45,-1,t,BIRD.small,{perch:true,peck:true}); if(rec) add('Myna',true,mx,my);
+      drawBird(ctx,bx-H*0.02,gy-H*0.5,S*0.5,1,t,BIRD.owl,{perch:true}); if(rec) add('Owl',true,bx,gy-H*0.54);
+      // squirrel runs up and down the trunk
+      const sq=(Math.sin(t*0.5)+1)/2, sqy=gy-S*0.1-sq*H*0.35, up=Math.cos(t*0.5)>0;
+      ctx.save(); ctx.translate(bx+H*0.07,sqy); ctx.rotate(up?-Math.PI/2:Math.PI/2); drawQuad(ctx,0,0,S*0.8,1,t,QUAD.squirrel,{phase:t*14,move:1}); ctx.restore();
+      if(rec) add('Squirrel',true,bx+H*0.07,sqy);
+      for(let i=0;i<8;i++){ const q=((t*0.08+i/8)%1); const ax=bx-H*0.06-q*S*0.05, ay=gy-q*H*0.4; drawInsect(ctx,ax,ay,S*0.12,1,t); }
+      if(rec) add('Ants',true,bx-H*0.07,gy-H*0.2);
+      stone(ctx,w*0.82,gy,S,rec); if(rec) add('Soil',false,w*0.2,gy+S*0.6);
+      thermoItem(ctx,w*0.95,gy-S*0.2,S,rec);
+    }
+  }
+
+  animLoop((dt)=>{
+    t+=dt;
+    const hr=+hR.value; $('#hV').textContent=Math.floor(hr)+':'+String(Math.round((hr%1)*60)).padStart(2,'0'); $('#wV').textContent=wR.value;
+    const e=Math.sin(Math.PI*(hr-6)/12); Tair+=((18+16*e)-Tair)*(1-Math.exp(-dt*0.8/1.5));
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    items=[]; scene(ctx,w,h,true);
+    const ord=ORDER[hab];
+    // survey lens
+    const S=Math.min(w/7.5,h/5.2), R=S*0.95;
+    if(!lens.init){ lens.x.x=w*0.5; lens.y.x=-R*2; lens.init=1; }
+    let tgt=null;
+    if(idx<ord.length) tgt=items.find(i=>i.name===ord[idx]);
+    if(run && tgt){
+      springTo(lens.x,tgt.x,26,9,dt); springTo(lens.y,tgt.y,26,9,dt); springTo(lens.r,1,30,8,dt);
+      const d=Math.hypot(lens.x.x-tgt.x,lens.y.x-tgt.y);
+      if(d<S*0.3) dwell+=dt;
+      if(dwell>0.9){ found[tgt.name]=true; dwell=0; idx++; table(); if(idx>=ord.length){ run=false; $('#go').textContent='✓ Done · again'; } }
+    } else springTo(lens.r,run?1:0,30,8,dt);
+    // tags for found items (green = living, blue = non-living)
+    items.forEach(it=>{ if(!found[it.name]) return; const col=it.living?COL.green:COL.blue; tag(ctx,it.x,it.y,it.x+(it.x<w*0.5?S*0.55:-S*0.55),it.y-S*0.45,it.name,col); });
+    const lr=R*clamp(lens.r.x,0,1.2);
+    if(lr>2){
+      const lx=lens.x.x, ly=lens.y.x;
+      ctx.save(); ctx.beginPath(); ctx.arc(lx,ly,lr,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill(); ctx.clip();
+      ctx.translate(lx,ly); ctx.scale(2,2); ctx.translate(-lx,-ly); scene(ctx,w,h,false); ctx.restore();
+      circ(ctx,lx,ly,lr,COL.ink,null,5);
+      const hx=lx+lr*0.72, hy=ly+lr*0.72; ctx.save(); ctx.lineCap='round'; line(ctx,hx,hy,hx+lr*0.55,hy+lr*0.55,COL.ink,10); line(ctx,hx+2,hy+2,hx+lr*0.53,hy+lr*0.53,'#fff',4); ctx.restore();
+      if(tgt && run){ const prog=clamp(dwell/0.9,0,1); ctx.save(); ctx.strokeStyle=COL.yellow; ctx.lineWidth=4; ctx.beginPath(); ctx.arc(lx,ly,lr+6,-Math.PI/2,-Math.PI/2+prog*Math.PI*2); ctx.stroke(); ctx.restore(); }
+    }
+  });
+  return wrap;
+}
+
+
+/* =====================================================================
+   12.2 LET US RECORD — a 1 m × 1 m quadrat in the school garden
+   Plan view, true scale (px per metre fixed by the canvas).
+   Organisms are scattered by a patchy density field
+   ρ(x,y) = ρ̄·(0.35 + Σ patches), so each throw samples a different count.
+   Mean densities: doob grass 20 /m², marigold 5 /m² (the textbook's
+   Plant 1 = 20, Plant 2 = 05), ants 8 /m², snails 3 /m².
+   The frame is thrown on a real arc: z(τ) = 4H·τ(1 − τ), H = 1.2 m,
+   seen from above as growth + a shadow offset; it lands with a
+   restitution-0.3 bounce and a spring-settled spin.
+   ===================================================================== */
+function buildA2(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label>Aim across <span class="val" id="axV"></span></label><input type="range" id="axR" min="0" max="100" step="1" value="40">
+      <label style="margin-top:8px">Aim down <span class="val" id="ayV"></span></label><input type="range" id="ayR" min="0" max="100" step="1" value="45"></div>
+    <div class="toggle-group" style="margin-top:0"><button class="toggle-btn play" id="th" style="padding:10px;">🎯 Throw</button><button class="toggle-btn" id="rnd" style="padding:10px;">🎲 Random</button></div>
+    <button class="toggle-btn navy" id="ct" style="margin-top:0;padding:10px;">🔢 Count inside</button>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Plant 1 · Doob grass</div><div class="rval" id="c0" style="color:var(--f-green)">—</div></div>
+      <div class="rcard"><div class="rlabel">Plant 2 · Marigold</div><div class="rval" id="c1" style="color:var(--f-green)">—</div></div>
+      <div class="rcard"><div class="rlabel">Animal 1 · Ants</div><div class="rval" id="c2" style="color:var(--f-red)">—</div></div>
+      <div class="rcard"><div class="rlabel">Animal 2 · Snails</div><div class="rval" id="c3" style="color:var(--f-red)">—</div></div></div></div>
+    <div class="control-group"><label>Table 12.2 <span class="val">per 1 m²</span></label>
+      <table class="log"><thead><tr><th>Group</th><th>Grass</th><th>Marigold</th><th>Ants</th><th>Snails</th></tr></thead><tbody id="tb"></tbody></table></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), axR=$('#axR'), ayR=$('#ayR');
+  const GW=4.4, GH=3.2;                     // garden, metres
+  const R=rng(1207);
+  const patches=[0,1,2,3].map(()=>Array.from({length:4},()=>({x:R()*GW,y:R()*GH,s:0.35+R()*0.5,a:0.6+R()*1.4})));
+  // marigolds grow in a loose bed, snails near the damp corner
+  patches[1]=[{x:1.2,y:0.8,s:0.55,a:2.4},{x:3.3,y:2.3,s:0.6,a:2},{x:2.4,y:1.3,s:0.4,a:1.2}];
+  patches[3]=[{x:3.6,y:0.7,s:0.6,a:3},{x:0.9,y:2.5,s:0.5,a:1.6}];
+  const MEAN=[20,5,8,3], NAMES=['Doob grass','Marigold','Ants','Snails'];
+  function dens(k,x,y){ let v=0.35; patches[k].forEach(p=>v+=p.a*Math.exp(-((x-p.x)**2+(y-p.y)**2)/(2*p.s*p.s))); return v; }
+  const org=[];
+  for(let k=0;k<4;k++){ let mx=0; for(let i=0;i<400;i++) mx=Math.max(mx,dens(k,R()*GW,R()*GH));
+    const n=Math.round(MEAN[k]*GW*GH); let c=0, guard=0;
+    // normalise so the garden-wide mean equals MEAN[k]
+    while(c<n && guard++<20000){ const x=0.05+R()*(GW-0.1), y=0.05+R()*(GH-0.1); if(R()*mx<dens(k,x,y)){ org.push({k,x,y,a:R()*6.28,ph:R()*6,sp:k===2?0.09+R()*0.05:k===3?0.006:0,sz:k===0?0.07+R()*0.03:k===1?0.09+R()*0.03:0}); c++; } } }
+  let t=0, group=0;
+  const Q={x:GW*0.4,y:GH*0.45,landed:true,rot:{x:0,v:0},z:0,phase:'idle',tau:0,x0:0,y0:0,x1:0,y1:0};
+  let counting=false, cell=0, cellT=0, marks=new Set(), tally=[0,0,0,0], shown=[0,0,0,0], rows=[];
+  function aim(){ return {x:0.5+ (GW-1)*(+axR.value/100), y:0.5+(GH-1)*(+ayR.value/100)}; }
+  function throwIt(){ if(Q.phase==='fly'||Q.phase==='bounce'||counting) return; const a=aim();
+    Q.x0=GW/2; Q.y0=GH+0.9; Q.x1=a.x; Q.y1=a.y; Q.phase='fly'; Q.tau=0; pend=false; Q.rot.v=9+Math.random()*4; Q.rot.x=0; marks.clear(); tally=[0,0,0,0]; shown=[0,0,0,0]; for(let i=0;i<4;i++) $('#c'+i).textContent='—'; }
+  $('#th').onclick=throwIt;
+  $('#rnd').onclick=()=>{ axR.value=Math.round(Math.random()*100); ayR.value=Math.round(Math.random()*100); throwIt(); };
+  let pend=false; $('#ct').onclick=()=>{ if(counting) return; if(Q.phase!=='idle'){ pend=true; return; } counting=true; cell=0; cellT=0; marks.clear(); tally=[0,0,0,0]; shown=[0,0,0,0]; };
+  function inside(o,cx,cy){ return Math.abs(o.x-cx)<=0.5 && Math.abs(o.y-cy)<=0.5; }
+  function table(){ let html=rows.map((r,i)=>`<tr><td>${i+1}</td>${r.map(v=>`<td>${v}</td>`).join('')}</tr>`).join('');
+    if(rows.length>1){ const avg=[0,1,2,3].map(k=>fmt(rows.reduce((s,r)=>s+r[k],0)/rows.length,1)); html+=`<tr><td class="r-ok">Avg</td>${avg.map(v=>`<td class="r-ok">${v}</td>`).join('')}</tr>`; }
+    $('#tb').innerHTML=html; }
+
+  /* plan-view organisms */
+  function grassTop(ctx,x,y,r,tt){ ctx.save(); ctx.strokeStyle=COL.green; ctx.lineWidth=1.6; ctx.beginPath();
+    for(let i=0;i<8;i++){ const a=i*0.785+Math.sin(tt*1.5+i)*0.08; ctx.moveTo(x,y); ctx.quadraticCurveTo(x+Math.cos(a+0.3)*r*0.6,y+Math.sin(a+0.3)*r*0.6,x+Math.cos(a)*r,y+Math.sin(a)*r); } ctx.stroke(); ctx.restore(); }
+  function marigoldTop(ctx,x,y,r,tt){
+    for(let i=0;i<4;i++){ const a=i*1.57+0.4; ell(ctx,x+Math.cos(a)*r*0.9,y+Math.sin(a)*r*0.9,r*0.5,r*0.2,a); SK(ctx,COL.green,1.4,'#f1faf4'); }
+    for(let i=0;i<10;i++){ const a=i*0.628+Math.sin(tt*0.8)*0.05; ell(ctx,x+Math.cos(a)*r*0.45,y+Math.sin(a)*r*0.45,r*0.28,r*0.16,a); SK(ctx,COL.ink,1.2,'#fff4c9'); }
+    circ(ctx,x,y,r*0.22,COL.ink,'#fff',1.4); }
+  function antTop(ctx,x,y,a,r,tt){ ctx.save(); ctx.translate(x,y); ctx.rotate(a);
+    for(let i=-1;i<=1;i++) for(const sd of [-1,1]){ const sw=Math.sin(tt*18+i*2+(sd>0?Math.PI:0))*r*0.25; line(ctx,i*r*0.3,0,i*r*0.4+sw,sd*r*0.7,COL.ink,1.1); }
+    circ(ctx,-r*0.6,0,r*0.35,COL.ink,COL.ink,1); circ(ctx,0,0,r*0.2,COL.ink,COL.ink,1); circ(ctx,r*0.45,0,r*0.25,COL.ink,COL.ink,1);
+    line(ctx,r*0.6,0,r*0.95,-r*0.35,COL.ink,1); line(ctx,r*0.6,0,r*0.95,r*0.35,COL.ink,1); ctx.restore(); }
+  function snailTop(ctx,x,y,a,r,tt){ ctx.save(); ctx.translate(x,y); ctx.rotate(a);
+    ell(ctx,r*0.25,0,r*0.95,r*0.32); SK(ctx,COL.ink,1.4,'#fff');
+    line(ctx,r*1.1,-r*0.1,r*1.4+Math.sin(tt*2)*r*0.05,-r*0.35,COL.ink,1.2); line(ctx,r*1.1,r*0.1,r*1.4,r*0.35,COL.ink,1.2);
+    circ(ctx,-r*0.05,0,r*0.62,COL.ink,'#fff',1.6);
+    ctx.beginPath(); for(let i=0;i<=40;i++){ const q=i/40*Math.PI*4, rr=r*0.55*(1-i/46); const px=-r*0.05+Math.cos(q)*rr, py=Math.sin(q)*rr; i?ctx.lineTo(px,py):ctx.moveTo(px,py); } ctx.strokeStyle=COL.ink; ctx.lineWidth=1.2; ctx.stroke(); ctx.restore(); }
+
+  animLoop((dt)=>{
+    t+=dt; $('#axV').textContent=fmt(+axR.value/100*(GW-1)+0.5,1)+' m'; $('#ayV').textContent=fmt(+ayR.value/100*(GH-1)+0.5,1)+' m';
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const pm=Math.min((w-30)/GW,(h-30)/GH), ox=(w-GW*pm)/2, oy=(h-GH*pm)/2;
+    const X=x=>ox+x*pm, Y=y=>oy+y*pm;
+    // garden bed
+    ctx.save(); rrect(ctx,ox,oy,GW*pm,GH*pm,12); ctx.fillStyle='#fbfaf6'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.stroke(); ctx.restore();
+    soilDots(ctx,ox+6,ox+GW*pm-6,oy+6,oy+GH*pm-6,12,'#dcd0bb',260);
+    // damp corner (snails like it)
+    ctx.save(); ctx.globalAlpha=0.5; ell(ctx,X(3.6),Y(0.7),pm*0.55,pm*0.35); ctx.fillStyle='#eef6fe'; ctx.fill(); ctx.restore();
+    // animals move: ants random-walk with persistence, snails creep
+    org.forEach(o=>{ if(!o.sp) return; o.a+=gauss()*(o.k===2?2.2:0.5)*Math.sqrt(dt); o.x+=Math.cos(o.a)*o.sp*dt; o.y+=Math.sin(o.a)*o.sp*dt;
+      if(o.x<0.05||o.x>GW-0.05||o.y<0.05||o.y>GH-0.05){ o.a+=Math.PI; o.x=clamp(o.x,0.05,GW-0.05); o.y=clamp(o.y,0.05,GH-0.05); } });
+    org.forEach(o=>{ const x=X(o.x), y=Y(o.y);
+      if(o.k===0) grassTop(ctx,x,y,o.sz*pm,t+o.ph); else if(o.k===1) marigoldTop(ctx,x,y,o.sz*pm,t+o.ph);
+      else if(o.k===2) antTop(ctx,x,y,o.a,0.022*pm,t+o.ph); else snailTop(ctx,x,y,o.a,0.035*pm,t+o.ph); });
+    // metre scale
+    line(ctx,ox+12,oy+GH*pm-14,ox+12+pm,oy+GH*pm-14,COL.ink,2.4); line(ctx,ox+12,oy+GH*pm-20,ox+12,oy+GH*pm-8,COL.ink,2); line(ctx,ox+12+pm,oy+GH*pm-20,ox+12+pm,oy+GH*pm-8,COL.ink,2);
+    textAt(ctx,'1 m',ox+12+pm/2,oy+GH*pm-20,{align:'center',size:12,weight:700});
+
+    // aim marker
+    const a=aim();
+    if(Q.phase==='idle'&&!counting){ ctx.save(); ctx.setLineDash([6,5]); ctx.strokeStyle=COL.yellow; ctx.lineWidth=1.6; ctx.strokeRect(X(a.x-0.5),Y(a.y-0.5),pm,pm); ctx.restore(); }
+
+    // quadrat flight
+    if(Q.phase==='fly'){ Q.tau+=dt/1.1; const u=Math.min(1,Q.tau); Q.x=lerp(Q.x0,Q.x1,u); Q.y=lerp(Q.y0,Q.y1,u); Q.z=4*1.2*u*(1-u);
+      Q.rot.x+=Q.rot.v*dt; if(u>=1){ Q.phase='bounce'; Q.tau=0; Q.z=0; } }
+    else if(Q.phase==='bounce'){ Q.tau+=dt/0.32; const u=Math.min(1,Q.tau); Q.z=4*0.12*u*(1-u); Q.rot.v*=Math.exp(-dt*6); Q.rot.x+=Q.rot.v*dt; if(u>=1){ Q.phase='settle'; Q.z=0; Q.rot.x=((Q.rot.x+Math.PI/4)%(Math.PI/2)+Math.PI/2)%(Math.PI/2)-Math.PI/4; } }
+    else if(Q.phase==='settle'){ springTo(Q.rot,0,60,9,dt); if(Math.abs(Q.rot.x)<0.002&&Math.abs(Q.rot.v)<0.02){ Q.rot.x=0; Q.phase='idle'; } }
+    const onGarden=Q.y<GH+0.4;
+    const sc=1+Q.z*0.4, cx=X(Q.x), cy=Y(Q.y), half=pm*0.5*sc;
+    // shadow (sun from upper-left): offset grows with height
+    if(Q.z>0.01){ ctx.save(); ctx.globalAlpha=0.18; ctx.translate(cx+Q.z*pm*0.25,cy+Q.z*pm*0.3); ctx.rotate(Q.rot.x); ctx.fillStyle=COL.ink; ctx.fillRect(-pm/2,-pm/2,pm,pm); ctx.restore(); }
+    if(onGarden||Q.phase==='fly'){
+      ctx.save(); ctx.translate(cx,cy); ctx.rotate(Q.rot.x);
+      ctx.strokeStyle=COL.yellow; ctx.lineWidth=1.2; ctx.beginPath(); for(let i=1;i<4;i++){ ctx.moveTo(-half+i*half/2,-half); ctx.lineTo(-half+i*half/2,half); ctx.moveTo(-half,-half+i*half/2); ctx.lineTo(half,-half+i*half/2); } ctx.stroke();
+      ctx.lineWidth=5*sc; ctx.strokeStyle=COL.yellow; ctx.strokeRect(-half,-half,2*half,2*half);
+      ctx.lineWidth=1.4; ctx.strokeStyle=COL.ink; ctx.strokeRect(-half-2.5*sc,-half-2.5*sc,2*half+5*sc,2*half+5*sc);
+      [[-1,-1],[1,-1],[1,1],[-1,1]].forEach(([sx,sy])=>{ ctx.beginPath(); ctx.arc(sx*half,sy*half,4*sc,0,Math.PI*2); ctx.fillStyle=COL.ink; ctx.fill(); });
+      ctx.restore();
+    }
+
+    // counting: sweep 16 sub-cells, ring each organism found
+    if(counting){ cellT+=dt;
+      const cs=0.25, ci=cell%4, cj=Math.floor(cell/4), cx0=Q.x-0.5+ci*cs, cy0=Q.y-0.5+cj*cs;
+      ctx.save(); ctx.fillStyle='rgba(217,160,23,0.14)'; ctx.fillRect(X(cx0),Y(cy0),cs*pm,cs*pm); ctx.restore();
+      if(cellT>=0.32){ org.forEach((o,i)=>{ if(!marks.has(i) && o.x>=cx0&&o.x<cx0+cs&&o.y>=cy0&&o.y<cy0+cs){ marks.add(i); tally[o.k]++; o.pop=0; } }); cellT=0; cell++;
+        if(cell>=16){ counting=false; rows.push(tally.slice()); if(rows.length>6) rows.shift(); group++; table(); } }
+    }
+    marks.forEach(i=>{ const o=org[i]; o.pop=(o.pop||0)+dt; const pr=1+0.6*Math.exp(-o.pop*6)*Math.sin(o.pop*30);
+      circ(ctx,X(o.x),Y(o.y),(o.k<2?o.sz*pm*0.9:0.05*pm)*pr,o.k<2?COL.green:COL.red,null,2.2); });
+    for(let k=0;k<4;k++){ if(shown[k]<tally[k]) shown[k]=Math.min(tally[k],shown[k]+dt*30); if(counting||rows.length) $('#c'+k).textContent=Math.floor(shown[k]); }
+    if(pend&&Q.phase==='idle'){ pend=false; $('#ct').onclick(); }
+    $('#ct').textContent=counting?'⏳ Counting…':'🔢 Count inside';
+  });
+  return wrap;
+}
+
+
+/* =====================================================================
+   12.3 LET US READ — Pond A (fish) vs Pond B (no fish)
+   Food-chain rate model (time in weeks, one 20-week season → 14 s):
+     larvae      dL/dt = 1.0·D·(1 − L/60) − 0.35·L − 0.12·F·L
+     dragonflies dD/dt = 0.2·L − 0.25·D
+     pollinators dP/dt = 0.5·P·(1 − P/30) − 0.035·D·P + 0.3
+     seeds       dS/dt = 2·P
+   Check (textbook claim): F = 6 → D ≈ 2, P ≈ 26, seeds ≈ 810;
+                           F = 0 → D ≈ 22, P ≈ 2,  seeds ≈ 330.
+   Every change in a count is shown as an event: a fish darts and eats a
+   larva, a larva climbs out as a dragonfly, a dragonfly catches a bee.
+   ===================================================================== */
+function buildA3(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label>Fish in Pond A <span class="val" id="fV"></span></label><input type="range" id="fR" min="0" max="8" step="1" value="6">
+      <div class="hint">Pond B has no fish</div></div>
+    <div class="toggle-group" style="margin-top:0"><button class="toggle-btn play" id="go" style="padding:10px;">▶ Run a season</button><button class="toggle-btn" id="rs" style="padding:10px;">↺ Reset</button></div>
+    <div class="control-group"><div class="result-cards three">
+      <div class="rcard"><div class="rlabel">&nbsp;</div><div class="rval" style="font-size:11px">Pond A<br>Pond B</div></div>
+      <div class="rcard"><div class="rlabel">Dragonflies</div><div class="rval" id="rD" style="color:var(--f-red)">—</div></div>
+      <div class="rcard"><div class="rlabel">Bees · butterflies</div><div class="rval" id="rP">—</div></div>
+      <div class="rcard wide"><div class="rlabel">Seeds made by the flowers</div><div class="rval" id="rS" style="color:var(--f-green)">—</div></div></div></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), fR=$('#fR');
+  let t=0, week=0, run=false;
+  const P0={L:10,D:6,P:10,S:0};
+  const ponds=[0,1].map(i=>({i, st:Object.assign({},P0), fish:[], larvae:[], flies:[], bees:[], splash:[]}));
+  function reset(){ week=0; run=false; ponds.forEach(p=>{ p.st=Object.assign({},P0); }); $('#go').textContent='▶ Run a season'; }
+  $('#go').onclick=()=>{ if(week>=20) reset(); run=!run; $('#go').textContent=run?'⏸ Pause':'▶ Run a season'; };
+  $('#rs').onclick=reset;
+  function deriv(s,F){ return {L:1.0*s.D*(1-s.L/60)-0.35*s.L-0.12*F*s.L, D:0.2*s.L-0.25*s.D, P:0.5*s.P*(1-s.P/30)-0.035*s.D*s.P+0.3, S:2*s.P}; }
+  const rnd=(a,b)=>a+Math.random()*(b-a);
+
+  animLoop((dt)=>{
+    t+=dt; const F=+fR.value; $('#fV').textContent=F;
+    if(run){ const dw=dt*20/14; for(let k=0;k<10;k++) ponds.forEach(p=>{ const d=deriv(p.st,p.i?0:F); for(const key in d) p.st[key]=Math.max(0,p.st[key]+d[key]*dw/10); });
+      week+=dw; if(week>=20){ week=20; run=false; $('#go').textContent='✓ Season over · again'; } }
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const top=h*0.2, gy=h*0.56, bot=h*0.96, half=w/2;
+    const S=Math.min(half/5,h/7);
+
+    ponds.forEach(p=>{
+      const x0=p.i*half, cx=x0+half/2, px0=x0+half*0.2, px1=x0+half*0.8;
+      const inW=(x,y)=>{ const u=(x-px0)/(px1-px0); if(u<0||u>1) return false; return y>gy+6 && y<gy+(bot-gy)*Math.sin(u*Math.PI)*0.95-8; };
+      // bank + water
+      ctx.save(); ctx.beginPath(); ctx.moveTo(px0,gy); ctx.bezierCurveTo(px0+half*0.05,bot,px1-half*0.05,bot,px1,gy); ctx.closePath(); ctx.fillStyle='#eef6fe'; ctx.fill(); ctx.restore();
+      ctx.save(); ctx.beginPath(); ctx.moveTo(x0+8,gy); ctx.lineTo(px0,gy); ctx.bezierCurveTo(px0+half*0.05,bot,px1-half*0.05,bot,px1,gy); ctx.lineTo(x0+half-8,gy); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.stroke(); ctx.restore();
+      waterSurface(ctx,px0+3,px1-3,gy+2,1.5,t+p.i,0.06);
+      soilDots(ctx,x0+6,px0-4,gy+8,bot,20+p.i,'#c9b89b',25); soilDots(ctx,px1+4,x0+half-6,gy+8,bot,30+p.i,'#c9b89b',25);
+      const bottomY=u=>gy+(bot-gy)*Math.sin(clamp(u,0,1)*Math.PI)*0.75;
+      // flowers on both banks — seed pods fill as seeds accumulate
+      const fl=[]; for(let j=0;j<6;j++){ const fx=j<3?x0+half*(0.03+j*0.055):x0+half*(0.84+(j-3)*0.055); fl.push({x:fx,y:gy-S*1.1+Math.sin(j*2.1)*S*0.1}); }
+      const seedsPer=p.st.S/6/12;
+      fl.forEach((f,j)=>{ drawFlower(ctx,f.x,gy,S*1.1,t,0.3,{h:(gy-f.y)/(S*1.1),bloom:1});
+        const pods=Math.min(20,Math.floor(seedsPer)); if(pods>0){ const R=rng(j+p.i*9); for(let q=0;q<pods;q++){ const a=R()*6.28, r=Math.sqrt(R())*S*0.13; dot(ctx,f.x+Math.cos(a)*r*0.6+S*0.02,gy-S*0.45-Math.abs(Math.sin(a))*r,2.3,COL.green); } } });
+
+      /* --- sync agents to the model --- */
+      const want={fish:p.i?0:F, larvae:Math.min(16,Math.round(p.st.L/2)), flies:Math.min(14,Math.round(p.st.D/1.4)), bees:Math.min(20,Math.round(p.st.P/1.4))};
+      const live=a=>a.filter(o=>!o.doom);
+      // fish
+      while(live(p.fish).length<want.fish){ p.fish.push({x:rnd(px0+half*0.15,px1-half*0.15),y:gy+S*0.2,vx:0,vy:60,a:0,drop:1}); p.splash.push({x:p.fish[p.fish.length-1].x,t:0}); }
+      if(live(p.fish).length>want.fish){ const f=live(p.fish)[0]; f.doom=1; f.leap=0; f.lx=f.x; f.ly=f.y; }
+      // larvae
+      while(live(p.larvae).length<want.larvae){ const u=rnd(0.15,0.85), lx=lerp(px0,px1,u); p.larvae.push({u,x:lx,y:gy+6,sink:1,ph:Math.random()*6}); }
+      if(live(p.larvae).length>want.larvae){ const l=live(p.larvae)[0]; l.doom=1;
+        const hunter=live(p.fish).filter(f=>!f.target)[0]; if(hunter){ hunter.target=l; l.hunted=1; } else l.emerge=1; }
+      // dragonflies
+      while(live(p.flies).length<want.flies){ const em=p.larvae.find(l=>l.emerge&&l.done&&!l.used); const x=em?em.x:rnd(px0,px1); if(em) em.used=1; p.flies.push({x,y:gy-4,tx:x,ty:gy-S*1.5,ph:Math.random()*6,retarget:0}); }
+      if(live(p.flies).length>want.flies){ const d=live(p.flies)[0]; d.doom=1; d.tx=x0+(Math.random()<0.5?-40:half+40); d.ty=top-20; }
+      // pollinators
+      while(live(p.bees).length<want.bees){ p.bees.push({x:x0+(Math.random()<0.5?4:half-4),y:rnd(top+S*0.5,gy-S*1.4),fl:Math.floor(Math.random()*6),hover:0,kind:Math.random()<0.6?'bee':'bfly',ph:Math.random()*6,pollen:0}); }
+      if(live(p.bees).length>want.bees){ const b=live(p.bees)[0]; b.doom=1; const hunter=live(p.flies).filter(d=>!d.prey)[0]; if(hunter){ hunter.prey=b; b.hunted=1; } else { b.leave=1; } }
+
+      /* --- move + draw: larvae --- */
+      p.larvae=p.larvae.filter(l=>{
+        if(l.sink){ l.y+=40*dt; const by=bottomY(l.u)-6; if(l.y>=by){ l.y=by; l.sink=0; } }
+        else if(l.emerge){ l.y-=S*0.5*dt; if(l.y<=gy+4){ l.done=1; if(!l.fade) l.fade=0; l.fade+=dt; if(l.fade>0.6) return !l.used&&l.fade<3?true:false; } }
+        else if(!l.hunted){ l.u=clamp(l.u+Math.sin(t*0.4+l.ph)*0.01*dt,0.1,0.9); l.x=lerp(px0,px1,l.u); l.y=bottomY(l.u)-6; }
+        if(l.eaten) return false;
+        if(!l.done) drawLarva(ctx,l.x,l.y,S*0.34,Math.sin(t*0.4+l.ph)>0?1:-1,t+l.ph);
+        return true; });
+      /* fish swim, or dart at a larva */
+      p.fish=p.fish.filter(f=>{
+        if(f.doom){ f.leap+=dt/1.1; const u=f.leap; f.x=f.lx+u*S*1.4; f.y=lerp(f.ly,top+S*0.4,u)-4*S*1.2*u*(1-u); if(u>=1) return false;
+          ctx.save(); ctx.globalAlpha=1-smooth01(0.7,1,u); drawFish(ctx,f.x,f.y,S*0.75,1,t,{fast:1}); ctx.restore();
+          line(ctx,f.x,f.y-S*0.1,f.x,top-10,COL.mid,1.2); return true; }
+        let tx,ty,spd;
+        if(f.target){ tx=f.target.x; ty=f.target.y; spd=S*3; if(Math.hypot(tx-f.x,ty-f.y)<S*0.25){ f.target.eaten=1; f.target=null; f.gulp=0.4; } }
+        else { f.a=(f.a||0)+gauss()*1.2*Math.sqrt(dt); tx=f.x+Math.cos(f.a)*40; ty=f.y+Math.sin(f.a)*20; spd=S*0.6; }
+        const d=Math.hypot(tx-f.x,ty-f.y)||1; f.vx=approach(f.vx,(tx-f.x)/d*spd,4,dt); f.vy=approach(f.vy,(ty-f.y)/d*spd*0.7,4,dt);
+        f.x+=f.vx*dt; f.y+=f.vy*dt;
+        if(!inW(f.x,f.y)){ const u=clamp((f.x-px0)/(px1-px0),0.12,0.88); f.x=lerp(f.x,lerp(px0,px1,u),0.2); f.y=clamp(f.y,gy+S*0.25,bottomY(u)-S*0.25); f.a=Math.atan2((gy+bot)/2-f.y,cx-f.x); }
+        drawFish(ctx,f.x,f.y,S*0.75,f.vx>=0?1:-1,t,{fast:!!f.target});
+        if(f.gulp>0){ f.gulp-=dt; circ(ctx,f.x+(f.vx>=0?1:-1)*S*0.4,f.y,S*0.12*(1-f.gulp/0.4)+2,COL.red,null,2); }
+        return true; });
+      /* dragonflies patrol, or chase a bee */
+      p.flies=p.flies.filter(d=>{
+        if(d.prey){ if(d.prey.gone){ d.prey=null; } else { d.tx=d.prey.x; d.ty=d.prey.y; if(Math.hypot(d.tx-d.x,d.ty-d.y)<S*0.2){ d.prey.gone=1; d.prey=null; d.bite=0.5; } } }
+        else if(!d.doom){ d.retarget-=dt; if(d.retarget<=0){ d.tx=rnd(px0-half*0.1,px1+half*0.1); d.ty=rnd(top+S*0.3,gy-S*0.5); d.retarget=rnd(0.6,1.6); } }
+        const k=d.prey?7:3.2; d.x=approach(d.x,d.tx,k,dt); d.y=approach(d.y,d.ty,k,dt);
+        if(d.doom && (d.x<x0-30||d.x>x0+half+30||d.y<top)) return false;
+        drawDragonfly(ctx,d.x,d.y+Math.sin(t*9+d.ph)*2,S*0.6,d.tx>=d.x?1:-1,t+d.ph);
+        if(d.bite>0){ d.bite-=dt; circ(ctx,d.x,d.y,S*0.3*(1-d.bite/0.5)+2,COL.red,null,2); }
+        return true; });
+      /* bees + butterflies: fly flower to flower on arcs, hover, carry pollen */
+      p.bees=p.bees.filter(b=>{
+        if(b.gone) return false;
+        if(b.leave){ b.x+=(b.x<cx?-1:1)*S*1.5*dt; b.y-=S*0.3*dt; if(b.x<x0-20||b.x>x0+half+20) return false; }
+        else if(!b.hunted || true){ const f=fl[b.fl], fx=f.x, fy=f.y-S*0.12;
+          if(b.hover>0){ b.hover-=dt; b.x=fx+Math.sin(t*6+b.ph)*3; b.y=fy+Math.cos(t*5+b.ph)*2; if(b.hover<=0){ b.fl=(b.fl+1+Math.floor(Math.random()*5))%6; b.pollen=1; } }
+          else { b.x=approach(b.x,fx,2.2,dt); b.y=approach(b.y,fy-Math.abs(b.x-fx)*0.25,2.2,dt); if(Math.hypot(b.x-fx,b.y-fy)<6) b.hover=rnd(0.7,1.4); } }
+        if(b.kind==='bee') drawBee(ctx,b.x,b.y,S*0.3,1,t+b.ph,{pollen:b.pollen}); else drawButterfly(ctx,b.x,b.y,S*0.42,1,t+b.ph);
+        return true; });
+      // splashes
+      p.splash=p.splash.filter(s=>{ s.t+=dt; for(let q=0;q<3;q++){ ctx.save(); ctx.globalAlpha=1-s.t; ctx.beginPath(); ctx.ellipse(s.x,gy+2,S*0.2*(1+s.t*3)*(1+q*0.4),4,0,0,Math.PI*2); ctx.strokeStyle=COL.blue; ctx.lineWidth=1.4; ctx.stroke(); ctx.restore(); } return s.t<1; });
+
+      // seed tray: one dot per 20 seeds
+      const ns=Math.floor(p.st.S/20), trx=x0+half*0.08, try_=top+S*0.35; textAt(ctx,'Seeds '+Math.round(p.st.S),trx,try_-8,{size:12,weight:700,color:COL.green});
+      for(let q=0;q<ns;q++){ dot(ctx,trx+(q%24)*S*0.14,try_+Math.floor(q/24)*S*0.14,S*0.045,COL.green); }
+      pill(ctx,p.i?'Pond B · no fish':'Pond A · '+F+' fish',cx,gy+S*0.05-(-(bot-gy)*0.82),p.i?COL.ink:COL.blue,{size:13});
+    });
+    line(ctx,half,top+10,half,h-6,COL.border||'#dbe4f0',1.4,[5,5]);
+
+    /* Fig 12.4 — the chain, with live pulses (red = direct, green = indirect) */
+    const sA=ponds[0].st, Fn=F;
+    const nodes=[{n:'Fish',x:0.1},{n:'Larvae',x:0.3},{n:'Dragonfly',x:0.5},{n:'Bees',x:0.7},{n:'Seeds',x:0.9}];
+    const ny=top*0.52, nr=Math.min(top*0.28,26);
+    const flux=[0.12*Fn*sA.L/6, 0.2*sA.L/4, 0.035*sA.D*sA.P/3, 2*sA.P/20];
+    const sgn=['−','+','−','+'];
+    for(let i=0;i<4;i++){ const ax=w*nodes[i].x+nr+6, bx=w*nodes[i+1].x-nr-6; vec(ctx,ax,ny,bx,ny,COL.red,2.2);
+      textAt(ctx,sgn[i],(ax+bx)/2,ny-8,{align:'center',size:16,weight:700,color:COL.red});
+      const n=3; for(let q=0;q<n;q++){ const u=((t*clamp(flux[i],0.05,2)*0.8+q/n)%1); dot(ctx,lerp(ax,bx-8,u),ny,3,COL.red); } }
+    curveArrow(ctx,w*0.1,ny+nr+4,w*0.9,ny+nr+4,top*0.5,COL.green,1.8,[6,5]);
+    textAt(ctx,'+ indirect effect',w*0.5,ny+nr+top*0.2,{align:'center',size:12,weight:700,color:COL.green});
+    nodes.forEach((nd,i)=>{ const x=w*nd.x; circ(ctx,x,ny,nr,COL.ink,'#fff',2);
+      if(i===0) drawFish(ctx,x,ny,nr*1.3,1,t); else if(i===1) drawLarva(ctx,x,ny,nr*1.2,1,t); else if(i===2) drawDragonfly(ctx,x,ny,nr*1.5,1,t); else if(i===3) drawBee(ctx,x,ny,nr*0.9,1,t);
+      else { for(let q=0;q<7;q++) dot(ctx,x+Math.cos(q*0.9)*nr*0.45*(q%2?1:0.5),ny+Math.sin(q*0.9)*nr*0.45*(q%2?1:0.5),3,COL.green); }
+      textAt(ctx,nd.n,x,ny-nr-6,{align:'center',size:11,weight:700,color:COL.muted}); });
+
+    // week clock
+    textAt(ctx,'Week '+Math.floor(week)+' / 20',w-10,h-10,{align:'right',size:13,weight:700,color:COL.ink});
+    ctx.save(); ctx.strokeStyle=COL.green; ctx.lineWidth=4; ctx.beginPath(); ctx.moveTo(w*0.02,h-6); ctx.lineTo(w*0.02+(w*0.75)*week/20,h-6); ctx.stroke(); ctx.restore();
+    $('#rD').innerHTML=Math.round(ponds[0].st.D)+'<br>'+Math.round(ponds[1].st.D);
+    $('#rP').innerHTML=Math.round(ponds[0].st.P)+'<br>'+Math.round(ponds[1].st.P);
+    $('#rS').textContent='A: '+Math.round(ponds[0].st.S)+'   ·   B: '+Math.round(ponds[1].st.S);
+  });
+  return wrap;
+}
+
+
+/* =====================================================================
+   12.4 LET US RELATE AND IDENTIFY — interactions in a pond habitat
+   Abiotic links are driven by real relations:
+     air temperature   dT/dt = (20 + 16·sun − T)/τ,  τ = 2 s
+     evaporation rate  E ∝ sun·(1 + 0.04·(T − 20)) + 0.25·wind
+     wave amplitude    a ∝ wind²   (wind-sea grows with U²), capped
+     wet-soil band     width ∝ 1/(1 + sun) near the water's edge
+   Biotic links (frog eats insects, snake eats fish, fish lay eggs,
+   frog and fish compete for larvae) run as looping behaviours.
+   The camera springs to each interaction; you sort it into
+   Criterion 1 (living↔non-living), 2 (non-living↔non-living) or
+   3 (living↔living).  Link colours: green = 1, blue = 2, red = 3.
+   ===================================================================== */
+function buildA4(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label>Sunlight <span class="val" id="sV"></span></label><input type="range" id="sR" min="0" max="100" step="1" value="70"></div>
+    <div class="control-group"><label>Wind <span class="val" id="wV"></span></label><input type="range" id="wR" min="0" max="10" step="0.5" value="3"></div>
+    <button class="toggle-btn play" id="nx" style="padding:10px;margin-top:0">▶ Next interaction</button>
+    <div class="control-group"><label style="margin-bottom:4px;">This is…</label>
+      <button class="opt-btn" data-c="1"><b style="color:var(--f-green)">1</b> · Living ↔ non-living</button>
+      <button class="opt-btn" data-c="2"><b style="color:var(--f-blue)">2</b> · Non-living ↔ non-living</button>
+      <button class="opt-btn" data-c="3"><b style="color:var(--f-red)">3</b> · Living ↔ living</button>
+      <div id="fb"></div></div>
+    <div class="control-group"><label>Table 12.3 <span class="val" id="nV">0 / 10</span></label>
+      <table class="log"><thead><tr><th style="color:var(--f-green)">1</th><th style="color:var(--f-blue)">2</th><th style="color:var(--f-red)">3</th></tr></thead><tbody id="tb"></tbody></table></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), sR=$('#sR'), wR=$('#wR');
+  const IA=[
+    {txt:'Earthworms live in moist soil',c:1,short:'Worm · moist soil',f:'worm'},
+    {txt:'Many microbes live in the pond water',c:1,short:'Microbes · water',f:'mic'},
+    {txt:'A fish lays eggs in water',c:1,short:'Fish eggs · water',f:'eggs'},
+    {txt:'Bright sunlight makes the day hot',c:2,short:'Sun · temperature',f:'sun'},
+    {txt:'Sunlight makes water evaporate fast',c:2,short:'Sun · evaporation',f:'evap'},
+    {txt:'Wind blowing on water makes waves',c:2,short:'Wind · waves',f:'wave'},
+    {txt:'Soil near the pond is moist',c:2,short:'Water · soil',f:'bank'},
+    {txt:'A frog eats insects',c:3,short:'Frog eats insect',f:'frog'},
+    {txt:'A water snake eats fish',c:3,short:'Snake eats fish',f:'snake'},
+    {txt:'Frogs and fish compete for insect larvae',c:3,short:'Frog vs fish · larvae',f:'comp'},
+  ];
+  let cur=-1, answered={}, t=0, T=28, fbT=0;
+  const cam={x:{x:0.5,v:0},y:{x:0.5,v:0},z:{x:1,v:0}};
+  $('#nx').onclick=()=>{ const left=IA.map((_,i)=>i).filter(i=>!answered[i]); if(!left.length){ answered={}; table(); cur=-1; $('#nx').textContent='▶ Next interaction'; return; }
+    cur=left[(left.indexOf(cur)+1)%left.length]; if(answered[cur]) cur=left[0]; $('#fb').innerHTML=''; wrap.querySelectorAll('.opt-btn').forEach(b=>b.classList.remove('active')); };
+  wrap.querySelectorAll('.opt-btn').forEach(b=>b.onclick=()=>{ if(cur<0) return; wrap.querySelectorAll('.opt-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active');
+    const ok=+b.dataset.c===IA[cur].c;
+    $('#fb').innerHTML=ok?'<div class="fb ok">✓ Criterion '+IA[cur].c+'</div>':'<div class="fb bad">✗ Look at what is living in it</div>';
+    if(ok){ answered[cur]=true; table(); fbT=1.2; } });
+  function table(){ const cols=[1,2,3].map(c=>IA.filter((x,i)=>x.c===c&&answered[i]).map(x=>x.short)); let html='';
+    for(let r=0;r<4;r++){ if(!cols.some(c=>c[r])) continue; html+='<tr>'+cols.map(c=>`<td>${c[r]||''}</td>`).join('')+'</tr>'; }
+    $('#tb').innerHTML=html; $('#nV').textContent=Object.keys(answered).length+' / 10'; }
+  const CC={1:COL.green,2:COL.blue,3:COL.red};
+
+  // living actors
+  const insects=Array.from({length:4},(_,i)=>({x:0.3+i*0.03,y:0.4,ph:i*1.7,eaten:0}));
+  const fishes=Array.from({length:3},(_,i)=>({x:0.62+i*0.1,y:0.72+i*0.05,a:Math.random()*6,vx:0,vy:0,alive:1,resp:0}));
+  const eggs=[], wisps=[];
+  let frogT=0, frogTgt=null, frogDir=1, snakeT=0, snakeX=0.6, compT=0;
+  const larva={x:0.58,y:0.62,ph:0};
+
+  animLoop((dt)=>{
+    t+=dt; const sun=+sR.value/100, wind=+wR.value; $('#sV').textContent=sR.value+'%'; $('#wV').textContent=wR.value;
+    T+=((20+16*sun)-T)*(1-Math.exp(-dt/2));
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const S=Math.min(w/7,h/5);
+    const WX=u=>u*w, WY=v=>v*h;
+    const gy=0.55, px0=0.46, px1=0.98;
+    const F={worm:[0.2,0.78,2.2],mic:[0.8,0.84,2.4],eggs:[0.56,0.7,2.2],sun:[0.2,0.2,1.6],evap:[0.72,0.45,2],wave:[0.72,0.55,2.4],bank:[0.4,0.62,2.2],frog:[0.34,0.45,2.2],snake:[0.75,0.56,2],comp:[0.55,0.58,2]};
+    const f=cur>=0?F[IA[cur].f]:[0.5,0.5,1];
+    springTo(cam.x,f[0],18,8,dt); springTo(cam.y,f[1],18,8,dt); springTo(cam.z,f[2],18,8,dt);
+    const z=cam.z.x, cx=clamp(cam.x.x,0.5/z,1-0.5/z), cy=clamp(cam.y.x,0.5/z,1-0.5/z);
+    ctx.save(); ctx.translate(w/2,h/2); ctx.scale(z,z); ctx.translate(-cx*w,-cy*h);
+
+    /* --- sky: sun (yellow), rays, air currents --- */
+    const sx=WX(0.12), sy=WY(0.16);
+    ctx.save(); ctx.globalAlpha=0.3+0.7*sun; drawSun(ctx,sx,sy,S*(0.22+0.12*sun),t); ctx.restore();
+    for(let i=0;i<Math.round(sun*6);i++){ const u=((t*0.35+i/6)%1); const ex=WX(0.25+i*0.1), ey=WY(gy); line(ctx,lerp(sx,ex,u),lerp(sy,ey,u),lerp(sx,ex,Math.min(1,u+0.08)),lerp(sy,ey,Math.min(1,u+0.08)),COL.yellow,2); }
+    for(let i=0;i<3;i++){ const ph=((t*0.1*(0.5+wind*0.4)+i*0.33)%1); const x0=WX(0.45+ph*0.5), y0=WY(0.3+i*0.05); ctx.save(); ctx.globalAlpha=Math.sin(ph*Math.PI)*Math.min(1,0.15+wind/8); ctx.strokeStyle=COL.blue; ctx.lineWidth=1.8; ctx.beginPath(); ctx.moveTo(x0,y0); ctx.bezierCurveTo(x0+S*0.3,y0-S*0.1,x0+S*0.5,y0+S*0.1,x0+S*0.8,y0); ctx.stroke(); ctx.restore(); }
+    // thermometer
+    const thx=WX(0.3), thy=WY(0.08);
+    thermo(ctx,thx,thy,thy+S*0.8,(T-10)/30,COL.ink,COL.red); textAt(ctx,fmt(T,0)+' °C',thx+14,thy+S*0.3,{size:12,weight:700,color:COL.red});
+
+    /* --- ground, moist bank, soil --- */
+    const wetW=0.14/(1+sun);
+    ctx.save(); ctx.beginPath(); ctx.rect(0,WY(gy),WX(px0+0.05),h); ctx.clip(); const g=ctx.createRadialGradient(WX(px0),WY(gy),0,WX(px0),WY(gy),WX(wetW)*2); g.addColorStop(0,'rgba(47,143,224,0.3)'); g.addColorStop(1,'rgba(47,143,224,0)'); ctx.fillStyle=g; ctx.fillRect(0,WY(gy),WX(px0+0.05),h); ctx.restore();
+    soilDots(ctx,0,WX(px0),WY(gy)+6,h,41,'#c9b89b',120);
+    // pond basin
+    const bot=0.97;
+    ctx.save(); ctx.beginPath(); ctx.moveTo(WX(px0),WY(gy)); ctx.bezierCurveTo(WX(px0+0.06),WY(bot),WX(px1-0.02),WY(bot),WX(px1),WY(gy)); ctx.lineTo(WX(px1),WY(gy)); ctx.closePath(); ctx.fillStyle='#eef6fe'; ctx.fill(); ctx.restore();
+    ctx.save(); ctx.beginPath(); ctx.moveTo(0,WY(gy)); ctx.lineTo(WX(px0),WY(gy)); ctx.bezierCurveTo(WX(px0+0.06),WY(bot),WX(px1-0.02),WY(bot),WX(px1),WY(gy)); ctx.lineTo(w,WY(gy)); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.stroke(); ctx.restore();
+    const amp=Math.min(9,0.5+0.09*wind*wind), kk=0.08-0.004*wind;
+    waterSurface(ctx,WX(px0)+3,WX(px1)-3,WY(gy),amp,t*(0.6+wind*0.12),kk);
+    // reeds (vegetation) where fish hide eggs
+    for(let i=0;i<5;i++){ const rx=WX(0.52+i*0.02); ctx.save(); ctx.strokeStyle=COL.green; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(rx,WY(0.8)); ctx.quadraticCurveTo(rx+Math.sin(t+i)*3,WY(0.6),rx+Math.sin(t*1.3+i)*6+wind,WY(0.47)); ctx.stroke(); ctx.restore(); }
+    for(let i=0;i<6;i++) drawGrass(ctx,WX(0.02+i*0.06),WY(gy),S*0.45,t,0.2+wind*0.06);
+
+    /* --- evaporation: vapour wisps rise, drift with wind --- */
+    const E=sun*(1+0.04*(T-20))+0.25*wind/10;
+    if(Math.random()<E*dt*7) wisps.push({x:lerp(px0+0.04,px1-0.04,Math.random()),y:gy-0.01,age:0});
+    wisps.forEach(p=>{ p.age+=dt; p.y-=0.05*dt; p.x+=0.004*wind*dt; });
+    for(let i=wisps.length-1;i>=0;i--) if(wisps[i].age>3) wisps.splice(i,1);
+    wisps.forEach(p=>{ ctx.save(); ctx.globalAlpha=Math.sin(p.age/3*Math.PI)*0.7; ctx.strokeStyle=COL.blue; ctx.lineWidth=1.6; ctx.beginPath(); for(let q=0;q<=8;q++){ const yy=WY(p.y)-q*3, xx=WX(p.x)+Math.sin(q*0.9+p.age*4)*3; q?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy); } ctx.stroke(); ctx.restore(); });
+
+    /* --- earthworm in moist soil (moves toward the wet band) --- */
+    const wmx=WX(clamp(0.2+0.05*Math.sin(t*0.3),0.05,0.4)), wmy=WY(0.75+0.05*sun+0.02*Math.sin(t*0.5));
+    drawWorm(ctx,wmx,wmy,S*0.8,Math.cos(t*0.3)>=0?1:-1,t,{bend:0.1});
+    ctx.save(); ctx.strokeStyle=COL.mid; ctx.setLineDash([3,4]); ctx.lineWidth=1.2; ctx.beginPath(); ctx.moveTo(wmx-S*0.5,wmy+2); ctx.quadraticCurveTo(wmx-S,wmy-S*0.3,wmx-S*1.3,WY(gy)); ctx.stroke(); ctx.restore();
+
+    /* --- frog on the bank snaps at flying insects --- */
+    const fx=WX(0.34), fy=WY(gy);
+    insects.forEach(q=>{ if(q.eaten>0){ q.eaten-=dt; return; } q.x=0.34+0.08*Math.sin(t*0.9+q.ph); q.y=0.4+0.05*Math.sin(t*1.7+q.ph*2); });
+    frogT+=dt; let tongue=0, tAng=0;
+    if(frogT>2.6){ const cand=insects.filter(q=>q.eaten<=0).sort((a,b)=>Math.hypot(WX(a.x)-fx,WY(a.y)-fy)-Math.hypot(WX(b.x)-fx,WY(b.y)-fy))[0];
+      if(cand){ frogTgt=cand; const u=(frogT-2.6)/0.35; const tx=WX(cand.x), ty=WY(cand.y); frogDir=tx<fx?-1:1; const mouthX=fx+frogDir*S*0.3, mouthY=fy-S*0.17; tAng=Math.atan2(ty-mouthY,(tx-mouthX)*frogDir); tongue=Math.sin(Math.min(1,u)*Math.PI)*Math.hypot(tx-mouthX,ty-mouthY)/(S*0.7);
+        if(u>=0.5 && !cand.hit){ cand.hit=1; } if(u>=1){ cand.eaten=3; cand.hit=0; frogT=0; } } else frogT=0; }
+    drawFrog(ctx,fx,fy,S*0.7,frogDir,t,{tongue,tAng});
+    insects.forEach(q=>{ if(q.eaten>0) return; drawInsect(ctx,WX(q.x),WY(q.y),S*0.16,Math.cos(t*0.9+q.ph)>0?1:-1,t+q.ph,{fly:1}); });
+
+    /* --- fish swim; one lays eggs by the reeds --- */
+    fishes.forEach((q,i)=>{
+      if(!q.alive){ q.resp-=dt; if(q.resp<=0){ q.alive=1; q.x=px1-0.03; q.y=0.8; } return; }
+      let tx=0.72+0.15*Math.sin(t*0.25+i*2), ty=0.72+0.08*Math.sin(t*0.4+i);
+      if(i===0){ tx=0.555+0.02*Math.sin(t*0.8); ty=0.7; }
+      if(i===1 && compT>3.5) { tx=larva.x; ty=larva.y; }
+      q.vx=approach(q.vx,(tx-q.x)*1.2,3,dt); q.vy=approach(q.vy,(ty-q.y)*1.2,3,dt); q.x+=q.vx*dt; q.y+=q.vy*dt;
+      drawFish(ctx,WX(q.x),WY(q.y),S*0.6,q.vx>=0?1:-1,t+i);
+      if(i===0 && Math.random()<dt*1.5) eggs.push({x:q.x-0.012,y:q.y,vy:0.02,stuck:0,age:0});
+    });
+    eggs.forEach(e=>{ e.age+=dt; if(!e.stuck){ e.y+=e.vy*dt; e.x+=(0.53+((e.age*7)%1)*0.08-e.x)*dt*0.8; if(e.y>0.74) e.stuck=1; } });
+    for(let i=eggs.length-1;i>=0;i--) if(eggs[i].age>9) eggs.splice(i,1);
+    eggs.forEach(e=>circ(ctx,WX(e.x),WY(e.y),3,COL.ink,'#fff',1.2));
+
+    /* --- competition: a larva wriggles; the frog leaps, the fish rushes --- */
+    compT+=dt; if(compT>6) compT=0;
+    larva.y=0.6+0.01*Math.sin(t*3);
+    if(compT<5) drawLarva(ctx,WX(larva.x),WY(larva.y),S*0.3,1,t);
+    if(compT>3.5 && compT<5){ const u=(compT-3.5)/1.5; ctx.save(); ctx.setLineDash([4,4]); line(ctx,fx+S*0.3,fy-S*0.2,WX(larva.x),WY(larva.y),COL.red,1.6,[4,4]); ctx.restore(); }
+
+    /* --- water snake swims at the surface and strikes a fish --- */
+    snakeT+=dt; snakeX=0.64+0.12*Math.sin(t*0.2);
+    const sxp=WX(snakeX), syp=WY(gy)+2; const strike=snakeT>5?Math.sin(Math.min(1,(snakeT-5)/0.5)*Math.PI):0;
+    drawSnake(ctx,sxp,syp+strike*S*0.35,S*1.2,Math.cos(t*0.2)>=0?1:-1,t,{strike});
+    if(snakeT>5.5){ snakeT=0; const v=fishes[2]; if(v.alive){ v.alive=0; v.resp=4; } }
+
+    /* --- microbes: magnified view inside the pond --- */
+    const mx=WX(0.8), my=WY(0.84), mR=S*0.42;
+    ctx.save(); ctx.beginPath(); ctx.arc(mx,my,mR,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill(); ctx.clip();
+    for(let i=0;i<9;i++){ const a=t*0.3+i*0.7, r=mR*0.55*Math.abs(Math.sin(i*1.3+t*0.2)); const qx=mx+Math.cos(a+i)*r, qy=my+Math.sin(a*1.2+i)*r;
+      if(i%3===0){ ell(ctx,qx,qy,mR*0.22,mR*0.09,a); SK(ctx,COL.ink,1.4,'#fff'); ell(ctx,qx,qy,mR*0.06,mR*0.05); SK(ctx,COL.blue,1.2); }
+      else if(i%3===1){ ctx.save(); ctx.translate(qx,qy); ctx.rotate(a*2); rrect(ctx,-mR*0.1,-mR*0.035,mR*0.2,mR*0.07,mR*0.035); ctx.restore(); SK(ctx,COL.ink,1.2,'#fff'); }
+      else { circ(ctx,qx,qy,mR*0.05,COL.green,'#f1faf4',1.2); } }
+    ctx.restore(); circ(ctx,mx,my,mR,COL.ink,null,3); textAt(ctx,'× 400',mx,my+mR+14,{align:'center',size:11,weight:700,color:COL.mid});
+
+    /* --- the current interaction: double-headed link, coloured by criterion --- */
+    if(cur>=0){ const it=IA[cur], col=answered[cur]?CC[it.c]:COL.yellow;
+      const P={worm:[[wmx,wmy],[WX(0.3),WY(0.68)]],mic:[[mx,my-mR*0.5],[WX(0.86),WY(0.62)]],eggs:[[WX(fishes[0].x),WY(fishes[0].y)],[WX(0.54),WY(0.76)]],
+        sun:[[sx,sy],[thx,thy+S*0.4]],evap:[[sx+S*0.3,sy+S*0.2],[WX(0.72),WY(0.46)]],wave:[[WX(0.62),WY(0.33)],[WX(0.72),WY(gy)]],bank:[[WX(0.5),WY(0.6)],[WX(0.4),WY(0.65)]],
+        frog:[[fx+frogDir*S*0.2,fy-S*0.3],[WX((frogTgt||insects[0]).x),WY((frogTgt||insects[0]).y)]],snake:[[sxp,syp],[WX(fishes[2].x),WY(fishes[2].y)]],comp:[[fx,fy-S*0.3],[WX(fishes[1].x),WY(fishes[1].y)]]}[it.f];
+      const [a,b]=P; line(ctx,a[0],a[1],b[0],b[1],col,3/z*1.4,[8/z,5/z]); circ(ctx,a[0],a[1],5/z*1.5,col,col,1); circ(ctx,b[0],b[1],5/z*1.5,col,col,1);
+    }
+    ctx.restore();
+    // caption (screen space)
+    if(cur>=0){ const it=IA[cur]; pill(ctx,it.txt,w/2,26,answered[cur]?CC[it.c]:COL.ink,{size:14}); }
+    else pill(ctx,'Press ▶ Next interaction',w/2,26,COL.ink,{size:13});
+    if(fbT>0){ fbT-=dt; if(fbT<=0 && Object.keys(answered).length<10) $('#nx').onclick(); }
+    $('#nx').textContent=Object.keys(answered).length===10?'↺ Start again':'▶ Next interaction';
+  });
+  return wrap;
+}
+
+
+/* =====================================================================
+   12.5 LET US CLASSIFY — eating habits (Table 12.4)
+   Each organism walks, hops, glides or grows on stage and then feeds
+   in a loop (graze, pounce, dive, peck, decompose, photosynthesise).
+   Walkers move at constant speed with the gait phase locked to the
+   distance covered (φ = x / stride · 2π) so the feet never slide.
+   A correct answer sends it on a parabolic arc into its group:
+   y(u) = lerp(y0, y1, u) − 4·H·u(1 − u).
+   ===================================================================== */
+function buildA5(){
+  const ORG=[
+    {id:'deer',n:'Deer',g:1},{id:'hare',n:'Hare',g:1},{id:'vulture',n:'Vulture',g:2},{id:'fox',n:'Bengal fox',g:3},{id:'shikra',n:'Shikra',g:2},
+    {id:'squirrel',n:'Squirrel',g:3},{id:'mouse',n:'Mouse',g:3},{id:'mushroom',n:'Mushroom',g:4},{id:'tree',n:'Tree',g:0}];
+  const GR=['Makes own food','Plants only','Animals only','Plants + animals','Dead matter'];
+  const GC=[COL.green,COL.green,COL.red,COL.yellow,COL.mid];
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label style="margin-bottom:2px;">Organism</label><div class="chip-wrap" id="orgs">${ORG.map((o,i)=>`<button class="chip-btn${i?'':' active'}" data-i="${i}">${o.n}</button>`).join('')}</div></div>
+    <div class="control-group"><label style="margin-bottom:2px;">It feeds on…</label>
+      ${GR.map((g,i)=>`<button class="opt-btn" data-g="${i}">${['☀️','🌿','🍖','🌿🍖','🍂'][i]}  ${g}</button>`).join('')}
+      <div id="fb"></div></div>
+    <div class="control-group"><label>Table 12.4 <span class="val" id="nV">0 / 9</span></label>
+      <table class="log"><tbody id="tb"></tbody></table></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas');
+  let t=0, sel=0, placed={}, order=[];
+  const st={x:-0.3, ft:0, mode:'enter', shake:{x:0,v:0}, grow:{x:0,v:0}};
+  function pick(i){ sel=i; st.x=-0.25; st.ft=0; st.mode='enter'; st.grow={x:0,v:0}; st.shake={x:0,v:0};
+    wrap.querySelectorAll('#orgs .chip-btn').forEach(b=>b.classList.toggle('active',+b.dataset.i===i)); $('#fb').innerHTML=''; }
+  wrap.querySelectorAll('#orgs .chip-btn').forEach(b=>b.onclick=()=>{ if(placed[ORG[+b.dataset.i].id]) return; pick(+b.dataset.i); });
+  wrap.querySelectorAll('.opt-btn').forEach(b=>b.onclick=()=>{ if(st.mode==='gone'||placed[ORG[sel].id]) return; const g=+b.dataset.g, o=ORG[sel];
+    if(g===o.g){ $('#fb').innerHTML='<div class="fb ok">✓ '+o.n+' → '+GR[g]+'</div>'; st.mode='go'; st.gu=0; }
+    else { $('#fb').innerHTML='<div class="fb bad">✗ Watch what it eats</div>'; st.shake.v+=26; st.bad=g; st.badT=0.8; } });
+  function table(){ $('#tb').innerHTML=ORG.filter(o=>placed[o.id]).map(o=>`<tr><td><b>${o.n}</b></td><td style="color:${GC[o.g]};font-weight:700">${GR[o.g]}</td></tr>`).join(''); $('#nV').textContent=Object.keys(placed).length+' / 9'; }
+
+  /* ---- props ---- */
+  function carcass(ctx,x,y,s){ G(ctx,x,y,s,1,u=>{ ctx.beginPath(); ctx.moveTo(-0.5,0); ctx.quadraticCurveTo(-0.1,-0.25,0.4,-0.05); SK(ctx,COL.ink,2.2*u);
+    for(let i=0;i<6;i++){ const x=-0.35+i*0.13; ctx.beginPath(); ctx.moveTo(x,-0.12+Math.abs(i-2.5)*0.02); ctx.quadraticCurveTo(x+0.06,-0.35,x+0.12,-0.02); SK(ctx,COL.ink,1.8*u); }
+    ell(ctx,0.52,-0.08,0.13,0.08); SK(ctx,COL.ink,2*u,'#fff'); }); }
+  function fruit(ctx,x,y,r){ circ(ctx,x,y,r,COL.green,'#f1faf4',2); line(ctx,x,y-r,x+2,y-r-5,COL.green,1.6); }
+  function logDraw(ctx,x,y,s,frac){ G(ctx,x,y,s,1,u=>{ const L=0.5+0.5*frac; ctx.beginPath(); ctx.moveTo(-L,0); ctx.lineTo(-L,-0.22);
+    for(let i=0;i<=10;i++){ const q=-L+i/10*(2*L); ctx.lineTo(q,-0.22-(frac<1?Math.sin(i*2.7)*0.02*(1-frac):0)); } ctx.lineTo(L,0); ctx.closePath(); SK(ctx,COL.ink,2.2*u,'#fff');
+    ell(ctx,L,-0.11,0.05,0.11); SK(ctx,COL.ink,1.6*u,'#fff'); for(let i=0;i<4;i++){ segs(ctx,[[-L+0.1+i*0.25*L,-0.15],[-L+0.25+i*0.25*L,-0.12]]); SK(ctx,COL.mid,1.2*u); } }); }
+
+  /* one organism, drawn at (x,y) with size s. mode 'feed' plays its meal. */
+  function actor(ctx,o,x,y,s,dir,tt,feed,ft,mv,phase,mini){
+    const cyc=(p)=>((ft%p)+p)%p;
+    switch(o.id){
+      case 'deer': { const gz=feed?0.5-0.5*Math.cos(ft*0.9):0; if(feed){ const bite=1-0.35*(0.5-0.5*Math.cos(ft*0.9)); drawGrass(ctx,x+s*0.78,y,s*0.4*bite,tt,0.3,COL.green,7); }
+        drawQuad(ctx,x,y,s,dir,tt,QUAD.deer,{phase,move:mv,graze:gz,chew:feed}); break; }
+      case 'hare': { const gz=feed?0.6+0.4*Math.sin(ft*2):0; if(feed){ for(let i=0;i<3;i++) drawGrass(ctx,x+s*0.5+i*s*0.1,y,s*0.28*(1-0.3*Math.max(0,Math.sin(ft*2))),tt+i,0.2,COL.green,4); }
+        drawQuad(ctx,x,y,s*1.4,dir,tt,QUAD.hare,{phase,move:mv,graze:gz,chew:feed,stretch:mv}); break; }
+      case 'vulture': { if(feed){ carcass(ctx,x+s*0.55,y,s*0.8); } drawBird(ctx,x,y-s*0.3,s*0.95,dir,tt,BIRD.vulture,feed||mv<0.5?{perch:true,peck:feed}:{flap:tt*5,glide:0.8}); break; }
+      case 'fox': { const c=cyc(7); let fx=x, fy=y, gz=0, str=0;
+        if(feed){ if(c<2){ const mx=x+s*(1.15-c*0.1); drawQuad(ctx,mx,y,s*0.45,-1,tt,QUAD.mouse,{phase:tt*20,move:1}); }
+          else if(c<2.7){ const u=(c-2)/0.7; fx=x+s*1.0*u; fy=y-4*s*0.35*u*(1-u); str=Math.sin(u*Math.PI); }
+          else if(c<4.5){ fx=x+s; gz=0.6+0.4*Math.sin(ft*5); }
+          else { fx=x+s*(1-(c-4.5)/2.5); const fu=clamp((c-4.5)/0.6,0,1); fruit(ctx,x+s*1.15,lerp(y-s*0.9,y-s*0.06,fu*fu),s*0.06); if(c>5.3) gz=0.6+0.4*Math.sin(ft*5); if(c>5.3) fx=x+s*0.1; }
+          // bush with ber fruit
+          drawTree(ctx,x+s*1.35,y,s*0.8,tt,0.3,{blobs:[[0,-0.6,0.3],[-0.25,-0.45,0.22],[0.25,-0.45,0.22]],fruit:[[-0.1,-0.5],[0.15,-0.62],[0.2,-0.4]]}); }
+        drawQuad(ctx,fx,fy,s,dir,tt,QUAD.fox,{phase,move:mv,graze:gz,chew:gz>0,stretch:str}); break; }
+      case 'shikra': { const c=cyc(6); const px=x-s*0.9, py=y-s*1.6, sp=x+s*0.9;
+        if(feed&&!mini){ line(ctx,px-s*0.8,py+s*0.25,px+s*0.3,py+s*0.2,COL.ink,4); line(ctx,px-s*0.5,py+s*0.24,px-s*0.55,y,COL.ink,6); line(ctx,px-s*0.5,py+s*0.24,px-s*0.55,y,'#fff',2); }
+        let bx=px, by=py, st_={perch:true}, pr=true, face=1;
+        if(feed){ if(c<2){ } else if(c<2.8){ const u=(c-2)/0.8; bx=lerp(px,sp,u); by=lerp(py,y-s*0.25,u)+4*s*0.25*u*(1-u); st_={flap:tt*3,glide:1,talons:true}; }
+          else if(c<4.4){ bx=sp; by=y-s*0.25; st_={perch:true,peck:true}; pr=false; }
+          else { const u=(c-4.4)/1.6; bx=lerp(sp,px,u); by=lerp(y-s*0.25,py,u)-4*s*0.3*u*(1-u); st_={flap:tt*14}; pr=false; face=-1; }
+          if(pr) drawBird(ctx,sp+Math.sin(tt*2)*s*0.1,y-s*0.1,s*0.4,-1,tt,BIRD.small,{perch:true,peck:true});
+          drawBird(ctx,bx,by,s*0.8,face,tt,BIRD.shikra,st_); }
+        else drawBird(ctx,x,y-s*0.3,s*0.8,dir,tt,BIRD.shikra,mv>0.5?{flap:tt*10}:{perch:true});
+        break; }
+      case 'squirrel': { const c=cyc(6); let gz=feed?0.5+0.5*Math.sin(ft*6):0;
+        if(feed){ if(c<3){ circ(ctx,x+s*0.35,y-s*0.08,s*0.06,COL.green,'#f1faf4',2); }
+          else { const ix=x+s*(0.9-(clamp(c-3,0,1))*0.55); if(c<4) drawInsect(ctx,ix,y-s*0.04,s*0.16,-1,tt); } }
+        drawQuad(ctx,x,y,s*1.3,dir,tt,QUAD.squirrel,{phase,move:mv,graze:gz,chew:feed}); break; }
+      case 'mouse': { const c=cyc(6); let gz=feed?0.5+0.5*Math.sin(ft*7):0;
+        if(feed){ const left=c<3?Math.round(8-c*2.5):0; for(let i=0;i<Math.max(0,left);i++) ell(ctx,x+s*0.45+(i%4)*s*0.07,y-s*0.03-(i>3?s*0.05:0),s*0.03,s*0.018,0.5), SK(ctx,COL.green,1.4,'#fff');
+          if(c>=3&&c<4.2) drawInsect(ctx,x+s*(1.0-(c-3)*0.45),y-s*0.04,s*0.15,-1,tt); }
+        drawQuad(ctx,x,y,s*1.3,dir,tt,QUAD.mouse,{phase,move:mv,graze:gz,chew:feed}); break; }
+      case 'mushroom': { const c=cyc(9); const frac=feed?1-smooth01(0,7,c)*0.6:1, g=feed?0.3+0.7*smooth01(0,3,c):1;
+        if(feed){ logDraw(ctx,x,y,s*1.1,frac); for(let i=0;i<5;i++){ const q=((ft*0.5+i/5)%1); dot(ctx,x+(i-2)*s*0.15,y+q*s*0.3,2.4,COL.mid); } }
+        drawMushroom(ctx,x-s*0.25,y-(feed?s*0.24:0),s*0.6,tt,g); drawMushroom(ctx,x+s*0.15,y-(feed?s*0.24:0),s*0.45,tt,g*0.9); break; }
+      case 'tree': { drawTree(ctx,x,y,s*1.4,tt,0.5,{});
+        if(feed){ const sx=x-s*(mini?0.9:1.4), sy=y-s*(mini?1.7:1.9); if(!mini) drawSun(ctx,sx,sy,s*0.14,tt);
+          for(let i=0;i<4;i++){ const u=((ft*0.5+i/4)%1); const ex=x-s*0.3+i*s*0.15, ey=y-s*1.3; line(ctx,lerp(sx,ex,u),lerp(sy,ey,u),lerp(sx,ex,Math.min(1,u+0.12)),lerp(sy,ey,Math.min(1,u+0.12)),COL.yellow,2.6); }
+          for(let i=0;i<4;i++){ const u=((ft*0.35+i/4)%1); dot(ctx,x+(i%2?3:-3),lerp(y+s*0.2,y-s*0.9,u),3.2,COL.blue); }
+          ctx.save(); ctx.strokeStyle=COL.blue; ctx.lineWidth=1.6; for(let i=0;i<4;i++){ ctx.beginPath(); ctx.moveTo(x,y); ctx.quadraticCurveTo(x+(i-1.5)*s*0.25,y+s*0.1,x+(i-1.5)*s*0.4,y+s*0.3); ctx.stroke(); } ctx.restore();
+          if(mini) break; const u1=(ft*0.4)%1, u2=(ft*0.4+0.5)%1;
+          textAt(ctx,'CO₂',lerp(x+s*1.3,x+s*0.5,u1),y-s*1.4,{size:13,weight:700,color:COL.ink,alpha:Math.sin(u1*Math.PI)}); vec(ctx,lerp(x+s*1.25,x+s*0.45,u1)-20,y-s*1.35,lerp(x+s*1.25,x+s*0.45,u1)-40,y-s*1.35,COL.ink,1.4);
+          textAt(ctx,'O₂',lerp(x+s*0.45,x+s*1.3,u2),y-s*0.95,{size:13,weight:700,color:COL.green,alpha:Math.sin(u2*Math.PI)}); } break; }
+    }
+  }
+
+  animLoop((dt)=>{
+    t+=dt;
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const sg=h*0.56, S=Math.min(w*0.26,h*0.3), zg=h*0.95, zw=w/5;
+    groundLine(ctx,w*0.04,w*0.96,sg); for(let i=0;i<9;i++) drawGrass(ctx,w*(0.06+i*0.11),sg,S*0.18,t,0.3);
+    // zones
+    for(let i=0;i<5;i++){ const zx=i*zw; ctx.save(); rrect(ctx,zx+5,sg+36,zw-10,zg-sg-30,10); ctx.fillStyle=st.bad===i&&st.badT>0?'rgba(217,67,43,0.08)':'#fbfcfe'; ctx.fill(); ctx.strokeStyle=st.bad===i&&st.badT>0?COL.red:'#dbe4f0'; ctx.lineWidth=1.6; ctx.stroke(); ctx.restore();
+      line(ctx,zx+14,zg-10,zx+zw-14,zg-10,COL.ink,2); pill(ctx,GR[i],zx+zw/2,sg+52,GC[i],{size:11}); }
+    if(st.badT>0) st.badT-=dt;
+    const zs=Math.min(zw*0.3,(zg-sg)*0.3);
+    const slot=(o)=>{ const k=order.filter(q=>q.g===o.g).indexOf(o); return [o.g*zw+zw*(0.3+ (k%2)*0.42), zg-10-(k>1?0:0)]; };
+    ORG.forEach(o=>{ if(!placed[o.id]) return; const [zx,zy]=slot(o); const k=order.filter(q=>q.g===o.g).indexOf(o);
+      const s=zs*(k>1?0.7:1); actor(ctx,o,zx+(k>1?(k-2.5)*zw*0.15:0),zy-(k>1?zs*0.9:0),s,1,t+k,true,t+k*1.3,0,0,true); });
+
+    // stage organism
+    const o=ORG[sel];
+    if(!placed[o.id]){
+      const cx=w*0.42;
+      springTo(st.shake,0,160,9,dt);
+      if(st.mode==='enter'){ const spd=o.id==='mushroom'||o.id==='tree'?0:0.5; if(spd){ st.x=Math.min(1,st.x+spd*dt); } else st.x=1;
+        springTo(st.grow,1,40,7,dt); if(st.x>=1){ st.mode='feed'; st.ft=0; } }
+      else if(st.mode==='feed') st.ft+=dt;
+      const x=lerp(-S*1.2,cx,clamp(st.x,0,1))+st.shake.x*S*0.02, mv=st.mode==='enter'?1:0;
+      if(st.mode==='go'){ st.gu+=dt/1.3; const u=Math.min(1,st.gu); const k=order.filter(q=>q.g===o.g).length;
+        const ex=o.g*zw+zw*(0.3+(k%2)*0.42)+(k>1?(k-2.5)*zw*0.15:0), ey=zg-10-(k>1?zs*0.9:0);
+        const X=lerp(cx,ex,u), Y=lerp(sg,ey,u)-4*h*0.18*u*(1-u), s=lerp(S,zs*(k>1?0.7:1),u);
+        actor(ctx,o,X,Y,s,ex>=cx?1:-1,t,false,0,0.6,X/(s*0.4));
+        if(u>=1){ placed[o.id]=true; order.push(o); table(); const nx=ORG.findIndex(q=>!placed[q.id]); if(nx>=0) pick(nx); else st.mode='gone'; } }
+      else {
+        const gsc=(o.id==='mushroom'||o.id==='tree')?Math.max(0.02,st.grow.x):1;
+        const flyIn=(o.id==='vulture'||o.id==='shikra')&&st.mode==='enter';
+        const yy=flyIn?sg-(1-st.x)*h*0.35:(o.id==='hare'&&mv?sg-Math.abs(Math.sin(st.x*18))*S*0.18:sg);
+        actor(ctx,o,x,yy,S*gsc,1,t,st.mode==='feed',st.ft,mv,x/(S*0.35)*2);
+        if(st.mode==='feed') pill(ctx,o.n,cx,sg+18,COL.ink,{size:13});
+      }
+    }
+    else { textAt(ctx,Object.keys(placed).length===9?'All sorted ✓':'Pick an organism',w/2,sg*0.5,{align:'center',size:16,weight:700,color:COL.mid}); }
+    wrap.querySelectorAll('#orgs .chip-btn').forEach(b=>{ const d=placed[ORG[+b.dataset.i].id]; b.classList.toggle('ok',!!d); b.style.opacity=d?0.55:1; });
+  });
+  return wrap;
+}
+
+
+/* =====================================================================
+   12.6 LET US LINK — a grassland food chain
+   Arrows point from the food to the eater ("is eaten by"), as in
+   Fig. 12.8. A correct arrow draws itself while the eater lunges:
+   offset(u) = 0.85·sin(πu)·(food − eater), u: 0 → 1 in 1.2 s, and the
+   food shrinks and springs back (k = 60, c = 7). Energy dots then flow
+   along every arrow. Complete chains (grass → … → top) are traced.
+   ===================================================================== */
+function buildA6(){
+  const NODES=[{id:'grass',n:'Grass'},{id:'grasshopper',n:'Grasshopper'},{id:'hare',n:'Hare'},{id:'frog',n:'Frog'},{id:'snake',n:'Snake'},{id:'eagle',n:'Eagle'}];
+  const VALID=['grass>grasshopper','grass>hare','grasshopper>frog','frog>snake','snake>eagle','hare>eagle','frog>eagle','hare>snake'];
+  const wrap=labShell();
+  const opts=NODES.map(o=>`<option value="${o.id}">${o.n}</option>`).join('');
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label style="margin-bottom:4px;">Draw an arrow</label>
+      <div class="role-row"><span class="rdot" style="background:var(--f-green)"></span><span class="rname">Food</span><select id="fa">${opts}</select></div>
+      <div class="role-row"><span class="rdot" style="background:var(--f-red)"></span><span class="rname">Eaten by</span><select id="fb2">${opts}</select></div>
+      <button class="toggle-btn navy" id="add" style="padding:10px;">➕ Add arrow</button><div id="fb"></div></div>
+    <div class="toggle-group" style="margin-top:0"><button class="toggle-btn play" id="tr" style="padding:10px;">▶ Trace chains</button><button class="toggle-btn" id="rs" style="padding:10px;">↺ Clear</button></div>
+    <div class="control-group"><label>Food chains <span class="val" id="nV">0</span></label><div id="ch" class="hint" style="font-size:12px;color:var(--text-1);line-height:1.7"></div></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas');
+  $('#fa').value='grass'; $('#fb2').value='grasshopper';
+  let t=0, links=[{a:'grass',b:'hare',grow:1,ok:1}], lunge=null, trace=-1, traceU=0, chains=[];
+  const food={}; NODES.forEach(o=>food[o.id]={x:1,v:0});
+  $('#add').onclick=()=>{ const a=$('#fa').value, b=$('#fb2').value; if(a===b){ $('#fb').innerHTML='<div class="fb warn">Pick two different organisms</div>'; return; }
+    if(links.some(l=>l.a===a&&l.b===b&&l.ok)){ $('#fb').innerHTML='<div class="fb warn">Already drawn</div>'; return; }
+    const ok=VALID.includes(a+'>'+b); links.push({a,b,grow:0,ok:ok?1:0,bad:ok?0:1,life:0});
+    $('#fb').innerHTML=ok?`<div class="fb ok">✓ ${NODES.find(n=>n.id===b).n} eats ${NODES.find(n=>n.id===a).n.toLowerCase()}</div>`:`<div class="fb bad">✗ ${NODES.find(n=>n.id===b).n} does not eat ${NODES.find(n=>n.id===a).n.toLowerCase()}</div>`;
+    if(ok) lunge={a,b,u:0}; };
+  $('#rs').onclick=()=>{ links=[{a:'grass',b:'hare',grow:1,ok:1}]; trace=-1; $('#fb').innerHTML=''; findChains(); };
+  $('#tr').onclick=()=>{ if(!chains.length) return; trace=(trace+1)%chains.length; traceU=0; };
+  function findChains(){ const ok=links.filter(l=>l.ok&&l.grow>=1); const out=[];
+    const walk=(p)=>{ const nx=ok.filter(l=>l.a===p[p.length-1]); if(!nx.length){ if(p.length>2) out.push(p); return; } nx.forEach(l=>{ if(!p.includes(l.b)) walk(p.concat(l.b)); }); };
+    walk(['grass']); chains=out;
+    $('#nV').textContent=chains.length;
+    $('#ch').innerHTML=chains.map((c,i)=>`<div style="${i===trace?'color:var(--f-red);font-weight:700':''}">${c.map(id=>NODES.find(n=>n.id===id).n).join(' → ')}</div>`).join('')||'<span style="color:var(--text-3)">Link grass to a top eater</span>'; }
+  findChains();
+
+  animLoop((dt)=>{
+    t+=dt;
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const S=Math.min(w/6,h/5), gy=h*0.9;
+    // home positions
+    const HOME={grass:[w*0.5,gy-S*0.25],grasshopper:[w*0.2,gy-S*0.62],hare:[w*0.78,gy],frog:[w*0.2,h*0.46],snake:[w*0.52,h*0.44],eagle:[w*0.66+Math.cos(t*0.5)*S*0.6,h*0.15+Math.sin(t*0.5)*S*0.15]};
+    const P={}; for(const k in HOME) P[k]=HOME[k].slice();
+    // lunge: the eater rushes most of the way to its food and back
+    if(lunge){ lunge.u+=dt/1.2; const u=Math.min(1,lunge.u), f=0.85*Math.sin(Math.PI*u);
+      const a=HOME[lunge.a], b=HOME[lunge.b]; P[lunge.b]=[lerp(b[0],a[0],f),lerp(b[1],a[1],f)];
+      if(u>0.45&&!lunge.bit){ lunge.bit=1; food[lunge.a].x=0.35; food[lunge.a].v=0; }
+      if(u>=1) lunge=null; }
+    for(const k in food) springTo(food[k],1,60,7,dt);
+    // landscape
+    groundLine(ctx,0,w,gy); soilDots(ctx,0,w,gy+6,h,61,'#c9b89b',30);
+    ctx.save(); ctx.beginPath(); ctx.moveTo(w*0.4,h*0.52); ctx.quadraticCurveTo(w*0.52,h*0.44,w*0.64,h*0.52); ctx.closePath(); ctx.restore();
+    // rock for the snake, puddle for the frog
+    const rx=w*0.52, ry=h*0.52; ctx.save(); ctx.beginPath(); ctx.moveTo(rx-S*0.8,ry); ctx.quadraticCurveTo(rx-S*0.7,ry-S*0.45,rx,ry-S*0.45); ctx.quadraticCurveTo(rx+S*0.8,ry-S*0.4,rx+S*0.85,ry); ctx.closePath(); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.stroke(); ctx.restore();
+    ell(ctx,w*0.2,h*0.47,S*0.6,S*0.1); SK(ctx,COL.blue,2,'#eef6fe');
+    // grass (food scale shrinks when eaten)
+    const gs=food.grass.x; for(let i=0;i<16;i++) drawGrass(ctx,w*(0.03+i*0.063),gy,S*0.55*(i>4&&i<11?gs:1),t,0.4,COL.green,6);
+    // links
+    const ctr=k=>{ const p=P[k]; return k==='grass'?[p[0],p[1]]:[p[0],p[1]-S*0.12]; };
+    links.forEach((l,i)=>{ const A=ctr(l.a), B=ctr(l.b);
+      if(l.ok){ l.grow=Math.min(1,l.grow+dt/0.9); if(l.grow>=1&&!l.counted){ l.counted=1; findChains(); } }
+      else { l.life+=dt; l.grow=l.life<0.6?l.life/0.6*0.55:Math.max(0,0.55-(l.life-1.2)*1.2); }
+      if(l.grow<=0) return;
+      const Bx=lerp(A[0],B[0],l.grow), By=lerp(A[1],B[1],l.grow);
+      const shake=l.ok?0:Math.sin(l.life*40)*4*clamp(1.2-l.life,0,1);
+      const inTrace=trace>=0&&chains[trace]&&chains[trace].some((id,j)=>id===l.a&&chains[trace][j+1]===l.b);
+      const col=l.ok?COL.red:COL.mid;
+      const curve=curveArrow(ctx,A[0],A[1]+shake,Bx,By+shake,S*0.12,col,inTrace?4:2.4,l.ok?null:[6,5],S*0.35,S*0.35);
+      if(l.ok&&l.grow>=1){ for(let q=0;q<3;q++){ const u=((t*0.45+q/3)%1); const p=curve(u); dot(ctx,p[0],p[1],inTrace?5:3.2,inTrace?COL.red:COL.yellow); } }
+    });
+    links=links.filter(l=>l.ok||l.life<2);
+    // organisms
+    const sc=k=>food[k].x;
+    { const p=P.grasshopper, hq=(t*0.7)%1, jump=hq<0.3?Math.sin(hq/0.3*Math.PI):0; drawGrasshopper(ctx,p[0],p[1]-jump*S*0.35,S*0.7*sc('grasshopper'),1,t,{leap:jump}); }
+    { const p=P.hare, hq=(t*0.5)%1, jump=hq<0.35?Math.sin(hq/0.35*Math.PI):0; drawQuad(ctx,p[0],p[1]-jump*S*0.3,S*1.1*sc('hare'),-1,t,QUAD.hare,{stretch:jump,graze:jump?0:0.4+0.4*Math.sin(t*3),chew:!jump}); }
+    { const p=P.frog; drawFrog(ctx,p[0],p[1],S*0.75*sc('frog'),1,t,{}); }
+    { const p=P.snake; drawSnake(ctx,p[0]+S*0.4,p[1],S*1.3*sc('snake'),1,t,{raise:0.3}); }
+    { const p=P.eagle, dv=-Math.sin(t*0.5)>=0?1:-1; if(lunge&&lunge.b==='eagle') drawBird(ctx,p[0],p[1],S*1.1*sc('eagle'),dv,t,BIRD.eagle,{flap:t*9,talons:true}); else drawRaptor(ctx,p[0],p[1],S*1.2*sc('eagle'),dv,t,BIRD.eagle,{flap:t*2.2,glide:0.5}); }
+    NODES.forEach(o=>{ const p=P[o.id]; const lp=o.id==='grass'?[p[0],gy+18]:[p[0],p[1]+S*0.32]; pill(ctx,o.n,lp[0],lp[1],o.id==='grass'?COL.green:COL.ink,{size:12}); });
+    // chain trace: a big pulse runs from grass to the top
+    if(trace>=0&&chains[trace]){ traceU+=dt*0.5; const c=chains[trace], seg=Math.floor(traceU)%(c.length-1), u=traceU%1;
+      const A=ctr(c[seg]), B=ctr(c[seg+1]); circ(ctx,lerp(A[0],B[0],u),lerp(A[1],B[1],u),7,COL.red,COL.yellow,2.4);
+      pill(ctx,c.map(id=>NODES.find(n=>n.id===id).n).join(' → '),w/2,22,COL.red,{size:13}); }
+  });
+  return wrap;
+}
+
+
+/* =====================================================================
+   12.7 LET US DRAW — millet, mice and eagles as a pyramid of numbers
+   Each level can feed only a fraction of the one below it:
+     mice   M* = ⌊millet / 6⌋,   eagles E* = ⌊M* / 4⌋ (at least 1 once M* ≥ 3)
+   The field relaxes toward M*, E*: extra mice are caught by a diving
+   eagle (or run off), new mice run in; eagles arrive or leave.
+   Count → the counted numbers sit on cards; Arrange → the cards spring
+   into order, largest at the base; Pyramid → tiers grow from the cards
+   with width ∝ n^0.6 (so 1 eagle is still visible).
+   ===================================================================== */
+function buildA7(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label>Millet plants <span class="val" id="mV"></span></label><input type="range" id="mR" min="12" max="48" step="1" value="24"></div>
+    <div class="control-group"><div class="step-row" id="steps"><button class="step-pill active" data-s="0">1 Count</button><button class="step-pill" data-s="1">2 Arrange</button><button class="step-pill" data-s="2">3 Pyramid</button></div></div>
+    <div class="control-group"><div class="result-cards three">
+      <div class="rcard"><div class="rlabel">Millet</div><div class="rval" id="r0" style="color:var(--f-green)">—</div></div>
+      <div class="rcard"><div class="rlabel">Mice</div><div class="rval" id="r1">—</div></div>
+      <div class="rcard"><div class="rlabel">Eagles</div><div class="rval" id="r2" style="color:var(--f-red)">—</div></div></div>
+      <p class="hint">Each level feeds only a few of the next</p></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), mR=$('#mR');
+  let t=0, step=-1, countT=0, counted=null;
+  const mice=[], eagles=[];
+  for(let i=0;i<4;i++) mice.push({x:0,v:0,dir:1,tx:0,wait:Math.random()*2,ph:0,init:(i+0.5)/4});
+  eagles.push({cx:0,x:0,y:0,ph:1,arrive:1,init:1});
+  const cards=[{k:1,n:'Mice'},{k:2,n:'Eagle'},{k:0,n:'Millet'}].map(c=>Object.assign(c,{x:{x:0,v:0},y:{x:0,v:0},show:{x:0,v:0},bw:{x:0,v:0}}));
+  function setStep(s){ step=s; wrap.querySelectorAll('#steps .step-pill').forEach(b=>{ const i=+b.dataset.s; b.classList.toggle('active',i===s); b.classList.toggle('done',i<s); });
+    if(s===0){ countT=0; counted=null; } }
+  stepPills(wrap,null,s=>{ if(s>0&&!counted) return; setStep(s); });
+  mR.oninput=()=>{ if(step>0) setStep(-1); counted=null; for(let i=0;i<3;i++) $('#r'+i).textContent='—'; };
+
+  animLoop((dt)=>{
+    t+=dt; const Nm=+mR.value; $('#mV').textContent=Nm;
+    const Mt=Math.floor(Nm/6), Et=Mt>=3?Math.max(1,Math.floor(Mt/4)):0;
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const fw=w*0.6, gy=h*0.86, S=Math.min(fw/5,h/4.2);
+    mice.forEach(m=>{ if(m.init){ m.x=m.tx=fw*(0.1+0.8*m.init); m.init=0; } }); eagles.forEach(e=>{ if(e.init){ e.cx=fw*0.5; e.x=e.cx; e.y=h*0.14; e.init=0; } });
+    groundLine(ctx,0,fw,gy); soilDots(ctx,0,fw,gy+6,h,71,'#c9b89b',30);
+    // millet rows (back rows higher and smaller)
+    const plants=[]; const rows=3, per=Math.ceil(Nm/rows);
+    for(let r=rows-1;r>=0;r--) for(let i=0;i<per;i++){ const idx=r*per+i; if(idx>=Nm) continue; const x=fw*(0.05+0.9*(i+0.5)/per)+(r%2)*fw*0.02, y=gy-r*S*0.12, s=S*(1.05-r*0.12); plants.push({x,y,s,idx}); drawMillet(ctx,x,y,s,t+idx*0.3,0.35); }
+    // mice relax toward M*: arrivals run in; extras are caught or run off
+    const alive=mice.filter(m=>!m.doom);
+    if(alive.length<Mt && Math.random()<dt*1.5) mice.push({x:Math.random()<0.5?-20:fw+20,v:0,dir:1,tx:Math.random()*fw*0.9+fw*0.05,wait:0,ph:0});
+    if(alive.length>Mt && Math.random()<dt*0.8){ const m=alive[0]; m.doom=1; const e=eagles.find(e=>!e.doom&&!e.prey); if(e){ e.prey=m; e.du=0; e.sx=e.x; e.sy=e.y; } else m.flee=1; }
+    const ae=eagles.filter(e=>!e.doom);
+    if(ae.length<Et && Math.random()<dt) eagles.push({cx:fw*(0.25+0.5*Math.random()),x:-40,y:h*0.1,ph:Math.random()*6,arrive:0});
+    if(ae.length>Et && Math.random()<dt*0.6){ ae[0].doom=1; }
+    for(let i=mice.length-1;i>=0;i--){ const m=mice[i];
+      if(m.caught){ m.x=m.caught.x; m.y=m.caught.y+S*0.2; if(m.caught.gone){ mice.splice(i,1); continue; } drawQuad(ctx,m.x,m.y,S*0.45,1,t,QUAD.mouse,{}); continue; }
+      if(m.flee){ m.tx=m.x<fw/2?-60:fw+60; }
+      if(m.wait>0){ m.wait-=dt; }
+      else { const d=m.tx-m.x; m.dir=d>=0?1:-1; const sp=S*1.4; m.x+=clamp(d,-sp*dt,sp*dt); m.ph+=Math.abs(clamp(d,-sp*dt,sp*dt))/(S*0.12);
+        if(Math.abs(d)<2){ if(m.flee){ mice.splice(i,1); continue; } m.wait=0.6+Math.random()*1.8; m.tx=Math.random()*fw*0.9+fw*0.05; } }
+      m.y=gy; drawQuad(ctx,m.x,gy,S*0.45,m.dir,t+i,QUAD.mouse,{phase:m.ph,move:m.wait>0?0:1,graze:m.wait>0?0.6+0.4*Math.sin(t*6+i):0,chew:m.wait>0});
+    }
+    // eagles circle; one dives on a parabola to take an extra mouse
+    for(let i=eagles.length-1;i>=0;i--){ const e=eagles[i];
+      if(e.prey){ e.du+=dt/1.4; const u=Math.min(1,e.du), px=e.prey.x, py=gy-S*0.2;
+        if(u<0.5){ const q=u/0.5; e.x=lerp(e.sx,px,q); e.y=lerp(e.sy,py,q*q); if(q>=1&&!e.prey.caught) e.prey.caught=e; }
+        else { const q=(u-0.5)/0.5; if(!e.prey.caught) e.prey.caught=e; e.x=lerp(px,e.cx,q); e.y=lerp(py,h*0.14,Math.sqrt(q)); }
+        if(u>=1){ e.gone=1; e.prey=null; e.gone=0; const m=mice.findIndex(mm=>mm.caught===e); if(m>=0) mice.splice(m,1); }
+        drawBird(ctx,e.x,e.y,S*0.9,e.x<px?1:-1,t,BIRD.eagle,{flap:t*10,talons:true}); continue; }
+      if(e.doom){ e.x+=S*2*dt; e.y-=S*0.5*dt; if(e.x>w+60){ eagles.splice(i,1); continue; } }
+      else { e.arrive=Math.min(1,e.arrive+dt*0.4); const tx=e.cx+Math.cos(t*0.45+e.ph)*fw*0.2, ty=h*0.14+Math.sin(t*0.45+e.ph)*h*0.04; e.x=lerp(e.x,tx,e.arrive<1?dt*2:1); e.y=lerp(e.y,ty,e.arrive<1?dt*2:1); }
+      drawRaptor(ctx,e.x,e.y,S*1.1,-Math.sin(t*0.45+e.ph)>=0?1:-1,t,BIRD.eagle,{flap:t*2.2+e.ph,glide:0.5});
+    }
+
+    /* ---- counting: ring each organism in turn ---- */
+    if(step===0){ countT+=dt; const order=[].concat(plants.map(p=>({k:0,x:p.x,y:p.y-p.s*0.9})),mice.filter(m=>!m.doom).map(m=>({k:1,x:m.x,y:gy-S*0.12,m})),eagles.filter(e=>!e.doom).map(e=>({k:2,x:e.x,y:e.y,e})));
+      const n=Math.min(order.length,Math.floor(countT*9)); const tally=[0,0,0];
+      for(let i=0;i<n;i++){ const o=order[i]; const pos=o.m?[o.m.x,gy-S*0.12]:o.e?[o.e.x,o.e.y]:[o.x,o.y]; tally[o.k]++; circ(ctx,pos[0],pos[1],o.k===0?S*0.14:S*0.22,[COL.green,COL.ink,COL.red][o.k],null,2);
+        if(i===n-1) textAt(ctx,String(tally[o.k]),pos[0],pos[1]-S*0.25,{align:'center',size:14,weight:700,color:[COL.green,COL.ink,COL.red][o.k]}); }
+      for(let i=0;i<3;i++) $('#r'+i).textContent=tally[i];
+      if(n>=order.length && order.length){ counted=tally; }
+    }
+    /* ---- the pyramid panel ---- */
+    const px0=w*0.64, px1=w*0.98, pw=px1-px0, base=h*0.88, th=Math.min(h*0.17,70);
+    line(ctx,w*0.62,h*0.04,w*0.62,h*0.96,'#dbe4f0',1.4,[5,5]);
+    if(counted){
+      const order=step>=1?[0,1,2]:[1,2,0];   // counted order vs arranged (largest at base)
+      const mxN=Math.max(1,counted[0]);
+      cards.forEach(c=>{ const slot=order.indexOf(c.k); const n=counted[c.k];
+        const cx=px0+pw/2, cy=step>=1?base-th*(slot+0.5):h*0.14+slot*th*0.9;
+        springTo(c.x,cx,40,9,dt); springTo(c.y,cy,40,9,dt); springTo(c.show,1,40,8,dt);
+        const tw=step>=2?Math.max(pw*0.18,pw*Math.pow(n/mxN,0.6)):pw*0.5; springTo(c.bw,tw,30,7,dt);
+        const col=[COL.green,COL.ink,COL.red][c.k];
+        ctx.save(); ctx.globalAlpha=clamp(c.show.x,0,1); ctx.translate(c.x.x,c.y.x);
+        if(step>=2){ ctx.beginPath(); const bw=c.bw.x, tw2=slot===2?bw*0.25:Math.max(pw*0.18,pw*Math.pow(counted[order[slot+1]]/mxN,0.6)); ctx.moveTo(-bw/2,th/2); ctx.lineTo(bw/2,th/2); ctx.lineTo(tw2/2,-th/2); ctx.lineTo(-tw2/2,-th/2); ctx.closePath(); ctx.fillStyle=['#f1faf4','#f3f6fa','#fdece7'][c.k]; ctx.fill(); ctx.strokeStyle=col; ctx.lineWidth=2.4; ctx.stroke(); }
+        else { rrect(ctx,-c.bw.x/2,-th*0.38,c.bw.x,th*0.76,10); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=col; ctx.lineWidth=2.4; ctx.stroke(); }
+        ctx.restore();
+        const ix=c.x.x-(step>=2?th*1.1:c.bw.x*0.28), iy=c.y.x+th*0.3;
+        if(c.k===0) drawMillet(ctx,ix,iy,th*0.62,t,0.3); else if(c.k===1) drawQuad(ctx,ix,iy,th*0.7,1,t,QUAD.mouse,{}); else drawRaptor(ctx,ix,iy-th*0.45,th*0.7,1,t,BIRD.eagle,{flap:t*3,glide:0.5});
+        textAt(ctx,c.n+'  '+n,step>=2?c.x.x-th*0.35:c.x.x+c.bw.x*0.02,c.y.x+6,{size:14,weight:700,color:col});
+      });
+      if(step>=2) textAt(ctx,'Trophic level',px0,h*0.06,{size:12,weight:700,color:COL.mid});
+      if(step>=2) ['1st','2nd','3rd'].forEach((s,i)=>textAt(ctx,s,px1,base-th*(i+0.5)+4,{align:'right',size:11,weight:700,color:COL.mid}));
+    } else textAt(ctx,step===0?'Counting…':'Press 1 Count',px0+pw/2,h*0.45,{align:'center',size:15,weight:700,color:COL.mid});
+  });
+  return wrap;
+}
+
+
+/* =====================================================================
+   12.8 LET US TRACE AND LINK — the grassland food web (Fig. 12.11)
+   Populations follow a Lotka–Volterra web (checked numerically):
+     grass      dx/dt = x(1 − 0.1x) − Σ eaten
+     consumer   dx/dt = x(−0.05 − 0.15x) + 0.6·Σ eaten − Σ being eaten
+     eaten on a link i→j:  (0.4 / nprey_j)·x_i·x_j
+   All ten coexist; remove hawks → birds and snakes rise, frogs fall;
+   remove grasshoppers → frogs, birds and snakes die out.
+   Node size ∝ √(x / x₀) and springs to it; energy dots on each arrow
+   flow at a rate ∝ the feeding flux.
+   ===================================================================== */
+function buildA8(){
+  const N=[
+    {id:'grass',n:'Grasses',x:0.5,y:0.9},{id:'grasshopper',n:'Grasshopper',x:0.17,y:0.72},{id:'hare',n:'Hare',x:0.55,y:0.68},{id:'mouse',n:'Mouse',x:0.84,y:0.66},
+    {id:'bird',n:'Bird',x:0.1,y:0.44},{id:'frog',n:'Frog',x:0.34,y:0.52},{id:'snake',n:'Snake',x:0.3,y:0.28},{id:'fox',n:'Fox',x:0.64,y:0.4},{id:'owl',n:'Owl',x:0.88,y:0.34},{id:'hawk',n:'Hawk',x:0.56,y:0.12}];
+  const TRUE=[['grass','grasshopper'],['grass','hare'],['grass','mouse'],['grasshopper','frog'],['frog','snake'],['snake','hawk'],['hare','fox'],
+    ['grasshopper','bird'],['bird','hawk'],['mouse','snake'],['mouse','owl'],['mouse','fox'],['hare','hawk'],['mouse','hawk']];
+  const GIVEN=7;
+  const wrap=labShell();
+  const opts=N.map(o=>`<option value="${o.id}">${o.n}</option>`).join('');
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label style="margin-bottom:2px;">Organism</label><div class="chip-wrap" id="orgs">${N.map((o,i)=>`<button class="chip-btn" data-i="${i}">${o.n}</button>`).join('')}</div>
+      <div class="result-cards" style="margin-top:8px"><div class="rcard"><div class="rlabel">It eats</div><div class="rval" id="rE">—</div></div><div class="rcard"><div class="rlabel">Eaten by</div><div class="rval" id="rB" style="color:var(--f-red)">—</div></div></div></div>
+    <div class="control-group"><label style="margin-bottom:4px;">Missing arrows <span class="val" id="mV">0 / 7</span></label>
+      <div class="role-row"><span class="rdot" style="background:var(--f-green)"></span><span class="rname">Food</span><select id="fa">${opts}</select></div>
+      <div class="role-row"><span class="rdot" style="background:var(--f-red)"></span><span class="rname">Eaten by</span><select id="fb2">${opts}</select></div>
+      <button class="toggle-btn navy" id="add" style="padding:9px;">➕ Add arrow</button><div id="fb"></div></div>
+    <div class="toggle-group" style="margin-top:0"><button class="toggle-btn" id="rm" style="padding:10px;">✂ Remove it</button><button class="toggle-btn" id="rs" style="padding:10px;">↺ Restore</button></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas');
+  $('#fa').value='grasshopper'; $('#fb2').value='bird';
+  const idx=id=>N.findIndex(o=>o.id===id);
+  let t=0, sel=-1, drawn=TRUE.slice(0,GIVEN).map(([a,b])=>({a,b,grow:1,given:1})), bad=null;
+  // equilibrium populations (x₀) from the model, then the live state
+  const x=N.map((o,i)=>i?1:8), removed=new Set();
+  function deriv(v){ const d=v.map((q,i)=>i?q*(-0.05-0.15*q):q*(1-0.1*q)); const fl=[];
+    TRUE.forEach(([a,b])=>{ const i=idx(a), j=idx(b), np=TRUE.filter(l=>l[1]===b).length, f=0.4/np*v[i]*v[j]; d[i]-=f; d[j]+=0.6*f; fl.push(f); }); return {d,fl}; }
+  for(let k=0;k<60000;k++){ const {d}=deriv(x); x.forEach((q,i)=>x[i]=Math.max(0,q+d[i]*0.01)); }
+  const x0=x.slice(), R=N.map(()=>({x:1,v:0})); let flux=TRUE.map(()=>0);
+  function pick(i){ sel=i; wrap.querySelectorAll('#orgs .chip-btn').forEach(b=>b.classList.toggle('active',+b.dataset.i===i)); info(); $('#rm').textContent=removed.has(N[i].id)?'↩ Put back':'✂ Remove it'; }
+  function info(){ if(sel<0) return; const id=N[sel].id, ok=drawn.filter(l=>l.grow>=1);
+    const e=ok.filter(l=>l.b===id).map(l=>N[idx(l.a)].n), b=ok.filter(l=>l.a===id).map(l=>N[idx(l.b)].n);
+    $('#rE').textContent=e.length?e.length+' · '+e.join(', '):'— makes food'; $('#rB').textContent=b.length?b.length+' · '+b.join(', '):'none'; }
+  wrap.querySelectorAll('#orgs .chip-btn').forEach(b=>b.onclick=()=>pick(+b.dataset.i));
+  $('#add').onclick=()=>{ const a=$('#fa').value, b=$('#fb2').value;
+    if(drawn.some(l=>l.a===a&&l.b===b)){ $('#fb').innerHTML='<div class="fb warn">Already there</div>'; return; }
+    if(TRUE.some(l=>l[0]===a&&l[1]===b)){ drawn.push({a,b,grow:0}); $('#fb').innerHTML=`<div class="fb ok">✓ ${N[idx(b)].n} eats ${N[idx(a)].n.toLowerCase()}</div>`; }
+    else { bad={a,b,life:0}; $('#fb').innerHTML=`<div class="fb bad">✗ Not in this web</div>`; } };
+  $('#rm').onclick=()=>{ if(sel<0) return; const id=N[sel].id; if(removed.has(id)){ removed.delete(id); x[sel]=Math.max(x[sel],0.15*x0[sel]); } else removed.add(id); pick(sel); };
+  $('#rs').onclick=()=>{ removed.forEach(id=>{ const i=idx(id); x[i]=Math.max(x[i],0.15*x0[i]); }); removed.clear(); if(sel>=0) pick(sel); };
+  // re-seed extinct species if their food returns (immigration trickle)
+  function icon(ctx,id,cx,cy,r,tt){
+    switch(id){
+      case 'grass': for(let i=0;i<3;i++) drawGrass(ctx,cx+(i-1)*r*0.45,cy+r*0.55,r*0.9,tt+i,0.4,COL.green,5); break;
+      case 'grasshopper': drawGrasshopper(ctx,cx,cy+r*0.35,r*1.7,1,tt); break;
+      case 'hare': drawQuad(ctx,cx-r*0.15,cy+r*0.6,r*1.9,1,tt,QUAD.hare,{graze:0.4+0.3*Math.sin(tt*3),chew:1}); break;
+      case 'mouse': drawQuad(ctx,cx-r*0.2,cy+r*0.35,r*2.2,1,tt,QUAD.mouse,{graze:0.5+0.5*Math.sin(tt*4),chew:1}); break;
+      case 'bird': drawBird(ctx,cx,cy,r*1.7,1,tt,BIRD.small,{flap:tt*12}); break;
+      case 'frog': drawFrog(ctx,cx-r*0.1,cy+r*0.45,r*1.6,1,tt,{}); break;
+      case 'snake': drawSnake(ctx,cx+r*0.45,cy+r*0.1,r*1.6,1,tt,{}); break;
+      case 'fox': drawQuad(ctx,cx+r*0.05,cy+r*0.6,r*1.6,1,tt,QUAD.fox,{}); break;
+      case 'owl': drawBird(ctx,cx,cy+r*0.2,r*1.3,1,tt,BIRD.owl,{perch:true}); break;
+      case 'hawk': drawRaptor(ctx,cx,cy+r*0.1,r*1.35,1,tt,BIRD.hawk,{flap:tt*2.5,glide:0.4}); break;
+    }
+  }
+
+  animLoop((dt)=>{
+    t+=dt;
+    // population dynamics: 20 model-time units per second
+    for(let k=0;k<20;k++){ const {d,fl}=deriv(x); flux=fl; x.forEach((q,i)=>{ x[i]=removed.has(N[i].id)?0:Math.max(0,q+d[i]*0.05); if(!removed.has(N[i].id)&&x[i]<1e-3) x[i]=1e-3; }); }
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const r0=Math.min(w,h)*0.065;
+    const P=N.map(o=>[o.x*w,o.y*h]);
+    N.forEach((o,i)=>springTo(R[i],removed.has(o.id)?0.55:clamp(Math.sqrt(x[i]/x0[i]),0.3,2),40,8,dt));
+    const rad=i=>r0*R[i].x;
+    // arrows: given (solid red), added (red, growing), missing (not shown)
+    drawn.forEach(l=>{ l.grow=Math.min(1,l.grow+dt/0.8); if(l.grow>=1&&!l.done){ l.done=1; info(); } const i=idx(l.a), j=idx(l.b);
+      const hl=sel>=0&&(i===sel||j===sel), dim=sel>=0&&!hl, dead=removed.has(l.a)||removed.has(l.b);
+      const A=P[i], B=[lerp(P[i][0],P[j][0],l.grow),lerp(P[i][1],P[j][1],l.grow)];
+      ctx.save(); ctx.globalAlpha=dim?0.35:1;
+      const cv=curveArrow(ctx,A[0],A[1],B[0],B[1],r0*0.3,dead?COL.mid:COL.red,hl?3.4:2.2,dead?[5,5]:null,rad(i)+3,l.grow>=1?rad(j)+4:0);
+      if(l.grow>=1&&!dead){ const k=TRUE.findIndex(q=>q[0]===l.a&&q[1]===l.b), f=flux[k]||0; const n=Math.max(1,Math.min(5,Math.round(f*6+1)));
+        for(let q=0;q<n;q++){ const u=((t*(0.2+f*0.8)+q/n)%1); const p=cv(u); dot(ctx,p[0],p[1],hl?4:3,COL.yellow); } }
+      ctx.restore(); });
+    drawn.forEach(l=>{ if(!l.given&&!l.flag){ l.flag=1; } });
+    // a wrong arrow draws half-way, shakes, and retracts
+    if(bad){ bad.life+=dt; const i=idx(bad.a), j=idx(bad.b), g=bad.life<0.5?bad.life/0.5*0.5:Math.max(0,0.5-(bad.life-1)*1.2), sh=Math.sin(bad.life*40)*4*clamp(1.1-bad.life,0,1);
+      if(g>0) curveArrow(ctx,P[i][0],P[i][1]+sh,lerp(P[i][0],P[j][0],g),lerp(P[i][1],P[j][1],g)+sh,r0*0.3,COL.mid,2.2,[6,5],rad(i)+3,0); if(bad.life>1.6) bad=null; }
+    // nodes
+    N.forEach((o,i)=>{ const [cx,cy]=P[i], r=rad(i), gone=removed.has(o.id);
+      ctx.save(); if(gone) ctx.globalAlpha=0.35;
+      circ(ctx,cx,cy,r,i===sel?COL.yellow:(i===0?COL.green:COL.ink),'#fff',i===sel?3.6:2.2);
+      ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,r-2,0,Math.PI*2); ctx.clip(); icon(ctx,o.id,cx,cy,r*0.75,t+i); ctx.restore();
+      ctx.restore();
+      if(gone){ line(ctx,cx-r*0.6,cy-r*0.6,cx+r*0.6,cy+r*0.6,COL.red,3); line(ctx,cx+r*0.6,cy-r*0.6,cx-r*0.6,cy+r*0.6,COL.red,3); }
+      const ch=x[i]/x0[i]; const lab=o.n+(Math.abs(ch-1)>0.08&&!gone?(ch>1?'  ▲':'  ▼'):'');
+      pill(ctx,lab,cx,cy+r+12,gone?COL.mid:(ch>1.08?COL.green:ch<0.92?COL.red:COL.ink),{size:11});
+    });
+    $('#mV').textContent=(drawn.length-GIVEN)+' / 7';
+  });
+  return wrap;
+}
+
+
+/* =====================================================================
+   12.9 LET US READ — exporting frog legs (1970s–80s) and its cascade
+   Rate model, time in years (30 years → 15 s):
+     frogs      dF/dt = 0.6·F(1 − F/100) − h·F − 0.012·Q·F
+     pests      dP/dt = 0.9·P(1 − P/200) − 0.008·F·P − 0.5·S·P
+     spraying   S = clamp((P − 40)/80, 0, 1)   (farmers spray when pests
+                                               cross a damage threshold)
+     pesticide  dQ/dt = 2·S − 0.15·Q           (builds up, slowly decays)
+     water quality = 100 / (1 + Q/5) %
+   Check: h = 0 → F ≈ 100, P ≈ 22, no spraying.  h = 0.4 from 1975 →
+   F ≈ 30, P ≈ 85, Q ≈ 5 by 1990.  Ban in 1987 → frogs recover.
+   ===================================================================== */
+function buildA9(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label>Frogs exported each year <span class="val" id="hV"></span></label><input type="range" id="hR" min="0" max="60" step="1" value="40">
+      <div class="hint">Export starts in 1975</div></div>
+    <div class="toggle-group" style="margin-top:0"><button class="toggle-btn play" id="go" style="padding:10px;">▶ Run 1970 → 2000</button><button class="toggle-btn" id="rs" style="padding:10px;">↺ Reset</button></div>
+    <button class="toggle-btn navy" id="ban" style="margin-top:0;padding:10px;">🚫 Ban the export now</button>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Frogs</div><div class="rval" id="r0" style="color:var(--f-red)">—</div></div>
+      <div class="rcard"><div class="rlabel">Pests</div><div class="rval" id="r1">—</div></div>
+      <div class="rcard"><div class="rlabel">Pesticide in water</div><div class="rval" id="r2" style="color:var(--f-yellow)">—</div></div>
+      <div class="rcard"><div class="rlabel">Water quality</div><div class="rval" id="r3" style="color:var(--f-blue)">—</div></div></div></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), hR=$('#hR');
+  let t=0, yr=0, run=false, banY=null, s={F:100,P:22,Q:0}, hist=[], S=0;
+  const frogs=[], pests=[], carried=[];
+  function reset(){ yr=0; run=false; banY=null; s={F:100,P:22,Q:0}; hist=[{y:0,F:100,P:22,Q:0,S:0}]; $('#go').textContent='▶ Run 1970 → 2000'; $('#ban').textContent='🚫 Ban the export now'; $('#ban').classList.remove('active'); }
+  reset();
+  $('#go').onclick=()=>{ if(yr>=30) reset(); run=!run; $('#go').textContent=run?'⏸ Pause':'▶ Run 1970 → 2000'; };
+  $('#rs').onclick=reset;
+  $('#ban').onclick=()=>{ if(banY!==null) return; banY=Math.max(yr,5); $('#ban').textContent='🚫 Banned in '+Math.round(1970+banY); $('#ban').classList.add('active'); };
+  const harvest=()=>{ const h=+hR.value/100; return (yr<5||(banY!==null&&yr>=banY))?0:h; };
+
+  animLoop((dt)=>{
+    t+=dt; $('#hV').textContent=hR.value+'%';
+    if(run){ const dy=dt*2; for(let k=0;k<10;k++){ const h=harvest(); S=clamp((s.P-40)/80,0,1);
+        const dF=0.6*s.F*(1-s.F/100)-h*s.F-0.012*s.Q*s.F, dP=0.9*s.P*(1-s.P/200)-0.008*s.F*s.P-0.5*S*s.P, dQ=2*S-0.15*s.Q;
+        s.F=Math.max(0.5,s.F+dF*dy/10); s.P=Math.max(0.5,s.P+dP*dy/10); s.Q=Math.max(0,s.Q+dQ*dy/10); yr+=dy/10; }
+      if(!hist.length||yr-hist[hist.length-1].y>0.1) hist.push({y:yr,F:s.F,P:s.P,Q:s.Q,S});
+      if(yr>=30){ yr=30; run=false; $('#go').textContent='✓ 2000 · again'; } }
+    else S=clamp((s.P-40)/80,0,1);
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const gh=h*0.3, gy=h*0.5, wy=gy+h*0.07, SC=Math.min(w/8,h/6);
+    const WQ=100/(1+s.Q/5);
+    // paddy water (tints murky as pesticide builds up)
+    ctx.save(); ctx.fillStyle=mixCol('#eef6fe','#e9e4d2',1-WQ/100); ctx.fillRect(w*0.02,gy,w*0.86,wy-gy); ctx.restore();
+    waterSurface(ctx,w*0.02,w*0.88,gy,1.2,t,0.05,mixCol('#2f8fe0','#8a7f5a',1-WQ/100));
+    line(ctx,w*0.02,wy,w*0.88,wy,COL.ink,2.4); soilDots(ctx,w*0.02,w*0.88,wy+6,h-gh-10,91,'#c9b89b',30);
+    // rice plants: pests chew them and they yellow
+    const dmg=clamp((s.P-20)/150,0,1);
+    const plants=[]; for(let i=0;i<11;i++){ const x=w*(0.05+i*0.075); plants.push(x);
+      ctx.save(); const col=mixCol('#1f9d55','#d9a017',dmg); ctx.strokeStyle=col; ctx.lineWidth=2;
+      for(let b=0;b<6;b++){ const a=-1.2+b*0.48, L=SC*(1.3-dmg*0.35)*(0.8+0.2*Math.cos(b*1.7)), sw=Math.sin(t*1.4+i+b)*0.05;
+        ctx.beginPath(); ctx.moveTo(x,gy+4); ctx.quadraticCurveTo(x+Math.sin(a*0.5)*L*0.4,gy-L*0.6,x+Math.sin(a+sw)*L*0.55,gy-Math.cos(a*0.6)*L); ctx.stroke(); }
+      ctx.restore(); const pc=mixCol('#1f9d55','#d9a017',dmg), px=x+SC*0.05, py=gy-SC*(1.25-dmg*0.3), sw=Math.sin(t*1.4+i)*SC*0.03;
+      ctx.save(); ctx.strokeStyle=pc; ctx.lineWidth=1.8; ctx.beginPath(); ctx.moveTo(x,gy-SC*0.6); ctx.quadraticCurveTo(px,py-SC*0.1,px+SC*0.25+sw,py+SC*0.2); ctx.stroke(); ctx.restore();
+      for(let q=0;q<5;q++){ const u=0.3+q*0.16; const gx=lerp(px,px+SC*0.25+sw,u), gyy=py-SC*0.05+u*u*SC*0.28; ell(ctx,gx,gyy,SC*0.03,SC*0.05,0.6); SK(ctx,pc,1.2,'#fff'); } }
+    // pests (∝ P) crawl and hop on the plants
+    const nP=Math.min(40,Math.round(s.P/5));
+    while(pests.length<nP) pests.push({pl:Math.floor(Math.random()*11),hgt:0.3+Math.random()*0.7,ph:Math.random()*6,hop:0,x:0,y:0});
+    while(pests.length>nP) pests.pop();
+    pests.forEach(p=>{ if(p.hop>0){ p.hop-=dt; } else if(Math.random()<dt*0.3){ p.pl=clamp(p.pl+(Math.random()<0.5?-1:1),0,10); p.hop=0.5; }
+      const tx=plants[p.pl]+Math.sin(p.ph)*SC*0.25, ty=gy-p.hgt*SC*1.1; p.x=p.x?approach(p.x,tx,5,dt):tx; p.y=p.y?approach(p.y,ty-(p.hop>0?Math.sin(p.hop/0.5*Math.PI)*SC*0.4:0),8,dt):ty;
+      if(!p.eaten) drawInsect(ctx,p.x,p.y,SC*0.15,Math.sin(p.ph)>0?1:-1,t+p.ph,{fly:p.hop>0}); });
+    // frogs (∝ F): sit in the water, hop, snap pests
+    const nF=Math.min(12,Math.round(s.F/8));
+    while(frogs.filter(f=>!f.gone).length<nF) frogs.push({x:w*(0.05+Math.random()*0.78),hx:0,ph:Math.random()*6,hop:-1,tongue:0,tx:0});
+    while(frogs.filter(f=>!f.gone).length>nF){ const f=frogs.find(f=>!f.gone); f.gone=1; if(harvest()>0) carried.push({x:f.x,y:gy,u:0}); }
+    for(let i=frogs.length-1;i>=0;i--) if(frogs[i].gone) frogs.splice(i,1);
+    frogs.forEach(f=>{ f.ph+=dt;
+      if(f.hop>=0){ f.hop+=dt/0.7; const u=Math.min(1,f.hop); const x=lerp(f.hx,f.tx,u); drawFrog(ctx,x,gy-Math.sin(u*Math.PI)*SC*0.6+2,SC*0.55,f.tx>=f.hx?1:-1,t,{leap:Math.sin(u*Math.PI)}); if(u>=1){ f.x=f.tx; f.hop=-1; } return; }
+      if(Math.random()<dt*0.15){ f.hx=f.x; f.tx=clamp(f.x+(Math.random()-0.5)*SC*2.5,w*0.04,w*0.85); f.hop=0; }
+      let tg=0, ta=-0.7; const near=pests.find(p=>Math.abs(p.x-f.x)<SC*0.9&&!p.eaten);
+      if(near && Math.sin(f.ph*2.3)>0.9){ tg=Math.hypot(near.x-f.x-SC*0.25,near.y-gy+SC*0.14)/(SC*0.55); ta=Math.atan2(near.y-gy+SC*0.14,Math.abs(near.x-f.x)-SC*0.25); }
+      drawFrog(ctx,f.x,gy+2,SC*0.55,near&&near.x<f.x?-1:1,t+f.ph,{tongue:tg,tAng:ta}); });
+    // frogs carried off to the export basket on an arc
+    const bx=w*0.94, by=gy-SC*0.2;
+    ctx.save(); ctx.beginPath(); ctx.moveTo(bx-SC*0.45,by-SC*0.3); ctx.lineTo(bx-SC*0.35,by+SC*0.3); ctx.lineTo(bx+SC*0.35,by+SC*0.3); ctx.lineTo(bx+SC*0.45,by-SC*0.3); ctx.closePath(); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.stroke(); ctx.restore();
+    for(let i=0;i<4;i++) line(ctx,bx-SC*0.4+i*SC*0.02,by-SC*0.15+i*SC*0.12,bx+SC*0.4-i*SC*0.02,by-SC*0.15+i*SC*0.12,COL.mid,1);
+    pill(ctx,'Export',bx,by+SC*0.55,COL.red,{size:11});
+    if(banY!==null){ line(ctx,bx-SC*0.5,by-SC*0.4,bx+SC*0.5,by+SC*0.4,COL.red,4); line(ctx,bx+SC*0.5,by-SC*0.4,bx-SC*0.5,by+SC*0.4,COL.red,4); }
+    for(let i=carried.length-1;i>=0;i--){ const c=carried[i]; c.u+=dt/1.1; const u=Math.min(1,c.u); const X=lerp(c.x,bx,u), Y=lerp(c.y,by-SC*0.2,u)-4*SC*1.6*u*(1-u);
+      drawFrog(ctx,X,Y,SC*0.45,1,t,{leap:0.8}); if(u>=1) carried.splice(i,1); }
+    // farmer sprays when pests cross the threshold (mist ∝ S)
+    if(S>0.02){ const fx=w*(0.1+0.7*(0.5+0.5*Math.sin(t*0.15))), fdir=Math.cos(t*0.15)>=0?1:-1;
+      drawPerson(ctx,fx,wy-2,SC*1.3,fdir,t,{phase:t*5,move:1,tank:1,arm:0.3});
+      const nz=[fx+fdir*SC*0.62,wy-SC*1.1];
+      for(let q=0;q<Math.round(18*S);q++){ const u=((t*0.9+q/18)%1); const mx=nz[0]+fdir*u*SC*0.9+Math.sin(q*3.1+t)*SC*0.15*u, my=nz[1]+u*SC*0.7+Math.cos(q*2.3)*SC*0.2*u;
+        ctx.save(); ctx.globalAlpha=(1-u)*0.8; dot(ctx,mx,my,2+u*3,COL.yellow); ctx.restore(); } }
+    textAt(ctx,String(Math.floor(1970+yr)),w*0.02,h*0.07,{size:22,weight:700,color:COL.ink});
+    if(harvest()>0) textAt(ctx,'exporting frog legs',w*0.02,h*0.07+20,{size:12,weight:700,color:COL.red});
+
+    /* ---- graph strip: 1970–2000 ---- */
+    const gx0=w*0.07, gx1=w*0.97, gyb=h-18, gyt=h-gh+10;
+    line(ctx,gx0,gyb,gx1,gyb,COL.ink,1.6); line(ctx,gx0,gyt,gx0,gyb,COL.ink,1.6);
+    for(let y=0;y<=30;y+=5){ const X=lerp(gx0,gx1,y/30); line(ctx,X,gyb,X,gyb+4,COL.ink,1.2); textAt(ctx,String(1970+y),X,gyb+15,{align:'center',size:10,color:COL.mid}); }
+    if(banY!==null){ const X=lerp(gx0,gx1,banY/30); line(ctx,X,gyt,X,gyb,COL.red,1.4,[4,4]); textAt(ctx,'ban',X+4,gyt+10,{size:10,weight:700,color:COL.red}); }
+    const X=y=>lerp(gx0,gx1,y/30), Y=v=>lerp(gyb,gyt,v);
+    [['F',100,COL.red,'Frogs'],['P',200,COL.ink,'Pests'],['Q',15,COL.yellow,'Pesticide'],['W',100,COL.blue,'Water']].forEach(([k,mx,col,lab],j)=>{
+      ctx.save(); ctx.strokeStyle=col; ctx.lineWidth=2.4; ctx.beginPath();
+      hist.forEach((p,i)=>{ const v=k==='W'?100/(1+p.Q/5):p[k]; const xx=X(p.y), yy=Y(clamp(v/mx,0,1)); i?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy); }); ctx.stroke(); ctx.restore();
+      textAt(ctx,lab,gx0+8+j*80,gyt-4,{size:11,weight:700,color:col}); });
+    $('#r0').textContent=Math.round(s.F); $('#r1').textContent=Math.round(s.P); $('#r2').textContent=fmt(s.Q,1); $('#r3').textContent=Math.round(WQ)+'%';
+  });
+  return wrap;
+}
+
+
+/* =====================================================================
+   12.10 LET US SURVEY — what farming choices do to soil over 10 years
+   Yearly rate model (tuned numerically; values 0 … ~1.2):
+     humus      dH = (0.10·org + 0.04·E + 0.03·M)(1 − H/1.2) − 0.09·H·k_syn·k_mono
+     microbes   dM = 1.2·M·(k·H + 0.2 − M) − 0.15·p·M
+     earthworms dE = 0.9·E·(1.1·H − E) − 0.35·p·E
+     predators  dB = B(1 − B) − 1.3·p·B               (ladybird beetles)
+     pests      dP = 1.2·P(1 − P)·k_mono − 1.0·B·P − 1.5·p(1 − R)·P
+     resistance dR = 0.25·p·k_mono·(1 − R)
+     yield      Y = min(1, nutrients)·(1 − 0.7·P)   (synthetic 0.95; organic 0.45 + 0.6·H)
+   Check: synthetic + 80 % spray + one crop → yield 0.80 → 0.37, pests
+   0.3 → 0.87, earthworms 0.6 → 0.13.  Organic, no spray, rotation →
+   yield 0.61 → 0.9, humus and earthworms rise.
+   Each year: fertiliser falls in (0–15 %), spraying (40–60 %), a
+   monsoon storm (75–95 %) washes loose topsoil away ∝ (1 − H).
+   ===================================================================== */
+function buildA10(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label style="margin-bottom:6px;">Fertiliser</label>
+      <div class="toggle-group" id="fzB"><button class="toggle-btn active" data-v="1">Synthetic</button><button class="toggle-btn" data-v="0">Compost · Kunapa jala</button></div></div>
+    <div class="control-group"><label>Pesticide spraying <span class="val" id="pV"></span></label><input type="range" id="pR" min="0" max="100" step="5" value="80"></div>
+    <div class="control-group"><label style="margin-bottom:6px;">Crops</label>
+      <div class="toggle-group" id="crB"><button class="toggle-btn active" data-v="1">Same crop</button><button class="toggle-btn" data-v="0">Rotate crops</button></div></div>
+    <div class="toggle-group" style="margin-top:0"><button class="toggle-btn play" id="go" style="padding:10px;">▶ Farm 10 years</button><button class="toggle-btn" id="rs" style="padding:10px;">↺ Reset</button></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Crop yield</div><div class="rval" id="r0" style="color:var(--f-green)">—</div></div>
+      <div class="rcard"><div class="rlabel">Humus</div><div class="rval" id="r1">—</div></div>
+      <div class="rcard"><div class="rlabel">Earthworms</div><div class="rval" id="r2">—</div></div>
+      <div class="rcard"><div class="rlabel">Pests</div><div class="rval" id="r3" style="color:var(--f-red)">—</div></div></div></div>
+    <div class="control-group"><table class="log"><thead><tr><th>Year</th><th>Yield</th><th>Humus</th><th>Pests</th></tr></thead><tbody id="tb"></tbody></table></div>`;
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), pR=$('#pR');
+  let syn=1, mono=1, t=0, yr=0, run=false, s, s0, rows=[], eroded=0, lastYear=-1;
+  const Y={x:0.75,v:0};
+  function yieldOf(st){ const nut=syn?0.95:0.45+0.6*st.H; return Math.min(1,nut)*(1-0.7*st.P)*(mono?1:0.97); }
+  function reset(){ s={H:0.6,M:0.6,E:0.6,B:0.6,P:0.3,R:0}; s0=Object.assign({},s); yr=0; run=false; rows=[]; eroded=0; lastYear=-1; $('#tb').innerHTML=''; $('#go').textContent='▶ Farm 10 years'; }
+  reset();
+  toggleWire(wrap.querySelectorAll('#fzB button'),b=>{ syn=+b.dataset.v; reset(); });
+  toggleWire(wrap.querySelectorAll('#crB button'),b=>{ mono=+b.dataset.v; reset(); });
+  pR.oninput=()=>{ if(yr===0) reset(); };
+  $('#go').onclick=()=>{ if(yr>=10) reset(); run=!run; $('#go').textContent=run?'⏸ Pause':'▶ Farm 10 years'; };
+  $('#rs').onclick=reset;
+  const R0=rng(1010), grains=Array.from({length:230},()=>({x:R0(),y:R0(),r:0.5+R0()*0.8,c:Math.floor(R0()*26)}));
+  const clusters=Array.from({length:26},()=>({x:0.04+R0()*0.92,y:0.05+R0()*0.55}));
+  const worms=Array.from({length:6},(_,i)=>({x:0.1+i*0.15,y:0.3+R0()*0.4,a:R0()*6,trail:[]}));
+  const drops=[], pellets=[], washed=[];
+  const pestA=[], beetles=[];
+
+  animLoop((dt)=>{
+    t+=dt; const p=+pR.value/100; $('#pV').textContent=pR.value+'%';
+    const yearF=yr%1;
+    if(run){ const dy=dt/1.5; for(let k=0;k<10;k++){ const h=dy/10, org=syn?0:1, eff=p*(1-s.R);
+        const dH=(0.10*org+0.04*s.E+0.03*s.M)*(1-s.H/1.2)-0.09*s.H*(syn?1.4:1)*(mono?1.2:1);
+        const dM=1.2*s.M*((syn?0.7:1)*s.H+0.2-s.M)-0.15*p*s.M, dE=0.9*s.E*(1.1*s.H-s.E)-0.35*p*s.E;
+        const dB=s.B*(1-s.B)-1.3*p*s.B, dP=1.2*s.P*(1-s.P)*(mono?1.3:0.8)-1.0*s.B*s.P-1.5*eff*s.P, dR=0.25*p*(mono?1.2:0.8)*(1-s.R);
+        s.H=clamp(s.H+dH*h,0.02,1.2); s.M=clamp(s.M+dM*h,0.01,1.2); s.E=clamp(s.E+dE*h,0.01,1.3); s.B=clamp(s.B+dB*h,0.01,1); s.P=clamp(s.P+dP*h,0.01,1); s.R=clamp(s.R+dR*h,0,1); yr+=h; }
+      eroded+=dy*(1-s.H/1.2)*(mono?1.2:0.8)*0.5;
+      if(Math.floor(yr)!==lastYear){ lastYear=Math.floor(yr); rows.push([lastYear,Math.round(yieldOf(s)*100),Math.round(s.H*100),Math.round(s.P*100)]);
+        $('#tb').innerHTML=rows.map(r=>`<tr><td>${r[0]}</td><td class="r-ok">${r[1]}%</td><td>${r[2]}</td><td class="r-bad">${r[3]}</td></tr>`).join(''); }
+      if(yr>=10){ yr=10; run=false; $('#go').textContent='✓ 10 years · again'; } }
+    const YL=yieldOf(s); springTo(Y,YL,20,7,dt);
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const gy=h*0.44+eroded*h*0.05, SC=Math.min(w/7,h/5), sb=h*0.97;
+    /* ---- soil cross-section: grains clump into crumbs when humus is high ---- */
+    ctx.save(); ctx.fillStyle=mixCol('#f4efe4','#e6dac1',clamp(s.H/1.2,0,1)); ctx.fillRect(0,gy,w,sb-gy); ctx.restore();
+    line(ctx,0,sb,w,sb,COL.ink,2);
+    const agg=smooth01(0.25,0.9,s.H);
+    clusters.forEach(c=>{ if(agg<0.15) return; ctx.save(); ctx.globalAlpha=agg*0.5; ell(ctx,c.x*w,gy+c.y*(sb-gy),SC*0.28,SC*0.18); ctx.fillStyle='#d7c7a6'; ctx.fill(); ctx.restore(); });
+    grains.forEach(g=>{ const c=clusters[g.c]; const lx=g.x*w, ly=gy+g.y*(sb-gy)*0.95+4, cx=c.x*w+(g.x-0.5)*SC*0.5, cy=gy+c.y*(sb-gy)+(g.y-0.5)*SC*0.3;
+      circ(ctx,lerp(lx,cx,agg),lerp(ly,cy,agg),g.r*SC*0.05,'#9c8a6a',g.r>1?'#fff':'#efe7d6',1.2); });
+    // microbes (∝ M) jiggle
+    const nM=Math.round(s.M*40); const RM=rng(7);
+    for(let i=0;i<nM;i++){ const mx=RM()*w, my=gy+RM()*(sb-gy); dot(ctx,mx+Math.sin(t*3+i)*2,my+Math.cos(t*2.6+i*1.3)*2,1.8,COL.green); }
+    // earthworms (∝ E) burrow, leaving tunnels
+    const nE=Math.min(6,Math.round(s.E*5));
+    worms.forEach((q,i)=>{ if(i>=nE) return; q.a+=gauss()*1.2*Math.sqrt(dt); q.x+=Math.cos(q.a)*0.02*dt; q.y+=Math.sin(q.a)*0.03*dt;
+      if(q.x<0.03||q.x>0.97) q.a=Math.PI-q.a; if(q.y<0.08||q.y>0.9) q.a=-q.a; q.x=clamp(q.x,0.03,0.97); q.y=clamp(q.y,0.08,0.9);
+      q.trail.push([q.x,q.y]); if(q.trail.length>90) q.trail.shift();
+      ctx.save(); ctx.strokeStyle='rgba(129,149,171,0.45)'; ctx.lineWidth=SC*0.07; ctx.lineCap='round'; ctx.beginPath(); q.trail.forEach((p,j)=>{ const X=p[0]*w, Yy=gy+p[1]*(sb-gy); j?ctx.lineTo(X,Yy):ctx.moveTo(X,Yy); }); ctx.stroke(); ctx.restore();
+      ctx.save(); ctx.translate(q.x*w,gy+q.y*(sb-gy)); ctx.rotate(q.a); drawWorm(ctx,0,0,SC*0.6,1,t+i); ctx.restore(); });
+    /* ---- crops: height ∝ yield; roots deeper in crumbly soil ---- */
+    const nPl=8, crop=mono?0:(Math.floor(yr)%2);
+    for(let i=0;i<nPl;i++){ const x=w*(0.08+i*0.12), sz=SC*(0.7+1.0*clamp(Y.x,0,1));
+      ctx.save(); ctx.strokeStyle=COL.green; ctx.lineWidth=1.4; for(let r=0;r<4;r++){ ctx.beginPath(); ctx.moveTo(x,gy); ctx.quadraticCurveTo(x+(r-1.5)*SC*0.2,gy+SC*0.3,x+(r-1.5)*SC*0.3,gy+SC*(0.3+0.5*agg)); ctx.stroke(); } ctx.restore();
+      if(crop===0) drawMillet(ctx,x,gy,sz,t+i,0.3,{grain:clamp(Y.x,0.2,1)});
+      else { G(ctx,x,gy,sz,1,u=>{ ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(0,-0.55); SK(ctx,COL.green,2*u); for(let k=0;k<7;k++){ const a=-Math.PI/2+(k-3)*0.45, rr=0.3+0.1*Math.cos(k); ell(ctx,Math.cos(a)*rr*0.8,-0.5+Math.sin(a)*rr*0.6+0.25,0.1,0.06,a); SK(ctx,COL.green,1.6*u,'#f1faf4'); }
+        for(let k=0;k<3;k++){ ell(ctx,-0.18+k*0.18,-0.3,0.03,0.09,0.3); SK(ctx,COL.green,1.4*u,'#fff'); } }); }
+    }
+    groundLine(ctx,0,w,gy);
+    // pests (∝ P) on the crop, ladybird beetles (∝ B) hunt them
+    const nP=Math.round(s.P*28), nB=Math.round(s.B*6);
+    while(pestA.length<nP) pestA.push({i:Math.floor(Math.random()*nPl),hh:0.3+Math.random()*0.6,ph:Math.random()*6});
+    while(pestA.length>nP) pestA.pop();
+    pestA.forEach(q=>{ const x=w*(0.08+q.i*0.12)+Math.sin(t*0.8+q.ph)*SC*0.2, y=gy-q.hh*SC*(0.7+1.0*clamp(Y.x,0,1)); drawInsect(ctx,x,y,SC*0.12,Math.cos(t*0.8+q.ph)>0?1:-1,t+q.ph); });
+    while(beetles.length<nB) beetles.push({x:Math.random(),ph:Math.random()*6,dir:1});
+    while(beetles.length>nB) beetles.pop();
+    beetles.forEach(b=>{ b.x+=Math.sin(t*0.3+b.ph)*0.03*dt; b.x=clamp(b.x,0.02,0.98); drawBeetle(ctx,b.x*w,gy-2,SC*0.28,Math.cos(t*0.3+b.ph)>0?1:-1,t+b.ph); });
+    /* ---- the year's events ---- */
+    if(run||yr>0&&yr<10){
+      if(yearF<0.15 && Math.random()<dt*25) pellets.push({x:w*(0.05+Math.random()*0.9),y:-10,vy:0,vx:(Math.random()-0.5)*40,syn});
+      if(yearF>0.4&&yearF<0.6&&p>0){ for(let q=0;q<Math.round(30*p);q++){ const u=((t*0.6+q/30)%1), mx=w*(q/30)+u*w*0.08, my=gy-SC*1.4+u*SC*0.9; ctx.save(); ctx.globalAlpha=(1-u)*0.7; dot(ctx,mx,my,2+3*u,COL.yellow); ctx.restore(); } }
+      if(yearF>0.75&&yearF<0.95){ for(let q=0;q<5;q++) drops.push({x:Math.random()*w,y:0,vy:500+Math.random()*200});
+        if(Math.random()<dt*20*(1-s.H/1.2)*(mono?1.2:0.8)) washed.push({x:Math.random()*w*0.8,y:gy+2,vx:60+Math.random()*80}); }
+    }
+    for(let i=pellets.length-1;i>=0;i--){ const q=pellets[i]; q.vy+=600*dt; q.y+=q.vy*dt; q.x+=q.vx*dt; if(q.y>gy){ pellets.splice(i,1); continue; }
+      if(q.syn) circ(ctx,q.x,q.y,3,COL.ink,'#fff',1.4); else { ell(ctx,q.x,q.y,5,3.5,q.x); SK(ctx,COL.ink,1.2,'#8d7a55'); } }
+    for(let i=drops.length-1;i>=0;i--){ const q=drops[i]; q.y+=q.vy*dt; if(q.y>gy){ drops.splice(i,1); continue; } line(ctx,q.x,q.y,q.x-2,q.y-9,COL.blue,1.4); }
+    for(let i=washed.length-1;i>=0;i--){ const q=washed[i]; q.x+=q.vx*dt; q.y=gy+2+Math.sin(q.x*0.1)*1.5; if(q.x>w+10){ washed.splice(i,1); continue; } dot(ctx,q.x,q.y-2,2.4,'#9c8a6a'); }
+    if(yearF>0.75&&yearF<0.95&&(run)){ vec(ctx,w*0.7,gy-12,w*0.95,gy-12,COL.blue,2.4); textAt(ctx,'run-off',w*0.82,gy-18,{align:'center',size:11,weight:700,color:COL.blue}); }
+    // year banner
+    textAt(ctx,'Year '+Math.floor(yr),16,28,{size:18,weight:700,color:COL.ink});
+    const ev=(!run&&yr===0)||yr>=10?'':yearF<0.15?(syn?'adding synthetic fertiliser':'adding compost · Kunapa jala'):yearF>0.4&&yearF<0.6&&p>0?'spraying pesticide':yearF>0.75&&yearF<0.95?'monsoon rain':'';
+    if(ev) textAt(ctx,ev,16,48,{size:12,weight:700,color:COL.mid});
+    const arrow=(v,v0)=>v>v0*1.05?' ▲':v<v0*0.95?' ▼':'';
+    $('#r0').textContent=Math.round(YL*100)+'%'+arrow(YL,yieldOf(s0)); $('#r1').textContent=Math.round(s.H*100)+arrow(s.H,s0.H);
+    $('#r2').textContent=Math.round(s.E*100)+arrow(s.E,s0.E); $('#r3').textContent=Math.round(s.P*100)+arrow(s.P,s0.P);
+  });
+  return wrap;
+}
+
+
+/* ---------------------------------------------------------------------
+   1. ACTIVITIES + ROUTER
+   --------------------------------------------------------------------- */
+const activities = [
+  { num:'12.1', title:'Two Habitats', desc:'Survey a habitat · sort living and non-living', build: buildA1 },
+  { num:'12.2', title:'Count in a Quadrat', desc:'Throw a 1 m × 1 m frame · count what is inside', build: buildA2 },
+  { num:'12.3', title:'Pond A vs Pond B', desc:'Fish → dragonflies → bees → seeds', build: buildA3 },
+  { num:'12.4', title:'Spot the Interactions', desc:'Sort each interaction into Criterion 1, 2 or 3', build: buildA4 },
+  { num:'12.5', title:'Who Eats What?', desc:'Watch each organism feed · classify it', build: buildA5 },
+  { num:'12.6', title:'Link a Food Chain', desc:'Grassland · draw who eats whom', build: buildA6 },
+  { num:'12.7', title:'Pyramid of Numbers', desc:'Count millet, mice, eagles · stack them', build: buildA7 },
+  { num:'12.8', title:'Trace a Food Web', desc:'Add the missing arrows · remove a species', build: buildA8 },
+  { num:'12.9', title:'Frogs, Pests & Pesticides', desc:'Export frog legs · watch the fields', build: buildA9 },
+  { num:'12.10', title:'Farm Survey', desc:'Farming choices · 10 years of soil', build: buildA10 },
+];
+let currentIndex = 0;
+
+function buildNav(){
+  const nav = document.getElementById('sideNav');
+  nav.innerHTML='';
+  activities.forEach((a,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'nav-item'+(i===currentIndex?' active':'');
+    btn.innerHTML = `<span class="n-num">${a.num}</span><span class="n-title">${a.title}</span>`;
+    btn.onclick = ()=>{ currentIndex=i; render(); };
+    nav.appendChild(btn);
+  });
+}
+function render(){
+  stopAllLoops();
+  buildNav();
+  const a = activities[currentIndex];
+  document.getElementById('panelBadge').textContent = a.num;
+  document.getElementById('panelTitle').textContent = a.title;
+  document.getElementById('panelDesc').textContent = a.desc||'';
+  const body = document.getElementById('panelBody');
+  body.innerHTML='';
+  body.appendChild(a.build());
+}
+function labShell(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `<div class="lab-canvas-wrap"><canvas></canvas></div><div class="lab-side"></div>`;
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   INIT
+   --------------------------------------------------------------------- */
+render();
+</script>
+<script src="../../tracking/activity-tracker.js"></script>
+<script src="../../nav/back-button.js"></script>
+</body>
+</html>

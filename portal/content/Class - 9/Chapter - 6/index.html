@@ -1,0 +1,1158 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 9 · Chapter 6 — How Forces Affect Motion | Botclub Labs</title>
+<link href="../../vendor/fonts/fonts.css" rel="stylesheet">
+<style>
+:root{
+  --navy-1:#0f2640; --navy-2:#1a3a5c; --navy-3:#234a73;
+  --accent:#2f8fe0; --accent-2:#5cc8ff;
+  --bg:#eef2f8; --surface-0:#ffffff; --surface-1:#f6f9fc; --surface-2:#eef2f8;
+  --border:#dbe4f0; --border-strong:#c2d1e5;
+  --text-1:#132a44; --text-2:#4c6178; --text-3:#8195ab;
+  --f-red:#d9432b; --f-blue:#2f8fe0; --f-green:#1f9d55; --f-yellow:#d9a017;
+  --radius:14px; --radius-sm:9px;
+  --fs-xs:clamp(10px,0.62vw,12px); --fs-sm:clamp(11px,0.72vw,13.5px);
+  --fs-md:clamp(12.5px,0.85vw,15px); --fs-lg:clamp(15px,1.15vw,19px);
+  --fs-xl:clamp(18px,1.5vw,25px);
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:22px; --sp-6:30px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{ font-family:'Poppins',system-ui,sans-serif; background:var(--bg); color:var(--text-1); overflow:hidden; }
+button, input, select{font-family:inherit;}
+
+.app{height:100vh; display:flex; flex-direction:column; min-height:0;}
+.topbar{
+  flex:0 0 auto; background:linear-gradient(120deg, var(--navy-1) 0%, var(--navy-2) 55%, var(--navy-3) 100%);
+  color:#fff; padding:clamp(9px,1vh,16px) clamp(14px,1.6vw,28px);
+  display:flex; align-items:center; gap:var(--sp-4); box-shadow:0 2px 10px rgba(15,38,64,0.25); z-index:5;
+}
+.topbar .brand-badge{
+  width:clamp(32px,2.4vw,40px); height:clamp(32px,2.4vw,40px); border-radius:10px; background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center;
+  font-size:clamp(15px,1.3vw,20px); flex:0 0 auto;
+}
+.topbar .chip{
+  display:inline-block; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.28);
+  border-radius:6px; padding:2px 9px; font-size:var(--fs-xs); letter-spacing:0.06em; text-transform:uppercase; font-weight:600; margin-bottom:3px;
+}
+.topbar h1{font-size:var(--fs-lg); font-weight:600; line-height:1.2; white-space:nowrap;}
+.topbar .spacer{flex:1;}
+.topbar .legend{display:flex; gap:14px; font-size:var(--fs-xs); color:rgba(255,255,255,0.85); align-items:center;}
+.topbar .legend span{display:inline-flex; align-items:center; gap:5px;}
+.topbar .legend i{width:12px; height:4px; border-radius:2px; display:inline-block;}
+
+.body-wrap{flex:1; display:flex; min-height:0; overflow:hidden;}
+.sidenav{
+  flex:0 0 clamp(170px,13.5vw,230px); background:var(--surface-0); border-right:1px solid var(--border);
+  overflow-y:auto; padding:var(--sp-2); display:flex; flex-direction:column; gap:4px;
+}
+.nav-item{
+  display:flex; align-items:center; gap:8px; text-align:left; width:100%;
+  border:1px solid var(--border); background:var(--surface-1); border-radius:var(--radius-sm); padding:7px 10px; cursor:pointer; transition:all .15s ease;
+}
+.nav-item:hover{background:var(--surface-2); border-color:var(--border-strong);}
+.nav-item.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.nav-item .n-num{font-size:var(--fs-xs); font-weight:700; color:var(--accent); flex:0 0 auto; min-width:26px;}
+.nav-item.active .n-num{color:var(--accent-2);}
+.nav-item .n-title{font-size:var(--fs-sm); font-weight:600; line-height:1.25;}
+
+.content{flex:1; min-width:0; display:flex; flex-direction:column; overflow:hidden;}
+.panel-head{flex:0 0 auto; padding:var(--sp-3) var(--sp-5); border-bottom:1px solid var(--border); background:var(--surface-0); display:flex; align-items:baseline; gap:12px;}
+.panel-badge{background:var(--navy-2); color:#fff; font-size:var(--fs-xs); font-weight:700; padding:3px 10px; border-radius:6px;}
+.panel-head h2{font-size:var(--fs-lg); font-weight:600; color:var(--text-1);}
+.panel-head p{font-size:var(--fs-sm); color:var(--text-2); flex:1; text-align:right;}
+.panel-body{flex:1; min-height:0; overflow:hidden; padding:var(--sp-3) var(--sp-5); display:flex;}
+
+.lab-view{flex:1; display:flex; gap:var(--sp-4); min-height:0; min-width:0;}
+.lab-canvas-wrap{flex:7 1 0; min-width:0; min-height:0; background:#fff; border:1px solid var(--border); border-radius:var(--radius); position:relative; overflow:hidden;}
+.lab-canvas-wrap canvas{width:100%; height:100%; display:block;}
+.lab-side{flex:3 1 0; min-width:230px; display:flex; flex-direction:column; gap:var(--sp-3); min-height:0; overflow-y:auto; padding-right:2px;}
+.side-sub{display:flex; flex-direction:column; gap:var(--sp-3);}
+
+.control-group{background:var(--surface-0); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 12px;}
+.control-group label{font-size:var(--fs-sm); font-weight:600; color:var(--text-1); display:flex; justify-content:space-between;}
+.control-group label .val{color:var(--accent); font-weight:700;}
+.control-group input[type=range]{width:100%; margin-top:7px; accent-color:var(--navy-2); cursor:pointer;}
+.toggle-group{display:flex; gap:6px; margin-top:7px; flex-wrap:wrap;}
+.toggle-btn{flex:1; min-width:56px; padding:7px 5px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:600; cursor:pointer; text-align:center; color:var(--text-2);}
+.toggle-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.toggle-btn.small{font-size:10.5px; padding:6px 3px;}
+.toggle-btn.play{background:var(--f-green); border-color:var(--f-green); color:#fff;}
+.toggle-btn.navy{background:var(--navy-2); border-color:var(--navy-2); color:#fff; width:100%; margin-top:9px;}
+.toggle-btn:disabled{opacity:.5; cursor:not-allowed;}
+.chip-btn{display:inline-flex; align-items:center; gap:5px; padding:6px 11px; margin:3px 3px 0 0; border:1px solid var(--border-strong); background:var(--surface-1); border-radius:18px; cursor:pointer; font-size:var(--fs-sm); font-weight:600; color:var(--text-2);}
+.chip-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.chip-btn.ok{border-color:var(--f-green);} .chip-btn.bad{border-color:var(--f-red);}
+.chip-wrap{display:flex; flex-wrap:wrap; margin-top:3px;}
+
+.role-row{display:flex; align-items:center; gap:8px; margin-top:7px; font-size:var(--fs-sm); font-weight:600;}
+.role-row .rdot{width:10px; height:10px; border-radius:50%; flex:0 0 auto; display:inline-block;}
+.role-row .rname{width:70px; flex:0 0 auto; color:var(--text-2);}
+.role-row select{flex:1; min-width:0; padding:6px 7px; border:1px solid var(--border-strong); border-radius:7px; font-size:var(--fs-sm); background:var(--surface-1); color:var(--text-1); cursor:pointer;}
+
+.step-row{display:flex; gap:5px;}
+.step-pill{flex:1; padding:6px 4px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:10.5px; font-weight:700; color:var(--text-3); cursor:pointer;}
+.step-pill.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.step-pill.done{border-color:var(--f-green); color:var(--f-green);}
+.step-pill.active.done{color:#fff;}
+.opt-btn{display:block; width:100%; text-align:left; margin-top:6px; padding:7px 9px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:500; color:var(--text-1); cursor:pointer; line-height:1.3;}
+.opt-btn.active{border-color:var(--navy-2); background:#e3ecf7; font-weight:600;}
+.var-row{display:flex; align-items:center; gap:6px; margin-top:7px;}
+.var-row .vname{flex:0 0 88px; font-size:var(--fs-sm); font-weight:600;}
+.var-row .toggle-group{margin-top:0; flex:1;}
+
+.result-cards{display:grid; grid-template-columns:1fr 1fr; gap:6px;}
+.result-cards.three{grid-template-columns:1fr 1fr 1fr;}
+.rcard{background:var(--surface-0); border:1px solid var(--border); border-radius:9px; padding:7px 9px;}
+.rcard .rlabel{font-size:9.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--text-3); font-weight:600;}
+.rcard .rval{font-size:var(--fs-md); font-weight:700; color:var(--text-1); margin-top:1px;}
+.rcard.wide{grid-column:1/-1;}
+.hint{font-size:var(--fs-xs); color:var(--text-3); margin-top:6px; line-height:1.4;}
+.fb{font-size:var(--fs-xs); font-weight:600; margin-top:6px; padding:5px 8px; border-radius:7px;}
+.fb.ok{background:#e4f7ec; color:#1f6b3d;}
+.fb.bad{background:#fdece7; color:#a4331c;}
+.fb.warn{background:#fdf4dc; color:#8a6410;}
+.log{width:100%; border-collapse:collapse; font-size:10.5px; margin-top:4px;}
+.log th{text-align:left; color:var(--text-3); font-weight:600; text-transform:uppercase; font-size:9px; letter-spacing:.04em; padding:3px 4px; border-bottom:1px solid var(--border);}
+.log td{padding:4px; border-bottom:1px solid var(--surface-2); color:var(--text-2);}
+.log td.r-ok{color:var(--f-green); font-weight:700;} .log td.r-bad{color:var(--f-red); font-weight:700;} .log td.r-warn{color:var(--f-yellow); font-weight:700;}
+.hidden{display:none !important;}
+
+@media (max-width:1000px) and (orientation:portrait), (max-width:1000px) and (min-height:601px){
+  .body-wrap{flex-direction:column;}
+  .sidenav{flex:0 0 auto; width:100%; height:auto; flex-direction:row; overflow-x:auto; overflow-y:hidden; border-right:none; border-bottom:1px solid var(--border); padding:6px;}
+  .nav-item{flex:0 0 auto; width:150px;}
+  .panel-body{overflow-y:auto;}
+  .lab-view{flex-direction:column;}
+  .lab-canvas-wrap{min-height:320px;}
+  .lab-side{min-width:0;}
+  .content{overflow-y:auto;}
+  .topbar .legend{display:none;}
+  .topbar h1{white-space:normal;}
+}
+::-webkit-scrollbar{width:7px; height:7px;}
+::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand-badge">🚀</div>
+    <div>
+      <div class="chip">Grade 9 · Ch 6</div>
+      <h1>How Forces Affect Motion</h1>
+    </div>
+    <div class="spacer"></div>
+    <div class="legend">
+      <span><i style="background:var(--f-yellow)"></i>Your force · what you set</span>
+      <span><i style="background:var(--f-red)"></i>Friction · opposing force</span>
+      <span><i style="background:var(--f-blue)"></i>Force back · weight</span>
+      <span><i style="background:var(--f-green)"></i>Motion · velocity</span>
+    </div>
+  </div>
+  <div class="body-wrap">
+    <nav class="sidenav" id="sideNav"></nav>
+    <main class="content">
+      <div class="panel-head">
+        <div class="panel-badge" id="panelBadge">2.1</div>
+        <h2 id="panelTitle">Select an activity</h2>
+        <p id="panelDesc"></p>
+      </div>
+      <div class="panel-body" id="panelBody"></div>
+    </main>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   GRADE 9 — CHAPTER 6: HOW FORCES AFFECT MOTION
+   (NCERT Exploration, iesc106) — Activities 6.1–6.7.
+   Every activity runs a continuous animation loop: buttons and sliders only
+   set targets. Coins decelerate at μg, blocks stick until μs·N then slide at
+   μk·N, carts accelerate at (mg − μMg)/(M + m), chairs and balloons move by
+   equal-and-opposite forces, springs settle with real spring-damper motion.
+   ========================================================================= */
+const COL = {red:'#d9432b', blue:'#2f8fe0', green:'#1f9d55', yellow:'#d9a017', ink:'#132a44', muted:'#4c6178', mid:'#8195ab'};
+
+/* ---------------------------------------------------------------------
+   0. CANVAS HELPERS
+   --------------------------------------------------------------------- */
+function fitCanvas(canvas){
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  const r = canvas.parentElement.getBoundingClientRect();
+  const w = Math.max(200, r.width), h = Math.max(160, r.height);
+  if(canvas._w!==w || canvas._h!==h || canvas._dpr!==dpr){
+    canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr);
+    canvas.style.width = w+'px'; canvas.style.height = h+'px';
+    canvas._w=w; canvas._h=h; canvas._dpr=dpr;
+  }
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, w, h};
+}
+function line(ctx,x1,y1,x2,y2,color,width,dash){
+  ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=width||2;
+  if(dash) ctx.setLineDash(dash); else ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); ctx.restore();
+}
+function arrowHead(ctx,x,y,ang,color,size){
+  size=size||7; ctx.save(); ctx.fillStyle=color; ctx.translate(x,y); ctx.rotate(ang);
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-size,size*0.42); ctx.lineTo(-size,-size*0.42); ctx.closePath(); ctx.fill(); ctx.restore();
+}
+function vec(ctx,x1,y1,x2,y2,color,width){ line(ctx,x1,y1,x2,y2,color,width||2.6); arrowHead(ctx,x2,y2,Math.atan2(y2-y1,x2-x1),color,7); }
+function dimArrow(ctx,x,y1,y2,color){ line(ctx,x,y1,x,y2,color,1.6); arrowHead(ctx,x,y1,-Math.PI/2,color,5); arrowHead(ctx,x,y2,Math.PI/2,color,5); }
+function textAt(ctx,txt,x,y,opts){
+  opts=opts||{}; ctx.save();
+  ctx.font=(opts.weight||500)+' '+(opts.size||12)+'px Poppins, sans-serif';
+  ctx.fillStyle=opts.color||COL.ink; ctx.textAlign=opts.align||'left'; ctx.textBaseline=opts.baseline||'alphabetic';
+  if(opts.alpha!==undefined) ctx.globalAlpha=opts.alpha;
+  ctx.fillText(txt,x,y); ctx.restore();
+}
+function rect(ctx,x,y,w,h,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw===undefined?2.2:lw; if(fill){ctx.fillStyle=fill; ctx.fillRect(x,y,w,h);} if(lw!==0){ctx.strokeStyle=stroke; ctx.strokeRect(x,y,w,h);} ctx.restore(); }
+function circ(ctx,x,y,r,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw||2.2; ctx.beginPath(); ctx.arc(x,y,Math.max(0.1,r),0,Math.PI*2); if(fill){ctx.fillStyle=fill; ctx.fill();} ctx.strokeStyle=stroke; ctx.stroke(); ctx.restore(); }
+function rrect(ctx,x,y,w,h,r){ r=Math.min(r,w/2,h/2); ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function fmt(x,d){ if(!isFinite(x)) return '—'; d=d===undefined?2:d; return Number(x.toFixed(d)).toString(); }
+function gauss(){ return (Math.random()+Math.random()+Math.random()+Math.random()-2)*1.2247; }
+function hexRgb(h){ const n=parseInt(h.slice(1),16); return [n>>16&255, n>>8&255, n&255]; }
+function mixCol(a,b,t){ const A=hexRgb(a),B=hexRgb(b); t=clamp(t,0,1); return 'rgb('+A.map((v,i)=>Math.round(lerp(v,B[i],t))).join(',')+')'; }
+function rampCol(stops,x){ // stops: [[pos,hex],...]
+  if(x<=stops[0][0]) return mixCol(stops[0][1],stops[0][1],0);
+  for(let i=1;i<stops.length;i++){ if(x<=stops[i][0]){ const a=stops[i-1],b=stops[i]; return mixCol(a[1],b[1],(x-a[0])/(b[0]-a[0])); } }
+  const l=stops[stops.length-1][1]; return mixCol(l,l,0);
+}
+function thermo(ctx,x,top,bot,frac,outline,liquid){
+  const br=8;
+  ctx.save(); ctx.lineWidth=2; ctx.strokeStyle=outline; ctx.fillStyle='#fff';
+  rrect(ctx,x-5,top,10,bot-top+2,5); ctx.fill(); ctx.stroke(); ctx.restore();
+  const lh=(bot-top-5)*clamp(frac,0,1);
+  ctx.save(); ctx.fillStyle=liquid; ctx.fillRect(x-2.2,bot-lh,4.4,lh+6); ctx.restore();
+  circ(ctx,x,bot+br,br,outline,'#fff',2); circ(ctx,x,bot+br,br-3.2,liquid,liquid,1);
+  for(let i=0;i<=4;i++){ const yy=top+5+(bot-top-5)*i/4; line(ctx,x+5,yy,x+9,yy,outline,1.1); }
+}
+function flame(ctx,cx,baseY,width,inten,t){
+  const n=5;
+  for(let i=0;i<n;i++){
+    const fx=cx-width/2+width*(i+0.5)/n;
+    const hh=(6+inten*32)*(0.78+0.22*Math.sin(t*13+i*1.7));
+    const sway=Math.sin(t*9+i*2.1)*3;
+    ctx.save(); ctx.lineJoin='round';
+    ctx.strokeStyle=COL.red; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(fx-7,baseY); ctx.quadraticCurveTo(fx-7,baseY-hh*0.55,fx+sway,baseY-hh); ctx.quadraticCurveTo(fx+7,baseY-hh*0.55,fx+7,baseY); ctx.stroke();
+    ctx.strokeStyle=COL.yellow; ctx.lineWidth=1.6;
+    ctx.beginPath(); ctx.moveTo(fx-3.5,baseY); ctx.quadraticCurveTo(fx-3,baseY-hh*0.35,fx+sway*0.5,baseY-hh*0.55); ctx.quadraticCurveTo(fx+3,baseY-hh*0.35,fx+3.5,baseY); ctx.stroke();
+    ctx.restore();
+  }
+}
+
+/* ---------------------------------------------------------------------
+   0b. ANIMATION ENGINE
+   --------------------------------------------------------------------- */
+let activeStops = [];
+function stopAllLoops(){ activeStops.forEach(s=>{ try{ s(); }catch(e){} }); activeStops=[]; }
+function animLoop(tick){
+  let last = performance.now();
+  let raf;
+  function frame(now){
+    const dt = Math.max(0, Math.min(0.04, (now-last)/1000));
+    last = now;
+    try{ tick(dt); }catch(e){ if(window.__errs) __errs.push(String(e&&e.stack||e).slice(0,300)); else console.error(e); }
+    raf = requestAnimationFrame(frame);
+  }
+  raf = requestAnimationFrame(frame);
+  const stop = ()=>cancelAnimationFrame(raf);
+  activeStops.push(stop);
+  return stop;
+}
+/** Exponential ease — frame-rate independent, always smooth. */
+function approach(cur,tgt,rate,dt){ return cur + (tgt-cur)*(1-Math.exp(-rate*dt)); }
+/** Spring-damper — gives natural overshoot and settle. */
+function springTo(state,target,k,damping,dt){
+  const acc = (target-state.x)*k - state.v*damping;
+  state.v += acc*dt;
+  state.x += state.v*dt;
+  return state.x;
+}
+function toggleWire(btns,cb){
+  btns.forEach(b=>b.onclick=()=>{ btns.forEach(x=>x.classList.remove('active')); b.classList.add('active'); cb(b); });
+}
+
+
+/* ---------------------------------------------------------------------
+   0c. CHAPTER-6 HELPERS — virtual stage, labels, a jointed line-drawn
+       teenager whose body really changes with age, sound, cameras
+   --------------------------------------------------------------------- */
+function rng(seed){ let s=(seed>>>0)||1; return ()=>{ s=(Math.imul(s,1664525)+1013904223)>>>0; return s/4294967296; }; }
+function smooth01(a,b,x){ const t=clamp((x-a)/(b-a),0,1); return t*t*(3-2*t); }
+function angDiff(a,b){ return Math.atan2(Math.sin(a-b),Math.cos(a-b)); }
+function ease(x){ x=clamp(x,0,1); return x<0.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2; }
+function spr(x){ return {x:x||0,v:0}; }
+function setv($,id,v){ const e=$('#'+id); if(e&&e.textContent!==v) e.textContent=v; }
+function setc($,id,c){ const e=$('#'+id); if(e&&e.style.color!==c) e.style.color=c; }
+function card(id,l,col){ return `<div class="rcard"><div class="rlabel">${l}</div><div class="rval" id="${id}"${col?` style="color:${col}"`:''}>—</div></div>`; }
+/* every scene draws on an 800 × 500 virtual stage, fitted into the canvas */
+const VW=800, VH=500;
+function stage(ctx,w,h){ const s=Math.min(w/VW,h/VH), ox=(w-VW*s)/2, oy=(h-VH*s)/2; ctx.translate(ox,oy); ctx.scale(s,s); return s; }
+function stepPills(el,names,cur,done,onPick){
+  el.innerHTML=names.map((n,i)=>`<button class="step-pill${i===cur?' active':''}${done[i]?' done':''}" data-i="${i}">${n}</button>`).join('');
+  el.querySelectorAll('.step-pill').forEach(b=>b.onclick=()=>onPick(+b.dataset.i));
+}
+function hexRgb(h){ if(h[0]!=='#') return h.match(/[\d.]+/g).slice(0,3).map(Number); const n=parseInt(h.slice(1),16); return [n>>16&255, n>>8&255, n&255]; }
+function rgba(h,a){ const c=hexRgb(h); return `rgba(${c[0]},${c[1]},${c[2]},${a})`; }
+function fitFont(ctx,txt,maxW,size,weight){
+  let s=size; ctx.font=weight+' '+s+'px Poppins, sans-serif';
+  while(s>9 && ctx.measureText(txt).width>maxW){ s-=0.5; ctx.font=weight+' '+s+'px Poppins, sans-serif'; }
+  return s;
+}
+function tableTop(ctx,x0,x1,y,legs){ ctx.save(); ctx.lineWidth=2.2; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; rrect(ctx,x0,y,x1-x0,12,3); ctx.fill(); ctx.stroke();
+  if(legs){ line(ctx,x0+22,y+12,x0+22,y+legs,COL.ink,2.4); line(ctx,x1-22,y+12,x1-22,y+legs,COL.ink,2.4); } ctx.restore(); }
+function meterV(ctx,x,y,w,h,frac,col,label){ // vertical bar meter, y = top
+  ctx.save(); rrect(ctx,x,y,w,h,5); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=1.6; ctx.stroke();
+  const f=clamp(frac,0,1); ctx.save(); rrect(ctx,x,y,w,h,5); ctx.clip(); ctx.fillStyle=col; ctx.globalAlpha=0.85; ctx.fillRect(x,y+h*(1-f),w,h*f); ctx.restore();
+  if(label) textAt(ctx,label,x+w/2,y+h+16,{align:'center',size:12,weight:700,color:col});
+  ctx.restore();
+}
+function tag(ctx,txt,x,y,col,o){ o=o||{}; ctx.save(); ctx.font=(o.weight||700)+' '+(o.size||13)+'px Poppins, sans-serif';
+  const w=ctx.measureText(txt).width+16, h=(o.size||13)+10; const X=o.align==='left'?x:(o.align==='right'?x-w:x-w/2);
+  ctx.globalAlpha=o.alpha===undefined?1:o.alpha; rrect(ctx,X,y-h/2,w,h,h/2); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=col; ctx.lineWidth=1.8; ctx.stroke();
+  ctx.fillStyle=col; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(txt,X+w/2,y+1); ctx.restore(); }
+function leader(ctx,x1,y1,x2,y2,txt,col,a){ ctx.save(); ctx.globalAlpha=a===undefined?1:a; line(ctx,x1,y1,x2,y2,col||COL.muted,1.3); circ(ctx,x1,y1,2.4,col||COL.muted,col||COL.muted,1);
+  textAt(ctx,txt,x2+(x2>=x1?5:-5),y2+4,{align:x2>=x1?'left':'right',size:12.5,weight:600,color:col||COL.muted}); ctx.restore(); }
+function glow(ctx,x,y,R,col,a){ if(a<=0.01) return; const c=hexRgb(col); ctx.save(); const g=ctx.createRadialGradient(x,y,0,x,y,R);
+  g.addColorStop(0,`rgba(${c},${Math.min(1,a)})`); g.addColorStop(0.35,`rgba(${c},${Math.min(1,a)*0.45})`); g.addColorStop(1,`rgba(${c},0)`);
+  ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,y,R,0,Math.PI*2); ctx.fill(); ctx.restore(); }
+function rayBurst(ctx,x,y,r0,r1,n,col,a,t){ if(a<=0.03) return; ctx.save(); ctx.globalAlpha=Math.min(1,a); ctx.strokeStyle=col; ctx.lineWidth=2.2; ctx.lineCap='round';
+  for(let i=0;i<n;i++){ const an=i/n*Math.PI*2+0.2, f=0.8+0.2*Math.sin(t*6+i*1.7); ctx.beginPath(); ctx.moveTo(x+Math.cos(an)*r0,y+Math.sin(an)*r0); ctx.lineTo(x+Math.cos(an)*(r0+(r1-r0)*f),y+Math.sin(an)*(r0+(r1-r0)*f)); ctx.stroke(); } ctx.restore(); }
+function mark(ctx,x,y,ok,a){ ctx.save(); ctx.globalAlpha=a===undefined?1:a; ctx.lineWidth=4; ctx.lineCap='round'; ctx.strokeStyle=ok?COL.green:COL.red; ctx.beginPath();
+  if(ok){ ctx.moveTo(x-9,y); ctx.lineTo(x-2,y+7); ctx.lineTo(x+10,y-8); } else { ctx.moveTo(x-8,y-8); ctx.lineTo(x+8,y+8); ctx.moveTo(x+8,y-8); ctx.lineTo(x-8,y+8); } ctx.stroke(); ctx.restore(); }
+const SFX={on:true,ctx:null};
+function sfxCtx(){ if(!SFX.on) return null; try{ if(!SFX.ctx) SFX.ctx=new (window.AudioContext||window.webkitAudioContext)(); if(SFX.ctx.state==='suspended') SFX.ctx.resume(); return SFX.ctx; }catch(e){ return null; } }
+function camFit(ctx,w,h,cam){ const cw=cam[2]-cam[0], ch=cam[3]-cam[1], s=Math.min(w/cw,h/ch); ctx.translate((w-cw*s)/2,(h-ch*s)/2); ctx.scale(s,s); ctx.translate(-cam[0],-cam[1]); return s; }
+function timeTagPx(ctx,w,txt){ tag(ctx,txt,w-58,24,COL.mid,{size:11.5,weight:600}); }
+
+function logTable(heads,rows){ return `<table class="log"><tr>${heads.map(h=>`<th>${h}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map(c=>typeof c==='object'?`<td class="${c.c||''}">${c.v}</td>`:`<td>${c}</td>`).join('')}</tr>`).join('')}</table>`; }
+function chipsWire(root,sel,cb){ const bs=[...root.querySelectorAll(sel)]; bs.forEach(b=>b.onclick=()=>{ bs.forEach(x=>x.classList.remove('active')); b.classList.add('active'); cb(b); }); return bs; }
+function setBtn(b,txt,cls){ if(b.textContent!==txt) b.textContent=txt; if(cls!==undefined) b.className='toggle-btn '+cls; }
+
+/* ---------------------------------------------------------------------
+   0d. CHAPTER-1 (GRADE 9) HELPERS — "keep / ignore" detail chips, the
+       effect-size bars, and line-drawn people, trees and signals
+   --------------------------------------------------------------------- */
+const D2R=Math.PI/180;
+function mmss(s){ if(!isFinite(s)) return '—'; s=Math.max(0,Math.round(s)); return Math.floor(s/60)+':'+String(s%60).padStart(2,'0'); }
+function sgn(x,d,u){ return (x>=0?'+':'−')+fmt(Math.abs(x),d)+(u||''); }
+/* chips that say which details your model KEEPS. list: [{k,label,ess}] */
+function modelChips(el,list,kept,onChange){
+  el.innerHTML=list.map(d=>`<button class="chip-btn${kept[d.k]?' active':''}" data-k="${d.k}">${kept[d.k]?'✓ ':''}${d.label}</button>`).join('');
+  el.querySelectorAll('.chip-btn').forEach(b=>b.onclick=()=>{ kept[b.dataset.k]=!kept[b.dataset.k]; modelChips(el,list,kept,onChange); onChange(b.dataset.k); });
+}
+/* bars: how much each detail changes the answer. rows: [{label,val,txt}] */
+function effectBars(rows,unit,col){
+  const mx=Math.max(1e-9,...rows.map(r=>Math.abs(r.val)));
+  return rows.map(r=>{ const f=Math.abs(r.val)/mx, zero=Math.abs(r.val)<1e-6;
+    return `<div style="display:flex;align-items:center;gap:6px;margin-top:5px;font-size:11px">
+      <span style="flex:0 0 104px;color:var(--text-2);font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${r.label}</span>
+      <span style="flex:1;height:9px;background:var(--surface-2);border-radius:5px;overflow:hidden"><i style="display:block;height:100%;width:${(f*100).toFixed(1)}%;background:${zero?'transparent':col};border-radius:5px"></i></span>
+      <span style="flex:0 0 58px;text-align:right;font-weight:700;color:${zero?'var(--text-3)':'var(--text-1)'}">${zero?'0 — none':r.txt}</span></div>`; }).join('');
+}
+/* a tree that bends with the wind (w in m/s, + = blowing to the left) */
+function treeDraw(ctx,x,y,H,wind,t,seed){
+  const lean=-wind*0.035+Math.sin(t*1.7+seed)*0.02*(1+Math.abs(wind)*0.6);
+  ctx.save(); ctx.translate(x,y); ctx.lineCap='round';
+  ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.beginPath(); ctx.moveTo(0,0); ctx.quadraticCurveTo(lean*H*0.3,-H*0.4,lean*H*0.7,-H*0.62); ctx.stroke();
+  const cx=lean*H*0.8, cy=-H*0.78;
+  ctx.fillStyle='#fff'; ctx.strokeStyle=COL.green; ctx.lineWidth=2;
+  ctx.beginPath(); for(let i=0;i<=16;i++){ const a=i/16*Math.PI*2, r=H*0.3*(1+0.12*Math.sin(a*5+seed)); const px=cx+Math.cos(a)*r*1.05+lean*H*0.15*Math.max(0,-Math.sin(a)), py=cy+Math.sin(a)*r*0.85; i?ctx.lineTo(px,py):ctx.moveTo(px,py); } ctx.closePath(); ctx.fill(); ctx.stroke();
+  ctx.restore();
+}
+/* small walking person, side-on. ph = walking phase, dir = ±1 */
+function walker(ctx,x,y,H,ph,dir,col,a){
+  ctx.save(); ctx.globalAlpha=a===undefined?1:a; ctx.translate(x,y); ctx.scale(dir||1,1); ctx.strokeStyle=col||COL.muted; ctx.lineWidth=Math.max(1.4,H*0.05); ctx.lineCap='round';
+  const hip=[0,-H*0.48], sh=[H*0.03,-H*0.8], sw=Math.sin(ph)*0.45;
+  ctx.beginPath(); ctx.moveTo(hip[0],hip[1]); ctx.lineTo(Math.sin(sw)*H*0.48,0); ctx.moveTo(hip[0],hip[1]); ctx.lineTo(-Math.sin(sw)*H*0.48,0);
+  ctx.moveTo(hip[0],hip[1]); ctx.lineTo(sh[0],sh[1]); ctx.moveTo(sh[0],sh[1]+H*0.04); ctx.lineTo(sh[0]-Math.sin(sw)*H*0.3,sh[1]+H*0.36); ctx.moveTo(sh[0],sh[1]+H*0.04); ctx.lineTo(sh[0]+Math.sin(sw)*H*0.3,sh[1]+H*0.36); ctx.stroke();
+  ctx.beginPath(); ctx.arc(sh[0]+H*0.02,sh[1]-H*0.1,H*0.1,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill(); ctx.stroke(); ctx.restore();
+}
+/* two-bone IK: returns the joint between a and b (bend side s = ±1) */
+function ik2(ax,ay,bx,by,l1,l2,s){
+  const d=Math.min(Math.hypot(bx-ax,by-ay),l1+l2-0.01), a=Math.atan2(by-ay,bx-ax);
+  const c=clamp((l1*l1+d*d-l2*l2)/(2*l1*d),-1,1), q=a+s*Math.acos(c);
+  return [ax+Math.cos(q)*l1, ay+Math.sin(q)*l1];
+}
+
+/* ---------------------------------------------------------------------
+   0d. CHAPTER-7 HELPERS — temperature colour, lab thermometer, magnifying
+       lens, tripod, beaker, bowl, wavy heat arrows, sounds, small tables
+   --------------------------------------------------------------------- */
+const T_RAMP=[[15,'#2f8fe0'],[32,'#8aa9c8'],[60,'#d9a017'],[150,'#d9432b'],[450,'#8a1c0c']];
+function tempCol(T){ return rampCol(T_RAMP,T); }
+/* vertical lab thermometer; T in °C; returns the bulb centre */
+function labThermo(ctx,x,top,bot,T,lo,hi,o){ o=o||{}; const r=o.r||9, tw=o.w||12;
+  ctx.save(); ctx.lineWidth=2; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff';
+  rrect(ctx,x-tw/2,top,tw,bot-top+4,tw/2); ctx.fill(); ctx.stroke();
+  const f=clamp((T-lo)/(hi-lo),0,1), ly=bot-(bot-top-8)*f;
+  ctx.fillStyle=COL.red; ctx.fillRect(x-2.4,ly,4.8,bot-ly+6);
+  circ(ctx,x,bot+r,r,COL.ink,'#fff',2); circ(ctx,x,bot+r,r-3,COL.red,COL.red,1);
+  const step=o.step||10;
+  for(let v=Math.ceil(lo/step)*step; v<=hi; v+=step){ const y=bot-(bot-top-8)*(v-lo)/(hi-lo); const big=(v%(step*2)===0);
+    line(ctx,x+tw/2,y,x+tw/2+(big?7:4),y,COL.ink,1.1); if(big&&o.labels!==false) textAt(ctx,String(v),x+tw/2+10,y+4,{size:o.fs||10,weight:600,color:COL.muted}); }
+  ctx.restore(); return {x,y:bot+r,ly};
+}
+/* magnifying lens: small ring at (sx,sy) on the object, big view at (cx,cy) */
+function lensView(ctx,cx,cy,R,sx,sy,draw,o){ o=o||{};
+  const d=Math.hypot(cx-sx,cy-sy)||1, a=Math.atan2(cy-sy,cx-sx), s=Math.asin(clamp((R-8)/d,-1,1));
+  ctx.save(); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.2; ctx.setLineDash([4,4]);
+  [1,-1].forEach(k=>{ const b=a+k*(Math.PI/2+s); ctx.beginPath(); ctx.moveTo(sx+Math.cos(b)*8,sy+Math.sin(b)*8); ctx.lineTo(cx+Math.cos(b)*R,cy+Math.sin(b)*R); ctx.stroke(); });
+  ctx.restore(); circ(ctx,sx,sy,8,COL.ink,null,2);
+  ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill(); ctx.clip(); draw(); ctx.restore();
+  circ(ctx,cx,cy,R,COL.ink,null,3.2); circ(ctx,cx,cy,R+4,COL.mid,null,1);
+  if(o.label) tag(ctx,o.label,cx,cy+R+16,o.col||COL.ink,{size:11});
+}
+function tripod(ctx,cx,top,baseY,w){ ctx.save(); ctx.lineCap='round';
+  line(ctx,cx-w/2-6,top,cx+w/2+6,top,COL.ink,4);
+  line(ctx,cx-w/2,top,cx-w/2-22,baseY,COL.ink,3.4); line(ctx,cx+w/2,top,cx+w/2+22,baseY,COL.ink,3.4); line(ctx,cx,top+3,cx,baseY,COL.mid,2.6);
+  ctx.restore(); }
+function gauze(ctx,cx,y,w){ ctx.save(); rect(ctx,cx-w/2,y-3,w,6,COL.ink,'#fff',1.8); for(let x=cx-w/2+4;x<cx+w/2;x+=6) line(ctx,x,y-3,x+3,y+3,COL.mid,1); ctx.restore(); }
+/* straight-walled beaker; returns inner box */
+function beakerDraw(ctx,cx,top,bot,w,o){ o=o||{}; const x0=cx-w/2, x1=cx+w/2;
+  ctx.save(); ctx.lineJoin='round'; ctx.lineWidth=3; ctx.strokeStyle=COL.ink;
+  ctx.beginPath(); ctx.moveTo(x0-8,top-4); ctx.lineTo(x0,top+8); ctx.lineTo(x0,bot-10); ctx.quadraticCurveTo(x0,bot,x0+10,bot); ctx.lineTo(x1-10,bot); ctx.quadraticCurveTo(x1,bot,x1,bot-10); ctx.lineTo(x1,top); ctx.lineTo(x1+4,top-4); ctx.stroke();
+  if(o.grad){ for(let i=1;i<=o.grad.n;i++){ const y=bot-(bot-top)*i/(o.grad.n+1); line(ctx,x0+6,y,x0+(i%2?16:24),y,COL.mid,1.3); if(o.grad.lab&&i%2===0) textAt(ctx,o.grad.lab(i),x0+28,y+4,{size:9.5,color:COL.mid,weight:600}); } }
+  ctx.restore(); return {x0,x1,top,bot};
+}
+/* round bowl: rim y, half-width w, depth d; returns the inner half-width at y */
+function bowlHalfW(w,d,rim,y){ const u=clamp((y-rim)/d,0,1); return w*Math.sqrt(Math.max(0,1-u*u)); }
+function bowlPath(ctx,cx,rim,w,d){ ctx.beginPath(); ctx.moveTo(cx-w,rim); ctx.ellipse(cx,rim,w,d,0,Math.PI,0,true); }
+function bowlDraw(ctx,cx,rim,w,d){ ctx.save(); ctx.lineWidth=3; ctx.strokeStyle=COL.ink; bowlPath(ctx,cx,rim,w,d); ctx.stroke(); line(ctx,cx-w-8,rim,cx-w+6,rim,COL.ink,3); line(ctx,cx+w-6,rim,cx+w+8,rim,COL.ink,3);
+  line(ctx,cx-w*0.35,rim+d+2,cx+w*0.35,rim+d+2,COL.ink,3); ctx.restore(); }
+/* a wavy arrow: heat leaving / arriving, travelling phase t */
+function heatWave(ctx,x,y,len,ang,col,t,a,amp){ if(a<=0.02) return; amp=amp||4; ctx.save(); ctx.globalAlpha=clamp(a,0,1); ctx.translate(x,y); ctx.rotate(ang);
+  ctx.strokeStyle=col; ctx.lineWidth=2.2; ctx.lineCap='round'; ctx.beginPath();
+  for(let s=0;s<=len-6;s+=2){ const yy=Math.sin(s*0.35-t*9)*amp; s?ctx.lineTo(s,yy):ctx.moveTo(s,yy); } ctx.stroke(); arrowHead(ctx,len,0,0,col,7); ctx.restore(); }
+function wavyUp(ctx,x,y0,y1,col,t,a,amp){ heatWave(ctx,x,y0,y0-y1,-Math.PI/2,col,t,a,amp); }
+/* sounds */
+function tink(freq,gain,dur){ const a=sfxCtx(); if(!a) return; try{ const o=a.createOscillator(), g=a.createGain(); o.type='sine'; o.frequency.value=freq||2600;
+  g.gain.setValueAtTime(gain||0.12,a.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,a.currentTime+(dur||0.35)); o.connect(g); g.connect(a.destination); o.start(); o.stop(a.currentTime+(dur||0.35)+0.02); }catch(e){} }
+function drip(){ tink(900+Math.random()*500,0.05,0.12); }
+/* small result table in the side panel */
+
+/* ---------------------------------------------------------------------
+   0e. CHAPTER-6 (GRADE 9) HELPERS — surfaces with real friction
+       coefficients, force arrows, a working spring balance, wheels,
+       a follow camera and a mini-map strip
+   --------------------------------------------------------------------- */
+/* kinetic (mu) and static (ms) coefficients for a metal coin stack / a
+   wooden block on each surface. Order = book order in Activity 6.1. */
+const SURF={
+  wood:    {name:'Wooden table top',   short:'Wood',     mu:0.42, ms:0.50},
+  cement:  {name:'Cemented floor',     short:'Cement',   mu:0.55, ms:0.66},
+  laminate:{name:'Laminated table top',short:'Laminate', mu:0.28, ms:0.34},
+  marble:  {name:'Polished marble',    short:'Marble',   mu:0.17, ms:0.21},
+  zero:    {name:'Frictionless (thought experiment)', short:'No friction', mu:0, ms:0},
+};
+const SURF_KEYS=['wood','cement','laminate','marble','zero'];
+/* shared between 6.1 and 6.2: average coin distance per surface */
+const RES61={};
+function hash1(i,s){ let x=Math.imul((i|0)^0x9e3779b9,0x85ebca6b)^Math.imul((s|0)+7,0xc2b2ae35); x^=x>>>15; x=Math.imul(x,0x2c1b3c6d); x^=x>>>12; return (x>>>0)/4294967296; }
+/* top-view surface texture in WORLD px (x0..x1 visible), band y0..y1 */
+function surfTop(ctx,kind,x0,x1,y0,y1){
+  ctx.save(); ctx.beginPath(); ctx.rect(x0,y0,x1-x0,y1-y0); ctx.clip();
+  ctx.fillStyle=kind==='zero'?'#f2f9ff':'#fff'; ctx.fillRect(x0,y0,x1-x0,y1-y0);
+  const H=y1-y0;
+  if(kind==='wood'){ const P=160; for(let i=Math.floor(x0/P)-1;i<=x1/P+1;i++){ const X=i*P; line(ctx,X,y0,X,y1,'#c9b79c',1.4);
+      for(let j=0;j<7;j++){ const yy=y0+H*(j+0.5+0.3*hash1(i,j))/7; ctx.strokeStyle='#dccdb4'; ctx.lineWidth=1; ctx.beginPath(); for(let x=X;x<=X+P;x+=10){ const py=yy+Math.sin((x+i*37)*0.035+j)*2.5; x===X?ctx.moveTo(x,py):ctx.lineTo(x,py); } ctx.stroke();
+        if(hash1(i,j+50)<0.25){ ctx.beginPath(); ctx.ellipse(X+P*hash1(i,j+9),yy,9,3.5,0,0,7); ctx.stroke(); } } } }
+  else if(kind==='cement'){ const P=40; for(let i=Math.floor(x0/P)-1;i<=x1/P+1;i++) for(let j=0;j<H/P+1;j++) for(let q=0;q<9;q++){ const x=i*P+hash1(i*31+q,j)*P, y=y0+j*P+hash1(i,j*17+q)*P; ctx.fillStyle=q%3?'#b7c3d0':'#8e9cab'; ctx.fillRect(x,y,1.8+q%2,1.8); } }
+  else if(kind==='laminate'){ const P=90; for(let i=Math.floor(x0/P)-1;i<=x1/P+1;i++){ line(ctx,i*P,y0,i*P,y1,'#e3e8ee',1); if(i%3===0){ ctx.save(); ctx.globalAlpha=0.5; line(ctx,i*P+20,y0,i*P+70,y1,'#dbe7f3',6); ctx.restore(); } } }
+  else if(kind==='marble'){ const P=240; for(let i=Math.floor(x0/P)-1;i<=x1/P+1;i++){ line(ctx,i*P,y0,i*P,y1,'#b9c6d3',2);
+      ctx.strokeStyle='#cfd8e2'; ctx.lineWidth=1.2; for(let v=0;v<3;v++){ ctx.beginPath(); ctx.moveTo(i*P+P*hash1(i,v),y0); ctx.bezierCurveTo(i*P+P*hash1(i,v+3),y0+H*0.3,i*P+P*hash1(i,v+6),y0+H*0.7,i*P+P*hash1(i,v+9),y1); ctx.stroke(); } } }
+  else { const P=120; for(let i=Math.floor(x0/P)-1;i<=x1/P+1;i++){ ctx.save(); ctx.globalAlpha=0.6; line(ctx,i*P,y1,i*P+40,y0,'#d6ebfb',3); line(ctx,i*P+12,y1,i*P+52,y0,'#e6f3fd',1.5); ctx.restore(); } }
+  ctx.restore();
+}
+/* side-view surface: top edge at y, thickness th, texture in world px */
+function surfSide(ctx,kind,x0,x1,y,th){
+  ctx.save(); ctx.fillStyle=kind==='zero'?'#f2f9ff':'#fff'; ctx.fillRect(x0,y,x1-x0,th);
+  ctx.beginPath(); ctx.rect(x0,y,x1-x0,th); ctx.clip();
+  if(kind==='wood'){ for(let j=0;j<4;j++){ ctx.strokeStyle='#dccdb4'; ctx.lineWidth=1; ctx.beginPath(); for(let x=Math.floor(x0/10)*10;x<=x1;x+=10){ const py=y+th*(j+0.6)/4.4+Math.sin(x*0.03+j*2)*1.6; x===Math.floor(x0/10)*10?ctx.moveTo(x,py):ctx.lineTo(x,py); } ctx.stroke(); } }
+  else if(kind==='cement'){ const P=24; for(let i=Math.floor(x0/P);i<=x1/P;i++) for(let q=0;q<5;q++){ ctx.fillStyle='#a9b6c3'; ctx.fillRect(i*P+hash1(i,q)*P,y+3+hash1(q,i)*(th-6),1.8,1.8); } }
+  else if(kind==='marble'){ const P=200; for(let i=Math.floor(x0/P);i<=x1/P;i++){ line(ctx,i*P,y,i*P,y+th,'#b9c6d3',1.6); ctx.strokeStyle='#d3dce5'; ctx.beginPath(); ctx.moveTo(i*P+30,y); ctx.quadraticCurveTo(i*P+90,y+th,i*P+150,y+th*0.4); ctx.stroke(); } }
+  else if(kind==='laminate'){ line(ctx,x0,y+4,x1,y+4,'#dbe7f3',3); }
+  ctx.restore();
+  line(ctx,x0,y,x1,y,COL.ink,2.4); line(ctx,x0,y+th,x1,y+th,COL.ink,1.6);
+}
+/* force arrow with a label at its tip. len in px; skip when tiny */
+function fArrow(ctx,x,y,dx,dy,col,label,o){ o=o||{}; const L=Math.hypot(dx,dy); if(L<3) return;
+  const w=o.w||4; ctx.save(); ctx.globalAlpha=o.alpha===undefined?1:o.alpha; ctx.lineCap='round';
+  const hs=Math.min(16,6+w*2.2), ux=dx/L, uy=dy/L, ex=x+dx-ux*hs*0.6, ey=y+dy-uy*hs*0.6;
+  ctx.strokeStyle=col; ctx.lineWidth=w; ctx.beginPath(); ctx.moveTo(x,y); ctx.lineTo(ex,ey); ctx.stroke();
+  arrowHead(ctx,x+dx,y+dy,Math.atan2(dy,dx),col,hs);
+  if(label){ const lx=x+dx+(o.lx===undefined?ux*8:o.lx), ly=y+dy+(o.ly===undefined?uy*8-6:o.ly);
+    textAt(ctx,label,lx,ly,{align:o.align||(Math.abs(ux)>0.3?(ux>0?'left':'right'):'center'),size:o.size||12.5,weight:700,color:col}); }
+  ctx.restore();
+}
+/* wheel side view: spokes turn with angle a */
+function wheelDraw(ctx,x,y,r,a,col){ circ(ctx,x,y,r,col||COL.ink,'#fff',2.2); circ(ctx,x,y,r*0.28,col||COL.ink,'#fff',1.6);
+  for(let i=0;i<4;i++){ const q=a+i*Math.PI/2; line(ctx,x+Math.cos(q)*r*0.28,y+Math.sin(q)*r*0.28,x+Math.cos(q)*r*0.9,y+Math.sin(q)*r*0.9,col||COL.ink,1.5); } }
+/* coil spring from (x1,y) to (x2,y), n turns, radius r */
+function coil(ctx,x1,x2,y,n,r,col,lw){ ctx.save(); ctx.strokeStyle=col||COL.ink; ctx.lineWidth=lw||1.8; ctx.lineJoin='round'; ctx.beginPath(); ctx.moveTo(x1,y);
+  const L=x2-x1, a=Math.min(6,Math.abs(L)*0.06)*Math.sign(L||1); ctx.lineTo(x1+a,y);
+  for(let i=0;i<=n*2;i++){ const u=i/(n*2); ctx.lineTo(x1+a+(L-2*a)*u, y+(i===0||i===n*2?0:(i%2?-r:r))); } ctx.lineTo(x2,y); ctx.stroke(); ctx.restore(); }
+/* A horizontal spring balance.
+   x = ring end, dir = +1 (hook to the right) or −1 (hook to the left).
+   F = force it feels (N), full = full-scale (N), k = stiffness shown as
+   pointer travel: travel px at full scale. Returns ring and hook points. */
+function springBalance(ctx,x,y,L,F,full,o){ o=o||{}; const d=o.dir||1, tr=o.travel||L*0.55, X=u=>x+d*u;
+  const e=clamp(F/full,-0.05,1.08)*tr, z0=26, bodyL=L;
+  // ring
+  circ(ctx,X(-2),y,9,COL.ink,'#fff',2.4);
+  // body tube
+  ctx.save(); ctx.lineWidth=2.4; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; const bx=Math.min(X(8),X(8+bodyL)); rrect(ctx,bx,y-19,bodyL,38,10); ctx.fill(); ctx.stroke(); ctx.restore();
+  // slot window with scale
+  const s0=X(z0+30), s1=X(z0+30+tr); line(ctx,Math.min(s0,s1)-6,y-8,Math.max(s0,s1)+6,y-8,COL.mid,1);
+  const nT=o.ticks||full; for(let i=0;i<=nT;i++){ const v=i/nT*full, px=X(z0+30+tr*v/full), big=(i%(o.major||1)===0); line(ctx,px,y-19,px,y-(big?9:13),COL.ink,big?1.6:1);
+    if(big) textAt(ctx,fmt(v,1),px,y-23,{align:'center',size:10.5,weight:700,color:COL.muted}); }
+  if(o.unit!==false) textAt(ctx,'N',X(bodyL+2),y-23,{align:'center',size:10,weight:700,color:COL.muted});
+  // spring from inner anchor to slider
+  const sl=X(z0+30)+d*e; coil(ctx,X(14),sl-d*6,y+5,o.turns||11,6,o.springCol||COL.ink,1.6);
+  // slider + pointer
+  rect(ctx,sl-5,y-4,10,17,COL.ink,'#fff',1.8); line(ctx,sl,y-6,sl,y-18,o.ptrCol||COL.red,2.6);
+  // rod out through the end cap to the hook
+  const endX=X(8+bodyL), hookX=endX+d*(Math.max(10,e+4)+10);
+  line(ctx,sl,y+5,hookX,y+5,COL.ink,2.2);
+  ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.beginPath(); ctx.arc(hookX+d*7,y+5,7,d>0?Math.PI:0,d>0?Math.PI*2.6:Math.PI*1.6,d<0); ctx.stroke(); ctx.restore();
+  if(o.label) textAt(ctx,o.label,X(8+bodyL/2),y+36,{align:'center',size:13,weight:800,color:COL.ink});
+  return {ring:[X(-2),y], hook:[hookX+d*7,y+5], hookTip:[hookX+d*14,y+5]};
+}
+/* a clenched hand (side) gripping at (x,y), facing dir */
+function fist(ctx,x,y,dir,s){ s=s||1; ctx.save(); ctx.translate(x,y); ctx.scale(dir*s,s); ctx.lineWidth=2.2; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff';
+  rrect(ctx,-4,-14,30,28,11); ctx.fill(); ctx.stroke(); for(let i=0;i<3;i++) line(ctx,-2,-6+i*7,10,-6+i*7,COL.ink,1.2);
+  ctx.beginPath(); ctx.moveTo(26,-8); ctx.lineTo(70,-12); ctx.moveTo(26,8); ctx.lineTo(70,12); ctx.stroke(); ctx.restore(); }
+/* follow-camera: spring-damper towards a target x (world px) */
+function camNew(x){ return {x:x,v:0}; }
+function camStep(c,tx,dt){ springTo(c,tx,40,11,dt); return c.x; }
+/* thin strip showing the whole track: 0..Lm metres; marks [{m,col,lbl}] */
+function miniMap(ctx,x,y,w,Lm,pos,col,marks,step){
+  line(ctx,x,y,x+w,y,COL.mid,2); step=step||0.5;
+  for(let v=0;v<=Lm+1e-9;v+=step){ const px=x+v/Lm*w; line(ctx,px,y-4,px,y+4,COL.mid,1.2); if(Math.abs(v-Math.round(v))<1e-6) textAt(ctx,fmt(v,0)+' m',px,y+17,{align:'center',size:10,weight:600,color:COL.muted}); }
+  (marks||[]).forEach(m=>{ const px=x+clamp(m.m,0,Lm)/Lm*w; line(ctx,px,y-9,px,y+9,m.col,2.4); if(m.lbl) textAt(ctx,m.lbl,px,y-13,{align:'center',size:9.5,weight:700,color:m.col}); });
+  if(pos!==null&&pos!==undefined){ const px=x+clamp(pos,0,Lm)/Lm*w; circ(ctx,px,y,5.5,col,col,1.5); if(pos>Lm) textAt(ctx,'→',px+8,y+4,{size:12,weight:800,color:col}); }
+}
+/* running trace for small graphs: push {t,v}, keep last n */
+function traceAdd(tr,t,v,n){ tr.push([t,v]); if(tr.length>(n||600)) tr.shift(); }
+function traceDraw(ctx,G,tr,col,lw,dash){ if(tr.length<2) return; ctx.save(); ctx.strokeStyle=col; ctx.lineWidth=lw||2.4; if(dash) ctx.setLineDash(dash); ctx.beginPath(); tr.forEach((p,i)=>{ const X=G.X(p[0]), Y=G.Y(p[1]); i?ctx.lineTo(X,Y):ctx.moveTo(X,Y); }); ctx.stroke(); ctx.restore(); }
+function graphFrame(ctx,x0,y0,x1,y1,xr,yr,o){ o=o||{};
+  const X=v=>x0+(v-xr[0])/(xr[1]-xr[0])*(x1-x0), Y=v=>y1-(v-yr[0])/(yr[1]-yr[0])*(y1-y0);
+  ctx.save(); ctx.fillStyle='#fff'; ctx.fillRect(x0,y0,x1-x0,y1-y0);
+  if(o.xs) for(let v=xr[0];v<=xr[1]+1e-9;v+=o.xs) line(ctx,X(v),y0,X(v),y1,'#e6ecf3',1);
+  if(o.ys) for(let v=yr[0];v<=yr[1]+1e-9;v+=o.ys) line(ctx,x0,Y(v),x1,Y(v),'#e6ecf3',1);
+  line(ctx,x0,y1,x1+6,y1,COL.ink,2); line(ctx,x0,y1,x0,y0-6,COL.ink,2); arrowHead(ctx,x1+8,y1,0,COL.ink,7); arrowHead(ctx,x0,y0-8,-Math.PI/2,COL.ink,7);
+  if(o.xs) for(let v=xr[0];v<=xr[1]+1e-9;v+=o.xs*(o.xl||1)) textAt(ctx,fmt(v,1),X(v),y1+14,{align:'center',size:10,color:COL.muted,weight:600});
+  if(o.ys) for(let v=yr[0];v<=yr[1]+1e-9;v+=o.ys*(o.yl||1)) textAt(ctx,fmt(v,1),x0-5,Y(v)+4,{align:'right',size:10,color:COL.muted,weight:600});
+  if(o.xt) textAt(ctx,o.xt,x1,y1-6,{align:'right',size:11,weight:700,color:COL.ink});
+  if(o.yt) textAt(ctx,o.yt,x0+6,y0+4,{align:'left',size:11,weight:700,color:o.ytc||COL.ink});
+  ctx.restore(); return {X,Y};
+}
+/* split the canvas into a scene box and a side/bottom panel box */
+function splitBox(w,h,f){ f=f||0.64; if(w/h>1.15) return {land:true,a:[0,0,w*f,h],b:[w*f,0,w,h]}; return {land:false,a:[0,0,w,h*0.66],b:[0,h*0.66,w,h]}; }
+function boxFit(ctx,box,cam){ ctx.save(); ctx.beginPath(); ctx.rect(box[0],box[1],box[2]-box[0],box[3]-box[1]); ctx.clip(); ctx.translate(box[0],box[1]); return camFit(ctx,box[2]-box[0],box[3]-box[1],cam); }
+
+/* =====================================================================
+   6.1 LET US INVESTIGATE — a stack of four ₹10 coins (4 × 7.71 g) shot
+   by a rubber band held at A and B (8 cm apart), pulled back to C.
+   Band: natural length 7.5 cm, k = 26 N/m. While in contact the V-shaped
+   band pushes with 2T·sinθ; kinetic friction μmg acts against motion the
+   whole time. After the band straightens the coins only feel friction, so
+   they decelerate at exactly μg and stop. Distances at C = 5 cm:
+   wood ≈ 29 cm, cement ≈ 22, laminate ≈ 43, marble ≈ 71 cm; with μ = 0
+   the stack never stops. Shown in slow motion (¼×) by default.
+   ===================================================================== */
+function buildA1(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML=`
+    <div class="control-group"><label>Surface</label><div class="chip-wrap" id="sf">${SURF_KEYS.map((k,i)=>`<button class="chip-btn${i?'':' active'}" data-k="${k}">${SURF[k].short}</button>`).join('')}</div></div>
+    <div class="control-group"><label>Stretch back to C <span class="val" id="cV"></span></label><input type="range" id="cR" min="3" max="6" step="0.5" value="5"></div>
+    <div class="control-group"><div class="toggle-group"><button class="toggle-btn play" id="go">▶ Pull back &amp; release</button><button class="toggle-btn small" id="rst">↺</button></div>
+      <div class="toggle-group" style="margin-top:8px"><button class="toggle-btn active" id="slow">Slow-mo ¼×</button><button class="toggle-btn" id="real">Real speed</button></div></div>
+    <div class="control-group"><div class="result-cards three">${card('r1','Speed',COL.green)}${card('r2','Distance from C',COL.ink)}${card('r3','Friction',COL.red)}</div>
+      <div class="fb hidden" id="fb"></div><div id="lg" style="margin-top:8px"></div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas'), fb=$('#fb');
+  const m=4*7.71e-3, g=9.8, R=0.0135, HALF=0.04, K=26, L0=0.075, P=2400;
+  let sk='wood', C=0.05, Cs=spr(0.05), st='ready', ph=0, x=R, v=0, t=0, tf=0, x0=0, mu=0, band={u:0,w:0}, tr=[], ghosts=[], sm=0.25;
+  const cam=camNew(0.03*P), log={};
+  function bandF(xc){ const y=Math.max(0,-(xc-R)); if(y<=0) return 0; const L=2*Math.hypot(HALF,y), T=Math.max(0,K*(L-L0)); return 2*T*y/Math.hypot(HALF,y); }
+  function reset(){ st='ready'; ph=0; x=R; v=0; tf=0; tr=[]; band={u:0,w:0}; fb.className='fb hidden'; }
+  chipsWire(wrap,'#sf .chip-btn',b=>{ sk=b.dataset.k; reset(); ghosts=[]; });
+  $('#rst').onclick=reset;
+  $('#go').onclick=()=>{ if(st==='load'||st==='hold'||st==='fly') return; reset(); st='load'; ph=0; };
+  chipsWire(wrap,'#slow,#real',b=>{ sm=b.id==='slow'?0.25:1; });
+  function paint(){ const rows=SURF_KEYS.filter(k=>log[k]).map(k=>{ const a=log[k]; const fin=a.filter(isFinite); const avg=fin.length?fin.reduce((p,q)=>p+q,0)/fin.length:Infinity;
+      return [SURF[k].short, a.slice(-3).map(d=>isFinite(d)?fmt(d*100,1):'∞').join(' · '), {v:isFinite(avg)?fmt(avg*100,1)+' cm':'never stops',c:'r-ok'}]; });
+    $('#lg').innerHTML=rows.length?logTable(['Surface','Trials (cm)','Average'],rows):''; }
+  animLoop(dt=>{
+    t+=dt; C=+$('#cR').value/100; setv($,'cV',fmt(C*100,1)+' cm'); springTo(Cs,C,120,20,dt);
+    const S=SURF[sk];
+    if(st==='load'){ ph+=dt/1.1; x=lerp(R,R-Cs.x,ease(ph)); if(ph>=1){ st='hold'; ph=0; } }
+    else if(st==='hold'){ x=R-Cs.x; ph+=dt; if(ph>0.45){ st='fly'; ph=0; tf=0; x0=x; v=0; tr=[[0,0]]; mu=S.mu*(1+gauss()*0.03); x=R-Cs.x*(1+gauss()*0.02); x0=x; band={u:0,w:0}; } }
+    else if(st==='fly'){ const real=dt*sm, n=Math.ceil(real/2e-4), h=real/n;
+      for(let i=0;i<n;i++){ const Fb=bandF(x), fr=mu*m*g; let a=(Fb-(v>0||Fb>fr?fr:Fb))/m;
+        const wasIn=x<R; v+=a*h; if(v<0) v=0; x+=v*h; tf+=h;
+        if(wasIn&&x>=R){ band.u=0; band.w=v; }
+        if(x>=R){ band.w+=(-Math.pow(2*Math.PI*14,2)*band.u-2*0.09*2*Math.PI*14*band.w)*h; band.u+=band.w*h; }
+        if(v<=0&&x>=R&&tf>0.02){ st='rest'; break; } }
+      if(tr.length===0||tf-tr[tr.length-1][0]>0.012) traceAdd(tr,tf,v,800);
+      if(st==='rest'){ const d=x-x0; (log[sk]=log[sk]||[]).push(d); if(log[sk].length>6) log[sk].shift(); RES61[sk]=log[sk].reduce((p,q)=>p+q,0)/log[sk].length; ghosts.push({tr:tr.slice(),sk}); if(ghosts.length>4) ghosts.shift(); paint();
+        fb.className='fb ok'; fb.innerHTML=`Stopped after <b>${fmt(d*100,1)} cm</b> on ${S.name.toLowerCase()} — friction slowed it at ${fmt(mu*g,2)} m/s² until it came to rest.`; }
+      if(sk==='zero'&&x>3.2){ st='rest'; (log[sk]=log[sk]||[]).push(Infinity); RES61[sk]=Infinity; paint(); fb.className='fb warn'; fb.innerHTML='No friction: after the band lets go nothing slows it down — it keeps moving at the same speed <b>forever</b>. (Newton’s first law)'; }
+    }
+    else if(st==='rest'&&sk!=='zero'){ /* at rest */ }
+    else if(st==='rest'&&sk==='zero'){ x+=v*dt*sm; }
+    if(st!=='fly'&&st!=='rest'){ band.u=approach(band.u,0,8,dt); }
+    if(st==='rest'&&sk!=='zero'){ band.w+=(-Math.pow(2*Math.PI*14,2)*band.u-2*0.09*2*Math.PI*14*band.w)*dt*sm; band.u+=band.w*dt*sm; }
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h); ctx.save(); stage(ctx,w,h);
+    const cx=camStep(cam,Math.max(0.03,x+0.05)*P,dt), SX=X=>400+X*P-cx, CY=205, SY=Y=>CY+Y*P;
+    // surface band (world-locked texture)
+    ctx.save(); ctx.translate(400-cx,0); surfTop(ctx,sk,cx-400,cx+400,60,350); ctx.restore();
+    line(ctx,0,60,800,60,COL.ink,1.6); line(ctx,0,350,800,350,COL.ink,1.6);
+    // ruler along the bottom edge: cm from C
+    const xC=-Cs.x;
+    for(let c=-10;c<=400;c++){ const X=SX(xC+c/100); if(X<-20||X>820) continue; const big=c%5===0; line(ctx,X,350,X,350-(big?12:6),COL.muted,big?1.5:1); if(c%10===0) textAt(ctx,c+' cm',X,332,{align:'center',size:10,weight:600,color:COL.muted}); }
+    // chalk marks A, B, C
+    [[0,-HALF,'A'],[0,HALF,'B']].forEach(([X,Y,l])=>{ const px=SX(X),py=SY(Y); line(ctx,px-7,py-7,px+7,py+7,COL.muted,2); line(ctx,px-7,py+7,px+7,py-7,COL.muted,2); textAt(ctx,l,px-26,py+6,{size:15,weight:800,color:COL.muted}); });
+    { const px=SX(xC); line(ctx,px,CY-26,px,CY+26,COL.muted,2); textAt(ctx,'C',px-6,CY+44,{size:15,weight:800,color:COL.muted}); }
+    // landing ghosts from earlier trials on this surface
+    (log[sk]||[]).forEach(d=>{ if(!isFinite(d)) return; const px=SX(xC+d); line(ctx,px,CY-40,px,CY+40,COL.green,1.2,[3,3]); });
+    // fingers holding the band at A and B (top view, coming in from the left)
+    const fing=(px,py,dir)=>{ ctx.save(); ctx.translate(px,py); ctx.rotate(dir*Math.PI/2); ctx.lineWidth=2.2; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; rrect(ctx,-8,-14,62,28,14); ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.ellipse(8,0,7,9,0,0,7); ctx.stroke(); line(ctx,40,-13,40,13,COL.mid,1); ctx.restore(); };
+    const bandTop=SY(-HALF), bandBot=SY(HALF), bx=SX(0);
+    // rubber band
+    ctx.save(); ctx.strokeStyle=COL.yellow; ctx.lineWidth=4.5; ctx.lineJoin='round'; ctx.lineCap='round'; ctx.beginPath(); ctx.moveTo(bx,bandTop);
+    if(x<R){ const cxp=SX(x); ctx.lineTo(cxp-R*P*0.55,SY(-R*0.83)); ctx.arc(cxp,CY,R*P,-Math.PI*0.7,Math.PI*0.7,true); ctx.lineTo(bx,bandBot); }
+    else { ctx.quadraticCurveTo(bx+band.u*P*2,CY,bx,bandBot); }
+    ctx.stroke(); ctx.restore();
+    fing(bx,bandTop-4,-1); fing(bx,bandBot+4,1);
+    // the coin stack (top view): bimetal ₹10 ring + tape band
+    const cxp=SX(x), rp=R*P; circ(ctx,cxp,CY,rp+2.5,COL.ink,'#fff',2.4); circ(ctx,cxp,CY,rp*0.72,COL.ink,null,1.5); ctx.save(); ctx.globalAlpha=0.6; circ(ctx,cxp,CY,rp+1,COL.mid,null,4); ctx.restore();
+    textAt(ctx,'₹10',cxp,CY+5,{align:'center',size:13,weight:800,color:COL.ink});
+    // pushing finger of the other hand (from the front)
+    if(st==='load'||st==='hold'||(st==='fly'&&tf<0.08)){ const lift=st==='fly'?clamp(tf/0.08,0,1):0; ctx.save(); ctx.globalAlpha=1-lift; ctx.translate(cxp+rp+2+lift*20,CY-lift*30); ctx.lineWidth=2.2; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; rrect(ctx,0,-13,150,26,13); ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.ellipse(12,0,7,8,0,0,7); ctx.stroke(); ctx.restore(); }
+    // forces on the coin stack
+    const sc=F=>26*Math.sqrt(F*10), Fb=bandF(x), fr=S.mu*m*g;
+    if(st==='hold'){ fArrow(ctx,cxp+rp,CY-rp-24,sc(Fb),0,COL.yellow,'band '+fmt(Fb,2)+' N',{align:'left'}); fArrow(ctx,cxp+rp+sc(Fb)*0+4,CY+rp+22,-sc(Fb),0,COL.blue,'finger',{align:'right',lx:-6}); tag(ctx,'balanced — at rest',cxp,CY+rp+62,COL.muted,{size:11.5}); }
+    if(st==='fly'){ if(Fb>0) fArrow(ctx,cxp,CY-rp-24,sc(Fb),0,COL.yellow,'band '+fmt(Fb,2)+' N',{align:'left'});
+      if(fr>0&&v>0) fArrow(ctx,cxp-rp-4,CY+rp+22,-sc(fr),0,COL.red,'friction '+fmt(fr,2)+' N',{align:'right',lx:-6});
+      if(v>0.005) fArrow(ctx,cxp-10,CY-rp-58,Math.min(260,v*120),0,COL.green,fmt(v,2)+' m/s',{w:3,align:'left'}); }
+    if(st==='rest'&&sk==='zero'&&v>0) fArrow(ctx,cxp-10,CY-rp-58,Math.min(260,v*120),0,COL.green,fmt(v,2)+' m/s (constant)',{w:3,align:'left'});
+    // mini-map
+    textAt(ctx,S.name,20,30,{size:13,weight:800,color:COL.ink});
+    miniMap(ctx,250,24,520,2.5,x-x0>0&&st!=='ready'&&st!=='load'&&st!=='hold'?x-x0:0,COL.green,SURF_KEYS.filter(k=>RES61[k]&&isFinite(RES61[k])).map(k=>({m:RES61[k],col:k===sk?COL.green:COL.mid,lbl:SURF[k].short})));
+    if(sm<1) textAt(ctx,'slow motion ¼×',790,78,{align:'right',size:11,weight:700,color:COL.mid});
+    // v–t graph
+    const G=graphFrame(ctx,70,378,760,478,[0,2],[0,2],{xs:0.25,ys:0.5,xl:2,yl:2,xt:'time (s)',yt:'speed (m/s)',ytc:COL.green});
+    ghosts.forEach(q=>{ ctx.save(); ctx.globalAlpha=0.35; traceDraw(ctx,G,q.tr.filter(p=>p[0]<=2),COL.mid,1.6); ctx.restore(); const e=q.tr[q.tr.length-1]; if(e&&e[0]<2) textAt(ctx,SURF[q.sk].short,G.X(e[0])+4,G.Y(0)-4,{size:10,weight:700,color:COL.mid}); });
+    traceDraw(ctx,G,tr.filter(p=>p[0]<=2),COL.green,2.6);
+    ctx.restore();
+    setv($,'r1',fmt(st==='fly'||st==='rest'?v:0,2)+' m/s'); setv($,'r2',st==='fly'||st==='rest'?fmt((x-x0)*100,1)+' cm':'—'); setv($,'r3',fmt(fr,3)+' N');
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   6.2 LET US MEASURE — a 500 g wooden block pulled through a 0–5 N spring
+   balance (k = 100 N/m, internal damping 8 N·s/m). Your hand moves at a
+   steady speed, so the reading climbs. The block stays put while the
+   pull ≤ μs·N (static friction grows to match it), then breaks free; from
+   then on kinetic friction μk·N acts and, moving at constant speed, the
+   reading settles at μk·N (net force zero). N = 0.5 × 9.8 = 4.9 N.
+   Wood 2.45 → 2.06 N, cement 3.23 → 2.70, laminate 1.67 → 1.37,
+   marble 1.03 → 0.83 N — smallest where the coins of 6.1 went furthest.
+   ===================================================================== */
+function buildA2(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML=`
+    <div class="control-group"><label>Surface</label><div class="chip-wrap" id="sf">${SURF_KEYS.slice(0,4).map((k,i)=>`<button class="chip-btn${i?'':' active'}" data-k="${k}">${SURF[k].short}</button>`).join('')}</div></div>
+    <div class="control-group"><label>How fast your hand moves <span class="val" id="vV"></span></label><input type="range" id="vR" min="1" max="5" step="0.5" value="1.5"></div>
+    <div class="control-group"><div class="toggle-group"><button class="toggle-btn play" id="go">▶ Start pulling</button><button class="toggle-btn small" id="rst">↺</button></div></div>
+    <div class="control-group"><div class="result-cards three">${card('r1','Balance reads',COL.yellow)}${card('r2','Just started at',COL.red)}${card('r3','Block speed',COL.green)}</div>
+      <div class="fb hidden" id="fb"></div><div id="lg" style="margin-top:8px"></div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas'), fb=$('#fb'), go=$('#go');
+  const m=0.5, g=9.8, N=m*g, k=100, c=7, P=1400, BL=0.10, BH=0.05;
+  let tBreak=0, sk='wood', st='idle', xb=0, vb=0, s=0, t=0, tp=0, moved=false, peak=0, steady=[], tr=[], trf=[], fr=0, handX=0;
+  const cam=camNew(0), log={};
+  function reset(){ st='idle'; xb=0; vb=0; s=0; tp=0; moved=false; peak=0; steady=[]; tr=[]; trf=[]; fr=0; fb.className='fb hidden'; setBtn(go,'▶ Start pulling','toggle-btn play'); }
+  chipsWire(wrap,'#sf .chip-btn',b=>{ sk=b.dataset.k; reset(); });
+  $('#rst').onclick=reset;
+  go.onclick=()=>{ if(st==='pull'){ st='stop'; setBtn(go,'▶ Pull again','toggle-btn play'); } else { if(st==='stop'&&xb>0.3) reset(); st='pull'; setBtn(go,'■ Stop pulling','toggle-btn'); } };
+  function paint(){ const rows=SURF_KEYS.slice(0,4).filter(q=>log[q]).map(q=>[SURF[q].short,fmt(log[q].p,2)+' N',log[q].s?fmt(log[q].s,2)+' N':'—',RES61[q]?(isFinite(RES61[q])?fmt(RES61[q]*100,0)+' cm':'∞'):'—']);
+    $('#lg').innerHTML=rows.length?logTable(['Surface','Starts at','Sliding','Coins (6.1)'],rows):''; }
+  animLoop(dt=>{
+    t+=dt; const vh=+$('#vR').value/100; setv($,'vV',fmt(vh*100,1)+' cm/s');
+    const S=SURF[sk], n=8, hh=dt/n;
+    for(let i=0;i<n;i++){ const vhand=st==='pull'?vh:0; const F=k*s+c*(vhand-vb);
+      if(Math.abs(vb)<1e-4&&Math.abs(F)<=S.ms*N){ vb=0; fr=F; }
+      else { if(!moved){ moved=true; peak=k*s; tBreak=tp; fb.className='fb ok'; fb.innerHTML='It just started to move — the largest friction this surface can give.'; }
+        fr=S.mu*N*(Math.abs(vb)>1e-4?Math.sign(vb):Math.sign(F)); const a=(F-fr)/m; const nv=vb+a*hh; vb=(vb>0&&nv<0)||(vb<0&&nv>0)?0:nv; }
+      s+=(vhand-vb)*hh; xb+=vb*hh; tp+=st==='pull'||Math.abs(vb)>0?hh:0; }
+    const rd=k*s; if(moved&&tp-tBreak<0.6&&rd>peak){ peak=rd; if(log[sk]) log[sk].p=peak; }
+    if(st!=='idle'&&tp<16&&(st==='pull'||Math.abs(vb)>0||rd>0.02)){ if(!tr.length||tp-tr[tr.length-1][0]>0.03){ traceAdd(tr,tp,rd); traceAdd(trf,tp,Math.abs(fr)); } }
+    if(moved&&st==='pull'&&Math.abs(vb-vh)<0.15*vh){ steady.push(rd); if(steady.length>90) steady.shift(); }
+    if(moved&&steady.length>60){ const av=steady.reduce((p,q)=>p+q,0)/steady.length; log[sk]={p:peak,s:av}; paint();
+      if(st==='pull') { fb.className='fb ok'; fb.innerHTML=`Started at <b>${fmt(peak,2)} N</b>; sliding at steady speed it reads <b>${fmt(av,2)} N</b> = friction (net force zero).`; } }
+    else if(moved&&!log[sk]){ log[sk]={p:peak,s:0}; paint(); }
+    if(st==='pull'&&xb>0.42){ st='stop'; setBtn(go,'↺ Start again','toggle-btn play'); }
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h); ctx.save(); stage(ctx,w,h);
+    const cx=camStep(cam,xb*P,dt), SX=X=>150+X*P-cx, TOP=270;
+    ctx.save(); ctx.translate(150-cx,0); surfSide(ctx,sk,cx-160,cx+660,TOP,34); ctx.restore();
+    for(let cm=0;cm<=60;cm+=5){ const X=SX(cm/100); if(X>-20&&X<820){ line(ctx,X,TOP+34,X,TOP+44,COL.muted,1.2); textAt(ctx,cm+' cm',X,TOP+56,{align:'center',size:10,weight:600,color:COL.muted}); } }
+    // block
+    const bx=SX(xb), by=TOP-BH*P, bw=BL*P, bh=BH*P;
+    ctx.save(); ctx.lineWidth=2.6; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; ctx.fillRect(bx,by,bw,bh); ctx.strokeRect(bx,by,bw,bh);
+    ctx.strokeStyle='#d8c6a8'; ctx.lineWidth=1.2; for(let j=0;j<4;j++){ ctx.beginPath(); for(let q=0;q<=bw;q+=8){ const yy=by+10+j*15+Math.sin(q*0.05+j)*2; q?ctx.lineTo(bx+q,yy):ctx.moveTo(bx+q,yy); } ctx.stroke(); } ctx.restore();
+    textAt(ctx,'500 g',bx+bw/2,by+bh/2+5,{align:'center',size:13,weight:800,color:COL.ink});
+    const eyeX=bx+bw+10, eyeY=by+bh*0.45; line(ctx,bx+bw,eyeY,eyeX-5,eyeY,COL.ink,2.4); circ(ctx,eyeX,eyeY,5,COL.ink,'#fff',2.2);
+    // the spring balance: hook at left on the eye, ring at right in your hand
+    const L=230, tv=150, e=clamp(rd/5,-0.05,1.08)*tv, ringX=eyeX-5+L+32+Math.max(10,e+4);
+    springBalance(ctx,ringX,eyeY-5,L,rd,5,{dir:-1,travel:tv,ticks:10,major:2});
+    handX=ringX; fist(ctx,ringX+6,eyeY-5,1,1.05);
+    // forces on the block
+    const fs=30;
+    if(rd>0.03) fArrow(ctx,bx+bw/2,by-24,rd*fs,0,COL.yellow,'pull '+fmt(rd,2)+' N',{align:'left'});
+    if(Math.abs(fr)>0.03) fArrow(ctx,bx+bw*0.35,TOP-6,-Math.abs(fr)*fs,0,COL.red,(moved&&Math.abs(vb)>1e-4?'kinetic':'static')+' friction '+fmt(Math.abs(fr),2)+' N',{align:'right',size:11.5,lx:-4,ly:-6});
+    if(Math.abs(vb)>1e-3) fArrow(ctx,bx+bw/2,by-58,vb*1800,0,COL.green,fmt(vb*100,1)+' cm/s',{w:3,align:'left'});
+    if(!moved&&rd>0.05) tag(ctx,'not moving: friction = pull',bx+bw/2,by-86,COL.muted,{size:11});
+    // lens: the two surfaces touching, bumps catching
+    const rough=3+S.mu*26, off=xb*P*6, lean=moved?0:clamp(rd/(S.ms*N),0,1)*6;
+    lensView(ctx,95,104,64,bx+bw*0.3,TOP-2,()=>{ const yL=112;
+      ctx.save(); ctx.beginPath(); ctx.moveTo(30,yL); for(let q=30;q<=160;q+=3){ const u=q; ctx.lineTo(u,yL+rough*(0.5+0.5*Math.sin(u*0.21+Math.sin(u*0.07)*2))*(0.6+0.8*hash1(Math.floor(u/12),3))*0.6); } ctx.lineTo(160,184); ctx.lineTo(30,184); ctx.closePath(); ctx.fillStyle='#eef2f6'; ctx.fill(); ctx.strokeStyle=COL.muted; ctx.lineWidth=1.8; ctx.stroke(); ctx.restore();
+      ctx.save(); ctx.beginPath(); ctx.moveTo(30,24); for(let q=30;q<=160;q+=3){ const u=q-off-lean; ctx.lineTo(q,yL-2-rough*(0.5+0.5*Math.sin(u*0.23+1+Math.sin(u*0.06)*2))*0.6+(moved&&Math.abs(vb)>1e-4?Math.sin(t*40)*0.8:0)); } ctx.lineTo(160,24); ctx.closePath(); ctx.fillStyle='#fff8ec'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=1.8; ctx.stroke(); ctx.restore();
+    },{label:'bumps catch on each other',col:COL.red});
+    // F–t graph
+    const G=graphFrame(ctx,300,352,770,470,[0,16],[0,4],{xs:2,ys:1,xt:'time (s)',yt:'force (N)'});
+    if(moved){ line(ctx,G.X(0),G.Y(S.ms*N),G.X(16),G.Y(S.ms*N),COL.red,1,[4,4]); line(ctx,G.X(0),G.Y(S.mu*N),G.X(16),G.Y(S.mu*N),COL.red,1,[2,3]); }
+    traceDraw(ctx,G,trf,COL.red,1.8,[5,3]); traceDraw(ctx,G,tr,COL.yellow,2.6);
+    textAt(ctx,'— balance reading',70,380,{size:11,weight:700,color:COL.yellow}); textAt(ctx,'- - friction',70,398,{size:11,weight:700,color:COL.red});
+    textAt(ctx,S.name,20,34,{size:13,weight:800,color:COL.ink});
+    ctx.restore();
+    setv($,'r1',fmt(Math.max(0,rd),2)+' N'); setv($,'r2',moved?fmt(peak,2)+' N':'—'); setv($,'r3',fmt(Math.max(0,vb)*100,1)+' cm/s');
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   6.3 / 6.4 LET US EXPERIMENT — cardboard-box cart on ball-bearing wheels,
+   thread over a pipe at the table edge, paper cup of coins hanging.
+   Whole system: (M + m)·a = m·g − μr·M·g, μr = 0.004 (wheel friction).
+   Cart 600 g, run s = 0.60 m. Cup 50 g → a = 0.718 m/s², T = 1.293 s.
+   6.3: cup 100 g → a = 1.366, T = 0.937 s: a₂/a₁ = T₁²/T₂² = 1.90
+        ("a little less than a factor of two", as the book says).
+   6.4: cart 1200 g → a = 0.354 m/s², T = 1.840 s: a₂/a₁ = 0.49 ≈ ½.
+   Times are read off a 240 fps slow-motion video (frame-quantised),
+   played back at ¼ speed.
+   ===================================================================== */
+function buildA3(){ return buildCart(3); }
+function buildA4(){ return buildCart(4); }
+function buildCart(mode){
+  const wrap=labShell();
+  const cupCtl=`<div class="control-group"><label>Mass of cup + coins <span class="val" id="mV"></span></label><input type="range" id="mR" min="20" max="120" step="10" value="50"${mode===4?' disabled':''}>
+      ${mode===3?'<button class="toggle-btn navy" id="dbl">× 2 Double the cup mass</button>':''}</div>`;
+  const cartCtl=`<div class="control-group"><label>Mass of cart <span class="val" id="MV"></span></label><input type="range" id="MR" min="600" max="1200" step="100" value="600"${mode===3?' disabled':''}>
+      ${mode===4?'<button class="toggle-btn navy" id="dbl">× 2 Double the cart mass</button>':''}</div>`;
+  wrap.querySelector('.lab-side').innerHTML=(mode===3?cupCtl+cartCtl:cartCtl+cupCtl)+`
+    <div class="control-group"><div class="toggle-group"><button class="toggle-btn play" id="go">▶ Release the cart</button><button class="toggle-btn small" id="rst">↺</button></div></div>
+    <div class="control-group"><div class="result-cards three">${card('r1','Pulling force',COL.yellow)}${card('r2','Acceleration',COL.green)}${card('r3','Time T',COL.ink)}</div>
+      <div class="fb hidden" id="fb"></div><div id="lg" style="margin-top:8px"></div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas'), fb=$('#fb');
+  const g=9.8, MUR=0.004, S=0.60, XP=0.86, FRONT0=XP-0.03-S, CL=0.22;
+  let st='ready', ph=0, x=0, v=0, tr=0, t=0, bob=spr(0), bump=spr(0), trace=[], ghost=null, runs=[], Tm=0, frame=0, wAng=0, back=0;
+  if($('#dbl')) $('#dbl').onclick=()=>{ const r0=runs[0]; if(mode===3){ $('#mR').value=Math.min(120,(r0?r0.mc*1000:+$('#mR').value)*2); } else { $('#MR').value=Math.min(1200,(r0?r0.M*1000:+$('#MR').value)*2); } };
+  $('#rst').onclick=()=>{ runs=[]; ghost=null; trace=[]; st='ready'; x=0; v=0; tr=0; fb.className='fb hidden'; paint(); };
+  $('#go').onclick=()=>{ if(st==='run'||st==='back') return; if(x>0.001){ st='back'; back=x; ph=0; } else start(); };
+  function start(){ st='run'; x=0; v=0; tr=0; frame=0; if(trace.length) ghost=trace; trace=[[0,0]]; fb.className='fb hidden'; }
+  function paint(){ const rows=runs.map((r,i)=>[String(i+1),fmt(r.mc*1000,0)+' g',fmt(r.M*1000,0)+' g',fmt(r.T,3)+' s',{v:fmt(2*S/(r.T*r.T),3),c:''}]);
+    $('#lg').innerHTML=rows.length?logTable(['Run','Cup','Cart','T','a = 2s/T²'],rows):''; }
+  function judge(){ if(runs.length<2) return; const a=runs[0], b=runs[runs.length-1], rat=(a.T*a.T)/(b.T*b.T);
+    const sameCart=Math.abs(a.M-b.M)<1e-6, sameCup=Math.abs(a.mc-b.mc)<1e-6;
+    let msg=`a₂/a₁ = T₁²/T₂² = ${fmt(a.T,3)}² / ${fmt(b.T,3)}² = <b>${fmt(rat,2)}</b>. `;
+    if(mode===3&&sameCart&&Math.abs(b.mc/a.mc-2)<0.01) msg+='Force doubled → acceleration nearly doubled (a bit less: the heavier cup must be accelerated too, and the wheels rub).';
+    else if(mode===4&&sameCup&&Math.abs(b.M/a.M-2)<0.01) msg+='Mass doubled → acceleration about <b>halved</b>.';
+    else msg+=mode===3?'Keep the cart the same and exactly double the cup to test the hypothesis.':'Keep the cup the same and exactly double the cart.';
+    fb.className='fb ok'; fb.innerHTML=msg; }
+  animLoop(dt=>{
+    t+=dt; const mc=+$('#mR').value/1000, M=+$('#MR').value/1000; setv($,'mV',fmt(mc*1000,0)+' g'); setv($,'MV',fmt(M*1000,0)+' g');
+    const a=Math.max(0,(mc*g-MUR*M*g)/(M+mc)), Ten=mc*(g-a);
+    if(st==='back'){ ph+=dt/0.9; x=back*(1-ease(ph)); if(ph>=1){ x=0; start(); } }
+    else if(st==='run'){ const real=dt*0.25; v+=a*real; x+=v*real; tr+=real; frame=Math.floor(tr*240);
+      if(!trace.length||tr-trace[trace.length-1][0]>0.01) traceAdd(trace,tr,v);
+      if(x>=S){ x=S; Tm=Math.round(Math.sqrt(2*S/a)*240)/240; st='done'; bump.v=-v*0.15; bob.v=v*0.3; runs.push({mc,M,T:Tm}); if(runs.length>6) runs.splice(1,1); paint(); judge(); v=0; } }
+    springTo(bump,0,900,14,dt); springTo(bob,0,500,5,dt);
+    wAng=x/0.025;
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const B=splitBox(w,h,0.66);
+    // ---------- the rig (U px per metre) ----------
+    const U=600; const rows0=Math.ceil(Math.round((M-0.6)/0.1+1e-6)/3); boxFit(ctx,B.a,[-0.02*U,-0.24*U-rows0*24,0.98*U,0.77*U]);
+    const X0=(FRONT0-CL+x)*U+bump.x*U, cupY=(0.06+x)*U+bob.x*U, xp=XP*U;
+    // table
+    ctx.lineJoin='round'; rect(ctx,-0.06*U,0,0.94*U,0.035*U,COL.ink,'#fff',2.4); line(ctx,0.02*U,0.035*U,0.02*U,0.88*U,COL.ink,2.4); line(ctx,0.80*U,0.035*U,0.80*U,0.88*U,COL.ink,2.4); line(ctx,-0.06*U,0.88*U,1.02*U,0.88*U,COL.muted,1.6);
+    // start line + run length
+    const fx=FRONT0*U; line(ctx,fx,-3,fx,12,COL.green,3); textAt(ctx,'start',fx,40,{align:'center',size:13,weight:700,color:COL.green});
+    line(ctx,fx,30,xp-18,30,COL.green,1.2,[6,5]); textAt(ctx,'s = 0.60 m',(fx+xp)/2,52,{align:'center',size:13,weight:700,color:COL.green});
+    // pipe pulley clamped at the edge
+    const rp=12, py=-44; rect(ctx,xp-22,-3,30,18,COL.muted,'#fff',1.4); line(ctx,xp-8,-3,xp-8,py,COL.muted,3); line(ctx,xp-8,py,xp,py,COL.muted,3); circ(ctx,xp,py,rp,COL.ink,'#fff',2.4); circ(ctx,xp,py,rp*0.4,COL.ink,'#fff',1.4);
+    const pa=-x*U/rp; line(ctx,xp,py,xp+Math.cos(pa)*rp,py+Math.sin(pa)*rp,COL.ink,1.6);
+    // cart: open cardboard box on pencil axles and four wheels
+    const wr=0.025*U, cl=CL*U, top=-2*wr-0.11*U, bh=0.11*U;
+    ctx.save(); ctx.lineWidth=2.6; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; ctx.fillRect(X0,top,cl,bh); ctx.strokeRect(X0,top,cl,bh); ctx.restore();
+    line(ctx,X0,top,X0-16,top-16,COL.ink,1.8); line(ctx,X0+cl,top,X0+cl+16,top-16,COL.ink,1.8);
+    const load=Math.round((M-0.6)/0.1+1e-6); for(let i=0;i<load;i++){ const bx=X0+10+(i%3)*40, by=top-4-Math.floor(i/3)*22; rect(ctx,bx,by-18,36,22,COL.blue,'#fff',2); textAt(ctx,'100 g',bx+18,by-3,{align:'center',size:9.5,weight:700,color:COL.blue}); }
+    textAt(ctx,'cart '+fmt(M*1000,0)+' g',X0+cl/2,top+bh*0.62,{align:'center',size:13,weight:800,color:COL.ink});
+    [X0+0.045*U,X0+cl-0.045*U].forEach(wx=>{ wheelDraw(ctx,wx,-wr,wr,wAng); circ(ctx,wx,-wr,3.5,COL.yellow,COL.yellow,1); });
+    // thread: cart hook → over the pipe → down to the cup
+    const hookX=X0+cl, hookY=py-rp; line(ctx,hookX,hookY,hookX+6,hookY,COL.ink,2.2);
+    ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=1.5; ctx.beginPath(); ctx.moveTo(hookX+6,hookY); ctx.lineTo(xp,py-rp); ctx.arc(xp,py,rp,-Math.PI/2,0); ctx.lineTo(xp+rp,cupY); ctx.stroke(); ctx.restore();
+    // paper cup with coins (10 g each)
+    const cx=xp+rp, cw=0.07*U, ch=0.08*U; ctx.save(); ctx.lineWidth=2.4; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; ctx.beginPath(); ctx.moveTo(cx-cw/2,cupY+7); ctx.lineTo(cx-cw*0.36,cupY+ch); ctx.lineTo(cx+cw*0.36,cupY+ch); ctx.lineTo(cx+cw/2,cupY+7); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx-cw/2,cupY+7); ctx.quadraticCurveTo(cx,cupY-9,cx+cw/2,cupY+7); ctx.stroke(); ctx.restore();
+    const nc=Math.round(mc*1000/10); for(let i=0;i<nc;i++){ ctx.save(); ctx.strokeStyle=COL.muted; ctx.lineWidth=1.4; ctx.fillStyle='#fff'; ctx.beginPath(); ctx.ellipse(cx+((i%2)?3:-3),cupY+ch-5-i*3.7,cw*0.3,2.6,0,0,7); ctx.fill(); ctx.stroke(); ctx.restore(); }
+    textAt(ctx,fmt(mc*1000,0)+' g',cx+cw/2+6,cupY+ch*0.6,{size:13,weight:800,color:COL.ink});
+    // forces: 130 px per newton
+    const fs=75, TenS=st==='run'?Ten:mc*g;
+    const ay=top-22-Math.ceil(load/3)*22; fArrow(ctx,X0+cl*0.3,ay,TenS*fs,0,COL.yellow,'thread '+fmt(TenS,2)+' N',{align:'left'});
+    fArrow(ctx,cx-cw/2-14,cupY+6,0,mc*g*fs,COL.blue,'mg = '+fmt(mc*g,2)+' N',{align:'right',lx:-6,ly:0});
+    if(st==='run'){ fArrow(ctx,X0+0.045*U,-4,-Math.max(22,MUR*M*g*fs*6),0,COL.red,'friction',{w:3,size:11,align:'right',lx:-4,ly:14});
+      fArrow(ctx,X0+10,ay-38,Math.min(300,v*220),0,COL.green,fmt(v,2)+' m/s',{w:3,align:'left'}); }
+    ctx.restore();
+    // ---------- panel: slow-motion video + v–t ----------
+    const b=B.b; ctx.save(); ctx.beginPath(); ctx.rect(b[0],b[1],b[2]-b[0],b[3]-b[1]); ctx.clip(); ctx.translate(b[0],b[1]);
+    const V=B.land?[0,0,300,480]:[0,0,560,200]; camFit(ctx,b[2]-b[0],b[3]-b[1],V);
+    const panelV=(x0,y0,W)=>{ rrect(ctx,x0,y0,W,96,12); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.stroke();
+      circ(ctx,x0+18,y0+18,6,COL.red,st==='run'&&(t*2%1<0.6)?COL.red:'#fff',2); textAt(ctx,'slow-mo video · 240 fps · ¼×',x0+30,y0+23,{size:11,weight:700,color:COL.muted});
+      textAt(ctx,(st==='done'?fmt(Tm,3):fmt(tr,3))+' s',x0+W/2,y0+64,{align:'center',size:30,weight:800,color:st==='done'?COL.green:COL.ink});
+      textAt(ctx,'frame '+(st==='done'?Math.round(Tm*240):frame),x0+W/2,y0+86,{align:'center',size:11,weight:600,color:COL.muted}); };
+    if(B.land){ panelV(20,20,260); const G=graphFrame(ctx,52,170,280,440,[0,2],[0,1.4],{xs:0.5,ys:0.2,yl:2,xt:'t (s)',yt:'v (m/s)',ytc:COL.green}); if(ghost) traceDraw(ctx,G,ghost,COL.mid,1.6,[4,4]); traceDraw(ctx,G,trace,COL.green,2.6); }
+    else { panelV(10,10,220); const G=graphFrame(ctx,290,24,540,170,[0,2],[0,1.4],{xs:0.5,ys:0.2,yl:2,xt:'t (s)',yt:'v (m/s)',ytc:COL.green}); if(ghost) traceDraw(ctx,G,ghost,COL.mid,1.6,[4,4]); traceDraw(ctx,G,trace,COL.green,2.6); }
+    ctx.restore();
+    setv($,'r1',fmt(Ten,3)+' N'); setv($,'r2',fmt(a,3)+' m/s²'); setv($,'r3',st==='done'?fmt(Tm,3)+' s':'—');
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   6.5 LET US EXPLORE — you on a wheeled chair (you + chair 52 kg, caster
+   rolling friction μr = 0.05), a heavy table (60 kg, needs 265 N to
+   slide) or a light table on castors (15 kg). Your arms push or pull
+   with force F only while the hands are on the table and the arms still
+   have stroke left (0.32 m). The table pushes/pulls you back with the SAME
+   F the whole time (third law), so a_you = F/52 kg. After the hands let
+   go the chair coasts and friction brings it to rest:
+   F = 100 N → 1.1 m/s → rolls ≈ 1.3 m (v²/2μr·g).
+   ===================================================================== */
+function buildA5(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML=`
+    <div class="control-group"><label>How hard your arms push/pull <span class="val" id="fV"></span></label><input type="range" id="fR" min="40" max="200" step="10" value="100"></div>
+    <div class="control-group"><div class="toggle-group"><button class="toggle-btn play" id="push">→ Push the table</button><button class="toggle-btn play" id="pull">← Pull the table</button></div></div>
+    <div class="control-group"><label>Table</label><div class="toggle-group" id="tb"><button class="toggle-btn active" data-k="heavy">Heavy · 60 kg</button><button class="toggle-btn" data-k="light">On wheels · 15 kg</button></div></div>
+    <div class="control-group"><div class="result-cards three">${card('r1','Force on you',COL.blue)}${card('r2','Your speed',COL.green)}${card('r3','You rolled',COL.ink)}</div>
+      <div class="fb hidden" id="fb"></div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas'), fb=$('#fb');
+  const g=9.8, mC=52, MUR=0.05, SH=0.93, SX0=0.02, S_BENT=0.185, S_STR=0.505, T0=1.5;
+  let tk='heavy', st='idle', mode='push', xc=T0-SX0-S_BENT, vc=0, xt=T0, vt=0, F=0, t=0, ph=0, from=null, arm=0, xs=xc, roll=0, fr=[], tph=0;
+  const cam=camNew(0);
+  const mT=()=>tk==='heavy'?60:15;
+  chipsWire(wrap,'#tb button',b=>{ tk=b.dataset.k; });
+  function act(md){ if(st==='prep'||st==='act') return; mode=md; st='prep'; ph=0; fr=[]; tph=0; fb.className='fb hidden';
+    from={xc,xt}; }
+  $('#push').onclick=()=>act('push'); $('#pull').onclick=()=>act('pull');
+  animLoop(dt=>{
+    t+=dt; const Fset=+$('#fR').value; setv($,'fV',Fset+' N');
+    const mt=mT(), heavyStuck=tk==='heavy';
+    if(st==='prep'){ ph+=dt/0.9; const e=ease(ph); const s0=mode==='push'?S_BENT:S_STR; const tgtXt=T0, tgtXc=T0-SX0-s0;
+      xc=lerp(from.xc,tgtXc,e); xt=lerp(from.xt,tgtXt,e); vc=0; vt=0; arm=e; if(ph>=1){ st='act'; ph=0; xs=xc; roll=0; } }
+    const n=6, hh=dt/n; F=0;
+    for(let i=0;i<n;i++){
+      const s=xt-(xc+SX0); let Fa=0;
+      if(st==='act'){ ph+=hh; const left=mode==='push'?S_STR-s:s-S_BENT; Fa=Fset*smooth01(0,0.12,ph)*smooth01(0,0.04,left); if(left<=0.001&&ph>0.1){ st='coast'; ph=0; } }
+      const dir=mode==='push'?1:-1; F=Fa;
+      // force on the table (+dir) and on you (−dir): equal and opposite
+      let at=0; if(!heavyStuck||Fa>mt*0.45*g){ at=(dir*Fa-(Math.abs(vt)>1e-3?Math.sign(vt)*MUR*mt*g:0))/mt; }
+      else if(Math.abs(vt)>1e-3){ at=-Math.sign(vt)*0.45*g; }
+      let ac=(-dir*Fa-(Math.abs(vc)>1e-3?Math.sign(vc)*MUR*mC*g:0))/mC;
+      const pvc=vc, pvt=vt; vc+=ac*hh; vt+=at*hh; if(Fa===0&&pvc*vc<0) vc=0; if(Math.abs(Fa)<1e-9&&pvt*vt<0) vt=0; if(heavyStuck&&Fa<=mt*0.45*g&&Math.abs(pvt)<1e-3) vt=0;
+      xc+=vc*hh; xt+=vt*hh;
+      // knees reach the table: inelastic bump
+      if(xt-(xc+SX0)<0.13&&vc>vt){ const vv=heavyStuck?0:(mC*vc+mt*vt)/(mC+mt); vc=vv; vt=heavyStuck?0:vv; xc=xt-SX0-0.13; }
+    }
+    if(st==='act'||st==='coast'){ roll=Math.max(roll,Math.abs(xc-xs)); if(tph<2.4){ tph+=dt; traceAdd(fr,tph,F,400); } }
+    if(st==='coast'){ ph+=dt; arm=Math.max(0,1-ph/0.5); if(Math.abs(vc)<1e-3&&Math.abs(vt)<1e-3&&ph>0.6){ st='idle';
+      fb.className='fb ok'; fb.innerHTML=mode==='push'?`You pushed the table <b>forward</b>; the table pushed <b>you backward</b> with the same force — you rolled back <b>${fmt(roll,2)} m</b>.`:`You pulled the table <b>towards you</b>; the table pulled <b>you towards it</b> — you rolled forward <b>${fmt(roll,2)} m</b>.`;
+      if(tk==='light') fb.innerHTML+=' Same force on both, but the 15 kg table speeds up more than you (a = F/m).'; } }
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h); ctx.save(); stage(ctx,w,h);
+    const U=280, FL=440, span=xt+1.2-(xc-0.5), ctr=span<2.7?(xc-0.5+xt+1.2)/2:xc+0.9;
+    const cx=camStep(cam,ctr*U,dt), SXw=X=>400+X*U-cx, SYw=Y=>FL-Y*U;
+    // floor tiles
+    line(ctx,0,FL,800,FL,COL.ink,2.4); for(let m=-6;m<=10;m+=0.5){ const X=SXw(m); if(X<-10||X>810) continue; line(ctx,X,FL,X-14,FL+26,COL.mid,1); if(Math.abs(m-Math.round(m))<1e-6) textAt(ctx,m+' m',X,FL+44,{align:'center',size:10,weight:600,color:COL.muted}); }
+    // ghost of where the chair started
+    if(st==='act'||st==='coast'||(st==='idle'&&roll>0.01)){ ctx.save(); ctx.globalAlpha=0.3; chairDraw(ctx,SXw(xs),FL,U,0,true); ctx.restore(); line(ctx,SXw(xs),FL+8,SXw(xc),FL+8,COL.green,2.4); }
+    // table
+    const tx=SXw(xt), tw=1.2*U, ty=SYw(0.75);
+    ctx.save(); ctx.lineWidth=2.6; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; ctx.fillRect(tx,ty,tw,16); ctx.strokeRect(tx,ty,tw,16);
+    [tx+14,tx+tw-26].forEach(lx=>{ ctx.strokeRect(lx,ty+16,12,FL-ty-16-(tk==='light'?16:0)); if(tk==='light'){ const ang=xt/0.035; wheelDraw(ctx,lx+6,FL-9,9,ang); } }); ctx.restore();
+    textAt(ctx,tk==='heavy'?'heavy table 60 kg':'table on wheels 15 kg',tx+tw*0.6,ty+36,{align:'center',size:13,weight:800,color:COL.ink});
+    // you on the chair
+    const cxp=SXw(xc); chairDraw(ctx,cxp,FL,U,xc/0.03,false);
+    const hip=[cxp-0.06*U,SYw(0.53)], lean=(st==='act'?(mode==='push'?0.05:-0.03):0), sh=[cxp+(SX0+lean)*U,SYw(SH)];
+    // legs raised: thigh forward, shin tucked, feet off the floor
+    const knee=[cxp+0.28*U,SYw(0.60)], foot=[cxp+0.30*U,SYw(0.30)];
+    capsule(ctx,knee,foot,0.045*U); capsule(ctx,foot,[foot[0]+0.09*U,foot[1]+2],0.03*U); capsule(ctx,hip,knee,0.06*U);
+    capsule(ctx,hip,sh,0.085*U); capsule(ctx,sh,[sh[0]+0.03*U,sh[1]-0.08*U],0.035*U);
+    circ(ctx,sh[0]+0.045*U,sh[1]-0.16*U,0.09*U,COL.ink,'#fff',2.6); circ(ctx,sh[0]+0.09*U,sh[1]-0.17*U,2.2,COL.ink,COL.ink,1);
+    // arms: hands on the table edge while acting, back on the lap otherwise
+    const edge=[tx,SYw(mode==='push'?0.70:0.755)], lap=[cxp+0.16*U,SYw(0.62)];
+    const k=st==='prep'?smooth01(0.5,1,ph):st==='act'?1:arm;
+    const hand=[lerp(lap[0],edge[0]-0.03*U,k),lerp(lap[1],edge[1],k)], el=ik2(sh[0],sh[1],hand[0],hand[1],0.30*U,0.28*U,1);
+    capsule(ctx,sh,el,0.038*U); capsule(ctx,el,hand,0.032*U); circ(ctx,hand[0],hand[1],0.035*U,COL.ink,'#fff',2.2);
+    // the force pair (0.8 px per N)
+    if(F>1){ const d=mode==='push'?1:-1, L=F*0.8;
+      const ya=ty-22, x1=d>0?tx+4:tx+4+L; fArrow(ctx,x1,ya,d*L,0,COL.yellow,'you → table '+fmt(F,0)+' N',{align:'center',lx:-d*L/2,ly:-12});
+      const yb=SYw(1.3), x2=d>0?sh[0]+10:sh[0]+10-L; fArrow(ctx,x2,yb,-d*L,0,COL.blue,'table → you '+fmt(F,0)+' N',{align:'center',lx:d*L/2,ly:-12}); }
+    if(Math.abs(vc)>0.01) fArrow(ctx,cxp,SYw(1.52),vc*110,0,COL.green,fmt(Math.abs(vc),2)+' m/s',{w:3});
+    if(Math.abs(vt)>0.01) fArrow(ctx,tx+tw/2,ty-40,vt*110,0,COL.green,fmt(Math.abs(vt),2)+' m/s',{w:3});
+    if(Math.abs(vc)>0.01&&F<1) fArrow(ctx,cxp+(vc>0?-0.3:0.3)*U,FL-6,-Math.sign(vc)*MUR*mC*g*0.8,0,COL.red,'friction',{w:3,size:11,align:vc>0?'right':'left',ly:14});
+    // F–t: the two forces are mirror images at every instant
+    const G=graphFrame(ctx,520,40,730,150,[0,2.4],[-200,200],{xs:0.6,ys:100,xt:'t (s)',yt:'force (N)'});
+    const d=mode==='push'?1:-1; traceDraw(ctx,G,fr.map(p=>[p[0],d*p[1]]),COL.yellow,2.6); traceDraw(ctx,G,fr.map(p=>[p[0],-d*p[1]]),COL.blue,2.6,[6,4]);
+    textAt(ctx,'on table',742,G.Y(d*120),{align:'left',size:10,weight:700,color:COL.yellow}); textAt(ctx,'on you',742,G.Y(-d*120),{align:'left',size:10,weight:700,color:COL.blue});
+    if(st==='prep') tag(ctx,'getting ready…',400,24,COL.mid,{size:11});
+    ctx.restore();
+    setv($,'r1',fmt(F,0)+' N'); setv($,'r2',fmt(Math.abs(vc),2)+' m/s'); setv($,'r3',fmt(roll,2)+' m');
+  });
+  return wrap;
+}
+/* office chair, side view, seat centre at x, floor at FL, U px per metre */
+function chairDraw(ctx,x,FL,U,rot,ghost){
+  const sY=FL-0.46*U; ctx.save(); ctx.lineJoin='round'; ctx.lineCap='round';
+  ctx.strokeStyle=ghost?COL.mid:COL.ink; ctx.fillStyle='#fff'; ctx.lineWidth=2.4;
+  rrect(ctx,x-0.24*U,sY-0.06*U,0.48*U,0.07*U,6); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x-0.22*U,sY-0.03*U); ctx.lineTo(x-0.28*U,sY-0.45*U); ctx.stroke();
+  rrect(ctx,x-0.34*U,sY-0.52*U,0.1*U,0.3*U,6); ctx.fill(); ctx.stroke();
+  line(ctx,x,sY+0.01*U,x,FL-0.12*U,ghost?COL.mid:COL.ink,4);
+  [-0.3,0,0.3].forEach(o=>{ line(ctx,x,FL-0.12*U,x+o*U,FL-0.06*U,ghost?COL.mid:COL.ink,3); if(!ghost) wheelDraw(ctx,x+o*U,FL-0.03*U,0.03*U,rot); else circ(ctx,x+o*U,FL-0.03*U,0.03*U,COL.mid,null,1.5); });
+  ctx.restore();
+}
+
+/* outlined limb segment (line-drawn body part) */
+function capsule(ctx,a,b,r){ ctx.save(); ctx.lineCap='round'; ctx.strokeStyle=COL.ink; ctx.lineWidth=r*2+4.4; ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); ctx.stroke();
+  ctx.strokeStyle='#fff'; ctx.lineWidth=r*2; ctx.stroke(); ctx.restore(); }
+
+/* =====================================================================
+   6.6 LET US VERIFY — two 0–10 N spring balances hooked together. A's ring
+   is on a wall hook (or held still by a friend), you pull B's ring.
+   Real dynamics: the two springs act in series (the joined hooks are light,
+   so each hook pulls the other exactly as hard at every instant); B's body
+   (120 g) is in your hand. Your pull eases up to the slider value and the
+   pair wobbles and settles (ζ ≈ 0.3). Readings are always equal; once still
+   k_A·x_A = k_B·x_B = your pull — even when B's spring is twice as
+   stiff and stretches half as much. Let go and both snap back to zero.
+   ===================================================================== */
+function buildA6(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML=`
+    <div class="control-group"><label>Your pull <span class="val" id="fV"></span></label><input type="range" id="fR" min="0" max="10" step="0.5" value="4">
+      <div class="toggle-group" style="margin-top:10px"><button class="toggle-btn" id="let">✋ Let go</button><button class="toggle-btn play" id="rec">● Record</button></div></div>
+    <div class="control-group"><label>Balances</label><div class="toggle-group" id="bt"><button class="toggle-btn active" data-k="same">Identical</button><button class="toggle-btn" data-k="stiff">B stiffer spring</button></div></div>
+    <div class="control-group"><label>Left end</label><div class="toggle-group" id="le"><button class="toggle-btn active" data-k="wall">Wall hook</button><button class="toggle-btn" data-k="friend">Friend holds it</button></div></div>
+    <div class="control-group"><div class="result-cards three">${card('r1','A reads',COL.blue)}${card('r2','B reads',COL.blue)}${card('r3','Still?',COL.ink)}</div>
+      <div class="fb hidden" id="fb"></div><div id="lg" style="margin-top:8px"></div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas'), fb=$('#fb');
+  const mB=0.12, kA=200, cD=2.2;
+  let kB=200, bt='same', le='wall', Fh=0, hold=true, X=0, vX=0, t=0, trA=[], trB=[], rows=[], handFree=0, jolt=0;
+  chipsWire(wrap,'#bt button',b=>{ const T=kA*kB/(kA+kB)*X; bt=b.dataset.k; kB=bt==='stiff'?400:200; X=T*(kA+kB)/(kA*kB); });
+  chipsWire(wrap,'#le button',b=>{ le=b.dataset.k; });
+  const lb=$('#let'); lb.onclick=()=>{ hold=!hold; lb.textContent=hold?'✋ Let go':'✊ Grab & pull'; lb.className='toggle-btn'+(hold?'':' active'); };
+  $('#rec').onclick=()=>{ const still=Math.abs(vX)<0.004; if(!still){ fb.className='fb warn'; fb.innerHTML='Wait — the balances are still moving. Read them when they are stationary.'; return; }
+    const T=kA*kB/(kA+kB)*X, A=Math.round(T*10)/10, Bv=Math.round(T*10)/10; rows.push([fmt(Fh,1)+' N',fmt(A,1)+' N',fmt(Bv,1)+' N',{v:Math.abs(A-Bv)<0.05?'equal':'≠',c:'r-ok'}]); rows=rows.slice(-6);
+    $('#lg').innerHTML=logTable(['Your pull','A','B',''],rows); fb.className='fb ok'; fb.innerHTML=`A = B = <b>${fmt(A,1)} N</b>: A pulls B exactly as hard as B pulls A.`; };
+  animLoop(dt=>{
+    t+=dt; const Fs=+$('#fR').value; setv($,'fV',fmt(Fs,1)+' N');
+    Fh=hold?approach(Fh,Fs,3,dt):0; handFree=approach(handFree,hold?0:1,6,dt);
+    const n=20, hh=dt/n;
+    const ke=kA*kB/(kA+kB);   // two springs in series
+    for(let i=0;i<n;i++){ const aX=(Fh-ke*X-cD*vX)/mB; vX+=aX*hh; X+=vX*hh; }
+    const T=ke*X; const rA=T, rB=T, still=Math.abs(vX)<0.004;
+    traceAdd(trA,t,rA,500); traceAdd(trB,t,rB,500);
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h); ctx.save(); stage(ctx,w,h);
+    const Y=210, L=200, trvA=100, trvB=100*kA/kB;
+    // left end
+    if(le==='wall'){ line(ctx,32,90,32,330,COL.ink,3); for(let y=96;y<330;y+=14) line(ctx,32,y,20,y+10,COL.muted,1.4); line(ctx,32,Y,50,Y,COL.ink,3); }
+    else { fist(ctx,42,Y,-1,1); textAt(ctx,'friend holds still',60,Y-44,{size:11,weight:700,color:COL.muted}); }
+    const A=springBalance(ctx,56,Y,L,rA,10,{dir:1,travel:trvA,ticks:10,major:2,label:'A'});
+    const eBpx=clamp(rB/10,-0.05,1.08)*trvB, ringB=A.hookTip[0]-12+L+32+Math.max(10,eBpx+4);
+    const Bb=springBalance(ctx,ringB,Y,L,rB,10,{dir:-1,travel:trvB,ticks:10,major:trvB<80?5:2,label:bt==='stiff'?'B (stiffer)':'B'});
+    // your hand
+    const hx=ringB+6+handFree*18; if(handFree<0.5) fist(ctx,hx,Y,1,1.05); else { ctx.save(); ctx.globalAlpha=handFree; ctx.lineWidth=2.2; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; rrect(ctx,hx,Y-20,34,40,12); ctx.fill(); ctx.stroke(); for(let i=0;i<4;i++) line(ctx,hx-2,Y-15+i*10,hx-18,Y-19+i*10,COL.ink,2); line(ctx,hx+34,Y-8,hx+80,Y-12,COL.ink,2.2); line(ctx,hx+34,Y+8,hx+80,Y+12,COL.ink,2.2); ctx.restore(); }
+    // forces: 16 px per N
+    const fs=16, jx=(A.hookTip[0]+Bb.hookTip[0])/2;
+    if(Fh>0.05) fArrow(ctx,ringB+84,Y-40,Fh*fs,0,COL.yellow,'your pull '+fmt(Fh,1)+' N',{align:'right',lx:-Fh*fs,ly:-12});
+    if(rA>0.05) fArrow(ctx,jx,Y-44,rA*fs,0,COL.blue,'B pulls A '+fmt(rA,1)+' N',{align:'left',size:12});
+    if(rB>0.05) fArrow(ctx,jx,Y+54,-rB*fs,0,COL.blue,'A pulls B '+fmt(rB,1)+' N',{align:'right',size:12});
+    // big readings
+    textAt(ctx,'A: '+fmt(rA,1)+' N',180,70,{align:'center',size:26,weight:800,color:COL.blue});
+    textAt(ctx,'B: '+fmt(rB,1)+' N',560,70,{align:'center',size:26,weight:800,color:COL.blue});
+    const eq=Math.abs(rA-rB)<0.05; textAt(ctx,eq?'=':'≠',370,70,{align:'center',size:30,weight:800,color:eq?COL.green:COL.red});
+    if(bt==='stiff'&&still&&rA>0.3) tag(ctx,'B stretches half as much — but reads the same',400,112,COL.muted,{size:11});
+    // readings vs time
+    const G=graphFrame(ctx,70,340,770,470,[t-8,t],[0,11],{ys:2,yt:'reading (N)'});
+    ctx.save(); ctx.beginPath(); ctx.rect(70,330,700,145); ctx.clip(); traceDraw(ctx,G,trA,COL.blue,4); traceDraw(ctx,G,trB,COL.ink,1.6,[5,4]); ctx.restore();
+    textAt(ctx,'— A   - - B',770,352,{align:'right',size:11,weight:700,color:COL.muted});
+    ctx.restore();
+    setv($,'r1',fmt(rA,1)+' N'); setv($,'r2',fmt(rB,1)+' N'); setv($,'r3',still?'yes':'wobbling'); setc($,'r3',still?COL.green:COL.red);
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   6.7 LET US UNDERSTAND — balloon rocket on a taut 8 m thread.
+   Rubber pressure (thin-shell neo-Hookean): ΔP = K(1/λ − 1/λ⁷),
+   λ = r/r₀, r₀ = 4.5 cm, K = 5.2 kPa → peak ≈ 3.2 kPa.
+   Air leaves the neck at v_e = √(2ΔP/ρ) (~70 m/s), volume flow
+   Q = C_d·A·v_e (C_d 0.62). The stretched rubber pushes the air out
+   backwards; the air pushes the balloon forwards with thrust ρ·Q·v_e.
+   Against it: air drag ½ρ·0.7·πr²·v² and straw-on-thread friction
+   0.03 N. The air still inside counts in the mass. A 10 cm balloon with
+   a 1 cm neck: top speed ≈ 7.7 m/s, empties in ≈ 1.3 s.
+   ===================================================================== */
+function buildA7(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML=`
+    <div class="control-group"><label>Blow the balloon up to <span class="val" id="rV"></span></label><input type="range" id="rR" min="7" max="13" step="0.5" value="10"></div>
+    <div class="control-group"><label>Neck opening</label><div class="toggle-group" id="nk"><button class="toggle-btn active" data-k="1.0">Wide · 1.0 cm</button><button class="toggle-btn" data-k="0.7">Narrow · 0.7 cm</button></div></div>
+    <div class="control-group"><div class="toggle-group"><button class="toggle-btn play" id="go">✂ Untie the neck</button><button class="toggle-btn small" id="rst">↺</button></div></div>
+    <div class="control-group"><div class="result-cards three">${card('r1','Air pressure inside',COL.yellow)}${card('r2','Push on balloon',COL.blue)}${card('r3','Distance',COL.green)}</div>
+      <div class="fb hidden" id="fb"></div><div id="lg" style="margin-top:8px"></div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas'), fb=$('#fb');
+  const rho=1.2, Cd=0.62, K=5200, RS=0.045, MS=0.0045, LTH=8, X0=0.6, FRIC=0.03;
+  let dn=0.010, st='tied', r=0.10, rs=spr(0.10), x=X0, v=0, t=0, tf=0, dP=0, th=0, dr=0, vmax=0, tr=[], ghost=null, jets=[], knot=null, runs=[];
+  const cam=camNew((X0-0.12)*800), V=r=>4/3*Math.PI*1.25*r*r*r, press=r=>{ const l=r/RS; return l>1?K*(1/l-1/Math.pow(l,7)):0; };
+  chipsWire(wrap,'#nk button',b=>{ dn=+b.dataset.k/100; });
+  function reset(){ st='tied'; x=X0; v=0; tf=0; vmax=0; if(tr.length) ghost=tr; tr=[]; jets=[]; knot=null; fb.className='fb hidden'; r=rs.x; }
+  $('#rst').onclick=reset;
+  $('#go').onclick=()=>{ if(st!=='tied') { reset(); return; } st='fly'; tf=0; tr=[[0,0]]; knot={x:0,y:0,vx:0,vy:0,a:0}; };
+  function paint(){ $('#lg').innerHTML=runs.length?logTable(['Balloon','Neck','Top speed','Went'],runs.map(q=>[fmt(q.r*100,1)+' cm',fmt(q.dn*100,1)+' cm',fmt(q.vm,1)+' m/s',{v:q.d+X0>=LTH-0.3?'hit the end':fmt(q.d,2)+' m',c:'r-ok'}])):''; }
+  animLoop(dt=>{
+    t+=dt; const r0=+$('#rR').value/100; setv($,'rV',fmt(r0*100,1)+' cm');
+    if(st==='tied'){ springTo(rs,r0,60,7,dt); r=rs.x; dP=press(r); th=0; dr=0; }
+    else if(st==='fly'||st==='coast'){ const n=12, hh=dt/n, An=Math.PI*dn*dn/4;
+      for(let i=0;i<n;i++){ dP=press(r); const ve=Math.sqrt(2*Math.max(0,dP)/rho), Q=Cd*An*ve; th=rho*Q*ve;
+        const mt=MS+rho*V(r); dr=0.5*rho*0.7*Math.PI*r*r*v*v;
+        const fr=v>1e-3?FRIC:Math.min(FRIC,th); const a=(th-dr-fr)/mt; v=Math.max(0,v+a*hh); x+=v*hh; tf+=hh;
+        r=Math.max(RS,Math.cbrt(Math.max(V(RS),V(r)-Q*hh)*3/(4*Math.PI*1.25)));
+        if(x>=LTH-0.15){ x=LTH-0.15; v=-v*0.15; if(Math.abs(v)<0.05) v=0; }
+        if(Math.random()<Q*hh*70000) jets.push({x:x-1.25*r-0.02,y:0,vx:v*0.5-(0.9+Math.random()*0.8)*Math.min(4,ve/18),vy:(Math.random()-0.5)*0.9,l:0}); }
+      vmax=Math.max(vmax,v); if(!tr.length||tf-tr[tr.length-1][0]>0.02) traceAdd(tr,tf,Math.max(0,v),400);
+      if(st==='fly'&&r<=RS+1e-4) st='coast';
+      if(st==='coast'&&Math.abs(v)<1e-3){ st='done'; runs.push({r:rs.x,dn,vm:vmax,d:x-X0}); runs=runs.slice(-5); paint();
+        fb.className='fb ok'; fb.innerHTML=`Air rushed out <b>backwards</b>, the balloon went <b>forwards</b> ${x>=LTH-0.3?'all the way to the end nail':fmt(x-X0,2)+' m'}. The stretched rubber pushed the air out; the air pushed the balloon the opposite way.`; }
+    }
+    jets.forEach(j=>{ j.l+=dt; j.x+=j.vx*dt; j.y+=j.vy*dt; }); jets=jets.filter(j=>j.l<0.45);
+    if(knot){ knot.vy+=9.8*dt*0.6; knot.y+=knot.vy*dt; knot.x-=0.2*dt; knot.a+=dt*6; }
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h); ctx.save(); stage(ctx,w,h);
+    const U=800, TY=124; const ctg=(x-0.12)*U; cam.x=st==='fly'||st==='coast'?ctg:approach(cam.x,ctg,6,dt); const cx=cam.x, SX=X=>400+X*U-cx;
+    // thread, ruler, nails
+    line(ctx,SX(0),TY,SX(LTH),TY,COL.ink,1.4);
+    for(let c=0;c<=LTH*10;c++){ const X=SX(c/10); if(X<-20||X>820) continue; line(ctx,X,TY+226,X,TY+226+(c%5?5:11),COL.muted,1.2); if(c%5===0) textAt(ctx,fmt(c/10,1)+' m',X,TY+250,{align:'center',size:10,weight:600,color:COL.muted}); }
+    line(ctx,Math.max(-10,SX(0)),TY+226,Math.min(810,SX(LTH)),TY+226,COL.muted,1.2);
+    [0,LTH].forEach(X=>{ const px=SX(X); if(px<-40||px>840) return; line(ctx,px,TY-60,px,TY+226,COL.ink,3); const d=X?1:-1; for(let y=TY-56;y<TY+226;y+=14) line(ctx,px,y,px+d*12,y+10,COL.muted,1.4); circ(ctx,px-d*4,TY,4,COL.ink,'#fff',2); });
+    // balloon: ellipse 1.25r long, straw taped on top riding the thread
+    const bx=SX(x), a=1.25*r*U, b=r*U, by=TY+8+b, sq=st==='fly'?Math.sin(t*38)*0.012*b:0;
+    jets.forEach(j=>{ const px=SX(j.x), py=by+j.y*U*0.5; const f=1-j.l/0.45; line(ctx,px,py,px-j.vx*10,py-j.vy*4,rgba(COL.blue,0.85*f),2.4); });
+    ctx.save(); ctx.lineWidth=2.8; ctx.strokeStyle=COL.red; ctx.fillStyle='#fff'; ctx.beginPath(); ctx.ellipse(bx,by,a+sq,b-sq,0,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    ctx.globalAlpha=0.5; ctx.lineWidth=2; ctx.beginPath(); ctx.ellipse(bx+a*0.35,by-b*0.45,a*0.22,b*0.12,-0.3,0,Math.PI*2); ctx.stroke(); ctx.restore();
+    // neck (points backwards)
+    const nx=bx-a; ctx.save(); ctx.strokeStyle=COL.red; ctx.lineWidth=2.4; ctx.beginPath(); ctx.moveTo(nx+2,by-7); ctx.lineTo(nx-16,by-5); ctx.moveTo(nx+2,by+7); ctx.lineTo(nx-16,by+5); ctx.stroke(); ctx.restore();
+    if(st==='tied'){ line(ctx,nx-16,by-8,nx-16,by+8,COL.ink,3); ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=1.6; ctx.beginPath(); ctx.moveTo(nx-16,by); ctx.quadraticCurveTo(nx-30,by-12,nx-26,by+2); ctx.moveTo(nx-16,by); ctx.quadraticCurveTo(nx-30,by+14,nx-34,by+6); ctx.stroke(); ctx.restore(); }
+    if(knot&&knot.y<0.28){ ctx.save(); ctx.translate(SX(X0-1.25*rs.x-0.03+knot.x),TY+8+rs.x*U+knot.y*U); ctx.rotate(knot.a); line(ctx,-8,0,8,0,COL.ink,2.4); ctx.restore(); }
+    // straw + tape
+    const sw=Math.min(0.14*U,a*1.2); rect(ctx,bx-sw/2,TY-6,sw,12,COL.ink,'#fff',2); line(ctx,bx-sw/2,TY,bx+sw/2,TY,COL.ink,1.4);
+    [-0.25,0.25].forEach(o=>{ rect(ctx,bx+o*sw-7,TY-8,14,by-b-TY+14,COL.mid,rgba('#dbe7f3',0.7),1.2); });
+    // squeeze arrows: rubber pushing on the air inside
+    const sqz=clamp(dP/3200,0,1.2);
+    if(sqz>0.05) for(let i=0;i<10;i++){ const q=i/10*Math.PI*2+0.3; const ex=bx+Math.cos(q)*a*0.93, ey=by+Math.sin(q)*b*0.93; fArrow(ctx,ex,ey,-Math.cos(q)*14*sqz,-Math.sin(q)*14*sqz*(b/a),COL.yellow,null,{w:2.2}); }
+    // the action–reaction pair and the opposing forces (360 px per N)
+    const fs=360;
+    if(th>0.004){ const L1=Math.min(170,th*fs); fArrow(ctx,nx-22,by+b*0.55,-L1,0,COL.yellow,'rubber pushes air out',{align:'right',size:11.5,lx:L1,ly:22});
+      fArrow(ctx,bx+a+8,by,L1,0,COL.blue,'air pushes balloon '+fmt(th,2)+' N',{align:'left',size:11.5,lx:-L1,ly:24}); }
+    if(v>0.02){ const L2=Math.min(170,(dr+FRIC)*fs); fArrow(ctx,bx+a*0.9,TY-20,-L2,0,COL.red,'drag + friction '+fmt(dr+FRIC,2)+' N',{align:'center',size:11,lx:L2/2,ly:-10}); }
+    if(v>0.02) fArrow(ctx,bx-60,TY-54,Math.min(240,v*28),0,COL.green,fmt(v,1)+' m/s',{w:3,align:'left'});
+    // mini-map + v–t
+    miniMap(ctx,140,26,620,LTH,x,COL.green,runs.map(q=>({m:q.d+X0,col:COL.mid})),1);
+    textAt(ctx,'thread 8 m',20,31,{size:12,weight:800,color:COL.ink});
+    const G=graphFrame(ctx,70,396,770,480,[0,5],[0,10],{xs:0.5,ys:2,xl:2,xt:'time (s)',yt:'speed (m/s)',ytc:COL.green});
+    if(ghost) traceDraw(ctx,G,ghost,COL.mid,1.6,[4,4]); traceDraw(ctx,G,tr,COL.green,2.6);
+    ctx.restore();
+    setv($,'r1',fmt(dP/1000,2)+' kPa'); setv($,'r2',fmt(th,2)+' N'); setv($,'r3',fmt(Math.max(0,x-X0),2)+' m');
+  });
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   1. ACTIVITIES + ROUTER
+   --------------------------------------------------------------------- */
+const activities = [
+  { num:'6.1', title:'Coins, a Rubber Band and Four Surfaces', desc:'Stretch to C, release, and see how far the coin stack slides on each surface', build: buildA1 },
+  { num:'6.2', title:'Measuring Friction with a Spring Balance', desc:'Pull steadily — read the balance when the block just starts to move', build: buildA2 },
+  { num:'6.3', title:'Double the Force on the Cart', desc:'Double the mass in the cup and compare T₁ and T₂ from the slow-motion video', build: buildA3 },
+  { num:'6.4', title:'Double the Mass of the Cart', desc:'Keep the cup the same, double the cart — what happens to the acceleration?', build: buildA4 },
+  { num:'6.5', title:'Push the Table from a Rolling Chair', desc:'Push or pull the table and watch which way you roll', build: buildA5 },
+  { num:'6.6', title:'Two Spring Balances Pulling Each Other', desc:'Pull harder or softer and compare the two readings', build: buildA6 },
+  { num:'6.7', title:'Balloon Rocket on a Thread', desc:'Untie the neck: air rushes back, the balloon rushes forward', build: buildA7 },
+];
+let currentIndex = 0;
+
+function buildNav(){
+  const nav = document.getElementById('sideNav');
+  nav.innerHTML='';
+  activities.forEach((a,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'nav-item'+(i===currentIndex?' active':'');
+    btn.innerHTML = `<span class="n-num">${a.num}</span><span class="n-title">${a.title}</span>`;
+    btn.onclick = ()=>{ currentIndex=i; render(); };
+    nav.appendChild(btn);
+  });
+}
+function render(){
+  stopAllLoops();
+  buildNav();
+  const a = activities[currentIndex];
+  document.getElementById('panelBadge').textContent = a.num;
+  document.getElementById('panelTitle').textContent = a.title;
+  document.getElementById('panelDesc').textContent = a.desc||'';
+  const body = document.getElementById('panelBody');
+  body.innerHTML='';
+  body.appendChild(a.build());
+}
+function labShell(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `<div class="lab-canvas-wrap"><canvas></canvas></div><div class="lab-side"></div>`;
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   INIT
+   --------------------------------------------------------------------- */
+render();
+</script>
+<script src="../../tracking/activity-tracker.js"></script>
+<script src="../../nav/back-button.js"></script>
+</body>
+</html>

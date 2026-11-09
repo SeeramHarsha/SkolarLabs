@@ -1,0 +1,1125 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Metals and Non-metals — Activity Simulator | Grade 10 Chapter 3</title>
+<style>
+:root{
+  --font-sans: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  --surface-1: #ffffff;
+  --surface-2: #f7f9fb;
+  --border: #e2e6ea;
+  --border-strong: #c9d0d8;
+  --text-primary: #1c2530;
+  --text-secondary: #5b6570;
+  --accent: #1a3a5c;
+  --accent-dark: #0f2640;
+}
+* { box-sizing: border-box; margin: 0; padding: 0; }
+html, body { height: 100%; }
+body {
+  font-family: var(--font-sans);
+  background: var(--surface-2);
+  color: var(--text-primary);
+  min-height: 100vh;
+  padding: 16px;
+}
+
+.app-shell {
+  max-width: 1800px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 32px);
+  min-height: 640px;
+}
+
+.sim-header {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+  color: white;
+  padding: 16px 22px;
+  border-radius: 12px;
+  margin-bottom: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  flex-wrap: wrap;
+  flex-shrink: 0;
+}
+.sim-header .badge {
+  background: rgba(255,255,255,0.15);
+  border: 1px solid rgba(255,255,255,0.25);
+  border-radius: 6px;
+  padding: 4px 10px;
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.5px;
+  text-transform: uppercase;
+  display: inline-block;
+}
+.sim-header h1 { font-size: 19px; font-weight: 500; margin-top: 6px; }
+.sim-header p { font-size: 13px; opacity: 0.75; margin-top: 2px; }
+.sim-header .progress-pill {
+  background: rgba(255,255,255,0.12);
+  border: 1px solid rgba(255,255,255,0.22);
+  border-radius: 20px;
+  padding: 8px 16px;
+  font-size: 12px;
+  white-space: nowrap;
+}
+.sim-header .progress-pill strong { font-size: 14px; }
+
+.activity-grid {
+  display: grid;
+  grid-template-columns: 250px 1fr;
+  gap: 14px;
+  flex: 1;
+  min-height: 0;
+}
+
+.activity-nav {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  overflow-y: auto;
+  padding-right: 4px;
+  min-height: 0;
+}
+.activity-nav::-webkit-scrollbar { width: 6px; }
+.activity-nav::-webkit-scrollbar-thumb { background: var(--border-strong); border-radius: 3px; }
+
+.nav-section-label {
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 0.6px;
+  text-transform: uppercase;
+  color: var(--text-secondary);
+  padding: 6px 10px 2px;
+}
+
+.nav-item {
+  padding: 9px 12px;
+  border-radius: 8px;
+  cursor: pointer;
+  border: 0.5px solid var(--border);
+  background: var(--surface-1);
+  transition: all 0.15s;
+  text-align: left;
+  width: 100%;
+  display: block;
+}
+.nav-item:hover { background: var(--surface-2); border-color: var(--border-strong); }
+.nav-item.active { background: var(--accent); border-color: var(--accent); color: white; }
+.nav-item .nav-num {
+  font-size: 10px;
+  font-weight: 500;
+  opacity: 0.6;
+  display: block;
+  margin-bottom: 2px;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+.nav-item.active .nav-num { opacity: 0.75; }
+.nav-item .nav-title { font-size: 13px; font-weight: 500; line-height: 1.3; }
+.nav-item .nav-sub { font-size: 11px; opacity: 0.65; margin-top: 1px; }
+
+.sim-panel {
+  background: var(--surface-2);
+  border: 0.5px solid var(--border);
+  border-radius: 12px;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+  min-height: 0;
+}
+.sim-panel-header {
+  padding: 14px 18px 12px;
+  border-bottom: 0.5px solid var(--border);
+  background: var(--surface-1);
+  flex-shrink: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+.sim-panel-header h2 { font-size: 16px; font-weight: 500; color: var(--text-primary); }
+.sim-panel-header p { font-size: 12.5px; color: var(--text-secondary); margin-top: 3px; line-height: 1.5; max-width: 640px; }
+.panel-badge {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--accent);
+  background: #e8eef5;
+  border: 0.5px solid #c9d8e6;
+  padding: 4px 10px;
+  border-radius: 6px;
+  white-space: nowrap;
+}
+
+.sim-content { flex: 1; display: flex; flex-direction: column; min-height: 0; }
+
+.sim-visual {
+  flex: 1;
+  position: relative;
+  min-height: 340px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: #f0f4f8;
+  overflow: hidden;
+  padding: 10px;
+}
+.sim-visual canvas { max-width: 100%; max-height: 100%; width: auto; height: auto; }
+
+.sim-controls {
+  padding: 12px 18px 14px;
+  border-top: 0.5px solid var(--border);
+  background: var(--surface-1);
+  flex-shrink: 0;
+}
+.step-info {
+  font-size: 12.5px;
+  color: var(--text-secondary);
+  margin-bottom: 10px;
+  padding: 9px 12px;
+  background: var(--surface-2);
+  border-radius: 6px;
+  border-left: 3px solid var(--accent);
+  line-height: 1.55;
+  min-height: 20px;
+}
+.step-info strong { color: var(--text-primary); }
+.step-info em { color: var(--accent); font-style: normal; font-weight: 500; }
+
+.ctrl-row {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+.btn-step {
+  padding: 8px 15px;
+  border-radius: 6px;
+  border: 0.5px solid var(--border-strong);
+  background: var(--surface-2);
+  color: var(--text-primary);
+  cursor: pointer;
+  font-size: 13px;
+  font-weight: 500;
+  transition: all 0.1s;
+  white-space: nowrap;
+}
+.btn-step:hover { background: var(--surface-1); }
+.btn-step.primary { background: var(--accent); color: white; border-color: var(--accent); }
+.btn-step.primary:hover { background: var(--accent-dark); }
+.btn-step:disabled { opacity: 0.4; cursor: default; }
+
+.step-dots { display: flex; gap: 5px; align-items: center; margin-left: auto; }
+.step-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--border-strong); transition: all 0.2s; cursor: pointer; }
+.step-dot.active { background: var(--accent); width: 18px; border-radius: 4px; }
+
+.outcome-label {
+  display: inline-block;
+  padding: 3px 9px;
+  border-radius: 4px;
+  font-size: 11px;
+  font-weight: 500;
+  margin-top: 5px;
+}
+.outcome-success { background: #e8f5e9; color: #2e7d32; border: 0.5px solid #a5d6a7; }
+.outcome-info { background: #e3f2fd; color: #1565c0; border: 0.5px solid #90caf9; }
+.outcome-warn { background: #fff3e0; color: #e65100; border: 0.5px solid #ffcc80; }
+.outcome-danger { background: #ffebee; color: #c62828; border: 0.5px solid #ef9a9a; }
+
+canvas { display: block; }
+.hidden { display: none !important; }
+
+/* Responsive breakpoints */
+@media (max-width: 1100px) {
+  .sim-visual { min-height: 300px; }
+}
+@media (max-width: 980px) {
+  .activity-grid { grid-template-columns: 210px 1fr; }
+  .sim-header h1 { font-size: 16px; }
+  .sim-visual { min-height: 280px; }
+}
+@media (max-width: 720px) and (orientation: portrait) {
+  body { padding: 8px; }
+  .app-shell { height: auto; min-height: 100vh; }
+  .activity-grid { grid-template-columns: 1fr; gap: 10px; }
+  .activity-nav {
+    flex-direction: row;
+    overflow-x: auto;
+    overflow-y: hidden;
+    max-height: none;
+    gap: 6px;
+    padding-bottom: 6px;
+    -webkit-overflow-scrolling: touch;
+  }
+  .nav-section-label { display: none; }
+  .nav-item { min-width: 150px; flex-shrink: 0; }
+  .sim-visual {
+    min-height: 0;
+    width: 100%;
+    aspect-ratio: 2 / 1;
+    padding: 6px;
+  }
+  .sim-visual canvas { width: 100% !important; height: 100% !important; }
+  .sim-header { flex-direction: column; align-items: flex-start; }
+  .sim-header .progress-pill { align-self: flex-start; }
+  .btn-step { padding: 10px 14px; font-size: 13.5px; }
+  .ctrl-row { gap: 6px; }
+}
+@media (max-width: 480px) {
+  .sim-header h1 { font-size: 15px; }
+  .sim-header p { font-size: 12px; }
+  .sim-panel-header h2 { font-size: 14.5px; }
+  .sim-panel-header p { font-size: 12px; }
+  .nav-item { min-width: 130px; padding: 8px 10px; }
+  .nav-item .nav-title { font-size: 12.5px; }
+  .step-info { font-size: 12px; padding: 8px 10px; }
+  .btn-step { padding: 9px 12px; font-size: 13px; }
+  .step-dots { margin-left: 0; width: 100%; justify-content: center; order: 3; margin-top: 6px; }
+}
+@media (max-width: 380px) {
+  .nav-item { min-width: 112px; }
+  .sim-visual { aspect-ratio: 4 / 3; }
+}
+</style>
+</head>
+<body>
+
+<div class="app-shell">
+  <div class="sim-header">
+    <div>
+      <div class="badge">Grade 10 · Chapter 3</div>
+      <h1>Metals and Non-metals — Activity Simulator</h1>
+      <p>Step-by-step virtual demonstrations of Activities 3.1–3.14 for classroom use</p>
+    </div>
+    <div class="progress-pill">Activity <strong id="hdrCurrent">1</strong> / <span id="hdrTotal">14</span></div>
+  </div>
+
+  <div class="activity-grid">
+    <div class="activity-nav" id="actNav"></div>
+    <div class="sim-panel">
+      <div class="sim-panel-header">
+        <div>
+          <h2 id="panelTitle">Select an activity</h2>
+          <p id="panelDesc">Choose an activity from the left to begin the simulation.</p>
+        </div>
+        <div class="panel-badge" id="panelBadge">NCERT 3.1</div>
+      </div>
+      <div class="sim-content">
+        <div class="sim-visual" id="simVisual">
+          <canvas id="simCanvas" width="920" height="460"></canvas>
+        </div>
+        <div class="sim-controls">
+          <div class="step-info" id="stepInfo">Select an activity to begin.</div>
+          <div class="ctrl-row">
+            <button class="btn-step" id="btnPrev" onclick="changeStep(-1)" disabled>← Prev</button>
+            <button class="btn-step primary" id="btnNext" onclick="changeStep(1)">Next →</button>
+            <button class="btn-step" onclick="resetActivity()" style="margin-left:4px">↺ Reset</button>
+            <div class="step-dots" id="stepDots"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============ Shared canvas helpers ============ */
+function drawArrow(ctx, x1, y1, x2, y2, color, label) {
+  ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 2.2;
+  ctx.beginPath(); ctx.moveTo(x1, y1); ctx.lineTo(x2, y2); ctx.stroke();
+  const angle = Math.atan2(y2 - y1, x2 - x1);
+  ctx.beginPath();
+  ctx.moveTo(x2, y2);
+  ctx.lineTo(x2 - 8 * Math.cos(angle - 0.4), y2 - 8 * Math.sin(angle - 0.4));
+  ctx.lineTo(x2 - 8 * Math.cos(angle + 0.4), y2 - 8 * Math.sin(angle + 0.4));
+  ctx.closePath(); ctx.fill();
+  if (label) {
+    ctx.font = '10px sans-serif'; ctx.textAlign = 'left';
+    ctx.fillText(label, x2 + 6, y2);
+  }
+}
+
+function drawMetalPiece(ctx, x, y, w, h, color, label, strokeColor) {
+  ctx.fillStyle = color;
+  ctx.fillRect(x, y, w, h);
+  ctx.strokeStyle = strokeColor || '#555';
+  ctx.lineWidth = 1.2;
+  ctx.strokeRect(x, y, w, h);
+  if (label) {
+    ctx.fillStyle = '#fff';
+    ctx.font = '10px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText(label, x + w / 2, y + h / 2 + 3);
+  }
+}
+
+function drawTestTube(ctx, x, y, w, h, fillColor, fillLevel, label) {
+  // tube outline
+  ctx.strokeStyle = '#607d8b'; ctx.lineWidth = 1.6;
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.lineTo(x, y + h - w / 2);
+  ctx.arc(x + w / 2, y + h - w / 2, w / 2, Math.PI, 0, false);
+  ctx.lineTo(x + w, y);
+  ctx.stroke();
+  // liquid
+  if (fillColor && fillLevel > 0) {
+    const liqY = y + h - h * fillLevel;
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(x + 1, liqY);
+    ctx.lineTo(x + 1, y + h - w / 2);
+    ctx.arc(x + w / 2, y + h - w / 2, w / 2 - 1, Math.PI, 0, false);
+    ctx.lineTo(x + w - 1, liqY);
+    ctx.closePath();
+    ctx.fillStyle = fillColor;
+    ctx.fill();
+    ctx.restore();
+  }
+  if (label) {
+    ctx.fillStyle = '#455a64'; ctx.font = '10px sans-serif'; ctx.textAlign = 'center';
+    ctx.fillText(label, x + w / 2, y + h + 14);
+  }
+}
+
+function drawBattery(ctx, x, y) {
+  ctx.fillStyle = '#8d6e63'; ctx.fillRect(x, y, 46, 24);
+  ctx.strokeStyle = '#4e342e'; ctx.lineWidth = 1.2; ctx.strokeRect(x, y, 46, 24);
+  ctx.fillStyle = '#fff'; ctx.font = '9px sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText('battery', x + 23, y + 15);
+  ctx.fillStyle = '#333'; ctx.font = '11px sans-serif';
+  ctx.fillText('+', x + 40, y - 4); ctx.fillText('−', x + 6, y - 4);
+}
+
+function drawBulb(ctx, x, y, glowing) {
+  ctx.beginPath(); ctx.arc(x, y, 14, 0, Math.PI * 2);
+  ctx.fillStyle = glowing ? '#fff59d' : '#eceff1';
+  ctx.fill();
+  ctx.strokeStyle = glowing ? '#f9a825' : '#90a4ae'; ctx.lineWidth = 1.5; ctx.stroke();
+  if (glowing) {
+    ctx.save();
+    ctx.shadowColor = '#ffeb3b'; ctx.shadowBlur = 18;
+    ctx.beginPath(); ctx.arc(x, y, 14, 0, Math.PI * 2); ctx.fillStyle = '#fff9c4'; ctx.fill();
+    ctx.restore();
+  }
+  ctx.strokeStyle = '#795548'; ctx.lineWidth = 1;
+  ctx.beginPath(); ctx.moveTo(x - 5, y + 5); ctx.lineTo(x + 5, y - 5); ctx.stroke();
+  ctx.fillStyle = '#616161'; ctx.fillRect(x - 8, y + 12, 16, 6);
+}
+
+function drawThermometer(ctx, x, y, h, level, color) {
+  ctx.strokeStyle = '#90a4ae'; ctx.lineWidth = 1.4;
+  ctx.strokeRect(x, y, 8, h);
+  const fillH = h * level;
+  ctx.fillStyle = color || '#e53935';
+  ctx.fillRect(x + 1, y + h - fillH, 6, fillH);
+  ctx.beginPath(); ctx.arc(x + 4, y + h + 5, 6, 0, Math.PI * 2); ctx.fill();
+}
+
+function drawTitleBanner(ctx, w, text) {
+  ctx.fillStyle = '#1565c0'; ctx.font = '500 13px sans-serif'; ctx.textAlign = 'center';
+  ctx.fillText(text, w / 2, 26);
+}
+
+function drawSummaryRows(ctx, w, startY, rows) {
+  rows.forEach(([left, right, bg, clr], i) => {
+    const y = startY + i * 34;
+    ctx.fillStyle = bg; ctx.fillRect(40, y, w - 80, 28);
+    ctx.strokeStyle = clr; ctx.lineWidth = 0.6; ctx.strokeRect(40, y, w - 80, 28);
+    ctx.fillStyle = '#222'; ctx.font = '11px sans-serif'; ctx.textAlign = 'left';
+    ctx.fillText(left, 50, y + 18);
+    ctx.fillStyle = clr; ctx.font = '500 11px sans-serif'; ctx.textAlign = 'right';
+    ctx.fillText(right, w - 50, y + 18);
+  });
+}
+
+function drawFlame(ctx, x, y) {
+  ctx.fillStyle = '#ff9800';
+  ctx.beginPath();
+  ctx.moveTo(x, y);
+  ctx.quadraticCurveTo(x - 8, y - 18, x, y - 34);
+  ctx.quadraticCurveTo(x + 8, y - 18, x, y);
+  ctx.fill();
+  ctx.fillStyle = '#ffeb3b';
+  ctx.beginPath();
+  ctx.moveTo(x, y - 2);
+  ctx.quadraticCurveTo(x - 4, y - 14, x, y - 24);
+  ctx.quadraticCurveTo(x + 4, y - 14, x, y - 2);
+  ctx.fill();
+}
+
+function drawBurner(ctx, x, y) {
+  drawFlame(ctx, x, y);
+  ctx.fillStyle = '#90a4ae'; ctx.fillRect(x - 10, y, 20, 30);
+  ctx.fillStyle = '#607d8b'; ctx.fillRect(x - 18, y + 30, 36, 8);
+  ctx.fillStyle = '#455a64'; ctx.fillRect(x - 24, y + 38, 48, 6);
+}
+
+/* ============ Activity definitions ============ */
+const activities = [
+{
+  id:1, num:"3.1", title:"Metallic Lustre", sub:"Shining surfaces",
+  desc:"Observe samples of iron, copper, aluminium and magnesium before and after cleaning with sand paper.",
+  steps:[
+    {label:"Samples of iron, copper, aluminium and magnesium are collected. Their surfaces look <strong>dull</strong> — tarnished by exposure to air.", state:0},
+    {label:"Each sample is rubbed firmly with <strong>sand paper</strong> to clean the surface.", state:1},
+    {label:"After cleaning, every sample shows a <em>shining surface</em>. This shine, natural to pure metals, is called <strong>metallic lustre</strong>.", state:2, outcome:"success:Metals have metallic lustre in their pure state"},
+  ],
+  draw:(ctx,step)=>{
+    const metals=[["Fe","#8d99ae"],["Cu","#c87f5f"],["Al","#b0bec5"],["Mg","#cfd8dc"]];
+    const dull = step===0;
+    metals.forEach((m,i)=>{
+      const x=60+i*100, y=90;
+      if(dull){
+        ctx.fillStyle='#9e9e9e';
+        ctx.beginPath(); ctx.arc(x,y,26,0,Math.PI*2); ctx.fill();
+        ctx.strokeStyle='#757575'; ctx.lineWidth=1; ctx.stroke();
+      } else {
+        const grad = ctx.createRadialGradient(x-8,y-8,4,x,y,28);
+        grad.addColorStop(0,'#ffffff'); grad.addColorStop(0.4,m[1]); grad.addColorStop(1,'#607d8b');
+        ctx.fillStyle=grad;
+        ctx.beginPath(); ctx.arc(x,y,26,0,Math.PI*2); ctx.fill();
+        ctx.strokeStyle='#455a64'; ctx.lineWidth=1; ctx.stroke();
+      }
+      ctx.fillStyle= dull? '#616161':'#fff'; ctx.font='11px sans-serif'; ctx.textAlign='center';
+      ctx.fillText(m[0],x,y+4);
+      ctx.fillStyle='#555'; ctx.font='10px sans-serif';
+      ctx.fillText(['Iron','Copper','Aluminium','Magnesium'][i], x, y+45);
+    });
+    if(step===1){
+      ctx.fillStyle='#795548'; ctx.font='11px sans-serif'; ctx.textAlign='center';
+      ctx.fillText('▭ rubbing with sand paper...',230,170);
+    }
+    if(step===2){
+      ctx.fillStyle='#2e7d32'; ctx.font='11px sans-serif'; ctx.textAlign='center';
+      ctx.fillText('Shining surfaces revealed — metallic lustre',230,180);
+    }
+  }
+},
+{
+  id:2, num:"3.2", title:"Hardness of Metals", sub:"Cutting with a knife",
+  desc:"Try cutting iron, copper, aluminium, magnesium and sodium with a knife.",
+  steps:[
+    {label:"A knife is used to try cutting samples of iron, copper, aluminium and magnesium.", state:0},
+    {label:"These metals resist the knife — only a faint scratch appears. <strong>Metals are generally hard.</strong>", state:1},
+    {label:"A piece of <strong>sodium</strong> is held with tongs. <span style='color:#c62828'>CAUTION: handled carefully</span>, dried between filter paper folds, placed on a watch-glass.", state:2},
+    {label:"The knife cuts through sodium <em>easily</em>, like cutting cheese — a freshly cut, shiny surface appears that quickly tarnishes. Sodium is exceptionally soft.", state:3, outcome:"info:Hardness varies from metal to metal — alkali metals are soft"},
+  ],
+  draw:(ctx,step)=>{
+    function drawKnife(cx,cy,angle){
+      ctx.save(); ctx.translate(cx,cy); ctx.rotate(angle);
+      ctx.fillStyle='#8d6e63'; ctx.fillRect(-30,-5,16,10); // handle
+      ctx.strokeStyle='#5d4037'; ctx.lineWidth=0.6; ctx.strokeRect(-30,-5,16,10);
+      const grad = ctx.createLinearGradient(-14,-8,40,8);
+      grad.addColorStop(0,'#eceff1'); grad.addColorStop(0.5,'#cfd8dc'); grad.addColorStop(1,'#90a4ae');
+      ctx.fillStyle=grad;
+      ctx.beginPath(); ctx.moveTo(-14,-7); ctx.lineTo(42,3); ctx.lineTo(-14,7); ctx.closePath(); ctx.fill();
+      ctx.strokeStyle='#607d8b'; ctx.lineWidth=0.7; ctx.stroke();
+      ctx.restore();
+    }
+    if(step<2){
+      const metals=[["Fe","#78909c","Iron"],["Cu","#c87f5f","Copper"],["Al","#b0bec5","Aluminium"],["Mg","#cfd8dc","Magnesium"]];
+      metals.forEach((m,i)=>{
+        const x = 44 + i*102;
+        drawMetalPiece(ctx,x,86,80,42,m[1],m[0],'#37474f');
+        ctx.fillStyle='#455a64'; ctx.font='9.5px sans-serif'; ctx.textAlign='center';
+        ctx.fillText(m[2], x+40, 145);
+        if(step===1){
+          // faint scratch marks — metal resists, only a thin line shows
+          ctx.strokeStyle='rgba(30,30,30,0.4)'; ctx.lineWidth=0.9;
+          ctx.beginPath(); ctx.moveTo(x+18,94); ctx.lineTo(x+62,120); ctx.stroke();
+          ctx.fillStyle='#2e7d32'; ctx.font='8.5px sans-serif';
+          ctx.fillText('faint scratch', x+40, 158);
+        }
+      });
+      drawKnife(415, step===1?70:48, step===1? 0.55:0.15);
+      ctx.fillStyle='#37474f'; ctx.font='500 11px sans-serif'; ctx.textAlign='center';
+      ctx.fillText(step===0? 'Knife pressed firmly onto each metal sample':'Barely a scratch on any of them — metals resist cutting',230,205);
+    } else if(step===2){
+      // watch glass with sodium, held by tongs, filter paper fold beside it
+      ctx.strokeStyle='#90a4ae'; ctx.lineWidth=1.4;
+      ctx.beginPath(); ctx.ellipse(230,150,58,16,0,0,Math.PI*2); ctx.stroke();
+      ctx.beginPath(); ctx.ellipse(230,146,58,16,0,0,Math.PI,true); ctx.stroke();
+      ctx.fillStyle='#e6e2b8'; ctx.fillRect(200,120,60,28);
+      ctx.strokeStyle='#9e9d24'; ctx.lineWidth=1; ctx.strokeRect(200,120,60,28);
+      ctx.fillStyle='#8d8f00'; ctx.font='8.5px sans-serif'; ctx.textAlign='center';
+      ctx.fillText('Na', 230, 138);
+      // tongs
+      ctx.save(); ctx.translate(300,60); ctx.rotate(0.25);
+      ctx.strokeStyle='#78909c'; ctx.lineWidth=3;
+      ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(45,45); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(14,-6); ctx.lineTo(58,40); ctx.stroke();
+      ctx.restore();
+      // folded filter paper
+      ctx.fillStyle='#fafaf5'; ctx.fillRect(90,120,44,34);
+      ctx.strokeStyle='#c9c9b8'; ctx.lineWidth=0.8; ctx.strokeRect(90,120,44,34);
+      ctx.beginPath(); ctx.moveTo(112,120); ctx.lineTo(112,154); ctx.stroke();
+      ctx.fillStyle='#8d8f7a'; ctx.font='8px sans-serif'; ctx.textAlign='center';
+      ctx.fillText('filter paper', 112, 164);
+      ctx.fillStyle='#37474f'; ctx.font='500 11px sans-serif'; ctx.textAlign='center';
+      ctx.fillText('Sodium held with tongs, dried, placed on a watch-glass', 230, 195);
+      ctx.fillStyle='#c62828'; ctx.font='9.5px sans-serif';
+      ctx.fillText('CAUTION — reacts vigorously with moisture / skin contact', 230, 208);
+    } else {
+      // sodium cut in half: freshly-cut shiny face vs tarnishing dull face
+      ctx.fillStyle='#cfcf9e'; ctx.beginPath(); ctx.moveTo(185,110); ctx.lineTo(228,108); ctx.lineTo(224,142); ctx.lineTo(183,140); ctx.closePath(); ctx.fill();
+      ctx.strokeStyle='#9e9d24'; ctx.lineWidth=0.8; ctx.stroke();
+      const shineGrad = ctx.createLinearGradient(228,108,272,140);
+      shineGrad.addColorStop(0,'#ffffff'); shineGrad.addColorStop(0.5,'#f5f5dc'); shineGrad.addColorStop(1,'#e0e0a0');
+      ctx.fillStyle=shineGrad;
+      ctx.beginPath(); ctx.moveTo(228,108); ctx.lineTo(272,110); ctx.lineTo(268,144); ctx.lineTo(224,142); ctx.closePath(); ctx.fill();
+      ctx.strokeStyle='#9e9d24'; ctx.stroke();
+      ctx.fillStyle='#616100'; ctx.font='8px sans-serif'; ctx.textAlign='center';
+      ctx.fillText('older face (dull)',204,158);
+      ctx.fillText('freshly cut (shiny)',248,158);
+      drawKnife(320,90,0.5);
+      ctx.fillStyle='#2e7d32'; ctx.font='500 11px sans-serif'; ctx.textAlign='center';
+      ctx.fillText('Sodium cuts easily, like cheese — shine dulls within minutes', 230, 178);
+
+      // comparative hardness strip
+      const bar=(x,w,color,label)=>{ ctx.fillStyle=color; ctx.fillRect(x,208,w,10); ctx.strokeStyle='#90a4ae'; ctx.lineWidth=0.6; ctx.strokeRect(x,208,w,10);
+        ctx.fillStyle='#455a64'; ctx.font='8px sans-serif'; ctx.textAlign='left'; ctx.fillText(label,x,205); };
+      ctx.fillStyle='#455a64'; ctx.font='500 8.5px sans-serif'; ctx.textAlign='left'; ctx.fillText('Relative hardness →',40,193);
+      bar(40,26,'#fff59d','Na');
+      bar(160,60,'#b0bec5','Al, Mg');
+      bar(310,90,'#78909c','Fe, Cu');
+    }
+  }
+},
+{
+  id:3, num:"3.3", title:"Malleability", sub:"Hammering metals",
+  desc:"Strike pieces of iron, zinc, lead and copper with a hammer and record the change in shape.",
+  steps:[
+    {label:"A piece of metal is placed on an iron block.", state:0},
+    {label:"It is struck <strong>four or five times</strong> with a hammer.", state:1},
+    {label:"The metal flattens into a thin sheet without breaking — it does not shatter. This property is called <strong>malleability</strong>.", state:2, outcome:"success:Gold and silver are the most malleable metals"},
+  ],
+  draw:(ctx,step)=>{
+    ctx.fillStyle='#455a64'; ctx.fillRect(140,150,180,20);
+    const thick = step===2? 8:26;
+    const w = step===2? 220:90;
+    ctx.fillStyle='#b0bec5'; ctx.fillRect(230-w/2,150-thick,w,thick);
+    ctx.strokeStyle='#607d8b'; ctx.strokeRect(230-w/2,150-thick,w,thick);
+    if(step===1){
+      ctx.save(); ctx.translate(230,60); ctx.rotate(-0.9);
+      ctx.fillStyle='#5d4037'; ctx.fillRect(-6,-40,12,50);
+      ctx.fillStyle='#8d6e63'; ctx.fillRect(-22,-55,44,20);
+      ctx.restore();
+      drawArrow(ctx,230,55,230,105,'#e53935','strike!');
+    }
+    ctx.fillStyle='#555'; ctx.font='11px sans-serif'; ctx.textAlign='center';
+    ctx.fillText(step===0? 'Metal piece resting on iron block':
+                 step===1? 'Hammer strikes the metal':
+                 'Beaten into a thin sheet — malleable!', 230,195);
+  }
+},
+{
+  id:4, num:"3.4", title:"Ductility", sub:"Drawing into wires",
+  desc:"List metals whose wires are seen in daily life and understand ductility.",
+  steps:[
+    {label:"Copper and aluminium wires are commonly seen carrying electricity in homes.", state:0},
+    {label:"The ability of a metal to be drawn into thin wires is called <strong>ductility</strong>.", state:1},
+    {label:"Gold is the most ductile metal — a wire of about <strong>2 km</strong> can be drawn from just 1 gram of gold!", state:2, outcome:"info:Malleability + ductility let metals be shaped as needed"},
+  ],
+  draw:(ctx,step)=>{
+    if(step<2){
+      for(let i=0;i<3;i++){
+        ctx.strokeStyle=['#d17b3f','#b0bec5','#d17b3f'][i]; ctx.lineWidth=3;
+        ctx.beginPath();
+        ctx.moveTo(60,80+i*40);
+        ctx.bezierCurveTo(150,60+i*40,300,110+i*40,400,80+i*40);
+        ctx.stroke();
+      }
+      ctx.fillStyle='#555'; ctx.font='11px sans-serif'; ctx.textAlign='center';
+      ctx.fillText('Copper & aluminium wires — used daily',230,190);
+    } else {
+      ctx.fillStyle='#ffd54f'; ctx.beginPath(); ctx.arc(230,80,18,0,Math.PI*2); ctx.fill();
+      ctx.strokeStyle='#f9a825'; ctx.stroke();
+      ctx.fillStyle='#7a5b00'; ctx.font='10px sans-serif'; ctx.fillText('1g gold',230,84);
+      drawArrow(ctx,260,80,320,80,'#f9a825','');
+      ctx.strokeStyle='#ffca28'; ctx.lineWidth=1;
+      for(let i=0;i<6;i++){
+        ctx.beginPath();
+        ctx.moveTo(60,140);
+        ctx.bezierCurveTo(150,130+i*3,300,150-i*3,400,140);
+        ctx.stroke();
+      }
+      ctx.fillStyle='#2e7d32'; ctx.font='11px sans-serif'; ctx.textAlign='center';
+      ctx.fillText('≈ 2 km of gold wire drawn from 1 gram',230,190);
+    }
+  }
+},
+{
+  id:5, num:"3.5", title:"Conductor of Heat", sub:"Wire, wax & pin",
+  desc:"Clamp a metal wire, fix a pin with wax at the free end, and heat near the clamp.",
+  steps:[
+    {label:"An aluminium or copper wire is clamped to a stand. A pin is fixed to the free end using wax.", state:0},
+    {label:"The wire is heated with a burner near the clamped end.", state:1},
+    {label:"After some time, heat travels along the wire, the wax melts, and the <strong>pin drops</strong>. Metals are good conductors of heat.", state:2, outcome:"success:Silver & copper are the best heat conductors; lead & mercury are poor"},
+  ],
+  draw:(ctx,step)=>{
+    ctx.fillStyle='#607d8b'; ctx.fillRect(60,40,10,140);
+    ctx.fillStyle='#455a64'; ctx.fillRect(50,150,30,10);
+    ctx.fillStyle='#b0bec5'; ctx.fillRect(70,70,300,6);
+    ctx.strokeStyle='#78909c'; ctx.strokeRect(70,70,300,6);
+    const waxMelted = step===2;
+    if(!waxMelted){
+      ctx.fillStyle='#fff59d'; ctx.fillRect(360,68,16,12);
+      ctx.strokeStyle='#f9a825'; ctx.strokeRect(360,68,16,12);
+      ctx.strokeStyle='#616161'; ctx.lineWidth=2;
+      ctx.beginPath(); ctx.moveTo(368,80); ctx.lineTo(368,95); ctx.stroke();
+    } else {
+      ctx.fillStyle='#fff59d'; ctx.beginPath(); ctx.ellipse(368,76,10,4,0,0,Math.PI*2); ctx.fill();
+      ctx.strokeStyle='#616161'; ctx.lineWidth=2;
+      ctx.beginPath(); ctx.moveTo(368,110); ctx.lineTo(372,135); ctx.stroke();
+      ctx.fillStyle='#e53935'; ctx.font='11px sans-serif'; ctx.textAlign='center';
+      ctx.fillText('pin drops!',390,140);
+    }
+    if(step>=1){ drawBurner(ctx,90,120); }
+    if(step===1){
+      for(let i=0;i<4;i++){
+        ctx.strokeStyle=`rgba(255,87,34,${0.7-i*0.15})`; ctx.lineWidth=1.5;
+        ctx.beginPath(); ctx.moveTo(90+i*45,68); ctx.lineTo(100+i*45,55); ctx.stroke();
+      }
+    }
+    ctx.fillStyle='#555'; ctx.font='11px sans-serif'; ctx.textAlign='center';
+    ctx.fillText(step===0? 'Pin fixed with wax at the free end':
+                 step===1? 'Heat applied near the clamped end':
+                 'Heat conducted along wire → wax melts',230,205);
+  }
+},
+{
+  id:6, num:"3.6", title:"Conductor of Electricity", sub:"Circuit test",
+  desc:"Set up a circuit with battery, bulb and switch, then insert samples between terminals A and B.",
+  steps:[
+    {label:"A circuit is set up with a battery, bulb and switch, ending in two open clip terminals A and B.", state:0},
+    {label:"A <strong>metal</strong> sample (e.g. iron) is placed in the circuit between A and B.", state:1, glow:true},
+    {label:"The bulb <strong>glows brightly</strong> — metals are good conductors of electricity.", state:2, glow:true},
+    {label:"A <strong>non-metal</strong> sample (e.g. sulphur) is tested instead — the bulb does <em>not</em> glow (except for graphite).", state:3, glow:false},
+  ],
+  draw:(ctx,step)=>{
+    drawBattery(ctx,60,90);
+    ctx.strokeStyle='#333'; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(106,102); ctx.lineTo(230,102); ctx.stroke();
+    drawBulb(ctx,270,102, step===2);
+    ctx.beginPath(); ctx.moveTo(284,102); ctx.lineTo(360,102); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(360,102); ctx.lineTo(360,150); ctx.lineTo(60,150); ctx.lineTo(60,114); ctx.stroke();
+    // clips A/B in middle
+    ctx.fillStyle='#333'; ctx.font='10px sans-serif'; ctx.textAlign='center';
+    if(step>=1){
+      ctx.strokeStyle= step===3? '#fdd835':'#8d99ae'; ctx.lineWidth=6;
+      ctx.beginPath(); ctx.moveTo(140,102); ctx.lineTo(175,102); ctx.stroke();
+      ctx.fillStyle='#455a64'; ctx.fillText(step===3? 'Sulphur':'Iron sample',157,90);
+    } else {
+      ctx.strokeStyle='#bbb'; ctx.setLineDash([3,3]);
+      ctx.beginPath(); ctx.moveTo(140,102); ctx.lineTo(175,102); ctx.stroke();
+      ctx.setLineDash([]);
+      ctx.fillStyle='#888'; ctx.fillText('A',140,90); ctx.fillText('B',175,90);
+    }
+    ctx.fillStyle='#555'; ctx.font='11px sans-serif';
+    ctx.fillText(step===0? 'Open circuit — insert a sample between A & B':
+                 step===1? 'Metal sample inserted...':
+                 step===2? 'Bulb glows — current flows through metal':
+                 'Bulb stays dark — sulphur does not conduct',230,190);
+  }
+},
+{
+  id:7, num:"3.7", title:"Non-metal Properties", sub:"Carbon, sulphur, iodine",
+  desc:"Repeat activities 3.1–3.4 and 3.6 with carbon, sulphur and iodine to compile Table 3.1.",
+  steps:[
+    {label:"Samples of carbon (coal/graphite), sulphur and iodine are collected.", state:0},
+    {label:"Sulphur is dull and brittle — breaks under the knife, not malleable. It does not conduct electricity.", state:1},
+    {label:"<strong>Iodine</strong> is surprisingly <em>lustrous</em> (shiny) despite being a non-metal — an exception!", state:2},
+    {label:"Graphite (a form of carbon) is soft and, unusually for a non-metal, <strong>conducts electricity</strong>.", state:3, outcome:"info:Physical properties alone cannot classify elements — there are exceptions"},
+  ],
+  draw:(ctx,step)=>{
+    const items = [
+      {name:'Carbon (coal)', color:'#212121', x:110},
+      {name:'Sulphur', color:'#fdd835', x:230},
+      {name:'Iodine', color:'#5e35b1', x:350},
+    ];
+    items.forEach(it=>{
+      const shine = it.name==='Iodine' && step>=2;
+      if(shine){
+        const grad = ctx.createRadialGradient(it.x-6,84,3,it.x,90,22);
+        grad.addColorStop(0,'#d1c4e9'); grad.addColorStop(1,'#5e35b1');
+        ctx.fillStyle=grad;
+      } else { ctx.fillStyle = it.color; }
+      ctx.beginPath(); ctx.arc(it.x,90,22,0,Math.PI*2); ctx.fill();
+      ctx.strokeStyle='#555'; ctx.lineWidth=0.8; ctx.stroke();
+      ctx.fillStyle='#555'; ctx.font='10px sans-serif'; ctx.textAlign='center';
+      ctx.fillText(it.name,it.x,130);
+    });
+    if(step===3){
+      drawBattery(ctx,150,155);
+      drawBulb(ctx,300,167,true);
+      ctx.strokeStyle='#333'; ctx.lineWidth=1.5;
+      ctx.beginPath(); ctx.moveTo(196,167); ctx.lineTo(286,167); ctx.stroke();
+      ctx.fillStyle='#555'; ctx.font='10px sans-serif'; ctx.fillText('graphite conducts!',225,155);
+    }
+    ctx.fillStyle='#555'; ctx.font='11px sans-serif'; ctx.textAlign='center';
+    ctx.fillText(step===0? 'Non-metal samples collected':
+                 step===1? 'Sulphur: dull, brittle, non-conductor':
+                 step===2? 'Iodine: lustrous — an exception!':
+                 'Graphite: conducts electricity — an exception!',230,210);
+  }
+},
+{
+  id:8, num:"3.8", title:"Chemical Test: Mg & S Oxides", sub:"Basic vs acidic oxides",
+  desc:"Burn magnesium and sulphur; test the products with litmus paper.",
+  steps:[
+    {label:"A magnesium ribbon is burnt — it produces a <strong>dazzling white flame</strong>. Ashes are collected and dissolved in water.", state:0},
+    {label:"The solution is tested with litmus: <strong>red litmus turns blue</strong>. The oxide is <em>basic</em>.", state:1, outcome:"info:MgO + H2O → Mg(OH)2 — basic"},
+    {label:"Sulphur powder is burnt; fumes are collected in an inverted test tube and dissolved in water.", state:2},
+    {label:"This solution turns <strong>blue litmus red</strong>. The oxide is <em>acidic</em>.", state:3, outcome:"warn:SO2 + H2O → H2SO3 — acidic"},
+  ],
+  draw:(ctx,step)=>{
+    if(step===0){
+      drawBurner(ctx,150,140);
+      ctx.strokeStyle='#eeeeee'; ctx.lineWidth=3;
+      ctx.beginPath(); ctx.moveTo(150,60); ctx.lineTo(150,105); ctx.stroke();
+      ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(150,55,10,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='#555'; ctx.font='11px sans-serif'; ctx.textAlign='center';
+      ctx.fillText('Magnesium ribbon burning — dazzling white flame',230,200);
+    } else if(step===1){
+      drawTestTube(ctx,200,60,50,110,'#e3f2fd',0.55,'Mg ash + water');
+      ctx.fillStyle='#1565c0'; ctx.font='11px sans-serif'; ctx.textAlign='center';
+      ctx.fillText('Red litmus → turns BLUE',230,195);
+      ctx.fillStyle='#e53935'; ctx.fillRect(280,100,5,25);
+      ctx.fillStyle='#1565c0'; ctx.fillRect(295,100,5,25);
+      ctx.fillStyle='#555'; ctx.font='9px sans-serif'; ctx.fillText('before → after',288,140);
+    } else if(step===2){
+      drawBurner(ctx,150,150);
+      ctx.fillStyle='#fdd835'; ctx.fillRect(140,140,20,8);
+      ctx.strokeStyle='#78909c'; ctx.lineWidth=1.4;
+      ctx.beginPath(); ctx.moveTo(130,60); ctx.lineTo(130,120); ctx.lineTo(170,120); ctx.lineTo(170,60); ctx.stroke();
+      for(let i=0;i<5;i++){ ctx.fillStyle='rgba(200,200,200,0.5)'; ctx.beginPath(); ctx.arc(150+Math.sin(i)*8,100-i*14,4,0,Math.PI*2); ctx.fill(); }
+      ctx.fillStyle='#555'; ctx.font='11px sans-serif'; ctx.textAlign='center';
+      ctx.fillText('SO₂ fumes collected in inverted tube',230,200);
+    } else {
+      drawTestTube(ctx,200,60,50,110,'#ffebee',0.55,'SO2 + water');
+      ctx.fillStyle='#c62828'; ctx.font='11px sans-serif'; ctx.textAlign='center';
+      ctx.fillText('Blue litmus → turns RED',230,195);
+      ctx.fillStyle='#1565c0'; ctx.fillRect(280,100,5,25);
+      ctx.fillStyle='#e53935'; ctx.fillRect(295,100,5,25);
+      ctx.fillStyle='#555'; ctx.font='9px sans-serif'; ctx.fillText('before → after',288,140);
+    }
+  }
+},
+{
+  id:9, num:"3.9", title:"Metals Burnt in Air", sub:"Reactivity toward oxygen",
+  desc:"Burn various metal samples over a flame and rank their reactivity toward oxygen.",
+  steps:[
+    {label:"Sodium & potassium: react so <strong>vigorously</strong> they catch fire on exposure to air — stored under kerosene oil.", state:0, outcome:"danger:Most reactive toward oxygen"},
+    {label:"Magnesium burns with a dazzling white flame; aluminium, zinc, lead develop a protective oxide layer at ordinary temperature.", state:1},
+    {label:"Iron filings burn vigorously in a flame (bulk iron doesn't burn); copper doesn't burn but forms black CuO coating when hot.", state:2},
+    {label:"Silver and gold do <strong>not</strong> react with oxygen even at high temperatures.", state:3, outcome:"success:Least reactive toward oxygen"},
+  ],
+  draw:(ctx,step)=>{
+    drawBurner(ctx,120,150);
+    const configs=[
+      {color:'#fdd835', label:'Na/K — bursts into flame', big:true},
+      {color:'#e0e0e0', label:'Mg — dazzling white flame', big:true},
+      {color:'#8d6e63', label:'Fe filings spark; Cu blackens', big:false},
+      {color:'#bdbdbd', label:'Ag/Au — no reaction', big:false},
+    ];
+    const c = configs[step];
+    ctx.save(); ctx.translate(120,95);
+    if(c.big){
+      for(let i=0;i<6;i++){
+        ctx.strokeStyle=`rgba(255,${150+i*10},0,${0.8-i*0.1})`; ctx.lineWidth=2;
+        ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo((Math.random()-0.5)*30,-30-i*4); ctx.stroke();
+      }
+    }
+    ctx.fillStyle=c.color; ctx.fillRect(-10,-10,20,20);
+    ctx.strokeStyle='#555'; ctx.strokeRect(-10,-10,20,20);
+    ctx.restore();
+    ctx.fillStyle='#555'; ctx.font='11px sans-serif'; ctx.textAlign='center';
+    ctx.fillText(c.label,230,205);
+    // reactivity ladder
+    const order=['Na,K','Mg','Al,Zn,Pb,Fe','Cu','Ag,Au'];
+    order.forEach((o,i)=>{
+      ctx.fillStyle = i<=step? '#1a3a5c':'#cfd8dc';
+      ctx.fillRect(320, 40+i*28, 110, 22);
+      ctx.fillStyle='#fff'; ctx.font='10px sans-serif'; ctx.textAlign='center';
+      ctx.fillText(o,375,55+i*28);
+    });
+    ctx.fillStyle='#555'; ctx.font='9px sans-serif'; ctx.fillText('most → least reactive',375,35);
+  }
+},
+{
+  id:10, num:"3.10", title:"Metals React with Water", sub:"Cold water, hot water, steam",
+  desc:"Test metal samples with cold water, then hot water, then steam to rank reactivity.",
+  steps:[
+    {label:"<strong>Cold water:</strong> Potassium & sodium react violently — evolved hydrogen catches fire immediately!", state:0, outcome:"danger:2Na + 2H2O → 2NaOH + H2 + heat"},
+    {label:"Calcium reacts less violently and starts <strong>floating</strong> (bubbles of H₂ stick to its surface).", state:1},
+    {label:"<strong>Hot water:</strong> Magnesium does not react with cold water but reacts with hot water, forming Mg(OH)₂ and floating too.", state:2},
+    {label:"<strong>Steam:</strong> Aluminium, iron and zinc react only with steam to form the metal oxide + hydrogen. Lead, copper, silver, gold do not react with water at all.", state:3},
+  ],
+  draw:(ctx,step)=>{
+    ctx.fillStyle='#bbdefb'; ctx.fillRect(80,110,300,70);
+    ctx.strokeStyle='#1976d2'; ctx.lineWidth=1.4; ctx.strokeRect(80,110,300,70);
+    if(step===0){
+      for(let i=0;i<10;i++){ ctx.strokeStyle='#ff7043'; ctx.lineWidth=1.5;
+        ctx.beginPath(); ctx.moveTo(200+i*4,110); ctx.lineTo(200+i*4-6,90); ctx.stroke(); }
+      ctx.fillStyle='#fdd835'; ctx.beginPath(); ctx.arc(230,105,10,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='#555'; ctx.font='11px sans-serif'; ctx.textAlign='center';
+      ctx.fillText('Na/K in cold water — catches fire!',230,210);
+    } else if(step===1){
+      ctx.fillStyle='#eceff1'; ctx.beginPath(); ctx.arc(230,120,14,0,Math.PI*2); ctx.fill();
+      for(let i=0;i<5;i++){ ctx.fillStyle='rgba(255,255,255,0.8)'; ctx.beginPath(); ctx.arc(220+i*5,128,2,0,Math.PI*2); ctx.fill(); }
+      ctx.fillStyle='#555'; ctx.font='11px sans-serif'; ctx.textAlign='center';
+      ctx.fillText('Calcium floats — H₂ bubbles cling to surface',230,210);
+    } else if(step===2){
+      drawBurner(ctx,230,205);
+      ctx.fillStyle='#bdbdbd'; ctx.beginPath(); ctx.arc(230,130,14,0,Math.PI*2); ctx.fill();
+      ctx.fillStyle='#555'; ctx.font='11px sans-serif'; ctx.textAlign='center';
+      ctx.fillText('Mg reacts with hot water → floats too',230,90);
+    } else {
+      ctx.clearRect(80,110,300,70);
+      ctx.strokeStyle='#78909c'; ctx.lineWidth=1.4;
+      ctx.beginPath(); ctx.moveTo(150,150); ctx.lineTo(150,90); ctx.lineTo(230,90); ctx.stroke();
+      for(let i=0;i<4;i++){ ctx.fillStyle='rgba(200,200,200,0.6)'; ctx.beginPath(); ctx.arc(190+i*10,80-i*6,4,0,Math.PI*2); ctx.fill(); }
+      ctx.fillStyle='#8d6e63'; ctx.fillRect(220,85,20,10);
+      ctx.fillStyle='#555'; ctx.font='11px sans-serif'; ctx.textAlign='center';
+      ctx.fillText('Al, Fe, Zn react only with steam',230,200);
+      ctx.fillStyle='#888'; ctx.font='10px sans-serif';
+      ctx.fillText('Pb, Cu, Ag, Au: no reaction at all',230,215);
+    }
+  }
+},
+{
+  id:11, num:"3.11", title:"Metals React with Acids", sub:"Dilute HCl + thermometer",
+  desc:"Put metal samples in dilute HCl with a thermometer and observe bubble rate & temperature rise.",
+  steps:[
+    {label:"Metal samples (except Na, K) are placed separately in test tubes of dilute HCl, with a thermometer bulb dipped in each.", state:0},
+    {label:"<strong>Magnesium</strong> reacts fastest — vigorous bubbling, highest temperature rise (most exothermic).", state:1, outcome:"success:Mg + 2HCl → MgCl2 + H2↑ (fastest)"},
+    {label:"Reactivity decreases: <strong>Mg &gt; Al &gt; Zn &gt; Fe</strong> — progressively slower bubbling.", state:2},
+    {label:"<strong>Copper</strong> shows no bubbles and no temperature change — copper does not react with dilute HCl.", state:3, outcome:"info:Cu lies below Hydrogen in the reactivity series"},
+  ],
+  draw:(ctx,step)=>{
+    const rate=[0,3,2,0][step===3?4:step] ; // unused fallback
+    const bubbleCounts=[0,8,4,0];
+    const metalLabel=['Setup','Magnesium','Zinc / Aluminium / Iron','Copper'];
+    drawTestTube(ctx,190,50,60,120,'#c8e6c9',0.6,metalLabel[step]);
+    drawThermometer(ctx,270,40,110, [0.2,0.85,0.55,0.2][step]);
+    const n = bubbleCounts[step];
+    for(let i=0;i<n;i++){
+      ctx.fillStyle='rgba(255,255,255,0.85)'; ctx.strokeStyle='#81c784'; ctx.lineWidth=0.6;
+      ctx.beginPath(); ctx.arc(200+ (i%5)*10, 150 - Math.floor(i/5)*20 - (i*3)%15, 3.5,0,Math.PI*2); ctx.fill(); ctx.stroke();
+    }
+    ctx.fillStyle='#555'; ctx.font='11px sans-serif'; ctx.textAlign='center';
+    ctx.fillText(step===0? 'Sample + dilute HCl + thermometer':
+                 step===1? 'Mg: fast bubbling, temp rises sharply':
+                 step===2? 'Zn/Al/Fe: moderate, slower bubbling':
+                 'Cu: no bubbles, no temperature change',230,205);
+  }
+},
+{
+  id:12, num:"3.12", title:"Displacement Reactions", sub:"Metal + salt solution",
+  desc:"Put a copper wire in iron sulphate solution, and an iron nail in copper sulphate solution.",
+  steps:[
+    {label:"Copper wire → <strong>iron(II) sulphate</strong> solution (pale green). Iron nail → <strong>copper(II) sulphate</strong> solution (blue).", state:0},
+    {label:"Test tube 1 (Cu in FeSO₄): <strong>no reaction</strong> — the solution stays green.", state:1, outcome:"info:Copper is less reactive than iron"},
+    {label:"Test tube 2 (Fe in CuSO₄): reddish-brown <strong>copper deposits</strong> on the nail; solution fades from blue toward pale green.", state:2, outcome:"success:Fe + CuSO4 → FeSO4 + Cu"},
+    {label:"Conclusion: <strong>Iron is more reactive than copper</strong> — it displaces copper from its salt solution.", state:3},
+  ],
+  draw:(ctx,step)=>{
+    drawTestTube(ctx,110,50,60,120, step>=1? '#c5e1a5':'#dcedc8', 0.6,'Cu wire + FeSO₄');
+    drawTestTube(ctx,290,50,60, 120, step===2||step===3? '#dcedc8':'#90caf9', 0.6,'Fe nail + CuSO₄');
+    // wire/nail
+    ctx.strokeStyle='#d17b3f'; ctx.lineWidth=3;
+    ctx.beginPath(); ctx.moveTo(140,55); ctx.lineTo(140,140); ctx.stroke();
+    ctx.strokeStyle= (step===2||step===3)? '#b0bec5':'#78909c'; ctx.lineWidth=4;
+    ctx.beginPath(); ctx.moveTo(320,55); ctx.lineTo(320,140); ctx.stroke();
+    if(step===2||step===3){
+      ctx.strokeStyle='#c87f5f'; ctx.lineWidth=2;
+      for(let i=0;i<8;i++){ ctx.beginPath(); ctx.moveTo(313,70+i*9); ctx.lineTo(327,70+i*9); ctx.stroke(); }
+    }
+    ctx.fillStyle='#555'; ctx.font='11px sans-serif'; ctx.textAlign='center';
+    ctx.fillText(step===0? 'Two test tubes set up':
+                 step===1? 'Cu + FeSO₄: no visible change':
+                 step===2? 'Fe + CuSO₄: copper deposits on nail':
+                 'Iron displaces copper — Fe is more reactive',230,205);
+  }
+},
+{
+  id:13, num:"3.13", title:"Properties of Ionic Compounds", sub:"NaCl, KI, BaCl2",
+  desc:"Test physical state, melting behaviour, solubility and conductivity of salt samples.",
+  steps:[
+    {label:"Samples of sodium chloride, potassium iodide, barium chloride are solids — hard, crystalline.", state:0},
+    {label:"Heated directly on a flame using a spatula: they resist melting — <strong>high melting points</strong>.", state:1, outcome:"info:Strong electrostatic attraction between ions"},
+    {label:"Dissolved in water, petrol, kerosene: soluble in <strong>water only</strong>, insoluble in petrol/kerosene.", state:2},
+    {label:"A salt solution is tested in a circuit: the bulb <strong>glows</strong> — ionic compounds conduct electricity in solution (ions move freely), but not as solids.", state:3, outcome:"success:Ionic compounds conduct only when molten or in solution"},
+  ],
+  draw:(ctx,step)=>{
+    if(step===0){
+      for(let i=0;i<3;i++){ drawMetalPiece(ctx,90+i*110,90,40,40,'#fff','',i==1?'#7b1fa2':'#455a64');
+        ctx.fillStyle='#333'; ctx.font='9px sans-serif'; ctx.textAlign='center';
+        ctx.fillText(['NaCl','KI','BaCl2'][i],110+i*110,150); }
+    } else if(step===1){
+      drawBurner(ctx,230,160);
+      ctx.save(); ctx.translate(230,110); ctx.rotate(0.3);
+      ctx.fillStyle='#8d6e63'; ctx.fillRect(-4,-40,8,60);
+      ctx.fillStyle='#fff'; ctx.fillRect(-10,-52,20,14);
+      ctx.strokeStyle='#555'; ctx.strokeRect(-10,-52,20,14);
+      ctx.restore();
+      ctx.fillStyle='#555'; ctx.font='11px sans-serif'; ctx.textAlign='center';
+      ctx.fillText('Salt resists melting on direct flame',230,205);
+    } else if(step===2){
+      drawTestTube(ctx,110,60,55,100,'#e1f5fe',0.55,'water: dissolves');
+      drawTestTube(ctx,225,60,55,100,'#fff9c4',0,'petrol: insoluble');
+      drawTestTube(ctx,340,60,55,100,'#f0f4c3',0,'kerosene: insoluble');
+      ctx.fillStyle='#333'; ctx.font='10px sans-serif'; ctx.textAlign='center';
+      ctx.fillText('•••', 137, 100);
+    } else {
+      drawBattery(ctx,60,90);
+      drawBulb(ctx,300,102,true);
+      ctx.strokeStyle='#333'; ctx.lineWidth=1.6;
+      ctx.beginPath(); ctx.moveTo(106,102); ctx.lineTo(180,102); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(220,102); ctx.lineTo(286,102); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(300,116); ctx.lineTo(300,150); ctx.lineTo(60,150); ctx.lineTo(60,114); ctx.stroke();
+      ctx.fillStyle='#90caf9'; ctx.fillRect(180,80,40,45);
+      ctx.strokeStyle='#1976d2'; ctx.strokeRect(180,80,40,45);
+      ctx.strokeStyle='#333'; ctx.lineWidth=3;
+      ctx.beginPath(); ctx.moveTo(190,80); ctx.lineTo(190,125); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(210,80); ctx.lineTo(210,125); ctx.stroke();
+      ctx.fillStyle='#555'; ctx.font='10px sans-serif'; ctx.textAlign='center';
+      ctx.fillText('salt solution',200,70);
+      ctx.fillText('Bulb glows — ions carry current',230,190);
+    }
+  }
+},
+{
+  id:14, num:"3.14", title:"Corrosion / Rusting", sub:"Conditions for rust",
+  desc:"Set up three test tubes with iron nails under different conditions and observe after a few days.",
+  steps:[
+    {label:"Three test tubes with clean iron nails: <strong>A</strong> — water + open air. <strong>B</strong> — boiled distilled water + oil layer (no dissolved air). <strong>C</strong> — dry air (anhydrous CaCl₂ absorbs moisture).", state:0},
+    {label:"Left for a few days...", state:1},
+    {label:"<strong>Tube A:</strong> nails develop brown flaky <strong>rust</strong> — exposed to both air and water.", state:2, outcome:"danger:Rust forms only with both air + water present"},
+    {label:"<strong>Tubes B and C:</strong> nails stay rust-free — B lacks dissolved air, C lacks moisture. Conclusion: <strong>both air and water are required for rusting.</strong>", state:3, outcome:"success:Prevented by painting, oiling, galvanising, alloying"},
+  ],
+  draw:(ctx,step)=>{
+    const labels=['A: water + air','B: boiled water + oil','C: dry air (CaCl₂)'];
+    const rusted = step>=2;
+    for(let i=0;i<3;i++){
+      const x = 80+i*130;
+      drawTestTube(ctx,x,50,60,130, i===0?'#bbdefb': i===1?'#bbdefb':'#eeeeee', i<2?0.6:0.3, labels[i]);
+      if(i===1 && step>=0){ ctx.fillStyle='#ffe082'; ctx.fillRect(x+2,110,56,8); }
+      if(i===2){ ctx.fillStyle='#e0e0e0'; ctx.fillRect(x+2,150,56,25); ctx.fillStyle='#666'; ctx.font='8px sans-serif'; ctx.textAlign='center'; ctx.fillText('CaCl₂',x+30,164); }
+      // nail
+      const nailColor = (i===0 && rusted) ? '#a1887f' : '#90a4ae';
+      ctx.strokeStyle = nailColor; ctx.lineWidth = 4;
+      ctx.beginPath(); ctx.moveTo(x+30,65); ctx.lineTo(x+30, i===2?140:160); ctx.stroke();
+      if(i===0 && rusted){
+        for(let j=0;j<6;j++){ ctx.fillStyle='#8d6e63'; ctx.beginPath(); ctx.arc(x+30+ (j%2?3:-3), 75+j*13, 2.5,0,Math.PI*2); ctx.fill(); }
+      }
+    }
+    ctx.fillStyle='#555'; ctx.font='11px sans-serif'; ctx.textAlign='center';
+    ctx.fillText(step===0? 'Three conditions set up in parallel':
+                 step===1? 'Test tubes left undisturbed for a few days':
+                 step===2? 'Tube A: nails rust (brown, flaky)':
+                 'Only tube A rusts — air + water both needed',230,210);
+  }
+}
+];
+
+/* ============ App logic ============ */
+const CANVAS_SCALE = 920 / 460; // canvas buffer is 2x the 460x230 space the draw() functions are authored for
+let currentActivity = 0;
+let currentStep = 0;
+
+function buildNav() {
+  const nav = document.getElementById('actNav');
+  nav.innerHTML = '';
+  const label = document.createElement('div');
+  label.className = 'nav-section-label';
+  label.textContent = 'Chapter 3 Activities';
+  nav.appendChild(label);
+  activities.forEach((a, i) => {
+    const btn = document.createElement('button');
+    btn.className = 'nav-item' + (i === currentActivity ? ' active' : '');
+    btn.innerHTML = `<span class="nav-num">Activity ${a.num}</span><span class="nav-title">${a.title}</span><span class="nav-sub">${a.sub}</span>`;
+    btn.onclick = () => { currentActivity = i; currentStep = 0; render(); };
+    nav.appendChild(btn);
+  });
+}
+
+function buildDots() {
+  const act = activities[currentActivity];
+  const dots = document.getElementById('stepDots');
+  dots.innerHTML = '';
+  act.steps.forEach((_, i) => {
+    const d = document.createElement('div');
+    d.className = 'step-dot' + (i === currentStep ? ' active' : '');
+    d.onclick = () => { currentStep = i; render(); };
+    dots.appendChild(d);
+  });
+}
+
+function outcomeHtml(outcomeStr) {
+  if (!outcomeStr) return '';
+  const [type, ...rest] = outcomeStr.split(':');
+  const text = rest.join(':');
+  return `<div class="outcome-label outcome-${type}">${text}</div>`;
+}
+
+function render() {
+  buildNav();
+  buildDots();
+  const act = activities[currentActivity];
+  const step = act.steps[currentStep];
+
+  document.getElementById('panelTitle').textContent = `Activity ${act.num} — ${act.title}`;
+  document.getElementById('panelDesc').textContent = act.desc;
+  document.getElementById('panelBadge').textContent = `NCERT ${act.num}`;
+  document.getElementById('hdrCurrent').textContent = currentActivity + 1;
+  document.getElementById('hdrTotal').textContent = activities.length;
+
+  document.getElementById('stepInfo').innerHTML = step.label + outcomeHtml(step.outcome);
+
+  document.getElementById('btnPrev').disabled = currentStep === 0;
+  document.getElementById('btnNext').disabled = currentStep === act.steps.length - 1;
+  document.getElementById('btnNext').textContent = currentStep === act.steps.length - 1 ? 'Done ✓' : 'Next →';
+
+  const canvas = document.getElementById('simCanvas');
+  const ctx = canvas.getContext('2d');
+  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.save();
+  ctx.scale(CANVAS_SCALE, CANVAS_SCALE); // draw() functions are authored for a 460x230 coordinate space
+  act.draw(ctx, currentStep);
+  ctx.restore();
+}
+
+function changeStep(delta) {
+  const act = activities[currentActivity];
+  const newStep = currentStep + delta;
+  if (newStep >= 0 && newStep < act.steps.length) {
+    currentStep = newStep;
+    render();
+  }
+}
+
+function resetActivity() {
+  currentStep = 0;
+  render();
+}
+
+document.addEventListener('keydown', (e) => {
+  if (e.key === 'ArrowRight') changeStep(1);
+  if (e.key === 'ArrowLeft') changeStep(-1);
+});
+
+render();
+</script>
+  <script src="../../tracking/activity-tracker.js"></script>
+<script src="../../nav/back-button.js"></script>
+</body>
+</html>

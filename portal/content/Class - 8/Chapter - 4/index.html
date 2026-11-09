@@ -1,0 +1,1033 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 8 · Chapter 4 — Electricity: Magnetic and Heating Effects | Botclub Labs</title>
+<link href="../../vendor/fonts/fonts.css" rel="stylesheet">
+<style>
+:root{
+  --navy-1:#0f2640; --navy-2:#1a3a5c; --navy-3:#234a73;
+  --accent:#2f8fe0; --accent-2:#5cc8ff;
+  --bg:#eef2f8; --surface-0:#ffffff; --surface-1:#f6f9fc; --surface-2:#eef2f8;
+  --border:#dbe4f0; --border-strong:#c2d1e5;
+  --text-1:#132a44; --text-2:#4c6178; --text-3:#8195ab;
+  --f-red:#d9432b; --f-blue:#2f8fe0; --f-green:#1f9d55; --f-yellow:#d9a017;
+  --radius:14px; --radius-sm:9px;
+  --fs-xs:clamp(10px,0.62vw,12px); --fs-sm:clamp(11px,0.72vw,13.5px);
+  --fs-md:clamp(12.5px,0.85vw,15px); --fs-lg:clamp(15px,1.15vw,19px);
+  --fs-xl:clamp(18px,1.5vw,25px);
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:22px; --sp-6:30px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{ font-family:'Poppins',system-ui,sans-serif; background:var(--bg); color:var(--text-1); overflow:hidden; }
+button, input, select{font-family:inherit;}
+
+.app{height:100vh; display:flex; flex-direction:column; min-height:0;}
+.topbar{
+  flex:0 0 auto; background:linear-gradient(120deg, var(--navy-1) 0%, var(--navy-2) 55%, var(--navy-3) 100%);
+  color:#fff; padding:clamp(9px,1vh,16px) clamp(14px,1.6vw,28px);
+  display:flex; align-items:center; gap:var(--sp-4); box-shadow:0 2px 10px rgba(15,38,64,0.25); z-index:5;
+}
+.topbar .brand-badge{
+  width:clamp(32px,2.4vw,40px); height:clamp(32px,2.4vw,40px); border-radius:10px; background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center;
+  font-size:clamp(15px,1.3vw,20px); flex:0 0 auto;
+}
+.topbar .chip{
+  display:inline-block; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.28);
+  border-radius:6px; padding:2px 9px; font-size:var(--fs-xs); letter-spacing:0.06em; text-transform:uppercase; font-weight:600; margin-bottom:3px;
+}
+.topbar h1{font-size:var(--fs-lg); font-weight:600; line-height:1.2; white-space:nowrap;}
+.topbar .spacer{flex:1;}
+.topbar .legend{display:flex; gap:14px; font-size:var(--fs-xs); color:rgba(255,255,255,0.85); align-items:center;}
+.topbar .legend span{display:inline-flex; align-items:center; gap:5px;}
+.topbar .legend i{width:12px; height:4px; border-radius:2px; display:inline-block;}
+
+.body-wrap{flex:1; display:flex; min-height:0; overflow:hidden;}
+.sidenav{
+  flex:0 0 clamp(170px,13.5vw,230px); background:var(--surface-0); border-right:1px solid var(--border);
+  overflow-y:auto; padding:var(--sp-2); display:flex; flex-direction:column; gap:4px;
+}
+.nav-item{
+  display:flex; align-items:center; gap:8px; text-align:left; width:100%;
+  border:1px solid var(--border); background:var(--surface-1); border-radius:var(--radius-sm); padding:7px 10px; cursor:pointer; transition:all .15s ease;
+}
+.nav-item:hover{background:var(--surface-2); border-color:var(--border-strong);}
+.nav-item.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.nav-item .n-num{font-size:var(--fs-xs); font-weight:700; color:var(--accent); flex:0 0 auto; min-width:26px;}
+.nav-item.active .n-num{color:var(--accent-2);}
+.nav-item .n-title{font-size:var(--fs-sm); font-weight:600; line-height:1.25;}
+
+.content{flex:1; min-width:0; display:flex; flex-direction:column; overflow:hidden;}
+.panel-head{flex:0 0 auto; padding:var(--sp-3) var(--sp-5); border-bottom:1px solid var(--border); background:var(--surface-0); display:flex; align-items:baseline; gap:12px;}
+.panel-badge{background:var(--navy-2); color:#fff; font-size:var(--fs-xs); font-weight:700; padding:3px 10px; border-radius:6px;}
+.panel-head h2{font-size:var(--fs-lg); font-weight:600; color:var(--text-1);}
+.panel-head p{font-size:var(--fs-sm); color:var(--text-2); flex:1; text-align:right;}
+.panel-body{flex:1; min-height:0; overflow:hidden; padding:var(--sp-3) var(--sp-5); display:flex;}
+
+.lab-view{flex:1; display:flex; gap:var(--sp-4); min-height:0; min-width:0;}
+.lab-canvas-wrap{flex:7 1 0; min-width:0; min-height:0; background:#fff; border:1px solid var(--border); border-radius:var(--radius); position:relative; overflow:hidden;}
+.lab-canvas-wrap canvas{width:100%; height:100%; display:block;}
+.lab-side{flex:3 1 0; min-width:230px; display:flex; flex-direction:column; gap:var(--sp-3); min-height:0; overflow-y:auto; padding-right:2px;}
+.side-sub{display:flex; flex-direction:column; gap:var(--sp-3);}
+
+.control-group{background:var(--surface-0); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 12px;}
+.control-group label{font-size:var(--fs-sm); font-weight:600; color:var(--text-1); display:flex; justify-content:space-between;}
+.control-group label .val{color:var(--accent); font-weight:700;}
+.control-group input[type=range]{width:100%; margin-top:7px; accent-color:var(--navy-2); cursor:pointer;}
+.toggle-group{display:flex; gap:6px; margin-top:7px; flex-wrap:wrap;}
+.toggle-btn{flex:1; min-width:56px; padding:7px 5px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:600; cursor:pointer; text-align:center; color:var(--text-2);}
+.toggle-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.toggle-btn.small{font-size:10.5px; padding:6px 3px;}
+.toggle-btn.play{background:var(--f-green); border-color:var(--f-green); color:#fff;}
+.toggle-btn.navy{background:var(--navy-2); border-color:var(--navy-2); color:#fff; width:100%; margin-top:9px;}
+.toggle-btn:disabled{opacity:.5; cursor:not-allowed;}
+.chip-btn{display:inline-flex; align-items:center; gap:5px; padding:6px 11px; margin:3px 3px 0 0; border:1px solid var(--border-strong); background:var(--surface-1); border-radius:18px; cursor:pointer; font-size:var(--fs-sm); font-weight:600; color:var(--text-2);}
+.chip-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.chip-btn.ok{border-color:var(--f-green);} .chip-btn.bad{border-color:var(--f-red);}
+.chip-wrap{display:flex; flex-wrap:wrap; margin-top:3px;}
+
+.role-row{display:flex; align-items:center; gap:8px; margin-top:7px; font-size:var(--fs-sm); font-weight:600;}
+.role-row .rdot{width:10px; height:10px; border-radius:50%; flex:0 0 auto; display:inline-block;}
+.role-row .rname{width:70px; flex:0 0 auto; color:var(--text-2);}
+.role-row select{flex:1; min-width:0; padding:6px 7px; border:1px solid var(--border-strong); border-radius:7px; font-size:var(--fs-sm); background:var(--surface-1); color:var(--text-1); cursor:pointer;}
+
+.step-row{display:flex; gap:5px;}
+.step-pill{flex:1; padding:6px 4px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:10.5px; font-weight:700; color:var(--text-3); cursor:pointer;}
+.step-pill.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.step-pill.done{border-color:var(--f-green); color:var(--f-green);}
+.step-pill.active.done{color:#fff;}
+.opt-btn{display:block; width:100%; text-align:left; margin-top:6px; padding:7px 9px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:500; color:var(--text-1); cursor:pointer; line-height:1.3;}
+.opt-btn.active{border-color:var(--navy-2); background:#e3ecf7; font-weight:600;}
+.var-row{display:flex; align-items:center; gap:6px; margin-top:7px;}
+.var-row .vname{flex:0 0 88px; font-size:var(--fs-sm); font-weight:600;}
+.var-row .toggle-group{margin-top:0; flex:1;}
+
+.result-cards{display:grid; grid-template-columns:1fr 1fr; gap:6px;}
+.result-cards.three{grid-template-columns:1fr 1fr 1fr;}
+.rcard{background:var(--surface-0); border:1px solid var(--border); border-radius:9px; padding:7px 9px;}
+.rcard .rlabel{font-size:9.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--text-3); font-weight:600;}
+.rcard .rval{font-size:var(--fs-md); font-weight:700; color:var(--text-1); margin-top:1px;}
+.rcard.wide{grid-column:1/-1;}
+.hint{font-size:var(--fs-xs); color:var(--text-3); margin-top:6px; line-height:1.4;}
+.fb{font-size:var(--fs-xs); font-weight:600; margin-top:6px; padding:5px 8px; border-radius:7px;}
+.fb.ok{background:#e4f7ec; color:#1f6b3d;}
+.fb.bad{background:#fdece7; color:#a4331c;}
+.fb.warn{background:#fdf4dc; color:#8a6410;}
+.log{width:100%; border-collapse:collapse; font-size:10.5px; margin-top:4px;}
+.log th{text-align:left; color:var(--text-3); font-weight:600; text-transform:uppercase; font-size:9px; letter-spacing:.04em; padding:3px 4px; border-bottom:1px solid var(--border);}
+.log td{padding:4px; border-bottom:1px solid var(--surface-2); color:var(--text-2);}
+.log td.r-ok{color:var(--f-green); font-weight:700;} .log td.r-bad{color:var(--f-red); font-weight:700;} .log td.r-warn{color:var(--f-yellow); font-weight:700;}
+.hidden{display:none !important;}
+
+@media (max-width:1000px) and (orientation:portrait), (max-width:1000px) and (min-height:601px){
+  .body-wrap{flex-direction:column;}
+  .sidenav{flex:0 0 auto; width:100%; height:auto; flex-direction:row; overflow-x:auto; overflow-y:hidden; border-right:none; border-bottom:1px solid var(--border); padding:6px;}
+  .nav-item{flex:0 0 auto; width:150px;}
+  .panel-body{overflow-y:auto;}
+  .lab-view{flex-direction:column;}
+  .lab-canvas-wrap{min-height:320px;}
+  .lab-side{min-width:0;}
+  .content{overflow-y:auto;}
+  .topbar .legend{display:none;}
+  .topbar h1{white-space:normal;}
+}
+::-webkit-scrollbar{width:7px; height:7px;}
+::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand-badge">⚡</div>
+    <div>
+      <div class="chip">Grade 8 · Ch 4</div>
+      <h1>Electricity: Magnetic and Heating Effects</h1>
+    </div>
+    <div class="spacer"></div>
+    <div class="legend">
+      <span><i style="background:var(--f-yellow)"></i>Current</span>
+      <span><i style="background:var(--f-blue)"></i>Magnetic field · S pole</span>
+      <span><i style="background:var(--f-red)"></i>N pole · Heat</span>
+      <span><i style="background:var(--f-green)"></i>Result</span>
+    </div>
+  </div>
+  <div class="body-wrap">
+    <nav class="sidenav" id="sideNav"></nav>
+    <main class="content">
+      <div class="panel-head">
+        <div class="panel-badge" id="panelBadge">4.1</div>
+        <h2 id="panelTitle">Select an activity</h2>
+        <p id="panelDesc"></p>
+      </div>
+      <div class="panel-body" id="panelBody"></div>
+    </main>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   GRADE 8 — CHAPTER 4: ELECTRICITY: MAGNETIC AND HEATING EFFECTS
+   Every activity runs a continuous animation loop: sliders/buttons set a
+   TARGET; the drawn object eases, springs or physically integrates toward
+   it every frame. Compass needles are damped torsion pendulums, clips fall
+   under gravity and bounce, the nichrome wire obeys an energy balance.
+   ========================================================================= */
+const COL = {red:'#d9432b', blue:'#2f8fe0', green:'#1f9d55', yellow:'#d9a017', ink:'#132a44', muted:'#4c6178', mid:'#8195ab'};
+
+/* ---------------------------------------------------------------------
+   0. CANVAS HELPERS
+   --------------------------------------------------------------------- */
+function fitCanvas(canvas){
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  const r = canvas.parentElement.getBoundingClientRect();
+  const w = Math.max(200, r.width), h = Math.max(160, r.height);
+  if(canvas._w!==w || canvas._h!==h || canvas._dpr!==dpr){
+    canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr);
+    canvas.style.width = w+'px'; canvas.style.height = h+'px';
+    canvas._w=w; canvas._h=h; canvas._dpr=dpr;
+  }
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, w, h};
+}
+function line(ctx,x1,y1,x2,y2,color,width,dash){
+  ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=width||2;
+  if(dash) ctx.setLineDash(dash); else ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); ctx.restore();
+}
+function arrowHead(ctx,x,y,ang,color,size){
+  size=size||7; ctx.save(); ctx.fillStyle=color; ctx.translate(x,y); ctx.rotate(ang);
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-size,size*0.42); ctx.lineTo(-size,-size*0.42); ctx.closePath(); ctx.fill(); ctx.restore();
+}
+function vec(ctx,x1,y1,x2,y2,color,width){ line(ctx,x1,y1,x2,y2,color,width||2.6); arrowHead(ctx,x2,y2,Math.atan2(y2-y1,x2-x1),color,7); }
+function dimArrow(ctx,x,y1,y2,color){ line(ctx,x,y1,x,y2,color,1.6); arrowHead(ctx,x,y1,-Math.PI/2,color,5); arrowHead(ctx,x,y2,Math.PI/2,color,5); }
+function textAt(ctx,txt,x,y,opts){
+  opts=opts||{}; ctx.save();
+  ctx.font=(opts.weight||500)+' '+(opts.size||12)+'px Poppins, sans-serif';
+  ctx.fillStyle=opts.color||COL.ink; ctx.textAlign=opts.align||'left'; ctx.textBaseline=opts.baseline||'alphabetic';
+  if(opts.alpha!==undefined) ctx.globalAlpha=opts.alpha;
+  ctx.fillText(txt,x,y); ctx.restore();
+}
+function rect(ctx,x,y,w,h,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw===undefined?2.2:lw; if(fill){ctx.fillStyle=fill; ctx.fillRect(x,y,w,h);} if(lw!==0){ctx.strokeStyle=stroke; ctx.strokeRect(x,y,w,h);} ctx.restore(); }
+function circ(ctx,x,y,r,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw||2.2; ctx.beginPath(); ctx.arc(x,y,Math.max(0.1,r),0,Math.PI*2); if(fill){ctx.fillStyle=fill; ctx.fill();} ctx.strokeStyle=stroke; ctx.stroke(); ctx.restore(); }
+function rrect(ctx,x,y,w,h,r){ r=Math.min(r,w/2,h/2); ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function fmt(x,d){ if(!isFinite(x)) return '—'; d=d===undefined?2:d; return Number(x.toFixed(d)).toString(); }
+function gauss(){ return (Math.random()+Math.random()+Math.random()+Math.random()-2)*1.2247; }
+function hexRgb(h){ const n=parseInt(h.slice(1),16); return [n>>16&255, n>>8&255, n&255]; }
+function mixCol(a,b,t){ const A=hexRgb(a),B=hexRgb(b); t=clamp(t,0,1); return 'rgb('+A.map((v,i)=>Math.round(lerp(v,B[i],t))).join(',')+')'; }
+function rampCol(stops,x){ // stops: [[pos,hex],...]
+  if(x<=stops[0][0]) return mixCol(stops[0][1],stops[0][1],0);
+  for(let i=1;i<stops.length;i++){ if(x<=stops[i][0]){ const a=stops[i-1],b=stops[i]; return mixCol(a[1],b[1],(x-a[0])/(b[0]-a[0])); } }
+  const l=stops[stops.length-1][1]; return mixCol(l,l,0);
+}
+function thermo(ctx,x,top,bot,frac,outline,liquid){
+  const br=8;
+  ctx.save(); ctx.lineWidth=2; ctx.strokeStyle=outline; ctx.fillStyle='#fff';
+  rrect(ctx,x-5,top,10,bot-top+2,5); ctx.fill(); ctx.stroke(); ctx.restore();
+  const lh=(bot-top-5)*clamp(frac,0,1);
+  ctx.save(); ctx.fillStyle=liquid; ctx.fillRect(x-2.2,bot-lh,4.4,lh+6); ctx.restore();
+  circ(ctx,x,bot+br,br,outline,'#fff',2); circ(ctx,x,bot+br,br-3.2,liquid,liquid,1);
+  for(let i=0;i<=4;i++){ const yy=top+5+(bot-top-5)*i/4; line(ctx,x+5,yy,x+9,yy,outline,1.1); }
+}
+function flame(ctx,cx,baseY,width,inten,t){
+  const n=5;
+  for(let i=0;i<n;i++){
+    const fx=cx-width/2+width*(i+0.5)/n;
+    const hh=(6+inten*32)*(0.78+0.22*Math.sin(t*13+i*1.7));
+    const sway=Math.sin(t*9+i*2.1)*3;
+    ctx.save(); ctx.lineJoin='round';
+    ctx.strokeStyle=COL.red; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(fx-7,baseY); ctx.quadraticCurveTo(fx-7,baseY-hh*0.55,fx+sway,baseY-hh); ctx.quadraticCurveTo(fx+7,baseY-hh*0.55,fx+7,baseY); ctx.stroke();
+    ctx.strokeStyle=COL.yellow; ctx.lineWidth=1.6;
+    ctx.beginPath(); ctx.moveTo(fx-3.5,baseY); ctx.quadraticCurveTo(fx-3,baseY-hh*0.35,fx+sway*0.5,baseY-hh*0.55); ctx.quadraticCurveTo(fx+3,baseY-hh*0.35,fx+3.5,baseY); ctx.stroke();
+    ctx.restore();
+  }
+}
+
+/* ---------------------------------------------------------------------
+   0b. ANIMATION ENGINE
+   --------------------------------------------------------------------- */
+let activeStops = [];
+function stopAllLoops(){ activeStops.forEach(s=>{ try{ s(); }catch(e){} }); activeStops=[]; }
+function animLoop(tick){
+  let last = performance.now();
+  let raf;
+  function frame(now){
+    const dt = Math.max(0, Math.min(0.04, (now-last)/1000));
+    last = now;
+    tick(dt);
+    raf = requestAnimationFrame(frame);
+  }
+  raf = requestAnimationFrame(frame);
+  const stop = ()=>cancelAnimationFrame(raf);
+  activeStops.push(stop);
+  return stop;
+}
+/** Exponential ease — frame-rate independent, always smooth. */
+function approach(cur,tgt,rate,dt){ return cur + (tgt-cur)*(1-Math.exp(-rate*dt)); }
+/** Spring-damper — gives natural overshoot and settle. */
+function springTo(state,target,k,damping,dt){
+  const acc = (target-state.x)*k - state.v*damping;
+  state.v += acc*dt;
+  state.x += state.v*dt;
+  return state.x;
+}
+function toggleWire(btns,cb){
+  btns.forEach(b=>b.onclick=()=>{ btns.forEach(x=>x.classList.remove('active')); b.classList.add('active'); cb(b); });
+}
+
+
+/* ---------------------------------------------------------------------
+   0c. CHAPTER-4 HELPERS — circuit parts, compass, field model
+   --------------------------------------------------------------------- */
+function smooth01(a,b,x){ const t=clamp((x-a)/(b-a),0,1); return t*t*(3-2*t); }
+function angDiff(a,b){ return Math.atan2(Math.sin(a-b),Math.cos(a-b)); }
+const BE=35;                       // µT, horizontal part of Earth's field in India
+const MU0=4e-7*Math.PI, CELL_E=1.5, CELL_R=0.3;   // one dry cell: 1.5 V, 0.3 Ω inside
+const COPPER='#b8732f', CLIP_MT=8; // field at a nail face needed per clip held
+function cellCurrent(n,Rext){ return n>0? n*CELL_E/(n*CELL_R+Rext) : 0; }
+/* Solenoid, L = 5 cm, radius 0.4 cm. Iron nail core multiplies the field ≈40× (open core). */
+function coilFaceMT(N,I,core){ return MU0*N*I/(2*0.05)*(1+39*core)*1e3; }
+function coilAxisUT(N,I,xcm,core){ const L=0.05,R=0.004,x=xcm/100; return MU0*N*I/(2*L)*((x+L)/Math.hypot(x+L,R)-x/Math.hypot(x,R))*(1+39*core)*1e6; }
+function clipCap(mT){ return clamp(Math.floor(mT/CLIP_MT),0,8); }
+
+/* Compass needle = damped torsion pendulum.  θ'' = −ω₀²(B/B_E)·sin(θ−θ_B) − γθ'
+   ω₀ from a 1.1 s swing in Earth's field alone.  (bx,by) in µT, screen axes. */
+function needleStep(n,bx,by,dt){
+  const B=Math.hypot(bx,by); if(B<1e-9) return;
+  const tgt=Math.atan2(by,bx), w0=2*Math.PI/1.1, k=w0*w0*B/BE, g=2.2+0.12*Math.sqrt(k);
+  const steps=Math.max(1,Math.ceil(Math.sqrt(k)*dt/0.12)), hh=dt/steps;
+  for(let i=0;i<steps;i++){ n.w+=(-k*Math.sin(n.a-tgt)-g*n.w)*hh; n.a+=n.w*hh; }
+}
+function drawCompass(ctx,x,y,R,ang){
+  circ(ctx,x,y,R,COL.ink,'#fff',2.4);
+  circ(ctx,x,y,R*0.84,COL.mid,null,1);
+  for(let i=0;i<36;i++){ const a=i*Math.PI/18, r1=R*(i%9===0?0.7:0.78);
+    line(ctx,x+Math.cos(a)*r1,y+Math.sin(a)*r1,x+Math.cos(a)*R*0.84,y+Math.sin(a)*R*0.84,COL.mid,i%9===0?1.6:1); }
+  if(R>30) [['N',-Math.PI/2],['E',0],['S',Math.PI/2],['W',Math.PI]].forEach(([l,a])=>textAt(ctx,l,x+Math.cos(a)*R*0.58,y+Math.sin(a)*R*0.58+4,{align:'center',size:clamp(R*0.15,9,14),weight:700,color:COL.mid}));
+  const L=R*0.72, W=R*0.12, c=Math.cos(ang), s=Math.sin(ang), px=-s, py=c;
+  ctx.save(); ctx.lineJoin='round';
+  ctx.beginPath(); ctx.moveTo(x-c*L,y-s*L); ctx.lineTo(x+px*W,y+py*W); ctx.lineTo(x-px*W,y-py*W); ctx.closePath();
+  ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.blue; ctx.lineWidth=2; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x+c*L,y+s*L); ctx.lineTo(x+px*W,y+py*W); ctx.lineTo(x-px*W,y-py*W); ctx.closePath();
+  ctx.fillStyle=COL.red; ctx.fill();
+  ctx.restore();
+  circ(ctx,x,y,Math.max(2.5,R*0.06),COL.ink,COL.ink,1);
+}
+function polyLen(p){ let L=0; for(let i=1;i<p.length;i++) L+=Math.hypot(p[i][0]-p[i-1][0],p[i][1]-p[i-1][1]); return L; }
+function polyAt(p,s){
+  for(let i=1;i<p.length;i++){ const d=Math.hypot(p[i][0]-p[i-1][0],p[i][1]-p[i-1][1]);
+    if(s<=d||i===p.length-1){ const u=d?clamp(s/d,0,1):0; return [lerp(p[i-1][0],p[i][0],u),lerp(p[i-1][1],p[i][1],u)]; } s-=d; }
+  return p[p.length-1];
+}
+function wirePath(ctx,p,col,w){ ctx.save(); ctx.strokeStyle=col; ctx.lineWidth=w||2.4; ctx.lineJoin='round'; ctx.lineCap='round'; ctx.beginPath(); p.forEach((q,i)=>i?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1])); ctx.stroke(); ctx.restore(); }
+/* moving current markers (yellow); phase grows with current, sign = direction */
+function flowDots(ctx,p,phase,alpha,gap,r){
+  if(alpha<0.02) return; gap=gap||22; const L=polyLen(p);
+  ctx.save(); ctx.globalAlpha=clamp(alpha,0,1); ctx.fillStyle=COL.yellow;
+  for(let s=((phase%gap)+gap)%gap;s<L;s+=gap){ const q=polyAt(p,s); ctx.beginPath(); ctx.arc(q[0],q[1],r||3.2,0,Math.PI*2); ctx.fill(); }
+  ctx.restore();
+}
+function bez(p0,p1,p2,p3,n){ const out=[]; n=n||24; for(let i=0;i<=n;i++){ const t=i/n,u=1-t;
+  out.push([u*u*u*p0[0]+3*u*u*t*p1[0]+3*u*t*t*p2[0]+t*t*t*p3[0], u*u*u*p0[1]+3*u*u*t*p1[1]+3*u*t*t*p2[1]+t*t*t*p3[1]]); } return out; }
+/* dry cell, centred, rotated by rot (0 → + on the right) */
+function drawCell(ctx,cx,cy,w,h,rot){
+  ctx.save(); ctx.translate(cx,cy); ctx.rotate(rot||0);
+  ctx.lineWidth=2; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff';
+  ctx.fillRect(w/2-1,-h*0.2,8,h*0.4); ctx.strokeRect(w/2-1,-h*0.2,8,h*0.4);
+  rrect(ctx,-w/2,-h/2,w,h,5); ctx.fill(); ctx.lineWidth=2.2; ctx.stroke();
+  line(ctx,w*0.18,-h/2+2,w*0.18,h/2-2,COL.mid,1.2);
+  ctx.restore();
+  const c=Math.cos(rot||0), s=Math.sin(rot||0), f=(v,u)=>[cx+c*v-s*u, cy+s*v+c*u];
+  const pp=f(w*0.34,0), mm=f(-w*0.3,0);
+  textAt(ctx,'+',pp[0],pp[1]+5,{align:'center',size:15,weight:700,color:COL.red});
+  textAt(ctx,'−',mm[0],mm[1]+5,{align:'center',size:15,weight:700,color:COL.blue});
+}
+/* n cells in series along a row; returns the two outer terminals */
+function drawBattery(ctx,cx,cy,n,cw,rot){
+  const sp=cw+18, x0=cx-(n-1)*sp/2, L=[x0-cw/2-8,cy], R=[x0+(n-1)*sp+cw/2+8,cy];
+  line(ctx,L[0],cy,R[0],cy,COL.ink,2.4);
+  for(let i=0;i<n;i++) drawCell(ctx,x0+i*sp,cy,cw,cw*0.42,rot);
+  return {L,R};
+}
+/* drawing-pin switch with a safety-pin lever pivoting on p1; lift = lever angle (0 = closed) */
+function drawSwitch(ctx,p1,p2,lift){
+  const L=Math.hypot(p2[0]-p1[0],p2[1]-p1[1])+8, base=Math.atan2(p2[1]-p1[1],p2[0]-p1[0]);
+  circ(ctx,p1[0],p1[1],6,COL.ink,'#fff',2); circ(ctx,p2[0],p2[1],6,COL.ink,'#fff',2);
+  ctx.save(); ctx.translate(p1[0],p1[1]); ctx.rotate(base-lift); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(0,-3); ctx.lineTo(L,-3); ctx.arc(L,0,3,-Math.PI/2,Math.PI/2); ctx.lineTo(7,3); ctx.stroke();
+  ctx.beginPath(); ctx.arc(0,0,5,0,Math.PI*2); ctx.stroke(); ctx.restore();
+  circ(ctx,p1[0],p1[1],2,COL.ink,COL.ink,1);
+}
+function drawClip(ctx,x,y,a,L,col){
+  const W=L*0.36; ctx.save(); ctx.translate(x,y); ctx.rotate(a); ctx.strokeStyle=col||COL.ink; ctx.lineWidth=clamp(L*0.07,1.2,2.2); ctx.lineCap='round'; ctx.beginPath();
+  ctx.moveTo(-0.12*L,0.08*W); ctx.lineTo(0.28*L,0.08*W); ctx.arc(0.28*L,-0.1*W,0.18*W,Math.PI/2,-Math.PI/2,true);
+  ctx.lineTo(-0.34*L,-0.28*W); ctx.arc(-0.34*L,0.06*W,0.34*W,-Math.PI/2,Math.PI/2,true);
+  ctx.lineTo(0.36*L,0.4*W); ctx.arc(0.36*L,-0.05*W,0.45*W,Math.PI/2,-Math.PI/2,true); ctx.lineTo(-0.08*L,-0.5*W);
+  ctx.stroke(); ctx.restore();
+}
+/* Magnetised nail modelled as two pole charges: +Q at x=+a, −Q at x=−a (cm). */
+function poleField(x,y,a,Q){ const e=0.02, dx1=x-a, dx2=x+a, r1=Math.pow(dx1*dx1+y*y+e,1.5), r2=Math.pow(dx2*dx2+y*y+e,1.5);
+  return [Q*(dx1/r1-dx2/r2), Q*(y/r1-y/r2)]; }
+function traceLines(a,nSeeds,xmax,ymax){
+  const lines=[];
+  for(let i=0;i<nSeeds;i++){ const th=(i+0.5)/nSeeds*Math.PI*2; let x=a+0.25*Math.cos(th), y=0.25*Math.sin(th); const pts=[[x,y]];
+    for(let k=0;k<1200;k++){ const f=poleField(x,y,a,1), m=Math.hypot(f[0],f[1]); if(m<1e-9) break;
+      x+=f[0]/m*0.06; y+=f[1]/m*0.06; pts.push([x,y]); if(Math.hypot(x+a,y)<0.22||Math.abs(x)>xmax||Math.abs(y)>ymax) break; }
+    lines.push(pts); }
+  return lines;
+}
+function drawFieldLines(ctx,lines,toPx,alpha,phase,sgn,every){
+  if(alpha<0.02) return; ctx.save(); ctx.globalAlpha=alpha; ctx.strokeStyle=COL.blue; ctx.lineWidth=1.4;
+  lines.forEach((L,i)=>{ if(i%every) return;
+    ctx.beginPath(); L.forEach((p,j)=>{ const q=toPx(p); j?ctx.lineTo(q[0],q[1]):ctx.moveTo(q[0],q[1]); }); ctx.stroke();
+    const n=L.length, gap=26, off=(((sgn>0?phase:-phase)%gap)+gap)%gap;
+    for(let s=off;s<n-1;s+=gap){ const j=Math.floor(s), p=toPx(L[j]), q=toPx(L[j+1]); let ang=Math.atan2(q[1]-p[1],q[0]-p[0]); if(sgn<0) ang+=Math.PI; arrowHead(ctx,p[0],p[1],ang,COL.blue,6); }
+  });
+  ctx.restore();
+}
+/* coil wound on a paper tube, seen from above (cm → px via P) */
+function drawCoilTop(ctx,P,pc,N,Ion,ph){
+  const a=P([-2.5,-0.45]), b=P([2.5,0.45]);
+  ctx.save(); rrect(ctx,a[0],a[1],b[0]-a[0],b[1]-a[1],4); ctx.fillStyle='rgba(251,249,241,0.6)'; ctx.fill(); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.4; ctx.stroke(); ctx.restore();
+  const wd=clamp(5*pc/N*0.5,1,2.6);
+  for(let i=0;i<N;i++){ const x=-2.5+(i+0.5)*5/N, p=P([x-0.1,-0.52]), q=P([x+0.1,0.52]); line(ctx,p[0],p[1],q[0],q[1],COPPER,wd); }
+  if(Ion){ ctx.save(); ctx.fillStyle=COL.yellow; const step=Math.max(1,Math.round(N/25));
+    for(let i=0;i<N;i+=step){ const x=-2.5+(i+0.5)*5/N, u=(((ph*0.02+i*0.13)%1)+1)%1, p=P([x-0.1+0.2*u,-0.52+1.04*u]); ctx.beginPath(); ctx.arc(p[0],p[1],2.2,0,Math.PI*2); ctx.fill(); } ctx.restore(); }
+}
+function drawNailTop(ctx,P,x,y,len,pc){ // len in cm, centred at x,y (cm); head on the left
+  const r=0.14*pc, h0=P([x-len/2,y]), t0=P([x+len/2,y]);
+  ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=1.8; ctx.fillStyle='#e9edf2';
+  ctx.beginPath(); ctx.moveTo(h0[0]+4,h0[1]-r); ctx.lineTo(t0[0]-0.5*pc,t0[1]-r); ctx.lineTo(t0[0],t0[1]); ctx.lineTo(t0[0]-0.5*pc,t0[1]+r); ctx.lineTo(h0[0]+4,h0[1]+r); ctx.closePath(); ctx.fill(); ctx.stroke();
+  rrect(ctx,h0[0],h0[1]-r*2.3,5,r*4.6,2); ctx.fill(); ctx.stroke(); ctx.restore();
+}
+
+/* ---------------------------------------------------------------------
+   1. ACTIVITIES + ROUTER
+   --------------------------------------------------------------------- */
+const activities = [
+  { num:'4.1', title:'Current & the Compass', desc:'Close the switch · watch the needle swing', build: buildA1 },
+  { num:'4.2', title:'Nail Electromagnet', desc:'Wind · switch on · lift the clips', build: buildA2 },
+  { num:'4.3', title:'Coil, Core & Strength', desc:'Iron core, cells, turns → stronger magnet', build: buildA3 },
+  { num:'4.4', title:'Poles of the Coil', desc:'Take the compass round ends A and B', build: buildA4 },
+  { num:'4.5', title:'Hot Nichrome Wire', desc:'Switch on 30 s · touch · compare', build: buildA5 },
+  { num:'4.6', title:'Lemon Battery', desc:'Add lemons until the LED glows', build: buildA6 },
+];
+let currentIndex = 0;
+
+function buildNav(){
+  const nav = document.getElementById('sideNav');
+  nav.innerHTML='';
+  activities.forEach((a,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'nav-item'+(i===currentIndex?' active':'');
+    btn.innerHTML = `<span class="n-num">${a.num}</span><span class="n-title">${a.title}</span>`;
+    btn.onclick = ()=>{ currentIndex=i; render(); };
+    nav.appendChild(btn);
+  });
+}
+function render(){
+  stopAllLoops();
+  buildNav();
+  const a = activities[currentIndex];
+  document.getElementById('panelBadge').textContent = a.num;
+  document.getElementById('panelTitle').textContent = a.title;
+  document.getElementById('panelDesc').textContent = a.desc||'';
+  const body = document.getElementById('panelBody');
+  body.innerHTML='';
+  body.appendChild(a.build());
+}
+function labShell(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `<div class="lab-canvas-wrap"><canvas></canvas></div><div class="lab-side"></div>`;
+  return wrap;
+}
+function onOff(id){ return `<div class="toggle-group" id="${id}"><button class="toggle-btn active" data-v="0">OFF</button><button class="toggle-btn" data-v="1">ON</button></div>`; }
+
+/* =====================================================================
+   4.1 DOES AN ELECTRIC CURRENT HAVE A MAGNETIC EFFECT?  (Oersted)
+   Long straight wire:  B = μ₀I / 2πd = 2×10⁻⁷ · I / d
+   Needle settles along B_earth + B_wire:  tan θ = B_wire / B_E
+   Check: 1 cell (I ≈ 1.9 A), d = 1 cm → B ≈ 37 µT → θ ≈ 47°; switch OFF → back to N.
+   Current flowing N over the needle pushes its N end towards W.
+   ===================================================================== */
+function buildA1(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label style="margin-bottom:6px;">Switch</label>${onOff('swB')}</div>
+    <div class="control-group"><label style="margin-bottom:6px;">Current in the wire</label>
+      <div class="toggle-group" id="dirB"><button class="toggle-btn active" data-v="1">↑ Towards N</button><button class="toggle-btn" data-v="-1">↓ Towards S</button></div></div>
+    <div class="control-group"><label style="margin-bottom:6px;">Cells</label>
+      <div class="toggle-group" id="cB"><button class="toggle-btn active" data-v="1">1 cell</button><button class="toggle-btn" data-v="2">2 cells</button></div></div>
+    <div class="control-group"><label>Wire above compass <span class="val" id="dV"></span></label><input type="range" id="dR" min="0.5" max="3" step="0.1" value="1"></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Current</div><div class="rval" id="r1">0 A</div></div>
+      <div class="rcard"><div class="rlabel">Wire's field</div><div class="rval" id="r2" style="color:var(--f-blue)">0 µT</div></div>
+      <div class="rcard wide"><div class="rlabel">Needle turned</div><div class="rval" id="r3" style="color:var(--f-green)">0°</div></div></div>
+      <p class="hint">B = 2×10⁻⁷ × I ÷ d · Earth ≈ 35 µT</p></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas'), dR=$('#dR');
+  let on=0, dir=1, cells=1, I=0, t=0, ph=0, ring=0, vxs=0.82;
+  const sw={x:0.55,v:0}, rot={x:0,v:0}, nd={a:-Math.PI/2,w:0};
+  toggleWire(wrap.querySelectorAll('#swB button'),b=>on=+b.dataset.v);
+  toggleWire(wrap.querySelectorAll('#dirB button'),b=>dir=+b.dataset.v);
+  toggleWire(wrap.querySelectorAll('#cB button'),b=>cells=+b.dataset.v);
+  animLoop((dt)=>{
+    t+=dt; const d=+dR.value; $('#dV').textContent=fmt(d,1)+' cm';
+    const rT=dir>0?0:Math.PI;
+    springTo(sw,on?0:0.55,120,13,dt); springTo(rot,rT,45,9,dt);         // lever snaps shut; cell turns round in its holder
+    const closed=sw.x<0.06 && Math.abs(rot.x-rT)<0.25, sg=Math.cos(rot.x)>=0?1:-1;
+    I=approach(I,closed?cellCurrent(cells,0.5):0,30,dt);
+    const Bw=2e-7*I/(d/100)*1e6;
+    needleStep(nd,-sg*Bw,-BE,dt);
+    if(I>0.02){ ph+=sg*(30+I*30)*dt; ring+=sg*1.6*dt; }
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const cW=Math.min(w*0.44,h*0.86), cH=h*0.84, x0=w*0.03, y0=h*0.08, cx=x0+cW/2, cy=y0+cH/2;
+    ctx.save(); rrect(ctx,x0,y0,cW,cH,10); ctx.fillStyle='#faf6ee'; ctx.fill(); ctx.strokeStyle='#c9b48f'; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+    const nT=y0+cH*0.09, nB=y0+cH*0.91, R=Math.min(cW*0.36,cH*0.3), xR=Math.min(w*0.64,x0+cW+w*0.2);
+    // north arrow on the cardboard
+    vec(ctx,x0+22,y0+cH*0.3,x0+22,y0+cH*0.3-34,COL.mid,1.8); textAt(ctx,'N',x0+22,y0+cH*0.3-40,{align:'center',size:12,weight:700,color:COL.mid});
+    drawCompass(ctx,cx,cy,R,nd.a);
+    // wire's shadow on the card (farther up → larger offset)
+    line(ctx,cx+4+d*5,nT+6,cx+4+d*5,nB-6,'rgba(19,42,68,0.13)',3);
+    const mid=(x0+cW+xR)/2, s1=[mid-26,nB], s2=[mid+26,nB];
+    wirePath(ctx,[[cx,nT],[xR,nT],[xR,nB],s2]); wirePath(ctx,[s1,[cx,nB]]);
+    line(ctx,cx,nT,cx,nB,COPPER,3.4);
+    flowDots(ctx,[[cx,nB],[cx,nT],[xR,nT],[xR,nB],[cx,nB]],ph,I>0.02?1:0,24);
+    [nT,nB].forEach(y=>{ circ(ctx,cx,y,8,COL.ink,'#fff',2.2); circ(ctx,cx,y,2.5,COL.ink,COL.ink,1); });
+    const cwid=clamp((xR-x0-cW)*0.28,34,62);
+    drawBattery(ctx,mid,nT,cells,cwid,rot.x);
+    drawSwitch(ctx,s1,s2,sw.x);
+    textAt(ctx,'switch',mid,nB+26,{align:'center',size:11,weight:600,color:COL.mid});
+    textAt(ctx,cells>1?'cells':'cell',mid,nT-cwid*0.42,{align:'center',size:11,weight:600,color:COL.mid});
+
+    // side view inset: wire end-on above the compass, field rings around it
+    const bx=xR+w*0.04, bW=w-bx-w*0.02, by=h*0.06, bh=h*0.46;
+    ctx.save(); rrect(ctx,bx,by,bW,bh,10); ctx.fillStyle='#f8fafd'; ctx.fill(); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.2; ctx.stroke(); ctx.clip();
+    textAt(ctx,'Side view, looking north',bx+10,by+18,{size:11,weight:700,color:COL.mid});
+    const gx=bx+bW/2, gy=by+bh*0.84, pc=bh*0.2, wy=gy-d*pc, Rn=bW*0.28;
+    ctx.save(); ctx.beginPath(); ctx.ellipse(gx,gy+5,Rn*1.1,9,0,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+    const ex=Math.cos(nd.a)*Rn; line(ctx,gx,gy,gx+ex,gy,COL.red,4); line(ctx,gx,gy,gx-ex,gy,COL.blue,4);
+    const al=clamp(Bw/45,0,0.9);
+    if(al>0.02){ ctx.save(); ctx.globalAlpha=al;
+      [0.45,0.9,1.4].forEach((k,ki)=>{ const r=k*pc; circ(ctx,gx,wy,r,COL.blue,null,1.6);
+        for(let j=0;j<3;j++){ const f=ring*(1.2-ki*0.25)+j*2.094+ki; arrowHead(ctx,gx+Math.cos(f)*r,wy+Math.sin(f)*r,f+sg*Math.PI/2,COL.blue,7); } });
+      ctx.restore(); }
+    circ(ctx,gx,wy,9,COPPER,'#fff',2.6);
+    if(I>0.02){ if(sg>0){ line(ctx,gx-5,wy-5,gx+5,wy+5,COL.yellow,2.4); line(ctx,gx-5,wy+5,gx+5,wy-5,COL.yellow,2.4); } else circ(ctx,gx,wy,3,COL.yellow,COL.yellow,1); }
+    dimArrow(ctx,gx+bW*0.36,wy,gy,COL.mid); textAt(ctx,'d = '+fmt(d,1)+' cm',gx+bW*0.36-6,(wy+gy)/2+4,{align:'right',size:11,weight:700,color:COL.mid});
+    textAt(ctx,'W',bx+12,gy+5,{size:12,weight:700,color:COL.mid}); textAt(ctx,'E',bx+bW-14,gy+5,{size:12,weight:700,color:COL.mid});
+    ctx.restore();
+
+    // field vectors at the needle: Earth (grey) + wire (blue) = where it points (green)
+    vxs=approach(vxs,sg>0?0.82:0.18,6,dt); const vx=bx+bW*vxs, vy=h*0.93, sc=Math.min(h*0.24/BE,bW*0.66/110);
+    textAt(ctx,'Field at the needle',bx+bW/2,h*0.58,{align:'center',size:11,weight:700,color:COL.mid});
+    vec(ctx,vx,vy,vx,vy-BE*sc,COL.mid,2.4);
+    textAt(ctx,'Earth',vx+(sg>0?6:-6),vy-BE*sc*0.4,{align:sg>0?'left':'right',size:11,weight:600,color:COL.mid});
+    if(Bw>0.6){ vec(ctx,vx,vy-BE*sc,vx-sg*Bw*sc,vy-BE*sc,COL.blue,2.6); textAt(ctx,'wire',vx-sg*Bw*sc*0.5,vy-BE*sc-8,{align:'center',size:11,weight:700,color:COL.blue}); }
+    vec(ctx,vx,vy,vx-sg*Bw*sc,vy-BE*sc,COL.green,3);
+
+    const deg=angDiff(nd.a,-Math.PI/2)*180/Math.PI;
+    $('#r1').textContent=fmt(I,2)+' A'; $('#r2').textContent=Math.round(Bw)+' µT';
+    $('#r3').textContent=Math.round(Math.abs(deg))+'°'+(deg<-1.5?' towards W':deg>1.5?' towards E':'');
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   4.2 NAIL ELECTROMAGNET
+   Field at the nail face ∝ N·I (iron core ≈40×). Clips held per end = B/8 mT.
+   Held chains swing as a pendulum driven by the hand's acceleration:
+      θ'' = −(g/L)·sin θ − (a_hand/L)·cos θ − γθ'
+   Current off → field gone → clips free-fall and bounce (e ≈ 0.3).
+   ===================================================================== */
+function buildA2(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label>Turns of wire <span class="val" id="nV"></span></label><input type="range" id="nR" min="5" max="40" step="1" value="20"></div>
+    <div class="control-group"><label style="margin-bottom:6px;">Connect the cell</label>${onOff('swB')}</div>
+    <div class="control-group"><label style="margin-bottom:6px;">Nail</label>
+      <div class="toggle-group" id="posB"><button class="toggle-btn" data-v="1">⬇ Lower to clips</button><button class="toggle-btn active" data-v="0">⬆ Lift up</button></div></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Current</div><div class="rval" id="r1">0 A</div></div>
+      <div class="rcard"><div class="rlabel">Field at the ends</div><div class="rval" id="r2" style="color:var(--f-blue)">0 mT</div></div>
+      <div class="rcard wide"><div class="rlabel">Clips held</div><div class="rval" id="r3" style="color:var(--f-green)">0</div></div></div>
+      <p class="hint">More turns → stronger magnet</p></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas'), nR=$('#nR');
+  let on=0, down=0, t=0, ph=0, Nd=0, I=0, clips=null, prevX=null, prevV=0, prevY=null;
+  const U={x:0,v:0}, SX={x:0.06,v:0}, th=[{x:0,v:0},{x:0,v:0}], chains=[[],[]];
+  toggleWire(wrap.querySelectorAll('#swB button'),b=>on=+b.dataset.v);
+  toggleWire(wrap.querySelectorAll('#posB button'),b=>down=+b.dataset.v);
+  function linkPos(e,k,piv,Lc){
+    let x=piv[0], y=piv[1], a=0;
+    for(let j=0;j<=k;j++){ a=th[e].x*(1+0.15*j); const dx=Math.sin(a)*Lc*0.9, dy=Math.cos(a)*Lc*0.9;
+      if(j===k) return [x+dx/2,y+dy/2,Math.atan2(dy,dx)]; x+=dx; y+=dy; }
+  }
+  animLoop((dt)=>{
+    t+=dt; const N=+nR.value; $('#nV').textContent=N;
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const floorY=h*0.87, NL=Math.min(w*0.46,480), nr=Math.max(8,NL*0.028), Lc=clamp(NL*0.09,24,40), g=h*5;
+    if(!clips){ clips=[]; for(let i=0;i<22;i++){ const e=i%2, x=w*0.5+(e?1:-1)*NL/2+(Math.random()-0.5)*NL*0.5;
+      clips.push({x,y:floorY-3.5,vx:0,vy:0,a:(Math.random()<0.5?0:Math.PI),tilt:(Math.random()-0.5)*0.2,va:0,st:'rest',e:-1}); } }
+    springTo(U,down?1:0,14,6.5,dt); springTo(SX,down?0:0.06,14,6.5,dt);
+    const nx=w*0.5+SX.x*w, ny=lerp(h*0.34,floorY-nr-9,U.x);
+    let vxN=0, vyN=0, axN=0;
+    if(prevX!==null && dt>1e-4){ vxN=(nx-prevX)/dt; vyN=(ny-prevY)/dt; axN=(vxN-prevV)/dt; }
+    prevX=nx; prevY=ny; prevV=vxN;
+    Nd+=clamp(N-Nd,-14*dt,14*dt);                        // the wire is wound on / off at a steady rate
+    I=approach(I,on?cellCurrent(1,0.6):0,30,dt);
+    const S=coilFaceMT(Math.floor(Nd),I,1), cap=clipCap(S);
+    if(I>0.02) ph+=(30+I*20)*dt;
+    const piv=[[nx-NL/2+3,ny+nr*1.9],[nx+NL/2-2,ny+2]];
+
+    function release(c){ c.st='fall'; c.vx=vxN+(Math.random()-0.5)*40; c.vy=vyN; c.va=(Math.random()-0.5)*8; c.e=-1; }
+    for(let e=0;e<2;e++) while(chains[e].length>cap) release(chains[e].pop());
+    // pick-up: the nearest clips inside reach fly to the free slot at each end
+    if(cap>0 && U.x>0.85) for(let e=0;e<2;e++){
+      const flying=clips.filter(c=>c.st==='fly'&&c.e===e).length, need=cap-chains[e].length-flying;
+      if(need>0){ const P=piv[e], reach=Lc*1.2+30*Math.sqrt(S/8);
+        clips.filter(c=>c.st==='rest'&&Math.hypot(c.x-P[0],c.y-P[1])<reach).sort((a,b)=>Math.hypot(a.x-P[0],a.y-P[1])-Math.hypot(b.x-P[0],b.y-P[1]))
+          .slice(0,need).forEach(c=>{ c.st='fly'; c.e=e; c.vx=0; c.vy=0; }); } }
+    for(let e=0;e<2;e++){ const T=th[e], n=chains[e].length;
+      if(n){ const Lp=Lc*(0.5+0.75*(n-1))+Lc*0.5; T.v+=(-(g/Lp)*Math.sin(T.x)-(axN/Lp)*Math.cos(T.x)-1.3*T.v)*dt; T.x+=T.v*dt; } else { T.x=0; T.v=0; }
+      chains[e].forEach((c,k)=>{ const p=linkPos(e,k,piv[e],Lc); c.x=p[0]; c.y=p[1]; c.a=p[2];
+        if(c.y>floorY-4){ c.y=floorY-4; c.x+=(e?1:-1)*k*Lc*0.35; c.a=0; } }); }
+    clips.forEach(c=>{
+      if(c.st==='fly'){
+        if(cap===0){ release(c); return; }
+        const tp=linkPos(c.e,chains[c.e].length,piv[c.e],Lc), dx=tp[0]-c.x, dy=tp[1]-c.y, d=Math.hypot(dx,dy)+1e-6, a=Math.min(40000,3e6*(S/8)/(d*d+400));
+        c.vx=(c.vx+dx/d*a*dt)*Math.exp(-6*dt); c.vy=(c.vy+dy/d*a*dt)*Math.exp(-6*dt); c.x+=c.vx*dt; c.y+=c.vy*dt; c.a=approach(c.a,tp[2],10,dt);
+        if(d<6){ c.st='held'; chains[c.e].push(c); }
+      } else if(c.st==='fall'){
+        c.vy+=g*dt; c.x+=c.vx*dt; c.y+=c.vy*dt; c.a+=c.va*dt;
+        if(c.y>=floorY-3.5){ c.y=floorY-3.5; if(c.vy>70){ c.vy*=-0.32; c.vx*=0.6; c.va*=0.5; } else { c.vy=0; c.st='rest'; } }
+      } else if(c.st==='rest'){
+        c.x+=c.vx*dt; c.vx*=Math.exp(-5*dt); c.a=approach(c.a,Math.round((c.a-c.tilt)/Math.PI)*Math.PI+c.tilt,8,dt);
+      }
+    });
+
+    // table
+    line(ctx,w*0.03,floorY,w*0.97,floorY,COL.ink,2.6);
+    for(let x=w*0.05;x<w*0.97;x+=22) line(ctx,x,floorY+2,x-10,floorY+12,COL.mid,1);
+    clips.filter(c=>c.st==='rest').forEach(c=>drawClip(ctx,c.x,c.y,c.a,Lc));
+    // cell + switch (top left) and flexible leads that follow the nail
+    const cwid=clamp(w*0.07,40,66), cC=[w*0.1,h*0.1];
+    drawCell(ctx,cC[0],cC[1],cwid,cwid*0.42,0);
+    const pos=[cC[0]+cwid/2+7,cC[1]], neg=[cC[0]-cwid/2,cC[1]], s1=[pos[0]+20,cC[1]], s2=[s1[0]+44,cC[1]];
+    const c0=nx-NL/2+NL*0.1, c1=nx+NL/2-NL*0.2;
+    const leadA=bez(s2,[s2[0]+90,s2[1]+30],[c1+30,ny-nr-130],[c1,ny-nr-1]), leadB=bez([c0,ny-nr-1],[c0-70,ny-nr-110],[neg[0]-50,neg[1]+120],neg);
+    wirePath(ctx,[pos,s1]); wirePath(ctx,leadA); wirePath(ctx,leadB);
+    drawSwitch(ctx,s1,s2,on?0:0.5);
+    flowDots(ctx,[pos,s1,...leadA],ph,I>0.02?1:0,24); flowDots(ctx,leadB,ph,I>0.02?1:0,24);
+    line(ctx,nx,0,nx,ny-nr,COL.mid,1.6);                                 // thread the nail hangs from
+    // magnetic field around the nail
+    const fa=clamp(S/45,0,0.7);
+    if(fa>0.02){ ctx.save(); ctx.globalAlpha=fa; ctx.strokeStyle=COL.blue; ctx.lineWidth=1.4; ctx.setLineDash([7,7]); ctx.lineDashOffset=t*24;
+      const xl=nx-NL/2, xr=nx+NL/2;
+      for(let k=1;k<=3;k++) for(const s of [-1,1]){ ctx.beginPath(); ctx.moveTo(xr,ny); ctx.bezierCurveTo(xr+k*16,ny+s*k*34,xl-k*16,ny+s*k*34,xl,ny); ctx.stroke(); }
+      ctx.restore(); }
+    // nail
+    ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.fillStyle='#e9edf2';
+    ctx.beginPath(); ctx.moveTo(nx-NL/2+5,ny-nr); ctx.lineTo(nx+NL/2-NL*0.08,ny-nr); ctx.lineTo(nx+NL/2,ny); ctx.lineTo(nx+NL/2-NL*0.08,ny+nr); ctx.lineTo(nx-NL/2+5,ny+nr); ctx.closePath(); ctx.fill(); ctx.stroke();
+    rrect(ctx,nx-NL/2,ny-nr*1.9,6,nr*3.8,2); ctx.fill(); ctx.stroke(); ctx.restore();
+    // coil — turns appear one by one as the wire is wound
+    const nFull=Math.floor(Nd), frac=Nd-nFull, pitch=(c1-c0)/Math.max(1,Math.ceil(Nd)||1), wd=clamp(pitch*0.55,1.4,3);
+    ctx.save(); ctx.lineCap='round';
+    for(let i=0;i<Math.ceil(Nd);i++){ const x=c0+(i+0.5)*pitch, u=i<nFull?1:frac;
+      line(ctx,x-pitch*0.3,ny-nr-2,lerp(x-pitch*0.3,x+pitch*0.3,u),lerp(ny-nr-2,ny+nr+2,u),COPPER,wd);
+      if(I>0.02&&i<nFull){ ctx.save(); ctx.setLineDash([3,6]); ctx.lineDashOffset=-ph*0.6; line(ctx,x-pitch*0.3,ny-nr-2,x+pitch*0.3,ny+nr+2,COL.yellow,wd,[3,6]); ctx.restore(); } }
+    ctx.restore();
+    if(S>2){ const al=clamp(S/30,0.25,1);
+      ctx.save(); ctx.globalAlpha=al; textAt(ctx,'N',nx+NL/2+12,ny-nr-4,{size:14,weight:700,color:COL.red}); textAt(ctx,'S',nx-NL/2-16,ny-nr-4,{size:14,weight:700,color:COL.blue}); ctx.restore(); }
+    clips.filter(c=>c.st!=='rest').forEach(c=>drawClip(ctx,c.x,c.y,c.a,Lc));
+
+    $('#r1').textContent=fmt(I,2)+' A'; $('#r2').textContent=Math.round(S)+' mT';
+    $('#r3').textContent=(chains[0].length+chains[1].length)+'';
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   4.3 COIL, IRON CORE, CELLS AND TURNS (+ "Think like a scientist")
+   On-axis field of a 5 cm coil at 2 cm beyond its end:
+      B = (μ₀NI/2L)·[(x+L)/√((x+L)²+R²) − x/√(x²+R²)]   (×40 with iron nail)
+   Check: 50 turns, 1 cell: air core ≈ 20 µT (needle ≈ 30°); with nail ≈ 88°.
+   Clips on the table: pulled when magnetic pull K·B²/d⁴ beats friction μg,
+   then slide with kinetic friction until they stick at the nail ends.
+   ===================================================================== */
+function buildA3(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label style="margin-bottom:6px;">Switch</label>${onOff('swB')}</div>
+    <div class="control-group"><label style="margin-bottom:6px;">Iron nail in the coil</label>
+      <div class="toggle-group" id="coreB"><button class="toggle-btn active" data-v="0">Out</button><button class="toggle-btn" data-v="1">In</button></div></div>
+    <div class="control-group"><label style="margin-bottom:6px;">Cells</label>
+      <div class="toggle-group" id="cB"><button class="toggle-btn active" data-v="1">1</button><button class="toggle-btn" data-v="2">2</button><button class="toggle-btn" data-v="4">4</button></div></div>
+    <div class="control-group"><label>Turns <span class="val" id="nV"></span></label><input type="range" id="nR" min="10" max="100" step="5" value="50"></div>
+    <button class="toggle-btn navy" id="scat" style="margin-top:0;padding:9px;flex:0 0 auto;">↺ Spread the clips again</button>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Current</div><div class="rval" id="r1">0 A</div></div>
+      <div class="rcard"><div class="rlabel">Field at compass</div><div class="rval" id="r2" style="color:var(--f-blue)">0 µT</div></div>
+      <div class="rcard"><div class="rlabel">Needle turned</div><div class="rval" id="r3" style="color:var(--f-green)">0°</div></div>
+      <div class="rcard"><div class="rlabel">Clips held</div><div class="rval" id="r4" style="color:var(--f-green)">0</div></div></div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas'), nR=$('#nR');
+  let on=0, core=0, cells=1, I=0, t=0, ph=0, phF=0, clips=[];
+  const sw={x:0.5,v:0}, nail={x:1,v:0}, nA={a:-Math.PI/2,w:0}, nB={a:-Math.PI/2,w:0}, held=[[],[]];
+  const LINES={air:traceLines(2.5,16,7.2,5.2), iron:traceLines(2.9,16,7.2,5.2)};
+  const SLOT=[1.2,-1.2,1.65,-1.65,2.1,-2.1,2.55,-2.55];
+  toggleWire(wrap.querySelectorAll('#swB button'),b=>on=+b.dataset.v);
+  toggleWire(wrap.querySelectorAll('#coreB button'),b=>core=+b.dataset.v);
+  toggleWire(wrap.querySelectorAll('#cB button'),b=>cells=+b.dataset.v);
+  function scatter(){ clips=[]; held[0]=[]; held[1]=[];
+    for(let e=0;e<2;e++){ const so=e?1:-1; for(let j=0;j<7;j++){ const side=j%2?1:-1;
+      clips.push({x:so*(2.9+(-0.6+Math.random()*1.4)), y:side*(1.5+Math.random()*1.2), vx:0, vy:0, a:Math.random()*Math.PI, st:'free', e:-1}); } }
+    clips.push({x:-0.3,y:1.7,vx:0,vy:0,a:0.4,st:'free',e:-1}, {x:0.4,y:-1.8,vx:0,vy:0,a:2.2,st:'free',e:-1});
+  }
+  scatter(); $('#scat').onclick=scatter;
+  animLoop((dt)=>{
+    t+=dt; const N=+nR.value; $('#nV').textContent=N;
+    springTo(sw,on?0:0.5,120,13,dt); springTo(nail,core?0:1,9,5.2,dt);
+    const u=clamp(nail.x,-0.05,1.1), s1=smooth01(0,0.45,u), s2=smooth01(0.55,1,u);
+    const nxo=2.4*s1-2.4*s2, nyo=-3.7*smooth01(0.4,1,u), nz=Math.sin(Math.PI*smooth01(0.3,1,u))*0.5;
+    const coreF=clamp(1-nxo/2.9,0,1)*clamp(1+nyo/0.4,0,1);
+    I=approach(I,sw.x<0.06?cellCurrent(cells,0.6):0,30,dt);
+    const Bc=coilAxisUT(N,I,2,coreF), Sf=coilFaceMT(N,I,coreF), cap=clipCap(Sf);
+    needleStep(nA,Bc,-BE,dt); needleStep(nB,Bc,-BE,dt);
+    if(I>0.02) ph+=(30+I*20)*dt; phF+=18*dt;
+    // clips: static friction holds them until the pull exceeds μg
+    const F=30, poles=[[-(coreF>0.5?2.9:2.5),0],[(coreF>0.5?2.9:2.5),0]];
+    for(let e=0;e<2;e++) while(held[e].length>cap){ const c=held[e].pop(), dx=c.x-poles[e][0], dy=c.y-poles[e][1], d=Math.hypot(dx,dy)+1e-6; c.st='free'; c.vx=dx/d*6; c.vy=dy/d*6; }
+    clips.forEach(c=>c.pull=false);
+    for(let e=0;e<2;e++){ const P=poles[e], need=cap-held[e].length; if(need<=0) continue;
+      clips.filter(c=>c.st==='free'&&(c.x<0?0:1)===e).sort((a,b)=>Math.hypot(a.x-P[0],a.y-P[1])-Math.hypot(b.x-P[0],b.y-P[1])).slice(0,need).forEach(c=>{ c.pull=true; c.e=e; }); }
+    clips.forEach(c=>{
+      if(c.st==='held'){ const j=held[c.e].indexOf(c), base=c.e?0:Math.PI, an=base+SLOT[j]*(c.e?1:-1), P=poles[c.e];
+        c.x=approach(c.x,P[0]+Math.cos(an)*0.55,12,dt); c.y=approach(c.y,P[1]+Math.sin(an)*0.55,12,dt); c.a=approach(c.a,an,10,dt); return; }
+      let ax=0, ay=0, sp=Math.hypot(c.vx,c.vy);
+      if(c.pull){ const P=poles[c.e], dx=P[0]-c.x, dy=P[1]-c.y, d=Math.hypot(dx,dy)+1e-6, a=Math.min(3000,0.4*Sf*Sf/Math.pow(Math.max(d,0.3),4));
+        if(a>F||sp>0){ ax=dx/d*a; ay=dy/d*a; c.a+=angDiff(Math.atan2(dy,dx),c.a)*Math.min(1,4*dt); }
+        if(d<0.65){ c.st='held'; held[c.e].push(c); c.vx=c.vy=0; return; } }
+      c.vx+=ax*dt; c.vy+=ay*dt; sp=Math.hypot(c.vx,c.vy);
+      if(sp>0){ const ns=Math.max(0,sp-F*dt); c.vx*=ns/sp; c.vy*=ns/sp; }
+      c.x+=c.vx*dt; c.y+=c.vy*dt;
+    });
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const pc=Math.min(w/13.4,h/9.6), cx=w*0.5, cy=h*0.4, P=q=>[cx+q[0]*pc,cy+q[1]*pc];
+    const fa=I>0.02?clamp(0.12+Math.log10(Math.max(1,Bc))/3.2,0,0.75):0, every=Bc<30?4:Bc<200?2:1;
+    drawFieldLines(ctx,coreF>0.5?LINES.iron:LINES.air,P,fa,phF,1,every);
+    const R=Math.min(1.25*pc,h*0.14);
+    drawCompass(ctx,...P([-4.5,0]),R,nA.a); drawCompass(ctx,...P([4.5,0]),R,nB.a);
+    const lifted=nyo<-0.3;
+    if(!lifted) drawNailTop(ctx,P,nxo,nyo,5.8,pc);
+    drawCoilTop(ctx,P,pc,N,I>0.02,ph);
+    clips.forEach(c=>{ const q=P([c.x,c.y]); drawClip(ctx,q[0],q[1],c.a,0.95*pc); });
+    // leads, switch, battery
+    const cw=clamp(pc*0.9,34,58), bat=[cx,cy+4.4*pc];
+    const L0=P([-1.5,0.5]), R0=P([1.5,0.5]), yb=cy+3.4*pc, sp1=P([1.5,1.35]), sp2=P([1.5,2.25]);
+    const bx=(cells-1)*(cw+18)/2+cw/2+8, BL=[bat[0]-bx,bat[1]], BR=[bat[0]+bx,bat[1]];
+    const xl=Math.min(L0[0],BL[0]-0.5*pc), xr=Math.max(R0[0],BR[0]+0.5*pc);
+    const pathR=[BR,[xr,bat[1]],[xr,yb],[R0[0],yb],sp2], pathR2=[sp1,R0], pathL=[L0,[L0[0],yb],[xl,yb],[xl,bat[1]],BL];
+    wirePath(ctx,pathR); wirePath(ctx,pathR2); wirePath(ctx,pathL);
+    flowDots(ctx,[...pathR,...pathR2],ph,I>0.02?1:0,24); flowDots(ctx,pathL,ph,I>0.02?1:0,24);
+    drawBattery(ctx,bat[0],bat[1],cells,cw,0);
+    drawSwitch(ctx,sp2,sp1,sw.x);
+    if(lifted){ const sh=P([nxo+nz*0.6,nyo+nz*0.8]); ctx.save(); ctx.globalAlpha=0.15; ctx.fillStyle=COL.ink; ctx.beginPath(); ctx.ellipse(sh[0],sh[1],2.9*pc,0.18*pc,0,0,Math.PI*2); ctx.fill(); ctx.restore();
+      drawNailTop(ctx,P,nxo,nyo,5.8,pc); }
+    textAt(ctx,'A',...P([-4.5,1.25+0.55]),{align:'center',size:12,weight:700,color:COL.mid});
+    textAt(ctx,'B',...P([4.5,1.25+0.55]),{align:'center',size:12,weight:700,color:COL.mid});
+
+    const deg=Math.abs(angDiff(nB.a,-Math.PI/2))*180/Math.PI;
+    $('#r1').textContent=fmt(I,2)+' A'; $('#r2').textContent=Math.round(Bc)+' µT'; $('#r3').textContent=Math.round(deg)+'°';
+    $('#r4').textContent=(held[0].length+held[1].length)+'';
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   4.4 POLES OF THE ELECTROMAGNET
+   Coil + nail = two poles, ±Q at the nail ends (a = 2.9 cm).
+   Needle follows B_magnet + B_earth at wherever the compass is.
+   The end that pulls the needle's N tip is an S pole; reversing the
+   cell swaps both ends.
+   ===================================================================== */
+function buildA4(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label style="margin-bottom:6px;">Switch</label>${onOff('swB')}</div>
+    <div class="control-group"><label style="margin-bottom:6px;">Cell</label>
+      <div class="toggle-group" id="dirB"><button class="toggle-btn active" data-v="1">+ on right</button><button class="toggle-btn" data-v="-1">Reversed</button></div></div>
+    <div class="control-group"><label>Move the compass <span class="val" id="pV"></span></label><input type="range" id="pR" min="0" max="360" step="1" value="180">
+      <div class="toggle-group"><button class="toggle-btn" id="goA">Near A</button><button class="toggle-btn" id="goB">Near B</button></div></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">End A</div><div class="rval" id="rA">?</div></div>
+      <div class="rcard"><div class="rlabel">End B</div><div class="rval" id="rB">?</div></div>
+      <div class="rcard wide"><div class="rlabel">Field at compass</div><div class="rval" id="r3" style="color:var(--f-blue)">35 µT</div></div></div>
+      <p class="hint">N tip of the needle is pulled to an S end</p></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas'), pR=$('#pR');
+  let on=0, dir=1, lastDir=1, I=0, t=0, ph=0, phF=0, rev=[false,false], dwell=[0,0];
+  const sw={x:0.5,v:0}, rot={x:0,v:0}, nd={a:-Math.PI/2,w:0}, PH={x:Math.PI,v:0};
+  const a=2.9, rx=5.3, ry=3.2, LINES=traceLines(a,18,7.4,5.4), I1=cellCurrent(1,0.6);
+  toggleWire(wrap.querySelectorAll('#swB button'),b=>on=+b.dataset.v);
+  toggleWire(wrap.querySelectorAll('#dirB button'),b=>dir=+b.dataset.v);
+  $('#goA').onclick=()=>pR.value=180; $('#goB').onclick=()=>pR.value=0;
+  animLoop((dt)=>{
+    t+=dt; const tg=+pR.value; $('#pV').textContent=tg+'°';
+    springTo(PH,tg*Math.PI/180,10,6,dt);                       // compass glides round its track
+    const rT=dir>0?0:Math.PI; springTo(sw,on?0:0.5,120,13,dt); springTo(rot,rT,45,9,dt);
+    if(dir!==lastDir){ rev=[false,false]; dwell=[0,0]; lastDir=dir; }
+    const closed=sw.x<0.06&&Math.abs(rot.x-rT)<0.25, sg=Math.cos(rot.x)>=0?1:-1;
+    I=approach(I,closed?I1:0,30,dt);
+    const Q=1280*I/I1*sg, cx0=rx*Math.cos(PH.x), cy0=ry*Math.sin(PH.x), f=poleField(cx0,cy0,a,Q);
+    needleStep(nd,f[0],f[1]-BE,dt);
+    const Bt=Math.hypot(f[0],f[1]-BE);
+    if(I>0.02) ph+=sg*(30+I*20)*dt; phF+=18*dt;
+    [[-a,0],[a,0]].forEach((p,e)=>{ const near=Math.hypot(cx0-p[0],cy0-p[1])<2.9;
+      if(near&&I>0.8*I1&&Math.abs(nd.w)<0.8) dwell[e]+=dt; else dwell[e]=0; if(dwell[e]>0.5) rev[e]=true; });
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const pc=Math.min(w/13.8,h/10.8), cx=w*0.5, cy=h*0.4, P=q=>[cx+q[0]*pc,cy+q[1]*pc];
+    drawFieldLines(ctx,LINES,P,I>0.02?0.55*I/I1:0,phF,sg,1);
+    ctx.save(); ctx.setLineDash([4,7]); ctx.strokeStyle=COL.mid; ctx.globalAlpha=0.5; ctx.lineWidth=1.2; ctx.beginPath(); ctx.ellipse(cx,cy,rx*pc,ry*pc,0,0,Math.PI*2); ctx.stroke(); ctx.restore();
+    // leads + battery below
+    const cw=clamp(pc*1,38,62), bat=[cx,cy+4.9*pc], L0=P([-1.5,0.5]), R0=P([1.5,0.5]), sp1=P([1.5,1.1]), sp2=P([1.5,2.0]);
+    const bx=cw/2+8, BL=[bat[0]-bx,bat[1]], BR=[bat[0]+bx,bat[1]], yb=cy+4.1*pc;
+    const pathR=[BR,[R0[0]+0.9*pc,bat[1]],[R0[0]+0.9*pc,yb],[R0[0],yb],sp2], pathR2=[sp1,R0], pathL=[L0,[L0[0],yb],[L0[0]-0.9*pc,yb],[L0[0]-0.9*pc,bat[1]],BL];
+    wirePath(ctx,pathR); wirePath(ctx,pathR2); wirePath(ctx,pathL);
+    flowDots(ctx,[...pathR,...pathR2],ph,I>0.02?1:0,24); flowDots(ctx,pathL,ph,I>0.02?1:0,24);
+    drawBattery(ctx,bat[0],bat[1],1,cw,rot.x); drawSwitch(ctx,sp2,sp1,sw.x);
+    drawNailTop(ctx,P,0,0,5.8,pc); drawCoilTop(ctx,P,pc,40,I>0.02,ph*sg);
+    // end labels and the poles once found
+    [[-a,'A'],[a,'B']].forEach(([x,l],e)=>{ const q=P([x+(e?0.55:-0.55),-0.95]); textAt(ctx,l,q[0],q[1],{align:'center',size:16,weight:700,color:COL.ink});
+      if(rev[e]&&I>0.02){ const isN=(e===1)===(sg>0), p=P([x,0]); ctx.save(); ctx.globalAlpha=0.9; circ(ctx,p[0],p[1],0.42*pc,isN?COL.red:COL.blue,isN?'#fdece7':'#e6f0fb',2.4);
+        textAt(ctx,isN?'N':'S',p[0],p[1]+6,{align:'center',size:16,weight:700,color:isN?COL.red:COL.blue}); ctx.restore(); } });
+    const cp=P([cx0,cy0]); drawCompass(ctx,cp[0],cp[1],1.15*pc,nd.a);
+    const Ar=rev[0]&&I>0.02?(sg>0?'S pole':'N pole'):'?', Br=rev[1]&&I>0.02?(sg>0?'N pole':'S pole'):'?';
+    $('#rA').textContent=Ar; $('#rB').textContent=Br;
+    $('#rA').style.color=Ar==='?'?'':Ar[0]==='N'?'var(--f-red)':'var(--f-blue)'; $('#rB').style.color=Br==='?'?'':Br[0]==='N'?'var(--f-red)':'var(--f-blue)';
+    $('#r3').textContent=Math.round(Bt)+' µT';
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   4.5 DOES A CURRENT CARRYING WIRE GET HOT?
+   Wire 0.3 mm × 10 cm. R = ρL/A (nichrome 1.1 µΩm → 1.56 Ω; copper → 0.024 Ω)
+   Energy balance:  m·c·dT/dt = I²R − hA(T−T₀) − εσA(T⁴−T₀⁴)
+   Check: nichrome, 30 s → H = I²Rt ≈ 21 J (1 cell) vs ≈ 64 J (2 cells);
+   copper barely warms. Thermal expansion makes the wire sag: s = √(3LΔL/8).
+   ===================================================================== */
+function buildA5(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label style="margin-bottom:6px;">Wire</label>
+      <div class="toggle-group" id="wB"><button class="toggle-btn active" data-v="ni">Nichrome</button><button class="toggle-btn" data-v="cu">Copper</button></div></div>
+    <div class="control-group"><label style="margin-bottom:6px;">Cells</label>
+      <div class="toggle-group" id="cB"><button class="toggle-btn active" data-v="1">1 cell</button><button class="toggle-btn" data-v="2">2 cells</button></div></div>
+    <div class="toggle-group" style="margin-top:0;flex:0 0 auto;"><button class="toggle-btn play" id="go" style="padding:10px;">▶ Switch ON for 30 s</button></div>
+    <button class="toggle-btn navy" id="touch" style="margin-top:0;padding:10px;flex:0 0 auto;">☝ Touch the wire</button>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Current</div><div class="rval" id="r1">0 A</div></div>
+      <div class="rcard"><div class="rlabel">Wire</div><div class="rval" id="r2" style="color:var(--f-red)">27 °C</div></div>
+      <div class="rcard"><div class="rlabel">Heat made</div><div class="rval" id="r3" style="color:var(--f-green)">0 J</div></div>
+      <div class="rcard"><div class="rlabel">Feels</div><div class="rval" id="r4">—</div></div></div>
+      <p class="hint">H = I² R t · clock runs ×2</p></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const MAT={ni:{rho:1.10e-6,dens:8400,c:450,eps:0.7,alpha:13e-6,name:'Nichrome'},cu:{rho:1.68e-8,dens:8960,c:385,eps:0.05,alpha:17e-6,name:'Copper'}};
+  const D=0.3e-3, L=0.10, A=Math.PI*D*D/4, S=Math.PI*D*L, T0=300, SPEED=2;
+  let runLabel='', mat='ni', cells=1, on=false, tOn=0, T=T0, H=0, t=0, ph=0, hist=[], prev=null, runT=-1, feel='—', feelT=0, touchPh=-1, heat=0;
+  const sw={x:0.5,v:0}, fY={x:0,v:0};
+  toggleWire(wrap.querySelectorAll('#wB button'),b=>mat=b.dataset.v);
+  toggleWire(wrap.querySelectorAll('#cB button'),b=>cells=+b.dataset.v);
+  $('#go').onclick=()=>{ if(on){ on=false; return; } if(hist.length>5) prev={pts:hist,label:runLabel}; runLabel=(cells>1?'2 cells':'1 cell')+' · '+MAT[mat].name; hist=[]; runT=0; tOn=0; H=0; on=true; };
+  $('#touch').onclick=()=>{ if(touchPh<0) touchPh=0; };
+  animLoop((dt)=>{
+    t+=dt; const M=MAT[mat], R=M.rho*L/A, m=A*L*M.dens;
+    springTo(sw,on?0:0.5,120,13,dt);
+    const Iset=sw.x<0.06?cellCurrent(cells,R+0.4):0, P=Iset*Iset*R;
+    const dts=dt*SPEED, n=Math.ceil(dts/0.01);
+    for(let i=0;i<n;i++){ const hh=dts/n; T+=(P-150*S*(T-T0)-M.eps*5.67e-8*S*(T**4-T0**4))/(m*M.c)*hh; }
+    if(on){ tOn+=dts; H+=P*dts; if(tOn>=30){ tOn=30; on=false; } }
+    if(runT>=0){ runT+=dts; if(hist.length===0||runT-hist[hist.length-1][0]>=0.2) hist.push([runT,T-273]); if(runT>45) runT=-1; }
+    if(Iset>0.02) ph+=(25+Iset*25)*dt;
+    const Tc=T-273;
+    // finger: down, feel, pull back (fast if hot)
+    if(touchPh>=0){ touchPh+=dt; const hot=Tc>60;
+      const tgt=touchPh<0.9?1:0; springTo(fY,tgt,hot&&fY.x>0.9?260:60,hot&&fY.x>0.9?20:11,dt);
+      if(fY.x>0.93&&feelT<=0){ feel=Tc<35?'Cool':Tc<60?'Warm':'Hot!'; feelT=2.2; if(hot) touchPh=Math.max(touchPh,0.9); }
+      if(touchPh>1.8){ touchPh=-1; } } else springTo(fY,0,60,11,dt);
+    feelT-=dt;
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    // cardboard in 3/4 view
+    const fl=[w*0.05,h*0.78], fr=[w*0.6,h*0.78], br=[w*0.66,h*0.5], bl=[w*0.11,h*0.5];
+    ctx.save(); ctx.beginPath(); ctx.moveTo(...fl); ctx.lineTo(...fr); ctx.lineTo(...br); ctx.lineTo(...bl); ctx.closePath(); ctx.fillStyle='#faf6ee'; ctx.fill(); ctx.strokeStyle='#c9b48f'; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+    const nL=[w*0.17,h*0.66], nR=[w*0.54,h*0.66], hn=h*0.24, pcm=(nR[0]-nL[0])/5;
+    const e1=[nL[0],nL[1]-hn*0.82], e2=[nR[0],nR[1]-hn*0.82];
+    const dL=0.05*(M.alpha*(T-T0)+0.0005), sag=Math.sqrt(3*0.05*dL/8)*100*pcm;          // ΔL and sag of the 5 cm span
+    const wp=bez(e1,[lerp(e1[0],e2[0],0.33),e1[1]+sag*1.33],[lerp(e1[0],e2[0],0.67),e1[1]+sag*1.33],e2,30);
+    // heat shimmer
+    heat=clamp((Tc-35)/180,0,1);
+    for(let i=0;i<6&&heat>0.01;i++){ const phs=(t*0.7+i/6)%1, x=lerp(e1[0],e2[0],(i+0.5)/6);
+      ctx.save(); ctx.globalAlpha=(1-phs)*heat; ctx.strokeStyle=COL.red; ctx.lineWidth=1.6; ctx.beginPath();
+      for(let q=0;q<=10;q++){ const yy=e1[1]+sag-8-phs*h*0.18-q*4, xx=x+Math.sin(q*0.9+t*5+i)*4; q?ctx.lineTo(xx,yy):ctx.moveTo(xx,yy); } ctx.stroke(); ctx.restore(); }
+    if(Tc>380){ ctx.save(); ctx.globalAlpha=clamp((Tc-380)/300,0,0.6); ctx.strokeStyle='#ff8a5c'; ctx.lineWidth=12; ctx.lineCap='round'; ctx.beginPath(); wp.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1])); ctx.stroke(); ctx.restore(); }
+    // nails
+    [nL,nR].forEach(p=>{ line(ctx,p[0],p[1],p[0],p[1]-hn,COL.ink,4); line(ctx,p[0]-9,p[1]-hn,p[0]+9,p[1]-hn,COL.ink,4); });
+    const wcol=rampCol([[25,'#8195ab'],[60,'#b8876f'],[150,'#d9432b'],[450,'#ff5a2a']],Tc);
+    wirePath(ctx,wp,mat==='cu'?mixCol(COPPER,'#d9432b',clamp((Tc-40)/150,0,1)):wcol,3.2);
+    // circuit in front
+    const yb=h*0.92, cw=clamp(w*0.06,38,60), bat=[w*0.3,yb];
+    const bx=(cells-1)*(cw+18)/2+cw/2+8, BL=[bat[0]-bx,yb], BR=[bat[0]+bx,yb], s1=[BR[0]+30,yb], s2=[s1[0]+48,yb];
+    const pR=[s2,[nR[0],yb],nR], pL=[nL,[nL[0],yb],BL];
+    wirePath(ctx,[BR,s1]); wirePath(ctx,pR); wirePath(ctx,pL);
+    const loop=[BR,s1,...pR,[nR[0],nR[1]-hn*0.82],...wp.slice().reverse(),[nL[0],nL[1]-hn*0.82],...pL];
+    flowDots(ctx,loop,ph,Iset>0.02?1:0,24);
+    drawBattery(ctx,bat[0],bat[1],cells,cw,0); drawSwitch(ctx,s1,s2,sw.x);
+    textAt(ctx,on?'ON  '+Math.floor(tOn)+' s':'OFF',s2[0]+18,yb+5,{size:13,weight:700,color:on?COL.green:COL.mid});
+    textAt(ctx,M.name+' wire',lerp(e1[0],e2[0],0.5),e1[1]-18,{align:'center',size:12,weight:700,color:COL.mid});
+    // finger
+    const fx=lerp(e1[0],e2[0],0.45), fyT=lerp(-20,e1[1]+sag*0.9-12,fY.x);
+    ctx.save(); ctx.fillStyle='#fff'; ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; rrect(ctx,fx-17,fyT-h*0.3,34,h*0.3+12,16); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(fx-9,fyT-4); ctx.quadraticCurveTo(fx,fyT-14,fx+9,fyT-4); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.4; ctx.stroke(); ctx.restore();
+    if(feelT>0){ const hot=feel==='Hot!', col=hot?COL.red:feel==='Warm'?COL.yellow:COL.blue;
+      textAt(ctx,feel,fx+30,fyT+4,{size:15,weight:700,color:col,alpha:clamp(feelT,0,1)});
+      if(hot) for(let k=0;k<6;k++){ const an=-Math.PI/2+(k-2.5)*0.4; line(ctx,fx+Math.cos(an)*26,fyT+14+Math.sin(an)*26,fx+Math.cos(an)*38,fyT+14+Math.sin(an)*38,COL.red,2); } }
+    // temperature–time graph
+    const gx0=w*0.72, gx1=w*0.97, gy0=h*0.1, gy1=h*0.58, Tmax=Math.max(300,Math.ceil(Math.max(Tc,...hist.map(p=>p[1]),...(prev?prev.pts.map(p=>p[1]):[0]))/100)*100);
+    const GX=s=>gx0+s/45*(gx1-gx0), GY=v=>gy1-v/Tmax*(gy1-gy0);
+    line(ctx,gx0,gy1,gx1,gy1,COL.ink,1.6); line(ctx,gx0,gy1,gx0,gy0,COL.ink,1.6);
+    for(let v=0;v<=Tmax;v+=100){ line(ctx,gx0,GY(v),gx1,GY(v),'#e6edf5',1); textAt(ctx,v+'',gx0-5,GY(v)+4,{align:'right',size:10,color:COL.mid}); }
+    [0,15,30,45].forEach(s=>textAt(ctx,s+'',GX(s),gy1+14,{align:'center',size:10,color:COL.mid}));
+    line(ctx,GX(30),gy0,GX(30),gy1,COL.mid,1,[4,4]); textAt(ctx,'OFF',GX(30)+3,gy1-6,{size:10,weight:600,color:COL.mid});
+    textAt(ctx,'°C',gx0-5,gy0-8,{align:'right',size:11,weight:700,color:COL.mid}); textAt(ctx,'time (s)',gx1,gy1+28,{align:'right',size:11,weight:600,color:COL.mid});
+    const plot=(pts,col,wd)=>{ if(pts.length<2) return; ctx.save(); ctx.strokeStyle=col; ctx.lineWidth=wd; ctx.beginPath(); pts.forEach((p,i)=>i?ctx.lineTo(GX(p[0]),GY(p[1])):ctx.moveTo(GX(p[0]),GY(p[1]))); ctx.stroke(); ctx.restore(); };
+    if(prev){ plot(prev.pts,COL.mid,2); textAt(ctx,prev.label,gx1,gy0+26,{align:'right',size:10,weight:600,color:COL.mid}); }
+    plot(hist,COL.red,2.6); if(runLabel) textAt(ctx,runLabel,gx1,gy0+12,{align:'right',size:10,weight:700,color:COL.red});
+    // energy bar
+    const ex0=gx0, ey=h*0.72, eW=gx1-gx0, Hmax=80;
+    textAt(ctx,'Heat made in the wire',ex0,ey-10,{size:11,weight:700,color:COL.mid});
+    rect(ctx,ex0,ey,eW,16,COL.ink,'#fff',1.4); rect(ctx,ex0,ey,eW*clamp(H/Hmax,0,1),16,COL.green,'rgba(31,157,85,0.25)',0);
+    textAt(ctx,fmt(H,1)+' J',ex0+eW,ey+34,{align:'right',size:13,weight:700,color:COL.green});
+
+    $('#r1').textContent=fmt(Iset,2)+' A'; $('#r2').textContent=Math.round(Tc)+' °C'; $('#r3').textContent=fmt(H,1)+' J';
+    $('#r4').textContent=feel; $('#go').textContent=on?'⏸ Switch OFF ('+Math.floor(30-tOn)+' s left)':'▶ Switch ON for 30 s';
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   4.6 LEMON BATTERY
+   Each lemon: copper (+) and iron (−) in juice → EMF ≈ 0.55 V (zinc ≈ 0.9 V),
+   internal resistance ≈ 1.2 kΩ. Lemons in series: E = n·e, R = n·r.
+   LED (Shockley):  V = n_d·V_T·ln(I/I_s + 1),  so  n·e = I·n·r + V(I).
+   Check: 3 lemons (1.65 V) → barely any current; 5–6 lemons → LED glows.
+   ===================================================================== */
+function buildA6(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label>Lemons <span class="val" id="lV"></span></label><input type="range" id="lR" min="1" max="6" step="1" value="2"></div>
+    <div class="control-group"><label style="margin-bottom:6px;">Metal with copper</label>
+      <div class="toggle-group" id="mB"><button class="toggle-btn active" data-v="0.55">Iron nail</button><button class="toggle-btn" data-v="0.9">Zinc strip</button></div></div>
+    <button class="toggle-btn navy" id="flip" style="margin-top:0;padding:10px;flex:0 0 auto;">↻ Reverse the LED</button>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Battery</div><div class="rval" id="r1">0 V</div></div>
+      <div class="rcard"><div class="rlabel">Current</div><div class="rval" id="r2" style="color:var(--f-green)">0 µA</div></div>
+      <div class="rcard wide"><div class="rlabel">LED</div><div class="rval" id="r3">Off</div></div></div>
+      <p class="hint">LED needs ≈ 1.8 V · long leg to copper (+)</p></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas'), lR=$('#lR');
+  let emf=0.55, flipped=false, t=0, ph=0, b=0, I=0, lemons=[], W=900;
+  const rot={x:0,v:0};
+  toggleWire(wrap.querySelectorAll('#mB button'),bt=>emf=+bt.dataset.v);
+  $('#flip').onclick=()=>flipped=!flipped;
+  function ledCurrent(E,R){ const Is=1e-19, nVt=2*0.02585; if(E<=0) return 0; let lo=0, hi=E/R;
+    for(let i=0;i<60;i++){ const m=(lo+hi)/2; if(m*R+nVt*Math.log(m/Is+1)>E) hi=m; else lo=m; } return lo; }
+  animLoop((dt)=>{
+    t+=dt; const n=+lR.value; $('#lV').textContent=n;
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h); W=w;
+    const sp=Math.min(w*0.155,190), rx=sp*0.42, ry=rx*0.78, ly=h*0.7, k=clamp(h/520,1,1.6);
+    // keep the row of lemons in step with the slider: new ones roll in, extra ones roll away
+    let alive=lemons.filter(l=>!l.leaving);
+    while(alive.length<n){ const l={x:{x:w+rx*2,v:0},ins:{x:0,v:0},roll:0,bub:[],leaving:false}; lemons.push(l); alive.push(l); }
+    while(alive.length>n){ alive[alive.length-1].leaving=true; alive.pop(); }
+    alive.forEach((l,i)=>{ const slot=w*0.5+(i-(n-1)/2)*sp, settled=Math.abs(l.x.x-slot)<4&&Math.abs(l.x.v)<30;
+      const x0=l.x.x; springTo(l.x,slot,26,6.5,dt); l.roll+=(l.x.x-x0)/rx;
+      springTo(l.ins,settled||l.ins.x>0.5?1:0,40,9,dt); });
+    lemons.forEach(l=>{ if(!l.leaving) return; springTo(l.ins,0,40,9,dt); if(l.ins.x<0.1){ const x0=l.x.x; springTo(l.x,w+rx*3,20,6,dt); l.roll+=(l.x.x-x0)/rx; } });
+    lemons=lemons.filter(l=>!(l.leaving&&l.x.x>w+rx*2.5));
+    springTo(rot,flipped?Math.PI:0,30,6,dt);
+    const ready=alive.length===n&&alive.every(l=>l.ins.x>0.9), fwd=Math.cos(rot.x)>0.92;
+    const E=n*emf, Iset=ready&&fwd?ledCurrent(E,n*1200+50):0;
+    I=approach(I,Iset,12,dt);
+    b=approach(b,clamp(Math.log10(Math.max(I,1e-9)/20e-6)/Math.log10(15),0,1),10,dt);
+    if(I>1e-6) ph+=clamp(Math.sqrt(I/100e-6),0.2,1.6)*50*dt;
+
+    // lemons with electrodes (Cu on the left, Fe/Zn on the right)
+    const tops=[];
+    lemons.forEach(l=>{ const x=l.x.x, dy=(1-l.ins.x)*ry*1.3;
+      ctx.save(); ctx.translate(x,ly); ctx.beginPath(); ctx.ellipse(0,0,rx,ry,0,0,Math.PI*2); ctx.fillStyle='#fffbe0'; ctx.fill();
+      ctx.strokeStyle=COL.yellow; ctx.lineWidth=2.6; ctx.stroke();
+      ctx.beginPath(); ctx.ellipse(-rx-4,0,6,5,0,0,Math.PI*2); ctx.ellipse(rx+4,0,6,5,0,0,Math.PI*2); ctx.stroke();
+      ctx.rotate(l.roll); ctx.strokeStyle='rgba(217,160,23,0.35)'; ctx.lineWidth=1.2;
+      for(let k=0;k<8;k++){ const a=k*Math.PI/4; ctx.beginPath(); ctx.moveTo(Math.cos(a)*rx*0.15,Math.sin(a)*ry*0.15); ctx.lineTo(Math.cos(a)*rx*0.8,Math.sin(a)*ry*0.8); ctx.stroke(); }
+      ctx.restore();
+      const cuX=x-rx*0.38, feX=x+rx*0.38, top=ly-ry-sp*0.25-dy, bot=ly+ry*0.35-dy;
+      [[cuX,COPPER,4],[feX,emf>0.7?'#7d8fa3':'#4c6178',emf>0.7?5:4]].forEach(([ex,col,wd])=>{ line(ctx,ex,top,ex,bot,col,wd); });
+      if(emf<0.7){ line(ctx,feX-6,top,feX+6,top,'#4c6178',4); }
+      textAt(ctx,'+',cuX-10,top+14,{align:'center',size:13,weight:700,color:COL.red}); textAt(ctx,'−',feX+10,top+14,{align:'center',size:13,weight:700,color:COL.blue});
+      // hydrogen bubbles at the copper, rate ∝ current
+      if(Math.random()<I/40e-6*dt*(l.leaving?0:1)) l.bub.push({y:bot-4,x:cuX+(Math.random()-0.5)*6,v:14+Math.random()*10});
+      l.bub=l.bub.filter(q=>{ q.y-=q.v*dt; q.x+=Math.sin(t*6+q.y*0.2)*0.3; if(q.y<ly-ry*0.85) return false; circ(ctx,q.x,q.y,2.2,COL.blue,'#fff',1.1); return true; });
+      if(!l.leaving) tops.push({cu:[cuX,top],fe:[feX,top],cuB:[cuX,bot],feB:[feX,bot]});
+    });
+    // wires: Fe(i) → Cu(i+1), LED between Cu(first) and Fe(last)
+    const ledX=w*0.5, ledY=h*0.2, padL=[ledX-22*k,ledY+74*k], padR=[ledX+22*k,ledY+74*k];
+    const loop=[];
+    if(tops.length===alive.length&&tops.length){
+      tops.sort((p,q)=>p.cu[0]-q.cu[0]);
+      const first=tops[0], last=tops[tops.length-1];
+      const wL=bez(first.cu,[first.cu[0],ledY+30],[padL[0]-80,padL[1]+40],padL,20), wR=bez(padR,[padR[0]+80,padR[1]+40],[last.fe[0],ledY+30],last.fe,20);
+      wirePath(ctx,wL); wirePath(ctx,wR);
+      loop.push(...wL,[ledX-9*k,ledY+22*k],[ledX+9*k,ledY+22*k],padR,...wR,last.feB,last.cuB,last.cu);
+      for(let i=tops.length-2;i>=0;i--){ const a=tops[i].fe, c=tops[i+1].cu, arc=bez(c,[c[0],c[1]-40],[a[0],a[1]-40],a,12); wirePath(ctx,arc); loop.push(...arc,tops[i].feB,tops[i].cuB,tops[i].cu); }
+      [padL,padR].forEach(p=>circ(ctx,p[0],p[1],5,COL.ink,'#fff',2));
+    }
+    flowDots(ctx,loop,ph,I>1e-6?1:0,22,2.8);
+    // LED: turns round about its vertical axis when reversed
+    if(b>0.02){ const gr=ctx.createRadialGradient(ledX,ledY,4,ledX,ledY,(50+b*60)*k); gr.addColorStop(0,'rgba(217,67,43,'+(0.45*b)+')'); gr.addColorStop(1,'rgba(217,67,43,0)');
+      ctx.save(); ctx.fillStyle=gr; ctx.beginPath(); ctx.arc(ledX,ledY,(50+b*60)*k,0,Math.PI*2); ctx.fill(); ctx.restore();
+      for(let q=0;q<10;q++){ const a=q*Math.PI/5+t*0.3, r1=34*k, r2=(34+b*(22+6*Math.sin(t*9+q)))*k; line(ctx,ledX+Math.cos(a)*r1,ledY-6*k+Math.sin(a)*r1,ledX+Math.cos(a)*r2,ledY-6*k+Math.sin(a)*r2,COL.red,2); } }
+    const cs=Math.cos(rot.x);
+    ctx.save(); ctx.translate(ledX,ledY); ctx.scale((Math.abs(cs)<0.05?0.05:cs)*k,k);
+    ctx.lineCap='round'; ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2;
+    ctx.beginPath(); ctx.moveTo(-9,22); ctx.lineTo(-9,52); ctx.lineTo(-22,62); ctx.lineTo(-22,74); ctx.stroke();   // long leg (+)
+    ctx.beginPath(); ctx.moveTo(9,22); ctx.lineTo(9,56); ctx.lineTo(22,66); ctx.lineTo(22,70); ctx.stroke();       // short leg (−)
+    ctx.beginPath(); ctx.moveTo(-18,22); ctx.lineTo(-18,-8); ctx.arc(0,-8,18,Math.PI,0); ctx.lineTo(18,22); ctx.closePath();
+    ctx.fillStyle=mixCol('#ffffff','#ff9e8a',b); ctx.fill(); ctx.strokeStyle=COL.red; ctx.lineWidth=2.4; ctx.stroke();
+    line(ctx,-22,22,22,22,COL.red,3);
+    ctx.restore();
+    textAt(ctx,'+',ledX-22*k*cs-12,ledY+60*k,{align:'center',size:13,weight:700,color:COL.red});
+    textAt(ctx,'LED',ledX+46*k,ledY-20*k,{size:12,weight:700,color:COL.mid});
+
+    $('#r1').textContent=fmt(E,2)+' V'; $('#r2').textContent=I<1e-6?'0 µA':Math.round(I*1e6)+' µA';
+    const st=!fwd&&ready?'Off — reversed':b<0.05?'Off':b<0.45?'Dim glow':'Glowing';
+    $('#r3').textContent=st; $('#r3').style.color=b>0.05?'var(--f-red)':'';
+  });
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   INIT
+   --------------------------------------------------------------------- */
+render();
+</script>
+<script src="../../tracking/activity-tracker.js"></script>
+<script src="../../nav/back-button.js"></script>
+</body>
+</html>

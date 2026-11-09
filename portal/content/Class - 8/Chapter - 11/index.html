@@ -1,0 +1,1140 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 8 · Chapter 11 — Keeping Time with the Skies | Botclub Labs</title>
+<link href="../../vendor/fonts/fonts.css" rel="stylesheet">
+<style>
+:root{
+  --navy-1:#0f2640; --navy-2:#1a3a5c; --navy-3:#234a73;
+  --accent:#2f8fe0; --accent-2:#5cc8ff;
+  --bg:#eef2f8; --surface-0:#ffffff; --surface-1:#f6f9fc; --surface-2:#eef2f8;
+  --border:#dbe4f0; --border-strong:#c2d1e5;
+  --text-1:#132a44; --text-2:#4c6178; --text-3:#8195ab;
+  --f-red:#d9432b; --f-blue:#2f8fe0; --f-green:#1f9d55; --f-yellow:#d9a017;
+  --radius:14px; --radius-sm:9px;
+  --fs-xs:clamp(10px,0.62vw,12px); --fs-sm:clamp(11px,0.72vw,13.5px);
+  --fs-md:clamp(12.5px,0.85vw,15px); --fs-lg:clamp(15px,1.15vw,19px);
+  --fs-xl:clamp(18px,1.5vw,25px);
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:22px; --sp-6:30px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{ font-family:'Poppins',system-ui,sans-serif; background:var(--bg); color:var(--text-1); overflow:hidden; }
+button, input, select{font-family:inherit;}
+
+.app{height:100vh; display:flex; flex-direction:column; min-height:0;}
+.topbar{
+  flex:0 0 auto; background:linear-gradient(120deg, var(--navy-1) 0%, var(--navy-2) 55%, var(--navy-3) 100%);
+  color:#fff; padding:clamp(9px,1vh,16px) clamp(14px,1.6vw,28px);
+  display:flex; align-items:center; gap:var(--sp-4); box-shadow:0 2px 10px rgba(15,38,64,0.25); z-index:5;
+}
+.topbar .brand-badge{
+  width:clamp(32px,2.4vw,40px); height:clamp(32px,2.4vw,40px); border-radius:10px; background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center;
+  font-size:clamp(15px,1.3vw,20px); flex:0 0 auto;
+}
+.topbar .chip{
+  display:inline-block; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.28);
+  border-radius:6px; padding:2px 9px; font-size:var(--fs-xs); letter-spacing:0.06em; text-transform:uppercase; font-weight:600; margin-bottom:3px;
+}
+.topbar h1{font-size:var(--fs-lg); font-weight:600; line-height:1.2; white-space:nowrap;}
+.topbar .spacer{flex:1;}
+.topbar .legend{display:flex; gap:14px; font-size:var(--fs-xs); color:rgba(255,255,255,0.85); align-items:center;}
+.topbar .legend span{display:inline-flex; align-items:center; gap:5px;}
+.topbar .legend i{width:12px; height:4px; border-radius:2px; display:inline-block;}
+
+.body-wrap{flex:1; display:flex; min-height:0; overflow:hidden;}
+.sidenav{
+  flex:0 0 clamp(170px,13.5vw,230px); background:var(--surface-0); border-right:1px solid var(--border);
+  overflow-y:auto; padding:var(--sp-2); display:flex; flex-direction:column; gap:4px;
+}
+.nav-item{
+  display:flex; align-items:center; gap:8px; text-align:left; width:100%;
+  border:1px solid var(--border); background:var(--surface-1); border-radius:var(--radius-sm); padding:7px 10px; cursor:pointer; transition:all .15s ease;
+}
+.nav-item:hover{background:var(--surface-2); border-color:var(--border-strong);}
+.nav-item.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.nav-item .n-num{font-size:var(--fs-xs); font-weight:700; color:var(--accent); flex:0 0 auto; min-width:26px;}
+.nav-item.active .n-num{color:var(--accent-2);}
+.nav-item .n-title{font-size:var(--fs-sm); font-weight:600; line-height:1.25;}
+
+.content{flex:1; min-width:0; display:flex; flex-direction:column; overflow:hidden;}
+.panel-head{flex:0 0 auto; padding:var(--sp-3) var(--sp-5); border-bottom:1px solid var(--border); background:var(--surface-0); display:flex; align-items:baseline; gap:12px;}
+.panel-badge{background:var(--navy-2); color:#fff; font-size:var(--fs-xs); font-weight:700; padding:3px 10px; border-radius:6px;}
+.panel-head h2{font-size:var(--fs-lg); font-weight:600; color:var(--text-1);}
+.panel-head p{font-size:var(--fs-sm); color:var(--text-2); flex:1; text-align:right;}
+.panel-body{flex:1; min-height:0; overflow:hidden; padding:var(--sp-3) var(--sp-5); display:flex;}
+
+.lab-view{flex:1; display:flex; gap:var(--sp-4); min-height:0; min-width:0;}
+.lab-canvas-wrap{flex:7 1 0; min-width:0; min-height:0; background:#fff; border:1px solid var(--border); border-radius:var(--radius); position:relative; overflow:hidden;}
+.lab-canvas-wrap canvas{width:100%; height:100%; display:block;}
+.lab-side{flex:3 1 0; min-width:230px; display:flex; flex-direction:column; gap:var(--sp-3); min-height:0; overflow-y:auto; padding-right:2px;}
+.side-sub{display:flex; flex-direction:column; gap:var(--sp-3);}
+
+.control-group{background:var(--surface-0); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 12px;}
+.control-group label{font-size:var(--fs-sm); font-weight:600; color:var(--text-1); display:flex; justify-content:space-between;}
+.control-group label .val{color:var(--accent); font-weight:700;}
+.control-group input[type=range]{width:100%; margin-top:7px; accent-color:var(--navy-2); cursor:pointer;}
+.toggle-group{display:flex; gap:6px; margin-top:7px; flex-wrap:wrap;}
+.toggle-btn{flex:1; min-width:56px; padding:7px 5px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:600; cursor:pointer; text-align:center; color:var(--text-2);}
+.toggle-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.toggle-btn.small{font-size:10.5px; padding:6px 3px;}
+.toggle-btn.play{background:var(--f-green); border-color:var(--f-green); color:#fff;}
+.toggle-btn.navy{background:var(--navy-2); border-color:var(--navy-2); color:#fff; width:100%; margin-top:9px;}
+.toggle-btn:disabled{opacity:.5; cursor:not-allowed;}
+.chip-btn{display:inline-flex; align-items:center; gap:5px; padding:6px 11px; margin:3px 3px 0 0; border:1px solid var(--border-strong); background:var(--surface-1); border-radius:18px; cursor:pointer; font-size:var(--fs-sm); font-weight:600; color:var(--text-2);}
+.chip-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.chip-btn.ok{border-color:var(--f-green);} .chip-btn.bad{border-color:var(--f-red);}
+.chip-wrap{display:flex; flex-wrap:wrap; margin-top:3px;}
+
+.role-row{display:flex; align-items:center; gap:8px; margin-top:7px; font-size:var(--fs-sm); font-weight:600;}
+.role-row .rdot{width:10px; height:10px; border-radius:50%; flex:0 0 auto; display:inline-block;}
+.role-row .rname{width:70px; flex:0 0 auto; color:var(--text-2);}
+.role-row select{flex:1; min-width:0; padding:6px 7px; border:1px solid var(--border-strong); border-radius:7px; font-size:var(--fs-sm); background:var(--surface-1); color:var(--text-1); cursor:pointer;}
+
+.step-row{display:flex; gap:5px;}
+.step-pill{flex:1; padding:6px 4px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:10.5px; font-weight:700; color:var(--text-3); cursor:pointer;}
+.step-pill.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.step-pill.done{border-color:var(--f-green); color:var(--f-green);}
+.step-pill.active.done{color:#fff;}
+.opt-btn{display:block; width:100%; text-align:left; margin-top:6px; padding:7px 9px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:500; color:var(--text-1); cursor:pointer; line-height:1.3;}
+.opt-btn.active{border-color:var(--navy-2); background:#e3ecf7; font-weight:600;}
+.var-row{display:flex; align-items:center; gap:6px; margin-top:7px;}
+.var-row .vname{flex:0 0 88px; font-size:var(--fs-sm); font-weight:600;}
+.var-row .toggle-group{margin-top:0; flex:1;}
+
+.result-cards{display:grid; grid-template-columns:1fr 1fr; gap:6px;}
+.result-cards.three{grid-template-columns:1fr 1fr 1fr;}
+.rcard{background:var(--surface-0); border:1px solid var(--border); border-radius:9px; padding:7px 9px;}
+.rcard .rlabel{font-size:9.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--text-3); font-weight:600;}
+.rcard .rval{font-size:var(--fs-md); font-weight:700; color:var(--text-1); margin-top:1px;}
+.rcard.wide{grid-column:1/-1;}
+.hint{font-size:var(--fs-xs); color:var(--text-3); margin-top:6px; line-height:1.4;}
+.fb{font-size:var(--fs-xs); font-weight:600; margin-top:6px; padding:5px 8px; border-radius:7px;}
+.fb.ok{background:#e4f7ec; color:#1f6b3d;}
+.fb.bad{background:#fdece7; color:#a4331c;}
+.fb.warn{background:#fdf4dc; color:#8a6410;}
+.log{width:100%; border-collapse:collapse; font-size:10.5px; margin-top:4px;}
+.log th{text-align:left; color:var(--text-3); font-weight:600; text-transform:uppercase; font-size:9px; letter-spacing:.04em; padding:3px 4px; border-bottom:1px solid var(--border);}
+.log td{padding:4px; border-bottom:1px solid var(--surface-2); color:var(--text-2);}
+.log td.r-ok{color:var(--f-green); font-weight:700;} .log td.r-bad{color:var(--f-red); font-weight:700;} .log td.r-warn{color:var(--f-yellow); font-weight:700;}
+.hidden{display:none !important;}
+
+@media (max-width:1000px) and (orientation:portrait), (max-width:1000px) and (min-height:601px){
+  .body-wrap{flex-direction:column;}
+  .sidenav{flex:0 0 auto; width:100%; height:auto; flex-direction:row; overflow-x:auto; overflow-y:hidden; border-right:none; border-bottom:1px solid var(--border); padding:6px;}
+  .nav-item{flex:0 0 auto; width:150px;}
+  .panel-body{overflow-y:auto;}
+  .lab-view{flex-direction:column;}
+  .lab-canvas-wrap{min-height:320px;}
+  .lab-side{min-width:0;}
+  .content{overflow-y:auto;}
+  .topbar .legend{display:none;}
+  .topbar h1{white-space:normal;}
+}
+::-webkit-scrollbar{width:7px; height:7px;}
+::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand-badge">☾</div>
+    <div>
+      <div class="chip">Grade 8 · Ch 11</div>
+      <h1>Keeping Time with the Skies</h1>
+    </div>
+    <div class="spacer"></div>
+    <div class="legend">
+      <span><i style="background:var(--f-yellow)"></i>Sun · sunlight</span>
+      <span><i style="background:var(--f-red)"></i>Moon · ball · stick</span>
+      <span><i style="background:var(--f-blue)"></i>Earth · sky paths · orbits</span>
+      <span><i style="background:var(--f-green)"></i>What you measure · sight line</span>
+    </div>
+  </div>
+  <div class="body-wrap">
+    <nav class="sidenav" id="sideNav"></nav>
+    <main class="content">
+      <div class="panel-head">
+        <div class="panel-badge" id="panelBadge">11.1</div>
+        <h2 id="panelTitle">Select an activity</h2>
+        <p id="panelDesc"></p>
+      </div>
+      <div class="panel-body" id="panelBody"></div>
+    </main>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   GRADE 8 — CHAPTER 11: KEEPING TIME WITH THE SKIES
+   Every activity runs a continuous animation loop: sliders/buttons set a
+   TARGET; the sky, the ball, the Sun and the satellite glide there — time
+   is never skipped, it is fast-forwarded. The sky is real spherical
+   astronomy: sin(alt) = sinφ·sinδ + cosφ·cosδ·cosH. The Moon runs 360°/29.53
+   days ahead of the Sun (so it rises ≈ 50 min later each day), phases come
+   from the true Sun–Moon–eye angle, shadows use the NOAA Sun formulas
+   (declination + equation of time), and satellites follow Kepler's law
+   T = 2π√(r³/GM) and fade out when they enter the Earth's shadow.
+   ========================================================================= */
+const COL = {red:'#d9432b', blue:'#2f8fe0', green:'#1f9d55', yellow:'#d9a017', ink:'#132a44', muted:'#4c6178', mid:'#8195ab'};
+
+/* ---------------------------------------------------------------------
+   0. CANVAS HELPERS
+   --------------------------------------------------------------------- */
+function fitCanvas(canvas){
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  const r = canvas.parentElement.getBoundingClientRect();
+  const w = Math.max(200, r.width), h = Math.max(160, r.height);
+  if(canvas._w!==w || canvas._h!==h || canvas._dpr!==dpr){
+    canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr);
+    canvas.style.width = w+'px'; canvas.style.height = h+'px';
+    canvas._w=w; canvas._h=h; canvas._dpr=dpr;
+  }
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, w, h};
+}
+function line(ctx,x1,y1,x2,y2,color,width,dash){
+  ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=width||2;
+  if(dash) ctx.setLineDash(dash); else ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); ctx.restore();
+}
+function arrowHead(ctx,x,y,ang,color,size){
+  size=size||7; ctx.save(); ctx.fillStyle=color; ctx.translate(x,y); ctx.rotate(ang);
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-size,size*0.42); ctx.lineTo(-size,-size*0.42); ctx.closePath(); ctx.fill(); ctx.restore();
+}
+function vec(ctx,x1,y1,x2,y2,color,width){ line(ctx,x1,y1,x2,y2,color,width||2.6); arrowHead(ctx,x2,y2,Math.atan2(y2-y1,x2-x1),color,7); }
+function dimArrow(ctx,x,y1,y2,color){ line(ctx,x,y1,x,y2,color,1.6); arrowHead(ctx,x,y1,-Math.PI/2,color,5); arrowHead(ctx,x,y2,Math.PI/2,color,5); }
+function textAt(ctx,txt,x,y,opts){
+  opts=opts||{}; ctx.save();
+  ctx.font=(opts.weight||500)+' '+(opts.size||12)+'px Poppins, sans-serif';
+  ctx.fillStyle=opts.color||COL.ink; ctx.textAlign=opts.align||'left'; ctx.textBaseline=opts.baseline||'alphabetic';
+  if(opts.alpha!==undefined) ctx.globalAlpha=opts.alpha;
+  ctx.fillText(txt,x,y); ctx.restore();
+}
+function rect(ctx,x,y,w,h,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw===undefined?2.2:lw; if(fill){ctx.fillStyle=fill; ctx.fillRect(x,y,w,h);} if(lw!==0){ctx.strokeStyle=stroke; ctx.strokeRect(x,y,w,h);} ctx.restore(); }
+function circ(ctx,x,y,r,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw||2.2; ctx.beginPath(); ctx.arc(x,y,Math.max(0.1,r),0,Math.PI*2); if(fill){ctx.fillStyle=fill; ctx.fill();} ctx.strokeStyle=stroke; ctx.stroke(); ctx.restore(); }
+function rrect(ctx,x,y,w,h,r){ r=Math.min(r,w/2,h/2); ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function fmt(x,d){ if(!isFinite(x)) return '—'; d=d===undefined?2:d; return Number(x.toFixed(d)).toString(); }
+function gauss(){ return (Math.random()+Math.random()+Math.random()+Math.random()-2)*1.2247; }
+function hexRgb(h){ const n=parseInt(h.slice(1),16); return [n>>16&255, n>>8&255, n&255]; }
+function mixCol(a,b,t){ const A=hexRgb(a),B=hexRgb(b); t=clamp(t,0,1); return 'rgb('+A.map((v,i)=>Math.round(lerp(v,B[i],t))).join(',')+')'; }
+function rampCol(stops,x){ // stops: [[pos,hex],...]
+  if(x<=stops[0][0]) return mixCol(stops[0][1],stops[0][1],0);
+  for(let i=1;i<stops.length;i++){ if(x<=stops[i][0]){ const a=stops[i-1],b=stops[i]; return mixCol(a[1],b[1],(x-a[0])/(b[0]-a[0])); } }
+  const l=stops[stops.length-1][1]; return mixCol(l,l,0);
+}
+function thermo(ctx,x,top,bot,frac,outline,liquid){
+  const br=8;
+  ctx.save(); ctx.lineWidth=2; ctx.strokeStyle=outline; ctx.fillStyle='#fff';
+  rrect(ctx,x-5,top,10,bot-top+2,5); ctx.fill(); ctx.stroke(); ctx.restore();
+  const lh=(bot-top-5)*clamp(frac,0,1);
+  ctx.save(); ctx.fillStyle=liquid; ctx.fillRect(x-2.2,bot-lh,4.4,lh+6); ctx.restore();
+  circ(ctx,x,bot+br,br,outline,'#fff',2); circ(ctx,x,bot+br,br-3.2,liquid,liquid,1);
+  for(let i=0;i<=4;i++){ const yy=top+5+(bot-top-5)*i/4; line(ctx,x+5,yy,x+9,yy,outline,1.1); }
+}
+function flame(ctx,cx,baseY,width,inten,t){
+  const n=5;
+  for(let i=0;i<n;i++){
+    const fx=cx-width/2+width*(i+0.5)/n;
+    const hh=(6+inten*32)*(0.78+0.22*Math.sin(t*13+i*1.7));
+    const sway=Math.sin(t*9+i*2.1)*3;
+    ctx.save(); ctx.lineJoin='round';
+    ctx.strokeStyle=COL.red; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(fx-7,baseY); ctx.quadraticCurveTo(fx-7,baseY-hh*0.55,fx+sway,baseY-hh); ctx.quadraticCurveTo(fx+7,baseY-hh*0.55,fx+7,baseY); ctx.stroke();
+    ctx.strokeStyle=COL.yellow; ctx.lineWidth=1.6;
+    ctx.beginPath(); ctx.moveTo(fx-3.5,baseY); ctx.quadraticCurveTo(fx-3,baseY-hh*0.35,fx+sway*0.5,baseY-hh*0.55); ctx.quadraticCurveTo(fx+3,baseY-hh*0.35,fx+3.5,baseY); ctx.stroke();
+    ctx.restore();
+  }
+}
+
+/* ---------------------------------------------------------------------
+   0b. ANIMATION ENGINE
+   --------------------------------------------------------------------- */
+let activeStops = [];
+function stopAllLoops(){ activeStops.forEach(s=>{ try{ s(); }catch(e){} }); activeStops=[]; }
+function animLoop(tick){
+  let last = performance.now();
+  let raf;
+  function frame(now){
+    const dt = Math.max(0, Math.min(0.04, (now-last)/1000));
+    last = now;
+    tick(dt);
+    raf = requestAnimationFrame(frame);
+  }
+  raf = requestAnimationFrame(frame);
+  const stop = ()=>cancelAnimationFrame(raf);
+  activeStops.push(stop);
+  return stop;
+}
+/** Exponential ease — frame-rate independent, always smooth. */
+function approach(cur,tgt,rate,dt){ return cur + (tgt-cur)*(1-Math.exp(-rate*dt)); }
+/** Spring-damper — gives natural overshoot and settle. */
+function springTo(state,target,k,damping,dt){
+  const acc = (target-state.x)*k - state.v*damping;
+  state.v += acc*dt;
+  state.x += state.v*dt;
+  return state.x;
+}
+function toggleWire(btns,cb){
+  btns.forEach(b=>b.onclick=()=>{ btns.forEach(x=>x.classList.remove('active')); b.classList.add('active'); cb(b); });
+}
+
+/* ---------------------------------------------------------------------
+   0c. CHAPTER-11 HELPERS — hands, magnifier, ground, particles
+   --------------------------------------------------------------------- */
+const G = 10;                       // N/kg — textbook value
+function smooth01(a,b,x){ const t=clamp((x-a)/(b-a),0,1); return t*t*(3-2*t); }
+function angDiff(a,b){ return Math.atan2(Math.sin(a-b),Math.cos(a-b)); }
+function rng(seed){ let s=(seed>>>0)||1; return ()=>{ s=(Math.imul(s,1664525)+1013904223)>>>0; return s/4294967296; }; }
+function sgn(x){ return x>0?1:x<0?-1:0; }
+
+/* labelled force arrow; skipped when tiny */
+function force(ctx,x,y,dx,dy,col,label,side){
+  const L=Math.hypot(dx,dy); if(L<4) return;
+  vec(ctx,x,y,x+dx,y+dy,col,3);
+  if(label && side==='b'){ textAt(ctx,label,x+dx/2,y+dy+18,{size:12,weight:700,color:col,align:'center'}); return; }
+  if(label){ const ox=side==='l'?-8:8; textAt(ctx,label,x+dx+(Math.abs(dx)>Math.abs(dy)?0:ox),y+dy+(Math.abs(dx)>Math.abs(dy)?-9:(dy>0?14:-4)),{size:12,weight:700,color:col,align:Math.abs(dx)>Math.abs(dy)?'center':(side==='l'?'right':'left')}); }
+}
+function ground(ctx,x0,x1,y){
+  line(ctx,x0,y,x1,y,COL.ink,2.4);
+  ctx.save(); ctx.strokeStyle='#c2d1e5'; ctx.lineWidth=1.1; ctx.beginPath();
+  for(let x=x0+8;x<x1;x+=14){ ctx.moveTo(x,y+2); ctx.lineTo(x-8,y+10); } ctx.stroke(); ctx.restore();
+}
+function coil(ctx,x,y1,y2,n,wd,col,lwd){
+  const L=y2-y1, lead=Math.min(12,Math.abs(L)*0.1), body=L-2*lead, N=n*24;
+  ctx.save(); ctx.strokeStyle=col; ctx.lineWidth=lwd||2; ctx.lineJoin='round'; ctx.beginPath();
+  ctx.moveTo(x,y1); ctx.lineTo(x,y1+lead);
+  const pitch=body/n;
+  for(let i=0;i<=N;i++){ const u=i/N, a=u*n*Math.PI*2;
+    ctx.lineTo(x+Math.sin(a)*wd/2, y1+lead+body*u - Math.cos(a)*Math.min(pitch*0.35,wd*0.18) + Math.min(pitch*0.35,wd*0.18)); }
+  ctx.lineTo(x,y2); ctx.stroke(); ctx.restore();
+}
+/* hand seen from the side: palm facing `dir` (±1), fingertips at (x,y) */
+function hand(ctx,x,y,dir,armLen,armAng){
+  const a=armAng===undefined?(dir>0?Math.PI:0):armAng;
+  const bx=x-dir*18, by=y;
+  ctx.save(); ctx.lineCap='round'; ctx.lineJoin='round';
+  line(ctx,bx,by,bx+Math.cos(a)*armLen,by+Math.sin(a)*armLen,COL.ink,9);
+  line(ctx,bx,by,bx+Math.cos(a)*armLen,by+Math.sin(a)*armLen,'#fff',5);
+  ctx.beginPath(); ctx.moveTo(bx,by-10); ctx.lineTo(x-dir*2,by-9); ctx.quadraticCurveTo(x+dir*2,by-8,x+dir*1,by); ctx.quadraticCurveTo(x+dir*2,by+8,x-dir*2,by+9); ctx.lineTo(bx,by+10); ctx.closePath();
+  ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke();
+  ctx.restore();
+}
+/* hand pressing downward: fingertip at (x,y) */
+function handDown(ctx,x,y,armLen){
+  ctx.save(); ctx.lineCap='round';
+  line(ctx,x,y-16,x+armLen*0.25,y-16-armLen,COL.ink,10); line(ctx,x,y-16,x+armLen*0.25,y-16-armLen,'#fff',6);
+  ctx.beginPath(); rrect(ctx,x-12,y-22,24,22,8); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke();
+  line(ctx,x-5,y-8,x-5,y-1,COL.mid,1.2); line(ctx,x+3,y-8,x+3,y-1,COL.mid,1.2);
+  ctx.restore();
+}
+function magnifier(ctx,cx,cy,R,draw,label){
+  ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fillStyle='#fbfdff'; ctx.fill(); ctx.clip(); draw(); ctx.restore();
+  circ(ctx,cx,cy,R,COL.ink,null,3);
+  if(label) textAt(ctx,label,cx,cy+R+16,{align:'center',size:11,weight:600,color:COL.muted});
+}
+/* jagged surface profile (friction close-up) */
+function roughProfile(seed,rough,n){ const R=rng(seed), a=[]; for(let i=0;i<n;i++) a.push((R()-0.5)*2*rough*(0.6+0.4*R())); return a; }
+/* ---- polygons (world units, y up) ---- */
+function polyArea(p){ let a=0; for(let i=0;i<p.length;i++){ const q=p[i], r=p[(i+1)%p.length]; a+=q[0]*r[1]-r[0]*q[1]; } return Math.abs(a)/2; }
+/* keep the part of polygon p with y <= Y */
+function clipBelow(p,Y){
+  const out=[];
+  for(let i=0;i<p.length;i++){
+    const a=p[i], b=p[(i+1)%p.length], ia=a[1]<=Y, ib=b[1]<=Y;
+    if(ia) out.push(a);
+    if(ia!==ib){ const u=(Y-a[1])/(b[1]-a[1]); out.push([a[0]+(b[0]-a[0])*u, Y]); }
+  }
+  return out;
+}
+function xform(p,ox,oy,ang){ const c=Math.cos(ang), s=Math.sin(ang); return p.map(q=>[ox+q[0]*c-q[1]*s, oy+q[0]*s+q[1]*c]); }
+function polyPath(ctx,p,X,Y){ ctx.beginPath(); p.forEach((q,i)=>ctx[i?'lineTo':'moveTo'](X(q[0]),Y(q[1]))); ctx.closePath(); }
+/* water surface Y so that the part of polygon p below it has area A (bisection) */
+function levelFor(p,A){
+  let lo=Math.min(...p.map(q=>q[1])), hi=Math.max(...p.map(q=>q[1]));
+  if(A<=0) return lo;
+  for(let k=0;k<40;k++){ const m=(lo+hi)/2; if(polyArea(clipBelow(p,m))<A) lo=m; else hi=m; }
+  return (lo+hi)/2;
+}
+/* width of polygon p along the horizontal line y=Y */
+function widthAt(p,Y){ const xs=[]; for(let i=0;i<p.length;i++){ const a=p[i], b=p[(i+1)%p.length]; if((a[1]-Y)*(b[1]-Y)<=0 && a[1]!==b[1]) xs.push(a[0]+(b[0]-a[0])*(Y-a[1])/(b[1]-a[1])); } return xs.length<2?0:Math.max(...xs)-Math.min(...xs); }
+
+const WFILL = 'rgba(47,143,224,0.14)', WFILL2 = 'rgba(47,143,224,0.28)';
+function dot(ctx,x,y,r,stroke,fill,lw){ ctx.beginPath(); ctx.arc(x,y,Math.max(0.3,r),0,Math.PI*2); if(fill){ctx.fillStyle=fill; ctx.fill();} if(stroke){ctx.strokeStyle=stroke; ctx.lineWidth=lw||1.4; ctx.stroke();} }
+const FARADAY = 96485, VM = 24.0;   // C/mol · L/mol of gas at room temperature
+function fmtClock(s){ if(s<60) return Math.round(s)+' s'; if(s<3600) return Math.floor(s/60)+' min '+String(Math.floor(s%60)).padStart(2,'0')+' s'; return Math.floor(s/3600)+' h '+String(Math.floor(s%3600/60)).padStart(2,'0')+' min'; }
+
+function face(ctx,x,y,u,dir,mood){
+  const cx=x-dir*1.7*u;
+  circ(ctx,cx,y,1.6*u,COL.ink,'#fff',2.2);
+  ctx.save(); ctx.fillStyle='#fff'; ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.lineJoin='round'; ctx.beginPath(); ctx.moveTo(cx+dir*1.45*u,y-0.6*u); ctx.lineTo(x,y+0.2*u); ctx.lineTo(cx+dir*1.5*u,y+0.35*u); ctx.fill(); ctx.stroke(); ctx.restore();
+  dot(ctx,cx+dir*0.7*u,y-0.5*u,1.8,null,COL.ink);
+  const my=y+0.85*u; ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.beginPath();
+  if(mood==='bad'){ ctx.moveTo(cx+dir*0.3*u,my+0.15*u); ctx.quadraticCurveTo(cx+dir*0.8*u,my-0.35*u,cx+dir*1.25*u,my+0.15*u); }
+  else { ctx.moveTo(cx+dir*0.4*u,my); ctx.lineTo(cx+dir*1.15*u,my); }
+  ctx.stroke(); ctx.restore();
+}
+/* round "magnified view" frame with a pointer ring on the object being viewed */
+function zoomFrame(ctx,cx,cy,R,tx,ty,label,draw){
+  if(tx!==null){
+    const d=Math.hypot(cx-tx,cy-ty)||1, ux=(cx-tx)/d, uy=(cy-ty)/d, a=Math.asin(clamp(R/d,0,1));
+    ctx.save(); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.1; ctx.setLineDash([4,4]);
+    [a,-a].forEach(s=>{ const c=Math.cos(s), sn=Math.sin(s), vx=ux*c-uy*sn, vy=ux*sn+uy*c, L=Math.sqrt(Math.max(0,d*d-R*R)); ctx.beginPath(); ctx.moveTo(tx,ty); ctx.lineTo(tx+vx*L,ty+vy*L); ctx.stroke(); });
+    ctx.restore(); circ(ctx,tx,ty,7,COL.ink,null,1.8);
+  }
+  magnifier(ctx,cx,cy,R,draw,label);
+}
+
+/* step pills: onPick(i) fires for pills that are unlocked */
+function stepPills(el,names,onPick){
+  el.innerHTML=names.map((n,i)=>`<button class="step-pill" data-i="${i}">${i+1} · ${n}</button>`).join('');
+  const bs=[...el.querySelectorAll('.step-pill')]; let unl=0;
+  bs.forEach(b=>b.onclick=()=>{ const i=+b.dataset.i; if(i<=unl) onPick(i); });
+  return { set(active,unlocked,done){ unl=unlocked; bs.forEach((b,i)=>{ b.classList.toggle('active',i===active); b.classList.toggle('done',!!(done&&done[i])); b.style.opacity=i<=unlocked?1:0.45; }); } };
+}
+function glassRod(ctx,x1,y1,x2,y2,wd){
+  ctx.save(); ctx.lineCap='round'; line(ctx,x1,y1,x2,y2,COL.ink,wd+2.4); line(ctx,x1,y1,x2,y2,'#fff',wd); ctx.restore();
+}
+/* eye in profile looking along +dir (±1) — sight point at (x,y) */
+function eyeIcon(ctx,x,y,u,dir){
+  const xa=x-dir*1.7*u;
+  ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.fillStyle='#fff'; ctx.lineJoin='round';
+  ctx.beginPath(); ctx.moveTo(xa,y); ctx.quadraticCurveTo(x-dir*0.8*u,y-0.9*u,x,y); ctx.quadraticCurveTo(x-dir*0.8*u,y+0.9*u,xa,y); ctx.closePath(); ctx.fill(); ctx.stroke();
+  dot(ctx,x-dir*0.55*u,y,0.3*u,COL.ink,COL.ink,1);
+  ctx.beginPath(); ctx.moveTo(xa,y-0.75*u); ctx.quadraticCurveTo(x-dir*0.9*u,y-1.35*u,x-dir*0.1*u,y-0.85*u); ctx.stroke();
+  ctx.restore();
+}
+/* LCD read-out box */
+function lcd(ctx,x,y,w,h,txt,on,unit){
+  ctx.save(); rrect(ctx,x,y,w,h,5); ctx.fillStyle=on?'#eaf4ec':'#e7ecf2'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke();
+  if(on){ ctx.font='700 '+Math.round(h*0.5)+'px "Courier New", monospace'; ctx.fillStyle=COL.ink; ctx.textAlign='right'; ctx.textBaseline='middle'; ctx.fillText(txt,x+w-(unit?h*0.9:h*0.25),y+h*0.54);
+    if(unit){ ctx.font='600 '+Math.round(h*0.34)+'px Poppins, sans-serif'; ctx.fillText(unit,x+w-h*0.15,y+h*0.58); } }
+  ctx.restore();
+}
+/* tripod stand with wire gauze: top centre (cx,yTop), legs down to yFloor */
+function tripodGauze(ctx,cx,yTop,yFloor,W){
+  ctx.save(); ctx.lineCap='round';
+  line(ctx,cx-W/2-6,yTop,cx+W/2+6,yTop,COL.ink,3);
+  line(ctx,cx-W/2,yTop+3,cx-W/2-10,yFloor,COL.ink,2.4); line(ctx,cx+W/2,yTop+3,cx+W/2+10,yFloor,COL.ink,2.4); line(ctx,cx,yTop+3,cx,yFloor-6,COL.mid,1.6);
+  ctx.restore();
+  ctx.save(); ctx.strokeStyle=COL.mid; ctx.lineWidth=1; ctx.beginPath(); for(let x=cx-W/2;x<=cx+W/2;x+=5){ ctx.moveTo(x,yTop-2); ctx.lineTo(x+2.5,yTop+2); } ctx.stroke(); ctx.restore();
+}
+/* gentle water surface ripple (x0..x1 at y) */
+function ripple(ctx,x0,x1,y,amp,t,col){
+  ctx.save(); ctx.strokeStyle=col||COL.blue; ctx.lineWidth=1.8; ctx.beginPath();
+  for(let i=0;i<=30;i++){ const x=lerp(x0,x1,i/30); ctx[i?'lineTo':'moveTo'](x,y+Math.sin(i*0.9+t*5)*amp); } ctx.stroke(); ctx.restore();
+}
+/* bisection solve f(x)=target on [a,b] for increasing f */
+function solveUp(f,target,a,b){ for(let i=0;i<40;i++){ const m=(a+b)/2; if(f(m)<target) a=m; else b=m; } return (a+b)/2; }
+function htmlIfChanged(el,html){ if(el._h!==html){ el._h=html; el.innerHTML=html; } }
+function lightPath(ctx,P,t,cols,opt){
+  opt=opt||{}; const sp=opt.speed||80, w=opt.w||2, al=opt.alpha===undefined?1:opt.alpha; let L0=0;
+  for(let i=0;i<P.length-1;i++){
+    const a=P[i], b=P[i+1], col=cols[Math.min(i,cols.length-1)], len=Math.hypot(b[0]-a[0],b[1]-a[1]);
+    if(len<0.5){ continue; }
+    ctx.save(); ctx.strokeStyle=col; ctx.lineCap='butt';
+    ctx.globalAlpha=al*0.42; ctx.lineWidth=w; if(opt.dashed) ctx.setLineDash([5,5]);
+    ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); ctx.stroke();
+    if(!opt.dashed){ ctx.globalAlpha=al; ctx.lineWidth=w+0.8; ctx.setLineDash([10,14]); ctx.lineDashOffset=L0-sp*t;
+      ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); ctx.stroke(); }
+    ctx.restore();
+    if(opt.arrows!==false&&len>60&&!opt.dashed){ const u=i===0?0.55:0.5; ctx.save(); ctx.globalAlpha=al; arrowHead(ctx,lerp(a[0],b[0],u),lerp(a[1],b[1],u),Math.atan2(b[1]-a[1],b[0]-a[0]),col,7); ctx.restore(); }
+    L0+=len;
+  }
+}
+/* angle arc at (x,y) from angle a0 to a1 (screen radians) with label */
+function angleArc(ctx,x,y,r,a0,a1,col,label,lw){
+  let d=angDiff(a1,a0); if(Math.abs(d)<0.005) return;
+  ctx.save(); ctx.strokeStyle=col; ctx.lineWidth=lw||2; ctx.beginPath(); ctx.arc(x,y,r,a0,a0+d,d<0); ctx.stroke(); ctx.restore();
+  if(label){ const am=a0+d/2; textAt(ctx,label,x+Math.cos(am)*(r+13),y+Math.sin(am)*(r+13)+4,{align:'center',size:12,weight:700,color:col}); }
+}
+/* the "toy": pole + ball + flag — lopsided in both directions so inversion
+   and lateral inversion are both obvious. foot at (x,y), height H px, sx/sy scale (±) */
+function drawToy(ctx,x,y,H,sx,sy,col,lw){
+  col=col||COL.red; const P=(u,v)=>[x+u*H*sx, y-v*H*sy];
+  ctx.save(); ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle=col; ctx.lineWidth=lw||Math.max(1.4,Math.min(4,H*0.045));
+  let a=P(-0.22,0), b=P(0.22,0); ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); ctx.stroke();
+  a=P(0,0); b=P(0,0.9); ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); ctx.stroke();
+  const f=[P(0,0.88),P(0.5,0.74),P(0,0.6)]; ctx.beginPath(); f.forEach((q,i)=>ctx[i?'lineTo':'moveTo'](q[0],q[1])); ctx.closePath(); ctx.fillStyle='rgba(217,67,43,0.18)'; ctx.fill(); ctx.stroke();
+  const c=P(0,0.97); ctx.beginPath(); ctx.arc(c[0],c[1],Math.max(1,H*0.07*Math.min(Math.abs(sx),Math.abs(sy))),0,Math.PI*2); ctx.fillStyle=col; ctx.fill();
+  ctx.restore();
+}
+/* sun: rotating rays */
+function sunIcon(ctx,x,y,r,t){
+  circ(ctx,x,y,r,COL.yellow,'#fff6da',2.4);
+  for(let k=0;k<12;k++){ const a=k/12*Math.PI*2+t*0.3; line(ctx,x+Math.cos(a)*(r+4),y+Math.sin(a)*(r+4),x+Math.cos(a)*(r+10+2*Math.sin(t*3+k)),y+Math.sin(a)*(r+10+2*Math.sin(t*3+k)),COL.yellow,2); }
+}
+/* ---------------------------------------------------------------------
+   0d. CHAPTER-11 ASTRONOMY HELPERS
+   --------------------------------------------------------------------- */
+const D2R = Math.PI/180, SYNODIC = 29.53;          // days, new Moon → new Moon
+function wrap360(a){ return ((a%360)+360)%360; }
+function wrap180(a){ a=wrap360(a); return a>180?a-360:a; }
+function hhmm(min){ min=Math.round(min); const h=Math.floor(min/60)%24, m=((min%60)+60)%60; return String(h).padStart(2,'0')+':'+String(m).padStart(2,'0'); }
+function ampm(min){ min=((Math.round(min)%1440)+1440)%1440; let h=Math.floor(min/60); const m=min%60, s=h<12?'a.m.':'p.m.'; h=h%12||12; return h+':'+String(m).padStart(2,'0')+' '+s; }
+/* equatorial (H hour angle, δ declination, degrees) → horizon (alt, az from N through E), latitude φ */
+function altAz(H,dec,lat){
+  const h=H*D2R, d=dec*D2R, p=lat*D2R;
+  const sa=Math.sin(p)*Math.sin(d)+Math.cos(p)*Math.cos(d)*Math.cos(h);
+  const az=Math.atan2(-Math.sin(h)*Math.cos(d), Math.cos(p)*Math.sin(d)-Math.sin(p)*Math.cos(d)*Math.cos(h));
+  return {alt:Math.asin(clamp(sa,-1,1))/D2R, az:wrap360(az/D2R)};
+}
+/* NOAA Sun: day-of-year N, clock minutes (time zone tz h), lat/lon → {alt, az, eot, dec} */
+function sunNOAA(N,clockMin,lat,lon,tz){
+  const g=2*Math.PI/365*(N-1+(clockMin/60-12)/24);
+  const eot=229.18*(0.000075+0.001868*Math.cos(g)-0.032077*Math.sin(g)-0.014615*Math.cos(2*g)-0.040849*Math.sin(2*g));
+  const dec=(0.006918-0.399912*Math.cos(g)+0.070257*Math.sin(g)-0.006758*Math.cos(2*g)+0.000907*Math.sin(2*g)-0.002697*Math.cos(3*g)+0.00148*Math.sin(3*g))/D2R;
+  const H=(clockMin+eot+4*lon-60*tz)/4-180;
+  const s=altAz(H,dec,lat); return {alt:s.alt, az:s.az, eot, dec, H};
+}
+const MONTHS=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+const MCUM=[0,31,59,90,120,151,181,212,243,273,304,334,365];
+function dayOfYear(m,d){ return MCUM[m-1]+d; }
+function dateOf(N){ N=((N-1)%365)+1; let m=0; while(N>MCUM[m+1]) m++; return (N-MCUM[m])+' '+MONTHS[m]; }
+/* lit part of a sphere as seen by the eye.
+   psi = screen angle pointing toward the light; k = cos(Sun–object–eye angle): +1 full, 0 half, −1 new */
+function drawPhase(ctx,x,y,r,psi,k,o){
+  o=o||{}; k=clamp(k,-1,1);
+  ctx.save(); ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fillStyle=o.dark||'#d5dce6'; ctx.fill(); ctx.restore();
+  ctx.save(); ctx.translate(x,y); ctx.rotate(psi);
+  ctx.beginPath(); ctx.arc(0,0,r,-Math.PI/2,Math.PI/2,false);
+  ctx.ellipse(0,0,Math.max(0.01,Math.abs(k)*r),r,0,Math.PI/2,-Math.PI/2,k<0);
+  ctx.closePath(); ctx.fillStyle=o.lit||'#fff7d6'; ctx.fill();
+  if(o.term!==false&&Math.abs(k)<0.985){ ctx.beginPath(); ctx.ellipse(0,0,Math.max(0.01,Math.abs(k)*r),r,0,Math.PI/2,-Math.PI/2,k<0); ctx.strokeStyle=o.termCol||'rgba(19,42,68,0.35)'; ctx.lineWidth=1; ctx.stroke(); }
+  ctx.restore();
+  if(o.stroke!==null) circ(ctx,x,y,r,o.stroke||COL.red,null,o.lw||2.2);
+}
+function phaseName(k){ const f=(1+k)/2; if(f>0.97) return 'Full'; if(f<0.03) return 'New'; if(Math.abs(f-0.5)<0.06) return 'Half'; return f>0.5?'Gibbous':'Crescent'; }
+/* simple stick figure (front view), feet at (x,y), height H */
+function person(ctx,x,y,H,col){
+  col=col||COL.ink; const hr=H*0.12;
+  ctx.save(); ctx.lineCap='round';
+  circ(ctx,x,y-H+hr,hr,col,'#fff',2);
+  line(ctx,x,y-H+2*hr,x,y-H*0.42,col,2.2);
+  line(ctx,x,y-H*0.42,x-H*0.14,y,col,2.2); line(ctx,x,y-H*0.42,x+H*0.14,y,col,2.2);
+  line(ctx,x,y-H*0.68,x-H*0.18,y-H*0.46,col,2.2); line(ctx,x,y-H*0.68,x+H*0.18,y-H*0.46,col,2.2);
+  ctx.restore();
+}
+/* star point with cross spikes when bright */
+function starDot(ctx,x,y,r,col,alpha){
+  ctx.save(); ctx.globalAlpha=clamp(alpha,0,1); ctx.fillStyle=col||'#fff';
+  ctx.beginPath(); ctx.arc(x,y,Math.max(0.4,r),0,Math.PI*2); ctx.fill();
+  if(r>1.6){ ctx.strokeStyle=col||'#fff'; ctx.lineWidth=0.8; ctx.beginPath(); ctx.moveTo(x-r*2.4,y); ctx.lineTo(x+r*2.4,y); ctx.moveTo(x,y-r*2.4); ctx.lineTo(x,y+r*2.4); ctx.stroke(); }
+  ctx.restore();
+}
+function glow(ctx,x,y,r,col,a){ const g=ctx.createRadialGradient(x,y,0,x,y,r); g.addColorStop(0,col); g.addColorStop(1,'rgba(255,255,255,0)'); ctx.save(); ctx.globalAlpha=a===undefined?1:a; ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,y,r,0,Math.PI*2); ctx.fill(); ctx.restore(); }
+
+/* ---------------------------------------------------------------------
+   1. ACTIVITIES + ROUTER
+   --------------------------------------------------------------------- */
+const activities = [
+  { num:"11.1", title:"Watching the Moon for a Month", desc:"Same time every day — sunrise, then sunset", build: buildA1 },
+  { num:"11.2", title:"Ball, Stick & Lamp", desc:"Turn around slowly and watch the lit part of the ball", build: buildA2 },
+  { num:"11.3", title:"Let Us Measure a Day!", desc:"1 m stick · a dot at the shadow tip every minute", build: buildA3 },
+  { num:"11.4", title:"Spotting a Satellite", desc:"Just after sunset — what moves, what twinkles, what blinks?", build: buildA4 },
+];
+let currentIndex = 0;
+
+function buildNav(){
+  const nav = document.getElementById('sideNav');
+  nav.innerHTML='';
+  activities.forEach((a,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'nav-item'+(i===currentIndex?' active':'');
+    btn.innerHTML = `<span class="n-num">${a.num}</span><span class="n-title">${a.title}</span>`;
+    btn.onclick = ()=>{ currentIndex=i; render(); };
+    nav.appendChild(btn);
+  });
+}
+function render(){
+  stopAllLoops();
+  buildNav();
+  const a = activities[currentIndex];
+  document.getElementById('panelBadge').textContent = a.num;
+  document.getElementById('panelTitle').textContent = a.title;
+  document.getElementById('panelDesc').textContent = a.desc||'';
+  const body = document.getElementById('panelBody');
+  body.innerHTML='';
+  body.appendChild(a.build());
+}
+function labShell(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `<div class="lab-canvas-wrap"><canvas></canvas></div><div class="lab-side"></div>`;
+  return wrap;
+}
+
+/* =====================================================================
+   11.1 LET US EXPLORE — THE MOON AT SUNRISE / SUNSET FOR A MONTH
+   Sky of Ahmedabad (φ = 23° N), looking south: East on the left, West on
+   the right. Sun and Moon are both kept on the celestial equator (δ = 0),
+   so each rises due East after 12 h below the horizon.
+     Sun hour angle   H☉ = 15°·(clock − 12 h)
+     Moon elongation  E  = 180° + 360°·(days since full Moon)/29.53
+     Moon hour angle  H☾ = H☉ − E       (it lags the Sun by E)
+     altitude          sin a = cosφ·cosH
+   Lit fraction seen = (1 − cos E)/2; the bright limb points along the sky
+   path toward the Sun. The Moon gains 12.19°/day on the Sun, so the Earth
+   must turn 24 h × 12.19/(360 − 12.19) ≈ 50 min extra → rises later daily.
+   Clock time is never skipped: "next day" fast-forwards through 24 h.
+   ===================================================================== */
+function buildA1(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML=`
+    <div class="control-group"><label>Day after full Moon <span class="val" id="vD"></span></label><input type="range" id="dS" min="1" max="30" step="1" value="1">
+      <div class="toggle-group"><button class="toggle-btn" id="prev">◀ Day before</button><button class="toggle-btn" id="next">Next day ▶</button></div></div>
+    <div class="control-group"><label>Look at the sky at</label><div class="toggle-group"><button class="toggle-btn" data-m="rise">🌅 Sunrise</button><button class="toggle-btn" data-m="set">🌇 Sunset</button></div></div>
+    <div class="control-group"><div class="toggle-group"><button class="toggle-btn play" id="rec">📝 Record today</button><button class="toggle-btn" id="play">▶ Play the month</button></div></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Bright part seen</div><div class="rval" id="rF" style="color:var(--f-red)">—</div></div>
+      <div class="rcard"><div class="rlabel">Sun ↔ Moon gap</div><div class="rval" id="rS" style="color:var(--f-green)">—</div></div>
+      <div class="rcard"><div class="rlabel">Phase</div><div class="rval" id="rP">—</div></div>
+      <div class="rcard"><div class="rlabel">Moonrise</div><div class="rval" id="rR">—</div></div></div><div class="fb" id="fb"></div></div>
+    <div class="control-group"><label>Table 11.1 <button class="chip-btn" id="clr" style="padding:2px 8px">clear</button></label>
+      <div style="max-height:190px;overflow-y:auto"><table class="log"><thead><tr><th>Day</th><th>Seen at</th><th>Bright part</th><th>From Sun</th></tr></thead><tbody id="tb"></tbody></table></div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const LAT=23, rnd=rng(11);
+  const stars=[]; for(let i=0;i<90;i++) stars.push({H0:rnd()*360, dec:-35+rnd()*95, m:rnd()});
+  let day=1, mode='rise', playing=false, pause=0, t=0, rows=[];
+  const T={x:6,v:0};                                   // clock: hours since day-1 midnight
+  const tgt=()=>(day-1)*24+(mode==='rise'?6:18);
+  const mBtns=[...wrap.querySelectorAll('[data-m]')];
+  function setMode(m){ mode=m; mBtns.forEach(b=>b.classList.toggle('active',b.dataset.m===m)); }
+  function setDay(d,auto){ day=clamp(d,1,30); $('#dS').value=day; if(auto!==false) setMode(day<=15?'rise':'set'); }
+  setMode('rise');
+  mBtns.forEach(b=>b.onclick=()=>setMode(b.dataset.m));
+  $('#dS').oninput=e=>setDay(+e.target.value);
+  $('#prev').onclick=()=>setDay(day-1);
+  $('#next').onclick=()=>setDay(day+1);
+  $('#play').onclick=()=>{ playing=!playing; if(playing&&day>=30){ rows=[]; setDay(1); } pause=0; };
+  $('#clr').onclick=()=>{ rows=[]; };
+
+  // sky model at clock T (hours)
+  function sky(Th){
+    const Hs=15*(((Th%24)+24)%24-12), age=(Th-6)/24+1, E=wrap360(180+360*age/SYNODIC), Hm=Hs-E;
+    const s=altAz(Hs,0,LAT), m=altAz(Hm,0,LAT);
+    return {Hs,Hm,E,s,m,k:-Math.cos(E*D2R),sep:Math.min(E,360-E)};
+  }
+  const riseCache={};
+  function moonrise(d){ // clock minutes of moonrise on day d (or null)
+    if(riseCache[d]!==undefined) return riseCache[d];
+    let res=null, prev=sky((d-1)*24).m.alt;
+    for(let i=1;i<=288&&res===null;i++){ const T1=(d-1)*24+i/12, a=sky(T1).m.alt;
+      if(prev<0&&a>=0){ let lo=T1-1/12, hi=T1; for(let j=0;j<30;j++){ const mid=(lo+hi)/2; if(sky(mid).m.alt<0) lo=mid; else hi=mid; } res=((lo+hi)/2-(d-1)*24)*60; }
+      prev=a; }
+    return riseCache[d]=res;
+  }
+  function record(){
+    const S=sky(T.x), seen=S.m.alt>2&&S.sep>11;
+    rows=rows.filter(r=>r.d!==day); rows.push({d:day,at:mode,k:S.k,psi:lastPsi,sep:S.sep,seen}); rows.sort((a,b)=>a.d-b.d);
+  }
+  $('#rec').onclick=record;
+  let lastPsi=0;
+
+  animLoop(dt=>{
+    t+=dt;
+    // clock glides toward the observation time — critically damped, speed-capped fast-forward
+    const Tt=tgt(), a=(Tt-T.x)*7-T.v*5.3; T.v=clamp(T.v+a*dt,-140,140); T.x+=T.v*dt;
+    const settled=Math.abs(Tt-T.x)<0.02&&Math.abs(T.v)<0.05;
+    if(playing&&settled){ pause+=dt; if(pause>0.25&&!rows.some(r=>r.d===day&&r.at===mode)) record(); if(pause>1.1){ pause=0; if(day<30) setDay(day+1); else playing=false; } }
+    $('#play').textContent=playing?'⏸ Pause':'▶ Play the month'; $('#play').classList.toggle('active',playing);
+
+    const S=sky(T.x);
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const jH=Math.max(96,h*0.2), H0=(h-jH)*0.8, top=16, pad=Math.max(24,w*0.04);
+    const X=az=>lerp(pad,w-pad,(az-90)/180), Y=alt=>H0-alt/78*(H0-top);
+    const P=(H)=>{ const q=altAz(H,0,LAT); return [X(q.az),Y(q.alt),q.alt,q.az]; };
+    // sky colour follows the Sun's altitude
+    const sa=S.s.alt, night=smooth01(2,-14,sa), dusk=Math.max(0,1-Math.abs(sa+3)/7);
+    const low=hexRgb('#eef6fd').map((v,i)=>lerp(lerp(v,hexRgb('#27406a')[i],night),hexRgb('#f7cfa0')[i],dusk*0.7));
+    ctx.save(); const gr=ctx.createLinearGradient(0,top,0,H0); gr.addColorStop(0,mixCol('#d4e8fa','#0f1f36',night)); gr.addColorStop(1,'rgb('+low.map(Math.round).join(',')+')');
+    ctx.fillStyle=gr; ctx.fillRect(0,0,w,H0); ctx.restore();
+    // stars (they turn with the sky too)
+    if(night>0.05){ stars.forEach(st=>{ const q=altAz(st.H0+15.04*T.x,st.dec,LAT); if(q.alt<1||q.az<88||q.az>272) return; starDot(ctx,X(q.az),Y(q.alt),0.6+st.m*1.3,'#fff',night*(0.35+0.65*st.m)*(0.8+0.2*Math.sin(t*6+st.H0))); }); }
+    const ink=night>0.5?'#c9d6e6':COL.muted;
+    // path of Sun & Moon across the sky (celestial equator)
+    ctx.save(); ctx.strokeStyle=night>0.5?'rgba(120,180,240,0.55)':'rgba(47,143,224,0.45)'; ctx.lineWidth=1.6; ctx.setLineDash([6,6]); ctx.beginPath();
+    for(let H=-92;H<=92;H+=2){ const p=P(H); ctx[H===-92?'moveTo':'lineTo'](p[0],p[1]); } ctx.stroke(); ctx.restore();
+    // altitude grid ticks on the left
+    [30,60].forEach(al=>{ line(ctx,pad-8,Y(al),pad,Y(al),ink,1); textAt(ctx,al+'°',pad-10,Y(al)+4,{align:'right',size:10,color:ink}); });
+
+    // Sun and Moon
+    const ps=P(S.Hs), pm=P(S.Hm), rM=Math.max(15,Math.min(w,h)*0.042);
+    const dir=S.E<180?1:-1, pm2=P(S.Hm+dir*3); const psi=Math.atan2(pm2[1]-pm[1],pm2[0]-pm[0]); lastPsi=psi;
+    const seen=S.m.alt>2&&S.sep>11;
+    // separation along the path (green), only when both are up or near the horizon
+    if(S.m.alt>-2&&S.s.alt>-8){ ctx.save(); ctx.strokeStyle=COL.green; ctx.lineWidth=3; ctx.beginPath(); const n=40; for(let i=0;i<=n;i++){ const p=P(S.Hm+dir*S.sep*i/n); ctx[i?'lineTo':'moveTo'](p[0],p[1]); } ctx.stroke(); ctx.restore();
+      const pmid=P(S.Hm+dir*S.sep/2); textAt(ctx,Math.round(S.sep)+'°',pmid[0],pmid[1]-12,{align:'center',size:13,weight:700,color:COL.green}); }
+    if(S.s.alt>-6){ glow(ctx,ps[0],ps[1],rM*3.2,'rgba(255,214,110,0.55)',1-night*0.6); sunIcon(ctx,ps[0],ps[1],rM*0.9,t); }
+    ctx.save(); ctx.globalAlpha=seen?1:(S.m.alt>0?0.45:0.9); drawPhase(ctx,pm[0],pm[1],rM,psi,S.k,{dark:night>0.5?'#2c3f5c':'#d5dce6',stroke:COL.red,lw:2.4}); ctx.restore();
+    if(S.m.alt>0&&!seen) textAt(ctx,'lost in the Sun’s glare',pm[0],pm[1]-rM-8,{align:'center',size:11,weight:600,color:COL.red});
+    // ground
+    ctx.save(); ctx.fillStyle='#f4f7fa'; ctx.fillRect(0,H0,w,h-H0); ctx.restore(); ground(ctx,0,w,H0);
+    [['E',90],['SE',135],['S',180],['SW',225],['W',270]].forEach(([s,az])=>textAt(ctx,s,X(az),H0+20,{align:'center',size:s.length>1?11:14,weight:700,color:s.length>1?COL.mid:COL.ink}));
+    person(ctx,X(180),H0+36+Math.min(56,h*0.085),Math.min(56,h*0.085),COL.ink);
+    // below-horizon markers
+    if(S.m.alt<=0){ const xm=clamp(pm[0],pad,w-pad); textAt(ctx,'Moon below the horizon',xm,H0-8,{align:xm>w/2?'right':'left',size:11,weight:600,color:COL.red}); }
+    // clock
+    const cm=((T.x%24)+24)%24*60, dd=Math.floor(T.x/24)+1;
+    lcd(ctx,w-pad-150,top,150,34,ampm(cm),true); textAt(ctx,'Day '+clamp(dd,1,30),w-pad-156,top+22,{align:'right',size:13,weight:700,color:ink});
+
+    // journal (Fig. 11.1): two rows of 15 circles
+    const jy=h-jH, cw=(w-2*pad-70)/15, cr=Math.min(cw*0.36,jH*0.2);
+    line(ctx,0,jy,w,jy,COL.mid,1);
+    [['Sunrise',0],['Sunset',1]].forEach(([lab,row])=>{ const y=jy+jH*(row?0.72:0.3);
+      textAt(ctx,lab,pad,y+4,{size:11,weight:700,color:row?COL.muted:COL.muted});
+      for(let i=0;i<15;i++){ const d=row*15+i+1, x=pad+70+cw*(i+0.5), r=rows.find(q=>q.d===d);
+        if(r&&r.seen) drawPhase(ctx,x,y,cr,r.psi,r.k,{stroke:COL.red,lw:1.4,term:false});
+        else { circ(ctx,x,y,cr,r?COL.red:'#c2d1e5',null,1.2); if(r){ line(ctx,x-cr*0.6,y-cr*0.6,x+cr*0.6,y+cr*0.6,COL.red,1.2); } }
+        if(d===day) circ(ctx,x,y,cr+4,COL.green,null,2);
+        if(i%7===0||d===day) textAt(ctx,String(d),x,y+cr+11,{align:'center',size:9,weight:600,color:COL.mid}); } });
+
+    // read-outs
+    $('#vD').textContent='Day '+day;
+    $('#rF').textContent=Math.round((1+S.k)/2*100)+'%';
+    $('#rS').textContent=Math.round(S.sep)+'°';
+    $('#rP').textContent=phaseName(S.k)+(phaseName(S.k)==='Full'||phaseName(S.k)==='New'?'':(S.E>180?' · waning':' · waxing'));
+    const mr=moonrise(day), mr0=day>1?moonrise(day-1):null;
+    $('#rR').textContent=mr===null?'none today':ampm(mr)+(mr0!==null&&mr>mr0?'  (+'+Math.round(mr-mr0)+' min)':'');
+    const fb=$('#fb');
+    if(!settled){ fb.className='fb warn'; fb.textContent='Time running…'; }
+    else if(seen){ fb.className='fb ok'; fb.textContent='Moon seen · '+(S.m.az<180?'eastern':'western')+' sky, '+Math.round(S.m.alt)+'° up'; }
+    else { fb.className='fb bad'; fb.textContent=S.m.alt<=0?'Moon is below the horizon now.':'Too close to the Sun to see.'; }
+    htmlIfChanged($('#tb'),rows.length?rows.map(r=>{ const p=rows.find(q=>q.d===r.d-1);
+      const size=!p||!p.seen||!r.seen?'—':(r.k>p.k?'Increased':'Decreased'), far=!p?'—':(r.sep>p.sep?'Farther':'Closer');
+      return `<tr><td>${r.d}</td><td>${r.at==='rise'?'Sunrise':'Sunset'}</td><td>${r.seen?size:'not seen'}</td><td>${far}</td></tr>`; }).join(''):'<tr><td colspan="4">—</td></tr>');
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   11.2 LET US EXPLORE — BALL ON A STICK, LAMP 3 m AWAY
+   3-D scene (m): your eye at the origin, lamp at (−3, 0, 0.3). The ball
+   (r = 3.5 cm) is held at arm's length 0.65 m, raised 18° above eye level:
+     B = 0.65·(cos e·cos θ, cos e·sin θ, sin e),  θ = 0 at A (away from lamp)
+   You turn anticlockwise: A → B → … → H. For the eye:
+     L = unit(lamp − B),  u = unit(B)          (line of sight)
+     k = L·(−u) = cos(lamp–ball–eye angle)     lit fraction = (1 + k)/2
+     the bright side points along L projected on your view (right, up).
+   At eye level (e = 0) your head (r ≈ 10 cm) sits on the lamp→ball line at A
+   and its shadow covers the ball — an eclipse, not a phase.
+   "Moon & Sun" swaps the lamp for parallel sunlight and the day numbers of
+   Fig. 11.5 (E = new Moon, day 1 … A = full Moon, day 15).
+   ===================================================================== */
+function buildA2(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML=`
+    <div class="control-group"><label>Turn around <span class="val" id="vT"></span></label><input type="range" id="tS" min="0" max="360" step="1" value="0">
+      <div class="chip-wrap" id="chips"></div>
+      <button class="toggle-btn play" id="auto" style="width:100%;margin-top:8px;padding:8px">▶ Turn slowly</button></div>
+    <div class="control-group"><label>Scene</label><div class="toggle-group"><button class="toggle-btn active" data-v="ball">Ball & lamp</button><button class="toggle-btn" data-v="moon">Moon & Sun</button></div>
+      <div id="hgt"><label style="margin-top:9px">Ball held</label><div class="toggle-group"><button class="toggle-btn active" data-h="up">Above head</button><button class="toggle-btn" data-h="eye">At eye level</button></div></div></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Position</div><div class="rval" id="rPos">A</div></div>
+      <div class="rcard"><div class="rlabel">Bright part you see</div><div class="rval" id="rF" style="color:var(--f-red)">—</div></div>
+      <div class="rcard wide"><div class="rlabel">Shape</div><div class="rval" id="rP">—</div></div></div><div class="fb" id="fb"></div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const L8='ABCDEFGH', DAYS=[15,18,22,26,1,4,8,12];
+  $('#chips').innerHTML=[...L8].map((c,i)=>`<button class="chip-btn" data-i="${i}">${c}</button>`).join('');
+  let view='ball', high=true, auto=false, thT=0, t=0; const TH={x:0,v:0}; const snaps={};
+  const vB=[...wrap.querySelectorAll('[data-v]')], hB=[...wrap.querySelectorAll('[data-h]')];
+  toggleWire(vB,b=>{ view=b.dataset.v; $('#hgt').classList.toggle('hidden',view==='moon'); for(const k in snaps) delete snaps[k]; });
+  toggleWire(hB,b=>{ high=b.dataset.h==='up'; });
+  $('#tS').oninput=e=>{ auto=false; const v=+e.target.value, cur=wrap360(thT); thT+=angDiff(v*D2R,cur*D2R)/D2R; };
+  [...wrap.querySelectorAll('#chips .chip-btn')].forEach(b=>b.onclick=()=>{ auto=false; const v=+b.dataset.i*45; thT+=angDiff(v*D2R,wrap360(thT)*D2R)/D2R; });
+  $('#auto').onclick=()=>{ auto=!auto; };
+  const V=(a,b,c)=>[a,b,c], sub=(a,b)=>[a[0]-b[0],a[1]-b[1],a[2]-b[2]], dotp=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+  const nrm=a=>{ const l=Math.hypot(a[0],a[1],a[2])||1; return [a[0]/l,a[1]/l,a[2]/l]; }, crs=(a,b)=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]];
+
+  animLoop(dt=>{
+    t+=dt;
+    if(auto) thT+=16*dt;                                  // a slow turn: 16°/s
+    const th=springTo(TH,thT,16,7,dt), thr=th*D2R;
+    $('#tS').value=Math.round(wrap360(thT)); $('#auto').textContent=auto?'⏸ Stop':'▶ Turn slowly';
+    // 3-D geometry
+    const moon=view==='moon', e=(moon?5:(high?18:0))*D2R, arm=0.65, rb=0.035, rh=0.1;
+    const B=V(arm*Math.cos(e)*Math.cos(thr),arm*Math.cos(e)*Math.sin(thr),arm*Math.sin(e));
+    const lamp=moon?V(-1e7,0,0):V(-3,0,high?0.3:0);
+    const Ld=nrm(sub(lamp,B)), u=nrm(B), rt=nrm(crs(u,[0,0,1])), up=crs(rt,u);
+    const k=-dotp(Ld,u), psi=Math.atan2(-dotp(Ld,up),dotp(Ld,rt));
+    // head shadow on the ball (only for the lamp)
+    let shadow=null;
+    if(!moon){ const dH=nrm(sub([0,0,0],lamp)), s=dotp(sub(B,lamp),dH), dO=Math.hypot(3,lamp[2]);
+      if(s>dO){ const Q=[lamp[0]+dH[0]*s,lamp[1]+dH[1]*s,lamp[2]+dH[2]*s], off=sub(Q,B), rs=rh*s/dO, d=Math.hypot(off[0],off[1],off[2]);
+        if(d<rs+rb) shadow={x:dotp(off,rt)/rb, y:-dotp(off,up)/rb, r:rs/rb}; } }
+    // Fig. 11.4c snapshots
+    for(let i=0;i<8;i++) if(Math.abs(angDiff(thr,i*Math.PI/4))<3*D2R) snaps[i]={psi,k,sh:shadow};
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const wide=w>h*1.15, wL=wide?w*0.56:w, hT=wide?h:h*0.55;
+    // ---------- top view ----------
+    const cx=wL*0.6, cy=hT*0.5, Ra=Math.min(wL*0.3,hT*0.36), pad=16;
+    textAt(ctx,'Seen from above',pad,22,{size:12,weight:700,color:COL.muted});
+    if(moon){ for(let i=-3;i<=3;i++){ const y=cy+i*hT*0.13; if(y<30||y>hT-10) continue; vec(ctx,pad,y,pad+wL*0.1,y,COL.yellow,2.4); }
+      textAt(ctx,'SUNRAYS',pad,cy-hT*0.43,{size:11,weight:700,color:COL.yellow}); }
+    else { const lx=pad+22; for(let i=-4;i<=4;i++){ const a=i*0.1; ctx.save(); ctx.globalAlpha=0.35; line(ctx,lx,cy,lx+Math.cos(a)*wL*0.95,cy+Math.sin(a)*wL*0.95,COL.yellow,1.4); ctx.restore(); }
+      glow(ctx,lx,cy,34,'rgba(255,214,110,0.9)'); circ(ctx,lx,cy,11,COL.yellow,'#fff6da',2.4); textAt(ctx,'lamp · 3 m',lx-6,cy+34,{size:11,weight:600,color:COL.muted}); }
+    // orbit circle + letters
+    circ(ctx,cx,cy,Ra,'rgba(47,143,224,0.5)',null,1.4);
+    for(let i=0;i<8;i++){ const a=i*Math.PI/4, lr=Ra+Math.max(10,Ra*0.13)+18, x=cx+Math.cos(a)*lr, y=cy-Math.sin(a)*lr-(moon?6:0);
+      textAt(ctx,L8[i],x,y+5,{align:'center',size:14,weight:700,color:snaps[i]?COL.ink:COL.mid});
+      if(moon) textAt(ctx,'Day '+DAYS[i],x,y+19,{align:'center',size:9.5,weight:600,color:COL.mid}); }
+    // head's shadow (behind the head, away from the lamp)
+    if(!moon&&!high){ ctx.save(); ctx.fillStyle='rgba(19,42,68,0.08)'; ctx.beginPath(); ctx.moveTo(cx,cy-12); ctx.lineTo(cx+Ra*1.4,cy-18); ctx.lineTo(cx+Ra*1.4,cy+18); ctx.lineTo(cx,cy+12); ctx.fill(); ctx.restore(); }
+    // ball / moon in top view: lit half faces the light
+    const bx=cx+Math.cos(thr)*Ra, by=cy-Math.sin(thr)*Ra, rB=Math.max(10,Ra*0.13);
+    const toLamp=moon?Math.PI:Math.atan2(-(lamp[1]-B[1]),lamp[0]-B[0]);
+    drawPhase(ctx,bx,by,rB,toLamp,1,{stroke:null}); ctx.save(); ctx.beginPath(); ctx.arc(bx,by,rB,toLamp+Math.PI/2,toLamp+3*Math.PI/2); ctx.closePath(); ctx.fillStyle='#8c9bb0'; ctx.fill(); ctx.restore(); circ(ctx,bx,by,rB,COL.red,null,2.4);
+    // half that faces you (green dashed, like the textbook's dashed arc)
+    const toMe=Math.atan2(by-cy,cx-bx); ctx.save(); ctx.strokeStyle=COL.green; ctx.lineWidth=2.4; ctx.setLineDash([5,4]); ctx.beginPath(); ctx.arc(bx,by,rB+5,toMe-Math.PI/2,toMe+Math.PI/2); ctx.stroke(); ctx.restore();
+    // you / the Earth
+    const rH=Math.max(13,Ra*0.16);
+    if(moon){ drawPhase(ctx,cx,cy,rH,Math.PI,1,{stroke:null}); ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,rH,Math.PI/2,3*Math.PI/2,true); ctx.closePath(); ctx.fillStyle='#8c9bb0'; ctx.fill(); ctx.restore(); circ(ctx,cx,cy,rH,COL.blue,null,2.6);
+      line(ctx,cx,cy,bx,by,COL.green,1.4,[3,5]); textAt(ctx,'Earth',cx,cy+rH+15,{align:'center',size:11,weight:700,color:COL.blue}); }
+    else { // shoulders turn with you, arm holds the stick
+      const sx=Math.cos(thr+Math.PI/2)*rH*2.1, sy=-Math.sin(thr+Math.PI/2)*rH*2.1;
+      ctx.save(); ctx.translate(cx,cy); ctx.rotate(-thr); ctx.beginPath(); ctx.ellipse(-rH*0.25,0,rH*0.75,rH*2.2,0,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.stroke(); ctx.restore();
+      const hx=cx+sx*0.85, hy=cy+sy*0.85; line(ctx,hx,hy,bx-Math.cos(thr)*rB,by+Math.sin(thr)*rB,COL.ink,5); line(ctx,hx,hy,bx-Math.cos(thr)*rB,by+Math.sin(thr)*rB,'#fff',2);
+      circ(ctx,cx,cy,rH,COL.ink,'#fff',2.4);
+      const nx=cx+Math.cos(thr)*rH, ny=cy-Math.sin(thr)*rH; ctx.save(); ctx.fillStyle=COL.ink; ctx.beginPath(); ctx.moveTo(nx+Math.cos(thr)*7,ny-Math.sin(thr)*7); ctx.lineTo(nx+Math.cos(thr+1.9)*6,ny-Math.sin(thr+1.9)*6); ctx.lineTo(nx+Math.cos(thr-1.9)*6,ny-Math.sin(thr-1.9)*6); ctx.fill(); ctx.restore();
+      line(ctx,nx,ny,bx,by,COL.green,1.4,[3,5]); }
+    // turning arrow
+    ctx.save(); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.6; ctx.beginPath(); ctx.arc(cx,cy,rH+14,-thr-0.2,-thr-1.2,true); ctx.stroke(); ctx.restore(); arrowHead(ctx,cx+Math.cos(-thr-1.2)*(rH+14),cy+Math.sin(-thr-1.2)*(rH+14),-thr-1.2-Math.PI/2,COL.mid,7);
+
+    // ---------- what you see ----------
+    const px=wide?wL+8:8, py=wide?8:hT+4, pw=wide?w-wL-16:w-16, ph=wide?h-16:h-hT-10;
+    ctx.save(); rrect(ctx,px,py,pw,ph,12); ctx.fillStyle=moon?'#0f1d31':'#1b2a40'; ctx.fill(); ctx.restore();
+    textAt(ctx,'What you see',px+12,py+22,{size:12,weight:700,color:'#c9d6e6'});
+    const eyH=wide?ph*0.62:ph, ex=wide?px+pw/2:px+pw*0.3, ey=py+eyH*0.52, R=Math.min(pw*(wide?0.3:0.2),eyH*0.3);
+    // lamp glare when it is in front of you
+    const lampDir=nrm(lamp), fwd=dotp(lampDir,u);
+    if(fwd>0.3){ const gx=ex+dotp(lampDir,rt)/fwd*R*2.6, gy=ey-dotp(lampDir,up)/fwd*R*2.6; glow(ctx,clamp(gx,px+20,px+pw-20),clamp(gy,py+20,py+eyH),R*1.6,'rgba(255,220,120,0.95)',clamp((fwd-0.3)*2,0,1)); }
+    drawPhase(ctx,ex,ey,R,psi,k,{dark:'#33445e',stroke:COL.red,lw:3,termCol:'rgba(19,42,68,0.25)'});
+    if(shadow){ ctx.save(); ctx.beginPath(); ctx.arc(ex,ey,R,0,Math.PI*2); ctx.clip(); ctx.fillStyle='rgba(20,30,48,0.85)'; ctx.beginPath(); ctx.arc(ex+shadow.x*R,ey+shadow.y*R,shadow.r*R,0,Math.PI*2); ctx.fill(); ctx.restore(); circ(ctx,ex,ey,R,COL.red,null,3); }
+    if(!moon){ line(ctx,ex,ey+R,ex+R*0.15,ey+R*2.3,'#c9d6e6',3); }   // the stick
+    // snapshots (Fig. 11.4c)
+    if(wide){ const sy0=py+eyH+10, cw=pw/4, cr=Math.min(cw*0.3,(ph-eyH-20)/4.6);
+      for(let i=0;i<8;i++){ const x=px+cw*(i%4+0.5), y=sy0+(ph-eyH-10)*(i<4?0.27:0.72), s=snaps[i];
+        if(s){ drawPhase(ctx,x,y,cr,s.psi,s.k,{dark:'#33445e',stroke:COL.red,lw:1.6,term:false}); if(s.sh){ ctx.save(); ctx.beginPath(); ctx.arc(x,y,cr,0,Math.PI*2); ctx.clip(); ctx.fillStyle='rgba(20,30,48,0.85)'; ctx.beginPath(); ctx.arc(x+s.sh.x*cr,y+s.sh.y*cr,s.sh.r*cr,0,Math.PI*2); ctx.fill(); ctx.restore(); } }
+        else circ(ctx,x,y,cr,'#4c6178',null,1.2);
+        textAt(ctx,L8[i]+(moon?' · '+DAYS[i]:''),x,y+cr+13,{align:'center',size:10,weight:700,color:'#c9d6e6'}); } }
+
+    // read-outs
+    const pos=Math.round(wrap360(th)/45)%8, near=Math.abs(angDiff(thr,pos*Math.PI/4))<8*D2R;
+    $('#vT').textContent=Math.round(wrap360(thT))+'°';
+    [...wrap.querySelectorAll('#chips .chip-btn')].forEach((b,i)=>b.classList.toggle('active',near&&i===pos));
+    $('#rPos').textContent=(near?L8[pos]:L8[Math.floor(wrap360(th)/45)%8]+'→'+L8[(Math.floor(wrap360(th)/45)+1)%8])+(moon&&near?' · Day '+DAYS[pos]:'');
+    $('#rF').textContent=Math.round((1+k)/2*100)+'%';
+    const pn=phaseName(k);
+    $('#rP').textContent=(shadow?'Eclipsed by your head':pn)+(moon&&pn!=='Full'&&pn!=='New'?(Math.sin(thr)>0?' · waning':' · waxing'):'');
+    const fb=$('#fb');
+    if(shadow){ fb.className='fb warn'; fb.textContent='Your head’s shadow — hold the ball higher.'; }
+    else if(pn==='Full'||pn==='New'){ fb.className='fb ok'; fb.textContent=pn==='Full'?'Whole lit half faces you.':'Only the dark half faces you.'; }
+    else { fb.className='fb ok'; fb.textContent=pn==='Half'?'Bright–dark edge is a straight line.':'Bright–dark edge is curved.'; }
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   11.3 LET US MEASURE A DAY! — 1 m STICK, A DOT EVERY MINUTE 11:00–13:10
+   Sun position from the NOAA formulas (declination δ and equation of time
+   for the date, IST = UTC + 5:30, the town's latitude/longitude):
+     H = (clock + EoT + 4·λ − 330)/4 − 180°
+     sin(alt) = sinφ·sinδ + cosφ·cosδ·cosH
+   Shadow tip of a 1 m stick = −(sₓ, s_y)/s_z  (s = unit vector to the Sun).
+   Checked against Table 11.2: at Nagpur (21.15° N, 79.09° E) the shortest
+   shadow falls at 12:21, 12:21, 12:21 for 22–24 March, drifting 19 s
+   earlier each day → day lengths 24:00, 24:00 … averaging 23 h 59 min 41 s.
+   On an equinox the tip moves along a straight E–W line; on other dates
+   it curves. Between days the clock fast-forwards through the night.
+   ===================================================================== */
+function buildA3(){
+  const wrap=labShell();
+  const PLACES=[['Nagpur',21.15,79.09],['Delhi',28.61,77.21],['Ahmedabad',23.02,72.57],['Kolkata',22.57,88.36]];
+  const STARTS=[['22 Mar',81],['21 Jun',172],['22 Dec',356]];
+  wrap.querySelector('.lab-side').innerHTML=`
+    <div class="control-group"><label>Place</label><div class="chip-wrap" id="pl">${PLACES.map((p,i)=>`<button class="chip-btn${i?'':' active'}" data-i="${i}">${p[0]}</button>`).join('')}</div>
+      <label style="margin-top:9px">Start date</label><div class="chip-wrap" id="st">${STARTS.map((p,i)=>`<button class="chip-btn${i?'':' active'}" data-i="${i}">${p[0]}</button>`).join('')}</div></div>
+    <div class="control-group"><label>Clock speed <span class="val" id="vS"></span></label><input type="range" id="sp" min="2" max="30" step="1" value="10">
+      <button class="toggle-btn play" id="go" style="width:100%;margin-top:9px;padding:9px">▶ Start marking dots</button></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Shadow length</div><div class="rval" id="rL" style="color:var(--f-green)">—</div></div>
+      <div class="rcard"><div class="rlabel">Sun height</div><div class="rval" id="rA" style="color:var(--f-yellow)">—</div></div>
+      <div class="rcard wide"><div class="rlabel">Average duration of a day</div><div class="rval" id="rD">—</div></div></div><div class="fb" id="fb"></div></div>
+    <div class="control-group"><label>Table 11.2</label><table class="log"><thead><tr><th>Date</th><th>Shortest shadow</th><th>Duration of day</th></tr></thead><tbody id="tb"></tbody></table></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  let P=PLACES[0], N0=81, A=660, state='idle', speed=10, dots=[], old=[], rows=[], ff=null, t=0;
+  const Sc={x:200,v:0};
+  function reset(){ A=660; state='idle'; dots=[]; old=[]; rows=[]; ff=null; }
+  [...wrap.querySelectorAll('#pl .chip-btn')].forEach(b=>b.onclick=()=>{ wrap.querySelectorAll('#pl .chip-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); P=PLACES[+b.dataset.i]; reset(); });
+  [...wrap.querySelectorAll('#st .chip-btn')].forEach(b=>b.onclick=()=>{ wrap.querySelectorAll('#st .chip-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); N0=STARTS[+b.dataset.i][1]; reset(); });
+  $('#sp').oninput=e=>{ speed=+e.target.value; };
+  $('#go').onclick=()=>{
+    if(state==='idle') state='run'; else if(state==='run') state='pause'; else if(state==='pause') state='run';
+    else if(state==='done'){ old=dots; dots=[]; ff={a0:A, a1:(Math.floor(A/1440)+1)*1440+660, k:0}; state='ff'; } };
+  const sunAt=(Aabs)=>{ const N=N0+Math.floor(Aabs/1440), m=Aabs-1440*Math.floor(Aabs/1440); return sunNOAA(N,m,P[1],P[2],5.5); };
+  const tipOf=s=>{ const ca=Math.cos(s.alt*D2R), sx=ca*Math.sin(s.az*D2R), sy=ca*Math.cos(s.az*D2R), sz=Math.sin(s.alt*D2R); return sz>0.02?[-sx/sz,-sy/sz]:null; };
+  // exact noon for a day (for the precise average)
+  const noonExact=N=>{ let lo=600,hi=840; for(let i=0;i<50;i++){ const a=lo+(hi-lo)/3,b=hi-(hi-lo)/3; if(sunNOAA(N,a,P[1],P[2],5.5).alt>sunNOAA(N,b,P[1],P[2],5.5).alt) hi=b; else lo=a; } return (lo+hi)/2; };
+
+  animLoop(dt=>{
+    t+=dt;
+    const day=Math.floor(A/1440), N=N0+day;
+    if(state==='run'){ const A1=Math.min(A+speed*dt,day*1440+790);
+      for(let m=Math.floor(A)+1;m<=Math.floor(A1);m++){ const mm=m-day*1440; if(mm>=660&&mm<=790&&!dots.some(d=>d.m===mm)){ const s=sunAt(m), tp=tipOf(s); if(tp) dots.push({m:mm,x:tp[0],y:tp[1],L:Math.hypot(tp[0],tp[1])}); } }
+      A=A1; if(A>=day*1440+790){ state='done'; const best=dots.reduce((a,b)=>b.L<a.L?b:a); rows.push({N,m:best.m,ex:noonExact(N)}); } }
+    if(state==='ff'){ ff.k=Math.min(1,ff.k+dt/2.4); A=lerp(ff.a0,ff.a1,smooth01(0,1,ff.k)); if(ff.k>=1){ A=ff.a1; state='idle'; ff=null; } }
+    const s=sunAt(A), tip=tipOf(s), mNow=A-1440*Math.floor(A/1440);
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const gH=Math.max(120,h*0.28), sH=h-gH;
+    // scale so this day's dot track fits (eases in)
+    let xr=0.3,yr0=0,yr1=0.3; for(let m=660;m<=790;m+=10){ const tp=tipOf(sunNOAA(N,m,P[1],P[2],5.5)); if(tp){ xr=Math.max(xr,Math.abs(tp[0])); yr0=Math.min(yr0,tp[1]); yr1=Math.max(yr1,tp[1]); } }
+    // camera stands north of the stick looking south (like 11.1): East on the left, the shadow falls toward you
+    const front=yr1+0.3, Sfit=Math.min((w*0.9)/(2*xr+1.0), (sH-80)/(0.8+0.5*front));
+    const S=springTo(Sc,Math.min(Sfit,sH*0.7),10,6,dt);
+    const cx=w*0.5, gy=sH-18-front*S*0.5;
+    const PX=(x,y,z)=>[cx-x*S, gy+y*S*0.5-(z||0)*S*0.8];
+    const dayLight=smooth01(-4,6,s.alt);
+    // ground patch with a 25 cm grid
+    const gx0=-xr-0.4, gx1=xr+0.4, gy0=Math.min(-0.3,yr0-0.2), gy1=yr1+0.3;
+    ctx.save(); ctx.beginPath(); [[gx0,gy0],[gx1,gy0],[gx1,gy1],[gx0,gy1]].forEach((q,i)=>{ const p=PX(q[0],q[1]); ctx[i?'lineTo':'moveTo'](p[0],p[1]); }); ctx.closePath();
+    ctx.fillStyle=mixCol('#dfe6ee','#f6f8f2',dayLight); ctx.fill(); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.4; ctx.stroke(); ctx.restore();
+    ctx.save(); ctx.strokeStyle='rgba(129,149,171,0.28)'; ctx.lineWidth=1; ctx.beginPath();
+    for(let x=Math.ceil(gx0*4)/4;x<=gx1;x+=0.25){ const a=PX(x,gy0), b=PX(x,gy1); ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); }
+    for(let y=Math.ceil(gy0*4)/4;y<=gy1;y+=0.25){ const a=PX(gx0,y), b=PX(gx1,y); ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); } ctx.stroke(); ctx.restore();
+    // compass
+    const cN=PX(gx0+0.12,gy1-0.32), cN2=PX(gx0+0.12,gy1-0.06); vec(ctx,cN[0],cN[1],cN2[0],cN2[1],COL.ink,2); textAt(ctx,'N',cN2[0]+8,cN2[1],{size:12,weight:700});
+    const eA=PX(gx1,(gy0+gy1)/2), wA=PX(gx0,(gy0+gy1)/2); textAt(ctx,'E',eA[0]-16,eA[1]+4,{size:13,weight:700}); textAt(ctx,'W',wA[0]+6,wA[1]+4,{size:13,weight:700}); const sA=PX(-0.2,gy0); textAt(ctx,'S',sA[0],sA[1]-6,{align:'center',size:13,weight:700});
+    // yesterday's dots, today's dots
+    old.forEach(d=>{ const p=PX(d.x,d.y); dot(ctx,p[0],p[1],2,null,'#b9c6d6'); });
+    const best=dots.length?dots.reduce((a,b)=>b.L<a.L?b:a):null;
+    dots.forEach(d=>{ const p=PX(d.x,d.y); dot(ctx,p[0],p[1],2.6,null,COL.green); });
+    // shadow + stick + sunlight
+    const base=PX(0,0), topP=PX(0,0,1);
+    if(tip&&dayLight>0.05){ const tp=PX(tip[0],tip[1]); ctx.save(); ctx.globalAlpha=0.55*dayLight; line(ctx,base[0],base[1],tp[0],tp[1],'#4c5a6c',Math.max(4,S*0.022)); ctx.restore();
+      if(state==='run'){ circ(ctx,tp[0],tp[1],6,COL.green,null,1.6); } }
+    if(best){ const p=PX(best.x,best.y); circ(ctx,p[0],p[1],7,COL.green,null,2.4); line(ctx,base[0],base[1],p[0],p[1],COL.green,1.4,[4,4]); textAt(ctx,'shortest · '+hhmm(best.m),p[0]+10,p[1]+20,{size:12,weight:700,color:COL.green}); }
+    ctx.save(); ctx.lineCap='round'; line(ctx,base[0],base[1],topP[0],topP[1],COL.red,Math.max(5,S*0.03)); line(ctx,base[0],base[1],topP[0],topP[1],'#fff',Math.max(2,S*0.012)); ctx.restore();
+    textAt(ctx,'1 m',topP[0]+10,(base[1]+topP[1])/2,{size:12,weight:700,color:COL.red});
+    if(s.alt>-1){ const ca=Math.cos(s.alt*D2R), sv=[ca*Math.sin(s.az*D2R),ca*Math.cos(s.az*D2R),Math.sin(s.alt*D2R)];
+      let far=1.6, sp=PX(sv[0]*far,sv[1]*far,1+sv[2]*far); for(let i=0;i<12&&(sp[1]<40||sp[0]<30||sp[0]>w-30);i++){ far*=0.85; sp=PX(sv[0]*far,sv[1]*far,1+sv[2]*far); }
+      sunIcon(ctx,sp[0],sp[1],13,t);
+      if(tip) lightPath(ctx,[sp,topP,PX(tip[0],tip[1])],t,[COL.yellow,COL.yellow],{w:1.8,speed:60,alpha:0.9}); }
+    else { textAt(ctx,'Night — Sun below the horizon',w/2,34,{align:'center',size:13,weight:600,color:COL.muted}); }
+    lcd(ctx,14,12,128,34,hhmm(mNow),true); textAt(ctx,dateOf(N)+' · '+P[0],150,34,{size:13,weight:700,color:COL.ink});
+
+    // ---- graph: shadow length vs time ----
+    const gx=46, gw=w-gx-18, gy2=h-22, gTop=sH+12;
+    line(ctx,0,sH,w,sH,COL.mid,1);
+    const all=dots.concat(old); let L0=Infinity,L1=0; for(let m=660;m<=790;m+=5){ const tp=tipOf(sunNOAA(N,m,P[1],P[2],5.5)); if(tp){ const L=Math.hypot(tp[0],tp[1]); L0=Math.min(L0,L); L1=Math.max(L1,L); } }
+    const pad=(L1-L0)*0.15+0.01; L0=Math.max(0,L0-pad); L1+=pad;
+    const GX=m=>gx+(m-660)/130*gw, GY=L=>gy2-(L-L0)/(L1-L0)*(gy2-gTop);
+    line(ctx,gx,gTop,gx,gy2,COL.ink,1.4); line(ctx,gx,gy2,gx+gw,gy2,COL.ink,1.4);
+    for(let m=660;m<=790;m+=30){ line(ctx,GX(m),gy2,GX(m),gy2+4,COL.ink,1); textAt(ctx,hhmm(m),GX(m),gy2+15,{align:'center',size:10,color:COL.muted}); }
+    textAt(ctx,fmt(L1*100,0)+' cm',gx-4,gTop+8,{align:'right',size:10,color:COL.muted}); textAt(ctx,fmt(L0*100,0)+' cm',gx-4,gy2,{align:'right',size:10,color:COL.muted});
+    textAt(ctx,'shadow length',gx+6,gTop+10,{size:10.5,weight:600,color:COL.green});
+    old.forEach(d=>dot(ctx,GX(d.m),GY(d.L),1.8,null,'#b9c6d6'));
+    dots.forEach(d=>dot(ctx,GX(d.m),GY(d.L),2.2,null,COL.green));
+    if(best){ line(ctx,GX(best.m),gTop,GX(best.m),gy2,COL.green,1.2,[4,4]); }
+    if(mNow>=660&&mNow<=790&&(state==='run'||state==='pause')) line(ctx,GX(mNow),gTop,GX(mNow),gy2,COL.mid,1);
+
+    // read-outs
+    $('#vS').textContent=speed+' min / s';
+    $('#go').textContent={idle:'▶ Start marking dots',run:'⏸ Pause',pause:'▶ Continue',done:'Next day ▶',ff:'⏩ Night passing…'}[state];
+    $('#go').disabled=state==='ff';
+    $('#rL').textContent=tip&&s.alt>0?fmt(Math.hypot(tip[0],tip[1])*100,1)+' cm':'—';
+    $('#rA').textContent=fmt(s.alt,1)+'°';
+    if(rows.length>1){ const d=(rows[rows.length-1].ex-rows[0].ex)/(rows.length-1), sec=Math.round(1440*60+d*60), hh=Math.floor(sec/3600), mm=Math.floor(sec%3600/60), ss=sec%60;
+      $('#rD').textContent=hh+' h '+String(mm).padStart(2,'0')+' min '+String(ss).padStart(2,'0')+' s'; } else $('#rD').textContent='needs 2 days';
+    const fb=$('#fb');
+    if(state==='idle'){ fb.className='fb warn'; fb.textContent=rows.length?'New day — start marking at 11:00.':'Press start at 11:00 a.m.'; }
+    else if(state==='run'){ fb.className='fb ok'; fb.textContent='Dot '+dots.length+' marked'; }
+    else if(state==='done'){ fb.className='fb ok'; fb.textContent='Shortest shadow at '+hhmm(rows[rows.length-1].m)+' — Sun at its highest.'; }
+    else fb.className='fb hidden';
+    htmlIfChanged($('#tb'),rows.length?rows.map((r,i)=>{ let du='——'; if(i){ const dm=1440+r.m-rows[i-1].m; du=Math.floor(dm/60)+':'+String(dm%60).padStart(2,'0'); } return `<tr><td>${dateOf(r.N)}</td><td>${hhmm(r.m)}</td><td>${du}</td></tr>`; }).join(''):'<tr><td colspan="3">—</td></tr>');
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   11.4 LET US IDENTIFY — SPOTTING AN ARTIFICIAL SATELLITE AFTER SUNSET
+   All-sky view (zenith in the centre, horizon on the rim, N up, E left)
+   for φ = 20° N at an equinox. Sun hour angle H = 90° + 15°/h after sunset.
+   Satellite: circular orbit r = 6371 km + h,
+     period T = 2π·√(r³/GM), GM = 3.986×10¹⁴ m³/s²   (h = 800 km → 100.7 min)
+     p(θ) = r·(cos θ·â + sin θ·b̂), θ̇ = 2π/T, â tilted β from the zenith.
+   It shines only while sunlit: lit if p·ŝ > 0 or |p − (p·ŝ)ŝ| > R⊕ — so
+   late in the evening it fades out mid-sky as it enters Earth's shadow.
+   Aeroplane: 10 km up at 240 m/s with blinking navigation lights.
+   Stars keep their place (they turn only 15°/h with the sky) and twinkle;
+   the planet Venus is steady and does not move across the stars.
+   Faint things appear as the sky darkens: limiting magnitude rises from
+   −1 at sunset to +5 when the Sun is 16° below the horizon.
+   ===================================================================== */
+function buildA4(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML=`
+    <div class="control-group"><label>Time after sunset <span class="val" id="vT"></span></label><input type="range" id="tS" min="0" max="150" step="1" value="45">
+      <div class="toggle-group"><button class="toggle-btn" data-s="1">×1</button><button class="toggle-btn active" data-s="10">×10</button><button class="toggle-btn" data-s="30">×30</button><button class="toggle-btn" id="pp">⏸</button></div></div>
+    <div class="control-group"><label>Satellite height <span class="val" id="vH"></span></label><input type="range" id="hS" min="400" max="1500" step="50" value="800">
+      <div class="toggle-group"><button class="toggle-btn" id="pass">🛰 New pass</button><button class="toggle-btn" id="trail">〰 Show paths</button></div></div>
+    <div class="control-group"><label>Binoculars on</label><div class="chip-wrap" id="bin"></div>
+      <label style="margin-top:9px">Which one is the satellite?</label><div class="chip-wrap" id="ans"></div><div class="fb hidden" id="fb"></div></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Moves across sky</div><div class="rval" id="rW" style="color:var(--f-green)">—</div></div>
+      <div class="rcard"><div class="rlabel">Its light</div><div class="rval" id="rL">—</div></div>
+      <div class="rcard"><div class="rlabel">One orbit takes</div><div class="rval" id="rT" style="color:var(--f-blue)">—</div></div>
+      <div class="rcard"><div class="rlabel">Satellite is</div><div class="rval" id="rS">—</div></div></div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const LAT=20, RE=6371e3, GM=3.986e14;
+  const R0=rng(4); const stars=[]; for(let i=0;i<260;i++) stars.push({H0:R0()*360, dec:-50+R0()*120, mag:Math.pow(R0(),0.55)*5.6, c:R0()<0.12?'#ffd9b0':R0()<0.2?'#cfe3ff':'#ffffff'});
+  const bright={H0:-35, dec:-16, mag:-1.4, c:'#cfe3ff'};                  // a Sirius-like bright star
+  let tau=45*60, tauT=45*60, speed=10, paused=false, hKm=800, trails=false, t=0, sel=0, answered=null;
+  let sat=null, plane=null, order=[], hist={sat:[],plane:[]};
+  const TT=()=>2*Math.PI*Math.sqrt(Math.pow(RE+hKm*1e3,3)/GM);
+  const add=(a,b,s)=>[a[0]+b[0]*s,a[1]+b[1]*s,a[2]+b[2]*s], dotp=(a,b)=>a[0]*b[0]+a[1]*b[1]+a[2]*b[2];
+  const topo=v=>{ const d=Math.hypot(v[0],v[1],v[2]); return {alt:Math.asin(v[2]/d)/D2R, az:wrap360(Math.atan2(v[0],v[1])/D2R), d}; };
+  function sunVec(){ const q=altAz(90+15*tau/3600,0,LAT); const ca=Math.cos(q.alt*D2R); return {alt:q.alt, v:[ca*Math.sin(q.az*D2R),ca*Math.cos(q.az*D2R),Math.sin(q.alt*D2R)]}; }
+  function newSat(delay){
+    const beta=(1+R0()*8)*D2R, psi=R0()*360*D2R, r=RE+hKm*1e3, c=[Math.cos(psi),-Math.sin(psi),0], tt=[Math.sin(psi),Math.cos(psi),0];
+    const a=[Math.sin(beta)*c[0],Math.sin(beta)*c[1],Math.cos(beta)], b=tt;
+    const s={a,b,r,T:TT()}; let th=-Math.PI/2; for(;th<0;th+=0.0005){ if(satAt(s,th).alt>0) break; }
+    s.th0=th-0.002; s.t0=tau+(delay||0); return s; }
+  function satPos(s,th){ return [s.r*(Math.cos(th)*s.a[0]+Math.sin(th)*s.b[0]), s.r*(Math.cos(th)*s.a[1]+Math.sin(th)*s.b[1]), s.r*(Math.cos(th)*s.a[2]+Math.sin(th)*s.b[2])]; }
+  function satAt(s,th){ const p=satPos(s,th); return Object.assign(topo([p[0],p[1],p[2]-RE]),{p}); }
+  function newPlane(delay){ const hd=R0()*360*D2R, off=(15+R0()*25)*1e3*(R0()<0.5?-1:1), u=[Math.sin(hd),Math.cos(hd),0], n=[Math.cos(hd),-Math.sin(hd),0];
+    return {q0:[n[0]*off-u[0]*75e3, n[1]*off-u[1]*75e3, 10e3], v:[u[0]*240,u[1]*240,0], t0:tau+(delay||0)}; }
+  function shuffle(){ order=['sat','plane','star','venus']; for(let i=3;i>0;i--){ const j=Math.floor(R0()*(i+1)); [order[i],order[j]]=[order[j],order[i]]; } answered=null; buildChips(); }
+  function buildChips(){
+    $('#bin').innerHTML=order.map((o,i)=>`<button class="chip-btn${i===sel?' active':''}" data-i="${i}">#${i+1}</button>`).join('');
+    $('#ans').innerHTML=order.map((o,i)=>`<button class="chip-btn${answered===i?(o==='sat'?' ok active':' bad active'):''}" data-i="${i}">#${i+1}</button>`).join('');
+    wrap.querySelectorAll('#bin .chip-btn').forEach(b=>b.onclick=()=>{ sel=+b.dataset.i; buildChips(); });
+    wrap.querySelectorAll('#ans .chip-btn').forEach(b=>b.onclick=()=>{ answered=+b.dataset.i; buildChips(); });
+    const fb=$('#fb'); if(answered===null){ fb.className='fb hidden'; return; }
+    const o=order[answered], txt={sat:'✓ Yes — a steady point crossing the sky in minutes.',plane:'✗ Blinking red/green/white lights: an aeroplane.',star:'✗ It twinkles and keeps its place: a star.',venus:'✗ Steady but not moving: the planet Venus.'}[o];
+    fb.className='fb '+(o==='sat'?'ok':'bad'); fb.textContent=txt; }
+  sat=newSat(0); plane=newPlane(0); shuffle();
+  const sB=[...wrap.querySelectorAll('[data-s]')]; toggleWire(sB,b=>{ speed=+b.dataset.s; });
+  $('#pp').onclick=()=>{ paused=!paused; $('#pp').textContent=paused?'▶':'⏸'; };
+  $('#tS').oninput=e=>{ tauT=+e.target.value*60; };
+  $('#hS').oninput=e=>{ hKm=+e.target.value; sat=newSat(0); hist.sat=[]; };
+  $('#pass').onclick=()=>{ sat=newSat(0); hist.sat=[]; shuffle(); };
+  $('#trail').onclick=()=>{ trails=!trails; $('#trail').classList.toggle('active',trails); };
+
+  animLoop(dt=>{
+    t+=dt;
+    // sim clock: glide to a new slider time, otherwise run at the chosen speed
+    if(Math.abs(tauT-tau)>2){ const step=(tauT-tau)*(1-Math.exp(-3*dt)); tau+=Math.sign(step)*Math.min(Math.abs(step),1800*dt); }
+    else if(!paused){ tau+=dt*speed; tauT=tau; $('#tS').value=Math.round(tau/60); }
+    const sun=sunVec(), dep=-sun.alt, Lm=-1+6*smooth01(3,16,dep);
+    // satellite state
+    if(tau<sat.t0-90){ sat=newSat(0); hist.sat=[]; } if(tau<plane.t0-5){ plane=newPlane(0); hist.plane=[]; }
+    let th=sat.th0+2*Math.PI*(tau-sat.t0)/sat.T, S=satAt(sat,th);
+    if(tau>sat.t0&&S.alt<-1&&th>sat.th0+0.05){ sat=newSat(20+R0()*40); hist.sat=[]; th=sat.th0; S=satAt(sat,th); }
+    const before=tau<sat.t0;
+    const pS=dotp(S.p,sun.v), perp=Math.sqrt(Math.max(0,S.p[0]**2+S.p[1]**2+S.p[2]**2-pS*pS)), lit=pS>0?1:smooth01(RE-12e3,RE+12e3,perp);
+    const satMag=1.6+5*Math.log10(S.d/1e6)+ (1-lit)*10;
+    // aeroplane
+    let pq=add(plane.q0,plane.v,tau-plane.t0), PL=topo(pq);
+    if(tau-plane.t0>650||PL.alt<-1&&tau-plane.t0>60){ plane=newPlane(15+R0()*30); hist.plane=[]; pq=add(plane.q0,plane.v,tau-plane.t0); PL=topo(pq); }
+    const venusQ=altAz(90-38+15*tau/3600,4,LAT), starQ=altAz(bright.H0+15.04*tau/3600,bright.dec,LAT);
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const wide=w>h*1.1, R=wide?Math.min(w*0.33,h*0.46):Math.min(w*0.46,h*0.34), cx=wide?w*0.36:w/2, cy=wide?h/2:R+22;
+    const P=(alt,az)=>{ const r=(90-alt)/90*R; return [cx-r*Math.sin(az*D2R), cy-r*Math.cos(az*D2R)]; };
+    // the sky disc: colour from the Sun's depression
+    const g=ctx.createRadialGradient(cx+R*0.6,cy,R*0.1,cx,cy,R*1.05); const tw=smooth01(2,17,dep);
+    g.addColorStop(0,mixCol('#6f8fbd','#0d1a2e',tw)); g.addColorStop(1,mixCol('#8aa6cc','#0a1526',tw));
+    ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fillStyle=g; ctx.fill(); ctx.clip();
+    // western twilight glow
+    const wg=P(0,270); glow(ctx,wg[0],wg[1],R*1.1,'rgba(247,190,120,0.75)',1-tw*0.9);
+    // stars (twinkle more near the horizon)
+    stars.forEach(st=>{ const q=altAz(st.H0+15.04*tau/3600,st.dec,LAT); if(q.alt<0) return; const vis=Lm-st.mag; if(vis<0) return;
+      const p=P(q.alt,q.az), tw2=1-0.5*(1-q.alt/90)*(0.5+0.5*Math.sin(t*(11+st.H0%7)+st.H0));
+      starDot(ctx,p[0],p[1],0.5+Math.max(0,(3.5-st.mag))*0.35,st.c,Math.min(1,vis*0.6)*tw2); });
+    // tracks
+    const tracks=(arr,col)=>{ if(!trails||arr.length<2) return; ctx.save(); ctx.strokeStyle=col; ctx.lineWidth=1.6; ctx.setLineDash([4,5]); ctx.beginPath(); arr.forEach((q,i)=>{ const p=P(q[0],q[1]); ctx[i?'lineTo':'moveTo'](p[0],p[1]); }); ctx.stroke(); ctx.restore(); };
+    if(!before&&S.alt>0){ const H=hist.sat; if(!H.length||Math.hypot(H[H.length-1][0]-S.alt,H[H.length-1][1]-S.az)>0.6) H.push([S.alt,S.az]); }
+    if(PL.alt>0){ const H=hist.plane; if(!H.length||Math.hypot(H[H.length-1][0]-PL.alt,H[H.length-1][1]-PL.az)>0.6) H.push([PL.alt,PL.az]); }
+    tracks(hist.sat,COL.green); tracks(hist.plane,'rgba(31,157,85,0.6)');
+    // objects
+    const obj={};
+    if(starQ.alt>0){ const p=P(starQ.alt,starQ.az), f=0.55+0.45*Math.sin(t*17)*Math.sin(t*7.3); starDot(ctx,p[0],p[1],2.4,['#cfe3ff','#fff','#ffd9e0','#d6ffe8'][Math.floor(t*9)%4],f*Math.min(1,(Lm+1.4)*0.8)); obj.star={p,q:starQ}; }
+    if(venusQ.alt>0){ const p=P(venusQ.alt,venusQ.az); glow(ctx,p[0],p[1],10,'rgba(255,250,225,0.9)'); dot(ctx,p[0],p[1],3,null,'#fffbea'); obj.venus={p,q:venusQ}; }
+    if(PL.alt>0){ const p=P(PL.alt,PL.az), ph=(t*speed)%1.2; const strobe=ph<0.06||(ph>0.18&&ph<0.24);
+      dot(ctx,p[0]-2.5,p[1],1.6,null,'#ff5a4a'); dot(ctx,p[0]+2.5,p[1],1.6,null,'#4dff88'); if(strobe) starDot(ctx,p[0],p[1],2.6,'#ffffff',1); obj.plane={p,q:PL}; }
+    if(!before&&S.alt>0){ const p=P(S.alt,S.az), vis=clamp((Lm-satMag)*0.8,0,1); if(vis>0.02){ ctx.save(); ctx.globalAlpha=vis; dot(ctx,p[0],p[1],2.3,null,'#fff'); ctx.restore(); }
+      if(lit<0.5&&lit>0) textAt(ctx,'entering Earth’s shadow',p[0]+8,p[1]-8,{size:10,weight:600,color:'#f2b8ae'});
+      obj.sat={p,q:S,vis}; }
+    ctx.restore();
+    // rim, compass, altitude rings
+    circ(ctx,cx,cy,R,COL.ink,null,2.4);
+    ctx.save(); ctx.strokeStyle='rgba(200,215,235,0.18)'; ctx.lineWidth=1; [30,60].forEach(a=>{ ctx.beginPath(); ctx.arc(cx,cy,(90-a)/90*R,0,Math.PI*2); ctx.stroke(); }); ctx.restore();
+    [['N',0],['E',90],['S',180],['W',270]].forEach(([s,az])=>{ const p=P(-9,az); textAt(ctx,s,p[0],p[1]+5,{align:'center',size:14,weight:700}); });
+    textAt(ctx,'sunset side',P(-3,262)[0]+10,P(-3,262)[1]+22,{size:10,weight:600,color:COL.yellow});
+    // number tags
+    order.forEach((o,i)=>{ const ob=obj[o]; if(!ob||(o==='sat'&&ob.vis<0.05)) return; const x=ob.p[0]+10, y=ob.p[1]-10;
+      ctx.save(); ctx.beginPath(); ctx.arc(x+6,y-4,8,0,Math.PI*2); ctx.fillStyle=i===sel?'#fff':'rgba(255,255,255,0.18)'; ctx.fill(); ctx.strokeStyle='#fff'; ctx.lineWidth=1.2; ctx.stroke(); ctx.restore();
+      textAt(ctx,String(i+1),x+6,y,{align:'center',size:10.5,weight:700,color:i===sel?COL.ink:'#fff'}); });
+
+    // ---- orbit inset: side view looking north (west on the left) ----
+    const ix=wide?w*0.84:w*0.27, iy=wide?h*0.28:cy+R+(h-cy-R)/2, IR=wide?Math.min(w*0.12,h*0.19):Math.min(w*0.14,(h-cy-R)*0.3);
+    const k=IR/(RE+1500e3), X=(p)=>[ix+p[0]*k, iy-p[2]*k];
+    const sd=[sun.v[0],sun.v[2]], sl=Math.hypot(sd[0],sd[1])||1, sx=sd[0]/sl, sz=sd[1]/sl;
+    // Earth's shadow (behind the Earth, away from the Sun)
+    ctx.save(); ctx.fillStyle='rgba(19,42,68,0.13)'; ctx.beginPath(); const ex=-sz, ez=sx, re=RE*k;
+    ctx.moveTo(ix+ex*re,iy-ez*re); ctx.lineTo(ix+ex*re-sx*IR*1.6,iy-ez*re+sz*IR*1.6); ctx.lineTo(ix-ex*re-sx*IR*1.6,iy+ez*re+sz*IR*1.6); ctx.lineTo(ix-ex*re,iy+ez*re); ctx.fill(); ctx.restore();
+    for(let i=-2;i<=2;i++){ const bx=ix+sx*IR*1.32-ex*i*re*0.4, bz=iy-sz*IR*1.32+ez*i*re*0.4; vec(ctx,bx,bz,bx-sx*IR*0.24,bz+sz*IR*0.24,COL.yellow,1.6); }
+    circ(ctx,ix,iy,re,COL.blue,'#eef5fd',2);
+    ctx.save(); ctx.strokeStyle=COL.blue; ctx.lineWidth=1.3; ctx.setLineDash([4,4]); ctx.beginPath(); for(let i=0;i<=72;i++){ const q=X(satPos(sat,i/72*Math.PI*2)); ctx[i?'lineTo':'moveTo'](q[0],q[1]); } ctx.stroke(); ctx.restore();
+    const ob=[ix,iy-re]; person(ctx,ob[0],ob[1],12,COL.ink);
+    const sp=X(S.p); dot(ctx,sp[0],sp[1],4,null,lit>0.5?COL.red:'#8195ab'); if(!before&&S.alt>0) line(ctx,ob[0],ob[1]-12,sp[0],sp[1],COL.green,1.2,[3,4]);
+    textAt(ctx,'Earth, side view',ix,iy+IR+16,{align:'center',size:10.5,weight:600,color:COL.muted});
+    textAt(ctx,'sunlight',ix+sx*IR*1.2,iy-sz*IR*1.2-re*1.0,{align:'center',size:10.5,weight:700,color:COL.yellow});
+
+    // ---- binoculars ----
+    const bx=wide?w*0.84:w*0.73, by=wide?h*0.74:iy, BR=wide?Math.min(w*0.11,h*0.2):IR*1.1, o=order[sel], ob2=obj[o];
+    ctx.save(); ctx.beginPath(); ctx.arc(bx-BR*0.5,by,BR*0.62,0,Math.PI*2); ctx.arc(bx+BR*0.5,by,BR*0.62,0,Math.PI*2); ctx.fillStyle=mixCol('#4a6690','#0b1628',tw); ctx.fill(); ctx.clip();
+    if(ob2&&!(o==='sat'&&ob2.vis<0.05)){
+      if(o==='sat') dot(ctx,bx,by,2.4,null,'#fff');
+      if(o==='star'){ const f=0.5+0.5*Math.sin(t*17)*Math.sin(t*7.3); starDot(ctx,bx,by,3,['#cfe3ff','#fff','#ffd9e0','#d6ffe8'][Math.floor(t*9)%4],f); }
+      if(o==='venus'){ glow(ctx,bx,by,18,'rgba(255,250,225,0.6)'); drawPhase(ctx,bx,by,5,Math.PI/2+0.9,0.35,{lit:'#fffbea',dark:'#1b2a40',stroke:null}); }
+      if(o==='plane'){ const hd=Math.atan2(plane.v[0],plane.v[1]); ctx.save(); ctx.translate(bx,by); ctx.rotate(-hd); ctx.scale(1.8,1.8);
+        ctx.strokeStyle='#8fa3bd'; ctx.lineWidth=1.6; ctx.beginPath(); ctx.moveTo(0,-14); ctx.lineTo(0,14); ctx.moveTo(-15,1); ctx.lineTo(15,1); ctx.moveTo(-6,12); ctx.lineTo(6,12); ctx.stroke();
+        const ph=(t*speed)%1.2; dot(ctx,-15,1,2,null,'#ff5a4a'); dot(ctx,15,1,2,null,'#4dff88'); if(ph<0.06||(ph>0.18&&ph<0.24)) starDot(ctx,0,14,3,'#fff',1); if(Math.sin(t*6)>0) dot(ctx,0,-2,2,null,'#ff3b30'); ctx.restore(); }
+    } else textAt(ctx,'not in the sky now',bx,by+4,{align:'center',size:10,weight:600,color:'#c9d6e6'});
+    ctx.restore();
+    ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.beginPath(); ctx.arc(bx-BR*0.5,by,BR*0.62,0,Math.PI*2); ctx.stroke(); ctx.beginPath(); ctx.arc(bx+BR*0.5,by,BR*0.62,0,Math.PI*2); ctx.stroke(); ctx.restore();
+    textAt(ctx,'Binoculars · #'+(sel+1),bx,by+BR*0.62+16,{align:'center',size:10.5,weight:600,color:COL.muted});
+
+    // read-outs (angular speed in real time, per second)
+    const angSpeed=(f)=>{ const a=f(tau), b=f(tau+1); const c=Math.sin(a.alt*D2R)*Math.sin(b.alt*D2R)+Math.cos(a.alt*D2R)*Math.cos(b.alt*D2R)*Math.cos((a.az-b.az)*D2R); return Math.acos(clamp(c,-1,1))/D2R; };
+    let wv='—', lt='—';
+    if(o==='sat'&&ob2){ wv=fmt(angSpeed(tt=>satAt(sat,sat.th0+2*Math.PI*(tt-sat.t0)/sat.T)),2)+'°/s'; lt='steady'; }
+    if(o==='plane'&&ob2){ wv=fmt(angSpeed(tt=>topo(add(plane.q0,plane.v,tt-plane.t0))),2)+'°/s'; lt='blinking'; }
+    if(o==='star'&&ob2){ wv='0.004°/s'; lt='twinkling'; }
+    if(o==='venus'&&ob2){ wv='0.004°/s'; lt='steady'; }
+    $('#rW').textContent=wv; $('#rL').textContent=lt;
+    $('#rT').textContent=fmt(sat.T/60,1)+' min'; $('#vH').textContent=hKm+' km';
+    $('#rS').textContent=before||S.alt<=0?'below horizon':(lit>0.5?'sunlit':'in shadow'); $('#rS').style.color=lit>0.5&&!before&&S.alt>0?'var(--f-yellow)':'var(--text-2)';
+    $('#vT').textContent=Math.floor(tau/60)+' min · Sun '+fmt(dep,0)+'° down';
+  });
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   INIT
+   --------------------------------------------------------------------- */
+render();
+</script>
+<script src="../../tracking/activity-tracker.js"></script>
+<script src="../../nav/back-button.js"></script>
+</body>
+</html>

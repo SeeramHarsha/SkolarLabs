@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 6 · Chapter 12 — Beyond Earth | Botclub Labs</title>
+<link href="../../vendor/fonts/fonts.css" rel="stylesheet">
+<style>
+:root{
+  --navy-1:#0f2640; --navy-2:#1a3a5c; --navy-3:#234a73;
+  --accent:#2f8fe0; --accent-2:#5cc8ff;
+  --bg:#eef2f8; --surface-0:#ffffff; --surface-1:#f6f9fc; --surface-2:#eef2f8;
+  --border:#dbe4f0; --border-strong:#c2d1e5;
+  --text-1:#132a44; --text-2:#4c6178; --text-3:#8195ab;
+  --f-red:#d9432b; --f-blue:#2f8fe0; --f-green:#1f9d55; --f-yellow:#d9a017;
+  --radius:14px; --radius-sm:9px;
+  --fs-xs:clamp(10px,0.62vw,12px); --fs-sm:clamp(11px,0.72vw,13.5px);
+  --fs-md:clamp(12.5px,0.85vw,15px); --fs-lg:clamp(15px,1.15vw,19px);
+  --fs-xl:clamp(18px,1.5vw,25px);
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:22px; --sp-6:30px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{ font-family:'Poppins',system-ui,sans-serif; background:var(--bg); color:var(--text-1); overflow:hidden; }
+button, input, select{font-family:inherit;}
+
+.app{height:100vh; display:flex; flex-direction:column; min-height:0;}
+.topbar{
+  flex:0 0 auto; background:linear-gradient(120deg, var(--navy-1) 0%, var(--navy-2) 55%, var(--navy-3) 100%);
+  color:#fff; padding:clamp(9px,1vh,16px) clamp(14px,1.6vw,28px);
+  display:flex; align-items:center; gap:var(--sp-4); box-shadow:0 2px 10px rgba(15,38,64,0.25); z-index:5;
+}
+.topbar .brand-badge{
+  width:clamp(32px,2.4vw,40px); height:clamp(32px,2.4vw,40px); border-radius:10px; background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center;
+  font-size:clamp(15px,1.3vw,20px); flex:0 0 auto;
+}
+.topbar .chip{
+  display:inline-block; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.28);
+  border-radius:6px; padding:2px 9px; font-size:var(--fs-xs); letter-spacing:0.06em; text-transform:uppercase; font-weight:600; margin-bottom:3px;
+}
+.topbar h1{font-size:var(--fs-lg); font-weight:600; line-height:1.2; white-space:nowrap;}
+.topbar .spacer{flex:1;}
+.topbar .legend{display:flex; gap:14px; font-size:var(--fs-xs); color:rgba(255,255,255,0.85); align-items:center;}
+.topbar .legend span{display:inline-flex; align-items:center; gap:5px;}
+.topbar .legend i{width:12px; height:4px; border-radius:2px; display:inline-block;}
+
+.body-wrap{flex:1; display:flex; min-height:0; overflow:hidden;}
+.sidenav{
+  flex:0 0 clamp(170px,13.5vw,230px); background:var(--surface-0); border-right:1px solid var(--border);
+  overflow-y:auto; padding:var(--sp-2); display:flex; flex-direction:column; gap:4px;
+}
+.nav-item{
+  display:flex; align-items:center; gap:8px; text-align:left; width:100%;
+  border:1px solid var(--border); background:var(--surface-1); border-radius:var(--radius-sm); padding:7px 10px; cursor:pointer; transition:all .15s ease;
+}
+.nav-item:hover{background:var(--surface-2); border-color:var(--border-strong);}
+.nav-item.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.nav-item .n-num{font-size:var(--fs-xs); font-weight:700; color:var(--accent); flex:0 0 auto; min-width:26px;}
+.nav-item.active .n-num{color:var(--accent-2);}
+.nav-item .n-title{font-size:var(--fs-sm); font-weight:600; line-height:1.25;}
+
+.content{flex:1; min-width:0; display:flex; flex-direction:column; overflow:hidden;}
+.panel-head{flex:0 0 auto; padding:var(--sp-3) var(--sp-5); border-bottom:1px solid var(--border); background:var(--surface-0); display:flex; align-items:baseline; gap:12px;}
+.panel-badge{background:var(--navy-2); color:#fff; font-size:var(--fs-xs); font-weight:700; padding:3px 10px; border-radius:6px;}
+.panel-head h2{font-size:var(--fs-lg); font-weight:600; color:var(--text-1);}
+.panel-head p{font-size:var(--fs-sm); color:var(--text-2); flex:1; text-align:right;}
+.panel-body{flex:1; min-height:0; overflow:hidden; padding:var(--sp-3) var(--sp-5); display:flex;}
+
+.lab-view{flex:1; display:flex; gap:var(--sp-4); min-height:0; min-width:0;}
+.lab-canvas-wrap{flex:7 1 0; min-width:0; min-height:0; background:#fff; border:1px solid var(--border); border-radius:var(--radius); position:relative; overflow:hidden;}
+.lab-canvas-wrap canvas{width:100%; height:100%; display:block;}
+.lab-side{flex:3 1 0; min-width:230px; display:flex; flex-direction:column; gap:var(--sp-3); min-height:0; overflow-y:auto; padding-right:2px;}
+.side-sub{display:flex; flex-direction:column; gap:var(--sp-3);}
+
+.control-group{background:var(--surface-0); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 12px;}
+.control-group label{font-size:var(--fs-sm); font-weight:600; color:var(--text-1); display:flex; justify-content:space-between;}
+.control-group label .val{color:var(--accent); font-weight:700;}
+.control-group input[type=range]{width:100%; margin-top:7px; accent-color:var(--navy-2); cursor:pointer;}
+.toggle-group{display:flex; gap:6px; margin-top:7px; flex-wrap:wrap;}
+.toggle-btn{flex:1; min-width:56px; padding:7px 5px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:600; cursor:pointer; text-align:center; color:var(--text-2);}
+.toggle-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.toggle-btn.small{font-size:10.5px; padding:6px 3px;}
+.toggle-btn.play{background:var(--f-green); border-color:var(--f-green); color:#fff;}
+.toggle-btn.navy{background:var(--navy-2); border-color:var(--navy-2); color:#fff; width:100%; margin-top:9px;}
+.toggle-btn:disabled{opacity:.5; cursor:not-allowed;}
+.chip-btn{display:inline-flex; align-items:center; gap:5px; padding:6px 11px; margin:3px 3px 0 0; border:1px solid var(--border-strong); background:var(--surface-1); border-radius:18px; cursor:pointer; font-size:var(--fs-sm); font-weight:600; color:var(--text-2);}
+.chip-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.chip-btn.ok{border-color:var(--f-green);} .chip-btn.bad{border-color:var(--f-red);}
+.chip-wrap{display:flex; flex-wrap:wrap; margin-top:3px;}
+
+.role-row{display:flex; align-items:center; gap:8px; margin-top:7px; font-size:var(--fs-sm); font-weight:600;}
+.role-row .rdot{width:10px; height:10px; border-radius:50%; flex:0 0 auto; display:inline-block;}
+.role-row .rname{width:70px; flex:0 0 auto; color:var(--text-2);}
+.role-row select{flex:1; min-width:0; padding:6px 7px; border:1px solid var(--border-strong); border-radius:7px; font-size:var(--fs-sm); background:var(--surface-1); color:var(--text-1); cursor:pointer;}
+
+.step-row{display:flex; gap:5px;}
+.step-pill{flex:1; padding:6px 4px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:10.5px; font-weight:700; color:var(--text-3); cursor:pointer;}
+.step-pill.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.step-pill.done{border-color:var(--f-green); color:var(--f-green);}
+.step-pill.active.done{color:#fff;}
+.opt-btn{display:block; width:100%; text-align:left; margin-top:6px; padding:7px 9px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:500; color:var(--text-1); cursor:pointer; line-height:1.3;}
+.opt-btn:disabled{opacity:.55; cursor:not-allowed;}
+.opt-btn.active{border-color:var(--navy-2); background:#e3ecf7; font-weight:600;}
+.var-row{display:flex; align-items:center; gap:6px; margin-top:7px;}
+.var-row .vname{flex:0 0 88px; font-size:var(--fs-sm); font-weight:600;}
+.var-row .toggle-group{margin-top:0; flex:1;}
+
+.result-cards{display:grid; grid-template-columns:1fr 1fr; gap:6px;}
+.result-cards.three{grid-template-columns:1fr 1fr 1fr;}
+.rcard{background:var(--surface-0); border:1px solid var(--border); border-radius:9px; padding:7px 9px;}
+.rcard .rlabel{font-size:9.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--text-3); font-weight:600;}
+.rcard .rval{font-size:var(--fs-md); font-weight:700; color:var(--text-1); margin-top:1px;}
+.rcard.wide{grid-column:1/-1;}
+.hint{font-size:var(--fs-xs); color:var(--text-3); margin-top:6px; line-height:1.4;}
+.fb{font-size:var(--fs-xs); font-weight:600; margin-top:6px; padding:5px 8px; border-radius:7px;}
+.fb.ok{background:#e4f7ec; color:#1f6b3d;}
+.fb.bad{background:#fdece7; color:#a4331c;}
+.fb.warn{background:#fdf4dc; color:#8a6410;}
+.log{width:100%; border-collapse:collapse; font-size:10.5px; margin-top:4px;}
+.log th{text-align:left; color:var(--text-3); font-weight:600; text-transform:uppercase; font-size:9px; letter-spacing:.04em; padding:3px 4px; border-bottom:1px solid var(--border);}
+.log td{padding:4px; border-bottom:1px solid var(--surface-2); color:var(--text-2);}
+.log td.r-ok{color:var(--f-green); font-weight:700;} .log td.r-bad{color:var(--f-red); font-weight:700;} .log td.r-warn{color:var(--f-yellow); font-weight:700;}
+.log td.g{color:var(--f-green);font-weight:700;} .log td.b{color:var(--f-blue);font-weight:700;} .log td.rd{color:var(--f-red);font-weight:700;}
+.qa-input{width:100%; margin-top:7px; padding:8px 10px; border:1px solid var(--border-strong); border-radius:8px; font-size:var(--fs-sm); color:var(--text-1); background:var(--surface-1);}
+.qa-input:focus{outline:none; border-color:var(--accent); background:#fff;}
+.nav-item .n-num{line-height:1.15; text-align:center;}
+.hidden{display:none !important;}
+
+@media (max-width:1000px) and (orientation:portrait), (max-width:1000px) and (min-height:601px){
+  .body-wrap{flex-direction:column;}
+  .sidenav{flex:0 0 auto; width:100%; height:auto; flex-direction:row; overflow-x:auto; overflow-y:hidden; border-right:none; border-bottom:1px solid var(--border); padding:6px;}
+  .nav-item{flex:0 0 auto; width:150px;}
+  .panel-body{overflow-y:auto;}
+  .lab-view{flex-direction:column;}
+  .lab-canvas-wrap{min-height:320px;}
+  .lab-side{min-width:0;}
+  .content{overflow-y:auto;}
+  .topbar .legend{display:none;}
+  .topbar h1{white-space:normal;}
+}
+::-webkit-scrollbar{width:7px; height:7px;}
+::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand-badge">🌌</div>
+    <div>
+      <div class="chip">Grade 6 · Ch 12</div>
+      <h1>Beyond Earth</h1>
+    </div>
+    <div class="spacer"></div>
+    <div class="legend">
+      <span><i style="background:var(--f-yellow)"></i>What you do · pen · pointer · Sun</span>
+      <span><i style="background:var(--f-red)"></i>Star patterns (as in Fig. 12.3)</span>
+      <span><i style="background:var(--f-blue)"></i>Directions · horizon · Earth</span>
+      <span><i style="background:var(--f-green)"></i>Found · Pole Star · Sirius · Venus</span>
+    </div>
+  </div>
+  <div class="body-wrap">
+    <nav class="sidenav" id="sideNav"></nav>
+    <main class="content">
+      <div class="panel-head">
+        <div class="panel-badge" id="panelBadge">12.1</div>
+        <h2 id="panelTitle">Select an activity</h2>
+        <p id="panelDesc"></p>
+      </div>
+      <div class="panel-body" id="panelBody"></div>
+    </main>
+  </div>
+</div>
+
+<script>
+
+/* =========================================================================
+   GRADE 6 — CHAPTER 12: BEYOND EARTH
+   Activities 12.1–12.4. Every scene is a real planetarium running on a
+   continuous animation loop: stars sit at their true positions and
+   brightness, the sky turns 15° per hour about the celestial pole for
+   the chosen date, time and place, twilight and city glow hide faint
+   stars, and stars twinkle more near the horizon. Controls only set a
+   TARGET — the view turns, the pen glides and lines extend on springs.
+   Colour rule: yellow = what you do · pen · pointer line · Sun,
+   red = star patterns (as in Fig. 12.3), blue = directions · horizon ·
+   Earth, green = found (Pole Star, Sirius, Venus).
+   ========================================================================= */
+const COL = {red:'#d9432b', blue:'#2f8fe0', green:'#1f9d55', yellow:'#d9a017', ink:'#132a44', muted:'#4c6178', mid:'#8195ab', navy:'#1a3a5c'};
+
+/* ---------------------------------------------------------------------
+   0. CANVAS HELPERS
+   --------------------------------------------------------------------- */
+function fitCanvas(canvas){
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  const r = canvas.parentElement.getBoundingClientRect();
+  const w = Math.max(200, r.width), h = Math.max(160, r.height);
+  if(canvas._w!==w || canvas._h!==h || canvas._dpr!==dpr){
+    canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr);
+    canvas.style.width = w+'px'; canvas.style.height = h+'px';
+    canvas._w=w; canvas._h=h; canvas._dpr=dpr;
+  }
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, w, h};
+}
+function line(ctx,x1,y1,x2,y2,color,width,dash){
+  ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=width||2;
+  if(dash) ctx.setLineDash(dash); else ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); ctx.restore();
+}
+function arrowHead(ctx,x,y,ang,color,size){
+  size=size||7; ctx.save(); ctx.fillStyle=color; ctx.translate(x,y); ctx.rotate(ang);
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-size,size*0.42); ctx.lineTo(-size,-size*0.42); ctx.closePath(); ctx.fill(); ctx.restore();
+}
+function vec(ctx,x1,y1,x2,y2,color,width){ line(ctx,x1,y1,x2,y2,color,width||2.6); arrowHead(ctx,x2,y2,Math.atan2(y2-y1,x2-x1),color,7); }
+function dimArrow(ctx,x,y1,y2,color){ line(ctx,x,y1,x,y2,color,1.6); arrowHead(ctx,x,y1,-Math.PI/2,color,5); arrowHead(ctx,x,y2,Math.PI/2,color,5); }
+function textAt(ctx,txt,x,y,opts){
+  opts=opts||{}; ctx.save();
+  ctx.font=(opts.weight||500)+' '+(opts.size||12)+'px Poppins, sans-serif';
+  ctx.fillStyle=opts.color||COL.ink; ctx.textAlign=opts.align||'left'; ctx.textBaseline=opts.baseline||'alphabetic';
+  if(opts.alpha!==undefined) ctx.globalAlpha=opts.alpha;
+  ctx.fillText(txt,x,y); ctx.restore();
+}
+function rect(ctx,x,y,w,h,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw===undefined?2.2:lw; if(fill){ctx.fillStyle=fill; ctx.fillRect(x,y,w,h);} if(lw!==0){ctx.strokeStyle=stroke; ctx.strokeRect(x,y,w,h);} ctx.restore(); }
+function circ(ctx,x,y,r,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw||2.2; ctx.beginPath(); ctx.arc(x,y,Math.max(0.1,r),0,Math.PI*2); if(fill){ctx.fillStyle=fill; ctx.fill();} ctx.strokeStyle=stroke; ctx.stroke(); ctx.restore(); }
+function rrect(ctx,x,y,w,h,r){ r=Math.min(r,w/2,h/2); ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function fmt(x,d){ if(!isFinite(x)) return '—'; d=d===undefined?2:d; return Number(x.toFixed(d)).toString(); }
+function gauss(){ return (Math.random()+Math.random()+Math.random()+Math.random()-2)*1.2247; }
+function hexRgb(h){ const n=parseInt(h.slice(1),16); return [n>>16&255, n>>8&255, n&255]; }
+function mixCol(a,b,t){ const A=hexRgb(a),B=hexRgb(b); t=clamp(t,0,1); return 'rgb('+A.map((v,i)=>Math.round(lerp(v,B[i],t))).join(',')+')'; }
+function rampCol(stops,x){ // stops: [[pos,hex],...]
+  if(x<=stops[0][0]) return mixCol(stops[0][1],stops[0][1],0);
+  for(let i=1;i<stops.length;i++){ if(x<=stops[i][0]){ const a=stops[i-1],b=stops[i]; return mixCol(a[1],b[1],(x-a[0])/(b[0]-a[0])); } }
+  const l=stops[stops.length-1][1]; return mixCol(l,l,0);
+}
+function thermo(ctx,x,top,bot,frac,outline,liquid){
+  const br=8;
+  ctx.save(); ctx.lineWidth=2; ctx.strokeStyle=outline; ctx.fillStyle='#fff';
+  rrect(ctx,x-5,top,10,bot-top+2,5); ctx.fill(); ctx.stroke(); ctx.restore();
+  const lh=(bot-top-5)*clamp(frac,0,1);
+  ctx.save(); ctx.fillStyle=liquid; ctx.fillRect(x-2.2,bot-lh,4.4,lh+6); ctx.restore();
+  circ(ctx,x,bot+br,br,outline,'#fff',2); circ(ctx,x,bot+br,br-3.2,liquid,liquid,1);
+  for(let i=0;i<=4;i++){ const yy=top+5+(bot-top-5)*i/4; line(ctx,x+5,yy,x+9,yy,outline,1.1); }
+}
+function flame(ctx,cx,baseY,width,inten,t){
+  const n=5;
+  for(let i=0;i<n;i++){
+    const fx=cx-width/2+width*(i+0.5)/n;
+    const hh=(6+inten*32)*(0.78+0.22*Math.sin(t*13+i*1.7));
+    const sway=Math.sin(t*9+i*2.1)*3;
+    ctx.save(); ctx.lineJoin='round';
+    ctx.strokeStyle=COL.red; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(fx-7,baseY); ctx.quadraticCurveTo(fx-7,baseY-hh*0.55,fx+sway,baseY-hh); ctx.quadraticCurveTo(fx+7,baseY-hh*0.55,fx+7,baseY); ctx.stroke();
+    ctx.strokeStyle=COL.yellow; ctx.lineWidth=1.6;
+    ctx.beginPath(); ctx.moveTo(fx-3.5,baseY); ctx.quadraticCurveTo(fx-3,baseY-hh*0.35,fx+sway*0.5,baseY-hh*0.55); ctx.quadraticCurveTo(fx+3,baseY-hh*0.35,fx+3.5,baseY); ctx.stroke();
+    ctx.restore();
+  }
+}
+
+/* ---------------------------------------------------------------------
+   0b. ANIMATION ENGINE
+   --------------------------------------------------------------------- */
+let activeStops = [];
+function stopAllLoops(){ activeStops.forEach(s=>{ try{ s(); }catch(e){} }); activeStops=[]; }
+function animLoop(tick){
+  let last = performance.now();
+  let raf;
+  function frame(now){
+    const dt = Math.max(0, Math.min(0.04, (now-last)/1000));
+    last = now;
+    tick(dt);
+    raf = requestAnimationFrame(frame);
+  }
+  raf = requestAnimationFrame(frame);
+  const stop = ()=>cancelAnimationFrame(raf);
+  activeStops.push(stop);
+  return stop;
+}
+/** Exponential ease — frame-rate independent, always smooth. */
+function approach(cur,tgt,rate,dt){ return cur + (tgt-cur)*(1-Math.exp(-rate*dt)); }
+/** Spring-damper — gives natural overshoot and settle. */
+function springTo(state,target,k,damping,dt){
+  const acc = (target-state.x)*k - state.v*damping;
+  state.v += acc*dt;
+  state.x += state.v*dt;
+  return state.x;
+}
+function toggleWire(btns,cb){
+  btns.forEach(b=>b.onclick=()=>{ btns.forEach(x=>x.classList.remove('active')); b.classList.add('active'); cb(b); });
+}
+
+
+
+/* ---------------------------------------------------------------------
+   0c. SHARED HELPERS — virtual stage, Q→A banner, stick figures,
+       cat, cups, particles (all line diagrams, all animated)
+   --------------------------------------------------------------------- */
+function rng(seed){ let s=(seed>>>0)||1; return ()=>{ s=(Math.imul(s,1664525)+1013904223)>>>0; return s/4294967296; }; }
+function smooth01(a,b,x){ const t=clamp((x-a)/(b-a),0,1); return t*t*(3-2*t); }
+function angDiff(a,b){ return Math.atan2(Math.sin(a-b),Math.cos(a-b)); }
+function ease(x){ x=clamp(x,0,1); return x<0.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2; }
+function spr(x){ return {x:x||0,v:0}; }
+function fitFont(ctx,txt,maxW,size,weight){
+  let s=size; ctx.font=weight+' '+s+'px Poppins, sans-serif';
+  while(s>9 && ctx.measureText(txt).width>maxW){ s-=0.5; ctx.font=weight+' '+s+'px Poppins, sans-serif'; }
+  return s;
+}
+/* every scene draws on an 800 × 470 virtual stage, fitted into the canvas */
+const VW=800, VH=520, BANNER=46;
+function stage(ctx,w,h){
+  const s=Math.min(w/VW,(h-BANNER-6)/VH), ox=(w-VW*s)/2, oy=BANNER+Math.max(0,(h-BANNER-VH*s)/2);
+  ctx.translate(ox,oy); ctx.scale(s,s); return s;
+}
+/* stick figure — feet on (x,y), height s. angles from straight-down, + = toward +x */
+function stick(ctx,x,y,s,o){
+  o=o||{}; const c=o.col||COL.ink, W=o.lw||Math.max(2,s*0.02);
+  const th=0.25*s, sh=0.25*s, ua=0.17*s, fa=0.16*s;
+  const LL=o.legL||[-0.12,-0.02], LR=o.legR||[0.12,0.02];
+  const drop=Math.max(Math.cos(LL[0])*th+Math.cos(LL[1])*sh, Math.cos(LR[0])*th+Math.cos(LR[1])*sh);
+  const hip=[x+(o.dx||0), y-drop];
+  const lean=o.lean||0;
+  const neck=[hip[0]+Math.sin(lean)*0.34*s, hip[1]-Math.cos(lean)*0.34*s];
+  const hd=[neck[0]+Math.sin(lean+(o.nod||0))*0.11*s, neck[1]-Math.cos(lean+(o.nod||0))*0.11*s];
+  ctx.save(); ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle=c; ctx.lineWidth=W;
+  const limb=(p,a,l1,l2)=>{ const k=[p[0]+Math.sin(a[0])*l1,p[1]+Math.cos(a[0])*l1], e=[k[0]+Math.sin(a[1])*l2,k[1]+Math.cos(a[1])*l2];
+    ctx.beginPath(); ctx.moveTo(p[0],p[1]); ctx.lineTo(k[0],k[1]); ctx.lineTo(e[0],e[1]); ctx.stroke(); return e; };
+  const fL=limb(hip,LL,th,sh), fR=limb(hip,LR,th,sh);
+  ctx.beginPath(); ctx.moveTo(hip[0],hip[1]); ctx.lineTo(neck[0],neck[1]); ctx.stroke();
+  const sho=[lerp(hip[0],neck[0],0.92),lerp(hip[1],neck[1],0.92)];
+  const hL=limb(sho,o.armL||[-0.25,-0.1],ua,fa), hR=limb(sho,o.armR||[0.25,0.1],ua,fa);
+  ctx.fillStyle='#fff'; ctx.beginPath(); ctx.arc(hd[0],hd[1],0.075*s,0,Math.PI*2); ctx.fill(); ctx.stroke();
+  const f=o.face===undefined?1:o.face;
+  if(f){ const ex=hd[0]+f*0.025*s, ey=hd[1]-0.012*s;
+    ctx.fillStyle=c; ctx.beginPath(); ctx.arc(ex,ey,Math.max(1.2,s*0.008),0,7); ctx.arc(ex+f*0.03*s,ey,Math.max(1.2,s*0.008),0,7); ctx.fill();
+    ctx.lineWidth=Math.max(1.2,W*0.6); ctx.beginPath();
+    const my=hd[1]+0.03*s, mood=o.mood===undefined?1:o.mood;
+    ctx.moveTo(ex-0.005*s*f,my); ctx.quadraticCurveTo(ex+f*0.015*s,my+mood*0.02*s,ex+f*0.04*s,my); ctx.stroke(); }
+  ctx.restore();
+  return {hip,neck,head:hd,handL:hL,handR:hR,footL:fL,footR:fR};
+}
+/* simple particle list: gravity-driven drops / crumbs / splash */
+function parts(){ return []; }
+function stepParts(P,dt,g,floorY,bounce){
+  for(const p of P){ p.vy+=(p.g===undefined?g:p.g)*dt; p.x+=p.vx*dt; p.y+=p.vy*dt; p.life-=dt;
+    if(floorY!==undefined && p.y>floorY){ if(bounce){ p.y=floorY; p.vy*=-bounce; p.vx*=0.7; } else p.life=0; } }
+  for(let i=P.length-1;i>=0;i--) if(P[i].life<=0) P.splice(i,1);
+}
+function splash(P,x,y,n,col,sp){ for(let i=0;i<n;i++){ const a=-Math.PI*(0.15+0.7*Math.random()); const v=(sp||120)*(0.5+Math.random()); P.push({x,y,vx:Math.cos(a)*v,vy:Math.sin(a)*v,life:0.5+Math.random()*0.4,r:1.5+Math.random()*2,c:col}); } }
+function drawParts(ctx,P,col){ ctx.save(); for(const p of P){ ctx.globalAlpha=clamp(p.life*2,0,1); ctx.fillStyle=p.c||col; ctx.beginPath(); ctx.arc(p.x,p.y,p.r||2.5,0,7); ctx.fill(); } ctx.restore(); }
+/* speech bubble */
+function bubble(ctx,x,y,txt,col,size,alpha){
+  if(alpha!==undefined && alpha<=0.01) return;
+  ctx.save(); if(alpha!==undefined) ctx.globalAlpha=clamp(alpha,0,1);
+  ctx.font='700 '+(size||15)+'px Poppins, sans-serif'; const tw=ctx.measureText(txt).width, hh=(size||15)*1.9;
+  rrect(ctx,x-tw/2-12,y-hh,tw+24,hh,hh/2); ctx.fillStyle='#fff'; ctx.fill(); ctx.lineWidth=2; ctx.strokeStyle=col; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(x-6,y-1); ctx.lineTo(x,y+9); ctx.lineTo(x+6,y-1); ctx.fillStyle='#fff'; ctx.fill();
+  ctx.beginPath(); ctx.moveTo(x-6,y); ctx.lineTo(x,y+9); ctx.lineTo(x+6,y); ctx.stroke();
+  textAt(ctx,txt,x,y-hh*0.33,{align:'center',size:size||15,weight:700,color:col}); ctx.restore();
+}
+function ground(ctx,x0,x1,y){ line(ctx,x0,y,x1,y,COL.ink,2); ctx.save(); ctx.strokeStyle='#c2d1e5'; ctx.lineWidth=1.2; ctx.beginPath(); for(let x=x0+6;x<x1;x+=16){ ctx.moveTo(x,y+2); ctx.lineTo(x-8,y+10); } ctx.stroke(); ctx.restore(); }
+function tableTop(ctx,x0,x1,y,legs){ ctx.save(); ctx.lineWidth=2.2; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; rrect(ctx,x0,y,x1-x0,12,3); ctx.fill(); ctx.stroke();
+  if(legs){ line(ctx,x0+22,y+12,x0+22,y+legs,COL.ink,2.4); line(ctx,x1-22,y+12,x1-22,y+legs,COL.ink,2.4); } ctx.restore(); }
+function meterV(ctx,x,y,w,h,frac,col,label){ // vertical bar meter, y = top
+  ctx.save(); rrect(ctx,x,y,w,h,5); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=1.6; ctx.stroke();
+  const f=clamp(frac,0,1); ctx.save(); rrect(ctx,x,y,w,h,5); ctx.clip(); ctx.fillStyle=col; ctx.globalAlpha=0.85; ctx.fillRect(x,y+h*(1-f),w,h*f); ctx.restore();
+  if(label) textAt(ctx,label,x+w/2,y+h+16,{align:'center',size:12,weight:700,color:col});
+  ctx.restore();
+}
+/* line-drawn cup/mug; (cx,by) = bottom centre */
+function mug(ctx,cx,by,wTop,wBot,hgt,level,fill,t){
+  ctx.save(); ctx.lineJoin='round';
+  const yT=by-hgt;
+  if(level>0){ const ly=by-hgt*clamp(level,0,1), f=(by-ly)/hgt, wl=lerp(wBot,wTop,f);
+    ctx.beginPath(); ctx.moveTo(cx-wBot/2+3,by-3); ctx.lineTo(cx-wl/2+3,ly); ctx.lineTo(cx+wl/2-3,ly); ctx.lineTo(cx+wBot/2-3,by-3); ctx.closePath(); ctx.fillStyle=fill; ctx.fill();
+    ctx.beginPath(); ctx.ellipse(cx,ly,wl/2-3,5,0,0,7); ctx.strokeStyle='rgba(19,42,68,0.35)'; ctx.lineWidth=1.2; ctx.stroke(); }
+  ctx.strokeStyle=COL.ink; ctx.lineWidth=2.6;
+  ctx.beginPath(); ctx.moveTo(cx-wTop/2,yT); ctx.lineTo(cx-wBot/2,by); ctx.lineTo(cx+wBot/2,by); ctx.lineTo(cx+wTop/2,yT); ctx.stroke();
+  ctx.beginPath(); ctx.ellipse(cx,yT,wTop/2,7,0,0,7); ctx.stroke();
+  const hx=cx+lerp(wBot,wTop,0.55)/2;
+  ctx.beginPath(); ctx.moveTo(hx-2,yT+hgt*0.2); ctx.bezierCurveTo(hx+46,yT+hgt*0.12,hx+46,yT+hgt*0.72,hx-6,yT+hgt*0.74); ctx.stroke();
+  ctx.restore();
+}
+function steam(ctx,cx,y,wid,inten,t){
+  if(inten<=0.02) return;
+  ctx.save(); ctx.strokeStyle=COL.mid; ctx.lineWidth=2; ctx.lineCap='round';
+  for(let i=0;i<3;i++){ const x0=cx+(i-1)*wid*0.28, ph=(t*0.7+i*0.33)%1; ctx.globalAlpha=clamp(inten,0,1)*(1-ph)*0.9;
+    ctx.beginPath(); for(let k=0;k<=12;k++){ const yy=y-ph*30-k*6, xx=x0+Math.sin(k*0.6+t*3+i)*6; if(k) ctx.lineTo(xx,yy); else ctx.moveTo(xx,yy); } ctx.stroke(); }
+  ctx.restore();
+}
+/* thermometer with a scale, value in °C; (x,top,bot) */
+function thermoScale(ctx,x,top,bot,T,T0,T1,marks,safe){
+  const f=(T-T0)/(T1-T0);
+  if(safe!==undefined){ const ys=bot-(bot-top-5)*(safe-T0)/(T1-T0); line(ctx,x-18,ys,x+26,ys,COL.green,2,[5,3]); }
+  thermo(ctx,x,top,bot,f,COL.ink,COL.red);
+  marks.forEach(m=>{ const yy=bot-(bot-top-5)*(m-T0)/(T1-T0); textAt(ctx,m+'°',x+13,yy+4,{size:11,weight:600,color:COL.muted}); });
+}
+/* tiny x–y chart; pts = [[x,y],...] in data coords */
+function miniChart(ctx,x,y,w,h,xr,yr,series,o){
+  o=o||{}; ctx.save(); rrect(ctx,x,y,w,h,8); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle='#dbe4f0'; ctx.lineWidth=1.2; ctx.stroke();
+  const px=v=>x+34+(w-44)*(v-xr[0])/(xr[1]-xr[0]), py=v=>y+h-24-(h-36)*(v-yr[0])/(yr[1]-yr[0]);
+  line(ctx,px(xr[0]),py(yr[0]),px(xr[1]),py(yr[0]),COL.mid,1.2); line(ctx,px(xr[0]),py(yr[0]),px(xr[0]),py(yr[1]),COL.mid,1.2);
+  if(o.band){ ctx.fillStyle='rgba(31,157,85,0.1)'; const a=py(o.band[1]), b=py(o.band[0]); ctx.fillRect(px(xr[0]),a,px(xr[1])-px(xr[0]),b-a); }
+  (o.yt||[]).forEach(v=>textAt(ctx,String(v),px(xr[0])-5,py(v)+4,{align:'right',size:10,color:COL.muted}));
+  (o.xt||[]).forEach(v=>textAt(ctx,String(v),px(v),py(yr[0])+14,{align:'center',size:10,color:COL.muted}));
+  if(o.xl) textAt(ctx,o.xl,px(xr[1]),py(yr[0])+14,{align:'right',size:10,weight:600,color:COL.muted});
+  if(o.yl) textAt(ctx,o.yl,x+8,y+14,{size:10,weight:600,color:COL.muted});
+  series.forEach(s=>{ if(s.pts.length<2) return; ctx.strokeStyle=s.col; ctx.lineWidth=s.lw||2.2; if(s.dash) ctx.setLineDash(s.dash); else ctx.setLineDash([]);
+    ctx.beginPath(); s.pts.forEach((p,i)=>{ const X=px(clamp(p[0],xr[0],xr[1])), Y=py(clamp(p[1],yr[0],yr[1])); if(i) ctx.lineTo(X,Y); else ctx.moveTo(X,Y); }); ctx.stroke(); });
+  ctx.setLineDash([]); ctx.restore(); return {px,py};
+}
+
+
+/* ---------------------------------------------------------------------
+   SHARED ACTIVITY SHELL
+   scene = { q, html, cards, tail, wire($), tick(dt,ctx,t,$), found(), fb() }
+   q is the textbook's question; found() returns the answer once the
+   scene has actually produced it — it then springs into the banner.
+   --------------------------------------------------------------------- */
+function card(id,l,col){ return `<div class="rcard"><div class="rlabel">${l}</div><div class="rval" id="${id}"${col?` style="color:${col}"`:''}>—</div></div>`; }
+function setv($,id,v){ const e=$('#'+id); if(e&&e.textContent!==v) e.textContent=v; }
+function setFb($,f){ const e=$('#fb'); if(!e) return; const c=f?'fb '+f[0]:'fb hidden', tx=f?f[1]:''; if(e.className!==c) e.className=c; if(e.textContent!==tx) e.textContent=tx; }
+function optList(id,opts){ return `<div id="${id}">${opts.map((o,i)=>`<button class="opt-btn" data-i="${i}">${o}</button>`).join('')}</div>`; }
+function wireOpts(wrap,id,cb){ const bs=[...wrap.querySelectorAll('#'+id+' .opt-btn')]; bs.forEach(b=>b.onclick=()=>{ if(b.disabled) return; bs.forEach(x=>x.classList.toggle('active',x===b)); cb(+b.dataset.i); }); return bs; }
+function chipList(id,opts,act){ return `<div class="chip-wrap" id="${id}">${opts.map((o,i)=>`<button class="chip-btn${i===act?' active':''}" data-i="${i}">${o}</button>`).join('')}</div>`; }
+function wireChips(wrap,id,cb){ const bs=[...wrap.querySelectorAll('#'+id+' .chip-btn')]; bs.forEach(b=>b.onclick=()=>{ if(b.disabled) return; bs.forEach(x=>x.classList.toggle('active',x===b)); cb(+b.dataset.i); }); return bs; }
+function setActive(bs,i){ bs.forEach((b,k)=>b.classList.toggle('active',k===i)); }
+function slider(id,label,min,max,step,val){ return `<div class="control-group"><label>${label} <span class="val" id="${id}V"></span></label><input type="range" id="${id}" min="${min}" max="${max}" step="${step}" value="${val}"></div>`; }
+function logTable(id,heads){ return `<table class="log"><thead><tr>${heads.map(h=>`<th>${h}</th>`).join('')}</tr></thead><tbody id="${id}"></tbody></table>`; }
+/* rows: [[cell | {t,c}] ...]; only rewritten when it changes */
+function setLog($,id,rows){
+  const e=$('#'+id); if(!e) return;
+  const html=rows.map(r=>'<tr>'+r.map(c=>typeof c==='object'?`<td class="${c.c||''}">${c.t}</td>`:`<td>${c}</td>`).join('')+'</tr>').join('');
+  if(e._h!==html){ e._h=html; e.innerHTML=html; }
+}
+function foundBanner(ctx,w,q,ans,pop,t){
+  ctx.save();
+  ctx.fillStyle='#f6f9fc'; ctx.fillRect(0,0,w,BANNER-2); line(ctx,0,BANNER-2,w,BANNER-2,'#dbe4f0',1);
+  const p=clamp(pop.x,0,1.25), got=!!ans;
+  const r=12*(got?0.8+0.2*p:1), cx=24, cy=BANNER/2-1;
+  circ(ctx,cx,cy,r,got?COL.green:COL.mid,got?COL.green:'#fff',1.8);
+  textAt(ctx,got?'✓':'?',cx,cy+5,{align:'center',size:13,weight:700,color:got?'#fff':COL.mid});
+  const txt=got?ans:q, mw=w-60; const s=fitFont(ctx,txt,mw,14.5,got?700:600);
+  ctx.globalAlpha=got?clamp(0.3+0.7*p,0,1):1;
+  textAt(ctx,txt,44,cy+5,{size:s,weight:got?700:600,color:got?'#1f6b3d':COL.muted});
+  ctx.restore();
+}
+function buildScene(factory){
+  const wrap=labShell(), S=factory(wrap);
+  wrap.querySelector('.lab-side').innerHTML = S.html+`
+    <div class="control-group"><div class="result-cards">${S.cards||''}</div><div class="fb hidden" id="fb"></div></div>`+(S.tail||'');
+  const $=s=>wrap.querySelector(s);
+  const canvas=$('canvas'), pop=spr(0);
+  S.wire($);
+  let t=0, lastAns='';
+  animLoop(dt=>{
+    t+=dt;
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    ctx.save(); ctx.beginPath(); ctx.rect(0,BANNER,w,h-BANNER); ctx.clip(); stage(ctx,w,h); S.tick(dt,ctx,t,$); ctx.restore();
+    const ans=S.found?S.found()||'':'';
+    if(ans!==lastAns){ lastAns=ans; pop.x=0; pop.v=0; }
+    springTo(pop,ans?1:0,170,11,dt);
+    foundBanner(ctx,w,S.q||'',ans,pop,t);
+    setFb($,S.fb?S.fb():null);
+  });
+  return wrap;
+}
+/* scene backdrop helpers */
+function sky(ctx,y1,top,bot){ const g=ctx.createLinearGradient(0,0,0,y1); g.addColorStop(0,top||'#e3f1fd'); g.addColorStop(1,bot||'#f7fbff'); ctx.fillStyle=g; ctx.fillRect(-400,-200,1600,y1+200); }
+function soilBand(ctx,x0,x1,y,h,col){ ctx.save(); ctx.fillStyle=col||'#f4ead8'; ctx.fillRect(x0,y,x1-x0,h); ctx.restore(); ground(ctx,x0,x1,y); }
+function cloud(ctx,x,y,s,col){ ctx.save(); ctx.strokeStyle=col||'#c2d1e5'; ctx.fillStyle='#fff'; ctx.lineWidth=2; ctx.beginPath();
+  ctx.arc(x,y,s*0.5,Math.PI*0.5,Math.PI*1.5); ctx.arc(x+s*0.55,y-s*0.35,s*0.6,Math.PI,Math.PI*1.95); ctx.arc(x+s*1.2,y,s*0.5,Math.PI*1.5,Math.PI*0.5); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore(); }
+function sunIcon(ctx,x,y,r,t){ circ(ctx,x,y,r,COL.yellow,'#fff6d6',2.4); for(let k=0;k<10;k++){ const a=k/10*6.283+t*0.2; line(ctx,x+Math.cos(a)*(r+5),y+Math.sin(a)*(r+5),x+Math.cos(a)*(r+13),y+Math.sin(a)*(r+13),COL.yellow,2); } }
+/* magnifier lens: draws contents via fn() clipped into a circle */
+function lens(ctx,cx,cy,r,fn,col,label){
+  ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,r,0,7); ctx.fillStyle='#fff'; ctx.fill(); ctx.clip(); fn(); ctx.restore();
+  circ(ctx,cx,cy,r,col||COL.ink,null,3); const a=0.78; line(ctx,cx+Math.cos(a)*r,cy+Math.sin(a)*r,cx+Math.cos(a)*(r+30),cy+Math.sin(a)*(r+30),col||COL.ink,7);
+  if(label) textAt(ctx,label,cx,cy-r-8,{align:'center',size:12,weight:700,color:col||COL.ink});
+}
+
+/* ---------------------------------------------------------------------
+   SKY ENGINE — a real planetarium on an 800 × 520 stage.
+   Stars sit at their true J2000 positions (RA/Dec) with true
+   magnitudes. The clock gives sidereal time (GMST = 18.697 h +
+   24.0657 h per day), so the whole sky turns 15° per hour about the
+   celestial pole exactly as it does over India. Alt/az → stereographic
+   projection for the way you are facing. A star is seen only if it is
+   brighter than the limiting magnitude set by twilight, light pollution
+   and how long your eyes have had in the dark; near the horizon it is
+   dimmed by extra air (airmass) and twinkles harder (∝ airmass^1.5).
+   --------------------------------------------------------------------- */
+const D2R=Math.PI/180, R2D=180/Math.PI;
+function radec(raH,dec){ const a=raH*15*D2R, d=dec*D2R; return [Math.cos(d)*Math.cos(a), Math.cos(d)*Math.sin(a), Math.sin(d)]; }
+function v3dot(a,b){ return a[0]*b[0]+a[1]*b[1]+a[2]*b[2]; }
+function v3ang(a,b){ return Math.acos(clamp(v3dot(a,b),-1,1)); }
+/* point on the great circle from a through b; t = 1 is b, t = 2 is one more a→b gap beyond b */
+function slerp(a,b,t){ const om=v3ang(a,b), s=Math.sin(om); if(s<1e-9) return a.slice(); const k1=Math.sin((1-t)*om)/s, k2=Math.sin(t*om)/s; return [a[0]*k1+b[0]*k2, a[1]*k1+b[1]*k2, a[2]*k1+b[2]*k2]; }
+
+/* catalogue: id, name, RA (h), Dec (°), magnitude, colour */
+const CAT=[
+  ['dubhe','Dubhe',11.0621,61.751,1.79,'#ffe2b0'],['merak','Merak',11.0307,56.382,2.37],['phecda','Phecda',11.8972,53.695,2.44],['megrez','Megrez',12.2571,57.033,3.31],
+  ['alioth','Alioth',12.9005,55.960,1.77],['mizar','Mizar',13.3988,54.925,2.27],['alkaid','Alkaid',13.7923,49.313,1.86],
+  ['polaris','Polaris',2.5303,89.264,1.98,'#fff3d6'],['yildun','',17.5369,86.586,4.36],['epsumi','',16.7661,82.037,4.21],['zetumi','',15.7343,77.795,4.32],
+  ['etaumi','',16.2918,75.755,4.95],['pherkad','Pherkad',15.3455,71.834,3.00],['kochab','Kochab',14.8451,74.156,2.08,'#ffd9a8'],
+  ['schedar','Schedar',0.675,56.537,2.24,'#ffe0b5'],['caph','Caph',0.1530,59.150,2.28],['gamcas','',0.9451,60.717,2.47],['ruchbah','',1.4303,60.235,2.68],['segin','',1.9066,63.670,3.37],
+  ['betelgeuse','Betelgeuse',5.9195,7.407,0.50,'#ff9a6a'],['rigel','Rigel',5.2423,-8.202,0.13,'#cfe0ff'],['bellatrix','Bellatrix',5.4189,6.350,1.64,'#dbe7ff'],
+  ['mintaka','Mintaka',5.5334,-0.299,2.23,'#dbe7ff'],['alnilam','Alnilam',5.6036,-1.202,1.69,'#dbe7ff'],['alnitak','Alnitak',5.6793,-1.943,1.77,'#dbe7ff'],
+  ['saiph','Saiph',5.7959,-9.670,2.09,'#dbe7ff'],['meissa','Meissa',5.5856,9.934,3.33],
+  ['sirius','Sirius',6.7525,-16.716,-1.46,'#e8f0ff'],['mirzam','Mirzam',6.3783,-17.956,1.98],['adhara','Adhara',6.9771,-28.972,1.50],['wezen','Wezen',7.1399,-26.393,1.84,'#fff1d0'],
+  ['aludra','Aludra',7.4016,-29.303,2.45],['furud','',6.3385,-30.063,3.02],
+  ['aldebaran','Aldebaran',4.5987,16.509,0.86,'#ffb27a'],['elnath','Elnath',5.4382,28.607,1.65],['zettau','',5.6274,21.143,3.0],
+  ['gamtau','',4.3299,15.628,3.65],['deltau','',4.3823,17.543,3.76],['epstau','',4.4769,19.180,3.53],['thetau','',4.4776,15.871,3.40],
+  ['alcyone','Pleiades',3.7914,24.105,2.87],['atlas','',3.8193,24.053,3.62],['electra','',3.7479,24.113,3.70],['maia','',3.7636,24.368,3.87],
+  ['merope','',3.7724,23.948,4.18],['taygeta','',3.7535,24.467,4.30],['pleione','',3.8197,24.137,5.05],
+  ['procyon','Procyon',7.6550,5.225,0.34],['gomeisa','',7.4527,8.289,2.89],['castor','Castor',7.5767,31.888,1.58],['pollux','Pollux',7.7553,28.026,1.14,'#ffdcae'],
+  ['capella','Capella',5.2782,45.998,0.08,'#fff0c8'],['regulus','Regulus',10.1395,11.967,1.35],['arcturus','Arcturus',14.2610,19.182,-0.05,'#ffc98f'],
+  ['vega','Vega',18.6156,38.784,0.03],['spica','Spica',13.4199,-11.161,0.97],['antares','Antares',16.4901,-26.432,1.06,'#ff9a6a'],['deneb','Deneb',20.6905,45.280,1.25],
+  ['altair','Altair',19.8464,8.868,0.76],['canopus','Canopus',6.3992,-52.696,-0.74],['arneb','',5.5455,-17.822,2.58],['nihal','',5.4707,-20.759,2.84],
+  ['cursa','',5.1308,-5.086,2.79],['denebola','',11.8177,14.572,2.13],['algieba','',10.3329,19.842,2.08],['alphard','Alphard',9.4598,-8.659,1.98,'#ffcf9c'],
+  ['hamal','',2.1196,23.462,2.00],['mirfak','',3.4054,49.861,1.79],['algol','',3.1361,40.956,2.12],['menkalinan','',5.9921,44.948,1.90],['alhena','',6.6285,16.399,1.93],
+  ['fomalhaut','Fomalhaut',22.9608,-29.622,1.16],['achernar','',1.6286,-57.237,0.46],['hadar','',14.0637,-60.373,0.61],['rigilk','',14.6600,-60.835,-0.27],['acrux','',12.4433,-63.099,0.77],
+];
+const STAR={}; const STARS=CAT.map(c=>{ const s={id:c[0],name:c[1],ra:c[2],dec:c[3],m:c[4],col:c[5]||'#ffffff',v:radec(c[2],c[3])}; STAR[s.id]=s; return s; });
+/* faint background stars: uniform on the sphere, N(<m) ∝ 10^(0.45 m), 3.4 ≤ m ≤ 6.6 */
+(function(){ const r=rng(1207), a=Math.pow(10,0.45*3.4), b=Math.pow(10,0.45*6.6);
+  for(let i=0;i<4200;i++){ const z=2*r()-1, ph=r()*Math.PI*2, q=Math.sqrt(1-z*z);
+    const m=Math.log10(a+r()*(b-a))/0.45, k=r();
+    STARS.push({id:'',name:'',m,col:k<0.15?'#ffd7b0':k<0.3?'#d6e4ff':'#ffffff',v:[q*Math.cos(ph),q*Math.sin(ph),z]}); } })();
+STARS.forEach((s,i)=>{ s.p=[i*1.7%6.28,i*2.9%6.28,i*4.3%6.28]; });
+
+/* ---------- time and place ---------- */
+const J2026=9496.5;                       // days from J2000.0 to 2026-01-01 00:00 UT
+const PLACES=[{n:'Nubra, Ladakh',lat:34.6,lon:77.6,z:5.5},{n:'Delhi',lat:28.6,lon:77.2,z:5.5},{n:'Bengaluru',lat:13.0,lon:77.6,z:5.5},{n:'Sydney',lat:-33.9,lon:151.2,z:10}];
+const MONTH=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'], MDAY=[0,31,59,90,120,151,181,212,243,273,304,334];
+function dateStr(d){ const y=2026+Math.floor(d/365); let r=Math.floor(d-Math.floor(d/365)*365), m=11; while(MDAY[m]>r) m--; return (r-MDAY[m]+1)+' '+MONTH[m]+' '+y; }
+function clockStr(h){ h=((h%24)+24)%24; let H=Math.floor(h), M=Math.round((h-H)*60); if(M===60){H=(H+1)%24;M=0;} const ap=H<12?'am':'pm', h12=H%12===0?12:H%12; return h12+':'+String(M).padStart(2,'0')+' '+ap; }
+function nOf(d,clock,P){ return J2026+d+(clock-P.z)/24; }
+const OBL=23.439*D2R;
+function eclVec(lam,bet){ const l=lam*D2R,b=(bet||0)*D2R, x=Math.cos(b)*Math.cos(l), y=Math.cos(b)*Math.sin(l), z=Math.sin(b); return [x, y*Math.cos(OBL)-z*Math.sin(OBL), y*Math.sin(OBL)+z*Math.cos(OBL)]; }
+function sunLon(n){ const L=280.460+0.9856474*n, g=(357.528+0.9856003*n)*D2R; return L+1.915*Math.sin(g)+0.020*Math.sin(2*g); }
+function gmstH(n){ return ((18.697374558+24.06570982441908*n)%24+24)%24; }
+function skyFrame(n,P){ const th=(gmstH(n)+P.lon/15)*15*D2R; return {c:Math.cos(th),s:Math.sin(th),sp:Math.sin(P.lat*D2R),cp:Math.cos(P.lat*D2R),n,P}; }
+/* equatorial unit vector → [east, north, up] */
+function enu(v,F){ const x=v[0]*F.c+v[1]*F.s, y=-v[0]*F.s+v[1]*F.c; return [y, F.cp*v[2]-F.sp*x, F.sp*v[2]+F.cp*x]; }
+function altAz(v,F){ const p=enu(v,F); return [Math.asin(clamp(p[2],-1,1))*R2D, (Math.atan2(p[0],p[1])*R2D+360)%360]; }
+function sunAlt(d,clock,P){ const n=nOf(d,clock,P); return altAz(eclVec(sunLon(n)),skyFrame(n,P)); }
+/* clock time when the Sun's height crosses h0, searching [a,b] */
+function sunCross(d,P,h0,a,b){ let fa=sunAlt(d,a,P)[0]-h0; for(let i=0;i<40;i++){ const m=(a+b)/2, fm=sunAlt(d,m,P)[0]-h0; if((fm<0)===(fa<0)){ a=m; fa=fm; } else b=m; } return (a+b)/2; }
+function sunsetT(d,P){ return sunCross(d,P,-0.833,12,23.9); }
+function sunriseT(d,P){ return sunCross(d,P,-0.833,0.1,12); }
+
+/* limiting magnitude: twilight (Sun height) · sky glow · dark-adapted eyes */
+const TWI=[[2,-3.6],[0,-2.6],[-3,-0.6],[-6,1.6],[-9,3.2],[-12,4.6],[-15,5.6],[-18,6.4]];
+function twiLim(h){ if(h>=TWI[0][0]) return TWI[0][1]; for(let i=1;i<TWI.length;i++) if(h>=TWI[i][0]){ const a=TWI[i-1],b=TWI[i]; return lerp(b[1],a[1],(h-b[0])/(a[0]-b[0])); } return 6.4; }
+const GLOW=[{n:'Dark sky',m:6.4,g:0},{n:'Town',m:4.4,g:0.35},{n:'City lights',m:2.6,g:0.8}];
+function eyeLim(tMin){ return 6.6-3.8*Math.exp(-tMin/7); }      // rods adapt over ≈ 30 min
+function airmass(alt){ return 1/(Math.sin(Math.max(alt,-1)*D2R)+0.50572*Math.pow(Math.max(alt,-1)+6.07995,-1.6364)); }
+/* mountains on the horizon (degrees high at azimuth az) */
+function mtn(az,flat){ if(flat) return 0.6; const a=az*D2R; return Math.max(0.4,2.2+1.5*Math.sin(3*a+1)+1.1*Math.sin(7*a+2)+0.55*Math.sin(13*a+0.3)+0.3*Math.sin(29*a)); }
+
+/* ---------- camera (az/alt you face) + stereographic projection ---------- */
+function camera(az,alt,fov,cx,cy){ const A=az*D2R,h=alt*D2R;
+  return {az,alt,f:[Math.sin(A)*Math.cos(h),Math.cos(A)*Math.cos(h),Math.sin(h)], r:[Math.cos(A),-Math.sin(A),0], u:[-Math.sin(A)*Math.sin(h),-Math.cos(A)*Math.sin(h),Math.cos(h)], F:(VW/2)/(2*Math.tan(fov*D2R/4)), cx:cx||VW/2, cy:cy||VH/2}; }
+function projE(C,p){ const Z=v3dot(p,C.f); if(Z<-0.3) return null; const s=2/(1+Z); return [C.cx+v3dot(p,C.r)*s*C.F, C.cy-v3dot(p,C.u)*s*C.F, Z]; }
+function azAltVec(az,alt){ const A=az*D2R,h=alt*D2R; return [Math.sin(A)*Math.cos(h),Math.cos(A)*Math.cos(h),Math.sin(h)]; }
+/* a view = everything one frame needs */
+function skyView(F,C,mlim,t){ return {F,C,mlim,t,P:v=>projE(C,enu(v,F))}; }
+function twinkle(s,t,X){ const sig=Math.min(0.9,0.075*Math.pow(X,1.5)); return Math.exp(sig*(Math.sin(t*11.3+s.p[0])+0.7*Math.sin(t*17.9+s.p[1])+0.5*Math.sin(t*26.3+s.p[2]))*0.55); }
+
+/* sky background: night navy, twilight glow toward the Sun, town glow at the horizon */
+function skyBack(ctx,V,sunAltDeg,sunAzDeg,glow){
+  fillVB(ctx,'#0b1d33');
+  const tw=smooth01(-18,2,sunAltDeg);
+  if(tw>0.001){ const sp=V.C, dir=azAltVec(sunAzDeg,Math.min(sunAltDeg,0)-4), p=projE(sp,dir);
+    const g=ctx.createLinearGradient(0,VB.y0,0,VB.y1); g.addColorStop(0,rgba('#2a5a8c',tw*0.85)); g.addColorStop(1,rgba('#6f9fcf',tw)); fillVB(ctx,g);
+    if(p){ const R=ctx.createRadialGradient(p[0],p[1],10,p[0],p[1],520); R.addColorStop(0,rgba('#f4b46a',0.85*tw)); R.addColorStop(0.35,rgba('#e8a35e',0.35*tw)); R.addColorStop(1,rgba('#e8a35e',0)); fillVB(ctx,R); } }
+  if(glow>0){ const hy=horizonY(V); const g=ctx.createLinearGradient(0,hy-260,0,hy); g.addColorStop(0,rgba('#d9a017',0)); g.addColorStop(1,rgba('#d9a017',0.32*glow)); ctx.fillStyle=g; ctx.fillRect(VB.x0,hy-260,VB.x1-VB.x0,260); }
+}
+function horizonY(V){ const p=projE(V.C,azAltVec(V.C.az,0)); return p?p[1]:VH; }
+function rgba(h,a){ const c=h[0]==='#'?hexRgb(h):h.match(/\d+/g).map(Number); return 'rgba('+c[0]+','+c[1]+','+c[2]+','+clamp(a,0,1)+')'; }
+
+/* draw every star brighter than the limit; returns nothing (use V.P for positions) */
+function starsDraw(ctx,V,opts){
+  opts=opts||{}; const t=V.t, sc=opts.scale||1;
+  for(const s of STARS){
+    const e=enu(s.v,V.F); if(e[2]<-0.02) continue;
+    const p=projE(V.C,e); if(!p||p[0]<VB.x0-10||p[0]>VB.x1+10||p[1]<VB.y0-10||p[1]>VB.y1+10) continue;
+    const alt=Math.asin(e[2])*R2D, X=airmass(alt), m=s.m+0.22*(X-1);
+    const vis=clamp((V.mlim-m)/0.9,0,1); if(vis<=0.01) continue;
+    const tw=opts.still?1:twinkle(s,t,X), b=vis*Math.min(1.25,tw);
+    const r=clamp(2.35-0.36*m,0.55,4.4)*sc*Math.sqrt(Math.min(tw,1.6));
+    if(m<1.2){ const R=ctx.createRadialGradient(p[0],p[1],0,p[0],p[1],r*4.2); R.addColorStop(0,rgba(s.col,0.45*b)); R.addColorStop(1,rgba(s.col,0)); ctx.fillStyle=R; ctx.beginPath(); ctx.arc(p[0],p[1],r*4.2,0,7); ctx.fill(); }
+    let col=s.col; if(m<0.6&&X>2.2&&!opts.still){ const k=Math.sin(t*23+s.p[1]); col=k>0.55?'#ff8f8f':k<-0.55?'#8fc7ff':s.col; }
+    ctx.globalAlpha=clamp(b,0,1); ctx.fillStyle=col; ctx.beginPath(); ctx.arc(p[0],p[1],r,0,7); ctx.fill(); ctx.globalAlpha=1;
+  }
+}
+/* how visible one catalogue star is right now (0..1) */
+function starVis(s,V){ const e=enu(s.v,V.F); if(e[2]<0) return 0; const alt=Math.asin(e[2])*R2D; if(alt<mtn(Math.atan2(e[0],e[1])*R2D)) return 0; const m=s.m+0.22*(airmass(alt)-1); return clamp((V.mlim-m)/0.9,0,1); }
+/* mountains + ground + compass points */
+function groundDraw(ctx,V,flat){
+  const C=V.C, pts=[];
+  for(let a=-150;a<=150;a+=2){ const az=C.az+a, p=projE(C,azAltVec(az,mtn(az,flat))); if(p) pts.push(p); }
+  if(pts.length<2) return;
+  ctx.save(); ctx.beginPath(); ctx.moveTo(pts[0][0],VH+400); pts.forEach(p=>ctx.lineTo(p[0],p[1])); ctx.lineTo(pts[pts.length-1][0],VH+400); ctx.closePath();
+  ctx.fillStyle='#06111f'; ctx.fill(); ctx.strokeStyle='#3e6286'; ctx.lineWidth=2; ctx.lineJoin='round';
+  ctx.beginPath(); pts.forEach((p,i)=>i?ctx.lineTo(p[0],p[1]):ctx.moveTo(p[0],p[1])); ctx.stroke(); ctx.restore();
+  const N=['N','NE','E','SE','S','SW','W','NW'];
+  for(let k=0;k<8;k++){ const p=projE(C,azAltVec(k*45,-4)); if(!p||p[0]<VB.x0+14||p[0]>VB.x1-14) continue;
+    const big=k%2===0; textAt(ctx,N[k],p[0],Math.min(p[1],VB.y1-8),{align:'center',size:big?17:13,weight:700,color:k===0?COL.red:'#7fb2e6'}); }
+}
+/* great-circle polyline between two sky vectors (or extended past b to t) */
+function gcLine(ctx,V,a,b,t0,t1,col,lw,dash){
+  ctx.save(); ctx.strokeStyle=col; ctx.lineWidth=lw||2; ctx.setLineDash(dash||[]); ctx.lineCap='round'; ctx.beginPath(); let pen=false;
+  const n=Math.max(2,Math.ceil(Math.abs(t1-t0)*14));
+  for(let i=0;i<=n;i++){ const p=V.P(slerp(a,b,lerp(t0,t1,i/n))); if(!p){ pen=false; continue; } if(pen) ctx.lineTo(p[0],p[1]); else ctx.moveTo(p[0],p[1]); pen=true; }
+  ctx.stroke(); ctx.restore();
+}
+function starLabel(ctx,V,id,txt,col,dx,dy,size){ const s=STAR[id], p=V.P(s.v); if(!p) return; textAt(ctx,txt,p[0]+(dx||9),p[1]+(dy||-8),{size:size||12,weight:600,color:col||'#9fb6d1'}); }
+function ring(ctx,x,y,r,col,lw,a){ ctx.save(); ctx.globalAlpha=a===undefined?1:clamp(a,0,1); circ(ctx,x,y,r,col,null,lw||2); ctx.restore(); }
+/* night observer (seen from behind), pointing an arm at (tx,ty) */
+function observer(ctx,x,y,s,tx,ty){
+  const sh=[x+0.02*s,y-0.72*s];
+  let ang=Math.PI*0.25; if(tx!==undefined) ang=Math.atan2(tx-sh[0],ty-sh[1]);
+  return stick(ctx,x,y,s,{col:'#c9d6e6',face:0,armR:[ang,ang],armL:[-0.18,-0.05],lw:3});
+}
+/* pen: a yellow marker that glides star → star on a spring, riding the turning sky */
+function penDraw(ctx,V,v,t,col){ const p=V.P(v); if(!p) return; const r=9+1.5*Math.sin(t*6); ring(ctx,p[0],p[1],r,col||COL.yellow,2.2); line(ctx,p[0]-r-5,p[1],p[0]-r+3,p[1],col||COL.yellow,2); line(ctx,p[0]+r-3,p[1],p[0]+r+5,p[1],col||COL.yellow,2); line(ctx,p[0],p[1]-r-5,p[0],p[1]-r+3,col||COL.yellow,2); line(ctx,p[0],p[1]+r-3,p[0],p[1]+r+5,col||COL.yellow,2); }
+/* star trails: each bright star's path over the last dh hours (exact sidereal arcs) */
+function trailsDraw(ctx,V,n0,n1,lim){
+  if(n1-n0<0.002) return; ctx.save(); ctx.lineWidth=1.3; ctx.lineCap='round';
+  for(const s of STARS){ if(s.m>lim) continue; ctx.strokeStyle=rgba(s.col,clamp((lim-s.m)/2.5,0.25,0.75)); ctx.beginPath(); let pen=false; const k=24;
+    for(let i=0;i<=k;i++){ const F=skyFrame(lerp(n0,n1,i/k),V.F.P), e=enu(s.v,F); const p=e[2]>-0.05?projE(V.C,e):null; if(!p){ pen=false; continue; } if(pen) ctx.lineTo(p[0],p[1]); else ctx.moveTo(p[0],p[1]); pen=true; }
+    ctx.stroke(); }
+  ctx.restore();
+}
+/* the sky fills the whole canvas, not just the 800 × 520 stage: VB = visible area in stage units */
+let VB={x0:0,y0:0,x1:VW,y1:VH};
+function stageClip(ctx){ try{ const m=ctx.getTransform().inverse(), d=ctx.canvas._dpr||1, a=m.transformPoint(new DOMPoint(0,BANNER*d)), b=m.transformPoint(new DOMPoint(ctx.canvas.width,ctx.canvas.height)); VB={x0:a.x,y0:a.y,x1:b.x,y1:b.y}; }catch(e){ VB={x0:0,y0:0,x1:VW,y1:VH}; }
+  ctx.beginPath(); ctx.rect(VB.x0,VB.y0,VB.x1-VB.x0,VB.y1-VB.y0); ctx.clip(); }
+function fillVB(ctx,col){ ctx.fillStyle=col; ctx.fillRect(VB.x0,VB.y0,VB.x1-VB.x0,VB.y1-VB.y0); }
+/* wrap an angle target so the spring takes the short way round */
+function wrapNear(target,cur){ return cur+((target-cur)%360+540)%360-180; }
+
+/* =====================================================================
+   12.1  LET US DRAW — join stars into a pattern, name it, compare.
+   The star field is the real winter sky over Nubra (20 Jan, from
+   7:30 pm), so the field rises in the east, crosses the south and
+   tilts as it goes, turning 15° per sidereal hour (shown ×60). Your
+   pen is a marker that glides star → star on a spring (stiffer for
+   short hops) and rides the turning sky, so the lines stay fixed to
+   their stars. Friends draw their own patterns on the very same stars.
+   ===================================================================== */
+const FIELD=['aldebaran','epstau','meissa','bellatrix','betelgeuse','mintaka','alnilam','alnitak','rigel','saiph','cursa','arneb','nihal',
+  'mirzam','sirius','wezen','adhara','aludra','alhena','gomeisa','procyon'];
+const LOFF={mintaka:[9,-9],alnilam:[11,6],alnitak:[-19,14],epstau:[8,-9]};
+function drawer(col){ return {col,segs:[],q:[],at:null,cur:null,u:spr(1)}; }
+function pathOf(edges){ const q=[]; let at=null; edges.forEach(([a,b])=>{ if(at!==a) q.push({to:a,draw:false}); q.push({to:b,draw:true}); at=b; }); return q; }
+function drawerStep(D,dt){
+  if(!D.cur&&D.q.length){ const it=D.q.shift(); if(!D.at){ D.at=it.to; } else if(it.to!==D.at){ D.cur={a:D.at,b:it.to,draw:it.draw}; D.u.x=0; D.u.v=0; } }
+  if(D.cur){ const ang=v3ang(STAR[D.cur.a].v,STAR[D.cur.b].v)*R2D, k=clamp(320/(ang+4),12,70);
+    springTo(D.u,1,k,2*Math.sqrt(k)*0.72,dt);
+    if(Math.abs(D.u.x-1)<0.012&&Math.abs(D.u.v)<0.06){ if(D.cur.draw) D.segs.push([D.cur.a,D.cur.b]); D.at=D.cur.b; D.cur=null; } }
+}
+function drawerDraw(ctx,V,D,t,o){
+  o=o||{}; const lw=o.lw||2.6, a=o.alpha===undefined?1:o.alpha;
+  ctx.save(); ctx.globalAlpha=a; D.segs.forEach(([p,q])=>gcLine(ctx,V,STAR[p].v,STAR[q].v,0,1,D.col,lw)); ctx.restore();
+  if(D.cur){ const A=STAR[D.cur.a].v, B=STAR[D.cur.b].v;
+    if(D.cur.draw) gcLine(ctx,V,A,B,0,clamp(D.u.x,0,1),D.col,lw); else gcLine(ctx,V,A,B,0,clamp(D.u.x,0,1),rgba(D.col,0.45),1.4,[3,6]);
+    if(!o.nopen) penDraw(ctx,V,slerp(A,B,D.u.x),t,o.pen||D.col); }
+  else if(D.at&&!o.nopen&&!o.idleHide) penDraw(ctx,V,STAR[D.at].v,t,o.pen||D.col);
+}
+function edgeKey(a,b){ return a<b?a+'|'+b:b+'|'+a; }
+function patLabel(ctx,V,segs,txt,col,mode,off){
+  if(!segs.length||!txt) return; let x=0,y=0,n=0,y0=1e9,y1=-1e9; segs.forEach(s=>s.forEach(id=>{ const p=V.P(STAR[id].v); if(p){ x+=p[0]; y+=p[1]; n++; y0=Math.min(y0,p[1]); y1=Math.max(y1,p[1]); } })); if(!n) return;
+  x/=n; y/=n; if(mode==='top') y=y0-22-(off||0); else if(mode==='bottom') y=y1+26+(off||0); x=clamp(x,90,VW-90); y=clamp(y,16,VH-16); const dy=0; ctx.save(); ctx.font='700 14px Poppins, sans-serif'; const w=ctx.measureText(txt).width+16;
+  rrect(ctx,x-w/2,y-12+(dy||0),w,22,11); ctx.fillStyle='rgba(11,29,51,0.82)'; ctx.fill(); ctx.strokeStyle=col; ctx.lineWidth=1.6; ctx.stroke(); ctx.restore();
+  textAt(ctx,txt,x,y+4+(dy||0),{align:'center',size:14,weight:700,color:col});
+}
+function buildA1(){ return buildScene(wrap=>{
+  const S={q:'Join the stars into a pattern — what does it look like to you?'};
+  const P=PLACES[0], DAY=19, T0=20, T1=25, CEN=radec(5.95,-4);
+  const FR=[{n:'Yangdol',name:'Hunter and his dog',col:COL.red,e:[['meissa','betelgeuse'],['meissa','bellatrix'],['betelgeuse','alnitak'],['alnitak','alnilam'],['alnilam','mintaka'],['mintaka','bellatrix'],['alnitak','saiph'],['mintaka','rigel'],['mirzam','sirius'],['sirius','wezen'],['wezen','adhara']]},
+            {n:'Dorjay',name:'Butterfly',col:COL.blue,e:[['betelgeuse','bellatrix'],['bellatrix','alnilam'],['alnilam','betelgeuse'],['alnilam','rigel'],['rigel','saiph'],['saiph','alnilam']]},
+            {n:'Tsering',name:'Kite on a string',col:COL.green,e:[['betelgeuse','procyon'],['procyon','sirius'],['sirius','rigel'],['rigel','betelgeuse'],['sirius','adhara']]}];
+  const NAMES=['Hunter','Butterfly','Kite','Boat','Bird','Tree','Crab'];
+  let clock=20.5, run=true, me=drawer(COL.yellow), myName='', saved=[], fr=[null,null,null], seen=[false,false,false], fade={x:1,v:0}, lastPick=null;
+  S.html=`
+    <div class="control-group"><label>Move the pen to star…</label>${chipList('st',FIELD.map((_,i)=>String.fromCharCode(65+i)),-1)}
+      <div class="toggle-group"><button class="toggle-btn" id="lift">✋ Lift pen</button><button class="toggle-btn" id="undo">↩ Undo</button><button class="toggle-btn" id="clr">✕ Clear</button></div></div>
+    <div class="control-group"><label>It looks like a…</label>${chipList('nm',NAMES,-1)}<input class="qa-input" id="own" placeholder="…or type your own name"></div>
+    <div class="control-group"><button class="toggle-btn navy" id="save" style="margin-top:0">＋ Keep it & draw another</button></div>
+    <div class="control-group"><label>Friends draw on the same stars</label>${chipList('fr',FR.map(f=>f.n),-1)}</div>
+    <div class="control-group"><label>The night</label>${chipList('tm',['Sky still','Night goes on ×60'],1)}</div>`;
+  S.cards=card('c1','Lines you drew',COL.yellow)+card('c2','Patterns kept',COL.yellow)+card('c3','Clock (Nubra)',COL.navy)+card('c4','Lines shared with friends',COL.green);
+  let lifted=true;
+  S.wire=$=>{
+    const sb=wireChips(wrap,'st',i=>{ const id=FIELD[i]; me.q.push({to:id,draw:!lifted&&!!me.at}); lifted=false; lastPick=id; setTimeout(()=>sb.forEach(b=>b.classList.remove('active')),250); });
+    $('#lift').onclick=()=>{ lifted=true; };
+    $('#undo').onclick=()=>{ if(me.q.length){ me.q.pop(); return; } if(me.cur){ me.cur=null; return; } const s=me.segs.pop(); if(s){ me.at=s[0]; } };
+    $('#clr').onclick=()=>{ me=drawer(COL.yellow); lifted=true; };
+    const nb=wireChips(wrap,'nm',i=>{ myName=NAMES[i]; $('#own').value=''; });
+    $('#own').oninput=e=>{ myName=e.target.value.trim(); setActive(nb,-1); };
+    $('#save').onclick=()=>{ if(me.segs.length<2) return; saved.push({segs:me.segs.slice(),name:myName||'Pattern '+(saved.length+1)}); me=drawer(COL.yellow); lifted=true; myName=''; $('#own').value=''; setActive(nb,-1); };
+    const fb=[...wrap.querySelectorAll('#fr .chip-btn')];
+    fb.forEach((b,i)=>b.onclick=()=>{ if(fr[i]){ fr[i]=null; b.classList.remove('active'); } else { const d=drawer(FR[i].col); d.q=pathOf(FR[i].e); fr[i]=d; seen[i]=true; b.classList.add('active'); } });
+    wireChips(wrap,'tm',i=>run=i===1);
+  };
+  const myEdges=()=>{ const all=me.segs.concat(...saved.map(s=>s.segs)); return new Set(all.map(s=>edgeKey(s[0],s[1]))); };
+  S.tick=(dt,ctx,t,$)=>{
+    /* the night goes on: 1 s = 1 min; after 1:30 am it fades and starts again at 7:30 pm */
+    if(run){ clock+=dt/60; if(clock>T1){ springTo(fade,0,30,11,dt); if(fade.x<0.05){ clock=T0; } } else springTo(fade,1,30,11,dt); } else springTo(fade,1,30,11,dt);
+    drawerStep(me,dt); fr.forEach(d=>d&&drawerStep(d,dt));
+    const F=skyFrame(nOf(DAY,clock,P),P), ce=enu(CEN,F), cAlt=Math.asin(ce[2])*R2D, cAz=Math.atan2(ce[0],ce[1])*R2D;
+    const C=camera(cAz,cAlt,86), V=skyView(F,C,6.2,t);
+    ctx.save(); stageClip(ctx);
+    skyBack(ctx,V,-30,0,0); starsDraw(ctx,V);
+    saved.forEach(s=>{ ctx.save(); ctx.globalAlpha=0.7; s.segs.forEach(([a,b])=>gcLine(ctx,V,STAR[a].v,STAR[b].v,0,1,COL.yellow,2.2,[8,4])); ctx.restore(); });
+    fr.forEach((d,i)=>d&&drawerDraw(ctx,V,d,t,{lw:2.4,idleHide:true}));
+    drawerDraw(ctx,V,me,t,{lw:3});
+    /* letters on the stars you can use */
+    FIELD.forEach((id,i)=>{ const s=STAR[id], p=V.P(s.v); if(!p) return; const here=me.at===id&&!me.cur;
+      const o=LOFF[id]||[8,-7]; textAt(ctx,String.fromCharCode(65+i),p[0]+o[0],p[1]+o[1],{size:here?15:12.5,weight:700,color:here?COL.yellow:'#8fb0d6'}); });
+    saved.forEach(s=>patLabel(ctx,V,s.segs,s.name,COL.yellow,'bottom'));
+    let ly=14; fr.forEach((d,i)=>{ if(!d) return; ctx.save(); rrect(ctx,10,ly,236,26,13); ctx.fillStyle='rgba(6,17,31,0.85)'; ctx.fill(); ctx.restore(); line(ctx,22,ly+13,44,ly+13,FR[i].col,3);
+      textAt(ctx,FR[i].n+': '+FR[i].name+(d.q.length||d.cur?' …':''),52,ly+18,{size:13,weight:700,color:FR[i].col}); ly+=32; });
+    if(me.segs.length) patLabel(ctx,V,me.segs,myName||'?',COL.yellow,'bottom');
+    groundDraw(ctx,V);
+    if(fade.x<0.99){ fillVB(ctx,rgba('#0b1d33',1-fade.x)); }
+    ctx.restore();
+    const E=myEdges(); let sh=0; fr.forEach((d,i)=>{ if(!d) return; FR[i].e.forEach(e=>{ if(E.has(edgeKey(e[0],e[1]))) sh++; }); });
+    setv($,'c1',String(me.segs.length)); setv($,'c2',String(saved.length)); setv($,'c3',clockStr(clock)); setv($,'c4',fr.some(Boolean)?sh+' of '+fr.reduce((a,d,i)=>a+(d?FR[i].e.length:0),0):'—');
+  };
+  const drew=()=>me.segs.length>=3||saved.length>0, named=()=>saved.length>0||(!!myName&&me.segs.length>=3);
+  S.found=()=>drew()&&named()&&seen.filter(Boolean).length>=2?'Same stars — but every pattern, name and story is different. All of them are right!':'';
+  S.fb=()=>{
+    if(!me.at&&!saved.length) return ['warn','Pick a letter — the pen glides to that star.'];
+    if(!drew()) return ['warn','Pick more letters to join stars. “Lift pen” to jump without a line.'];
+    if(!named()) return ['warn','Give your pattern a name.'];
+    if(seen.filter(Boolean).length<2) return ['warn','Now see what two friends drew on the same stars.'];
+    return ['ok','The lines are not in the sky — we imagine them. Watch: they stay with their stars all night.'];
+  };
+  return S;
+}); }
+
+/* =====================================================================
+   12.2  LET US TRY TO LOCATE — the Big Dipper and the Pole Star.
+   You turn on a spring to face N/NE/E/S/W. The clock runs the real
+   sidereal sky (time-lapse 1 h per 3 s) for the month and place chosen.
+   Eyes fresh from a lit room see only stars brighter than mag ≈ 2.8;
+   after waiting, rods adapt (6.6 − 3.8·e^(−t/7 min)), and twilight or
+   town/city glow set a lower limit. The pointer line runs along the
+   great circle Merak → Dubhe and on: tick marks every pointer gap
+   (5.37°). Polaris sits 28.7° = 5.3 gaps beyond Dubhe, 0.7° from the
+   celestial pole, so it barely moves while every other star turns
+   15° per hour around it (exact star trails). Its height = your latitude.
+   ===================================================================== */
+function compass(ctx,x,y,r,faceAz){
+  circ(ctx,x,y,r,'#7fb2e6','rgba(6,17,31,0.85)',2);
+  for(let k=0;k<8;k++){ const a=(k*45-faceAz)*D2R; line(ctx,x+Math.sin(a)*(r-7),y-Math.cos(a)*(r-7),x+Math.sin(a)*(r-2),y-Math.cos(a)*(r-2),'#7fb2e6',1.5); }
+  const a=-faceAz*D2R, s=Math.sin(a), c=Math.cos(a), w=5;
+  ctx.save(); ctx.beginPath(); ctx.moveTo(x+s*(r-9),y-c*(r-9)); ctx.lineTo(x+c*w,y+s*w); ctx.lineTo(x-c*w,y-s*w); ctx.closePath(); ctx.fillStyle=COL.red; ctx.fill();
+  ctx.beginPath(); ctx.moveTo(x-s*(r-9),y+c*(r-9)); ctx.lineTo(x+c*w,y+s*w); ctx.lineTo(x-c*w,y-s*w); ctx.closePath(); ctx.fillStyle='#c9d6e6'; ctx.fill(); ctx.restore();
+  textAt(ctx,'N',x+s*(r+11),y-c*(r+11)+5,{align:'center',size:12,weight:700,color:COL.red});
+}
+function buildA2(){ return buildScene(wrap=>{
+  const S={q:'Can you find the Big Dipper — and use it to find the Pole Star?'};
+  const DIRS=[['N',0],['NE',45],['E',90],['S',180],['W',270]], MONS=[0,2,4,6,9];
+  const BD=[['alkaid','mizar'],['mizar','alioth'],['alioth','megrez'],['megrez','phecda'],['phecda','merak'],['merak','dubhe'],['dubhe','megrez']];
+  const LD=[['polaris','yildun'],['yildun','epsumi'],['epsumi','zetumi'],['zetumi','etaumi'],['etaumi','pherkad'],['pherkad','kochab'],['kochab','zetumi']];
+  const GAP=v3ang(STAR.merak.v,STAR.dubhe.v), POLT=v3ang(STAR.merak.v,STAR.polaris.v)/GAP;
+  let place=0, mon=2, face=3, clockT=21, clock=21, play=false, glow=0, eyeT=0, eyeRun=false, trails=false, tr0=null;
+  let bd=null, ext=0, ptr=spr(0), cam=spr(180), camAlt=spr(36), found=false, pop=spr(0), trailH=0, ld=null;
+  S.html=`
+    <div class="control-group"><label>Face towards</label>${chipList('fc',DIRS.map(d=>d[0]),3)}</div>
+    <div class="control-group"><label>Month</label>${chipList('mo',MONS.map(m=>MONTH[m]),2)}
+      ${slider('tm','Clock',19,29,0.25,21).replace('class="control-group"','style="margin-top:6px"')}
+      <button class="toggle-btn play" id="pl" style="width:100%;margin-top:7px">▶ Let the night run</button></div>
+    <div class="control-group"><label>Where you stand</label>${chipList('pc',PLACES.map(p=>p.n),0)}</div>
+    <div class="control-group"><label>Sky</label>${chipList('gl',GLOW.map(g=>g.n),0)}
+      <button class="toggle-btn" id="eye" style="width:100%;margin-top:7px">👁 Wait for eyes to get used to the dark</button></div>
+    <div class="control-group"><button class="toggle-btn navy" id="tr" style="margin-top:0">✎ Trace the Big Dipper</button>
+      ${slider('px','Pointer line × gap between the two cup stars',0,7,0.05,0).replace('class="control-group"','style="margin-top:8px"')}
+      <button class="toggle-btn" id="st" style="width:100%;margin-top:7px">☄ Star trails (long exposure)</button></div>`;
+  S.cards=card('c1','Clock',COL.navy)+card('c2','Eyes · faintest star',COL.blue)+card('c3','Pole Star height',COL.green)+card('c4','Pointer line',COL.yellow);
+  S.wire=$=>{
+    wireChips(wrap,'fc',i=>face=i);
+    wireChips(wrap,'mo',i=>{ mon=i; tr0=null; });
+    $('#tm').oninput=e=>{ clockT=+e.target.value; play=false; $('#pl').textContent='▶ Let the night run'; };
+    $('#pl').onclick=()=>{ play=!play; if(play&&clockT>=28.9){ clockT=19; } $('#pl').textContent=play?'❚❚ Pause':'▶ Let the night run'; };
+    wireChips(wrap,'pc',i=>{ place=i; tr0=null; });
+    wireChips(wrap,'gl',i=>glow=i);
+    $('#eye').onclick=()=>{ eyeRun=true; };
+    $('#tr').onclick=()=>{ const st=S._st; if(!st||!st.dpOn||st.dub<0.2) return; bd=drawer(COL.red); bd.q=pathOf(BD); };
+    $('#px').oninput=e=>ext=+e.target.value;
+    $('#st').onclick=()=>{ trails=!trails; tr0=null; $('#st').classList.toggle('active',trails); };
+  };
+  S.tick=(dt,ctx,t,$)=>{
+    const P=PLACES[place], DAY=MDAY[MONS[mon]]+14;
+    if(play){ clockT=Math.min(29,clockT+dt/3); if(clockT>=29){ play=false; $('#pl').textContent='▶ Let the night run'; } const e=$('#tm'); if(e) e.value=clockT; }
+    clock=approach(clock,clockT,6,dt);
+    if(eyeRun){ eyeT=Math.min(30,eyeT+dt*2); if(eyeT>=30) eyeRun=false; }
+    const n=nOf(DAY,clock,P), F=skyFrame(n,P), sun=altAz(eclVec(sunLon(n)),F);
+    springTo(cam,wrapNear(DIRS[face][1],cam.x),9,5,dt); springTo(camAlt,36,9,5,dt);
+    const mlim=Math.min(twiLim(sun[0]),GLOW[glow].m,eyeLim(eyeT));
+    const C=camera(cam.x,camAlt.x,112,VW/2,VH/2), V=skyView(F,C,mlim,t);
+    if(bd) drawerStep(bd,dt); if(ld) drawerStep(ld,dt);
+    springTo(ptr,ext,30,8,dt);
+    const polVis=starVis(STAR.polaris,V), tip=1+Math.max(0,ptr.x);
+    const reach=tip>=POLT-0.25&&polVis>0.25&&bd&&bd.segs.length>=6;
+    if(reach&&!found){ found=true; ld=drawer(COL.red); ld.q=pathOf(LD); pop.x=0; pop.v=0; }
+    if(tr0===null&&trails) tr0=n; if(trails&&tr0!==null) trailH=(n-tr0)*24; else trailH=0;
+    springTo(pop,found?1:0,120,9,dt);
+    ctx.save(); stageClip(ctx);
+    skyBack(ctx,V,sun[0],sun[1],GLOW[glow].g);
+    if(trails&&tr0!==null) trailsDraw(ctx,V,Math.min(tr0,n),n,Math.min(mlim,3.6));
+    starsDraw(ctx,V);
+    if(trails){ const p=V.P([0,0,1]); if(p){ line(ctx,p[0]-7,p[1],p[0]+7,p[1],COL.blue,2); line(ctx,p[0],p[1]-7,p[0],p[1]+7,COL.blue,2); } }
+    if(bd) drawerDraw(ctx,V,bd,t,{lw:2.4,pen:COL.yellow,idleHide:true});
+    if(ld) drawerDraw(ctx,V,ld,t,{lw:2,alpha:0.85,nopen:true});
+    /* pointer line with a tick at every gap */
+    if(ptr.x>0.02&&bd&&bd.segs.length>=6){ const A=STAR.merak.v,B=STAR.dubhe.v;
+      gcLine(ctx,V,A,B,0,tip,COL.yellow,2.4,[9,6]);
+      for(let k=1;k<=Math.floor(ptr.x+1e-6);k++){ const p=V.P(slerp(A,B,1+k)); if(p){ circ(ctx,p[0],p[1],3,COL.yellow,COL.yellow,1); textAt(ctx,'×'+k,p[0]+7,p[1]+14,{size:11.5,weight:700,color:COL.yellow}); } }
+      const q=V.P(slerp(A,B,tip)); if(q) circ(ctx,q[0],q[1],4.5,COL.yellow,'#0b1d33',2.2); }
+    if(bd&&bd.segs.length>=7){ starLabel(ctx,V,'merak','Merak','#e9b949',10,14,11.5); starLabel(ctx,V,'dubhe','Dubhe','#e9b949',10,-8,11.5); }
+    if(found){ const p=V.P(STAR.polaris.v); if(p){ ring(ctx,p[0],p[1],10+8*clamp(pop.x,0,1.3),COL.green,2.6); textAt(ctx,'Pole Star',p[0]+18,p[1]-12,{size:15,weight:700,color:'#5fd08f'}); } }
+    if(bd&&bd.segs.length>=7) patLabel(ctx,V,BD,'Big Dipper',COL.red,'top');
+    groundDraw(ctx,V);
+    let tgt; const pp=V.P(STAR.polaris.v), dp=V.P(STAR.dubhe.v);
+    if(found&&pp) tgt=pp; else if(bd&&dp) tgt=dp;
+    observer(ctx,92,VH-6,118,tgt&&tgt[0],tgt&&tgt[1]);
+    compass(ctx,VW-58,VH-58,36,cam.x);
+    if(sun[0]>-12) textAt(ctx,sun[0]>-0.8?'Sun up':'Twilight',VW/2,26,{align:'center',size:13,weight:700,color:COL.yellow});
+    ctx.restore();
+    const pol=altAz(STAR.polaris.v,F);
+    setv($,'c1',clockStr(clock)+' · '+MONTH[MONS[mon]]); setv($,'c2','mag '+fmt(mlim,1)+(eyeT<29.9?' ('+Math.round(eyeT)+' min)':''));
+    setv($,'c3',pol[0]<0?'below horizon':fmt(pol[0],0)+'° up, due N'); setv($,'c4',bd&&bd.segs.length>=6?'×'+fmt(ptr.x,1)+(found?' (Pole Star at ×'+fmt(POLT-1,1)+')':''):'trace first');
+    S._st={P,pol,sun,mlim,polVis,dub:starVis(STAR.dubhe,V),meg:starVis(STAR.megrez,V),dpOn:!!(dp&&dp[0]>0&&dp[0]<VW&&dp[1]>0&&dp[1]<VH)};
+  };
+  S.found=()=>!found?'':trailH>=2?'The Pole Star stays nearly still in the North while the Big Dipper wheels around it.':'That faint star is the Pole Star — about 5 pointer gaps from the cup. It marks North.';
+  S.fb=()=>{ const s=S._st; if(!s) return null;
+    if(s.pol[0]<0&&place===3) return ['bad','From the southern hemisphere the Pole Star never rises — it is below the horizon.'];
+    if(s.sun[0]>-6) return ['warn','The sky is still too bright. Move the clock later.'];
+    if(!bd){ if(DIRS[face][0]!=='N'&&DIRS[face][0]!=='NE') return ['warn','The Big Dipper is in the northern sky — turn to face North.'];
+      if(!s.dpOn||s.dub<0.2) return ['warn','The Big Dipper is low or set now — try May, or a different time.'];
+      return ['warn','Seven stars like a ladle — press “Trace the Big Dipper”.']; }
+    if(!found){ if(s.polVis<0.25) return ['bad','The Pole Star is not very bright — the sky glow hides it. Try a darker sky or wait for your eyes.'];
+      return ['warn','Slide the pointer line on through Dubhe until it meets a star.']; }
+    if(trailH<2) return ['ok','Turn on star trails and let the night run for a few hours.'];
+    return ['ok','Change the place: the Pole Star’s height equals your latitude.'];
+  };
+  return S;
+}); }
+
+/* =====================================================================
+   12.3  LET US TRY TO IDENTIFY — Orion's belt, then Sirius.
+   The evening sky over Delhi: the clock is set in hours after the real
+   sunset for the month, so the sky starts in twilight (only the
+   brightest stars) and darkens as the Sun sinks (limiting magnitude
+   from the Sun's depth). The belt — Mintaka, Alnilam, Alnitak — is
+   2.7° long and almost perfectly straight. The line along it, carried
+   on as a great circle towards the east, passes 2.6° from Sirius at
+   ≈ 8.9 belt-lengths; the other way it passes Aldebaran (Rohiṇī) and
+   the Pleiades (Kṛittikā). The chart is Orion's height at this many
+   hours after sunset, for every month — that is why Dec–Apr is best.
+   ===================================================================== */
+function buildA3(){ return buildScene(wrap=>{
+  const S={q:'Find the three stars of Orion’s belt — then follow them to Sirius.'};
+  const P=PLACES[1], DIRS=[['E',90],['SE',135],['S',180],['SW',225],['W',270]], MONS=[9,11,0,1,3,5];
+  const BELT=[['mintaka','alnilam'],['alnilam','alnitak']];
+  const HUNT=[['meissa','betelgeuse'],['meissa','bellatrix'],['betelgeuse','alnitak'],['bellatrix','mintaka'],['alnitak','saiph'],['mintaka','rigel']];
+  const DOG=[['mirzam','sirius'],['sirius','wezen'],['wezen','adhara'],['wezen','aludra']];
+  const A=STAR.mintaka.v, B=STAR.alnitak.v, BL=v3ang(A,B);
+  let mon=2, hrs=2.5, hT=2.5, play=false, face=1, cam=spr(135), camAlt=spr(33), dirW=false;
+  let bt=null, hunt=null, dog=null, ext=0, ptr=spr(0), gotS=false, gotA=false, popS=spr(0), chart=null, chartKey='';
+  S.html=`
+    <div class="control-group"><label>Month</label>${chipList('mo',MONS.map(m=>MONTH[m]),2)}
+      ${slider('hs','Hours after sunset',0.25,8,0.05,2.5).replace('class="control-group"','style="margin-top:6px"')}
+      <button class="toggle-btn play" id="pl" style="width:100%;margin-top:7px">▶ Let the evening run</button></div>
+    <div class="control-group"><label>Face towards</label>${chipList('fc',DIRS.map(d=>d[0]),1)}</div>
+    <div class="control-group"><button class="toggle-btn navy" id="bb" style="margin-top:0">✎ Find the three belt stars</button>
+      <label style="margin-top:9px">Follow the belt line</label>${chipList('dw',['Towards east','Towards west'],0)}
+      ${slider('ex','… for how many belt lengths',0,13,0.05,0).replace('class="control-group"','style="margin-top:4px"')}</div>`;
+  S.cards=card('c1','Clock (Delhi)',COL.navy)+card('c2','Sun',COL.yellow)+card('c3','Orion’s height',COL.red)+card('c4','Belt line',COL.yellow);
+  S.wire=$=>{
+    wireChips(wrap,'mo',i=>{ mon=i; });
+    $('#hs').oninput=e=>{ hT=+e.target.value; play=false; $('#pl').textContent='▶ Let the evening run'; };
+    $('#pl').onclick=()=>{ play=!play; if(play&&hT>=7.9) hT=0.25; $('#pl').textContent=play?'❚❚ Pause':'▶ Let the evening run'; };
+    wireChips(wrap,'fc',i=>face=i);
+    $('#bb').onclick=()=>{ const s=S._st; if(!s||!s.beltOn) return; bt=drawer(COL.red); bt.q=pathOf(BELT); };
+    wireChips(wrap,'dw',i=>{ dirW=i===1; });
+    $('#ex').oninput=e=>ext=+e.target.value;
+  };
+  S.tick=(dt,ctx,t,$)=>{
+    const DAY=MDAY[MONS[mon]]+14, ss=sunsetT(DAY,P);
+    if(play){ hT=Math.min(8,hT+dt/3); if(hT>=8){ play=false; $('#pl').textContent='▶ Let the evening run'; } const e=$('#hs'); if(e) e.value=hT; }
+    hrs=approach(hrs,hT,6,dt);
+    const clock=ss+hrs, n=nOf(DAY,clock,P), F=skyFrame(n,P), sun=altAz(eclVec(sunLon(n)),F);
+    springTo(cam,wrapNear(DIRS[face][1],cam.x),9,5,dt);
+    const mlim=Math.min(twiLim(sun[0]),6.0), C=camera(cam.x,camAlt.x,94,VW/2,VH/2), V=skyView(F,C,mlim,t);
+    if(bt) drawerStep(bt,dt); if(hunt) drawerStep(hunt,dt); if(dog) drawerStep(dog,dt);
+    if(bt&&bt.segs.length===2&&!hunt){ hunt=drawer(COL.red); hunt.q=pathOf(HUNT); }
+    if(hunt&&hunt.segs.length===HUNT.length&&!dog&&gotS){ dog=drawer(COL.red); dog.q=pathOf(DOG); }
+    const sgn=dirW?-1:1; springTo(ptr,sgn*ext,26,8,dt);
+    { const tp=ptr.x>=0?1+ptr.x:ptr.x, ta=bt&&Math.abs(ptr.x)>0.3?altAz(slerp(A,B,tp),F)[0]:0; springTo(camAlt,clamp(ta-18,33,58),7,4.5,dt); }
+    const tip=ptr.x>=0?1+ptr.x:ptr.x, ready=bt&&bt.segs.length===2;
+    const sV=starVis(STAR.sirius,V), aV=starVis(STAR.aldebaran,V);
+    if(ready&&tip>=8.5&&sV>0.3&&!gotS){ gotS=true; popS.x=0; popS.v=0; }
+    if(ready&&tip<=-7.4&&aV>0.3) gotA=true;
+    springTo(popS,gotS?1:0,120,9,dt);
+    ctx.save(); stageClip(ctx);
+    skyBack(ctx,V,sun[0],sun[1],0.15); starsDraw(ctx,V);
+    if(hunt) drawerDraw(ctx,V,hunt,t,{lw:2,alpha:0.85,nopen:true});
+    if(dog) drawerDraw(ctx,V,dog,t,{lw:2,alpha:0.85,nopen:true});
+    if(bt) drawerDraw(ctx,V,bt,t,{lw:3,pen:COL.yellow,idleHide:true});
+    if(ready&&Math.abs(ptr.x)>0.02){ gcLine(ctx,V,A,B,ptr.x>=0?0:1,tip,COL.yellow,2.4,[9,6]);
+      for(let k=1;k<=Math.floor(Math.abs(ptr.x)+1e-6);k++){ const tt=ptr.x>=0?1+k:-k+0; const p=V.P(slerp(A,B,tt)); if(p&&k%1===0){ circ(ctx,p[0],p[1],2.6,COL.yellow,COL.yellow,1); if(k%2===0||k<3) textAt(ctx,'×'+k,p[0]+6,p[1]+14,{size:11,weight:700,color:COL.yellow}); } }
+      const q=V.P(slerp(A,B,tip)); if(q) circ(ctx,q[0],q[1],4.5,COL.yellow,'#0b1d33',2.2); }
+    if(hunt&&hunt.segs.length===HUNT.length){ patLabel(ctx,V,HUNT.concat(BELT),'Orion',COL.red,'top'); starLabel(ctx,V,'betelgeuse','Betelgeuse (Ārdrā)','#e79a7d',10,-6,11.5); starLabel(ctx,V,'rigel','Rigel','#9fb6d1',9,14,11.5); }
+    if(gotS){ const p=V.P(STAR.sirius.v); if(p){ ring(ctx,p[0],p[1],12+9*clamp(popS.x,0,1.3),COL.green,2.6); textAt(ctx,'Sirius',p[0]+20,p[1]+5,{size:16,weight:700,color:'#5fd08f'}); } if(dog&&dog.segs.length) patLabel(ctx,V,DOG,'Canis Major',COL.red,'bottom'); }
+    if(gotA){ starLabel(ctx,V,'aldebaran','Aldebaran (Rohiṇī)','#5fd08f',10,-8,12.5); if(tip<=-12.3) starLabel(ctx,V,'alcyone','Pleiades (Kṛittikā)','#5fd08f',10,-10,12.5); }
+    groundDraw(ctx,V,true);
+    const sp=V.P(STAR.sirius.v), op=V.P(STAR.alnilam.v); const tg=gotS&&sp?sp:bt&&op?op:null;
+    observer(ctx,92,VH-6,118,tg&&tg[0],tg&&tg[1]);
+    /* chart: Orion's height this long after sunset, month by month */
+    const key=fmt(hrs,1); if(key!==chartKey){ chartKey=key; chart=[]; for(let m=0;m<=12;m++){ const d=MDAY[m%12]+14, c=sunsetT(d,P)+hrs, Fm=skyFrame(nOf(d,c,P),P); chart.push([m,altAz(STAR.alnilam.v,Fm)[0]]); } }
+    const cx=VW-232, cy=10; ctx.save(); ctx.globalAlpha=0.94;
+    const ax=miniChart(ctx,cx,cy,222,128,[0,12],[-60,80],[{pts:chart,col:COL.red}],{band:[20,80],yt:[-60,0,60],xt:[],yl:'Orion’s height, '+fmt(hrs,1)+' h after sunset'});
+    line(ctx,ax.px(0),ax.py(0),ax.px(12),ax.py(0),COL.blue,1.2,[3,3]);
+    ['J','F','M','A','M','J','J','A','S','O','N','D'].forEach((l,i)=>textAt(ctx,l,ax.px(i),cy+122,{align:'center',size:9.5,weight:i===MONS[mon]?700:500,color:i===MONS[mon]?COL.red:COL.muted}));
+    const mi=MONS[mon]; circ(ctx,ax.px(mi),ax.py(clamp(chart[mi][1],-60,80)),4.5,COL.red,'#fff',2.2); ctx.restore();
+    if(sun[0]>-12) textAt(ctx,sun[0]>-0.8?'Sun up':'Twilight',VW/2-60,26,{align:'center',size:13,weight:700,color:COL.yellow});
+    ctx.restore();
+    const ori=altAz(STAR.alnilam.v,F), bOn=op&&op[0]>20&&op[0]<VW-20&&op[1]>20&&op[1]<VH-20;
+    setv($,'c1',clockStr(clock)+' · '+MONTH[MONS[mon]]); setv($,'c2',sun[0]>-0.8?'up':fmt(-sun[0],0)+'° below');
+    setv($,'c3',ori[0]<0?'not risen / set':fmt(ori[0],0)+'° up'); setv($,'c4',ready?'×'+fmt(Math.abs(ptr.x),1)+(dirW?' west':' east'):'find belt first');
+    S._st={ori,sun,bOn,beltOn:!!(bOn&&starVis(STAR.alnilam,V)>0.3),sV};
+  };
+  S.found=()=>gotS?'Sirius — the brightest star in the night sky, along Orion’s belt towards the east.':bt&&bt.segs.length===2?'Three bright stars in a short straight line — Orion’s belt. That is Orion, the hunter.':'';
+  S.fb=()=>{ const s=S._st; if(!s) return null;
+    if(s.ori[0]<0) return ['bad','Orion is below the horizon now. It is best seen December to April, after sunset.'];
+    if(s.sun[0]>-6&&!bt) return ['warn','Still twilight — only the brightest stars show. Wait a little longer.'];
+    if(!bt){ if(!s.bOn) return ['warn','Orion is up — turn to find it ('+(s.ori[1]<180?'east/south-east':'south-west/west')+').']; return ['warn','Three stars in a short straight line — press “Find the three belt stars”.']; }
+    if(!gotS){ if(dirW&&ext>0) return ['warn','That way leads to Aldebaran and the Pleiades. Sirius is towards the east.']; if(s.sV<0.3) return ['warn','Sirius is still below the horizon — let the evening run.']; return ['warn','Slide the belt line on towards the east.']; }
+    if(!gotA) return ['ok','Try the other way along the belt too.'];
+    return ['ok','Change the month: see when Orion is up in the evening.'];
+  };
+  return S;
+}); }
+
+/* =====================================================================
+   12.4  LET US TRY TO IDENTIFY — Venus at dawn or dusk.
+   Venus and Earth go round the Sun (Venus a = 0.723 au, 224.7 days,
+   orbit tilted 3.39°; Earth 365.25 days, true Sun position). From the
+   two positions we get where Venus is in our sky, its distance, its
+   angle from the Sun (elongation, at most ≈ 46°), its phase and its
+   brightness (Mallama's Venus formula, ≈ −4 mag). East of the Sun it
+   sets after the Sun → evening, in the West; west of the Sun it rises
+   before the Sun → morning, in the East. The clock is set in minutes
+   from the real sunrise/sunset in Delhi. Stars are points, so the air
+   makes them twinkle; Venus shows a small disc (10″–60″) whose light
+   averages out the air's wobble, so it shines steadily.
+   ===================================================================== */
+function venus(n){
+  const g=(357.528+0.9856003*n)*D2R, rE=1.00014-0.01671*Math.cos(g)-0.00014*Math.cos(2*g), lE=(sunLon(n)+180)*D2R;
+  const E=[rE*Math.cos(lE),rE*Math.sin(lE),0];
+  const a=0.723332, i=3.3946*D2R, Om=76.68*D2R, u=(181.979801+1.6021302244*n)*D2R-Om;
+  const Vh=[a*(Math.cos(Om)*Math.cos(u)-Math.sin(Om)*Math.sin(u)*Math.cos(i)), a*(Math.sin(Om)*Math.cos(u)+Math.cos(Om)*Math.sin(u)*Math.cos(i)), a*Math.sin(u)*Math.sin(i)];
+  const G=[Vh[0]-E[0],Vh[1]-E[1],Vh[2]-E[2]], dist=Math.hypot(...G);
+  const lam=Math.atan2(G[1],G[0])*R2D, bet=Math.asin(G[2]/dist)*R2D;
+  const elong=Math.acos(clamp(-(G[0]*E[0]+G[1]*E[1])/(dist*rE),-1,1))*R2D;
+  const ph=Math.acos(clamp((a*a+dist*dist-rE*rE)/(2*a*dist),-1,1))*R2D;
+  const mag=-4.384-1.044e-3*ph+3.687e-4*ph*ph-2.814e-6*ph*ph*ph+8.938e-9*ph*ph*ph*ph+5*Math.log10(a*dist);
+  const east=((lam-sunLon(n))%360+540)%360-180>0;
+  return {E,Vh,dist,lam,bet,elong,ph,mag,east,diam:16.68/dist,k:(1+Math.cos(ph*D2R))/2,v:eclVec(lam,bet)};
+}
+function venusDisc(ctx,x,y,r,ph,rot){
+  ctx.save(); ctx.translate(x,y); ctx.rotate(rot);
+  circ(ctx,0,0,r,'rgba(201,214,230,0.35)',null,1.2);
+  const c=Math.cos(ph*D2R), rx=Math.max(0.01,Math.abs(c)*r);
+  ctx.beginPath(); ctx.arc(0,0,r,-Math.PI/2,Math.PI/2,false);
+  if(c>=0) ctx.ellipse(0,0,rx,r,0,Math.PI/2,Math.PI*1.5,false); else ctx.ellipse(0,0,rx,r,0,Math.PI/2,-Math.PI/2,true);
+  ctx.closePath(); ctx.fillStyle='#fff6dc'; ctx.fill(); ctx.restore();
+}
+function buildA4(){ return buildScene(wrap=>{
+  const S={q:'Where and when can you spot Venus — and how is it different from a star?'};
+  const P=PLACES[1], DIRS=[['E',90],['S',180],['W',270]];
+  let dT=200, d=200, play=false, dusk=true, mins=40, mT=40, face=0, cam=spr(90), twk=false, tel=false, hist=[], saw={dawn:false,dusk:false}, seenNow=false, tw0=0;
+  S.html=`
+    <div class="control-group">${slider('dt','Date',0,729,1,200).replace('class="control-group"','style=""')}
+      <button class="toggle-btn play" id="pl" style="width:100%;margin-top:7px">▶ Run the months</button></div>
+    <div class="control-group"><label>When</label>${chipList('wn',['Dawn — before sunrise','Dusk — after sunset'],1)}
+      ${slider('mn','Minutes from sunrise / sunset',10,100,1,40).replace('class="control-group"','style="margin-top:6px"')}</div>
+    <div class="control-group"><label>Face towards</label>${chipList('fc',DIRS.map(x=>x[0]),0)}</div>
+    <div class="control-group"><button class="toggle-btn" id="tw" style="width:100%">〰 Twinkle meter: Venus vs a star</button>
+      <button class="toggle-btn" id="tl" style="width:100%;margin-top:7px">🔭 Look through a telescope</button></div>`;
+  S.cards=card('c1','Date',COL.navy)+card('c2','Clock (Delhi)',COL.navy)+card('c3','Venus’ angle from Sun',COL.yellow)+card('c4','Venus’ height',COL.green);
+  S.wire=$=>{
+    $('#dt').oninput=e=>{ dT=+e.target.value; play=false; $('#pl').textContent='▶ Run the months'; };
+    $('#pl').onclick=()=>{ play=!play; if(play&&dT>=728) dT=0; $('#pl').textContent=play?'❚❚ Pause':'▶ Run the months'; };
+    wireChips(wrap,'wn',i=>dusk=i===1);
+    $('#mn').oninput=e=>mT=+e.target.value;
+    wireChips(wrap,'fc',i=>face=i);
+    $('#tw').onclick=()=>{ twk=!twk; $('#tw').classList.toggle('active',twk); hist=[]; tw0=0; };
+    $('#tl').onclick=()=>{ tel=!tel; $('#tl').classList.toggle('active',tel); };
+  };
+  S.tick=(dt,ctx,t,$)=>{
+    if(play){ dT=Math.min(729,dT+dt*8); if(dT>=729){ play=false; $('#pl').textContent='▶ Run the months'; } const e=$('#dt'); if(e) e.value=dT; }
+    d=approach(d,dT,5,dt); mins=approach(mins,mT,6,dt);
+    const day=Math.floor(d), clock=dusk?sunsetT(day,P)+mins/60:sunriseT(day,P)-mins/60;
+    const n=nOf(d-day+day,clock,P), nn=nOf(day,clock,P), F=skyFrame(nn,P), sun=altAz(eclVec(sunLon(nn)),F), Vn=venus(nn);
+    springTo(cam,wrapNear(DIRS[face][1],cam.x),9,5,dt);
+    const mlim=Math.min(twiLim(sun[0]),5.0), C=camera(cam.x,20,100,VW/2,VH/2+60), V=skyView(F,C,mlim,t);
+    const ve=enu(Vn.v,F), vAlt=Math.asin(ve[2])*R2D, vAz=(Math.atan2(ve[0],ve[1])*R2D+360)%360, X=airmass(vAlt);
+    const vm=Vn.mag+0.22*(X-1), vvis=vAlt>0.6?clamp((mlim-vm)/0.9,0,1):0, vp=projE(C,ve);
+    const onScr=!!(vp&&vp[0]>10&&vp[0]<VW-10&&vp[1]>10&&vp[1]<VH-10);
+    seenNow=vvis>0.4&&onScr&&Vn.elong>9; if(seenNow) saw[dusk?'dusk':'dawn']=true;
+    ctx.save(); stageClip(ctx);
+    skyBack(ctx,V,sun[0],sun[1],0.2); starsDraw(ctx,V);
+    /* Venus: steady, with a soft glow */
+    if(vp&&vvis>0){ const tws=Math.exp(0.08*Math.min(0.9,0.075*Math.pow(X,1.5))*Math.sin(t*13)*0.55), b=vvis*tws;
+      const R=ctx.createRadialGradient(vp[0],vp[1],0,vp[0],vp[1],26); R.addColorStop(0,rgba('#fff3cf',0.6*b)); R.addColorStop(1,rgba('#fff3cf',0)); ctx.fillStyle=R; ctx.beginPath(); ctx.arc(vp[0],vp[1],26,0,7); ctx.fill();
+      ctx.globalAlpha=clamp(b,0,1); circ(ctx,vp[0],vp[1],4.6,'#fff8e6','#fffaf0',1); ctx.globalAlpha=1;
+      if(seenNow){ ring(ctx,vp[0],vp[1],15+2*Math.sin(t*3),COL.green,2.2); textAt(ctx,'Venus',vp[0]+20,vp[1]-12,{size:16,weight:700,color:'#5fd08f'}); } }
+    groundDraw(ctx,V,true);
+    const sp=projE(C,azAltVec(sun[1],Math.max(sun[0],-3)));
+    if(sp&&sp[0]>0&&sp[0]<VW){ textAt(ctx,'☀ Sun '+fmt(-sun[0],0)+'° below',sp[0],Math.min(VH-30,sp[1]+28),{align:'center',size:12.5,weight:700,color:COL.yellow}); }
+    observer(ctx,92,VH-6,118,seenNow?vp[0]:undefined,seenNow?vp[1]:undefined);
+    /* orbit view from above: Sun, Venus, Earth, lines of sight */
+    { const ox=110, oy=112, R=88, s=R/1.02; ctx.save(); rrect(ctx,8,8,204,214,12); ctx.fillStyle='rgba(255,255,255,0.95)'; ctx.fill(); ctx.strokeStyle='#dbe4f0'; ctx.lineWidth=1.2; ctx.stroke();
+      circ(ctx,ox,oy,0.723*s,'#9ccbb1',null,1.4); circ(ctx,ox,oy,1*s,'#9cc3ea',null,1.4);
+      const ex=ox+Vn.E[0]*s, ey=oy-Vn.E[1]*s, vx=ox+Vn.Vh[0]*s, vy=oy-Vn.Vh[1]*s;
+      line(ctx,ex,ey,ox,oy,COL.yellow,1.6,[4,3]); line(ctx,ex,ey,vx,vy,COL.green,1.8);
+      const a1=Math.atan2(oy-ey,ox-ex), a2=Math.atan2(vy-ey,vx-ex); ctx.strokeStyle=COL.yellow; ctx.lineWidth=1.6; ctx.beginPath(); ctx.arc(ex,ey,22,a1,a2,angDiff(a2,a1)<0); ctx.stroke();
+      sunIcon(ctx,ox,oy,8,t); circ(ctx,vx,vy,5,COL.green,'#e4f7ec',2); circ(ctx,ex,ey,6,COL.blue,'#dcecff',2);
+      textAt(ctx,'Venus',vx,vy-9,{align:'center',size:10.5,weight:700,color:COL.green}); textAt(ctx,'Earth',ex,ey+18,{align:'center',size:10.5,weight:700,color:COL.blue});
+      textAt(ctx,fmt(Vn.elong,0)+'° '+(Vn.elong<9?'(lost in the Sun’s glare)':Vn.east?'→ evening sky':'→ morning sky'),110,214,{align:'center',size:11,weight:700,color:Vn.elong<9?COL.red:COL.ink});
+      ctx.restore(); }
+    /* twinkle meter */
+    if(twk){ let best=null; for(const s of STARS){ if(!s.name||s.m>1.6) continue; const e=enu(s.v,F); const al=Math.asin(e[2])*R2D; if(al<3||al>40) continue; if(starVis(s,V)<0.5) continue; const pp=V.P(s.v), on=!!(pp&&pp[0]>20&&pp[0]<VW-20&&pp[1]>20&&pp[1]<VH-20); if(!best||(on&&!best.on)||(on===best.on&&s.m<best.s.m)) best={s,al,on}; }
+      tw0+=dt; if(tw0>1/30){ tw0=0; const sx=best?twinkle(best.s,t,airmass(best.al)):null; const vx=vvis>0?Math.exp(0.08*Math.min(0.9,0.075*Math.pow(X,1.5))*Math.sin(t*13)*0.55):null; hist.push([sx,vx]); if(hist.length>120) hist.shift(); }
+      const ax=VW-232, ay=10; ctx.save(); ctx.globalAlpha=0.95;
+      const k=hist.length; miniChart(ctx,ax,ay,222,120,[0,120],[0.3,1.8],[{pts:hist.map((h,i)=>[i+120-k,h[0]===null?1:h[0]]).filter((_,i)=>hist[i][0]!==null),col:COL.blue},{pts:hist.map((h,i)=>[i+120-k,h[1]===null?1:h[1]]).filter((_,i)=>hist[i][1]!==null),col:COL.green,lw:2.8}],{yt:[],xt:[],yl:'Brightness, last 4 s'});
+      textAt(ctx,'Venus',ax+40,ay+112,{size:10.5,weight:700,color:COL.green}); textAt(ctx,best?best.s.name+' (star)':'no bright star low',ax+92,ay+112,{size:10.5,weight:700,color:COL.blue}); ctx.restore();
+      if(best){ const p=V.P(best.s.v); if(p) ring(ctx,p[0],p[1],11,COL.blue,1.6); } }
+    /* telescope */
+    if(tel){ const lx=VW-120, ly=twk?250:150, lr=80; ctx.save(); ctx.beginPath(); ctx.arc(lx,ly,lr,0,7); ctx.fillStyle='#050d18'; ctx.fill(); ctx.restore();
+      if(vvis>0&&Vn.elong>4){ const r=clamp(Vn.diam/60*60,4,70), rot=Math.atan2((sp?sp[1]:VH)-(vp?vp[1]:0),(sp?sp[0]:0)-(vp?vp[0]:0)); venusDisc(ctx,lx,ly,r,Vn.ph,rot); }
+      circ(ctx,lx,ly,lr,'#c9d6e6',null,3); textAt(ctx,'Telescope ×50',lx,ly-lr-8,{align:'center',size:12,weight:700,color:'#c9d6e6'});
+      textAt(ctx,vvis>0?Math.round(Vn.k*100)+' % lit · '+fmt(Vn.diam,0)+'″ wide':'Venus not in the sky',lx,ly+lr+18,{align:'center',size:11.5,weight:700,color:'#c9d6e6'}); }
+    ctx.restore();
+    setv($,'c1',dateStr(d)); setv($,'c2',clockStr(clock)); setv($,'c3',fmt(Vn.elong,0)+'° '+(Vn.east?'east':'west')); setv($,'c4',vAlt<0?'below horizon':fmt(vAlt,0)+'° · '+(vAz<180?'E side':'W side'));
+    S._st={Vn,vAlt,vAz,vvis,onScr,sun};
+  };
+  S.found=()=>!seenNow?'':(dusk?'Venus, the “Evening Star”, low in the West after sunset':'Venus, the “Morning Star”, low in the East before sunrise')+' — steady, not twinkling: a planet.';
+  S.fb=()=>{ const s=S._st; if(!s) return null;
+    if(s.Vn.elong<9) return ['bad','Venus is too close to the Sun now — lost in its glare. Change the date.'];
+    if(s.vAlt<=0.6) return ['bad',(s.Vn.east?'Venus is an evening object now':'Venus is a morning object now')+' — it is below the horizon at this '+(dusk?'dusk':'dawn')+'. Try '+(s.Vn.east?'dusk':'dawn')+'.'];
+    if(s.vvis<0.4) return ['warn','The sky is too bright — move further from sunrise / sunset.'];
+    if(!s.onScr) return ['warn','Venus is up — at '+(dusk?'dusk look West':'dawn look East')+'.'];
+    if(!twk) return ['ok','Turn on the twinkle meter: does Venus twinkle like the star?'];
+    if(!(saw.dawn&&saw.dusk)) return ['ok','Now find Venus at '+(saw.dusk?'dawn':'dusk')+' — run the months to when it switches sides.'];
+    return ['ok','Watch the telescope as Venus swings close to us: a thin, large crescent.'];
+  };
+  return S;
+}); }
+
+
+/* ---------------------------------------------------------------------
+   ACTIVITIES + ROUTER
+   --------------------------------------------------------------------- */
+function _b(name){ return typeof window[name]==='function'?window[name]:()=>{ const d=document.createElement('div'); d.textContent='(not built)'; return d; }; }
+const activities = [
+  { num:'12.1', tag:'', title:'Join the Stars', desc:'Let us draw · connect stars into a pattern, name it, compare with friends · Fig. 12.2', build:_b('buildA1') },
+  { num:'12.2', tag:'', title:'Big Dipper → Pole Star', desc:'Let us try to locate · face North, find the Big Dipper, follow the pointer stars · Fig. 12.4', build:_b('buildA2') },
+  { num:'12.3', tag:'', title:'Orion → Sirius', desc:'Let us try to identify · the belt of three stars, then east to Sirius · Fig. 12.3', build:_b('buildA3') },
+  { num:'12.4', tag:'', title:'Spot Venus', desc:'Let us try to identify · East at dawn, West at dusk · a planet does not twinkle', build:_b('buildA4') },
+];
+if(typeof buildGal==='function') activities.unshift({num:'G',tag:'',title:'Gallery',desc:'',build:buildGal});
+let currentIndex = 0;
+
+function buildNav(){
+  const nav = document.getElementById('sideNav');
+  nav.innerHTML='';
+  activities.forEach((a,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'nav-item'+(i===currentIndex?' active':'');
+    btn.innerHTML = `<span class="n-num">${a.num}${a.tag?'<br>'+a.tag:''}</span><span class="n-title">${a.title}</span>`;
+    btn.onclick = ()=>{ currentIndex=i; render(); };
+    nav.appendChild(btn);
+  });
+}
+function render(){
+  stopAllLoops();
+  buildNav();
+  const a = activities[currentIndex];
+  document.getElementById('panelBadge').textContent = a.num+(a.tag?' '+a.tag:'');
+  document.getElementById('panelTitle').textContent = a.title;
+  document.getElementById('panelDesc').textContent = a.desc||'';
+  const body = document.getElementById('panelBody');
+  body.innerHTML='';
+  body.appendChild(a.build());
+}
+function labShell(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `<div class="lab-canvas-wrap"><canvas></canvas></div><div class="lab-side"></div>`;
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   INIT
+   --------------------------------------------------------------------- */
+render();
+
+</script>
+<script src="../../tracking/activity-tracker.js"></script>
+<script src="../../nav/back-button.js"></script>
+</body>
+</html>

@@ -1,0 +1,1408 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 10 · Chapter 9 — Light: Reflection & Refraction | Botclub Labs</title>
+<link href="../../vendor/fonts/fonts.css" rel="stylesheet">
+<style>
+:root{
+  --navy-1:#0f2640; --navy-2:#1a3a5c; --navy-3:#234a73;
+  --accent:#2f8fe0; --accent-2:#5cc8ff;
+  --bg:#eef2f8; --surface-0:#ffffff; --surface-1:#f6f9fc; --surface-2:#eef2f8;
+  --border:#dbe4f0; --border-strong:#c2d1e5;
+  --text-1:#132a44; --text-2:#4c6178; --text-3:#8195ab;
+  --real:#d9432b; --virtual:#2f8fe0; --ok:#1f9d55; --warn:#c9820b;
+  --radius:14px; --radius-sm:9px;
+  --fs-xs:clamp(10px,0.62vw,12px); --fs-sm:clamp(11px,0.72vw,13.5px);
+  --fs-md:clamp(12.5px,0.85vw,15px); --fs-lg:clamp(15px,1.15vw,19px);
+  --fs-xl:clamp(18px,1.5vw,25px);
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:22px; --sp-6:30px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{
+  font-family:'Poppins',system-ui,sans-serif;
+  background:var(--bg);
+  color:var(--text-1);
+  overflow:hidden;
+}
+button, input{font-family:inherit;}
+
+/* ============ APP SHELL ============ */
+.app{height:100vh; height:100dvh; display:flex; flex-direction:column; min-height:0;}
+
+.topbar{
+  flex:0 0 auto;
+  background:linear-gradient(120deg, var(--navy-1) 0%, var(--navy-2) 55%, var(--navy-3) 100%);
+  color:#fff;
+  padding:clamp(10px,1.1vh,18px) clamp(14px,1.6vw,28px);
+  display:flex; align-items:center; gap:var(--sp-4);
+  box-shadow:0 2px 10px rgba(15,38,64,0.25);
+  z-index:5;
+}
+.topbar .brand-badge{
+  width:clamp(34px,2.6vw,44px); height:clamp(34px,2.6vw,44px);
+  border-radius:10px; background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.25);
+  display:flex; align-items:center; justify-content:center;
+  font-size:clamp(16px,1.4vw,22px); flex:0 0 auto;
+}
+.topbar .titles{min-width:0;}
+.topbar .chip{
+  display:inline-block; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.28);
+  border-radius:6px; padding:2px 9px; font-size:var(--fs-xs); letter-spacing:0.06em; text-transform:uppercase; font-weight:600;
+  margin-bottom:4px;
+}
+.topbar h1{font-size:var(--fs-lg); font-weight:600; line-height:1.25; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.topbar p{font-size:var(--fs-sm); opacity:0.78; margin-top:1px; white-space:nowrap; overflow:hidden; text-overflow:ellipsis;}
+.topbar .spacer{flex:1;}
+.topbar .prof-note{
+  font-size:var(--fs-xs); opacity:0.85; text-align:right; max-width:260px; line-height:1.5; display:none;
+}
+@media (min-width:1100px){ .topbar .prof-note{display:block;} }
+
+.body-wrap{flex:1; display:flex; min-height:0; overflow:hidden;}
+
+/* ---------- SIDE NAV ---------- */
+.sidenav{
+  flex:0 0 clamp(190px,15.5vw,268px);
+  background:var(--surface-0);
+  border-right:1px solid var(--border);
+  overflow-y:auto;
+  padding:var(--sp-3);
+  display:flex; flex-direction:column; gap:6px;
+}
+.nav-section-label{
+  font-size:var(--fs-xs); text-transform:uppercase; letter-spacing:0.08em; color:var(--text-3);
+  font-weight:600; padding:8px 8px 2px;
+}
+.nav-item{
+  display:flex; flex-direction:column; align-items:flex-start; gap:1px;
+  text-align:left; width:100%; border:1px solid var(--border); background:var(--surface-1);
+  border-radius:var(--radius-sm); padding:8px 11px; cursor:pointer; transition:all .15s ease;
+}
+.nav-item:hover{background:var(--surface-2); border-color:var(--border-strong);}
+.nav-item.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.nav-item .n-num{font-size:var(--fs-xs); font-weight:700; letter-spacing:.04em; color:var(--accent); opacity:.95;}
+.nav-item.active .n-num{color:var(--accent-2);}
+.nav-item .n-title{font-size:var(--fs-md); font-weight:600; line-height:1.3;}
+.nav-item .n-sub{font-size:var(--fs-xs); color:var(--text-2);}
+.nav-item.active .n-sub{color:rgba(255,255,255,0.75);}
+.nav-item .n-type{
+  align-self:flex-end; font-size:9px; text-transform:uppercase; letter-spacing:.05em;
+  background:var(--surface-2); border-radius:4px; padding:1px 5px; color:var(--text-3); margin-top:2px;
+}
+.nav-item.active .n-type{background:rgba(255,255,255,0.15); color:#fff;}
+
+/* ---------- MAIN CONTENT ---------- */
+.content{flex:1; min-width:0; display:flex; flex-direction:column; overflow:hidden;}
+.panel-head{
+  flex:0 0 auto; padding:var(--sp-4) var(--sp-5) var(--sp-2);
+  border-bottom:1px solid var(--border); background:var(--surface-0);
+}
+.panel-head .badge-row{display:flex; align-items:center; gap:8px; flex-wrap:wrap;}
+.panel-badge{
+  background:var(--navy-2); color:#fff; font-size:var(--fs-xs); font-weight:700;
+  padding:3px 10px; border-radius:6px; letter-spacing:.04em;
+}
+.panel-typebadge{font-size:var(--fs-xs); color:var(--text-2); border:1px solid var(--border); padding:2px 8px; border-radius:6px;}
+.panel-head h2{font-size:var(--fs-xl); font-weight:600; margin-top:6px; color:var(--text-1);}
+.panel-head p{font-size:var(--fs-sm); color:var(--text-2); margin-top:3px; line-height:1.5; max-width:1000px;}
+
+.panel-body{flex:1; min-height:0; overflow:hidden; padding:var(--sp-4) var(--sp-5); display:flex;}
+
+/* ============ DEMO VIEW (step-based) ============ */
+.demo-view{flex:1; display:flex; gap:var(--sp-4); min-height:0; min-width:0;}
+.demo-canvas-wrap{
+  flex:1.5; min-width:0; min-height:0; background:#eaf2fb;
+  border:1px solid var(--border); border-radius:var(--radius);
+  display:flex; align-items:center; justify-content:center; overflow:hidden; position:relative;
+}
+.demo-canvas-wrap canvas{width:100%; height:100%; display:block;}
+.demo-side{flex:1; min-width:260px; max-width:420px; display:flex; flex-direction:column; gap:var(--sp-3); min-height:0;}
+.step-card{
+  background:var(--surface-0); border:1px solid var(--border); border-radius:var(--radius);
+  padding:var(--sp-4); flex:1; min-height:0; overflow-y:auto;
+}
+.step-card .step-tag{font-size:var(--fs-xs); font-weight:700; color:var(--accent); text-transform:uppercase; letter-spacing:.05em;}
+.step-card .step-text{font-size:var(--fs-md); line-height:1.65; color:var(--text-1); margin-top:6px;}
+.step-card .step-text strong{color:var(--navy-2);}
+.step-card .step-text em{color:var(--accent); font-style:normal; font-weight:600;}
+.outcome-pill{display:inline-block; margin-top:10px; font-size:var(--fs-xs); font-weight:600; padding:3px 10px; border-radius:20px;}
+.outcome-pill.ok{background:#e4f7ec; color:var(--ok); border:1px solid #b8e8cb;}
+.outcome-pill.info{background:#e6f2fd; color:var(--accent); border:1px solid #b9dcfb;}
+
+.ctrl-row{display:flex; gap:8px; align-items:center; flex-wrap:wrap; flex:0 0 auto;}
+.btn{
+  padding:9px 16px; border-radius:9px; border:1px solid var(--border-strong);
+  background:var(--surface-0); color:var(--text-1); cursor:pointer; font-size:var(--fs-sm); font-weight:600;
+  transition:all .12s ease; white-space:nowrap;
+}
+.btn:hover{background:var(--surface-2);}
+.btn:disabled{opacity:.4; cursor:default;}
+.btn.primary{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.btn.primary:hover{background:var(--navy-1);}
+.btn.ghost{background:transparent;}
+.btn.sm{padding:6px 11px; font-size:var(--fs-xs);}
+.step-dots{display:flex; gap:5px; align-items:center; margin-left:auto;}
+.step-dot{width:7px; height:7px; border-radius:50%; background:var(--border-strong); transition:all .2s;}
+.step-dot.active{background:var(--navy-2); width:20px; border-radius:5px;}
+
+/* ============ LAB VIEW (interactive ray diagrams) ============ */
+.lab-view{flex:1; display:flex; gap:var(--sp-4); min-height:0; min-width:0;}
+.lab-canvas-wrap{
+  flex:2; min-width:0; min-height:0; background:#f7fafd;
+  border:1px solid var(--border); border-radius:var(--radius); position:relative; overflow:hidden;
+}
+.lab-canvas-wrap canvas{width:100%; height:100%; display:block;}
+.lab-legend{
+  position:absolute; top:10px; left:12px; background:rgba(255,255,255,0.92);
+  border:1px solid var(--border); border-radius:8px; padding:7px 11px; font-size:var(--fs-xs);
+  color:var(--text-2); line-height:1.8; backdrop-filter:blur(2px);
+}
+.lab-legend span{display:inline-block; width:16px; height:2.5px; margin-right:6px; vertical-align:middle;}
+.leg-incident{background:#e8a33d;}
+.leg-refl{background:#2f8fe0;}
+.leg-virtual{background:#2f8fe0; opacity:.55; border-top:2px dashed #2f8fe0; height:0; margin-top:2px;}
+.leg-axis{background:#9aa9bb;}
+
+.lab-side{flex:1; min-width:270px; max-width:400px; display:flex; flex-direction:column; gap:var(--sp-3); min-height:0; overflow-y:auto; padding-right:2px;}
+.control-group{background:var(--surface-0); border:1px solid var(--border); border-radius:var(--radius-sm); padding:11px 13px;}
+.control-group label{font-size:var(--fs-sm); font-weight:600; color:var(--text-1); display:flex; justify-content:space-between;}
+.control-group label .val{color:var(--accent); font-weight:700;}
+.control-group input[type=range]{width:100%; margin-top:8px; accent-color:var(--navy-2); cursor:pointer;}
+.toggle-group{display:flex; gap:6px; margin-top:8px;}
+.toggle-btn{
+  flex:1; padding:8px 6px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1);
+  font-size:var(--fs-sm); font-weight:600; cursor:pointer; text-align:center; color:var(--text-2);
+}
+.toggle-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.quick-jump{display:flex; flex-wrap:wrap; gap:6px; margin-top:9px;}
+.jump-btn{
+  flex:1 1 calc(33% - 5px); padding:6px 4px; font-size:10.5px; font-weight:600; text-align:center;
+  border:1px solid var(--border-strong); background:var(--surface-1); border-radius:6px; cursor:pointer; color:var(--text-2);
+}
+.jump-btn.active{background:var(--accent); border-color:var(--accent); color:#fff;}
+
+.result-cards{display:grid; grid-template-columns:1fr 1fr; gap:7px;}
+.rcard{background:var(--surface-0); border:1px solid var(--border); border-radius:9px; padding:8px 10px;}
+.rcard .rlabel{font-size:9.5px; text-transform:uppercase; letter-spacing:.05em; color:var(--text-3); font-weight:600;}
+.rcard .rval{font-size:var(--fs-md); font-weight:700; color:var(--text-1); margin-top:2px;}
+.rcard.wide{grid-column:1/-1;}
+.nature-tags{display:flex; gap:5px; flex-wrap:wrap; margin-top:3px;}
+.tag{font-size:10px; font-weight:700; padding:2px 8px; border-radius:12px;}
+.tag.real{background:#fde7e2; color:var(--real);}
+.tag.virtual{background:#e6f2fd; color:var(--virtual);}
+.tag.inverted{background:#fdf1e0; color:var(--warn);}
+.tag.erect{background:#e4f7ec; color:var(--ok);}
+.tag.size{background:var(--surface-2); color:var(--text-2);}
+
+.mini-table{width:100%; border-collapse:collapse; font-size:10.5px;}
+.mini-table th{background:var(--navy-2); color:#fff; padding:5px 6px; text-align:left; font-weight:600;}
+.mini-table td{padding:5px 6px; border-bottom:1px solid var(--border); color:var(--text-2);}
+.mini-table tr.hl td{background:#eaf3fd; color:var(--text-1); font-weight:600;}
+
+/* ============ RESPONSIVE ============ */
+@media (max-width:1000px) and (orientation:portrait), (max-width:1000px) and (min-height:601px){
+  .body-wrap{flex-direction:column;}
+  .sidenav{
+    flex:0 0 auto; width:100%; height:auto; flex-direction:row; overflow-x:auto; overflow-y:hidden;
+    border-right:none; border-bottom:1px solid var(--border); padding:8px;
+  }
+  .nav-section-label{display:none;}
+  .nav-item{flex:0 0 auto; width:170px;}
+  .panel-body{overflow-y:auto;}
+  .demo-view, .lab-view{flex-direction:column;}
+  .demo-canvas-wrap{min-height:260px;}
+  .lab-canvas-wrap{min-height:280px;}
+  .demo-side, .lab-side{max-width:none; min-width:0;}
+  .content{overflow-y:auto;}
+}
+@media (max-width:620px){
+  .topbar h1{white-space:normal;}
+  .quick-jump{flex-direction:column;}
+  .jump-btn{flex:1 1 auto;}
+  .result-cards{grid-template-columns:1fr 1fr;}
+}
+@media (max-width:420px){
+  .topbar{padding:10px 12px; gap:10px;}
+  .topbar .brand-badge{display:none;}
+  .nav-item{width:140px; padding:7px 9px;}
+  .panel-head{padding:12px 14px 8px;}
+  .panel-body{padding:12px 14px;}
+  .demo-canvas-wrap{min-height:220px;}
+  .lab-canvas-wrap{min-height:230px;}
+  .lab-legend{font-size:10px; padding:5px 8px; line-height:1.5;}
+  .control-group{padding:9px 10px;}
+  .btn{padding:8px 12px;}
+  .result-cards{grid-template-columns:1fr;}
+}
+::-webkit-scrollbar{width:8px; height:8px;}
+::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <div class="brand-badge">🔬</div>
+    <div class="titles">
+      <div class="chip">Grade 10 · Chapter 9</div>
+      <h1>Light — Reflection &amp; Refraction</h1>
+      <p>Physics-accurate activity simulator for classroom demonstration</p>
+    </div>
+    <div class="spacer"></div>
+    <div class="prof-note">Select an activity from the panel on the left. Ray-diagram labs are computed live from the mirror/lens formula — drag the sliders to explore any object position.</div>
+  </div>
+
+  <div class="body-wrap">
+    <nav class="sidenav" id="sideNav"></nav>
+    <main class="content">
+      <div class="panel-head">
+        <div class="badge-row">
+          <div class="panel-badge" id="panelBadge">9.1</div>
+          <div class="panel-typebadge" id="panelType">Demo</div>
+        </div>
+        <h2 id="panelTitle">Select an activity</h2>
+        <p id="panelDesc">Choose an activity from the left to begin.</p>
+      </div>
+      <div class="panel-body" id="panelBody"></div>
+    </main>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   CHAPTER 9 — LIGHT: REFLECTION & REFRACTION
+   Interactive activity simulator. Two rendering modes:
+   - "demo"    : fixed step-through cartoon illustrations (qualitative activities)
+   - "mirrorlab" / "lenslab" / "slablab" : live ray-traced physics labs driven by sliders
+   ========================================================================= */
+
+/* ---------------------------------------------------------------------
+   0. CANVAS / DPR HELPERS
+   --------------------------------------------------------------------- */
+function fitCanvas(canvas){
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  const rect = canvas.parentElement.getBoundingClientRect();
+  const w = Math.max(200, rect.width);
+  const h = Math.max(160, rect.height);
+  canvas.width = Math.round(w*dpr);
+  canvas.height = Math.round(h*dpr);
+  canvas.style.width = w+'px';
+  canvas.style.height = h+'px';
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, w, h};
+}
+
+function line(ctx,x1,y1,x2,y2,color,width,dash){
+  ctx.save();
+  ctx.strokeStyle = color; ctx.lineWidth = width||2;
+  if(dash) ctx.setLineDash(dash); else ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke();
+  ctx.restore();
+}
+function arrowHead(ctx,x,y,ang,color,size){
+  size = size||8;
+  ctx.save();
+  ctx.fillStyle = color;
+  ctx.translate(x,y); ctx.rotate(ang);
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-size,size*0.42); ctx.lineTo(-size,-size*0.42); ctx.closePath(); ctx.fill();
+  ctx.restore();
+}
+function rayWithHead(ctx,x1,y1,x2,y2,color,width,dash){
+  line(ctx,x1,y1,x2,y2,color,width,dash);
+  if(!dash) arrowHead(ctx,x2,y2,Math.atan2(y2-y1,x2-x1),color,7);
+}
+function textAt(ctx,txt,x,y,opts){
+  opts = opts||{};
+  ctx.save();
+  ctx.font = (opts.weight||500)+' '+(opts.size||12)+'px Poppins, sans-serif';
+  ctx.fillStyle = opts.color||'#132a44';
+  ctx.textAlign = opts.align||'left';
+  ctx.textBaseline = opts.baseline||'alphabetic';
+  ctx.fillText(txt,x,y);
+  ctx.restore();
+}
+
+/* ---------------------------------------------------------------------
+   1. ACTIVITY DATA
+   --------------------------------------------------------------------- */
+const activities = [
+  { id:'a1', num:'9.1', title:'The Shining Spoon', sub:'Curved mirrors, first look', type:'demo',
+    desc:'View your face in the curved surfaces of a spoon — an everyday introduction to concave and convex mirrors.',
+    draw: drawSpoon,
+    steps:[
+      {label:'A large, shiny steel spoon is held up at arm\'s length, concave (inner) side facing the face.', state:0},
+      {label:'<strong>Close up, concave side:</strong> The face appears <em>enlarged and erect</em> — like a shaving mirror.', state:1},
+      {label:'<strong>Spoon moved farther away:</strong> Past a certain distance the image <em>inverts</em> and shrinks — concave mirrors don\'t always show an erect image.', state:2},
+      {label:'<strong>Spoon reversed — convex (outer) side facing the face:</strong> The image is always <em>small and erect</em>, no matter the distance.', state:3, outcome:'Concave: image changes with distance. Convex: always small & erect.'},
+    ]},
+
+  { id:'a2', num:'9.2', title:'Focus of a Concave Mirror', sub:'Finding focal length with sunlight', type:'demo',
+    desc:'CAUTION: never look directly at the Sun or a mirror reflecting it. Converge sunlight with a concave mirror to locate its principal focus.',
+    draw: drawFocusBurn,
+    steps:[
+      {label:'A concave mirror is held facing the Sun. Parallel rays from the distant Sun fall on it.', state:0},
+      {label:'A sheet of paper is placed in front of the mirror and slid back and forth until the reflected spot is smallest and sharpest.', state:1},
+      {label:'This sharp bright spot is the <strong>principal focus (F)</strong> — a tiny, real, inverted image of the Sun. Its distance from the mirror pole is the <em>focal length</em>.', state:2},
+      {label:'Held steady, the concentrated heat makes the paper smoke and then <strong>catch fire</strong> — proof that real energy converges at F.', state:3, outcome:'Focal length ≈ distance from mirror to the burning spot.'},
+    ]},
+
+  { id:'a3', num:'9.3 – 9.4', title:'Spherical Mirror Ray Diagrams', sub:'Live image-formation lab', type:'mirrorlab',
+    desc:'Drag the object anywhere in front of a concave or convex mirror. Rays are traced live using the mirror formula 1/v + 1/u = 1/f, exactly as in Table 9.1 / 9.2 and Fig. 9.7 / 9.8.' },
+
+  { id:'a4', num:'9.7', title:'The Coin in a Bucket', sub:'Apparent bending at a water surface', type:'demo',
+    desc:'A classic refraction demonstration — reaching for a coin looks easy from above, but the light path bends at the surface.',
+    draw: drawCoinBucket,
+    steps:[
+      {label:'A coin rests at the bottom of an empty bucket. Looking at it from the side, its true position is clear.', state:0},
+      {label:'Water is poured into the bucket. Viewed from the same angle, the coin now appears to have <strong>shifted upward</strong> from its real position.', state:1},
+      {label:'Reaching in "in one go" along the line of sight <strong>misses the coin</strong> — the hand goes to where the coin appears to be, not where it is.', state:2},
+      {label:'<strong>Why:</strong> light from the coin bends (refracts) <em>away from the normal</em> as it leaves water (denser) and enters air (rarer), shifting the apparent position.', state:3, outcome:'Refraction makes underwater objects look higher/closer than they are.'},
+    ]},
+
+  { id:'a5', num:'9.8', title:'The Reappearing Coin', sub:'Apparent depth in a shallow bowl', type:'demo',
+    desc:'A coin that has just gone out of sight reappears once water is poured in — without anyone touching it.',
+    draw: drawCoinBowl,
+    steps:[
+      {label:'A coin sits in a shallow, empty bowl. The observer backs away until the coin just disappears behind the bowl\'s rim.', state:0},
+      {label:'From the same fixed spot, a friend gently pours water into the bowl without disturbing the coin.', state:1},
+      {label:'As the water level rises, the coin <strong>becomes visible again</strong> — refracted light now reaches the eye over the rim.', state:2},
+      {label:'The coin also looks <em>raised</em> above its true position — this is the same bending of light responsible for apparent depth.', state:3, outcome:'Refraction lets light "bend around" the rim into the eye.'},
+    ]},
+
+  { id:'a6', num:'9.9 – 9.10', title:'Refraction through a Glass Slab', sub:"Snell's law explorer", type:'slablab',
+    desc:'Adjust the angle of incidence and watch the ray bend towards the normal entering the denser glass, then away from the normal on exiting — always emerging parallel to the incident ray, but laterally shifted.' },
+
+  { id:'a7', num:'9.11', title:'Focus of a Convex Lens', sub:'Finding focal length with sunlight', type:'demo',
+    desc:'CAUTION: never look directly at the Sun or through a lens pointed at it. A convex (converging) lens focuses parallel sunlight to a hot, bright point.',
+    draw: drawLensBurn,
+    steps:[
+      {label:'A convex lens is held facing the Sun, parallel rays from the Sun falling on both its faces.', state:0},
+      {label:'A sheet of paper is placed on the far side of the lens and slid back and forth to find the smallest, sharpest bright spot.', state:1},
+      {label:'This point is the <strong>principal focus (F)</strong> — a tiny, real, inverted image of the Sun. Its distance from the optical centre is the focal length.', state:2},
+      {label:'Held steady, concentrated sunlight heats the paper until it <strong>smokes and ignites</strong>.', state:3, outcome:'Focal length ≈ distance from lens to the burning spot.'},
+    ]},
+
+  { id:'a8', num:'9.12 – 9.13', title:'Spherical Lens Ray Diagrams', sub:'Live image-formation lab', type:'lenslab',
+    desc:'Drag the object anywhere in front of a convex or concave lens. Rays are traced live using the lens formula 1/v − 1/u = 1/f, exactly as in Table 9.4 / 9.5 and Fig. 9.16 / 9.17.' },
+];
+
+/* ---------------------------------------------------------------------
+   2. NAV BUILD + ROUTER
+   --------------------------------------------------------------------- */
+let currentIndex = 0;
+
+function buildNav(){
+  const nav = document.getElementById('sideNav');
+  nav.innerHTML = '<div class="nav-section-label">Chapter 9 Activities</div>';
+  activities.forEach((a,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'nav-item'+(i===currentIndex?' active':'');
+    const typeLabel = a.type==='demo' ? 'Demo' : (a.type==='mirrorlab' ? 'Mirror Lab' : a.type==='lenslab' ? 'Lens Lab' : 'Interactive');
+    btn.innerHTML = `<span class="n-num">Activity ${a.num}</span><span class="n-title">${a.title}</span><span class="n-sub">${a.sub}</span><span class="n-type">${typeLabel}</span>`;
+    btn.onclick = ()=>{ currentIndex = i; render(); };
+    nav.appendChild(btn);
+  });
+}
+
+function render(){
+  buildNav();
+  const a = activities[currentIndex];
+  document.getElementById('panelBadge').textContent = a.num;
+  document.getElementById('panelType').textContent = a.type==='demo' ? 'Step Demo' : a.type==='mirrorlab' ? 'Ray-Diagram Lab' : a.type==='lenslab' ? 'Ray-Diagram Lab' : 'Interactive Lab';
+  document.getElementById('panelTitle').textContent = `Activity ${a.num}: ${a.title}`;
+  document.getElementById('panelDesc').textContent = a.desc;
+
+  const body = document.getElementById('panelBody');
+  body.innerHTML = '';
+  if(a.type === 'demo') body.appendChild(buildDemoView(a));
+  else if(a.type === 'mirrorlab') body.appendChild(buildMirrorLab());
+  else if(a.type === 'lenslab') body.appendChild(buildLensLab());
+  else if(a.type === 'slablab') body.appendChild(buildSlabLab());
+}
+
+/* ---------------------------------------------------------------------
+   3. DEMO VIEW (step-through cartoons)
+   --------------------------------------------------------------------- */
+function buildDemoView(activity){
+  const wrap = document.createElement('div');
+  wrap.className = 'demo-view';
+  wrap.innerHTML = `
+    <div class="demo-canvas-wrap"><canvas id="demoCanvas"></canvas></div>
+    <div class="demo-side">
+      <div class="step-card">
+        <div class="step-tag" id="stepTag">Step 1</div>
+        <div class="step-text" id="stepText"></div>
+        <span class="outcome-pill info" id="outcomePill" style="display:none;"></span>
+      </div>
+      <div class="ctrl-row">
+        <button class="btn" id="btnPrev">← Prev</button>
+        <button class="btn primary" id="btnNext">Next →</button>
+        <button class="btn ghost" id="btnReset">↺ Reset</button>
+        <div class="step-dots" id="stepDots"></div>
+      </div>
+    </div>`;
+
+  let step = 0;
+  const canvas = wrap.querySelector('#demoCanvas');
+
+  function paint(){
+    const {ctx,w,h} = fitCanvas(canvas);
+    ctx.clearRect(0,0,w,h);
+    activity.draw(ctx,w,h,step);
+  }
+  function draw(){
+    const s = activity.steps[step];
+    wrap.querySelector('#stepTag').textContent = `Step ${step+1} of ${activity.steps.length}`;
+    wrap.querySelector('#stepText').innerHTML = s.label;
+    const pill = wrap.querySelector('#outcomePill');
+    if(s.outcome){ pill.style.display='inline-block'; pill.textContent = s.outcome; pill.className='outcome-pill ok'; }
+    else pill.style.display = 'none';
+    wrap.querySelector('#btnPrev').disabled = step===0;
+    const nextBtn = wrap.querySelector('#btnNext');
+    nextBtn.disabled = step===activity.steps.length-1;
+    nextBtn.textContent = step===activity.steps.length-1 ? 'Done ✓' : 'Next →';
+    const dotsWrap = wrap.querySelector('#stepDots');
+    dotsWrap.innerHTML = '';
+    activity.steps.forEach((_,i)=>{
+      const d = document.createElement('div');
+      d.className = 'step-dot'+(i===step?' active':'');
+      dotsWrap.appendChild(d);
+    });
+    paint();
+  }
+  wrap.querySelector('#btnPrev').onclick = ()=>{ step = Math.max(0,step-1); draw(); };
+  wrap.querySelector('#btnNext').onclick = ()=>{ step = Math.min(activity.steps.length-1,step+1); draw(); };
+  wrap.querySelector('#btnReset').onclick = ()=>{ step = 0; draw(); };
+
+  const ro = new ResizeObserver(()=>paint());
+  ro.observe(canvas.parentElement);
+  requestAnimationFrame(draw);
+  return wrap;
+}
+
+/* ---- demo illustration: 9.1 Spoon ---- */
+function drawSpoon(ctx,w,h,step){
+  const cx=w*0.5, cy=h*0.52;
+  ctx.fillStyle='#eaf2fb'; ctx.fillRect(0,0,w,h);
+  // face
+  function face(x,y,scale,squashY,flipX){
+    ctx.save(); ctx.translate(x,y); ctx.scale(scale*(flipX?-1:1), scale*squashY);
+    ctx.fillStyle='#f3c9a0'; ctx.beginPath(); ctx.ellipse(0,0,42,54,0,0,Math.PI*2); ctx.fill();
+    ctx.fillStyle='#3a2a20';
+    ctx.beginPath(); ctx.ellipse(-15,-8,6,8,0,0,Math.PI*2); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(15,-8,6,8,0,0,Math.PI*2); ctx.fill();
+    ctx.strokeStyle='#a4664a'; ctx.lineWidth=3; ctx.beginPath(); ctx.arc(0,20,14,0.15*Math.PI,0.85*Math.PI); ctx.stroke();
+    ctx.restore();
+  }
+  // spoon
+  function spoon(x,y,concaveFacing){
+    ctx.save(); ctx.translate(x,y);
+    ctx.fillStyle='#c9d3dd'; ctx.strokeStyle='#8b97a6'; ctx.lineWidth=2;
+    ctx.fillRect(-6,20,12,110); ctx.strokeRect(-6,20,12,110);
+    ctx.beginPath();
+    if(concaveFacing) ctx.ellipse(0,-20,46,58,0,0,Math.PI*2);
+    else ctx.ellipse(0,-20,46,58,0,0,Math.PI*2);
+    ctx.fill(); ctx.stroke();
+    ctx.fillStyle = concaveFacing ? '#9fb4c9' : '#e7edf3';
+    ctx.beginPath(); ctx.ellipse(0,-20,34,46,0,0,Math.PI*2); ctx.fill();
+    ctx.restore();
+  }
+  if(step===0){
+    face(cx-140,cy-10,1,1,false);
+    spoon(cx+60,cy-10,true);
+    textAt(ctx,'Concave (inner) side faces the observer',cx,h-24,{align:'center',color:'#4c6178',size:13});
+  } else if(step===1){
+    face(cx-160,cy-10,1,1,false);
+    spoon(cx+10,cy-10,true);
+    face(cx+150,cy-30,1.6,0.9,true);
+    line(ctx,cx-118,cy-10,cx+2,cy-10,'#e8a33d',2,[5,4]);
+    line(ctx,cx-118,cy-10,cx+2,cy-40,'#e8a33d',2,[5,4]);
+    textAt(ctx,'Close up: image enlarged & erect',cx,h-24,{align:'center',color:'#4c6178',size:13});
+  } else if(step===2){
+    face(cx-190,cy-10,1,1,false);
+    spoon(cx+40,cy-10,true);
+    face(cx+150,cy+35,0.9,-0.9,true);
+    textAt(ctx,'Farther away: image inverts & shrinks',cx,h-24,{align:'center',color:'#4c6178',size:13});
+  } else {
+    face(cx-140,cy-10,1,1,false);
+    spoon(cx+60,cy-10,false);
+    face(cx+185,cy-14,0.55,0.55,true);
+    textAt(ctx,'Convex (outer) side: always small & erect',cx,h-24,{align:'center',color:'#4c6178',size:13});
+  }
+}
+
+/* ---- demo illustration: 9.2 concave mirror burning paper ---- */
+function drawFocusBurn(ctx,w,h,step){
+  ctx.fillStyle='#fff7e6'; ctx.fillRect(0,0,w,h);
+  const mx=w*0.28, my=h*0.5, R=h*0.32;
+  // sun
+  textAt(ctx,'☀',w*0.08,h*0.22,{size:38,align:'center'});
+  for(let i=-2;i<=2;i++) line(ctx,w*0.08+i*10,h*0.30,mx-R*0.5,my+i*14,'#f4c14a',2);
+  // mirror (concave arc)
+  ctx.save();
+  ctx.strokeStyle='#5a6b80'; ctx.lineWidth=6; ctx.beginPath();
+  ctx.arc(mx+R*1.15, my, R, Math.PI*0.72, Math.PI*1.28); ctx.stroke();
+  ctx.restore();
+  const focusX = mx + R*0.42;
+  if(step>=1){
+    line(ctx,mx-R*0.5,my,focusX, my,'#f4c14a',2);
+    for(let i=-2;i<=2;i++){ if(i===0) continue; line(ctx,mx-R*0.5,my+i*14,focusX,my,'#f4c14a',2); }
+  }
+  if(step>=2){
+    ctx.fillStyle='#e0472c'; ctx.beginPath(); ctx.arc(focusX,my,4,0,Math.PI*2); ctx.fill();
+    textAt(ctx,'F',focusX,my-12,{align:'center',size:13,weight:700,color:'#e0472c'});
+    // paper
+    ctx.fillStyle='#fff'; ctx.strokeStyle='#c2d1e5'; ctx.fillRect(focusX-16,my+30,32,44); ctx.strokeRect(focusX-16,my+30,32,44);
+  }
+  if(step>=3){
+    ctx.save(); ctx.translate(focusX,my+30);
+    for(let i=0;i<10;i++){ ctx.beginPath(); ctx.moveTo(Math.random()*24-12,44); ctx.quadraticCurveTo(Math.random()*20-10,20+Math.random()*10,Math.random()*16-8,-6-Math.random()*14); ctx.strokeStyle='rgba(120,120,120,0.5)'; ctx.lineWidth=1.5; ctx.stroke(); }
+    ctx.fillStyle='#ff8a3d'; ctx.beginPath(); ctx.arc(0,20,7,0,Math.PI*2); ctx.fill();
+    ctx.restore();
+    textAt(ctx,'Paper smokes / catches fire at F',focusX,my+100,{align:'center',size:12,color:'#4c6178'});
+  }
+  textAt(ctx,'Concave mirror',mx+R*1.15,my+R+22,{align:'center',size:12,color:'#4c6178'});
+}
+
+/* ---- demo illustration: 9.7 coin in bucket ---- */
+function drawCoinBucket(ctx,w,h,step){
+  ctx.fillStyle='#eaf2fb'; ctx.fillRect(0,0,w,h);
+  const bx=w*0.5, bw=w*0.34, bTop=h*0.28, bBot=h*0.82;
+  ctx.strokeStyle='#7c8ba0'; ctx.lineWidth=4;
+  ctx.beginPath(); ctx.moveTo(bx-bw/2,bTop); ctx.lineTo(bx-bw*0.42,bBot); ctx.lineTo(bx+bw*0.42,bBot); ctx.lineTo(bx+bw/2,bTop); ctx.stroke();
+  const waterY = bTop + (bBot-bTop)*0.32;
+  const hasWater = step>=1;
+  if(hasWater){
+    ctx.fillStyle='rgba(90,170,230,0.45)';
+    ctx.beginPath(); ctx.moveTo(bx-bw/2+3,waterY); ctx.lineTo(bx-bw*0.42+2,bBot-3); ctx.lineTo(bx+bw*0.42-2,bBot-3); ctx.lineTo(bx+bw/2-3,waterY); ctx.closePath(); ctx.fill();
+  }
+  // coin (true position)
+  const coinX = bx, coinY = bBot-14;
+  ctx.fillStyle='#e0b23d'; ctx.beginPath(); ctx.ellipse(coinX,coinY,16,6,0,0,Math.PI*2); ctx.fill();
+  ctx.strokeStyle='#a67c1c'; ctx.stroke();
+  // eye
+  const eyeX = bx+w*0.24, eyeY = h*0.18;
+  ctx.fillStyle='#132a44'; ctx.beginPath(); ctx.ellipse(eyeX,eyeY,9,6,0.3,0,Math.PI*2); ctx.fill();
+
+  if(step<=0){
+    line(ctx,eyeX,eyeY,coinX,coinY,'#e8a33d',2,[5,4]);
+    textAt(ctx,'Empty bucket — true line of sight to coin',bx,h*0.95,{align:'center',size:12,color:'#4c6178'});
+  } else if(step===1){
+    line(ctx,eyeX,eyeY,coinX,coinY,'#e8a33d',2,[5,4]);
+    textAt(ctx,'Water poured in — coin now looks higher',bx,h*0.95,{align:'center',size:12,color:'#4c6178'});
+    // apparent coin
+    const appX = coinX, appY = waterY+(coinY-waterY)*0.42;
+    ctx.fillStyle='rgba(224,178,61,0.55)'; ctx.beginPath(); ctx.ellipse(appX,appY,16,6,0,0,Math.PI*2); ctx.fill();
+    line(ctx,eyeX,eyeY,appX,appY,'#2f8fe0',2);
+  } else if(step===2){
+    const appX = coinX, appY = waterY+(coinY-waterY)*0.42;
+    line(ctx,eyeX,eyeY,appX,appY,'#2f8fe0',2);
+    ctx.fillStyle='rgba(224,178,61,0.55)'; ctx.beginPath(); ctx.ellipse(appX,appY,16,6,0,0,Math.PI*2); ctx.fill();
+    // hand reaching toward apparent position, missing true coin
+    ctx.strokeStyle='#c98a5c'; ctx.lineWidth=8; ctx.lineCap='round';
+    ctx.beginPath(); ctx.moveTo(bx+w*0.1,h*0.08); ctx.lineTo(appX-6,appY+2); ctx.stroke();
+    textAt(ctx,'Reaching along the apparent line misses the coin!',bx,h*0.95,{align:'center',size:12,color:'#4c6178'});
+  } else {
+    const appX = coinX, appY = waterY+(coinY-waterY)*0.42;
+    line(ctx,coinX,coinY,bx-bw*0.3,waterY,'#e8a33d',2);
+    line(ctx,bx-bw*0.3,waterY,eyeX,eyeY,'#2f8fe0',2);
+    line(ctx,bx-bw*0.3,waterY,bx-bw*0.3,waterY-30,'#9aa9bb',1,[3,3]);
+    textAt(ctx,'normal',bx-bw*0.3+4,waterY-32,{size:10,color:'#9aa9bb'});
+    line(ctx,eyeX,eyeY,appX,appY,'#2f8fe0',1.4,[4,3]);
+    textAt(ctx,'Light bends away from normal leaving water',bx,h*0.95,{align:'center',size:12,color:'#4c6178'});
+  }
+}
+
+/* ---- demo illustration: 9.8 coin in bowl ---- */
+function drawCoinBowl(ctx,w,h,step){
+  ctx.fillStyle='#eaf2fb'; ctx.fillRect(0,0,w,h);
+  const bx=w*0.42, brx=w*0.16, by=h*0.66;
+  ctx.strokeStyle='#7c8ba0'; ctx.lineWidth=4;
+  ctx.beginPath(); ctx.ellipse(bx,by,brx,brx*0.30,0,0,Math.PI); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(bx-brx,by); ctx.lineTo(bx-brx*0.65,by-brx*0.55); ctx.lineTo(bx+brx*0.65,by-brx*0.55); ctx.lineTo(bx+brx,by); ctx.stroke();
+  const waterLevel = step>=1 ? Math.min(1, (step-0.4)) : 0;
+  if(waterLevel>0){
+    const wy = by - brx*0.55*waterLevel;
+    ctx.fillStyle='rgba(90,170,230,0.45)';
+    ctx.beginPath(); ctx.moveTo(bx-brx*(0.65+0.35*(1-waterLevel)),wy); ctx.lineTo(bx-brx,by); ctx.lineTo(bx+brx,by); ctx.lineTo(bx+brx*(0.65+0.35*(1-waterLevel)),wy); ctx.closePath(); ctx.fill();
+  }
+  ctx.fillStyle='#e0b23d'; ctx.beginPath(); ctx.ellipse(bx,by-4,13,5,0,0,Math.PI*2); ctx.fill();
+
+  // eye far away, low angle
+  const eyeX = w*0.86, eyeY = h*0.42;
+  ctx.fillStyle='#132a44'; ctx.beginPath(); ctx.ellipse(eyeX,eyeY,9,6,-0.2,0,Math.PI*2); ctx.fill();
+  const rimX = bx+brx, rimY = by-brx*0.55;
+
+  if(step===0){
+    line(ctx,eyeX,eyeY,rimX,rimY,'#9aa9bb',2,[4,4]);
+    textAt(ctx,'Coin just hidden behind the rim (dry bowl)',w*0.5,h*0.95,{align:'center',size:12,color:'#4c6178'});
+  } else if(step===1){
+    line(ctx,eyeX,eyeY,rimX,rimY,'#9aa9bb',2,[4,4]);
+    textAt(ctx,'Water is poured gently, without disturbing the coin',w*0.5,h*0.95,{align:'center',size:12,color:'#4c6178'});
+  } else if(step===2){
+    const wy = by-brx*0.55;
+    line(ctx,bx,by-4,bx+brx*0.55,wy,'#e8a33d',2);
+    line(ctx,bx+brx*0.55,wy,eyeX,eyeY,'#2f8fe0',2);
+    textAt(ctx,'Refracted ray now clears the rim — coin reappears!',w*0.5,h*0.95,{align:'center',size:12,color:'#4c6178'});
+  } else {
+    const wy = by-brx*0.55;
+    line(ctx,bx,by-4,bx+brx*0.55,wy,'#e8a33d',2);
+    line(ctx,bx+brx*0.55,wy,eyeX,eyeY,'#2f8fe0',2);
+    ctx.fillStyle='rgba(224,178,61,0.5)'; ctx.beginPath(); ctx.ellipse(bx,by-16,13,5,0,0,Math.PI*2); ctx.fill();
+    textAt(ctx,'Coin also appears raised — apparent depth < real depth',w*0.5,h*0.95,{align:'center',size:12,color:'#4c6178'});
+  }
+}
+
+/* ---- demo illustration: 9.11 convex lens burning paper ---- */
+function drawLensBurn(ctx,w,h,step){
+  ctx.fillStyle='#fff7e6'; ctx.fillRect(0,0,w,h);
+  const lx=w*0.42, ly=h*0.5, lh=h*0.34;
+  textAt(ctx,'☀',w*0.08,h*0.22,{size:38,align:'center'});
+  for(let i=-2;i<=2;i++) line(ctx,w*0.08+i*10,h*0.30,lx-10,ly+i*16,'#f4c14a',2);
+  ctx.save();
+  ctx.fillStyle='rgba(190,225,250,0.55)'; ctx.strokeStyle='#4f6b8a'; ctx.lineWidth=2.4;
+  ctx.beginPath();
+  ctx.moveTo(lx,ly-lh); ctx.quadraticCurveTo(lx+26,ly,lx,ly+lh); ctx.quadraticCurveTo(lx-26,ly,lx,ly-lh); ctx.closePath();
+  ctx.fill(); ctx.stroke();
+  ctx.restore();
+  line(ctx,lx-70,ly,lx+140,ly,'#c2d1e5',1);
+  const focusX = lx + w*0.24;
+  if(step>=1){
+    for(let i=-2;i<=2;i++) line(ctx,lx,ly+i*16,focusX,ly,'#f4c14a',2);
+  }
+  if(step>=2){
+    ctx.fillStyle='#e0472c'; ctx.beginPath(); ctx.arc(focusX,ly,4,0,Math.PI*2); ctx.fill();
+    textAt(ctx,'F',focusX,ly-12,{align:'center',size:13,weight:700,color:'#e0472c'});
+    ctx.fillStyle='#fff'; ctx.strokeStyle='#c2d1e5'; ctx.fillRect(focusX-16,ly+8,32,44); ctx.strokeRect(focusX-16,ly+8,32,44);
+  }
+  if(step>=3){
+    ctx.save(); ctx.translate(focusX,ly+8);
+    for(let i=0;i<10;i++){ ctx.beginPath(); ctx.moveTo(Math.random()*24-12,44); ctx.quadraticCurveTo(Math.random()*20-10,20+Math.random()*10,Math.random()*16-8,-6-Math.random()*14); ctx.strokeStyle='rgba(120,120,120,0.5)'; ctx.lineWidth=1.5; ctx.stroke(); }
+    ctx.fillStyle='#ff8a3d'; ctx.beginPath(); ctx.arc(0,0,7,0,Math.PI*2); ctx.fill();
+    ctx.restore();
+    textAt(ctx,'Paper smokes / catches fire at F',focusX,ly+90,{align:'center',size:12,color:'#4c6178'});
+  }
+  textAt(ctx,'Convex (converging) lens',lx,ly+lh+26,{align:'center',size:12,color:'#4c6178'});
+}
+
+/* ---------------------------------------------------------------------
+   4. MIRROR RAY-DIAGRAM LAB  (Activities 9.3 – 9.6)
+   --------------------------------------------------------------------- */
+function mirrorImage(u,h,f){
+  const v = 1/(1/f - 1/u);
+  const m = -v/u;
+  return {v, h2:m*h, m};
+}
+/* returns array of ray segments: {pts:[[x,y],[x,y]], dash:bool} in WORLD coords */
+function mirrorRays(u,h,f){
+  const rays = [];
+  const XMIN=-95, XMAX=60;
+  // Ray 1: parallel to axis -> through/from F
+  {
+    const p1=[u,h], p2=[0,h];
+    rays.push({pts:[p1,p2], color:'#e8a33d'}); // incident
+    const target=[f,0];
+    if(f<0){ // concave: solid all the way through target and beyond
+      const dir=[target[0]-p2[0], target[1]-p2[1]];
+      const t=(XMIN-p2[0])/dir[0];
+      const end=[XMIN, p2[1]+dir[1]*t];
+      rays.push({pts:[p2,end], color:'#2f8fe0'});
+    } else { // convex: dashed backward to target, solid forward opposite direction
+      rays.push({pts:[p2,target], color:'#2f8fe0', dash:true});
+      const dir=[p2[0]-target[0], p2[1]-target[1]];
+      const t=(XMIN-p2[0])/dir[0];
+      const end=[XMIN, p2[1]+dir[1]*t];
+      rays.push({pts:[p2,end], color:'#2f8fe0'});
+    }
+  }
+  // Ray 2: through/towards F -> reflects parallel to axis
+  {
+    const y0 = h*f/(f-u);
+    rays.push({pts:[[u,h],[0,y0]], color:'#e8a33d'});
+    rays.push({pts:[[0,y0],[XMIN,y0]], color:'#2f8fe0'});
+  }
+  return rays;
+}
+
+function buildMirrorLab(){
+  const wrap = document.createElement('div');
+  wrap.className = 'lab-view';
+  wrap.innerHTML = `
+    <div class="lab-canvas-wrap">
+      <canvas id="mirrorCanvas"></canvas>
+      <div class="lab-legend">
+        <div><span class="leg-incident"></span>Incident ray</div>
+        <div><span class="leg-refl"></span>Reflected ray (real)</div>
+        <div><span class="leg-virtual"></span>Virtual back-projection</div>
+      </div>
+    </div>
+    <div class="lab-side">
+      <div class="control-group">
+        <label>Mirror Type</label>
+        <div class="toggle-group">
+          <button class="toggle-btn active" data-type="concave">Concave</button>
+          <button class="toggle-btn" data-type="convex">Convex</button>
+        </div>
+      </div>
+      <div class="control-group">
+        <label>Focal length |f| <span class="val" id="mFVal">15 cm</span></label>
+        <input type="range" id="mF" min="6" max="26" step="1" value="15">
+      </div>
+      <div class="control-group">
+        <label>Object distance u <span class="val" id="mUVal">−45 cm</span></label>
+        <input type="range" id="mU" min="5" max="100" step="1" value="45">
+        <div class="quick-jump" id="mJump"></div>
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:2px;">Result</label>
+        <div class="result-cards">
+          <div class="rcard"><div class="rlabel">Image distance v</div><div class="rval" id="rV">—</div></div>
+          <div class="rcard"><div class="rlabel">Magnification m</div><div class="rval" id="rM">—</div></div>
+          <div class="rcard wide">
+            <div class="rlabel">Nature of image</div>
+            <div class="nature-tags" id="rTags"></div>
+          </div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:6px;">Reference — Table 9.1 (Concave)</label>
+        <table class="mini-table" id="mTable"></table>
+      </div>
+    </div>`;
+
+  const canvas = wrap.querySelector('#mirrorCanvas');
+  const typeBtns = wrap.querySelectorAll('.toggle-btn');
+  const fSlider = wrap.querySelector('#mF');
+  const uSlider = wrap.querySelector('#mU');
+  const jumpWrap = wrap.querySelector('#mJump');
+
+  let mirrorType = 'concave';
+  let infinityMode = false;
+
+  const zoneRows = [
+    ['At infinity','At focus F','Highly diminished, point-sized','Real & inverted'],
+    ['Beyond C','Between F and C','Diminished','Real & inverted'],
+    ['At C','At C','Same size','Real & inverted'],
+    ['Between C and F','Beyond C','Enlarged','Real & inverted'],
+    ['At F','At infinity','—','Image not formed'],
+    ['Between P and F','Behind the mirror','Enlarged','Virtual & erect'],
+  ];
+  function buildTable(){
+    const tbl = wrap.querySelector('#mTable');
+    let html = '<tr><th>Object</th><th>Image</th><th>Size</th><th>Nature</th></tr>';
+    zoneRows.forEach((r,i)=>{ html += `<tr data-z="${i}"><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`; });
+    tbl.innerHTML = html;
+  }
+  buildTable();
+
+  function jumpButtons(){
+    const fm = parseFloat(fSlider.value);
+    const conv = mirrorType==='concave';
+    jumpWrap.innerHTML='';
+    const opts = conv ? [
+      ['At ∞', ()=>{ infinityMode=true; }],
+      ['Beyond 2F', ()=>{ infinityMode=false; uSlider.value = Math.min(100, Math.round(2*fm+18)); }],
+      ['At 2F', ()=>{ infinityMode=false; uSlider.value = Math.round(2*fm); }],
+      ['F–2F', ()=>{ infinityMode=false; uSlider.value = Math.round(1.5*fm); }],
+      ['At F', ()=>{ infinityMode=false; uSlider.value = Math.round(fm); }],
+      ['P–F', ()=>{ infinityMode=false; uSlider.value = Math.max(5,Math.round(0.5*fm)); }],
+    ] : [
+      ['At ∞', ()=>{ infinityMode=true; }],
+      ['Near mirror', ()=>{ infinityMode=false; uSlider.value = Math.round(1.2*fm); }],
+      ['Far away', ()=>{ infinityMode=false; uSlider.value = Math.min(100, Math.round(3*fm)); }],
+    ];
+    opts.forEach(([label,fn])=>{
+      const b=document.createElement('button'); b.className='jump-btn'; b.textContent=label;
+      b.onclick=()=>{ fn(); paint(); };
+      jumpWrap.appendChild(b);
+    });
+  }
+
+  typeBtns.forEach(b=>{
+    b.onclick = ()=>{
+      typeBtns.forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      mirrorType = b.dataset.type;
+      jumpButtons();
+      paint();
+    };
+  });
+  fSlider.oninput = ()=>{ jumpButtons(); paint(); };
+  uSlider.oninput = ()=>{ infinityMode=false; paint(); };
+
+  function paint(){
+    const fm = parseFloat(fSlider.value);
+    const f = mirrorType==='concave' ? -fm : fm;
+    let uMag = parseFloat(uSlider.value);
+    wrap.querySelector('#mFVal').textContent = fm+' cm';
+    wrap.querySelector('#mUVal').textContent = (infinityMode?'∞':('−'+uMag))+' cm';
+
+    let u = -uMag;
+    // avoid singularity at u == f
+    if(Math.abs(u-f) < 0.6) u = f - (u<f? -0.6:0.6);
+
+    let v,h2,m, atInf=false, noImage=false;
+    const hObj = 11;
+    if(infinityMode){
+      v=f; h2=0; m=0; atInf=false;
+    } else {
+      const res = mirrorImage(u,hObj,f);
+      v=res.v; h2=res.h2; m=res.m;
+      if(!isFinite(v) || Math.abs(v)>500) noImage=true;
+    }
+
+    // ---- results panel ----
+    wrap.querySelector('#rV').textContent = noImage ? 'at ∞' : (infinityMode? f.toFixed(1)+' cm (at F)' : v.toFixed(1)+' cm');
+    wrap.querySelector('#rM').textContent = infinityMode ? '≈0' : (noImage? '—' : m.toFixed(2)+'×');
+    const tagWrap = wrap.querySelector('#rTags'); tagWrap.innerHTML='';
+    function tag(t,cls){ const s=document.createElement('span'); s.className='tag '+cls; s.textContent=t; tagWrap.appendChild(s); }
+    if(noImage){ tag('Image at infinity','size'); }
+    else{
+      const virtual = v>0;
+      tag(virtual?'Virtual':'Real', virtual?'virtual':'real');
+      tag(m<0?'Inverted':'Erect', m<0?'inverted':'erect');
+      const am=Math.abs(m);
+      tag(am>1.05?'Enlarged':am<0.95?'Diminished':'Same size','size');
+    }
+
+    // highlight table zone (concave only)
+    wrap.querySelectorAll('#mTable tr').forEach(r=>r.classList.remove('hl'));
+    if(mirrorType==='concave'){
+      let zone;
+      if(infinityMode) zone=0;
+      else if(uMag>2*fm+2) zone=1;
+      else if(Math.abs(uMag-2*fm)<=2) zone=2;
+      else if(uMag>fm+1 && uMag<2*fm-2) zone=3;
+      else if(Math.abs(uMag-fm)<=1) zone=4;
+      else zone=5;
+      const row = wrap.querySelector(`#mTable tr[data-z="${zone}"]`);
+      if(row) row.classList.add('hl');
+    }
+
+    // ---- draw ----
+    const {ctx,w,h} = fitCanvas(canvas);
+    ctx.clearRect(0,0,w,h);
+    const originX = w*0.62, cy = h*0.5;
+    const scale = Math.min(w/175, h/150);
+
+    const X = (x)=> originX + x*scale;
+    const Y = (y)=> cy - y*scale;
+
+    // axis
+    line(ctx,0,cy,w,cy,'#c2d1e5',1.4);
+    // mirror curve
+    const R = 2*fm;
+    const s = f<0 ? -1 : 1;
+    const apY = 42;
+    ctx.beginPath();
+    for(let yy=-apY; yy<=apY; yy+=2){
+      const xx = s*(R - Math.sqrt(Math.max(0,R*R-yy*yy)));
+      const px=X(xx), py=Y(yy);
+      if(yy===-apY) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+    }
+    ctx.strokeStyle='#5a6b80'; ctx.lineWidth=5; ctx.stroke();
+    // shading (silvered back)
+    ctx.save();
+    ctx.beginPath();
+    for(let yy=-apY; yy<=apY; yy+=4){
+      const xx = s*(R - Math.sqrt(Math.max(0,R*R-yy*yy))) + s*6;
+      const px=X(xx), py=Y(yy);
+      if(yy===-apY) ctx.moveTo(px,py); else ctx.lineTo(px,py);
+    }
+    ctx.strokeStyle='rgba(90,107,128,0.35)'; ctx.lineWidth=6; ctx.stroke();
+    ctx.restore();
+
+    // F and C markers
+    function marker(x,label,color){
+      const px=X(x), py=Y(0);
+      ctx.fillStyle=color; ctx.beginPath(); ctx.arc(px,py,3.4,0,Math.PI*2); ctx.fill();
+      textAt(ctx,label,px,py-9,{align:'center',size:12,weight:700,color});
+    }
+    marker(f,'F','#e0472c');
+    marker(2*f,'C','#132a44');
+    marker(0,'P','#132a44');
+
+    if(!infinityMode){
+      // object arrow
+      const ux=u, uh=hObj;
+      rayWithHead(ctx,X(ux),Y(0),X(ux),Y(uh),'#1f9d55',3.4);
+      textAt(ctx,'Object',X(ux),Y(uh)+16,{align:'center',size:11,color:'#1f9d55',weight:600});
+
+      if(!noImage){
+        const rays = mirrorRays(u,hObj,f);
+        rays.forEach(r=>{
+          rayWithHead(ctx, X(r.pts[0][0]),Y(r.pts[0][1]), X(r.pts[1][0]),Y(r.pts[1][1]), r.color, 2, r.dash?[5,4]:null);
+        });
+        // image arrow
+        const virtual = v>0;
+        ctx.save();
+        ctx.strokeStyle = virtual?'#2f8fe0':'#d9432b';
+        ctx.fillStyle = virtual?'#2f8fe0':'#d9432b';
+        ctx.lineWidth=3.4;
+        if(virtual) ctx.setLineDash([5,4]);
+        ctx.beginPath(); ctx.moveTo(X(v),Y(0)); ctx.lineTo(X(v),Y(h2)); ctx.stroke();
+        ctx.setLineDash([]);
+        arrowHead(ctx,X(v),Y(h2), h2>=0? -Math.PI/2 : Math.PI/2, virtual?'#2f8fe0':'#d9432b',7);
+        ctx.restore();
+        textAt(ctx,'Image',X(v),Y(h2)+(h2>=0?-14:20),{align:'center',size:11,color:virtual?'#2f8fe0':'#d9432b',weight:600});
+      }
+    } else {
+      // parallel rays from infinity converging/diverging at F
+      for(let i=-2;i<=2;i++){
+        const yy=i*13;
+        rayWithHead(ctx,X(-95),Y(yy),X(0),Y(yy),'#e8a33d',1.8);
+        const target=[f,0];
+        const dir=[target[0]-0, target[1]-yy];
+        if(f<0){
+          const t=(-95-0)/dir[0]; const end=[-95, yy+dir[1]*t];
+          rayWithHead(ctx,X(0),Y(yy),X(end[0]),Y(end[1]),'#2f8fe0',1.8);
+        } else {
+          rayWithHead(ctx,X(0),Y(yy),X(f),Y(0),'#2f8fe0',1.8,[5,4]);
+          const back=[0-(f-0),yy-(0-yy)];
+          const dirF=[0-f,yy-0]; const t=(-95-0)/dirF[0]; const end=[-95, yy+dirF[1]*t];
+          rayWithHead(ctx,X(0),Y(yy),X(end[0]),Y(end[1]),'#2f8fe0',1.8);
+        }
+      }
+      ctx.fillStyle='#d9432b'; ctx.beginPath(); ctx.arc(X(f),Y(0),4,0,Math.PI*2); ctx.fill();
+      textAt(ctx,'Point image at F',X(f),Y(0)-14,{align:'center',size:11,color:'#d9432b',weight:600});
+      textAt(ctx,'Object at infinity →',X(-90),Y(0)-14,{align:'left',size:11,color:'#1f9d55',weight:600});
+    }
+
+    textAt(ctx,mirrorType==='concave'?'Concave Mirror':'Convex Mirror', X(0), h-14,{align:'center',size:12,color:'#4c6178',weight:600});
+  }
+
+  jumpButtons();
+  const ro = new ResizeObserver(()=>paint());
+  ro.observe(canvas.parentElement);
+  requestAnimationFrame(paint);
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   5. LENS RAY-DIAGRAM LAB  (Activities 9.12 – 9.13)
+   --------------------------------------------------------------------- */
+function lensImage(u,h,f){
+  const v = 1/(1/f + 1/u);
+  const m = v/u;
+  return {v, h2:m*h, m};
+}
+function lensRays(u,h,f){
+  const rays = [];
+  const XMAX=95, XMIN=-95;
+  // Ray 1: parallel -> through/from focus (signed f used directly)
+  {
+    const p1=[u,h], p2=[0,h];
+    rays.push({pts:[p1,p2], color:'#e8a33d'});
+    const target=[f,0];
+    if(f>0){
+      const dir=[target[0]-p2[0], target[1]-p2[1]];
+      const t=(XMAX-p2[0])/dir[0];
+      const end=[XMAX, p2[1]+dir[1]*t];
+      rays.push({pts:[p2,end], color:'#2f8fe0'});
+    } else {
+      rays.push({pts:[p2,target], color:'#2f8fe0', dash:true});
+      const dir=[p2[0]-target[0], p2[1]-target[1]];
+      const t=(XMAX-p2[0])/dir[0];
+      const end=[XMAX, p2[1]+dir[1]*t];
+      rays.push({pts:[p2,end], color:'#2f8fe0'});
+    }
+  }
+  // Ray 2: through optical centre, undeviated
+  {
+    const t=(XMAX-u)/(0-u);
+    const end=[XMAX, h+(0-h)*t];
+    rays.push({pts:[[u,h],end], color:'#e8a33d'});
+  }
+  return rays;
+}
+
+function buildLensLab(){
+  const wrap = document.createElement('div');
+  wrap.className = 'lab-view';
+  wrap.innerHTML = `
+    <div class="lab-canvas-wrap">
+      <canvas id="lensCanvas"></canvas>
+      <div class="lab-legend">
+        <div><span class="leg-incident"></span>Incident ray</div>
+        <div><span class="leg-refl"></span>Refracted ray (real)</div>
+        <div><span class="leg-virtual"></span>Virtual back-projection</div>
+      </div>
+    </div>
+    <div class="lab-side">
+      <div class="control-group">
+        <label>Lens Type</label>
+        <div class="toggle-group">
+          <button class="toggle-btn active" data-type="convex">Convex</button>
+          <button class="toggle-btn" data-type="concave">Concave</button>
+        </div>
+      </div>
+      <div class="control-group">
+        <label>Focal length |f| <span class="val" id="lFVal">15 cm</span></label>
+        <input type="range" id="lF" min="6" max="26" step="1" value="15">
+      </div>
+      <div class="control-group">
+        <label>Object distance u <span class="val" id="lUVal">−45 cm</span></label>
+        <input type="range" id="lU" min="5" max="100" step="1" value="45">
+        <div class="quick-jump" id="lJump"></div>
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:2px;">Result</label>
+        <div class="result-cards">
+          <div class="rcard"><div class="rlabel">Image distance v</div><div class="rval" id="lrV">—</div></div>
+          <div class="rcard"><div class="rlabel">Magnification m</div><div class="rval" id="lrM">—</div></div>
+          <div class="rcard wide">
+            <div class="rlabel">Nature of image</div>
+            <div class="nature-tags" id="lrTags"></div>
+          </div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:6px;">Reference — Table 9.4 (Convex)</label>
+        <table class="mini-table" id="lTable"></table>
+      </div>
+    </div>`;
+
+  const canvas = wrap.querySelector('#lensCanvas');
+  const typeBtns = wrap.querySelectorAll('.toggle-btn');
+  const fSlider = wrap.querySelector('#lF');
+  const uSlider = wrap.querySelector('#lU');
+  const jumpWrap = wrap.querySelector('#lJump');
+
+  let lensType = 'convex';
+  let infinityMode = false;
+
+  const zoneRows = [
+    ['At infinity','At focus F₂','Highly diminished, point-sized','Real & inverted'],
+    ['Beyond 2F₁','Between F₂ and 2F₂','Diminished','Real & inverted'],
+    ['At 2F₁','At 2F₂','Same size','Real & inverted'],
+    ['Between F₁ and 2F₁','Beyond 2F₂','Enlarged','Real & inverted'],
+    ['At focus F₁','At infinity','—','Image not formed'],
+    ['Between F₁ and O','Same side as object','Enlarged','Virtual & erect'],
+  ];
+  function buildTable(){
+    const tbl = wrap.querySelector('#lTable');
+    let html = '<tr><th>Object</th><th>Image</th><th>Size</th><th>Nature</th></tr>';
+    zoneRows.forEach((r,i)=>{ html += `<tr data-z="${i}"><td>${r[0]}</td><td>${r[1]}</td><td>${r[2]}</td><td>${r[3]}</td></tr>`; });
+    tbl.innerHTML = html;
+  }
+  buildTable();
+
+  function jumpButtons(){
+    const fm = parseFloat(fSlider.value);
+    const conv = lensType==='convex';
+    jumpWrap.innerHTML='';
+    const opts = conv ? [
+      ['At ∞', ()=>{ infinityMode=true; }],
+      ['Beyond 2F', ()=>{ infinityMode=false; uSlider.value = Math.min(100, Math.round(2*fm+18)); }],
+      ['At 2F', ()=>{ infinityMode=false; uSlider.value = Math.round(2*fm); }],
+      ['F–2F', ()=>{ infinityMode=false; uSlider.value = Math.round(1.5*fm); }],
+      ['At F', ()=>{ infinityMode=false; uSlider.value = Math.round(fm); }],
+      ['O–F', ()=>{ infinityMode=false; uSlider.value = Math.max(5,Math.round(0.5*fm)); }],
+    ] : [
+      ['At ∞', ()=>{ infinityMode=true; }],
+      ['Near lens', ()=>{ infinityMode=false; uSlider.value = Math.round(1.2*fm); }],
+      ['Far away', ()=>{ infinityMode=false; uSlider.value = Math.min(100, Math.round(3*fm)); }],
+    ];
+    opts.forEach(([label,fn])=>{
+      const b=document.createElement('button'); b.className='jump-btn'; b.textContent=label;
+      b.onclick=()=>{ fn(); paint(); };
+      jumpWrap.appendChild(b);
+    });
+  }
+
+  typeBtns.forEach(b=>{
+    b.onclick = ()=>{
+      typeBtns.forEach(x=>x.classList.remove('active'));
+      b.classList.add('active');
+      lensType = b.dataset.type;
+      jumpButtons();
+      paint();
+    };
+  });
+  fSlider.oninput = ()=>{ jumpButtons(); paint(); };
+  uSlider.oninput = ()=>{ infinityMode=false; paint(); };
+
+  function paint(){
+    const fm = parseFloat(fSlider.value);
+    const f = lensType==='convex' ? fm : -fm;
+    let uMag = parseFloat(uSlider.value);
+    wrap.querySelector('#lFVal').textContent = fm+' cm';
+    wrap.querySelector('#lUVal').textContent = (infinityMode?'∞':('−'+uMag))+' cm';
+
+    let u = -uMag;
+    if(Math.abs(u-(-f)) < 0.6) u = -f - (u<-f? -0.6:0.6); // avoid u == -f singularity (1/u+1/f=0)
+    if(Math.abs(u) < 0.6) u = -0.6;
+
+    let v,h2,m, noImage=false;
+    const hObj=11;
+    if(infinityMode){ v=f; h2=0; m=0; }
+    else{
+      const res = lensImage(u,hObj,f);
+      v=res.v; h2=res.h2; m=res.m;
+      if(!isFinite(v) || Math.abs(v)>500) noImage=true;
+    }
+
+    wrap.querySelector('#lrV').textContent = noImage? 'at ∞' : (infinityMode? f.toFixed(1)+' cm (at F)' : v.toFixed(1)+' cm');
+    wrap.querySelector('#lrM').textContent = infinityMode? '≈0' : (noImage?'—':m.toFixed(2)+'×');
+    const tagWrap = wrap.querySelector('#lrTags'); tagWrap.innerHTML='';
+    function tag(t,cls){ const s=document.createElement('span'); s.className='tag '+cls; s.textContent=t; tagWrap.appendChild(s); }
+    if(noImage){ tag('Image at infinity','size'); }
+    else{
+      const virtual = v<0;
+      tag(virtual?'Virtual':'Real', virtual?'virtual':'real');
+      tag(m<0?'Inverted':'Erect', m<0?'inverted':'erect');
+      const am=Math.abs(m);
+      tag(am>1.05?'Enlarged':am<0.95?'Diminished':'Same size','size');
+    }
+
+    wrap.querySelectorAll('#lTable tr').forEach(r=>r.classList.remove('hl'));
+    if(lensType==='convex'){
+      let zone;
+      if(infinityMode) zone=0;
+      else if(uMag>2*fm+2) zone=1;
+      else if(Math.abs(uMag-2*fm)<=2) zone=2;
+      else if(uMag>fm+1 && uMag<2*fm-2) zone=3;
+      else if(Math.abs(uMag-fm)<=1) zone=4;
+      else zone=5;
+      const row = wrap.querySelector(`#lTable tr[data-z="${zone}"]`);
+      if(row) row.classList.add('hl');
+    }
+
+    const {ctx,w,h} = fitCanvas(canvas);
+    ctx.clearRect(0,0,w,h);
+    const originX = w*0.55, cy = h*0.5;
+    const scale = Math.min(w/195, h/150);
+    const X = (x)=> originX + x*scale;
+    const Y = (y)=> cy - y*scale;
+
+    line(ctx,0,cy,w,cy,'#c2d1e5',1.4);
+
+    // lens shape
+    const apY=44;
+    ctx.save();
+    ctx.beginPath();
+    if(lensType==='convex'){
+      ctx.moveTo(X(0),Y(-apY));
+      ctx.quadraticCurveTo(X(9),Y(0),X(0),Y(apY));
+      ctx.quadraticCurveTo(X(-9),Y(0),X(0),Y(-apY));
+    } else {
+      ctx.moveTo(X(-4),Y(-apY));
+      ctx.lineTo(X(4),Y(-apY));
+      ctx.quadraticCurveTo(X(-3),Y(0),X(4),Y(apY));
+      ctx.lineTo(X(-4),Y(apY));
+      ctx.quadraticCurveTo(X(3),Y(0),X(-4),Y(-apY));
+    }
+    ctx.closePath();
+    ctx.fillStyle='rgba(180,215,245,0.55)'; ctx.fill();
+    ctx.strokeStyle='#4f6b8a'; ctx.lineWidth=2.2; ctx.stroke();
+    ctx.restore();
+
+    function marker(x,label,color){
+      const px=X(x), py=Y(0);
+      ctx.fillStyle=color; ctx.beginPath(); ctx.arc(px,py,3.4,0,Math.PI*2); ctx.fill();
+      textAt(ctx,label,px,py-9,{align:'center',size:12,weight:700,color});
+    }
+    marker(f,'F₂','#e0472c');
+    marker(-f,'F₁','#e0472c');
+    marker(2*f,'2F₂','#132a44');
+    marker(-2*f,'2F₁','#132a44');
+    marker(0,'O','#132a44');
+
+    if(!infinityMode){
+      const ux=u, uh=hObj;
+      rayWithHead(ctx,X(ux),Y(0),X(ux),Y(uh),'#1f9d55',3.4);
+      textAt(ctx,'Object',X(ux),Y(uh)+16,{align:'center',size:11,color:'#1f9d55',weight:600});
+
+      if(!noImage){
+        const rays = lensRays(u,hObj,f);
+        rays.forEach(r=>{
+          rayWithHead(ctx, X(r.pts[0][0]),Y(r.pts[0][1]), X(r.pts[1][0]),Y(r.pts[1][1]), r.color, 2, r.dash?[5,4]:null);
+        });
+        const virtual = v<0;
+        ctx.save();
+        ctx.strokeStyle = virtual?'#2f8fe0':'#d9432b';
+        ctx.lineWidth=3.4;
+        if(virtual) ctx.setLineDash([5,4]);
+        ctx.beginPath(); ctx.moveTo(X(v),Y(0)); ctx.lineTo(X(v),Y(h2)); ctx.stroke();
+        ctx.setLineDash([]);
+        arrowHead(ctx,X(v),Y(h2), h2>=0? -Math.PI/2 : Math.PI/2, virtual?'#2f8fe0':'#d9432b',7);
+        ctx.restore();
+        textAt(ctx,'Image',X(v),Y(h2)+(h2>=0?-14:20),{align:'center',size:11,color:virtual?'#2f8fe0':'#d9432b',weight:600});
+      }
+    } else {
+      for(let i=-2;i<=2;i++){
+        const yy=i*13;
+        rayWithHead(ctx,X(-95),Y(yy),X(0),Y(yy),'#e8a33d',1.8);
+        if(f>0){
+          const dir=[f-0,0-yy]; const t=(95-0)/dir[0]; const end=[95, yy+dir[1]*t];
+          rayWithHead(ctx,X(0),Y(yy),X(end[0]),Y(end[1]),'#2f8fe0',1.8);
+        } else {
+          rayWithHead(ctx,X(0),Y(yy),X(f),Y(0),'#2f8fe0',1.8,[5,4]);
+          const dirF=[0-f,yy-0]; const t=(95-0)/dirF[0]; const end=[95, yy+dirF[1]*t];
+          rayWithHead(ctx,X(0),Y(yy),X(end[0]),Y(end[1]),'#2f8fe0',1.8);
+        }
+      }
+      ctx.fillStyle='#d9432b'; ctx.beginPath(); ctx.arc(X(f),Y(0),4,0,Math.PI*2); ctx.fill();
+      textAt(ctx,'Point image at F₂',X(f),Y(0)-14,{align:'center',size:11,color:'#d9432b',weight:600});
+      textAt(ctx,'Object at infinity →',X(-90),Y(0)-14,{align:'left',size:11,color:'#1f9d55',weight:600});
+    }
+
+    textAt(ctx,lensType==='convex'?'Convex (Converging) Lens':'Concave (Diverging) Lens', X(0), h-14,{align:'center',size:12,color:'#4c6178',weight:600});
+  }
+
+  jumpButtons();
+  const ro = new ResizeObserver(()=>paint());
+  ro.observe(canvas.parentElement);
+  requestAnimationFrame(paint);
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   6. GLASS SLAB REFRACTION LAB  (Activities 9.9 – 9.10)
+   --------------------------------------------------------------------- */
+function buildSlabLab(){
+  const wrap = document.createElement('div');
+  wrap.className = 'lab-view';
+  wrap.innerHTML = `
+    <div class="lab-canvas-wrap">
+      <canvas id="slabCanvas"></canvas>
+      <div class="lab-legend">
+        <div><span class="leg-incident"></span>Incident ray</div>
+        <div><span class="leg-refl"></span>Refracted / emergent ray</div>
+        <div><span class="leg-axis"></span>Normal (dashed)</div>
+      </div>
+    </div>
+    <div class="lab-side">
+      <div class="control-group">
+        <label>Angle of incidence (i) <span class="val" id="sIVal">45°</span></label>
+        <input type="range" id="sI" min="5" max="80" step="1" value="45">
+      </div>
+      <div class="control-group">
+        <label>Refractive index of glass (n) <span class="val" id="sNVal">1.50</span></label>
+        <input type="range" id="sN" min="120" max="200" step="1" value="150">
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:2px;">Live readings</label>
+        <div class="result-cards">
+          <div class="rcard"><div class="rlabel">∠ incidence (i)</div><div class="rval" id="sOutI">—</div></div>
+          <div class="rcard"><div class="rlabel">∠ refraction (r)</div><div class="rval" id="sOutR">—</div></div>
+          <div class="rcard"><div class="rlabel">∠ emergence (e)</div><div class="rval" id="sOutE">—</div></div>
+          <div class="rcard"><div class="rlabel">sin i / sin r</div><div class="rval" id="sOutSnell">—</div></div>
+          <div class="rcard wide"><div class="rlabel">Lateral shift</div><div class="rval" id="sOutShift">—</div></div>
+        </div>
+      </div>
+      <div class="control-group">
+        <label style="margin-bottom:4px; font-weight:600;">What to notice</label>
+        <p style="font-size:var(--fs-xs); color:var(--text-2); line-height:1.6;">
+        At the <strong>air → glass</strong> face the ray bends <em>towards</em> the normal (r &lt; i).
+        At the <strong>glass → air</strong> face it bends <em>away</em> from the normal, and the emergent ray
+        is <strong>parallel</strong> to the incident ray (e = i) — but laterally displaced.
+        </p>
+      </div>
+    </div>`;
+
+  const canvas = wrap.querySelector('#slabCanvas');
+  const iSlider = wrap.querySelector('#sI');
+  const nSlider = wrap.querySelector('#sN');
+
+  function paint(){
+    const iDeg = parseFloat(iSlider.value);
+    const n = parseFloat(nSlider.value)/100;
+    wrap.querySelector('#sIVal').textContent = iDeg+'°';
+    wrap.querySelector('#sNVal').textContent = n.toFixed(2);
+
+    const iRad = iDeg*Math.PI/180;
+    const rRad = Math.asin(Math.sin(iRad)/n);
+    const rDeg = rRad*180/Math.PI;
+    const eDeg = iDeg; // emergent parallel to incident
+
+    wrap.querySelector('#sOutI').textContent = iDeg.toFixed(1)+'°';
+    wrap.querySelector('#sOutR').textContent = rDeg.toFixed(1)+'°';
+    wrap.querySelector('#sOutE').textContent = eDeg.toFixed(1)+'°';
+    wrap.querySelector('#sOutSnell').textContent = (Math.sin(iRad)/Math.sin(rRad)).toFixed(3)+'  (= n)';
+
+    const {ctx,w,h} = fitCanvas(canvas);
+    ctx.clearRect(0,0,w,h);
+
+    const slabW = Math.min(w*0.30, 220);
+    const slabX1 = w*0.5 - slabW/2, slabX2 = w*0.5 + slabW/2;
+    const cy = h*0.5;
+
+    // glass slab
+    ctx.fillStyle='rgba(180,215,245,0.45)'; ctx.strokeStyle='#4f6b8a'; ctx.lineWidth=2;
+    ctx.fillRect(slabX1,h*0.14,slabW,h*0.72);
+    ctx.strokeRect(slabX1,h*0.14,slabW,h*0.72);
+    textAt(ctx,'AIR',slabX1-14,h*0.12,{align:'right',size:12,color:'#4c6178',weight:600});
+    textAt(ctx,'GLASS',w*0.5,h*0.10,{align:'center',size:12,color:'#2f5c86',weight:600});
+    textAt(ctx,'AIR',slabX2+14,h*0.12,{align:'left',size:12,color:'#4c6178',weight:600});
+
+    // entry point
+    const Ox = slabX1, Oy = cy;
+    // normal at entry
+    line(ctx,Ox,h*0.14,Ox,h*0.86,'#9aa9bb',1.4,[4,4]);
+
+    // incident ray: comes from upper-left at angle iDeg from normal (vertical)
+    const inLen = Math.min(w,h)*0.32;
+    const ix1 = Ox - inLen*Math.sin(iRad), iy1 = Oy - inLen*Math.cos(iRad);
+    rayWithHead(ctx, ix1,iy1, Ox,Oy, '#e8a33d', 2.6);
+
+    // refracted ray inside glass at angle rDeg from normal, travels to exit face
+    const dxIn = Math.tan(rRad) * slabW;
+    const Px = Ox + slabW, Py = Oy + dxIn;
+    rayWithHead(ctx, Ox,Oy, Px,Py, '#2f8fe0', 2.6);
+    // normal at exit
+    line(ctx,Px,h*0.14,Px,h*0.86,'#9aa9bb',1.4,[4,4]);
+
+    // emergent ray: parallel to incident, angle iDeg from exit normal
+    const outLen = Math.min(w,h)*0.32;
+    const ex2 = Px + outLen*Math.sin(iRad), ey2 = Py + outLen*Math.cos(iRad);
+    rayWithHead(ctx, Px,Py, ex2,ey2, '#d9432b', 2.6);
+
+    // angle arcs & labels
+    function angleArc(cx,cy0,fromAng,toAng,r,color){
+      ctx.strokeStyle=color; ctx.lineWidth=1.6;
+      ctx.beginPath(); ctx.arc(cx,cy0,r,fromAng,toAng); ctx.stroke();
+    }
+    // i at entry (between normal-up and incident ray, both pointing up-ish)
+    angleArc(Ox,Oy, -Math.PI/2, -Math.PI/2+iRad, 30, '#e8a33d');
+    textAt(ctx,'i',Ox-16*Math.sin(iRad/2)-6,Oy-30*Math.cos(iRad/2)-4,{size:12,weight:700,color:'#e8a33d'});
+    // r at entry (between normal-down and refracted ray)
+    angleArc(Ox,Oy, Math.PI/2-rRad, Math.PI/2, 26, '#2f8fe0');
+    textAt(ctx,'r',Ox+18*Math.sin(rRad/2)+4,Oy+26*Math.cos(rRad/2)+12,{size:12,weight:700,color:'#2f8fe0'});
+    // e at exit
+    angleArc(Px,Py, -Math.PI/2, -Math.PI/2+iRad, 26, '#d9432b');
+    textAt(ctx,'e',Px+16*Math.sin(iRad/2)+4,Py-26*Math.cos(iRad/2)-4,{size:12,weight:700,color:'#d9432b'});
+
+    // lateral shift readout (perpendicular distance between incident-extended and emergent lines)
+    const shiftPx = Math.hypot(Px-Ox,Py-Oy) * Math.sin(iRad-rRad);
+    const shiftWorld = shiftPx / (slabW/6); // arbitrary scale to a "cm-like" figure (slab ~6cm thick)
+    wrap.querySelector('#sOutShift').textContent = shiftWorld.toFixed(2)+' × slab thickness';
+
+    textAt(ctx,'O',Ox-6,Oy+18,{size:11,color:'#132a44',weight:600});
+    textAt(ctx,"O'",Px+4,Py+18,{size:11,color:'#132a44',weight:600});
+  }
+
+  iSlider.oninput = paint;
+  nSlider.oninput = paint;
+  const ro = new ResizeObserver(paint);
+  ro.observe(canvas.parentElement);
+  requestAnimationFrame(paint);
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   7. INIT
+   --------------------------------------------------------------------- */
+render();
+window.addEventListener('resize', ()=>{}); // ResizeObservers on canvases handle actual redraws
+</script>
+  <script src="../../tracking/activity-tracker.js"></script>
+<script src="../../nav/back-button.js"></script>
+</body>
+</html>

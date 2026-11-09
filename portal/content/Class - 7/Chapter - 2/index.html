@@ -1,0 +1,1635 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 7 · Chapter 2 — Exploring Substances: Acidic, Basic, and Neutral | Botclub Labs</title>
+<link href="../../vendor/fonts/fonts.css" rel="stylesheet">
+<style>
+:root{
+  --navy-1:#0f2640; --navy-2:#1a3a5c; --navy-3:#234a73;
+  --accent:#2f8fe0; --accent-2:#5cc8ff;
+  --bg:#eef2f8; --surface-0:#ffffff; --surface-1:#f6f9fc; --surface-2:#eef2f8;
+  --border:#dbe4f0; --border-strong:#c2d1e5;
+  --text-1:#132a44; --text-2:#4c6178; --text-3:#8195ab;
+  --f-red:#d9432b; --f-blue:#2f8fe0; --f-green:#1f9d55; --f-yellow:#d9a017;
+  --radius:14px; --radius-sm:9px;
+  --fs-xs:clamp(10px,0.62vw,12px); --fs-sm:clamp(11px,0.72vw,13.5px);
+  --fs-md:clamp(12.5px,0.85vw,15px); --fs-lg:clamp(15px,1.15vw,19px);
+  --fs-xl:clamp(18px,1.5vw,25px);
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:22px; --sp-6:30px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{ font-family:'Poppins',system-ui,sans-serif; background:var(--bg); color:var(--text-1); overflow:hidden; }
+button, input, select{font-family:inherit;}
+
+.app{height:100vh; display:flex; flex-direction:column; min-height:0;}
+.topbar{
+  flex:0 0 auto; background:linear-gradient(120deg, var(--navy-1) 0%, var(--navy-2) 55%, var(--navy-3) 100%);
+  color:#fff; padding:clamp(9px,1vh,16px) clamp(14px,1.6vw,28px);
+  display:flex; align-items:center; gap:var(--sp-4); box-shadow:0 2px 10px rgba(15,38,64,0.25); z-index:5;
+}
+.topbar .brand-badge{
+  width:clamp(32px,2.4vw,40px); height:clamp(32px,2.4vw,40px); border-radius:10px; background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center;
+  font-size:clamp(15px,1.3vw,20px); flex:0 0 auto;
+}
+.topbar .chip{
+  display:inline-block; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.28);
+  border-radius:6px; padding:2px 9px; font-size:var(--fs-xs); letter-spacing:0.06em; text-transform:uppercase; font-weight:600; margin-bottom:3px;
+}
+.topbar h1{font-size:var(--fs-lg); font-weight:600; line-height:1.2; white-space:nowrap;}
+.topbar .spacer{flex:1;}
+.topbar .legend{display:flex; gap:14px; font-size:var(--fs-xs); color:rgba(255,255,255,0.85); align-items:center;}
+.topbar .legend span{display:inline-flex; align-items:center; gap:5px;}
+.topbar .legend i{width:12px; height:4px; border-radius:2px; display:inline-block;}
+
+.body-wrap{flex:1; display:flex; min-height:0; overflow:hidden;}
+.sidenav{
+  flex:0 0 clamp(170px,13.5vw,230px); background:var(--surface-0); border-right:1px solid var(--border);
+  overflow-y:auto; padding:var(--sp-2); display:flex; flex-direction:column; gap:4px;
+}
+.nav-item{
+  display:flex; align-items:center; gap:8px; text-align:left; width:100%;
+  border:1px solid var(--border); background:var(--surface-1); border-radius:var(--radius-sm); padding:7px 10px; cursor:pointer; transition:all .15s ease;
+}
+.nav-item:hover{background:var(--surface-2); border-color:var(--border-strong);}
+.nav-item.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.nav-item .n-num{font-size:var(--fs-xs); font-weight:700; color:var(--accent); flex:0 0 auto; min-width:26px;}
+.nav-item.active .n-num{color:var(--accent-2);}
+.nav-item .n-title{font-size:var(--fs-sm); font-weight:600; line-height:1.25;}
+
+.content{flex:1; min-width:0; display:flex; flex-direction:column; overflow:hidden;}
+.panel-head{flex:0 0 auto; padding:var(--sp-3) var(--sp-5); border-bottom:1px solid var(--border); background:var(--surface-0); display:flex; align-items:baseline; gap:12px;}
+.panel-badge{background:var(--navy-2); color:#fff; font-size:var(--fs-xs); font-weight:700; padding:3px 10px; border-radius:6px;}
+.panel-head h2{font-size:var(--fs-lg); font-weight:600; color:var(--text-1);}
+.panel-head p{font-size:var(--fs-sm); color:var(--text-2); flex:1; text-align:right;}
+.panel-body{flex:1; min-height:0; overflow:hidden; padding:var(--sp-3) var(--sp-5); display:flex;}
+
+.lab-view{flex:1; display:flex; gap:var(--sp-4); min-height:0; min-width:0;}
+.lab-canvas-wrap{flex:7 1 0; min-width:0; min-height:0; background:#fff; border:1px solid var(--border); border-radius:var(--radius); position:relative; overflow:hidden;}
+.lab-canvas-wrap canvas{width:100%; height:100%; display:block;}
+.lab-side{flex:3 1 0; min-width:230px; display:flex; flex-direction:column; gap:var(--sp-3); min-height:0; overflow-y:auto; padding-right:2px;}
+.side-sub{display:flex; flex-direction:column; gap:var(--sp-3);}
+
+.control-group{background:var(--surface-0); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 12px;}
+.control-group label{font-size:var(--fs-sm); font-weight:600; color:var(--text-1); display:flex; justify-content:space-between;}
+.control-group label .val{color:var(--accent); font-weight:700;}
+.control-group input[type=range]{width:100%; margin-top:7px; accent-color:var(--navy-2); cursor:pointer;}
+.toggle-group{display:flex; gap:6px; margin-top:7px; flex-wrap:wrap;}
+.toggle-btn{flex:1; min-width:56px; padding:7px 5px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:600; cursor:pointer; text-align:center; color:var(--text-2);}
+.toggle-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.toggle-btn.small{font-size:10.5px; padding:6px 3px;}
+.toggle-btn.play{background:var(--f-green); border-color:var(--f-green); color:#fff;}
+.toggle-btn.navy{background:var(--navy-2); border-color:var(--navy-2); color:#fff; width:100%; margin-top:9px;}
+.toggle-btn:disabled{opacity:.5; cursor:not-allowed;}
+.chip-btn{display:inline-flex; align-items:center; gap:5px; padding:6px 11px; margin:3px 3px 0 0; border:1px solid var(--border-strong); background:var(--surface-1); border-radius:18px; cursor:pointer; font-size:var(--fs-sm); font-weight:600; color:var(--text-2);}
+.chip-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.chip-btn.ok{border-color:var(--f-green);} .chip-btn.bad{border-color:var(--f-red);}
+.chip-wrap{display:flex; flex-wrap:wrap; margin-top:3px;}
+
+.role-row{display:flex; align-items:center; gap:8px; margin-top:7px; font-size:var(--fs-sm); font-weight:600;}
+.role-row .rdot{width:10px; height:10px; border-radius:50%; flex:0 0 auto; display:inline-block;}
+.role-row .rname{width:70px; flex:0 0 auto; color:var(--text-2);}
+.role-row select{flex:1; min-width:0; padding:6px 7px; border:1px solid var(--border-strong); border-radius:7px; font-size:var(--fs-sm); background:var(--surface-1); color:var(--text-1); cursor:pointer;}
+
+.step-row{display:flex; gap:5px;}
+.step-pill{flex:1; padding:6px 4px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:10.5px; font-weight:700; color:var(--text-3); cursor:pointer;}
+.step-pill.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.step-pill.done{border-color:var(--f-green); color:var(--f-green);}
+.step-pill.active.done{color:#fff;}
+.opt-btn{display:block; width:100%; text-align:left; margin-top:6px; padding:7px 9px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:500; color:var(--text-1); cursor:pointer; line-height:1.3;}
+.opt-btn.active{border-color:var(--navy-2); background:#e3ecf7; font-weight:600;}
+.var-row{display:flex; align-items:center; gap:6px; margin-top:7px;}
+.var-row .vname{flex:0 0 88px; font-size:var(--fs-sm); font-weight:600;}
+.var-row .toggle-group{margin-top:0; flex:1;}
+
+.result-cards{display:grid; grid-template-columns:1fr 1fr; gap:6px;}
+.result-cards.three{grid-template-columns:1fr 1fr 1fr;}
+.rcard{background:var(--surface-0); border:1px solid var(--border); border-radius:9px; padding:7px 9px;}
+.rcard .rlabel{font-size:9.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--text-3); font-weight:600;}
+.rcard .rval{font-size:var(--fs-md); font-weight:700; color:var(--text-1); margin-top:1px;}
+.rcard.wide{grid-column:1/-1;}
+.hint{font-size:var(--fs-xs); color:var(--text-3); margin-top:6px; line-height:1.4;}
+.fb{font-size:var(--fs-xs); font-weight:600; margin-top:6px; padding:5px 8px; border-radius:7px;}
+.fb.ok{background:#e4f7ec; color:#1f6b3d;}
+.fb.bad{background:#fdece7; color:#a4331c;}
+.fb.warn{background:#fdf4dc; color:#8a6410;}
+.log{width:100%; border-collapse:collapse; font-size:10.5px; margin-top:4px;}
+.log th{text-align:left; color:var(--text-3); font-weight:600; text-transform:uppercase; font-size:9px; letter-spacing:.04em; padding:3px 4px; border-bottom:1px solid var(--border);}
+.log td{padding:4px; border-bottom:1px solid var(--surface-2); color:var(--text-2);}
+.log td.r-ok{color:var(--f-green); font-weight:700;} .log td.r-bad{color:var(--f-red); font-weight:700;} .log td.r-warn{color:var(--f-yellow); font-weight:700;}
+.hidden{display:none !important;}
+
+@media (max-width:1000px) and (orientation:portrait), (max-width:1000px) and (min-height:601px){
+  .body-wrap{flex-direction:column;}
+  .sidenav{flex:0 0 auto; width:100%; height:auto; flex-direction:row; overflow-x:auto; overflow-y:hidden; border-right:none; border-bottom:1px solid var(--border); padding:6px;}
+  .nav-item{flex:0 0 auto; width:150px;}
+  .panel-body{overflow-y:auto;}
+  .lab-view{flex-direction:column;}
+  .lab-canvas-wrap{min-height:320px;}
+  .lab-side{min-width:0;}
+  .content{overflow-y:auto;}
+  .topbar .legend{display:none;}
+  .topbar h1{white-space:normal;}
+}
+::-webkit-scrollbar{width:7px; height:7px;}
+::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand-badge">🧪</div>
+    <div>
+      <div class="chip">Grade 7 · Ch 2</div>
+      <h1>Exploring Substances: Acidic, Basic, and Neutral</h1>
+    </div>
+    <div class="spacer"></div>
+    <div class="legend">
+      <span><i style="background:var(--f-yellow)"></i>What you add</span>
+      <span><i style="background:var(--f-red)"></i>Acidic</span>
+      <span><i style="background:var(--f-blue)"></i>Basic</span>
+      <span><i style="background:var(--f-green)"></i>Neutral · no change</span>
+    </div>
+  </div>
+  <div class="body-wrap">
+    <nav class="sidenav" id="sideNav"></nav>
+    <main class="content">
+      <div class="panel-head">
+        <div class="panel-badge" id="panelBadge">2.1</div>
+        <h2 id="panelTitle">Select an activity</h2>
+        <p id="panelDesc"></p>
+      </div>
+      <div class="panel-body" id="panelBody"></div>
+    </main>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   GRADE 7 — CHAPTER 2: EXPLORING SUBSTANCES: ACIDIC, BASIC, AND NEUTRAL
+   Activities 2.1 – 2.7 (NCERT Curiosity, gecu102). Every activity runs a
+   continuous animation loop: sliders/buttons only set a TARGET; drops
+   free-fall, spots wick, plumes sink and mix, faces pucker on springs.
+   Every indicator colour comes from a real pH, solved from the charge
+   balance of whatever is actually in the tube or on the paper.
+   ========================================================================= */
+const COL = {red:'#d9432b', blue:'#2f8fe0', green:'#1f9d55', yellow:'#d9a017', ink:'#132a44', muted:'#4c6178', mid:'#8195ab'};
+
+/* ---------------------------------------------------------------------
+   0. CANVAS HELPERS
+   --------------------------------------------------------------------- */
+function fitCanvas(canvas){
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  const r = canvas.parentElement.getBoundingClientRect();
+  const w = Math.max(200, r.width), h = Math.max(160, r.height);
+  if(canvas._w!==w || canvas._h!==h || canvas._dpr!==dpr){
+    canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr);
+    canvas.style.width = w+'px'; canvas.style.height = h+'px';
+    canvas._w=w; canvas._h=h; canvas._dpr=dpr;
+  }
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, w, h};
+}
+function line(ctx,x1,y1,x2,y2,color,width,dash){
+  ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=width||2;
+  if(dash) ctx.setLineDash(dash); else ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); ctx.restore();
+}
+function arrowHead(ctx,x,y,ang,color,size){
+  size=size||7; ctx.save(); ctx.fillStyle=color; ctx.translate(x,y); ctx.rotate(ang);
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-size,size*0.42); ctx.lineTo(-size,-size*0.42); ctx.closePath(); ctx.fill(); ctx.restore();
+}
+function vec(ctx,x1,y1,x2,y2,color,width){ line(ctx,x1,y1,x2,y2,color,width||2.6); arrowHead(ctx,x2,y2,Math.atan2(y2-y1,x2-x1),color,7); }
+function dimArrow(ctx,x,y1,y2,color){ line(ctx,x,y1,x,y2,color,1.6); arrowHead(ctx,x,y1,-Math.PI/2,color,5); arrowHead(ctx,x,y2,Math.PI/2,color,5); }
+function textAt(ctx,txt,x,y,opts){
+  opts=opts||{}; ctx.save();
+  ctx.font=(opts.weight||500)+' '+(opts.size||12)+'px Poppins, sans-serif';
+  ctx.fillStyle=opts.color||COL.ink; ctx.textAlign=opts.align||'left'; ctx.textBaseline=opts.baseline||'alphabetic';
+  if(opts.alpha!==undefined) ctx.globalAlpha=opts.alpha;
+  ctx.fillText(txt,x,y); ctx.restore();
+}
+function rect(ctx,x,y,w,h,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw===undefined?2.2:lw; if(fill){ctx.fillStyle=fill; ctx.fillRect(x,y,w,h);} if(lw!==0){ctx.strokeStyle=stroke; ctx.strokeRect(x,y,w,h);} ctx.restore(); }
+function circ(ctx,x,y,r,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw||2.2; ctx.beginPath(); ctx.arc(x,y,Math.max(0.1,r),0,Math.PI*2); if(fill){ctx.fillStyle=fill; ctx.fill();} ctx.strokeStyle=stroke; ctx.stroke(); ctx.restore(); }
+function rrect(ctx,x,y,w,h,r){ r=Math.min(r,w/2,h/2); ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function fmt(x,d){ if(!isFinite(x)) return '—'; d=d===undefined?2:d; return Number(x.toFixed(d)).toString(); }
+function gauss(){ return (Math.random()+Math.random()+Math.random()+Math.random()-2)*1.2247; }
+function hexRgb(h){ const n=parseInt(h.slice(1),16); return [n>>16&255, n>>8&255, n&255]; }
+function mixCol(a,b,t){ const A=hexRgb(a),B=hexRgb(b); t=clamp(t,0,1); return 'rgb('+A.map((v,i)=>Math.round(lerp(v,B[i],t))).join(',')+')'; }
+function rampCol(stops,x){ // stops: [[pos,hex],...]
+  if(x<=stops[0][0]) return mixCol(stops[0][1],stops[0][1],0);
+  for(let i=1;i<stops.length;i++){ if(x<=stops[i][0]){ const a=stops[i-1],b=stops[i]; return mixCol(a[1],b[1],(x-a[0])/(b[0]-a[0])); } }
+  const l=stops[stops.length-1][1]; return mixCol(l,l,0);
+}
+function thermo(ctx,x,top,bot,frac,outline,liquid){
+  const br=8;
+  ctx.save(); ctx.lineWidth=2; ctx.strokeStyle=outline; ctx.fillStyle='#fff';
+  rrect(ctx,x-5,top,10,bot-top+2,5); ctx.fill(); ctx.stroke(); ctx.restore();
+  const lh=(bot-top-5)*clamp(frac,0,1);
+  ctx.save(); ctx.fillStyle=liquid; ctx.fillRect(x-2.2,bot-lh,4.4,lh+6); ctx.restore();
+  circ(ctx,x,bot+br,br,outline,'#fff',2); circ(ctx,x,bot+br,br-3.2,liquid,liquid,1);
+  for(let i=0;i<=4;i++){ const yy=top+5+(bot-top-5)*i/4; line(ctx,x+5,yy,x+9,yy,outline,1.1); }
+}
+function flame(ctx,cx,baseY,width,inten,t){
+  const n=5;
+  for(let i=0;i<n;i++){
+    const fx=cx-width/2+width*(i+0.5)/n;
+    const hh=(6+inten*32)*(0.78+0.22*Math.sin(t*13+i*1.7));
+    const sway=Math.sin(t*9+i*2.1)*3;
+    ctx.save(); ctx.lineJoin='round';
+    ctx.strokeStyle=COL.red; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(fx-7,baseY); ctx.quadraticCurveTo(fx-7,baseY-hh*0.55,fx+sway,baseY-hh); ctx.quadraticCurveTo(fx+7,baseY-hh*0.55,fx+7,baseY); ctx.stroke();
+    ctx.strokeStyle=COL.yellow; ctx.lineWidth=1.6;
+    ctx.beginPath(); ctx.moveTo(fx-3.5,baseY); ctx.quadraticCurveTo(fx-3,baseY-hh*0.35,fx+sway*0.5,baseY-hh*0.55); ctx.quadraticCurveTo(fx+3,baseY-hh*0.35,fx+3.5,baseY); ctx.stroke();
+    ctx.restore();
+  }
+}
+
+/* ---------------------------------------------------------------------
+   0b. ANIMATION ENGINE
+   --------------------------------------------------------------------- */
+let activeStops = [];
+function stopAllLoops(){ activeStops.forEach(s=>{ try{ s(); }catch(e){} }); activeStops=[]; }
+function animLoop(tick){
+  let last = performance.now();
+  let raf;
+  function frame(now){
+    const dt = Math.max(0, Math.min(0.04, (now-last)/1000));
+    last = now;
+    tick(dt);
+    raf = requestAnimationFrame(frame);
+  }
+  raf = requestAnimationFrame(frame);
+  const stop = ()=>cancelAnimationFrame(raf);
+  activeStops.push(stop);
+  return stop;
+}
+/** Exponential ease — frame-rate independent, always smooth. */
+function approach(cur,tgt,rate,dt){ return cur + (tgt-cur)*(1-Math.exp(-rate*dt)); }
+/** Spring-damper — gives natural overshoot and settle. */
+function springTo(state,target,k,damping,dt){
+  const acc = (target-state.x)*k - state.v*damping;
+  state.v += acc*dt;
+  state.x += state.v*dt;
+  return state.x;
+}
+function toggleWire(btns,cb){
+  btns.forEach(b=>b.onclick=()=>{ btns.forEach(x=>x.classList.remove('active')); b.classList.add('active'); cb(b); });
+}
+
+
+/* ---------------------------------------------------------------------
+   0c. CHAPTER-2 HELPERS — virtual stage, chemistry engine, indicators,
+       lab-ware (dropper, drops, test tube, tile, litmus piece) — all
+       line diagrams, all animated
+   --------------------------------------------------------------------- */
+function rng(seed){ let s=(seed>>>0)||1; return ()=>{ s=(Math.imul(s,1664525)+1013904223)>>>0; return s/4294967296; }; }
+function smooth01(a,b,x){ const t=clamp((x-a)/(b-a),0,1); return t*t*(3-2*t); }
+function ease(x){ x=clamp(x,0,1); return x<0.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2; }
+function spr(x){ return {x:x||0,v:0}; }
+function setv($,id,v){ const e=$('#'+id); if(e&&e.textContent!==v) e.textContent=v; }
+function card(id,l,col){ return `<div class="rcard"><div class="rlabel">${l}</div><div class="rval" id="${id}"${col?` style="color:${col}"`:''}>—</div></div>`; }
+/* every scene draws on an 800 × 500 virtual stage, fitted into the canvas */
+const VW=800, VH=500;
+function stage(ctx,w,h){ const s=Math.min(w/VW,h/VH), ox=(w-VW*s)/2, oy=(h-VH*s)/2; ctx.translate(ox,oy); ctx.scale(s,s); return s; }
+function stepPills(el,names,cur,done,onPick){
+  el.innerHTML=names.map((n,i)=>`<button class="step-pill${i===cur?' active':''}${done[i]?' done':''}" data-i="${i}">${n}</button>`).join('');
+  el.querySelectorAll('.step-pill').forEach(b=>b.onclick=()=>onPick(+b.dataset.i));
+}
+
+/* =====================================================================
+   CHEMISTRY ENGINE
+   A mixture = { V (mL), sb (mmol strong cation: Na⁺, ½Ca²⁺ …),
+                 sa (mmol strong anion: Cl⁻ …), sys:{ acid-key: mmol } }.
+   Every weak acid system is stored in its fully protonated form; salts
+   like NaHCO₃ = H₂CO₃ + Na⁺. pH is found from the charge balance
+     [H⁺] + sb/V = [OH⁻] + sa/V + Σ C·(mean negative charge of the acid)
+   by bisection — exact for any mix, so indicators never need a fake
+   “if acid then red” rule: colour follows the real pH.
+   ===================================================================== */
+const ACID = {
+  cit:[3.13,4.76,6.40],  // citric (lemon, amla, tomato)
+  asc:[4.10,11.6],       // ascorbic — vitamin C (amla)
+  tar:[2.98,4.34],       // tartaric (tamarind)
+  ace:[4.76],            // acetic (vinegar)
+  lac:[3.86],            // lactic (curd)
+  oxa:[1.25,4.14],       // oxalic (tomato)
+  car:[6.35,10.33],      // carbonic (baking soda, washing soda, tap water)
+  fat:[8.5],             // fatty acid of soap (in micelles)
+  ext:[4.5],             // plant acids in the rose extract
+  lit:[6.5],             // litmus dye itself
+};
+/* per-litre recipes of every sample (mol/L) */
+const LIQ = {
+  lemon:   {name:'Lemon juice',          col:'#f4e27a', sys:{cit:0.25}},
+  soap:    {name:'Soap solution',        col:'#eef2f7', sys:{fat:0.02}, sb:0.02},
+  amla:    {name:'Amla juice',           col:'#d7e79c', sys:{asc:0.05,cit:0.03}},
+  tamarind:{name:'Tamarind water',       col:'#c08a4a', sys:{tar:0.02}},
+  vinegar: {name:'Vinegar',              col:'#f2ecd6', sys:{ace:0.8}},
+  soda:    {name:'Baking soda solution', col:'#f3f6fa', sys:{car:0.1}, sb:0.1},
+  lime:    {name:'Lime water',           col:'#f4f7fa', sb:0.04},
+  tap:     {name:'Tap water',            col:'#e4f0fb', sys:{car:0.0005}, sb:0.0003},
+  wash:    {name:'Washing powder sol.',  col:'#e9eefc', sys:{car:0.05}, sb:0.1},
+  sugar:   {name:'Sugar solution',       col:'#fbfbf2'},
+  salt:    {name:'Salt solution',        col:'#f6f8fb', sb:0.1, sa:0.1},
+  water:   {name:'Water',                col:'#e4f0fb'},
+  curd:    {name:'Curd',                 col:'#fbfbf6', sys:{lac:0.1}, sb:0.07},
+  tomato:  {name:'Tomato',               col:'#f2a08a', sys:{cit:0.03,oxa:0.002}, sb:0.03},
+  karela:  {name:'Bitter gourd',         col:'#cfe3b0', sys:{car:0.002}, sb:0.0015},
+  rose:    {name:'Red rose extract',     col:'#c22b66', sys:{ext:0.001}},
+  bluelit: {name:'Blue litmus solution', col:'#3a66c9', sys:{lit:0.002}, sb:0.0021},
+};
+const SAMPLES = ['lemon','soap','amla','tamarind','vinegar','soda','lime','tap','wash','sugar','salt'];
+const NATURE = {lemon:'acidic',amla:'acidic',tamarind:'acidic',vinegar:'acidic',soap:'basic',soda:'basic',lime:'basic',wash:'basic',tap:'neutral',sugar:'neutral',salt:'neutral'};
+const NCOL = {acidic:COL.red, basic:COL.blue, neutral:COL.green};
+function mixNew(){ return {V:0, sb:0, sa:0, sys:{}}; }
+function mixAdd(m,key,mL){ const L=LIQ[key]; m.V+=mL; m.sb+=(L.sb||0)*mL; m.sa+=(L.sa||0)*mL; for(const k in (L.sys||{})) m.sys[k]=(m.sys[k]||0)+L.sys[k]*mL; return m; }
+function mixAddMix(m,o,f){ m.V+=o.V*f; m.sb+=o.sb*f; m.sa+=o.sa*f; for(const k in o.sys) m.sys[k]=(m.sys[k]||0)+o.sys[k]*f; return m; }
+function mixCopy(o){ return mixAddMix(mixNew(),o,1); }
+function meanCharge(pKas,H){ // mean negative charge of a polyprotic acid at [H⁺]
+  let terms=[1], num=0, den=1, prod=1;
+  for(let i=0;i<pKas.length;i++){ prod*=Math.pow(10,-pKas[i])/H; den+=prod; num+=(i+1)*prod; }
+  return num/den;
+}
+function mixPH(m){
+  if(m.V<=0) return 7;
+  let lo=-1, hi=15;
+  for(let it=0;it<48;it++){
+    const pH=(lo+hi)/2, H=Math.pow(10,-pH), OH=1e-14/H;
+    let f=H+m.sb/m.V-OH-m.sa/m.V;
+    for(const k in m.sys) if(m.sys[k]>0) f-=m.sys[k]/m.V*meanCharge(ACID[k],H);
+    if(f>0) lo=pH; else hi=pH;  // f falls as pH rises
+  }
+  return (lo+hi)/2;
+}
+function liqPH(key){ return mixPH(mixAdd(mixNew(),key,1)); }
+/* indicator colours — fraction in base form from the dye's pKa */
+function baseFrac(pH,pKa,n){ return 1/(1+Math.pow(10,(n||1)*(pKa-pH))); }
+const LIT_RED='#d23a3a', LIT_BLUE='#3a66c9';
+function litmusCol(pH){ return mixCol(LIT_RED,LIT_BLUE,baseFrac(pH,6.5,1)); }
+const ROSE_RAMP=[[2.5,'#b3122e'],[3.2,'#bf1d3f'],[3.8,'#c93a86'],[4.7,'#c93a86'],[5.8,'#a8448a'],[6.8,'#6f5596'],[7.5,'#3f7092'],[8.1,'#2a8f78'],[9.5,'#2f9b4c'],[11.5,'#58a83a'],[13,'#9cb02c']];
+function roseCol(pH){ return rampCol(ROSE_RAMP,pH); }
+const TUR_Y='#f0b400', TUR_R='#b0301a';
+function turmericCol(pH){ return mixCol(TUR_Y,TUR_R,baseFrac(pH,8.0,1.5)); }
+/* a drop landing on a paper = the drop mixed with what the paper already holds */
+const PAPER_MIX = {
+  blue: {sys:{lit:0.001}, sb:0.002},   // blue litmus paper: litmus + a trace of alkali
+  red:  {sys:{lit:0.001}, sa:0.002},   // red litmus paper: litmus + a trace of acid
+  tur:  {},                            // turmeric: just the dye, no buffer
+};
+function paperPH(paper,key){
+  const m=mixAdd(mixNew(),key,0.05), P=PAPER_MIX[paper];
+  m.V+=0.05; m.sb+=(P.sb||0)*0.05; m.sa+=(P.sa||0)*0.05; for(const k in (P.sys||{})) m.sys[k]=(m.sys[k]||0)+P.sys[k]*0.05;
+  return mixPH(m);
+}
+function colName(hex){ // readable colour word for the tables
+  const [r,g,b]=hexRgb(hex[0]==='#'?hex:rgbHex(hex));
+  if(r>200&&g>150&&b<80) return 'yellow';
+  if(g>r&&g>b) return 'green';
+  if(b>r+20&&b>g) return 'blue';
+  if(r>b+40&&g<110) return r>150?'red':'dark red';
+  return b>90?'pink-purple':'red-brown';
+}
+/* colours may arrive as #hex or rgb(...) — accept both everywhere */
+function hexRgb(h){ if(h[0]!=='#') return h.match(/[\d.]+/g).slice(0,3).map(Number); const n=parseInt(h.slice(1),16); return [n>>16&255, n>>8&255, n&255]; }
+function rgbHex(s){ const m=s.match(/\d+/g).map(Number); return '#'+m.slice(0,3).map(v=>v.toString(16).padStart(2,'0')).join(''); }
+
+/* =====================================================================
+   LAB-WARE
+   ===================================================================== */
+/* dropper: tip at (x,tip); glass tube 16 wide, 130 long; rubber bulb on top
+   squeeze 0..1 flattens the bulb; fill 0..1 = liquid inside */
+function dropper(ctx,x,tip,liq,fill,squeeze,ang){
+  ctx.save(); ctx.translate(x,tip); ctx.rotate(ang||0); ctx.lineJoin='round';
+  const L=130, w=8;
+  const glass=()=>{ ctx.beginPath(); ctx.moveTo(-2,0); ctx.lineTo(-w,-26); ctx.lineTo(-w,-L); ctx.lineTo(w,-L); ctx.lineTo(w,-26); ctx.lineTo(2,0); ctx.closePath(); };
+  if(fill>0){ ctx.save(); glass(); ctx.clip(); const top=-lerp(4,L-8,clamp(fill,0,1)); ctx.fillStyle=liq; ctx.globalAlpha=0.9; ctx.fillRect(-w,top,2*w,-top+2);
+    ctx.globalAlpha=1; line(ctx,-w,top,w,top,COL.ink,1); ctx.restore(); }
+  glass(); ctx.fillStyle='rgba(255,255,255,0.25)'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke();
+  line(ctx,-4,-34,-4,-L+8,'rgba(129,149,171,0.5)',1.4);
+  const bw=13*(1-0.45*squeeze), bh=44+8*squeeze;
+  ctx.beginPath(); ctx.moveTo(-w-2,-L); ctx.bezierCurveTo(-bw-6,-L-bh*0.4,-bw,-L-bh,0,-L-bh); ctx.bezierCurveTo(bw,-L-bh,bw+6,-L-bh*0.4,w+2,-L); ctx.closePath();
+  ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.yellow; ctx.lineWidth=2.6; ctx.stroke();
+  ctx.restore();
+}
+/* a drop hanging / falling; (x,y) = centre */
+function dropShape(ctx,x,y,r,col,stretch){
+  const s=stretch||1; ctx.save(); ctx.translate(x,y);
+  ctx.beginPath(); ctx.moveTo(0,-r*1.6*s); ctx.bezierCurveTo(r*0.6,-r*0.9*s,r,-r*0.3,r,r*0.15); ctx.arc(0,r*0.15,r,0,Math.PI); ctx.bezierCurveTo(-r,-r*0.3,-r*0.6,-r*0.9*s,0,-r*1.6*s);
+  ctx.fillStyle=col; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=1.4; ctx.stroke(); ctx.restore();
+}
+/* dropper controller — squeeze → drop swells at the tip → detaches → free
+   fall (g, compressed) → calls onLand(x,y). Returns a tiny object. */
+function dropperRig(x,tip,key){
+  return { x:spr(x), tipY:tip, key, fill:0.7, sq:0, queue:0, phase:'idle', ph:0, r:0, drops:[], land:null,
+    moveTo(nx){ this.tx=nx; }, tx:x,
+    squeezeOnce(n){ this.queue+=n||1; },
+    step(dt,floorFn){ springTo(this.x,this.tx,70,14,dt);
+      const settled=Math.abs(this.x.v)<8 && Math.abs(this.x.x-this.tx)<2;
+      if(this.phase==='idle' && this.queue>0 && settled){ this.phase='squeeze'; this.ph=0; }
+      const ds=dt*(this.speed||1);
+      if(this.phase==='squeeze'){ this.ph+=ds; this.sq=smooth01(0,0.18,this.ph); this.r=5.2*smooth01(0.05,0.26,this.ph);
+        if(this.ph>=0.3){ this.drops.push({x:this.x.x,y:this.tipY+this.r*1.2,vy:40,r:this.r,key:this.key}); this.r=0; this.queue--; this.fill=Math.max(0.12,this.fill-0.012); this.phase='release'; this.ph=0; } }
+      else if(this.phase==='release'){ this.ph+=ds; this.sq=1-smooth01(0,0.16,this.ph); if(this.ph>0.16){ this.phase='idle'; this.sq=0; } }
+      for(const d of this.drops){ d.vy+=2600*dt; d.y+=d.vy*dt; const fy=floorFn(d.x); if(d.y+d.r>=fy){ d.dead=true; if(this.onLand) this.onLand(d.x,fy,d); } }
+      this.drops=this.drops.filter(d=>!d.dead);
+    },
+    busy(){ return this.queue>0 || this.phase!=='idle' || this.drops.length>0; },
+    draw(ctx){ const L=LIQ[this.key]; dropper(ctx,this.x.x,this.tipY,L.col,this.fill,this.sq);
+      if(this.r>0.3) dropShape(ctx,this.x.x,this.tipY+this.r*1.2,this.r,L.col,1.2);
+      for(const d of this.drops) dropShape(ctx,d.x,d.y,d.r,L.col,1+clamp(d.vy/1500,0,0.6)); }
+  };
+}
+/* white glazed tile, with light grout lines */
+function tile(ctx,x,y,w,h){
+  ctx.save(); rrect(ctx,x,y,w,h,8); ctx.fillStyle='#fdfefe'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.stroke();
+  ctx.strokeStyle='#e6ecf3'; ctx.lineWidth=1.2; ctx.beginPath(); ctx.moveTo(x+12,y+10); ctx.lineTo(x+w*0.3,y+10); ctx.moveTo(x+w-14,y+h-10); ctx.lineTo(x+w*0.75,y+h-10); ctx.stroke(); ctx.restore();
+}
+/* wet spot on a paper: Washburn-like spreading  r = R·√(1−e^(−t/τ)),
+   colour front converts first-order  c = 1 − e^(−t/τc) */
+function spotNew(x,y,R,from,to){ const R0=rng((x*7+y*13)|0), wob=[]; for(let i=0;i<9;i++) wob.push(0.85+R0()*0.3); return {x,y,R,from,to,t:0,wob}; }
+function spotStep(s,dt){ s.t+=dt; }
+function spotR(s){ return s.R*Math.sqrt(1-Math.exp(-s.t/0.35)); }
+function spotConv(s){ return 1-Math.exp(-Math.max(0,s.t-0.1)/0.55); }
+function spotDraw(ctx,s){
+  const r=spotR(s); if(r<0.5) return;
+  ctx.save(); ctx.beginPath();
+  for(let i=0;i<=36;i++){ const a=i/36*Math.PI*2, k=i/36*9, j=Math.floor(k)%9, f=k-Math.floor(k), wv=lerp(s.wob[j],s.wob[(j+1)%9],f);
+    const rr=r*wv, px=s.x+Math.cos(a)*rr, py=s.y+Math.sin(a)*rr*0.9; if(i) ctx.lineTo(px,py); else ctx.moveTo(px,py); }
+  ctx.closePath(); ctx.fillStyle=mixCol(mixCol(s.from,s.to,spotConv(s)),'#132a44',0.13); ctx.fill(); // wet paper looks darker
+  ctx.strokeStyle='rgba(19,42,68,0.28)'; ctx.lineWidth=1.3; ctx.stroke(); ctx.restore();
+}
+/* indicator paper piece with spots clipped to it */
+function paperPiece(ctx,x,y,w,h,col,spots,rot){
+  ctx.save(); ctx.translate(x+w/2,y+h/2); ctx.rotate(rot||0); ctx.translate(-x-w/2,-y-h/2);
+  ctx.beginPath(); ctx.rect(x,y,w,h); ctx.fillStyle=col; ctx.fill();
+  ctx.save(); ctx.clip(); (spots||[]).forEach(s=>spotDraw(ctx,s)); ctx.restore();
+  ctx.strokeStyle=COL.ink; ctx.lineWidth=1.8; ctx.strokeRect(x,y,w,h);
+  ctx.strokeStyle='rgba(255,255,255,0.35)'; ctx.lineWidth=1; for(let i=1;i<4;i++){ ctx.beginPath(); ctx.moveTo(x+4,y+h*i/4); ctx.lineTo(x+w-4,y+h*i/4+2); ctx.stroke(); }
+  ctx.restore();
+}
+/* test tube: open top at y=top, height h, inner half-width r, rounded bottom.
+   fill = liquid height in px. rot about the rim centre. */
+function tubePath(ctx,cx,top,h,r){ ctx.beginPath(); ctx.moveTo(cx-r,top); ctx.lineTo(cx-r,top+h-r); ctx.arc(cx,top+h-r,r,Math.PI,0,true); ctx.lineTo(cx+r,top); }
+function testTube(ctx,cx,top,h,r,liqH,col,o){
+  o=o||{}; ctx.save();
+  if(o.rot){ ctx.translate(cx,top); ctx.rotate(o.rot); ctx.translate(-cx,-top); }
+  if(liqH>0){ ctx.save(); tubePath(ctx,cx,top,h,r); ctx.closePath(); ctx.clip();
+    const ly=top+h-liqH, wob=o.wob||0;
+    ctx.beginPath(); ctx.moveTo(cx-r-2,ly+wob); ctx.quadraticCurveTo(cx,ly+3,cx+r+2,ly-wob); ctx.lineTo(cx+r+2,top+h+2); ctx.lineTo(cx-r-2,top+h+2); ctx.closePath();
+    ctx.fillStyle=col; ctx.fill(); if(o.inside) o.inside(ly);
+    ctx.strokeStyle='rgba(19,42,68,0.35)'; ctx.lineWidth=1.2; ctx.beginPath(); ctx.moveTo(cx-r,ly+wob); ctx.quadraticCurveTo(cx,ly+4,cx+r,ly-wob); ctx.stroke(); ctx.restore(); }
+  tubePath(ctx,cx,top,h,r); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.stroke();
+  ctx.beginPath(); ctx.ellipse(cx,top,r+3,3.5,0,0,Math.PI*2); ctx.stroke();
+  line(ctx,cx-r+6,top+14,cx-r+6,top+h-r-6,'rgba(255,255,255,0.8)',2.2);
+  ctx.restore();
+}
+/* wooden test-tube stand for n tubes at xs[], rim at y=railY */
+function tubeStand(ctx,x0,x1,railY,baseY){
+  ctx.save(); ctx.lineWidth=2.4; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff';
+  rrect(ctx,x0,railY,x1-x0,14,4); ctx.fill(); ctx.stroke();
+  rrect(ctx,x0-10,baseY,x1-x0+20,16,5); ctx.fill(); ctx.stroke();
+  line(ctx,x0+10,railY+14,x0+10,baseY,COL.ink,3); line(ctx,x1-10,railY+14,x1-10,baseY,COL.ink,3); ctx.restore();
+}
+/* liquid plume from a drop inside a tube: sinks, spreads and dissolves */
+function plumeDraw(ctx,p){ ctx.save(); ctx.globalAlpha=clamp(p.m,0,1)*0.85; ctx.fillStyle=p.col; ctx.beginPath(); ctx.ellipse(p.x,p.y,p.r*0.8,p.r,0,0,Math.PI*2); ctx.fill(); ctx.restore(); }
+/* colour swatch word in logs */
+function sw(col){ return `<i style="display:inline-block;width:10px;height:10px;border-radius:3px;border:1px solid #8195ab;vertical-align:-1px;background:${col}"></i>`; }
+/* big front face — sour pucker, bitter grimace, sniffing */
+function face(ctx,cx,cy,R,o){
+  o=o||{}; ctx.save(); ctx.lineCap='round'; ctx.lineJoin='round';
+  const pk=clamp(o.pucker||0,0,1.3), bt=clamp(o.bitter||0,0,1.3), sq=Math.max(pk,bt*0.8), open=clamp(o.open||0,0,1);
+  const shake=(o.shiver||0)*Math.sin((o.t||0)*38)*R*0.03;
+  ctx.translate(cx+shake,cy);
+  const cheek=1-0.12*pk; // cheeks suck in when sour
+  ctx.beginPath(); ctx.moveTo(0,-R);
+  ctx.bezierCurveTo(R*0.95,-R,R*1.02,-R*0.2,R*0.86*cheek,R*0.3); ctx.bezierCurveTo(R*0.7*cheek,R*0.82,R*0.32,R*1.02,0,R*1.02);
+  ctx.bezierCurveTo(-R*0.32,R*1.02,-R*0.7*cheek,R*0.82,-R*0.86*cheek,R*0.3); ctx.bezierCurveTo(-R*1.02,-R*0.2,-R*0.95,-R,0,-R);
+  ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=3; ctx.stroke();
+  // ears
+  for(const s of [-1,1]){ ctx.beginPath(); ctx.ellipse(s*R*0.98,-R*0.05,R*0.1,R*0.18,0,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill(); ctx.stroke(); }
+  // hair
+  ctx.beginPath(); ctx.moveTo(-R*0.9,-R*0.35); ctx.bezierCurveTo(-R*0.9,-R*1.15,R*0.9,-R*1.15,R*0.9,-R*0.35); ctx.bezierCurveTo(R*0.5,-R*0.72,-R*0.3,-R*0.7,-R*0.9,-R*0.35); ctx.fillStyle=COL.ink; ctx.fill();
+  // eyes: squint closes the lids
+  const ey=-R*0.18, blink=((o.t||0)%4.1)<0.12?0.9:0;
+  for(const s of [-1,1]){ const ex=s*R*0.36, lid=Math.min(0.94,Math.max(sq*0.85,blink));
+    ctx.save(); ctx.beginPath(); ctx.ellipse(ex,ey,R*0.15,R*0.11*(1-lid)+0.6,0,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill(); ctx.lineWidth=2.4; ctx.stroke(); ctx.clip();
+    ctx.beginPath(); ctx.arc(ex+(o.look||0)*R*0.05,ey,R*0.065,0,Math.PI*2); ctx.fillStyle=COL.ink; ctx.fill(); ctx.restore();
+    // brows: sour → raised & arched; bitter → pulled down in the middle
+    const by=ey-R*0.2-pk*R*0.1+bt*R*0.04, inner=bt*R*0.08;
+    ctx.beginPath(); ctx.moveTo(ex-s*R*0.17,by+inner*(s<0?0:0)); ctx.quadraticCurveTo(ex,by-R*0.06-pk*R*0.05,ex+s*R*0.17,by+(s>0?0:0)); ctx.lineWidth=3; ctx.stroke();
+    if(bt>0.05){ line(ctx,ex-s*R*0.17*(-1),by+inner,ex,by-R*0.02,COL.ink,3); }
+    if(sq>0.2){ for(let k=0;k<3;k++) line(ctx,ex+s*R*0.2,ey-R*0.05+k*R*0.05,ex+s*R*(0.28+sq*0.04),ey-R*0.08+k*R*0.08,COL.mid,1.6); }
+  }
+  // nose + nostrils (flare when sniffing)
+  const fl=clamp(o.sniff||0,0,1);
+  ctx.beginPath(); ctx.moveTo(-R*0.02,-R*0.05); ctx.quadraticCurveTo(-R*0.12,R*0.18,-R*0.1,R*0.24); ctx.quadraticCurveTo(0,R*0.3,R*0.1,R*0.24); ctx.lineWidth=2.4; ctx.strokeStyle=COL.ink; ctx.stroke();
+  for(const s of [-1,1]){ ctx.beginPath(); ctx.ellipse(s*R*0.05,R*0.235,R*(0.025+0.02*fl),R*(0.015+0.012*fl),0,0,Math.PI*2); ctx.fillStyle=COL.ink; ctx.fill(); }
+  // mouth
+  const my=R*0.55;
+  if(pk>bt){ // sour: small round pursed lips
+    const mw=R*lerp(0.34,0.1,clamp(pk,0,1)), mh=R*lerp(0.04,0.09,clamp(pk,0,1))+open*R*0.12;
+    ctx.beginPath(); ctx.ellipse(0,my,mw,mh,0,0,Math.PI*2); ctx.fillStyle=open>0.05?COL.ink:'#fff'; ctx.fill(); ctx.lineWidth=3; ctx.stroke();
+    if(pk>0.3) for(const s of [-1,1]) line(ctx,s*(mw+R*0.04),my-R*0.04,s*(mw+R*0.1),my,COL.mid,1.6);
+  } else { // neutral smile → bitter grimace with tongue out
+    const mw=R*lerp(0.3,0.38,bt), curve=lerp(R*0.1,-R*0.14,clamp(bt,0,1)), oh=open*R*0.2;
+    ctx.beginPath(); ctx.moveTo(-mw,my); ctx.quadraticCurveTo(0,my+curve,mw,my);
+    if(oh>1){ ctx.quadraticCurveTo(0,my+curve+oh,-mw,my); ctx.fillStyle=COL.ink; ctx.fill(); }
+    ctx.lineWidth=3; ctx.stroke();
+    if(bt>0.3){ ctx.beginPath(); ctx.ellipse(R*0.04,my+R*0.02+bt*R*0.08,R*0.1,R*0.07*bt+1,0.1,0,Math.PI); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.red; ctx.lineWidth=2.4; ctx.stroke(); }
+  }
+  ctx.restore();
+}
+function fitFont(ctx,txt,maxW,size,weight){
+  let s=size; ctx.font=weight+' '+s+'px Poppins, sans-serif';
+  while(s>9 && ctx.measureText(txt).width>maxW){ s-=0.5; ctx.font=weight+' '+s+'px Poppins, sans-serif'; }
+  return s;
+}
+function tableTop(ctx,x0,x1,y,legs){ ctx.save(); ctx.lineWidth=2.2; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; rrect(ctx,x0,y,x1-x0,12,3); ctx.fill(); ctx.stroke();
+  if(legs){ line(ctx,x0+22,y+12,x0+22,y+legs,COL.ink,2.4); line(ctx,x1-22,y+12,x1-22,y+legs,COL.ink,2.4); } ctx.restore(); }
+function steam(ctx,cx,y,wid,inten,t){
+  if(inten<=0.02) return;
+  ctx.save(); ctx.strokeStyle=COL.mid; ctx.lineWidth=2; ctx.lineCap='round';
+  for(let i=0;i<3;i++){ const x0=cx+(i-1)*wid*0.28, ph=(t*0.7+i*0.33)%1; ctx.globalAlpha=clamp(inten,0,1)*(1-ph)*0.9;
+    ctx.beginPath(); for(let k=0;k<=12;k++){ const yy=y-ph*30-k*6, xx=x0+Math.sin(k*0.6+t*3+i)*6; if(k) ctx.lineTo(xx,yy); else ctx.moveTo(xx,yy); } ctx.stroke(); }
+  ctx.restore();
+}
+/* thermometer with a scale, value in °C; (x,top,bot) */
+function thermoScale(ctx,x,top,bot,T,T0,T1,marks,safe){
+  const f=(T-T0)/(T1-T0);
+  if(safe!==undefined){ const ys=bot-(bot-top-5)*(safe-T0)/(T1-T0); line(ctx,x-18,ys,x+26,ys,COL.green,2,[5,3]); }
+  thermo(ctx,x,top,bot,f,COL.ink,COL.red);
+  marks.forEach(m=>{ const yy=bot-(bot-top-5)*(m-T0)/(T1-T0); textAt(ctx,m+'°',x+13,yy+4,{size:11,weight:600,color:COL.muted}); });
+}
+/* tiny x–y chart; pts = [[x,y],...] in data coords */
+function miniChart(ctx,x,y,w,h,xr,yr,series,o){
+  o=o||{}; ctx.save(); rrect(ctx,x,y,w,h,8); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle='#dbe4f0'; ctx.lineWidth=1.2; ctx.stroke();
+  const px=v=>x+34+(w-44)*(v-xr[0])/(xr[1]-xr[0]), py=v=>y+h-24-(h-36)*(v-yr[0])/(yr[1]-yr[0]);
+  line(ctx,px(xr[0]),py(yr[0]),px(xr[1]),py(yr[0]),COL.mid,1.2); line(ctx,px(xr[0]),py(yr[0]),px(xr[0]),py(yr[1]),COL.mid,1.2);
+  if(o.band){ ctx.fillStyle='rgba(31,157,85,0.1)'; const a=py(o.band[1]), b=py(o.band[0]); ctx.fillRect(px(xr[0]),a,px(xr[1])-px(xr[0]),b-a); }
+  (o.yt||[]).forEach(v=>textAt(ctx,String(v),px(xr[0])-5,py(v)+4,{align:'right',size:10,color:COL.muted}));
+  (o.xt||[]).forEach(v=>textAt(ctx,String(v),px(v),py(yr[0])+14,{align:'center',size:10,color:COL.muted}));
+  if(o.xl) textAt(ctx,o.xl,px(xr[1]),py(yr[0])+14,{align:'right',size:10,weight:600,color:COL.muted});
+  if(o.yl) textAt(ctx,o.yl,x+8,y+14,{size:10,weight:600,color:COL.muted});
+  series.forEach(s=>{ if(s.pts.length<2) return; ctx.strokeStyle=s.col; ctx.lineWidth=s.lw||2.2; if(s.dash) ctx.setLineDash(s.dash); else ctx.setLineDash([]);
+    ctx.beginPath(); s.pts.forEach((p,i)=>{ const X=px(clamp(p[0],xr[0],xr[1])), Y=py(clamp(p[1],yr[0],yr[1])); if(i) ctx.lineTo(X,Y); else ctx.moveTo(X,Y); }); ctx.stroke(); });
+  ctx.setLineDash([]); ctx.restore(); return {px,py};
+}
+function meterV(ctx,x,y,w,h,frac,col,label){ // vertical bar meter, y = top
+  ctx.save(); rrect(ctx,x,y,w,h,5); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=1.6; ctx.stroke();
+  const f=clamp(frac,0,1); ctx.save(); rrect(ctx,x,y,w,h,5); ctx.clip(); ctx.fillStyle=col; ctx.globalAlpha=0.85; ctx.fillRect(x,y+h*(1-f),w,h*f); ctx.restore();
+  if(label) textAt(ctx,label,x+w/2,y+h+16,{align:'center',size:12,weight:700,color:col});
+  ctx.restore();
+}
+
+
+/* =====================================================================
+   2.1 LITMUS ON A WHITE TILE  (also reused by 2.5 for turmeric paper)
+   A drop is squeezed out, swells at the tip, detaches and free-falls
+   (g compressed). On the paper it spreads like a wicking front
+   r = R·√(1 − e^(−t/τ)) and the dye converts first-order toward the
+   colour set by the REAL pH of (drop + what the paper holds):
+   blue litmus carries a trace of alkali, red litmus a trace of acid —
+   that is why neutral drops change neither.
+   Finished pairs fly (spring) into the Group A / B / C trays = Table 2.2.
+   ===================================================================== */
+function paperTest(cfg){
+  const n=cfg.papers.length, PW=n===2?172:190, PH=112, GAP=58;
+  const x0=400-(n*PW+(n-1)*GAP)/2, PY=188;
+  const home=i=>({x:x0+i*(PW+GAP), y:PY});
+  const binW=(760-(cfg.bins.length-1)*10)/cfg.bins.length;
+  const bins=cfg.bins.map((b,i)=>Object.assign({x:20+i*(binW+10), y:378, w:binW, h:112, items:[]},b));
+  const S={ key:null, pieces:[], flying:[], queue:[], results:{}, auto:false, ring:[],
+    dy:spr(-40), dyT:0, swapTo:null,
+    rig:dropperRig(400,104,'lemon'),
+    fresh(){ this.pieces=cfg.papers.map((p,i)=>({p, spots:[], x:spr(home(i).x-700-i*90), y:spr(PY), s:spr(1), rot:0, tx:home(i).x, ty:PY, ts:1})); },
+    used(){ return this.pieces.some(pc=>pc.spots.length>0); },
+    choose(key){
+      if(this.rig.busy()) return;
+      if(this.used()) this.retire();
+      this.key=key; this.swapTo=key; this.dyT=-260;  // dropper lifts out, refills, comes back
+      this.refresh&&this.refresh();
+    },
+    retire(){ // current pieces fly to their group tray
+      const k=this.key, g=cfg.group(this.results[k]||{});
+      const b=bins.find(b=>b.g===g); if(!b){ this.fresh(); return; }
+      const idx=b.items.length, per=Math.max(1,Math.floor((b.w-10)/(n===2?64:52))), col=idx%per, row=Math.floor(idx/per);
+      const ms=n===2?0.15:0.2, cw=n===2?64:52;
+      this.pieces.forEach((pc,i)=>{ pc.tx=b.x+8+col*cw+i*(PW*ms+3); pc.ty=b.y+24+row*42; pc.ts=ms; pc.bin=b; pc.label=i===0?LIQ[k].name.split(' ')[0]:null; pc.labelCol=cfg.labelCol?cfg.labelCol(k):COL.muted; pc.lx=b.x+8+col*cw+(n*PW*ms+(n-1)*3)/2; pc.ly=b.y+24+row*42+PH*ms+11; });
+      b.items.push(k); this.flying.push(...this.pieces); this.fresh();
+    },
+    drop(){ if(!this.key||this.rig.busy()||this.used()||this.swapTo) return false;
+      this.queue=this.pieces.map((pc,i)=>i); return true; },
+    reset(){ this.results={}; bins.forEach(b=>b.items=[]); this.flying=[]; this.queue=[]; this.key=null; this.fresh(); this.auto=false; this.refresh&&this.refresh(); },
+    nextUntested(){ return SAMPLES.find(k=>!this.results[k]); },
+    tick(dt,ctx,t){
+      const rig=this.rig;
+      // dropper vertical travel: lift → swap liquid → return
+      springTo(this.dy,this.dyT,60,13,dt);
+      if(this.swapTo && this.dy.x<-230){ rig.x.x=rig.tx=home(0).x+PW/2; rig.x.v=0; rig.key=this.swapTo; rig.fill=0.75; this.swapTo=null; this.dyT=0; }
+      rig.tipY=104+this.dy.x+Math.sin(t*2.1)*2;
+      if(this.queue.length && !rig.busy() && !this.swapTo && Math.abs(this.dy.x)<3){
+        const i=this.queue.shift(), pc=this.pieces[i]; rig.moveTo(pc.tx+PW/2); rig.squeezeOnce(1); rig.target=i; }
+      rig.onLand=(x,y)=>{ const pc=this.pieces[rig.target]; if(!pc) return;
+        const pH=paperPH(pc.p.k,rig.key);
+        pc.spots.push(spotNew(x-pc.x.x,PH/2+(Math.random()-0.5)*6,PH*0.36,pc.p.base,pc.p.col(pH)));
+        this.ring.push({x,y,t:0}); const r=this.results[rig.key]||(this.results[rig.key]={}); r[pc.p.k]=pH; };
+      rig.step(dt,x=>PY+PH/2);
+      // pieces
+      for(const pc of this.pieces.concat(this.flying)){ springTo(pc.x,pc.tx,34,9,dt); springTo(pc.y,pc.ty,34,9,dt); springTo(pc.s,pc.ts,34,9,dt); pc.spots.forEach(s=>spotStep(s,dt)); }
+      this.ring.forEach(r=>r.t+=dt); this.ring=this.ring.filter(r=>r.t<0.6);
+      const done=this.used() && this.pieces.every(pc=>pc.spots.length>0 && spotConv(pc.spots[0])>0.96) && !rig.busy();
+      if(done && !this.logged){ this.logged=true; cfg.onResult&&cfg.onResult(this.key,this.results[this.key]); }
+      if(!this.used()) this.logged=false;
+      if(this.auto && !rig.busy() && !this.queue.length && !this.swapTo && Math.abs(this.dy.x)<3){
+        if(!this.key || done){ const nx=this.nextUntested(); if(nx) this.choose(nx); else { this.auto=false; if(this.used()) this.retire(); this.key=null; this.refresh&&this.refresh(); } }
+        else if(!this.used() && this.pieces.every(pc=>Math.abs(pc.x.x-pc.tx)<3)) this.drop();
+      }
+      // ---- draw
+      tile(ctx,70,150,660,196);
+      cfg.papers.forEach((p,i)=>textAt(ctx,p.name,home(i).x+PW/2,PY+PH+28,{align:'center',size:14,weight:600,color:COL.muted}));
+      bins.forEach(b=>{ ctx.save(); rrect(ctx,b.x,b.y,b.w,b.h,10); ctx.fillStyle='#fbfcfe'; ctx.fill(); ctx.setLineDash([6,4]); ctx.strokeStyle=b.col; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+        textAt(ctx,b.name,b.x+10,b.y+16,{size:12.5,weight:700,color:b.col}); });
+      const drawPc=pc=>{ ctx.save(); ctx.translate(pc.x.x,pc.y.x); ctx.scale(pc.s.x,pc.s.x); paperPiece(ctx,0,0,PW,PH,pc.p.base,pc.spots); ctx.restore(); };
+      this.flying.forEach(pc=>{ drawPc(pc); if(pc.label && Math.abs(pc.y.x-pc.ty)<6) textAt(ctx,pc.label,pc.lx,pc.ly,{align:'center',size:10.5,weight:600,color:pc.labelCol}); });
+      this.pieces.forEach(drawPc);
+      this.ring.forEach(r=>{ ctx.save(); ctx.globalAlpha=1-r.t/0.6; ctx.strokeStyle=COL.yellow; ctx.lineWidth=2; ctx.beginPath(); ctx.ellipse(r.x,r.y,8+r.t*70,(8+r.t*70)*0.4,0,0,7); ctx.stroke(); ctx.restore(); });
+      rig.draw(ctx);
+      if(this.key){ textAt(ctx,LIQ[rig.key].name,rig.x.x+20,rig.tipY-150,{size:14,weight:700,color:COL.yellow}); }
+      else textAt(ctx,'Pick a sample →',560,80,{align:'center',size:16,weight:600,color:COL.mid});
+    }
+  };
+  S.fresh(); S.pieces.forEach(pc=>{ pc.x.x=pc.tx; });
+  return S;
+}
+
+function buildA1(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><label>Sample in the dropper</label><div class="chip-wrap" id="chips"></div></div>
+    <div class="control-group"><div class="toggle-group">
+      <button class="toggle-btn play" id="go">💧 Put a drop on each</button></div>
+      <div class="toggle-group"><button class="toggle-btn" id="all">▶ Test all</button><button class="toggle-btn" id="clr">↺ Clear tile</button></div></div>
+    <div class="control-group"><div class="result-cards">${card('r1','Blue litmus')}${card('r2','Red litmus')}<div class="rcard wide"><div class="rlabel">Nature</div><div class="rval" id="r3">—</div></div></div></div>
+    <div class="control-group"><label>Table 2.1</label><table class="log"><thead><tr><th>Sample</th><th>Blue</th><th>Red</th></tr></thead><tbody id="lg"></tbody></table></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const word=(paper,pH)=>{ const f=baseFrac(pH,6.5,1); return paper==='blue'?(f<0.5?'→ red':'no change'):(f>0.5?'→ blue':'no change'); };
+  const group=r=>{ if(r.blue===undefined) return null; const b=baseFrac(r.blue,6.5), rd=baseFrac(r.red,6.5); return b<0.5?'A':(rd>0.5?'B':'C'); };
+  const natOf={A:'acidic',B:'basic',C:'neutral'};
+  const S=paperTest({ papers:[{k:'blue',name:'Blue litmus',base:LIT_BLUE,col:litmusCol},{k:'red',name:'Red litmus',base:LIT_RED,col:litmusCol}],
+    group, bins:[{g:'A',name:'Group A · blue → red',col:COL.red},{g:'B',name:'Group B · red → blue',col:COL.blue},{g:'C',name:'Group C · no change',col:COL.green}],
+    onResult(k,r){ const g=group(r), c=NCOL[natOf[g]];
+      $('#lg').insertAdjacentHTML('beforeend',`<tr><td>${LIQ[k].name}</td><td>${sw(litmusCol(r.blue))} ${word('blue',r.blue)}</td><td>${sw(litmusCol(r.red))} ${word('red',r.red)}</td></tr>`);
+      setv($,'r1',word('blue',r.blue)); setv($,'r2',word('red',r.red)); const e=$('#r3'); e.textContent=natOf[g]+' · Group '+g; e.style.color=c; refresh(); } });
+  function refresh(){
+    $('#chips').innerHTML=SAMPLES.map(k=>{ const r=S.results[k], g=r&&r.red!==undefined?group(r):null;
+      return `<button class="chip-btn${S.key===k?' active':''}" data-k="${k}"${g?` style="border-color:${NCOL[natOf[g]]}"`:''}>${LIQ[k].name}</button>`; }).join('');
+    wrap.querySelectorAll('#chips .chip-btn').forEach(b=>b.onclick=()=>{ S.auto=false; S.choose(b.dataset.k); if(!S.results[b.dataset.k]){ ['r1','r2','r3'].forEach(i=>setv($,i,'—')); } });
+  }
+  S.refresh=refresh; refresh();
+  $('#go').onclick=()=>S.drop();
+  $('#all').onclick=()=>{ S.auto=true; };
+  $('#clr').onclick=()=>{ S.reset(); $('#lg').innerHTML=''; ['r1','r2','r3'].forEach(i=>setv($,i,'—')); };
+  let t=0;
+  animLoop(dt=>{ t+=dt; const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h); ctx.save(); stage(ctx,w,h); S.tick(dt,ctx,t); ctx.restore(); });
+  return wrap;
+}
+
+
+/* =====================================================================
+   2.2 SOUR, SLIPPERY, BITTER
+   Taste: a spoon travels along a curved path to the mouth; sourness
+   S = clamp((5 − pH)/3, 0, 1) from the food's real pH drives the pucker
+   through a spring-damper (overshoot, then a slow relax) plus a
+   shiver whose amplitude decays. The same food is dropped on blue and
+   red litmus so “sour” and “turns blue litmus red” are seen together.
+   Karela is bitter, yet litmus shows it is not basic.
+   Touch: the finger is dragged by your hand through a spring; friction
+   is stick-slip (static μs, kinetic μk):  m x'' = k(x_hand − x) − F_f.
+   Water: μs 0.9, μk 0.6 → jerky stick-slip.  Soap / baking soda:
+   μ ≈ 0.1–0.2 → the finger glides — “slippery”.
+   ===================================================================== */
+const FOODS = {
+  lemon:   {acid:'Citric acid'},
+  amla:    {acid:'Ascorbic acid (vitamin C) + citric acid'},
+  tamarind:{acid:'Tartaric acid'},
+  vinegar: {acid:'Acetic acid'},
+  curd:    {acid:'Lactic acid'},
+  tomato:  {acid:'Citric acid + oxalic acid'},
+  karela:  {acid:'No acid — bitter, but not basic', bitter:1},
+};
+function drawFood(ctx,k,cx,cy,s,t){
+  ctx.save(); ctx.translate(cx,cy); ctx.scale(s,s); ctx.lineJoin='round'; ctx.lineCap='round'; ctx.lineWidth=2.6; ctx.strokeStyle=COL.ink;
+  const F=c=>{ ctx.fillStyle=c; ctx.fill(); ctx.stroke(); };
+  if(k==='lemon'){ ctx.beginPath(); ctx.ellipse(0,0,62,60,0,0,7); F('#fbf1a8'); ctx.beginPath(); ctx.ellipse(0,0,50,48,0,0,7); ctx.fillStyle='#fff8cc'; ctx.fill(); ctx.lineWidth=1.6; ctx.stroke();
+    for(let i=0;i<10;i++){ const a=i/10*Math.PI*2; line(ctx,0,0,Math.cos(a)*48,Math.sin(a)*46,COL.yellow,1.8); }
+    circ(ctx,0,0,5,COL.yellow,'#fff',1.6); }
+  else if(k==='amla'){ ctx.beginPath(); ctx.ellipse(0,0,56,54,0,0,7); F('#e3efb8'); for(let i=-2;i<=2;i++){ ctx.beginPath(); ctx.ellipse(0,0,Math.abs(i)*12+2,54,0,-Math.PI/2,Math.PI/2,i<0); ctx.lineWidth=1.4; ctx.strokeStyle=COL.green; ctx.stroke(); }
+    line(ctx,0,-54,6,-68,COL.ink,3); }
+  else if(k==='tamarind'){ ctx.beginPath(); ctx.moveTo(-90,10); for(let i=0;i<=6;i++){ const x=-90+i*30; ctx.quadraticCurveTo(x+15,-30-6*Math.sin(i),x+30,-14+i*2); } ctx.quadraticCurveTo(100,10,90,24);
+    for(let i=6;i>=0;i--){ const x=-90+i*30; ctx.quadraticCurveTo(x+15,34,x,24-i*2); } ctx.closePath(); F('#e8cfa6');
+    for(let i=1;i<6;i++) line(ctx,-90+i*30,-18+i*2,-88+i*30,22-i*2,'#a0703c',1.4); }
+  else if(k==='vinegar'){ ctx.beginPath(); ctx.moveTo(-34,70); ctx.lineTo(-34,-10); ctx.quadraticCurveTo(-34,-34,-12,-44); ctx.lineTo(-12,-74); ctx.lineTo(12,-74); ctx.lineTo(12,-44); ctx.quadraticCurveTo(34,-34,34,-10); ctx.lineTo(34,70); ctx.closePath(); F('#fbf8ec');
+    rect(ctx,-14,-86,28,12,COL.ink,COL.yellow,2); rect(ctx,-28,4,56,40,COL.ink,'#fff',1.6); textAt(ctx,'VINEGAR',0,29,{align:'center',size:10,weight:700,color:COL.ink}); }
+  else if(k==='curd'){ ctx.beginPath(); ctx.moveTo(-80,-6); ctx.quadraticCurveTo(-76,56,0,58); ctx.quadraticCurveTo(76,56,80,-6); ctx.closePath(); F('#fff');
+    ctx.beginPath(); ctx.moveTo(-72,-6); ctx.bezierCurveTo(-50,-40,-10,-30,0,-44); ctx.bezierCurveTo(14,-30,52,-38,72,-6); ctx.fillStyle='#fdfdf6'; ctx.fill(); ctx.lineWidth=1.8; ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(0,-6,80,10,0,0,7); ctx.lineWidth=2.6; ctx.stroke(); }
+  else if(k==='tomato'){ ctx.beginPath(); ctx.ellipse(0,4,64,54,0,0,7); F('#f6b3a2');
+    ctx.beginPath(); for(let i=0;i<5;i++){ const a=-Math.PI/2+i/5*Math.PI*2; ctx.moveTo(0,-46); ctx.quadraticCurveTo(Math.cos(a)*12,-46+Math.sin(a)*8,Math.cos(a)*24,-46+Math.sin(a)*12+4); } ctx.strokeStyle=COL.green; ctx.lineWidth=3; ctx.stroke(); }
+  else if(k==='karela'){ ctx.beginPath(); ctx.moveTo(-110,0); ctx.bezierCurveTo(-80,-44,70,-40,110,-4); ctx.bezierCurveTo(70,36,-80,40,-110,0); F('#d8ebc0');
+    const R0=rng(5); for(let i=0;i<34;i++){ const x=-90+R0()*180, y=(R0()-0.5)*44*(1-Math.abs(x)/120); ctx.beginPath(); ctx.ellipse(x,y,5,3,0.2,0,7); ctx.strokeStyle=COL.green; ctx.lineWidth=1.3; ctx.stroke(); }
+    line(ctx,110,-4,124,-14,COL.ink,3); }
+  ctx.restore();
+}
+function spoon(ctx,x,y,ang,fillCol){
+  ctx.save(); ctx.translate(x,y); ctx.rotate(ang); ctx.lineWidth=2.4; ctx.strokeStyle=COL.ink;
+  ctx.beginPath(); ctx.ellipse(0,0,20,12,0,0,7); ctx.fillStyle='#fff'; ctx.fill(); ctx.stroke();
+  if(fillCol){ ctx.beginPath(); ctx.ellipse(0,1,13,6,0,0,7); ctx.fillStyle=fillCol; ctx.fill(); }
+  ctx.beginPath(); ctx.moveTo(18,-3); ctx.lineTo(110,-6); ctx.lineTo(110,4); ctx.lineTo(18,3); ctx.stroke(); ctx.restore();
+}
+function finger(ctx,x0,x1,yc,r,dir,ph){ // capsule finger, pad facing the other finger
+  ctx.save(); ctx.lineWidth=2.8; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff';
+  ctx.beginPath(); if(dir>0){ ctx.moveTo(x0,yc-r); ctx.lineTo(x1-r,yc-r); ctx.arc(x1-r,yc,r,-Math.PI/2,Math.PI/2); ctx.lineTo(x0,yc+r); }
+  else { ctx.moveTo(x1,yc-r); ctx.lineTo(x0+r,yc-r); ctx.arc(x0+r,yc,r,-Math.PI/2,Math.PI/2,true); ctx.lineTo(x1,yc+r); }
+  ctx.fill(); ctx.stroke();
+  // nail + knuckle creases
+  const tipx=dir>0?x1-r:x0+r;
+  ctx.beginPath(); ctx.ellipse(tipx-dir*18,yc-(ph>0?-r*0.45:r*0.45),26,r*0.28,0,0,7); ctx.lineWidth=1.8; ctx.stroke();
+  for(let i=1;i<=2;i++){ const kx=tipx-dir*(r+70*i); line(ctx,kx,yc-r*0.7,kx+dir*4,yc+r*0.7,COL.mid,1.6); }
+  // fingerprint ridges on the pad
+  ctx.save(); ctx.beginPath(); ctx.rect(Math.min(x0,x1)-5,ph>0?yc:yc-r,Math.abs(x1-x0)+10,r); ctx.clip();
+  for(let i=1;i<6;i++){ ctx.beginPath(); ctx.ellipse(tipx-dir*48,yc+(ph>0?r:-r)*0.9,i*12,i*6,0,0,7); ctx.strokeStyle='rgba(129,149,171,0.55)'; ctx.lineWidth=1.2; ctx.stroke(); }
+  ctx.restore(); ctx.restore();
+}
+const RUB = {
+  dry:  {name:'Dry fingers', ms:0.7, mk:0.5, film:null},
+  water:{name:'Water', ms:0.9, mk:0.6, film:'#cfe6fa', key:'water'},
+  soda: {name:'Baking soda solution', ms:0.22, mk:0.15, film:'#e9f1fb', key:'soda', bub:1},
+  soap: {name:'Soap solution', ms:0.12, mk:0.08, film:'#eef2f7', key:'soap', bub:1},
+};
+function buildA2(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><div class="toggle-group" id="md"><button class="toggle-btn active" data-m="taste">👅 Taste</button><button class="toggle-btn" data-m="touch">🤏 Touch</button></div></div>
+    <div class="side-sub" id="tasteP">
+      <div class="control-group"><label>Food</label><div class="chip-wrap" id="fd"></div>
+        <button class="toggle-btn play navy" id="tst" style="background:var(--f-green);border-color:var(--f-green)">🥄 Taste it</button>
+        <div class="hint">Only taste what is safe to eat. Never an unknown substance.</div></div>
+      <div class="control-group"><div class="result-cards">${card('t1','Taste')}${card('t2','Blue litmus')}<div class="rcard wide"><div class="rlabel">Acid in it</div><div class="rval" id="t3" style="font-size:var(--fs-sm)">—</div></div></div></div>
+    </div>
+    <div class="side-sub hidden" id="touchP">
+      <div class="control-group"><label>Between the fingers</label><div class="toggle-group" id="lq">${Object.keys(RUB).map((k,i)=>`<button class="toggle-btn small${k==='soda'?' active':''}" data-k="${k}">${RUB[k].name}</button>`).join('')}</div>
+        <button class="toggle-btn play navy" id="rub" style="background:var(--f-green);border-color:var(--f-green)">🤏 Rub fingers</button></div>
+      <div class="control-group"><div class="result-cards">${card('u1','Grip (μ)')}${card('u2','Motion')}<div class="rcard wide"><div class="rlabel">Feels</div><div class="rval" id="u3">—</div></div></div></div>
+    </div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  let mode='taste', t=0;
+  // ---------- taste state
+  let food='lemon', tT=-1, puck=spr(0), bitt=spr(0), open=spr(0), shiv=0, tag=spr(0), litSpots={blue:[],red:[]}, tasted=null;
+  const renderFoods=()=>{ $('#fd').innerHTML=Object.keys(FOODS).map(k=>`<button class="chip-btn${k===food?' active':''}" data-k="${k}">${LIQ[k].name}</button>`).join('');
+    wrap.querySelectorAll('#fd .chip-btn').forEach(b=>b.onclick=()=>{ if(tT>=0&&tT<2.2) return; food=b.dataset.k; tasted=null; tag.x=0; litSpots={blue:[],red:[]}; ['t1','t2','t3'].forEach(i=>setv($,i,'—')); renderFoods(); }); };
+  renderFoods();
+  $('#tst').onclick=()=>{ if(tT>=0&&tT<2.2) return; tT=0; tasted=null; tag.x=0; litSpots={blue:[],red:[]}; };
+  // ---------- touch state
+  let liq='soda', rubbing=false, amp=spr(0), ph=0, fx=0, fv=0, stuck=true, trace=[], slips=0, lastSlip=0;
+  toggleWire(wrap.querySelectorAll('#lq button'),b=>{ liq=b.dataset.k; trace=[]; slips=0; });
+  $('#rub').onclick=()=>{ rubbing=!rubbing; $('#rub').textContent=rubbing?'⏸ Stop':'🤏 Rub fingers'; };
+  toggleWire(wrap.querySelectorAll('#md button'),b=>{ mode=b.dataset.m; $('#tasteP').classList.toggle('hidden',mode!=='taste'); $('#touchP').classList.toggle('hidden',mode!=='touch'); });
+
+  const FX=250, FY=230, FR=150, MOUTH=[FX,FY+FR*0.55];
+  function tickTaste(dt,ctx){
+    const pH=liqPH(food), S=clamp((5-pH)/3,0,1), B=FOODS[food].bitter||0, IT=[600,262];
+    let spX=IT[0]-20, spY=IT[1]-10, ang=0.25, full=false;
+    if(tT>=0){ tT+=dt;
+      const go=ease(clamp(tT/0.9,0,1)), back=ease(clamp((tT-1.15)/0.7,0,1)), u=tT<1.15?go:1-back;
+      const P0=[IT[0]-20,IT[1]-10], P1=[430,70], P2=[MOUTH[0]+118,MOUTH[1]];
+      spX=(1-u)*(1-u)*P0[0]+2*u*(1-u)*P1[0]+u*u*P2[0]; spY=(1-u)*(1-u)*P0[1]+2*u*(1-u)*P1[1]+u*u*P2[1]; ang=lerp(0.25,0,u);
+      full=tT<1.0;
+      if(tT>1.0 && !tasted){ tasted=food;
+        ['blue','red'].forEach(p=>{ const q=paperPH(p,food); litSpots[p]=[spotNew(IT[0]+(p==='blue'?-42:42),422,17,p==='blue'?LIT_BLUE:LIT_RED,litmusCol(q))]; });
+        setv($,'t1',B?'Bitter':(S>0.5?'Very sour':S>0.15?'Sour':'Not sour'));
+        const bf=baseFrac(paperPH('blue',food),6.5); setv($,'t2',bf<0.5?'→ red (acidic)':'no change');
+        $('#t3').textContent=FOODS[food].acid; $('#t3').style.color=B?COL.green:COL.red; }
+      if(tT>4.5) tT=-1;
+    }
+    const react=tT>1.0&&tT<3.4;
+    springTo(open,(tT>0.6&&tT<1.2)?1:0,120,14,dt);
+    springTo(puck,react?S*1.1:0,react?90:18,react?7:6,dt);
+    springTo(bitt,react?B:0,react?60:18,react?8:6,dt);
+    shiv=react?Math.max(S,B)*Math.exp(-(tT-1.0)*1.3):0;
+    springTo(tag,tasted?1:0,120,9,dt);
+    ['blue','red'].forEach(p=>litSpots[p].forEach(s=>spotStep(s,dt)));
+    // table + plate
+    tableTop(ctx,420,780,356,0);
+    ctx.save(); ctx.beginPath(); ctx.ellipse(IT[0],350,120,16,0,0,7); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.stroke(); ctx.restore();
+    drawFood(ctx,food,IT[0],IT[1]+10,1,t);
+    face(ctx,FX,FY,FR,{pucker:puck.x,bitter:bitt.x,open:open.x,shiver:shiv,t,look:tT>=0&&tT<1?1:0});
+    // body shoulders
+    ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(FX-170,500); ctx.quadraticCurveTo(FX-160,FY+FR+40,FX-40,FY+FR+14); ctx.moveTo(FX+40,FY+FR+14); ctx.quadraticCurveTo(FX+160,FY+FR+40,FX+170,500); ctx.stroke(); ctx.restore();
+    spoon(ctx,spX,spY,ang,full?LIQ[food].col:null);
+    // acid tag
+    if(tag.x>0.02){ ctx.save(); ctx.translate(IT[0],IT[1]-118); ctx.scale(tag.x,tag.x); const txt=FOODS[food].acid; ctx.font='700 15px Poppins, sans-serif'; const tw=Math.min(330,ctx.measureText(txt).width);
+      rrect(ctx,-tw/2-14,-18,tw+28,34,17); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=FOODS[food].bitter?COL.green:COL.red; ctx.lineWidth=2.2; ctx.stroke();
+      textAt(ctx,txt,0,5,{align:'center',size:fitFont(ctx,txt,330,15,700),weight:700,color:FOODS[food].bitter?COL.green:COL.red}); ctx.restore(); }
+    // mini litmus check
+    textAt(ctx,'Litmus check',IT[0],392,{align:'center',size:12,weight:600,color:COL.muted});
+    paperPiece(ctx,IT[0]-72,402,60,40,LIT_BLUE,litSpots.blue); paperPiece(ctx,IT[0]+12,402,60,40,LIT_RED,litSpots.red);
+    textAt(ctx,'blue',IT[0]-42,460,{align:'center',size:11,color:COL.muted}); textAt(ctx,'red',IT[0]+42,460,{align:'center',size:11,color:COL.muted});
+  }
+  function tickTouch(dt,ctx){
+    const L=RUB[liq], N=18000, Fs=L.ms*N, Fk=L.mk*N, k=400, c=6;  // ω₀ = √k = 20 rad/s ≫ rubbing 4.7 rad/s
+    springTo(amp,rubbing?70:0,20,9,dt);
+    const sub=10, h=dt/sub; let xd=0;
+    for(let i=0;i<sub;i++){ ph+=h*2*Math.PI*0.75; xd=amp.x*Math.sin(ph);
+      const Fsp=k*(xd-fx);
+      if(stuck){ if(Math.abs(Fsp)>Fs){ stuck=false; if(t-lastSlip>0.05){ slips++; lastSlip=t; } } }
+      if(!stuck){ const a=Fsp-Fk*Math.sign(fv||Fsp)-c*fv; const nv=fv+a*h; if(fv!==0 && Math.sign(nv)!==Math.sign(fv) && Math.abs(k*(xd-fx))<=Fs){ fv=0; stuck=true; } else fv=nv; fx+=fv*h; }
+    }
+    trace.push([t,xd,fx]); while(trace.length && trace[0][0]<t-4) trace.shift();
+    // hand driver + spring
+    const Y=112, R=46, ox=fx;
+    const hx=600+xd; ctx.save(); rrect(ctx,hx,Y-70,90,140,18); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.yellow; ctx.lineWidth=2.6; ctx.stroke(); ctx.restore();
+    textAt(ctx,'your hand',hx+45,Y+92,{align:'center',size:12,weight:600,color:COL.yellow});
+    // zig-zag spring between hand and finger base
+    const sx0=500+ox, sx1=hx; ctx.save(); ctx.strokeStyle=COL.yellow; ctx.lineWidth=2.4; ctx.beginPath(); ctx.moveTo(sx0,Y); const nz=10; for(let i=1;i<nz;i++){ ctx.lineTo(lerp(sx0,sx1,i/nz),Y+(i%2?-12:12)); } ctx.lineTo(sx1,Y); ctx.stroke(); ctx.restore();
+    // thumb (fixed, below) and index finger (moves, above)
+    finger(ctx,20,420,Y+2*R-4,R,1,1);
+    if(L.film){ ctx.save(); ctx.globalAlpha=0.9; ctx.fillStyle=L.film; rrect(ctx,110+ox*0.5,Y+R-6,300,12,6); ctx.fill(); ctx.strokeStyle=COL.blue; ctx.lineWidth=1.4; ctx.stroke();
+      if(L.bub){ const R0=rng(9); for(let i=0;i<14;i++){ const bx=120+ox*0.5+R0()*280+Math.sin(t*2+i)*3; circ(ctx,bx,Y+R-6+R0()*12,2+R0()*3,COL.blue,'#fff',1); } } ctx.restore(); }
+    finger(ctx,120+ox,500+ox,Y,R,-1,1);
+    // ghost trail arrows of motion
+    if(Math.abs(fv)>4) vec(ctx,300+ox,Y-R-18,300+ox+clamp(fv*0.4,-110,110),Y-R-18,COL.green,2.6);
+    // chart
+    const cx=40, cy=300, cw=720, ch=190;
+    ctx.save(); rrect(ctx,cx,cy,cw,ch,10); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle='#dbe4f0'; ctx.lineWidth=1.2; ctx.stroke(); ctx.restore();
+    line(ctx,cx+10,cy+ch/2,cx+cw-10,cy+ch/2,'#e6ecf3',1);
+    textAt(ctx,'last 4 seconds',cx+cw-12,cy+18,{align:'right',size:11,color:COL.muted});
+    textAt(ctx,'— hand',cx+14,cy+18,{size:11.5,weight:700,color:COL.yellow}); textAt(ctx,'— finger',cx+72,cy+18,{size:11.5,weight:700,color:COL.green});
+    const X=tt=>cx+cw-10-(t-tt)/4*(cw-20), Yv=v=>cy+ch/2-v*1.0;
+    [[1,COL.yellow,[6,4]],[2,COL.green,null]].forEach(([ix,col,dash])=>{ ctx.save(); ctx.strokeStyle=col; ctx.lineWidth=ix===2?2.6:1.8; if(dash) ctx.setLineDash(dash); ctx.beginPath(); trace.forEach((p,i)=>{ const x=X(p[0]), y=Yv(p[ix]); if(i) ctx.lineTo(x,y); else ctx.moveTo(x,y); }); ctx.stroke(); ctx.restore(); });
+    const rate=slips/Math.max(1,Math.min(t,8));
+    setv($,'u1','μs '+L.ms+' · μk '+L.mk);
+    setv($,'u2',!rubbing?'—':(L.mk<0.3?'smooth glide':'stick-slip jerks'));
+    const e=$('#u3'), fe=!rubbing?'—':(L.mk<0.3?'Slippery, soapy':'Not slippery');
+    if(e.textContent!==fe){ e.textContent=fe; e.style.color=L.mk<0.3?COL.blue:COL.ink; }
+    if(t>8){ slips=0; }
+  }
+  animLoop(dt=>{ t+=dt; const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h); ctx.save(); stage(ctx,w,h); if(mode==='taste') tickTaste(dt,ctx); else tickTouch(dt,ctx); ctx.restore(); });
+  return wrap;
+}
+
+
+/* =====================================================================
+   2.3 MAKING RED ROSE EXTRACT — wash · crush · hot water · wait · filter
+   Crushing: every pestle pass splits nearby pieces (size ÷ √2 each).
+   Extraction (colour leaving the petals), t in minutes:
+       dC/dt = (1 − C)/τ ,   τ = 2.5 min · (s/4 mm) · D(90°C)/D(T) · p(90)/p(T)
+     D ∝ T/η(T), water viscosity η = 2.414×10⁻⁵ · 10^(247.8/(T − 140)) Pa·s
+     p(T) = cell-wall leakiness, 0.15 → 1 as heat opens the cells (45–70 °C)
+   The water cools by Newton’s law toward 27 °C, faster without the lid,
+   so τ keeps growing while you wait. 10 minutes are shown in ~10 s.
+   Filtering: the tilted tumbler empties by weir flow Q ∝ head^1.5; the
+   filter cone drains ∝ its own liquid head (Darcy), dripping into the tube.
+   ===================================================================== */
+function etaW(T){ return 2.414e-5*Math.pow(10,247.8/(T+273.15-140)); }
+function diffW(T){ return (T+273.15)/etaW(T); }
+function leak(T){ return 0.15+0.85*smooth01(45,70,T); }
+function tauExt(T,s){ return 2.5*(s/4)*(diffW(90)/diffW(T))*(leak(90)/leak(T)); }
+/* polygons in stage coords (y down) */
+function pArea(p){ let a=0; for(let i=0;i<p.length;i++){ const q=p[i], r=p[(i+1)%p.length]; a+=q[0]*r[1]-r[0]*q[1]; } return Math.abs(a)/2; }
+function clipDown(p,Y){ const out=[]; for(let i=0;i<p.length;i++){ const a=p[i], b=p[(i+1)%p.length], ia=a[1]>=Y, ib=b[1]>=Y; if(ia) out.push(a); if(ia!==ib){ const u=(Y-a[1])/(b[1]-a[1]); out.push([a[0]+(b[0]-a[0])*u,Y]); } } return out; }
+function levelDown(p,A){ let lo=Math.min(...p.map(q=>q[1])), hi=Math.max(...p.map(q=>q[1])); if(A<=0) return hi; for(let k=0;k<36;k++){ const m=(lo+hi)/2; if(pArea(clipDown(p,m))<A) hi=m; else lo=m; } return (lo+hi)/2; }
+function xfD(p,ox,oy,a){ const c=Math.cos(a), s=Math.sin(a); return p.map(q=>[ox+q[0]*c-q[1]*s, oy+q[0]*s+q[1]*c]); }
+function pPath(ctx,p){ ctx.beginPath(); p.forEach((q,i)=>ctx[i?'lineTo':'moveTo'](q[0],q[1])); ctx.closePath(); }
+function petal(ctx,x,y,sz,ang,dirt,fill){
+  ctx.save(); ctx.translate(x,y); ctx.rotate(ang); const s=sz;
+  ctx.beginPath(); ctx.moveTo(0,s*0.5); ctx.bezierCurveTo(-s*0.7,s*0.2,-s*0.6,-s*0.5,-s*0.15,-s*0.45); ctx.quadraticCurveTo(0,-s*0.3,s*0.15,-s*0.45); ctx.bezierCurveTo(s*0.6,-s*0.5,s*0.7,s*0.2,0,s*0.5);
+  ctx.fillStyle=fill||'#f4b3c6'; ctx.fill(); ctx.strokeStyle='#b8235a'; ctx.lineWidth=s>10?1.8:1.1; ctx.stroke();
+  if(s>14) line(ctx,0,s*0.4,0,-s*0.25,'rgba(184,35,90,0.45)',1);
+  if(dirt>0.02){ ctx.fillStyle='rgba(120,90,60,'+(0.8*dirt).toFixed(2)+')'; for(let i=0;i<4;i++){ ctx.beginPath(); ctx.arc(((i*37)%11-5)*s*0.05,((i*23)%9-4)*s*0.06,Math.max(1,s*0.05),0,7); ctx.fill(); } }
+  ctx.restore();
+}
+const EXT_COL='#c93a86';
+function buildA3(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><div class="step-row" id="pills"></div></div>
+    <div class="control-group">
+      <button class="toggle-btn play" id="act" style="width:100%;padding:10px;">🚿 Wash petals</button>
+      <div id="tempG" class="hidden" style="margin-top:9px"><label>Water from the kettle <span class="val" id="tV"></span></label><input type="range" id="tR" min="40" max="95" value="90"></div>
+      <div id="lidG" class="hidden toggle-group"><button class="toggle-btn active" data-l="1">Lid on</button><button class="toggle-btn" data-l="0">Lid off</button></div>
+      <button class="toggle-btn navy" id="nx" disabled>Next step ▶</button></div>
+    <div class="control-group"><div class="result-cards">${card('c1','Piece size')}${card('c2','Water temp.','var(--f-red)')}${card('c3','Time')}${card('c4','Colour out','#c93a86')}</div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const NAMES=['1 Wash','2 Crush','3 Hot water','4 Wait','5 Filter'];
+  let step=0, done=[0,0,0,0,0], t=0;
+  // petals
+  const R0=rng(11); let frags=[];
+  for(let i=0;i<14;i++) frags.push({x:320+R0()*160, y:318+R0()*26, sz:30, ang:R0()*6.28, dirt:0.7+R0()*0.3, jx:spr(0), jy:spr(0), lx:0, ly:0, vy:0});
+  // state per step
+  let washT=0, drips=[], grindT=0, juice=0, pest=0, pourT=-1, Tk=90, Tw=27, water=0, lid=true, lidY=spr(-160), run=false, tm=0, C=0, hist=[], clouds=[], fillT=-1, lip={x:spr(470),y:spr(192)}, ang=spr(0), tubeA=0, cone=0, fdrops=[], onPaper=[], stream=0;
+  const TUMB=[[-180,0],[0,0],[-15,230],[-165,230]], TAREA=pArea(TUMB), FULL=TAREA*0.62;
+  const meanS=()=>frags.reduce((a,f)=>a+f.sz,0)/frags.length*1; // px == mm here (petal 30 mm)
+  function pills(){ stepPills($('#pills'),NAMES,step,done,i=>{ if(i<=step || done[i-1]) go(i); }); }
+  function go(i){ step=i; run=false; $('#tempG').classList.toggle('hidden',step!==2); $('#lidG').classList.toggle('hidden',step!==3); labels(); pills();
+    if(step===2 && water===0){ // pieces tumble from the mortar into the tumbler: set local targets
+      const n=frags.length; frags.forEach((f,k)=>{ const u=(k+0.5)/n; f.lx=-160+u*140+(R0()-0.5)*10; f.ly=222-R0()*16-(f.sz>12?4:0); f.fy=-260-R0()*140; f.vy=0; f.landed=false; }); }
+  }
+  function labels(){ const a=$('#act');
+    a.textContent=['🚿 Wash petals','🪨 Grind (2 s)','🫖 Pour hot water','⏱ '+(run?'Pause':'Wait'),'⏳ Pour into the filter'][step];
+    $('#nx').disabled=!(done[step]&&step<4); }
+  $('#act').onclick=()=>{
+    if(step===0) washT=2.6;
+    else if(step===1) grindT=2;
+    else if(step===2 && water===0 && pourT<0) pourT=0;
+    else if(step===3){ run=!run; }
+    else if(step===4 && fillT<0 && done[3]) fillT=0;
+    labels(); };
+  $('#nx').onclick=()=>{ if(done[step]&&step<4) go(step+1); };
+  $('#tR').oninput=()=>{ Tk=+$('#tR').value; };
+  toggleWire(wrap.querySelectorAll('#lidG button'),b=>{ lid=b.dataset.l==='1'; });
+  pills(); labels();
+
+  function tumblerPoly(){ return xfD(TUMB,lip.x.x,lip.y.x,ang.x); }
+  function drawTumbler(ctx,lvCol){
+    const P=tumblerPoly();
+    if(water>1){ const Y=levelDown(P,water), L=clipDown(P,Y); if(L.length>2){ pPath(ctx,L); ctx.fillStyle=lvCol; ctx.fill();
+      const xs=[]; for(let i=0;i<P.length;i++){ const a=P[i], b=P[(i+1)%P.length]; if((a[1]-Y)*(b[1]-Y)<=0&&a[1]!==b[1]) xs.push(a[0]+(b[0]-a[0])*(Y-a[1])/(b[1]-a[1])); }
+      if(xs.length>1) line(ctx,Math.min(...xs),Y,Math.max(...xs),Y,COL.blue,1.6); } }
+    // pieces inside (local coords)
+    ctx.save(); ctx.translate(lip.x.x,lip.y.x); ctx.rotate(ang.x);
+    frags.forEach(f=>{ if(f.gone) return; const y=f.landed===false?f.fy:f.ly; petal(ctx,f.lx,y,Math.max(3,f.sz*0.75),f.ang,0,mixCol('#f4b3c6','#d9d0d6',C*0.8)); });
+    ctx.restore();
+    // glass
+    ctx.save(); ctx.beginPath(); ctx.moveTo(P[1][0],P[1][1]); ctx.lineTo(P[2][0],P[2][1]); ctx.lineTo(P[3][0],P[3][1]); ctx.lineTo(P[0][0],P[0][1]); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.8; ctx.lineJoin='round'; ctx.stroke();
+    ctx.beginPath(); ctx.arc(P[1][0],P[1][1],2,0,7); ctx.arc(P[0][0],P[0][1],2,0,7); ctx.fillStyle=COL.ink; ctx.fill();
+    const a=P[0], b=P[3]; line(ctx,lerp(a[0],b[0],0.1)+8,lerp(a[1],b[1],0.1),lerp(a[0],b[0],0.85)+10,lerp(a[1],b[1],0.85),'rgba(129,149,171,0.45)',2);
+    ctx.restore();
+    return P;
+  }
+  function liquidCol(){ return mixCol('#eef6fd',EXT_COL,0.9*C); }
+
+  function tick(dt,ctx){
+    const s=meanS();
+    // ---------------- STEP 0: wash in a colander under the tap
+    if(step===0){
+      const on=washT>0; if(on) washT-=dt;
+      frags.forEach(f=>{ if(on){ f.dirt*=Math.exp(-1.6*dt); if(Math.random()<dt*8){ f.jx.v+=(Math.random()-0.5)*120; f.jy.v+=-60*Math.random(); } } springTo(f.jx,0,60,5,dt); springTo(f.jy,0,60,5,dt); });
+      if(on && Math.random()<dt*14) drips.push({x:330+Math.random()*140,y:392,vy:60});
+      drips.forEach(d=>{ d.vy+=1400*dt; d.y+=d.vy*dt; }); drips=drips.filter(d=>d.y<470);
+      // tap
+      ctx.save(); ctx.lineWidth=3; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; rrect(ctx,300,24,120,26,8); ctx.fill(); ctx.stroke(); rrect(ctx,382,40,36,44,8); ctx.fill(); ctx.stroke();
+      line(ctx,330,24,330,6,COL.ink,3); line(ctx,312,6,348,6,COL.yellow,4); ctx.restore();
+      if(on){ ctx.save(); ctx.strokeStyle='rgba(47,143,224,0.55)'; ctx.lineWidth=12; ctx.lineCap='round'; ctx.beginPath(); ctx.moveTo(400,86); for(let y=86;y<318;y+=12) ctx.lineTo(400+Math.sin(t*30+y*0.1)*2,y); ctx.stroke(); ctx.restore();
+        for(let i=0;i<10;i++){ const a=t*9+i*0.63, r=((t*140+i*23)%70); ctx.save(); ctx.globalAlpha=1-r/70; circ(ctx,400+Math.cos(a)*r,322-Math.abs(Math.sin(a))*r*0.4,2.2,COL.blue,'rgba(47,143,224,0.4)',1); ctx.restore(); } }
+      // colander
+      ctx.save(); ctx.lineWidth=2.8; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; ctx.beginPath(); ctx.moveTo(260,300); ctx.quadraticCurveTo(270,392,400,392); ctx.quadraticCurveTo(530,392,540,300); ctx.closePath(); ctx.fill(); ctx.stroke();
+      for(let i=0;i<9;i++){ circ(ctx,300+i*25,352+Math.abs(i-4)*-4+10,2.6,COL.mid,'#fff',1.2); } line(ctx,370,392,360,420,COL.ink,2.8); line(ctx,430,392,440,420,COL.ink,2.8); line(ctx,340,420,460,420,COL.ink,2.8); ctx.restore();
+      frags.forEach(f=>petal(ctx,f.x+f.jx.x,f.y+f.jy.x,f.sz,f.ang,f.dirt));
+      drips.forEach(d=>dropShape(ctx,d.x,d.y,3,'rgba(47,143,224,0.5)',1));
+      ctx.save(); ctx.lineWidth=2.8; ctx.strokeStyle=COL.ink; ctx.beginPath(); ctx.moveTo(260,300); ctx.lineTo(540,300); ctx.stroke(); ctx.restore();
+      const d=frags.reduce((a,f)=>a+f.dirt,0)/frags.length;
+      textAt(ctx,'Dirt left: '+Math.round(d*100)+' %',400,470,{align:'center',size:14,weight:600,color:d<0.08?COL.green:COL.muted});
+      if(d<0.08 && !done[0]){ done[0]=1; pills(); labels(); }
+    }
+    // ---------------- STEP 1: crush in a mortar
+    if(step===1){
+      const on=grindT>0; if(on){ grindT-=dt; pest+=dt*2*Math.PI*1.4; } if(!on && grindT<=0 && $('#act').dataset.b) {}
+      const hx=400+Math.cos(pest)*95, hy=404+Math.sin(pest)*14;
+      if(frags[0].mx===undefined) frags.forEach(f=>{ f.mx=300+Math.random()*200; f.my=380+Math.random()*30; });
+      const add=[];
+      frags.forEach(f=>{ const dx=f.mx-hx, dy=f.my-hy, d=Math.hypot(dx,dy)+1e-3;
+        if(on && d<55){ f.mx+=dx/d*90*dt+(-Math.sin(pest))*60*dt; f.my+=dy/d*30*dt; f.ang+=dt*3;
+          if(f.sz>2.2 && Math.random()<dt*2.2 && frags.length+add.length<240){ f.sz/=Math.SQRT2; add.push({sz:f.sz,ang:Math.random()*6.28,mx:f.mx+(Math.random()-0.5)*10,my:f.my+(Math.random()-0.5)*6,dirt:0,jx:spr(0),jy:spr(0)}); juice+=0.004; } }
+        // keep inside the bowl floor
+        const u=(f.mx-400)/150; f.my=clamp(f.my,398-(1-u*u)*0+(u*u)*-40-18,418-u*u*50); f.mx=clamp(f.mx,272,528); });
+      frags.push(...add); juice=Math.min(1,juice);
+      // mortar
+      ctx.save(); ctx.lineWidth=3; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff';
+      ctx.beginPath(); ctx.moveTo(230,320); ctx.bezierCurveTo(236,470,564,470,570,320); ctx.closePath(); ctx.fill(); ctx.stroke();
+      rrect(ctx,330,440,140,22,6); ctx.fill(); ctx.stroke(); ctx.restore();
+      if(juice>0.01){ ctx.save(); ctx.beginPath(); ctx.ellipse(400,420,120*Math.sqrt(juice)+20,10+8*juice,0,0,7); ctx.fillStyle=mixCol('#fbe3ec',EXT_COL,0.2+0.5*juice); ctx.globalAlpha=0.8; ctx.fill(); ctx.restore(); }
+      frags.forEach(f=>petal(ctx,f.mx,f.my,Math.max(3,f.sz*0.8),f.ang,0,'#f4b3c6'));
+      ctx.save(); ctx.lineWidth=3; ctx.strokeStyle=COL.ink; ctx.beginPath(); ctx.ellipse(400,320,170,22,0,0,7); ctx.stroke(); ctx.restore();
+      // pestle: head at (hx,hy), handle up to the right
+      const top=[hx+120+Math.cos(pest)*30,120];
+      ctx.save(); ctx.lineCap='round'; ctx.strokeStyle=COL.ink; ctx.lineWidth=30; ctx.beginPath(); ctx.moveTo(hx,hy-10); ctx.lineTo(top[0],top[1]); ctx.stroke();
+      ctx.strokeStyle='#fff'; ctx.lineWidth=24.5; ctx.stroke(); ctx.restore();
+      circ(ctx,hx,hy-6,22,COL.ink,'#fff',3);
+      ctx.save(); ctx.lineWidth=3; ctx.strokeStyle=COL.yellow; ctx.beginPath(); ctx.arc(top[0],top[1],16,0,7); ctx.stroke(); ctx.restore();
+      if(on) for(let i=0;i<3;i++){ const a=pest-0.4-i*0.25; ctx.save(); ctx.globalAlpha=0.5-i*0.15; ctx.strokeStyle=COL.yellow; ctx.lineWidth=2; ctx.beginPath(); ctx.ellipse(400,404,95,14,0,a-0.3,a); ctx.stroke(); ctx.restore(); }
+      textAt(ctx,'Pieces: '+frags.length+'   ·   average size ≈ '+fmt(s,1)+' mm',400,490,{align:'center',size:14,weight:600,color:COL.muted});
+      if(s<=9 && !done[1]){ done[1]=1; pills(); labels(); }
+    }
+    // ---------------- STEP 2 – 4 : tumbler
+    if(step>=2){
+      // pour pieces in, then hot water
+      if(pourT>=0){ pourT+=dt;
+        frags.forEach(f=>{ if(!f.landed){ f.vy+=1500*dt; f.fy+=f.vy*dt; if(f.fy>=f.ly){ f.fy=f.ly; f.landed=true; } } });
+        if(pourT>1.4 && water<FULL){ stream=1; const add=Math.min(FULL-water,16000*dt); water+=add; Tw=water>add?(Tw*(water-add)+(Tk-4)*add)/water:Tk-4; }
+        else stream=0;
+        if(water>=FULL){ pourT=-1; stream=0; done[2]=1; pills(); labels(); }
+      }
+      // extraction + cooling (minutes)
+      if(step===3 && run && !done[3]) {}
+      if(step>=3 && run){ const dm=dt*1.0; tm+=dm; const k=lid&&step===3?1/35:1/12; Tw=27+(Tw-27)*Math.exp(-k*dm);
+        const dC=(1-C)/tauExt(Tw,Math.max(1.2,s))*dm; C=Math.min(1,C+dC);
+        if(clouds.length<40 && Math.random()<dC*300) clouds.push({x:-160+Math.random()*140,y:215,r:4,a:0.3});
+        if(hist.length===0||tm-hist[hist.length-1][0]>0.1) hist.push([tm,C,Tw]);
+        if(tm>=5 && !done[3]){ done[3]=1; pills(); labels(); } if(tm>=20){ run=false; labels(); } }
+      else if(step>=2 && water>0){ Tw=27+(Tw-27)*Math.exp(-dt*0.05/12); }
+      clouds.forEach(c=>{ c.y-=dt*(8+Math.max(0,Tw-40)*0.4); c.x+=Math.sin(t*2+c.y*0.05)*dt*6; c.r+=dt*6; c.a-=dt*0.12; }); clouds=clouds.filter(c=>c.a>0&&c.y>40);
+      // filtering: move lip above the funnel, tilt, weir flow
+      const FX=598, FT=232;
+      if(step===4){ lip.x.x=lip.x.x; }
+      const target=step===4&&fillT>=0&&!done[4]?[570,212]:[470,192];
+      springTo(lip.x,target[0],30,10,dt); springTo(lip.y,target[1],30,10,dt);
+      let Q=0;
+      if(step===4 && fillT>=0){ fillT+=dt; const near=Math.abs(lip.x.x-570)<4;
+        springTo(ang,near?(water>300?Math.min(1.95,0.55+fillT*0.14):0):0,12,7,dt);
+        const P=tumblerPoly(), Y=levelDown(P,water), head=lip.y.x-Y;  // liquid above the lip spills
+        Q=head>0?220*Math.pow(head,1.5):0; Q=Math.min(Q,water/dt); water-=Q*dt; cone+=Q*dt;
+        if(Q>40 && Math.random()<dt*3 && onPaper.length<9){ onPaper.push({x:FX+(Math.random()-0.5)*40,y:FT+20+Math.random()*20,sz:Math.max(3,s*0.7),ang:Math.random()*6}); const f=frags.find(f=>!f.gone&&!f.p); if(f) f.gone=true; }
+      } else springTo(ang,0,12,7,dt);
+      // Darcy drain through the paper
+      const qf=cone*1.1; cone-=qf*dt; tubeA+=qf*dt*0.18;
+      if(qf>30 && Math.random()<dt*Math.min(18,qf/60)) fdrops.push({y:FT+132,vy:40});
+      fdrops.forEach(d=>{ d.vy+=1400*dt; d.y+=d.vy*dt; }); const tubeLvl=414-Math.min(78,tubeA/40); fdrops=fdrops.filter(d=>d.y<tubeLvl);
+      if(step===4 && fillT>0 && water<400 && cone<200 && !done[4] && tubeA>1200){ done[4]=1; pills(); labels(); }
+
+      // ---- draw bench
+      tableTop(ctx,40,760,422,0);
+      // kettle (step 2)
+      if(step===2){ const tilt=stream?0.75:0.1*Math.sin(t*1.3)*0; const kx=650, ky=280;
+        ctx.save(); ctx.translate(kx,ky); ctx.rotate(-tilt); ctx.lineWidth=3; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; ctx.lineJoin='round';
+        ctx.beginPath(); ctx.moveTo(-60,60); ctx.lineTo(-50,-40); ctx.quadraticCurveTo(0,-62,50,-40); ctx.lineTo(60,60); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(-52,20); ctx.lineTo(-110,-40); ctx.lineTo(-104,-48); ctx.lineTo(-50,-4); ctx.fill(); ctx.stroke();
+        ctx.beginPath(); ctx.moveTo(40,-36); ctx.bezierCurveTo(100,-60,100,50,58,40); ctx.stroke(); circ(ctx,0,-56,7,COL.ink,'#fff',2.4); ctx.restore();
+        const sp=[kx+Math.cos(-tilt)*(-107)-Math.sin(-tilt)*(-44), ky+Math.sin(-tilt)*(-107)+Math.cos(-tilt)*(-44)];
+        steam(ctx,sp[0],sp[1]-6,20,(Tk-35)/60,t);
+        textAt(ctx,Tk+' °C',kx+50,ky+110,{align:'center',size:15,weight:700,color:COL.red});
+        if(stream){ const P=tumblerPoly(), Y=levelDown(P,water); ctx.save(); ctx.strokeStyle='rgba(47,143,224,0.6)'; ctx.lineWidth=7; ctx.lineCap='round'; ctx.beginPath(); ctx.moveTo(sp[0],sp[1]);
+          for(let k=1;k<=16;k++){ const u=k/16; ctx.lineTo(sp[0]-u*(sp[0]-395)+Math.sin(t*40+k)*0.8, sp[1]+(Y-sp[1])*u*u); } ctx.stroke(); ctx.restore(); }
+      }
+      // pouring mortar (start of step 2)
+      if(step===2 && pourT>=0 && pourT<1.6){ const a=smooth01(0,0.4,pourT)-smooth01(1.1,1.6,pourT);
+        ctx.save(); ctx.translate(250,40+60*a); ctx.rotate(0.9*a); ctx.lineWidth=3; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; ctx.beginPath(); ctx.moveTo(-70,-10); ctx.bezierCurveTo(-66,70,66,70,70,-10); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore(); }
+      // funnel + filter + tube (step 4)
+      if(step===4){
+        tubeStand(ctx,540,660,356,404);
+        const lv=Math.min(78,tubeA/40); testTube(ctx,FX,326,90,17,lv,mixCol('#fbe3ec',EXT_COL,0.95*C),{});
+        // funnel
+        const cl=Math.sqrt(Math.max(0,cone)/60);
+        ctx.save(); ctx.lineWidth=2.6; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff';
+        ctx.beginPath(); ctx.moveTo(FX-64,FT); ctx.lineTo(FX-7,FT+90); ctx.lineTo(FX-5,FT+132); ctx.lineTo(FX+5,FT+132); ctx.lineTo(FX+7,FT+90); ctx.lineTo(FX+64,FT); ctx.stroke();
+        if(cl>0.5){ ctx.beginPath(); const yy=FT+86-Math.min(70,cl*6); const hw=(FT+86-yy)*0.62; ctx.moveTo(FX-hw,yy); ctx.lineTo(FX,FT+86); ctx.lineTo(FX+hw,yy); ctx.closePath(); ctx.fillStyle=liquidCol(); ctx.fill(); }
+        ctx.setLineDash([5,4]); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.6; ctx.beginPath(); ctx.moveTo(FX-58,FT+2); ctx.lineTo(FX,FT+86); ctx.lineTo(FX+58,FT+2); ctx.stroke(); ctx.setLineDash([]); ctx.restore();
+        onPaper.forEach(p=>petal(ctx,p.x,p.y,p.sz,p.ang,0,'#e7c9d5'));
+        fdrops.forEach(d=>dropShape(ctx,FX,d.y,3.2,liquidCol(),1.1));
+        if(Q>1){ const P=tumblerPoly(); ctx.save(); ctx.strokeStyle=liquidCol(); ctx.globalAlpha=0.95; ctx.lineWidth=clamp(Math.sqrt(Q)*0.08,2,8); ctx.lineCap='round'; ctx.beginPath(); ctx.moveTo(P[1][0]+2,P[1][1]);
+          for(let k=1;k<=10;k++){ const u=k/10; ctx.lineTo(P[1][0]+2+u*14,P[1][1]+u*u*(FT+40-P[1][1])); } ctx.stroke(); ctx.restore(); }
+        textAt(ctx,'Red rose extract',FX,448,{align:'center',size:13,weight:700,color:tubeA>800?EXT_COL:COL.mid});
+      }
+      drawTumbler(ctx,liquidCol());
+      // colour clouds rising from the pieces (local coords)
+      ctx.save(); ctx.translate(lip.x.x,lip.y.x); ctx.rotate(ang.x); ctx.beginPath(); TUMB.forEach((q,i)=>ctx[i?'lineTo':'moveTo'](q[0],q[1])); ctx.clip();
+      clouds.forEach(c=>{ const Y=water>0?levelDown(TUMB,water):230; if(c.y<Y) return; ctx.globalAlpha=Math.max(0,c.a); ctx.fillStyle=EXT_COL; ctx.beginPath(); ctx.arc(c.x,c.y,c.r,0,7); ctx.fill(); }); ctx.restore();
+      // lid
+      springTo(lidY,(step===3&&lid)?0:-170,70,8,dt);
+      if(lidY.x>-160){ const P=tumblerPoly(); ctx.save(); ctx.lineWidth=2.8; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; rrect(ctx,P[0][0]-12,P[0][1]-12+lidY.x,(P[1][0]-P[0][0])+24,12,5); ctx.fill(); ctx.stroke(); circ(ctx,(P[0][0]+P[1][0])/2,P[0][1]-18+lidY.x,6,COL.yellow,'#fff',2.4); ctx.restore(); }
+      else if(step>=3 && water>2000 && Tw>45 && Math.abs(ang.x)<0.1){ const P=tumblerPoly(); steam(ctx,(P[0][0]+P[1][0])/2,P[0][1]-10,60,(Tw-45)/40,t); }
+      // thermometer in the tumbler (steps 2–3)
+      if(step===2||step===3){ thermoScale(ctx,215,120,380,Tw,20,100,[40,60,80,100]); }
+      // clock + chart (step 3)
+      if(step===3){ const cx=680, cy=330; circ(ctx,cx,cy,44,COL.ink,'#fff',2.8); for(let i=0;i<12;i++){ const a=i/12*Math.PI*2; line(ctx,cx+Math.cos(a)*36,cy+Math.sin(a)*36,cx+Math.cos(a)*41,cy+Math.sin(a)*41,COL.ink,2); }
+        const a=-Math.PI/2+tm/60*Math.PI*2; line(ctx,cx,cy,cx+Math.cos(a)*34,cy+Math.sin(a)*34,COL.yellow,3); circ(ctx,cx,cy,3,COL.ink,COL.ink,1);
+        textAt(ctx,fmt(tm,1)+' min',cx,cy+64,{align:'center',size:14,weight:700,color:COL.ink});
+        const ch=miniChart(ctx,520,24,270,210,[0,20],[0,100],[{pts:hist.map(p=>[p[0],p[1]*100]),col:EXT_COL,lw:2.6},{pts:hist.map(p=>[p[0],p[2]]),col:COL.red,lw:1.6,dash:[5,4]}],{xt:[0,5,10,15,20],yt:[0,50,100]});
+        textAt(ctx,'— colour out %',524,18,{size:11.5,weight:700,color:EXT_COL}); textAt(ctx,'- - water °C',650,18,{size:11.5,weight:700,color:COL.red}); textAt(ctx,'minutes',655,250,{align:'center',size:11,color:COL.muted});
+        line(ctx,ch.px(5),ch.py(0),ch.px(5),ch.py(100),'#dbe4f0',1); line(ctx,ch.px(10),ch.py(0),ch.px(10),ch.py(100),'#dbe4f0',1);
+      }
+    }
+    setv($,'c1',fmt(s,1)+' mm');
+    setv($,'c2',step>=2&&water>0?fmt(Tw,0)+' °C':(step===2?Tk+' °C':'—'));
+    setv($,'c3',step>=3?fmt(tm,1)+' min':'—');
+    setv($,'c4',step>=3?Math.round(C*100)+' %':'—');
+    setv($,'tV',Tk+' °C');
+  }
+  animLoop(dt=>{ t+=dt; const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h); ctx.save(); stage(ctx,w,h); tick(dt,ctx); ctx.restore(); });
+  return wrap;
+}
+
+
+/* =====================================================================
+   2.4 TESTING WITH RED ROSE EXTRACT — tubes A and B
+   10–20 drops of extract, then 20–30 drops of a sample (1 drop = 0.05 mL).
+   Each drop enters as a plume carrying its own local colour, sinks and
+   hands its contents to the bulk first-order (τ = 1.6 s still, 0.25 s
+   when swirled). Bulk colour = rose-anthocyanin colour at the bulk’s
+   solved pH; its depth ∝ 1 − e^(−3·f_extract), so dilution pales it.
+   ===================================================================== */
+function roseWord(pH){ return pH<3.3?'red':(pH>7.3?'green':'no change'); }
+function roseNature(pH){ return pH<3.3?'acidic':(pH>7.3?'basic':'neutral'); }
+function buildA4(){
+  const wrap=labShell();
+  const opts=SAMPLES.map(k=>`<option value="${k}">${LIQ[k].name}</option>`).join('');
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><div class="role-row"><span class="rdot" style="background:var(--f-yellow)"></span><span class="rname">Tube A</span><select id="sA">${opts}</select></div>
+      <div class="role-row"><span class="rdot" style="background:var(--f-yellow)"></span><span class="rname">Tube B</span><select id="sB">${opts}</select></div></div>
+    <div class="control-group"><label>Extract in each tube <span class="val" id="eV"></span></label><input type="range" id="eR" min="10" max="20" value="15">
+      <label style="margin-top:8px">Sample drops to add <span class="val" id="dV"></span></label><input type="range" id="dR" min="20" max="30" value="25"></div>
+    <div class="control-group"><button class="toggle-btn play" id="add" style="width:100%;padding:9px">💧 Add the drops</button>
+      <div class="toggle-group"><button class="toggle-btn" id="sw">🌀 Swirl</button><button class="toggle-btn" id="fr">↺ Fresh tubes</button></div></div>
+    <div class="control-group"><div class="result-cards">${card('k1','Tube A')}${card('k2','Tube B')}</div></div>
+    <div class="control-group"><label>Table 2.3</label><table class="log"><thead><tr><th>Sample</th><th>Extract turns</th><th>Nature</th></tr></thead><tbody id="lg"></tbody></table></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  $('#sA').value='lemon'; $('#sB').value='soap';
+  const TOP=150, H=270, RR=32, PXML=88;
+  const tubes=['A','B'].map((n,i)=>({n, x:290+i*220, mix:null, ext:0, plumes:[], added:0, want:0, key:null, rot:spr(0), content:[], logged:true,
+    rig:dropperRig(290+i*220,108,i?'soap':'lemon'), dy:spr(0), dyT:0, swap:null}));
+  let swirlT=0, t=0;
+  function fresh(){ const e=+$('#eR').value;
+    tubes.forEach(tb=>{ tb.mix=mixAdd(mixNew(),'rose',e*0.05); tb.ext=e*0.05; tb.plumes=[]; tb.added=0; tb.want=0; tb.content=[]; tb.logged=true; tb.rig.queue=0; });
+    ['k1','k2'].forEach(i=>setv($,i,'—')); }
+  fresh();
+  function setSample(tb,key){ if(tb.rig.key===key) return; tb.swap=key; tb.dyT=-260; }
+  $('#sA').onchange=()=>setSample(tubes[0],$('#sA').value);
+  $('#sB').onchange=()=>setSample(tubes[1],$('#sB').value);
+  $('#eR').oninput=()=>{ setv($,'eV',$('#eR').value+' drops'); if(tubes.every(tb=>tb.added===0)) fresh(); };
+  $('#dR').oninput=()=>setv($,'dV',$('#dR').value+' drops');
+  setv($,'eV','15 drops'); setv($,'dV','25 drops');
+  $('#add').onclick=()=>{ const n=+$('#dR').value; tubes.forEach(tb=>{ if(tb.rig.busy()||tb.swap) return; tb.want+=n; tb.rig.squeezeOnce(n); tb.logged=false; if(!tb.content.includes(tb.rig.key)) tb.content.push(tb.rig.key); }); };
+  $('#sw').onclick=()=>{ swirlT=2.5; };
+  $('#fr').onclick=()=>fresh();
+  const surfY=tb=>TOP+H-Math.min(H-20,tb.mix.V*PXML);
+  tubes.forEach(tb=>{ tb.rig.onLand=(x,y,d)=>{ const dm=mixAdd(mixNew(),d.key,0.05), loc=mixAddMix(mixCopy(dm),tb.mix,0.02/Math.max(0.05,tb.mix.V));
+      tb.plumes.push({x:x+(Math.random()-0.5)*6, y, vy:55, r:6, m:1, dm, col:roseCol(mixPH(loc))}); tb.added++; }; });
+
+  animLoop(dt=>{ t+=dt; const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h); ctx.save(); stage(ctx,w,h);
+    if(swirlT>0) swirlT-=dt;
+    const tau=swirlT>0?0.25:1.6;
+    tubeStand(ctx,190,610,250,438);
+    tubes.forEach((tb,i)=>{
+      // dropper lift / refill / return
+      springTo(tb.dy,tb.dyT,60,13,dt);
+      if(tb.swap && tb.dy.x<-230){ tb.rig.key=tb.swap; tb.rig.fill=0.8; tb.swap=null; tb.dyT=0; }
+      tb.rig.tipY=108+tb.dy.x+Math.sin(t*2+i)*2;
+      tb.rig.speed=2.2;
+      tb.rig.step(dt,()=>surfY(tb));  // speed 2.2 → brisk squeezing, ≈ 4 drops per second
+      // plumes: sink, spread, dissolve into the bulk
+      tb.plumes.forEach(p=>{ const k=dt/tau, f=Math.min(p.m,p.m*k*1.0+0.0); mixAddMix(tb.mix,p.dm,f); p.m-=f;
+        p.vy=approach(p.vy,swirlT>0?0:12,2,dt); p.y=Math.min(TOP+H-RR-4,p.y+p.vy*dt); p.r+=dt*(swirlT>0?60:14); p.x+=Math.sin(t*3+p.y*0.05)*dt*(swirlT>0?60:6); });
+      tb.plumes=tb.plumes.filter(p=>p.m>0.02);
+      // swirl = driven rocking, then a damped settle
+      const drive=swirlT>0?0.16*Math.sin(t*2*Math.PI*2.2):0; springTo(tb.rot,drive,160,6,dt);
+      const pH=mixPH(tb.mix), fe=tb.ext/tb.mix.V, bulk=mixCol('#ffffff',roseCol(pH),1-Math.exp(-3*fe));
+      testTube(ctx,tb.x,TOP,H,RR,Math.min(H-20,tb.mix.V*PXML),bulk,{rot:tb.rot.x,wob:tb.rot.x*40,inside:()=>tb.plumes.forEach(p=>plumeDraw(ctx,{x:p.x,y:p.y,r:p.r,m:p.m,col:p.col}))});
+      // drop count ticks on the tube
+      textAt(ctx,tb.n,tb.x-RR-26,TOP+40,{align:'center',size:26,weight:700,color:COL.ink});
+      textAt(ctx,tb.content.length?tb.content.map(k=>LIQ[k].name).join(' + '):'extract only',tb.x,466,{align:'center',size:13,weight:600,color:COL.muted});
+      textAt(ctx,tb.added+' / '+tb.want+' drops',tb.x,488,{align:'center',size:12,color:COL.yellow});
+      tb.rig.draw(ctx);
+      textAt(ctx,LIQ[tb.rig.key].name,tb.rig.x.x+20,tb.rig.tipY-148,{size:13,weight:700,color:COL.yellow});
+      // result
+      const word=tb.added?roseWord(pH):'—';
+      setv($,i?'k2':'k1',word);
+      const settled=!tb.rig.busy() && tb.plumes.length===0 && tb.added>0 && tb.added>=tb.want;
+      if(settled && !tb.logged){ tb.logged=true; const nat=roseNature(pH);
+        $('#lg').insertAdjacentHTML('afterbegin',`<tr><td>${tb.content.map(k=>LIQ[k].name).join(' + ')}</td><td>${sw(roseCol(pH))} ${roseWord(pH)}</td><td style="color:${NCOL[nat]};font-weight:700">${nat}</td></tr>`); }
+    });
+    ctx.restore();
+  });
+  return wrap;
+}
+
+
+/* =====================================================================
+   2.5 TURMERIC PAPER — make it, then test the samples of Activity 2.1
+   Paste: grains swirl with the spoon (flow speed ∝ radius) and wet
+   grains merge; evenness U = 1 − e^(−stir/1.2 s).
+   Dip: the paste climbs the filter paper by capillarity (Washburn)
+   h = √(k·t), so it races up first and slows near the top.
+   Dry: moisture M falls first-order, M' = −M/τ (τ shorter in the sun);
+   it drips while M is high (rate ∝ M²) and the yellow brightens.
+   Test: curcumin turns red above pH ≈ 8 (fraction = 1/(1+10^(1.5(8−pH)))),
+   so only bases change it — acids and neutrals both stay yellow.
+   ===================================================================== */
+const TUR_WET='#b87f00';
+function buildA5(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><div class="step-row" id="pills"></div></div>
+    <div class="side-sub" id="mk">
+      <div class="control-group"><div class="toggle-group" id="bt"></div>
+        <div id="sunG" class="hidden toggle-group"><button class="toggle-btn active" data-s="0">In the shade</button><button class="toggle-btn" data-s="1">In the sun</button></div>
+        <button class="toggle-btn navy" id="nx" disabled>Next step ▶</button></div>
+      <div class="control-group"><div class="result-cards">${card('m1','Water in paste','var(--f-blue)')}${card('m2','Evenness')}${card('m3','Colour on paper','var(--f-yellow)')}${card('m4','Moisture','var(--f-blue)')}</div></div>
+    </div>
+    <div class="side-sub hidden" id="ts">
+      <div class="control-group"><label>Sample in the dropper</label><div class="chip-wrap" id="chips"></div></div>
+      <div class="control-group"><button class="toggle-btn play" id="go" style="width:100%;padding:9px">💧 Put a drop</button>
+        <div class="toggle-group"><button class="toggle-btn" id="all">▶ Test all</button><button class="toggle-btn" id="clr">↺ Clear tile</button></div></div>
+      <div class="control-group"><label>Table 2.4</label><table class="log"><thead><tr><th>Sample</th><th>Turmeric paper</th></tr></thead><tbody id="lg"></tbody></table>
+        <div class="hint">Name colour = what litmus said in 2.1 (red acidic · blue basic · green neutral)</div></div>
+    </div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const NAMES=['1 Paste','2 Dip','3 Dry','4 Cut','5 Test'];
+  let step=0, done=[0,0,0,0,0], t=0;
+  // --- paste state
+  const R0=rng(4), grains=[]; for(let i=0;i<170;i++){ const a=R0()*Math.PI*2, r=Math.sqrt(R0())*70; grains.push({a,r,h:(1-r/70)*26*R0(),wet:0}); }
+  let water=0, stirT=0, stirTot=0, spA=0, wrig=dropperRig(470,150,'water'); wrig.speed=2;
+  wrig.onLand=(x,y)=>{ water+=1; grains.forEach(g=>{ const gx=400+Math.cos(g.a)*g.r*2.6, gy=330+Math.sin(g.a)*g.r*0.8; if(Math.hypot(gx-x,(gy-y)*2)<60+water*6) g.wet=Math.min(1,g.wet+0.5); }); };
+  // --- dip / dry / cut state
+  let dipT=-1, py=spr(-40), hW=0, M=1, sun=false, dryOn=false, dripP=[], sway=spr(0), cutT=-1, cuts=0;
+  const PW=220, PH=160;
+  // --- test step
+  const natCol=k=>NCOL[NATURE[k]];
+  const S=paperTest({ papers:[{k:'tur',name:'Turmeric paper strip',base:TUR_Y,col:turmericCol}],
+    group:r=>r.tur===undefined?null:(baseFrac(r.tur,8,1.5)>0.5?'R':'Y'), labelCol:natCol,
+    bins:[{g:'R',name:'Turned red',col:COL.blue},{g:'Y',name:'No change — stays yellow',col:COL.mid}],
+    onResult(k,r){ const red=baseFrac(r.tur,8,1.5)>0.5; $('#lg').insertAdjacentHTML('beforeend',`<tr><td style="color:${natCol(k)};font-weight:600">${LIQ[k].name}</td><td>${sw(turmericCol(r.tur))} ${red?'turned red':'no change'}</td></tr>`); refresh(); } });
+  function refresh(){ $('#chips').innerHTML=SAMPLES.map(k=>`<button class="chip-btn${S.key===k?' active':''}" data-k="${k}"${S.results[k]?` style="border-color:${natCol(k)}"`:''}>${LIQ[k].name}</button>`).join('');
+    wrap.querySelectorAll('#chips .chip-btn').forEach(b=>b.onclick=()=>{ S.auto=false; S.choose(b.dataset.k); }); }
+  S.refresh=refresh; refresh();
+  $('#go').onclick=()=>S.drop(); $('#all').onclick=()=>{ S.auto=true; }; $('#clr').onclick=()=>{ S.reset(); $('#lg').innerHTML=''; };
+  toggleWire(wrap.querySelectorAll('#sunG button'),b=>{ sun=b.dataset.s==='1'; });
+
+  function pills(){ stepPills($("#pills"),NAMES,step,done,i=>{ if(i<=step||done[i-1]||i===4) go(i); }); }
+  function go(i){ step=i; $('#mk').classList.toggle('hidden',step===4); $('#ts').classList.toggle('hidden',step!==4); $('#sunG').classList.toggle('hidden',step!==2); buttons(); pills(); }
+  function buttons(){
+    const B=[[['💧 Add water','w'],['🥄 Stir','s']],[['⬇ Dip the paper','d']],[[dryOn?'⏸ Pause':'☀ Let it dry','y']],[['✂ Cut into strips','c']],[]][step];
+    $('#bt').innerHTML=B.map(b=>`<button class="toggle-btn play" data-a="${b[1]}">${b[0]}</button>`).join('');
+    $('#bt').querySelectorAll('button').forEach(b=>b.onclick=()=>act(b.dataset.a));
+    $('#nx').disabled=!(done[step]&&step<4); }
+  function act(a){
+    if(a==='w' && !wrig.busy()){ wrig.moveTo(400+(Math.random()-0.5)*140); wrig.squeezeOnce(3); }
+    if(a==='s') stirT=2;
+    if(a==='d' && dipT<0 && !done[1]) dipT=0;
+    if(a==='y'){ dryOn=!dryOn; buttons(); }
+    if(a==='c' && cutT<0 && !done[3]) cutT=0;
+  }
+  $('#nx').onclick=()=>{ if(done[step]&&step<4) go(step+1); };
+  pills(); buttons();
+
+  const U=()=>1-Math.exp(-stirTot/1.2), W=()=>water/9;
+  function dish(ctx,cx,cy){ ctx.save(); ctx.lineWidth=2.8; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff';
+    ctx.beginPath(); ctx.ellipse(cx,cy+14,200,64,0,0,Math.PI); ctx.lineTo(cx-200,cy); ctx.ellipse(cx,cy,200,64,0,Math.PI,0,true); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(cx,cy,200,64,0,0,7); ctx.stroke(); ctx.restore(); }
+  function paste(ctx,cx,cy,level){ // smooth paste once wet + stirred
+    const wet=clamp(W(),0,1), u=U()*wet;
+    if(u>0.05){ ctx.save(); ctx.globalAlpha=clamp(u*1.3,0,1); ctx.beginPath(); ctx.ellipse(cx,cy+4,175*(0.55+0.45*u),52*(0.55+0.45*u),0,0,7); ctx.fillStyle=mixCol(TUR_Y,TUR_WET,0.35); ctx.fill();
+      ctx.strokeStyle='rgba(176,110,0,0.5)'; ctx.lineWidth=1.4; for(let i=1;i<4;i++){ ctx.beginPath(); ctx.ellipse(cx,cy+4,i*42,i*12,0,spA*0.4+i,spA*0.4+i+2.2); ctx.stroke(); } ctx.restore(); }
+    grains.forEach(g=>{ const gx=cx+Math.cos(g.a)*g.r*2.6, gy=cy+Math.sin(g.a)*g.r*0.8-g.h*(1-u);
+      ctx.fillStyle=g.wet>0.5?mixCol(TUR_Y,TUR_WET,0.4):'#e9b43a'; ctx.globalAlpha=1-u*0.85; ctx.beginPath(); ctx.arc(gx,gy,g.wet>0.5?3.4:2.4,0,7); ctx.fill(); ctx.globalAlpha=1; });
+  }
+  function paper(ctx,x,y,col,wetH,M){ // x,y = top-left
+    ctx.save(); rrect(ctx,x,y,PW,PH,3); ctx.fillStyle='#fff'; ctx.fill();
+    if(wetH>0){ ctx.save(); rrect(ctx,x,y,PW,PH,3); ctx.clip(); ctx.fillStyle=col; ctx.beginPath(); ctx.moveTo(x-2,y+PH+2);
+      for(let i=0;i<=20;i++){ const xx=x+i/20*PW; ctx.lineTo(xx,y+PH-wetH+Math.sin(i*1.7+t)*2.5); } ctx.lineTo(x+PW+2,y+PH+2); ctx.closePath(); ctx.fill(); ctx.restore(); }
+    rrect(ctx,x,y,PW,PH,3); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.stroke(); ctx.restore(); }
+
+  function tick(dt,ctx){
+    if(step===0){
+      if(stirT>0){ stirT-=dt; stirTot+=dt*clamp(W(),0.2,1); spA+=dt*7;
+        grains.forEach(g=>{ g.a+=dt*(1.8+g.r*0.02); if(W()>0.3) g.wet=Math.min(1,g.wet+dt*0.8*W()); g.r=approach(g.r,g.r*0.98+35*0.02,1,dt); }); }
+      wrig.step(dt,x=>330);
+      dish(ctx,400,330); paste(ctx,400,330);
+      if(stirT>0){ const sx=400+Math.cos(spA)*120, sy=330+Math.sin(spA)*34; spoon(ctx,sx,sy,-0.9,null); }
+      wrig.draw(ctx); textAt(ctx,'Water',wrig.x.x+18,wrig.tipY-150,{size:13,weight:700,color:COL.blue});
+      textAt(ctx,'Turmeric powder',400,440,{align:'center',size:14,weight:600,color:COL.muted});
+      if(W()>=1 && U()>0.9 && !done[0]){ done[0]=1; pills(); buttons(); }
+    }
+    if(step===1){
+      if(dipT>=0){ dipT+=dt; const inP=dipT>0.6 && hW<PH*0.99;
+        springTo(py,inP||dipT<0.6?150:-40,40,10,dt);
+        if(py.x>135){ const tw=(dipT-0.8); hW=Math.min(PH,Math.sqrt(Math.max(0,tw)*7000)); }
+        if(hW>=PH*0.99 && !done[1] && py.x<-20){ done[1]=1; pills(); buttons(); } }
+      else springTo(py,-40,40,10,dt);
+      dish(ctx,400,390); paste(ctx,400,390);
+      // tongs holding the paper
+      const px=400-PW/2, pY=py.x+60;
+      line(ctx,400-14,pY-120,400-8,pY+8,COL.ink,3); line(ctx,400+14,pY-120,400+8,pY+8,COL.ink,3); circ(ctx,400,pY-118,8,COL.yellow,'#fff',2.4);
+      ctx.save(); ctx.beginPath(); ctx.rect(0,0,800,390+(py.x>100?-2:200)); if(py.x>100){ ctx.rect(0,0,0,0); } ctx.clip();
+      paper(ctx,px,pY,mixCol(TUR_Y,TUR_WET,0.55),hW,1); ctx.restore();
+      if(py.x>100){ ctx.save(); ctx.beginPath(); ctx.ellipse(400,392,178,50,0,0,Math.PI); ctx.fillStyle=mixCol(TUR_Y,TUR_WET,0.35); ctx.fill(); ctx.restore(); }
+      textAt(ctx,'Paste climbs: '+Math.round(hW/PH*100)+' %',640,120,{align:'center',size:14,weight:700,color:COL.yellow});
+      // √t curve as a tiny inset
+      miniChart(ctx,560,140,210,130,[0,4],[0,100],[{pts:Array.from({length:41},(_,i)=>[i/10,Math.min(100,Math.sqrt(i/10*7000)/PH*100)]),col:'#dbe4f0',lw:2},{pts:dipT>0.8?Array.from({length:21},(_,i)=>{ const tt=i/20*Math.min(4,dipT-0.8); return [tt,Math.min(100,Math.sqrt(tt*7000)/PH*100)]; }):[],col:COL.yellow,lw:2.6}],{xt:[0,2,4],yt:[0,100]});
+    }
+    if(step===2){
+      if(dryOn){ const tau=sun?0.9:2.6; M*=Math.exp(-dt/tau); if(Math.random()<dt*14*M*M) dripP.push({x:300+Math.random()*PW,y:330,vy:0}); }
+      dripP.forEach(d=>{ d.vy+=1500*dt; d.y+=d.vy*dt; }); dripP=dripP.filter(d=>d.y<470);
+      if(Math.random()<dt*0.8) sway.v+=(Math.random()-0.5)*(sun?0.6:0.3);
+      springTo(sway,0,6,0.8,dt);
+      // line + clips
+      ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.beginPath(); ctx.moveTo(40,120); ctx.quadraticCurveTo(400,160,760,120); ctx.stroke(); ctx.restore();
+      ctx.save(); ctx.translate(400,150); ctx.rotate(sway.x*0.25);
+      paper(ctx,-PW/2,20,mixCol(TUR_Y,TUR_WET,0.7*M),PH,M);
+      [-70,70].forEach(cx=>{ ctx.save(); ctx.lineWidth=2.4; ctx.strokeStyle=COL.yellow; ctx.fillStyle='#fff'; rrect(ctx,cx-8,0,16,34,4); ctx.fill(); ctx.stroke(); ctx.restore(); });
+      ctx.restore();
+      dripP.forEach(d=>dropShape(ctx,d.x,d.y,3,mixCol(TUR_Y,TUR_WET,0.4),1));
+      if(sun){ circ(ctx,700,60,26,COL.yellow,'#fff',2.6); for(let i=0;i<10;i++){ const a=i/10*Math.PI*2+t*0.3; line(ctx,700+Math.cos(a)*34,60+Math.sin(a)*34,700+Math.cos(a)*46,60+Math.sin(a)*46,COL.yellow,2.4); } }
+      meterV(ctx,640,200,28,200,M,COL.blue,'moisture');
+      if(M<0.05 && !done[2]){ done[2]=1; dryOn=false; pills(); buttons(); }
+    }
+    if(step===3){
+      tile(ctx,120,110,560,330);
+      const x0=400-PW/2*1.6, y0=150, W3=PW*1.6, H3=PH*1.5, sw3=W3/6;
+      if(cutT>=0){ cutT+=dt; const per=0.9; cuts=Math.min(5,Math.floor(cutT/per)); if(cutT>5*per+0.3 && !done[3]){ done[3]=1; pills(); buttons(); } }
+      // strip i slides sideways (smoothly) once the cut on its left is finished
+      for(let i=0;i<6;i++){ const shift=cutT<0?0:(i-2.5)*14*smooth01(0,0.5,cutT-Math.max(0,i-0.5)*0.9);
+        ctx.save(); ctx.fillStyle=TUR_Y; ctx.fillRect(x0+i*sw3+shift,y0,sw3,H3); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.strokeRect(x0+i*sw3+shift,y0,sw3,H3); ctx.restore(); }
+      if(cutT<0){ ctx.save(); ctx.fillStyle=TUR_Y; ctx.fillRect(x0,y0,W3,H3); ctx.restore(); }
+      if(cutT<0){ ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.strokeRect(x0,y0,W3,H3); ctx.restore(); }
+      for(let i=cuts+1;i<6;i++) if(!done[3]){ ctx.save(); ctx.setLineDash([6,5]); line(ctx,x0+i*sw3,y0,x0+i*sw3,y0+H3,COL.yellow,1.6); ctx.restore(); }
+      if(cutT>=0 && !done[3]){ const k=Math.min(5,cuts+1), u=(cutT%0.9)/0.9, sx=x0+k*sw3, sy=y0-20+u*(H3+30), open=0.25+0.25*Math.sin(u*Math.PI*8);
+        ctx.save(); ctx.translate(sx,sy+40); ctx.rotate(Math.PI); ctx.lineWidth=2.6; ctx.strokeStyle=COL.ink;  // blades lead the cut
+        [open,-open].forEach(a=>{ ctx.save(); ctx.rotate(a); ctx.fillStyle='#fff'; ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-4,-70); ctx.lineTo(4,-70); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(0,30); ctx.stroke(); ctx.beginPath(); ctx.ellipse(0,44,11,15,0,0,7); ctx.strokeStyle=COL.yellow; ctx.stroke(); ctx.strokeStyle=COL.ink; ctx.restore(); });
+        circ(ctx,0,0,4,COL.ink,'#fff',2); ctx.restore(); }
+      textAt(ctx,'Turmeric paper',400,470,{align:'center',size:14,weight:600,color:COL.muted});
+    }
+    if(step===4) S.tick(dt,ctx,t);
+    if(step<4){ setv($,'m1',water+' drops'); setv($,'m2',Math.round(U()*100)+' %'); setv($,'m3',Math.round(hW/PH*100)+' %'); setv($,'m4',Math.round(M*100)+' %'); }
+  }
+  animLoop(dt=>{ t+=dt; const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h); ctx.save(); stage(ctx,w,h); tick(dt,ctx); ctx.restore(); });
+  return wrap;
+}
+
+
+/* =====================================================================
+   2.6 ONION SMELL — an olfactory indicator
+   Overnight, onion odour molecules random-walk in the closed jar and
+   stick to the strips: loading S = 1 − e^(−h/3 h) (12 h shown in 8 s).
+   On the table each strip releases molecules at a rate ∝ S. A sniff is a
+   point sink: molecules drift toward the nostrils with speed ∝ 1/r²;
+   perceived smell ψ = 1 − e^(−n/6) of the n molecules breathed in.
+   Drops: the onion’s sulphur odour compounds are destroyed in a basic
+   medium, first-order at k = 1.4 s⁻¹ × (base fraction at the drop’s pH,
+   pKa ≈ 8); in an acid k ≈ 0, so the smell stays.
+   ===================================================================== */
+function onionBits(ctx,cx,cy,w,t){ const R0=rng(3); for(let i=0;i<16;i++){ const x=cx+(R0()-0.5)*w, y=cy-R0()*26, r=7+R0()*7, a=R0()*6;
+  ctx.save(); ctx.translate(x,y); ctx.rotate(a); ctx.strokeStyle='#9a5a9a'; ctx.lineWidth=1.8; ctx.fillStyle='#fbf2fb'; ctx.beginPath(); ctx.arc(0,0,r,Math.PI*0.1,Math.PI*1.2); ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.arc(0,0,r*0.6,Math.PI*0.2,Math.PI*1.1); ctx.stroke(); ctx.restore(); } }
+function squig(ctx,x,y,a,alpha){ ctx.save(); ctx.globalAlpha=alpha; ctx.translate(x,y); ctx.rotate(a); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.8; ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(-6,0); ctx.quadraticCurveTo(-3,-4,0,0); ctx.quadraticCurveTo(3,4,6,0); ctx.stroke(); ctx.restore(); }
+function buildA6(){
+  const wrap=labShell();
+  const ac=['tamarind','lemon','vinegar'], bs=['soda','soap','lime','wash'];
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><div class="step-row" id="pills"></div></div>
+    <div class="control-group"><div id="bt"></div>
+      <div id="dG" class="hidden"><div class="role-row"><span class="rdot" style="background:var(--f-red)"></span><span class="rname">Strip A</span><select id="lA">${ac.map(k=>`<option value="${k}">${LIQ[k].name}</option>`).join('')}</select></div>
+        <div class="role-row"><span class="rdot" style="background:var(--f-blue)"></span><span class="rname">Strip B</span><select id="lB">${bs.map(k=>`<option value="${k}">${LIQ[k].name}</option>`).join('')}</select></div></div>
+      <button class="toggle-btn navy" id="nx" disabled>Next step ▶</button></div>
+    <div class="control-group"><div class="result-cards">${card('o1','Smell of A')}${card('o2','Smell of B')}<div class="rcard wide"><div class="rlabel">Onion odour left on strip</div><div class="rval" id="o3">—</div></div></div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const NAMES=['1 Overnight','2 Smell','3 Add drops','4 Smell again'];
+  let step=0, done=[0,0,0,0], t=0, hrs=0, night=false, mols=[], out=spr(0), jarX=spr(0);
+  const strips=[{n:'A',S:0,x:250,key:null,spots:[]},{n:'B',S:0,x:550,key:null,spots:[]}];
+  const face_={x:spr(400),y:spr(120),sn:0,pull:0,target:null,count:0,psi:spr(0),mood:0};
+  const bars={A:[null,null],B:[null,null]};
+  const rigs=[dropperRig(250,300,'tamarind'),dropperRig(550,300,'soda')]; rigs.forEach(r=>{ r.speed=1.6; r.fill=0.7; });
+  let dropsOn=false;
+  rigs.forEach((r,i)=>r.onLand=(x,y)=>{ const s=strips[i]; s.key=r.key; s.spots.push(spotNew(x,y+(Math.random()-0.5)*8,26,'#fbfbfb',LIQ[r.key].col)); });
+  function pills(){ stepPills($('#pills'),NAMES,step,done,i=>{ if(i<=step||done[i-1]) go(i); }); }
+  function go(i){ step=i; $('#dG').classList.toggle('hidden',step!==2); buttons(); pills(); }
+  function buttons(){
+    const B=[[night?'🌙 …overnight':'🌙 Leave it overnight','n']],S2=[['👃 Smell strip A','a'],['👃 Smell strip B','b']];
+    const list=[B,S2,[['💧 Put drops on both strips','d']],S2][step];
+    $('#bt').innerHTML='<div class="toggle-group">'+list.map(b=>`<button class="toggle-btn play" data-a="${b[1]}">${b[0]}</button>`).join('')+'</div>';
+    $('#bt').querySelectorAll('button').forEach(b=>b.onclick=()=>act(b.dataset.a));
+    $('#nx').disabled=!(done[step]&&step<3); }
+  function act(a){
+    if(a==='n' && !night && hrs===0){ night=true; buttons(); }
+    if((a==='a'||a==='b') && !face_.target && out.x>0.95){ face_.target=a==='a'?0:1; face_.sn=0; face_.count=0; }
+    if(a==='d' && !dropsOn){ dropsOn=true; rigs[0].key=$('#lA').value; rigs[1].key=$('#lB').value; rigs.forEach(r=>r.squeezeOnce(3)); }
+  }
+  $('#nx').onclick=()=>{ if(done[step]&&step<3) go(step+1); };
+  pills(); buttons();
+
+  function tick(dt,ctx){
+    // ---- overnight in the closed jar
+    if(night){ hrs=Math.min(12,hrs+dt*1.5); strips.forEach(s=>s.S=1-Math.exp(-hrs/3)); if(hrs>=12){ night=false; done[0]=1; pills(); buttons(); } }
+    springTo(out,done[0]?1:0,14,7,dt);
+    springTo(jarX,done[0]?-520:0,10,6,dt);
+    // base destroys the odour; acid leaves it
+    strips.forEach(s=>{ if(s.key){ const pH=liqPH(s.key), k=1.4*baseFrac(pH,8,1); s.S*=Math.exp(-k*dt); } s.spots.forEach(p=>spotStep(p,dt)); });
+    // molecules
+    const jx=400+jarX.x;
+    if(out.x<0.5){ if(night && mols.length<80 && Math.random()<dt*40) mols.push({x:jx+(Math.random()-0.5)*220,y:400,vx:0,vy:-30,a:0,life:6,inJar:1});
+      mols.forEach(m=>{ m.vx+=(Math.random()-0.5)*600*dt; m.vy+=(Math.random()-0.5)*600*dt; m.vx*=0.96; m.vy*=0.96; m.x+=m.vx*dt; m.y+=m.vy*dt; m.a+=dt*2;
+        if(m.x<jx-135){ m.x=jx-135; m.vx*=-1; } if(m.x>jx+135){ m.x=jx+135; m.vx*=-1; } if(m.y<175){ m.y=175; m.vy*=-1; } if(m.y>415){ m.y=415; m.vy*=-1; }
+        if(Math.abs(m.x-(jx-60))<14&&m.y<330&&Math.random()<dt*3) m.life=0; if(Math.abs(m.x-(jx+60))<14&&m.y<330&&Math.random()<dt*3) m.life=0; m.life-=dt*0.2; }); }
+    else { strips.forEach((s,i)=>{ if(Math.random()<dt*26*s.S) mols.push({x:s.x+(Math.random()-0.5)*140,y:398,vx:(Math.random()-0.5)*20,vy:-40-Math.random()*30,a:Math.random()*6,life:3.2}); });
+      const nose=[face_.x.x,face_.y.x+17];
+      mols.forEach(m=>{ m.vx+=(Math.random()-0.5)*80*dt; m.x+=m.vx*dt; m.y+=m.vy*dt; m.a+=dt*2; m.life-=dt;
+        if(face_.pull>0){ const dx=nose[0]-m.x, dy=nose[1]-m.y, r=Math.hypot(dx,dy)+1; const v=Math.min(420,face_.pull*2.6e6/(r*r)); m.x+=dx/r*v*dt; m.y+=dy/r*v*dt; if(r<10){ m.life=0; face_.count++; } } }); }
+    mols=mols.filter(m=>m.life>0 && m.y>-20);
+    // ---- the sniff: face glides over the strip, breathes in for 1.2 s, rises
+    if(face_.target!==null){ face_.sn+=dt; const s=strips[face_.target], down=face_.sn<2.2;
+      springTo(face_.x,down?s.x:400,26,9,dt); springTo(face_.y,down?290:120,26,9,dt);
+      face_.pull=(face_.sn>0.7&&face_.sn<1.9)?1:0;
+      if(face_.sn>2.0 && face_.sn-dt<=2.0){ const psi=1-Math.exp(-face_.count/6); const k=s.n; bars[k][step>=2?1:0]=psi; face_.psi.v+=0; face_.mood=psi; setv($,face_.target?'o2':'o1',psi>0.6?'strong onion':psi>0.25?'faint onion':'no onion smell');
+        if(step===1||step===3){ const idx=step>=2?1:0; if(bars.A[idx]!==null&&bars.B[idx]!==null&&!done[step]){ done[step]=1; pills(); buttons(); } } }
+      if(face_.sn>3.2){ face_.target=null; face_.pull=0; } }
+    else { springTo(face_.x,400,26,9,dt); springTo(face_.y,120,26,9,dt); }
+    springTo(face_.psi,face_.target!==null&&face_.sn>1.9?face_.mood:0,40,7,dt);
+    rigs.forEach(r=>{ r.tipY=approach(r.tipY,done[2]&&!r.busy()?-260:300,3,dt); });
+    if(dropsOn){ rigs.forEach(r=>r.step(dt,()=>410)); if(rigs.every(r=>!r.busy())&&strips.every(s=>s.spots.length>=3)&&!done[2]){ done[2]=1; pills(); buttons(); } }
+
+    // ---- draw
+    tableTop(ctx,20,780,432,0);
+    // jar (slides away after the night)
+    if(jarX.x>-500){ ctx.save(); ctx.translate(jarX.x,0);
+      ctx.save(); ctx.lineWidth=3; ctx.strokeStyle=COL.ink; ctx.fillStyle='rgba(255,255,255,0.9)'; rrect(ctx,260,160,280,272,26); ctx.fill(); ctx.stroke(); ctx.restore();
+      onionBits(ctx,400,420,240,t);
+      if(out.x<0.3) [340,460].forEach(x=>{ ctx.save(); ctx.fillStyle=mixCol('#ffffff','#e9d6ef',strips[0].S); ctx.fillRect(x-12,176,24,150); ctx.strokeStyle=COL.ink; ctx.lineWidth=1.8; ctx.strokeRect(x-12,176,24,150); ctx.restore(); });
+      const lidUp=done[0]?-40:0; ctx.save(); ctx.lineWidth=3; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; rrect(ctx,250,146+lidUp,300,20,6); ctx.fill(); ctx.stroke(); ctx.restore();
+      // clock
+      if(!done[0]){ const cx=660, cy=240; circ(ctx,cx,cy,50,COL.ink,'#fff',2.8); const a=-Math.PI/2+hrs/12*Math.PI*2; line(ctx,cx,cy,cx+Math.cos(a)*40,cy+Math.sin(a)*40,COL.yellow,3); circ(ctx,cx,cy,3,COL.ink,COL.ink,1);
+        textAt(ctx,fmt(hrs,1)+' h',cx,cy+74,{align:'center',size:15,weight:700,color:COL.ink}); textAt(ctx,night||hrs>0?'🌙':'',cx,cy-66,{align:'center',size:22}); }
+      ctx.restore(); }
+    // strips: fly from inside the jar to the table
+    strips.forEach((s,i)=>{ const u=out.x, sx=lerp(340+i*120,s.x,clamp(u,0,1.1)), sy=lerp(250,410,clamp(u,0,1.1)), w=lerp(24,160,clamp(u,0,1)), h=lerp(150,34,clamp(u,0,1));
+      if(u<0.3) return;
+      ctx.save(); ctx.fillStyle=mixCol('#ffffff','#eadcf0',s.S); ctx.fillRect(sx-w/2,sy-h/2,w,h); ctx.beginPath(); ctx.rect(sx-w/2,sy-h/2,w,h); ctx.clip(); s.spots.forEach(p=>spotDraw(ctx,p)); ctx.restore();
+      ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.strokeRect(sx-w/2,sy-h/2,w,h); ctx.restore();
+      if(u>0.9){ textAt(ctx,'Strip '+s.n,s.x,458,{align:'center',size:14,weight:700,color:COL.ink});
+        if(s.key) textAt(ctx,LIQ[s.key].name,s.x,478,{align:'center',size:12,weight:600,color:NCOL[NATURE[s.key]]}); }
+    });
+    mols.forEach(m=>squig(ctx,m.x,m.y,m.a,clamp(m.life,0,1)*0.9));
+    if(dropsOn || step===2) rigs.forEach(r=>{ if(r.tipY>-200) r.draw(ctx); });
+    // the face
+    if(out.x>0.6){ face(ctx,face_.x.x,face_.y.x,70,{t,sniff:face_.pull,pucker:0,bitter:face_.psi.x*0.9});
+      if(face_.pull) for(let i=0;i<3;i++){ const ph=(t*3+i/3)%1; ctx.save(); ctx.globalAlpha=1-ph; ctx.strokeStyle=COL.yellow; ctx.lineWidth=2; ctx.beginPath(); ctx.arc(face_.x.x,face_.y.x+17,40*(1-ph)+6,0.2,Math.PI-0.2); ctx.stroke(); ctx.restore(); } }
+    // before / after bars
+    if(out.x>0.6){ const bx=640, by=40; ctx.save(); rrect(ctx,bx,by,150,150,10); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle='#dbe4f0'; ctx.stroke(); ctx.restore();
+      textAt(ctx,'Smell',bx+10,by+18,{size:12,weight:700,color:COL.muted});
+      [['A',0],['A',1],['B',0],['B',1]].forEach(([k,j],n)=>{ const v=bars[k][j], x=bx+18+n*32, h=100*(v||0);
+        ctx.save(); ctx.fillStyle=j?(k==='A'?COL.red:COL.blue):COL.mid; ctx.globalAlpha=v===null?0:0.85; ctx.fillRect(x,by+128-h,20,h); ctx.restore();
+        line(ctx,x-2,by+128,x+22,by+128,COL.ink,1.2); textAt(ctx,k+(j?'′':''),x+10,by+144,{align:'center',size:11,weight:600,color:COL.muted}); });
+      textAt(ctx,'′ = after drops',bx+75,by+168,{align:'center',size:10.5,color:COL.muted}); }
+    setv($,'o3','A '+Math.round(strips[0].S*100)+' %  ·  B '+Math.round(strips[1].S*100)+' %');
+  }
+  animLoop(dt=>{ t+=dt; const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h); ctx.save(); stage(ctx,w,h); tick(dt,ctx); ctx.restore(); });
+  return wrap;
+}
+
+
+/* =====================================================================
+   2.7 ACID MEETS BASE — neutralisation, drop by drop
+   Lemon juice ≈ 0.25 M citric acid (3 acidic H each): one drop holds
+   0.0375 mmol of acid. Lime water ≈ 0.02 M Ca(OH)₂ = 0.04 M OH⁻: one drop
+   holds 0.002 mmol of base, so ≈ 19 drops are needed before the litmus
+   flips from red to blue — “a stage comes”. The pH is solved from the
+   charge balance every frame; near the end each new drop makes a blue
+   flash that lingers longer before swirling hides it.
+   Heat: acid + base → salt + water + heat, 55.8 kJ per mol neutralised.
+     ΔT = 55.8 J/mmol × n ÷ (V mL × 4.18 J g⁻¹ K⁻¹) ≈ 0.25 °C per lemon drop,
+   then Newton cooling back to 28 °C (τ = 90 s).
+   ===================================================================== */
+const ACID_H = {cit:3, asc:1, tar:2, ace:1, lac:1, oxa:2, car:0, fat:1, ext:1};
+function acidEq(m){ let a=0; for(const k in m.sys) a+=(ACID_H[k]||0)*m.sys[k]; return a; }
+function buildA7(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML = `
+    <div class="control-group"><div class="step-row" id="pills"></div></div>
+    <div class="control-group"><label>Add with the dropper</label>
+      <div class="toggle-group"><button class="toggle-btn" data-k="lemon" data-n="1">🍋 Lemon · 1</button><button class="toggle-btn" data-k="water" data-n="20">💧 Water · 20</button></div>
+      <div class="toggle-group"><button class="toggle-btn" data-k="bluelit" data-n="1">🔵 Blue litmus · 1</button></div>
+      <div class="toggle-group"><button class="toggle-btn" data-k="lime" data-n="1">🥛 Lime water · 1</button><button class="toggle-btn" data-k="lime" data-n="5">🥛 Lime water · 5</button></div>
+      <div class="toggle-group"><button class="toggle-btn play" id="sw">🌀 Swirl</button><button class="toggle-btn" id="em">↺ Wash tube</button></div></div>
+    <div class="control-group"><div class="result-cards">${card('n1','Lemon drops','var(--f-red)')}${card('n2','Lime water drops','var(--f-blue)')}${card('n3','Temperature')}<div class="rcard"><div class="rlabel">Solution</div><div class="rval" id="n4">—</div></div></div>
+      <div class="fb hidden" id="fb"></div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const NAMES=['1 Lemon + water','2 Blue litmus','3 Lime water','4 Lemon again'];
+  const CX=310, TOP=150, H=290, RR=42, PXML=42, VMAX=6;
+  let mix, plumes, cnt, T, nOld, ribbon, done, flipped, swirlT=0, rot=spr(0), t=0, jobs=[], dy=spr(0), dyT=0, swap=null;
+  const rig=dropperRig(CX,112,'lemon'); rig.speed=1.3;
+  function reset(){ mix=mixNew(); plumes=[]; cnt={lemon:0,water:0,bluelit:0,lime:0}; T=28; nOld=0; ribbon=[]; done=[0,0,0,0]; flipped=false; jobs=[]; rig.queue=0; pills(); }
+  function pills(){ stepPills($('#pills'),NAMES,-1,done,()=>{}); }
+  reset();
+  const pending=()=>{ const m=mixCopy(mix); plumes.forEach(p=>mixAddMix(m,p.dm,p.m)); return m; };
+  wrap.querySelectorAll('button[data-k]').forEach(b=>b.onclick=()=>{ const n=+b.dataset.n; if(pending().V+ (jobs.reduce((a,j)=>a+j.n,0)+rig.queue+n)*0.05>VMAX){ fb('The tube is nearly full — wash it and start again.','warn'); return; } jobs.push({k:b.dataset.k,n}); });
+  $('#sw').onclick=()=>{ swirlT=2.4; };
+  $('#em').onclick=()=>reset();
+  function fb(msg,cls){ const e=$('#fb'); e.className='fb '+cls; e.textContent=msg; }
+  const surfY=()=>TOP+H-Math.min(H-24,Math.max(0,mix.V)*PXML);
+  rig.onLand=(x,y,d)=>{ const dm=mixAdd(mixNew(),d.key,0.05);
+    const loc=mixAddMix(mixCopy(dm),mix,mix.V>0?Math.min(1,0.03/mix.V):0), lit=(mix.sys.lit||0)/Math.max(0.05,mix.V);
+    const col=lit>1e-6?litmusCol(mixPH(loc)):LIQ[d.key].col;
+    plumes.push({x:x+(Math.random()-0.5)*8,y:Math.max(y,surfY()),vy:60,r:7,m:1,dm,col}); cnt[d.key]++;
+    if((d.key==='lime'||d.key==='lemon') && (mix.sys.lit||0)+(pending().sys.lit||0)>0){ const eq=pending(); ribbon.push({col:litmusCol(mixPH(eq)),k:d.key}); if(ribbon.length>34) ribbon.shift(); } };
+
+  animLoop(dt=>{ t+=dt; const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h); ctx.save(); stage(ctx,w,h);
+    // dropper jobs: lift & refill when the liquid changes, then squeeze n drops
+    springTo(dy,dyT,60,13,dt);
+    if(swap && dy.x<-230){ rig.key=swap; rig.fill=0.8; swap=null; dyT=0; }
+    if(!swap && !rig.busy() && Math.abs(dy.x)<3 && jobs.length){ const j=jobs.shift(); if(j.k!==rig.key){ swap=j.k; dyT=-260; jobs.unshift(j); } else { rig.speed=j.n>=5?3:1.3; rig.squeezeOnce(j.n); } }
+    rig.tipY=112+dy.x+Math.sin(t*2)*2; rig.moveTo(CX+Math.sin(rot.x)*-60*0);
+    rig.step(dt,()=>surfY());
+    // plumes hand their contents to the bulk
+    if(swirlT>0) swirlT-=dt;
+    const tau=swirlT>0?0.2:1.3;
+    plumes.forEach(p=>{ const f=p.m*(1-Math.exp(-dt/tau)); mixAddMix(mix,p.dm,f); p.m-=f; p.vy=approach(p.vy,swirlT>0?0:10,2,dt); p.y=Math.min(TOP+H-RR,p.y+p.vy*dt); p.r+=dt*(swirlT>0?70:12); p.x+=Math.sin(t*3+p.y*0.05)*dt*(swirlT>0?70:5); });
+    plumes=plumes.filter(p=>p.m>0.02);
+    // neutralisation heat + cooling
+    const nN=Math.max(0,Math.min(acidEq(mix),mix.sb-mix.sa-0.0021*0.05*cnt.bluelit)); // litmus’ own trace of alkali excluded
+    if(nN>nOld && mix.V>0) T+=55.8*(nN-nOld)/(mix.V*4.18);
+    nOld=Math.max(nOld,nN); T=28+(T-28)*Math.exp(-dt/90);
+    // colour of the solution
+    const pH=mixPH(mix), lit=(mix.sys.lit||0)/Math.max(0.05,mix.V), dye=1-Math.exp(-lit/3e-5);
+    const lemonTint=mixCol('#ffffff','#f4e27a',clamp(cnt.lemon*0.05/Math.max(0.05,mix.V)*1.5,0,0.6));
+    const bulk=mixCol(lemonTint,litmusCol(pH),dye*0.85);
+    // swirl rocking
+    springTo(rot,swirlT>0?0.14*Math.sin(t*2*Math.PI*2.2):0,160,6,dt);
+    // ---- draw
+    tubeStand(ctx,CX-80,CX+80,280,452);
+    testTube(ctx,CX,TOP,H,RR,Math.min(H-24,mix.V*PXML),bulk,{rot:rot.x,wob:rot.x*50,inside:()=>plumes.forEach(p=>plumeDraw(ctx,p))});
+    rig.draw(ctx); textAt(ctx,LIQ[rig.key].name,rig.x.x+26,rig.tipY-96,{size:14,weight:700,color:rig.key==='lemon'?COL.red:rig.key==='lime'?COL.blue:COL.yellow});
+    // ribbon: colour after each lemon / lime-water drop
+    const rx=470, ry=70; textAt(ctx,'Colour after each drop',rx,ry-12,{size:13,weight:700,color:COL.muted});
+    ctx.save(); rrect(ctx,rx-4,ry-4,318,60,8); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle='#dbe4f0'; ctx.stroke(); ctx.restore();
+    ribbon.forEach((r,i)=>{ ctx.fillStyle=r.col; ctx.fillRect(rx+i*9+1,ry+2,8,40); line(ctx,rx+i*9+1,ry+46,rx+i*9+9,ry+46,r.k==='lime'?COL.blue:COL.red,3); });
+    line(ctx,rx+150,ry+68,rx+166,ry+68,COL.blue,3); textAt(ctx,'lime water',rx+170,ry+72,{size:11,weight:600,color:COL.muted}); line(ctx,rx+240,ry+68,rx+256,ry+68,COL.red,3); textAt(ctx,'lemon',rx+260,ry+72,{size:11,weight:600,color:COL.muted});
+    // thermometer, magnified 28 – 29 °C
+    const tx=520, tt=200, tb=420;
+    thermo(ctx,tx,tt,tb,(T-28)/1,COL.ink,COL.red);
+    for(let i=0;i<=5;i++){ const yy=tb-(tb-tt-5)*i/5; textAt(ctx,(28+i*0.2).toFixed(1)+'°',tx+14,yy+4,{size:11,weight:600,color:COL.muted}); }
+    textAt(ctx,T.toFixed(2)+' °C',tx+72,tt+30,{size:22,weight:700,color:COL.red});
+    textAt(ctx,'+'+(T-28).toFixed(2)+' °C from the reaction',tx+72,tt+52,{size:12,weight:600,color:COL.muted});
+    // equation strip, lights up while acid and base react
+    const react=plumes.some(p=>p.dm.sb>0.0005)&&acidEq(mix)>0;
+    ctx.save(); ctx.globalAlpha=react?1:0.45; textAt(ctx,'Acid + Base → Salt + Water + Heat',600,470,{align:'center',size:15,weight:700,color:react?COL.red:COL.muted}); ctx.restore();
+    // --- steps & cards
+    const red=lit>1e-6 && baseFrac(pH,6.5)<0.5, blue=lit>1e-6 && baseFrac(pH,6.5)>0.5;
+    if(!done[0] && cnt.lemon>=1 && cnt.water>=20){ done[0]=1; pills(); }
+    if(done[0] && !done[1] && red){ done[1]=1; pills(); }
+    if(done[1] && !done[2] && blue && cnt.lime>0 && plumes.length===0){ done[2]=1; flipped=true; pills(); fb('It turned blue after '+cnt.lime+' drops of lime water — the acid is used up.','ok'); }
+    if(done[2] && !done[3] && red && plumes.length===0){ done[3]=1; pills(); fb('One more drop of lemon juice — red again!','warn'); }
+    setv($,'n1',String(cnt.lemon)); setv($,'n2',String(cnt.lime)); setv($,'n3',T.toFixed(2)+' °C');
+    const e=$('#n4'), s=lit<1e-6?'add litmus to see':(red?'acidic':(blue?'basic':'turning…'));
+    if(e.textContent!==s){ e.textContent=s; e.style.color=red?COL.red:blue?COL.blue:COL.muted; }
+    ctx.restore();
+  });
+  return wrap;
+}
+
+
+/* ---------------------------------------------------------------------
+   1. ACTIVITIES + ROUTER
+   --------------------------------------------------------------------- */
+const activities = [
+  { num:'2.1', title:'Litmus on a Tile', desc:'One drop on blue · one on red · sort into groups', build: buildA1 },
+  { num:'2.2', title:'Sour, Slippery, Bitter', desc:'Taste the acids · rub the base', build: buildA2 },
+  { num:'2.3', title:'Making Red Rose Extract', desc:'Wash · crush · hot water · wait · filter', build: buildA3 },
+  { num:'2.4', title:'Testing with Rose Extract', desc:'Drops into tubes A and B', build: buildA4 },
+  { num:'2.5', title:'Turmeric Paper', desc:'Make the paper · then test the samples', build: buildA5 },
+  { num:'2.6', title:'Onion Smell Test', desc:'An indicator you smell, not see', build: buildA6 },
+  { num:'2.7', title:'Acid Meets Base', desc:'Lemon + litmus · then lime water drop by drop', build: buildA7 },
+];
+let currentIndex = 0;
+
+function buildNav(){
+  const nav = document.getElementById('sideNav');
+  nav.innerHTML='';
+  activities.forEach((a,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'nav-item'+(i===currentIndex?' active':'');
+    btn.innerHTML = `<span class="n-num">${a.num}</span><span class="n-title">${a.title}</span>`;
+    btn.onclick = ()=>{ currentIndex=i; render(); };
+    nav.appendChild(btn);
+  });
+}
+function render(){
+  stopAllLoops();
+  buildNav();
+  const a = activities[currentIndex];
+  document.getElementById('panelBadge').textContent = a.num;
+  document.getElementById('panelTitle').textContent = a.title;
+  document.getElementById('panelDesc').textContent = a.desc||'';
+  const body = document.getElementById('panelBody');
+  body.innerHTML='';
+  body.appendChild(a.build());
+}
+function labShell(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `<div class="lab-canvas-wrap"><canvas></canvas></div><div class="lab-side"></div>`;
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   INIT
+   --------------------------------------------------------------------- */
+render();
+</script>
+<script src="../../tracking/activity-tracker.js"></script>
+<script src="../../nav/back-button.js"></script>
+</body>
+</html>

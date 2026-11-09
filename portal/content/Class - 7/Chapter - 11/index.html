@@ -1,0 +1,1689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 7 · Chapter 11 — Light: Shadows and Reflections | Botclub Labs</title>
+<link href="../../vendor/fonts/fonts.css" rel="stylesheet">
+<style>
+:root{
+  --navy-1:#0f2640; --navy-2:#1a3a5c; --navy-3:#234a73;
+  --accent:#2f8fe0; --accent-2:#5cc8ff;
+  --bg:#eef2f8; --surface-0:#ffffff; --surface-1:#f6f9fc; --surface-2:#eef2f8;
+  --border:#dbe4f0; --border-strong:#c2d1e5;
+  --text-1:#132a44; --text-2:#4c6178; --text-3:#8195ab;
+  --f-red:#d9432b; --f-blue:#2f8fe0; --f-green:#1f9d55; --f-yellow:#d9a017;
+  --radius:14px; --radius-sm:9px;
+  --fs-xs:clamp(10px,0.62vw,12px); --fs-sm:clamp(11px,0.72vw,13.5px);
+  --fs-md:clamp(12.5px,0.85vw,15px); --fs-lg:clamp(15px,1.15vw,19px);
+  --fs-xl:clamp(18px,1.5vw,25px);
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:22px; --sp-6:30px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{ font-family:'Poppins',system-ui,sans-serif; background:var(--bg); color:var(--text-1); overflow:hidden; }
+button, input, select{font-family:inherit;}
+
+.app{height:100vh; display:flex; flex-direction:column; min-height:0;}
+.topbar{
+  flex:0 0 auto; background:linear-gradient(120deg, var(--navy-1) 0%, var(--navy-2) 55%, var(--navy-3) 100%);
+  color:#fff; padding:clamp(9px,1vh,16px) clamp(14px,1.6vw,28px);
+  display:flex; align-items:center; gap:var(--sp-4); box-shadow:0 2px 10px rgba(15,38,64,0.25); z-index:5;
+}
+.topbar .brand-badge{
+  width:clamp(32px,2.4vw,40px); height:clamp(32px,2.4vw,40px); border-radius:10px; background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center;
+  font-size:clamp(15px,1.3vw,20px); flex:0 0 auto;
+}
+.topbar .chip{
+  display:inline-block; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.28);
+  border-radius:6px; padding:2px 9px; font-size:var(--fs-xs); letter-spacing:0.06em; text-transform:uppercase; font-weight:600; margin-bottom:3px;
+}
+.topbar h1{font-size:var(--fs-lg); font-weight:600; line-height:1.2; white-space:nowrap;}
+.topbar .spacer{flex:1;}
+.topbar .legend{display:flex; gap:14px; font-size:var(--fs-xs); color:rgba(255,255,255,0.85); align-items:center;}
+.topbar .legend span{display:inline-flex; align-items:center; gap:5px;}
+.topbar .legend i{width:12px; height:4px; border-radius:2px; display:inline-block;}
+
+.body-wrap{flex:1; display:flex; min-height:0; overflow:hidden;}
+.sidenav{
+  flex:0 0 clamp(170px,13.5vw,230px); background:var(--surface-0); border-right:1px solid var(--border);
+  overflow-y:auto; padding:var(--sp-2); display:flex; flex-direction:column; gap:4px;
+}
+.nav-item{
+  display:flex; align-items:center; gap:8px; text-align:left; width:100%;
+  border:1px solid var(--border); background:var(--surface-1); border-radius:var(--radius-sm); padding:7px 10px; cursor:pointer; transition:all .15s ease;
+}
+.nav-item:hover{background:var(--surface-2); border-color:var(--border-strong);}
+.nav-item.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.nav-item .n-num{font-size:var(--fs-xs); font-weight:700; color:var(--accent); flex:0 0 auto; min-width:26px;}
+.nav-item.active .n-num{color:var(--accent-2);}
+.nav-item .n-title{font-size:var(--fs-sm); font-weight:600; line-height:1.25;}
+
+.content{flex:1; min-width:0; display:flex; flex-direction:column; overflow:hidden;}
+.panel-head{flex:0 0 auto; padding:var(--sp-3) var(--sp-5); border-bottom:1px solid var(--border); background:var(--surface-0); display:flex; align-items:baseline; gap:12px;}
+.panel-badge{background:var(--navy-2); color:#fff; font-size:var(--fs-xs); font-weight:700; padding:3px 10px; border-radius:6px;}
+.panel-head h2{font-size:var(--fs-lg); font-weight:600; color:var(--text-1);}
+.panel-head p{font-size:var(--fs-sm); color:var(--text-2); flex:1; text-align:right;}
+.panel-body{flex:1; min-height:0; overflow:hidden; padding:var(--sp-3) var(--sp-5); display:flex;}
+
+.lab-view{flex:1; display:flex; gap:var(--sp-4); min-height:0; min-width:0;}
+.lab-canvas-wrap{flex:7 1 0; min-width:0; min-height:0; background:#fff; border:1px solid var(--border); border-radius:var(--radius); position:relative; overflow:hidden;}
+.lab-canvas-wrap canvas{width:100%; height:100%; display:block;}
+.lab-side{flex:3 1 0; min-width:230px; display:flex; flex-direction:column; gap:var(--sp-3); min-height:0; overflow-y:auto; padding-right:2px;}
+.side-sub{display:flex; flex-direction:column; gap:var(--sp-3);}
+
+.control-group{background:var(--surface-0); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 12px;}
+.control-group label{font-size:var(--fs-sm); font-weight:600; color:var(--text-1); display:flex; justify-content:space-between;}
+.control-group label .val{color:var(--accent); font-weight:700;}
+.control-group input[type=range]{width:100%; margin-top:7px; accent-color:var(--navy-2); cursor:pointer;}
+.toggle-group{display:flex; gap:6px; margin-top:7px; flex-wrap:wrap;}
+.toggle-btn{flex:1; min-width:56px; padding:7px 5px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:600; cursor:pointer; text-align:center; color:var(--text-2);}
+.toggle-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.toggle-btn.small{font-size:10.5px; padding:6px 3px;}
+.toggle-btn.play{background:var(--f-green); border-color:var(--f-green); color:#fff;}
+.toggle-btn.navy{background:var(--navy-2); border-color:var(--navy-2); color:#fff; width:100%; margin-top:9px;}
+.toggle-btn:disabled{opacity:.5; cursor:not-allowed;}
+.chip-btn{display:inline-flex; align-items:center; gap:5px; padding:6px 11px; margin:3px 3px 0 0; border:1px solid var(--border-strong); background:var(--surface-1); border-radius:18px; cursor:pointer; font-size:var(--fs-sm); font-weight:600; color:var(--text-2);}
+.chip-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.chip-btn.ok{border-color:var(--f-green);} .chip-btn.bad{border-color:var(--f-red);}
+.chip-wrap{display:flex; flex-wrap:wrap; margin-top:3px;}
+
+.role-row{display:flex; align-items:center; gap:8px; margin-top:7px; font-size:var(--fs-sm); font-weight:600;}
+.role-row .rdot{width:10px; height:10px; border-radius:50%; flex:0 0 auto; display:inline-block;}
+.role-row .rname{width:70px; flex:0 0 auto; color:var(--text-2);}
+.role-row select{flex:1; min-width:0; padding:6px 7px; border:1px solid var(--border-strong); border-radius:7px; font-size:var(--fs-sm); background:var(--surface-1); color:var(--text-1); cursor:pointer;}
+
+.step-row{display:flex; gap:5px;}
+.step-pill{flex:1; padding:6px 4px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:10.5px; font-weight:700; color:var(--text-3); cursor:pointer;}
+.step-pill.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.step-pill.done{border-color:var(--f-green); color:var(--f-green);}
+.step-pill.active.done{color:#fff;}
+.opt-btn{display:block; width:100%; text-align:left; margin-top:6px; padding:7px 9px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:500; color:var(--text-1); cursor:pointer; line-height:1.3;}
+.opt-btn.active{border-color:var(--navy-2); background:#e3ecf7; font-weight:600;}
+.var-row{display:flex; align-items:center; gap:6px; margin-top:7px;}
+.var-row .vname{flex:0 0 88px; font-size:var(--fs-sm); font-weight:600;}
+.var-row .toggle-group{margin-top:0; flex:1;}
+
+.result-cards{display:grid; grid-template-columns:1fr 1fr; gap:6px;}
+.result-cards.three{grid-template-columns:1fr 1fr 1fr;}
+.rcard{background:var(--surface-0); border:1px solid var(--border); border-radius:9px; padding:7px 9px;}
+.rcard .rlabel{font-size:9.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--text-3); font-weight:600;}
+.rcard .rval{font-size:var(--fs-md); font-weight:700; color:var(--text-1); margin-top:1px;}
+.rcard.wide{grid-column:1/-1;}
+.hint{font-size:var(--fs-xs); color:var(--text-3); margin-top:6px; line-height:1.4;}
+.fb{font-size:var(--fs-xs); font-weight:600; margin-top:6px; padding:5px 8px; border-radius:7px;}
+.fb.ok{background:#e4f7ec; color:#1f6b3d;}
+.fb.bad{background:#fdece7; color:#a4331c;}
+.fb.warn{background:#fdf4dc; color:#8a6410;}
+.log{width:100%; border-collapse:collapse; font-size:10.5px; margin-top:4px;}
+.log th{text-align:left; color:var(--text-3); font-weight:600; text-transform:uppercase; font-size:9px; letter-spacing:.04em; padding:3px 4px; border-bottom:1px solid var(--border);}
+.log td{padding:4px; border-bottom:1px solid var(--surface-2); color:var(--text-2);}
+.log td.r-ok{color:var(--f-green); font-weight:700;} .log td.r-bad{color:var(--f-red); font-weight:700;} .log td.r-warn{color:var(--f-yellow); font-weight:700;}
+.hidden{display:none !important;}
+
+@media (max-width:1000px) and (orientation:portrait), (max-width:1000px) and (min-height:601px){
+  .body-wrap{flex-direction:column;}
+  .sidenav{flex:0 0 auto; width:100%; height:auto; flex-direction:row; overflow-x:auto; overflow-y:hidden; border-right:none; border-bottom:1px solid var(--border); padding:6px;}
+  .nav-item{flex:0 0 auto; width:150px;}
+  .panel-body{overflow-y:auto;}
+  .lab-view{flex-direction:column;}
+  .lab-canvas-wrap{min-height:320px;}
+  .lab-side{min-width:0;}
+  .content{overflow-y:auto;}
+  .topbar .legend{display:none;}
+  .topbar h1{white-space:normal;}
+}
+::-webkit-scrollbar{width:7px; height:7px;}
+::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand-badge">🔦</div>
+    <div>
+      <div class="chip">Grade 7 · Ch 11</div>
+      <h1>Light: Shadows and Reflections</h1>
+    </div>
+    <div class="spacer"></div>
+    <div class="legend">
+      <span><i style="background:var(--f-yellow)"></i>Light from the source</span>
+      <span><i style="background:var(--f-blue)"></i>Mirror · reflected light</span>
+      <span><i style="background:var(--f-red)"></i>Object · image</span>
+      <span><i style="background:var(--f-green)"></i>Screen · eye · what you measure</span>
+    </div>
+  </div>
+  <div class="body-wrap">
+    <nav class="sidenav" id="sideNav"></nav>
+    <main class="content">
+      <div class="panel-head">
+        <div class="panel-badge" id="panelBadge">2.1</div>
+        <h2 id="panelTitle">Select an activity</h2>
+        <p id="panelDesc"></p>
+      </div>
+      <div class="panel-body" id="panelBody"></div>
+    </main>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   GRADE 7 — CHAPTER 11: LIGHT: SHADOWS AND REFLECTIONS
+   Activities 11.1 – 11.10 (NCERT Curiosity, gecu111). Every activity runs a
+   continuous animation loop: buttons and sliders only set TARGETS that the
+   objects spring towards. Light is traced as real straight lines: rays are
+   sampled from a finite source through holes, pipes and slits, shadows are
+   rendered pixel by pixel from how much of the torch each point can see,
+   mirrors obey angle of incidence = angle of reflection, and pinhole images
+   are built from the actual u, v and hole size.
+   ========================================================================= */
+const COL = {red:'#d9432b', blue:'#2f8fe0', green:'#1f9d55', yellow:'#d9a017', ink:'#132a44', muted:'#4c6178', mid:'#8195ab'};
+
+/* ---------------------------------------------------------------------
+   0. CANVAS HELPERS
+   --------------------------------------------------------------------- */
+function fitCanvas(canvas){
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  const r = canvas.parentElement.getBoundingClientRect();
+  const w = Math.max(200, r.width), h = Math.max(160, r.height);
+  if(canvas._w!==w || canvas._h!==h || canvas._dpr!==dpr){
+    canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr);
+    canvas.style.width = w+'px'; canvas.style.height = h+'px';
+    canvas._w=w; canvas._h=h; canvas._dpr=dpr;
+  }
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, w, h};
+}
+function line(ctx,x1,y1,x2,y2,color,width,dash){
+  ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=width||2;
+  if(dash) ctx.setLineDash(dash); else ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); ctx.restore();
+}
+function arrowHead(ctx,x,y,ang,color,size){
+  size=size||7; ctx.save(); ctx.fillStyle=color; ctx.translate(x,y); ctx.rotate(ang);
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-size,size*0.42); ctx.lineTo(-size,-size*0.42); ctx.closePath(); ctx.fill(); ctx.restore();
+}
+function vec(ctx,x1,y1,x2,y2,color,width){ line(ctx,x1,y1,x2,y2,color,width||2.6); arrowHead(ctx,x2,y2,Math.atan2(y2-y1,x2-x1),color,7); }
+function dimArrow(ctx,x,y1,y2,color){ line(ctx,x,y1,x,y2,color,1.6); arrowHead(ctx,x,y1,-Math.PI/2,color,5); arrowHead(ctx,x,y2,Math.PI/2,color,5); }
+function textAt(ctx,txt,x,y,opts){
+  opts=opts||{}; ctx.save();
+  ctx.font=(opts.weight||500)+' '+(opts.size||12)+'px Poppins, sans-serif';
+  ctx.fillStyle=opts.color||COL.ink; ctx.textAlign=opts.align||'left'; ctx.textBaseline=opts.baseline||'alphabetic';
+  if(opts.alpha!==undefined) ctx.globalAlpha=opts.alpha;
+  ctx.fillText(txt,x,y); ctx.restore();
+}
+function rect(ctx,x,y,w,h,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw===undefined?2.2:lw; if(fill){ctx.fillStyle=fill; ctx.fillRect(x,y,w,h);} if(lw!==0){ctx.strokeStyle=stroke; ctx.strokeRect(x,y,w,h);} ctx.restore(); }
+function circ(ctx,x,y,r,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw||2.2; ctx.beginPath(); ctx.arc(x,y,Math.max(0.1,r),0,Math.PI*2); if(fill){ctx.fillStyle=fill; ctx.fill();} ctx.strokeStyle=stroke; ctx.stroke(); ctx.restore(); }
+function rrect(ctx,x,y,w,h,r){ r=Math.min(r,w/2,h/2); ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function fmt(x,d){ if(!isFinite(x)) return '—'; d=d===undefined?2:d; return Number(x.toFixed(d)).toString(); }
+function gauss(){ return (Math.random()+Math.random()+Math.random()+Math.random()-2)*1.2247; }
+function hexRgb(h){ const n=parseInt(h.slice(1),16); return [n>>16&255, n>>8&255, n&255]; }
+function mixCol(a,b,t){ const A=hexRgb(a),B=hexRgb(b); t=clamp(t,0,1); return 'rgb('+A.map((v,i)=>Math.round(lerp(v,B[i],t))).join(',')+')'; }
+function rampCol(stops,x){ // stops: [[pos,hex],...]
+  if(x<=stops[0][0]) return mixCol(stops[0][1],stops[0][1],0);
+  for(let i=1;i<stops.length;i++){ if(x<=stops[i][0]){ const a=stops[i-1],b=stops[i]; return mixCol(a[1],b[1],(x-a[0])/(b[0]-a[0])); } }
+  const l=stops[stops.length-1][1]; return mixCol(l,l,0);
+}
+function thermo(ctx,x,top,bot,frac,outline,liquid){
+  const br=8;
+  ctx.save(); ctx.lineWidth=2; ctx.strokeStyle=outline; ctx.fillStyle='#fff';
+  rrect(ctx,x-5,top,10,bot-top+2,5); ctx.fill(); ctx.stroke(); ctx.restore();
+  const lh=(bot-top-5)*clamp(frac,0,1);
+  ctx.save(); ctx.fillStyle=liquid; ctx.fillRect(x-2.2,bot-lh,4.4,lh+6); ctx.restore();
+  circ(ctx,x,bot+br,br,outline,'#fff',2); circ(ctx,x,bot+br,br-3.2,liquid,liquid,1);
+  for(let i=0;i<=4;i++){ const yy=top+5+(bot-top-5)*i/4; line(ctx,x+5,yy,x+9,yy,outline,1.1); }
+}
+function flame(ctx,cx,baseY,width,inten,t){
+  const n=5;
+  for(let i=0;i<n;i++){
+    const fx=cx-width/2+width*(i+0.5)/n;
+    const hh=(6+inten*32)*(0.78+0.22*Math.sin(t*13+i*1.7));
+    const sway=Math.sin(t*9+i*2.1)*3;
+    ctx.save(); ctx.lineJoin='round';
+    ctx.strokeStyle=COL.red; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(fx-7,baseY); ctx.quadraticCurveTo(fx-7,baseY-hh*0.55,fx+sway,baseY-hh); ctx.quadraticCurveTo(fx+7,baseY-hh*0.55,fx+7,baseY); ctx.stroke();
+    ctx.strokeStyle=COL.yellow; ctx.lineWidth=1.6;
+    ctx.beginPath(); ctx.moveTo(fx-3.5,baseY); ctx.quadraticCurveTo(fx-3,baseY-hh*0.35,fx+sway*0.5,baseY-hh*0.55); ctx.quadraticCurveTo(fx+3,baseY-hh*0.35,fx+3.5,baseY); ctx.stroke();
+    ctx.restore();
+  }
+}
+
+/* ---------------------------------------------------------------------
+   0b. ANIMATION ENGINE
+   --------------------------------------------------------------------- */
+let activeStops = [];
+function stopAllLoops(){ activeStops.forEach(s=>{ try{ s(); }catch(e){} }); activeStops=[]; }
+function animLoop(tick){
+  let last = performance.now();
+  let raf;
+  function frame(now){
+    const dt = Math.max(0, Math.min(0.04, (now-last)/1000));
+    last = now;
+    try{ tick(dt); }catch(e){ if(window.__errs) __errs.push(String(e&&e.stack||e).slice(0,300)); else console.error(e); }
+    raf = requestAnimationFrame(frame);
+  }
+  raf = requestAnimationFrame(frame);
+  const stop = ()=>cancelAnimationFrame(raf);
+  activeStops.push(stop);
+  return stop;
+}
+/** Exponential ease — frame-rate independent, always smooth. */
+function approach(cur,tgt,rate,dt){ return cur + (tgt-cur)*(1-Math.exp(-rate*dt)); }
+/** Spring-damper — gives natural overshoot and settle. */
+function springTo(state,target,k,damping,dt){
+  const acc = (target-state.x)*k - state.v*damping;
+  state.v += acc*dt;
+  state.x += state.v*dt;
+  return state.x;
+}
+function toggleWire(btns,cb){
+  btns.forEach(b=>b.onclick=()=>{ btns.forEach(x=>x.classList.remove('active')); b.classList.add('active'); cb(b); });
+}
+
+
+/* ---------------------------------------------------------------------
+   0c. CHAPTER-6 HELPERS — virtual stage, labels, a jointed line-drawn
+       teenager whose body really changes with age, sound, cameras
+   --------------------------------------------------------------------- */
+function rng(seed){ let s=(seed>>>0)||1; return ()=>{ s=(Math.imul(s,1664525)+1013904223)>>>0; return s/4294967296; }; }
+function smooth01(a,b,x){ const t=clamp((x-a)/(b-a),0,1); return t*t*(3-2*t); }
+function angDiff(a,b){ return Math.atan2(Math.sin(a-b),Math.cos(a-b)); }
+function ease(x){ x=clamp(x,0,1); return x<0.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2; }
+function spr(x){ return {x:x||0,v:0}; }
+function setv($,id,v){ const e=$('#'+id); if(e&&e.textContent!==v) e.textContent=v; }
+function setc($,id,c){ const e=$('#'+id); if(e&&e.style.color!==c) e.style.color=c; }
+function card(id,l,col){ return `<div class="rcard"><div class="rlabel">${l}</div><div class="rval" id="${id}"${col?` style="color:${col}"`:''}>—</div></div>`; }
+/* every scene draws on an 800 × 500 virtual stage, fitted into the canvas */
+const VW=800, VH=500;
+function stage(ctx,w,h){ const s=Math.min(w/VW,h/VH), ox=(w-VW*s)/2, oy=(h-VH*s)/2; ctx.translate(ox,oy); ctx.scale(s,s); return s; }
+function stepPills(el,names,cur,done,onPick){
+  el.innerHTML=names.map((n,i)=>`<button class="step-pill${i===cur?' active':''}${done[i]?' done':''}" data-i="${i}">${n}</button>`).join('');
+  el.querySelectorAll('.step-pill').forEach(b=>b.onclick=()=>onPick(+b.dataset.i));
+}
+function hexRgb(h){ if(h[0]!=='#') return h.match(/[\d.]+/g).slice(0,3).map(Number); const n=parseInt(h.slice(1),16); return [n>>16&255, n>>8&255, n&255]; }
+function rgba(h,a){ const c=hexRgb(h); return `rgba(${c[0]},${c[1]},${c[2]},${a})`; }
+function fitFont(ctx,txt,maxW,size,weight){
+  let s=size; ctx.font=weight+' '+s+'px Poppins, sans-serif';
+  while(s>9 && ctx.measureText(txt).width>maxW){ s-=0.5; ctx.font=weight+' '+s+'px Poppins, sans-serif'; }
+  return s;
+}
+function tableTop(ctx,x0,x1,y,legs){ ctx.save(); ctx.lineWidth=2.2; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff'; rrect(ctx,x0,y,x1-x0,12,3); ctx.fill(); ctx.stroke();
+  if(legs){ line(ctx,x0+22,y+12,x0+22,y+legs,COL.ink,2.4); line(ctx,x1-22,y+12,x1-22,y+legs,COL.ink,2.4); } ctx.restore(); }
+function meterV(ctx,x,y,w,h,frac,col,label){ // vertical bar meter, y = top
+  ctx.save(); rrect(ctx,x,y,w,h,5); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=1.6; ctx.stroke();
+  const f=clamp(frac,0,1); ctx.save(); rrect(ctx,x,y,w,h,5); ctx.clip(); ctx.fillStyle=col; ctx.globalAlpha=0.85; ctx.fillRect(x,y+h*(1-f),w,h*f); ctx.restore();
+  if(label) textAt(ctx,label,x+w/2,y+h+16,{align:'center',size:12,weight:700,color:col});
+  ctx.restore();
+}
+function tag(ctx,txt,x,y,col,o){ o=o||{}; ctx.save(); ctx.font=(o.weight||700)+' '+(o.size||13)+'px Poppins, sans-serif';
+  const w=ctx.measureText(txt).width+16, h=(o.size||13)+10; const X=o.align==='left'?x:(o.align==='right'?x-w:x-w/2);
+  ctx.globalAlpha=o.alpha===undefined?1:o.alpha; rrect(ctx,X,y-h/2,w,h,h/2); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=col; ctx.lineWidth=1.8; ctx.stroke();
+  ctx.fillStyle=col; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(txt,X+w/2,y+1); ctx.restore(); }
+function leader(ctx,x1,y1,x2,y2,txt,col,a){ ctx.save(); ctx.globalAlpha=a===undefined?1:a; line(ctx,x1,y1,x2,y2,col||COL.muted,1.3); circ(ctx,x1,y1,2.4,col||COL.muted,col||COL.muted,1);
+  textAt(ctx,txt,x2+(x2>=x1?5:-5),y2+4,{align:x2>=x1?'left':'right',size:12.5,weight:600,color:col||COL.muted}); ctx.restore(); }
+function glow(ctx,x,y,R,col,a){ if(a<=0.01) return; const c=hexRgb(col); ctx.save(); const g=ctx.createRadialGradient(x,y,0,x,y,R);
+  g.addColorStop(0,`rgba(${c},${Math.min(1,a)})`); g.addColorStop(0.35,`rgba(${c},${Math.min(1,a)*0.45})`); g.addColorStop(1,`rgba(${c},0)`);
+  ctx.fillStyle=g; ctx.beginPath(); ctx.arc(x,y,R,0,Math.PI*2); ctx.fill(); ctx.restore(); }
+function rayBurst(ctx,x,y,r0,r1,n,col,a,t){ if(a<=0.03) return; ctx.save(); ctx.globalAlpha=Math.min(1,a); ctx.strokeStyle=col; ctx.lineWidth=2.2; ctx.lineCap='round';
+  for(let i=0;i<n;i++){ const an=i/n*Math.PI*2+0.2, f=0.8+0.2*Math.sin(t*6+i*1.7); ctx.beginPath(); ctx.moveTo(x+Math.cos(an)*r0,y+Math.sin(an)*r0); ctx.lineTo(x+Math.cos(an)*(r0+(r1-r0)*f),y+Math.sin(an)*(r0+(r1-r0)*f)); ctx.stroke(); } ctx.restore(); }
+function mark(ctx,x,y,ok,a){ ctx.save(); ctx.globalAlpha=a===undefined?1:a; ctx.lineWidth=4; ctx.lineCap='round'; ctx.strokeStyle=ok?COL.green:COL.red; ctx.beginPath();
+  if(ok){ ctx.moveTo(x-9,y); ctx.lineTo(x-2,y+7); ctx.lineTo(x+10,y-8); } else { ctx.moveTo(x-8,y-8); ctx.lineTo(x+8,y+8); ctx.moveTo(x+8,y-8); ctx.lineTo(x-8,y+8); } ctx.stroke(); ctx.restore(); }
+const SFX={on:true,ctx:null};
+function sfxCtx(){ if(!SFX.on) return null; try{ if(!SFX.ctx) SFX.ctx=new (window.AudioContext||window.webkitAudioContext)(); if(SFX.ctx.state==='suspended') SFX.ctx.resume(); return SFX.ctx; }catch(e){ return null; } }
+function camFit(ctx,w,h,cam){ const cw=cam[2]-cam[0], ch=cam[3]-cam[1], s=Math.min(w/cw,h/ch); ctx.translate((w-cw*s)/2,(h-ch*s)/2); ctx.scale(s,s); ctx.translate(-cam[0],-cam[1]); return s; }
+function timeTagPx(ctx,w,txt){ tag(ctx,txt,w-58,24,COL.mid,{size:11.5,weight:600}); }
+
+/* ---- borrowed lab-ware: flame, candle, smoke, Sun ---- */
+function flameOne(ctx,x,y,w,h,t,col,inner){
+  if(h<1) return; const f=1+0.08*Math.sin(t*23)+0.05*Math.sin(t*37+1), sway=Math.sin(t*7.3)*w*0.12, H=h*f;
+  ctx.save(); ctx.lineJoin='round';
+  glow(ctx,x,y-H*0.45,H*0.9,col||COL.yellow,0.28);
+  ctx.beginPath(); ctx.moveTo(x-w/2,y); ctx.bezierCurveTo(x-w*0.62,y-H*0.45,x-w*0.1+sway,y-H*0.75,x+sway,y-H); ctx.bezierCurveTo(x+w*0.1+sway,y-H*0.75,x+w*0.62,y-H*0.45,x+w/2,y); ctx.quadraticCurveTo(x,y+w*0.3,x-w/2,y);
+  ctx.fillStyle=rgba(col||COL.yellow,0.22); ctx.fill(); ctx.strokeStyle=col||COL.yellow; ctx.lineWidth=2.4; ctx.stroke();
+  const ic=inner||COL.blue; ctx.beginPath(); ctx.moveTo(x-w*0.22,y); ctx.bezierCurveTo(x-w*0.28,y-H*0.25,x-w*0.05+sway*0.5,y-H*0.38,x+sway*0.5,y-H*0.46); ctx.bezierCurveTo(x+w*0.05+sway*0.5,y-H*0.38,x+w*0.28,y-H*0.25,x+w*0.22,y); ctx.closePath();
+  ctx.strokeStyle=ic; ctx.lineWidth=1.8; ctx.stroke();
+  ctx.restore();
+}
+/* spirit lamp standing on y (table top); returns the flame's hottest point */
+/* ---- candle: (x, base) bottom centre; st = {pool 0..1, lit, f 0..1 flame, t, lean, wickH, drips[]} ---- */
+function candleDraw(ctx,x,base,w,h,st){
+  st=st||{}; const top=base-h, pool=clamp(st.pool||0,0,1), dip=pool*w*0.16;
+  ctx.save(); ctx.lineJoin='round'; ctx.lineWidth=2.4; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff';
+  ctx.beginPath(); ctx.moveTo(x-w/2,base); ctx.lineTo(x-w/2,top); ctx.quadraticCurveTo(x,top+dip*2,x+w/2,top); ctx.lineTo(x+w/2,base); ctx.closePath(); ctx.fill(); ctx.stroke();
+  if(pool>0.02){ const pw=w/2-5; ctx.save(); ctx.beginPath(); ctx.moveTo(x-pw,top+1.5); ctx.quadraticCurveTo(x,top+dip*2+2,x+pw,top+1.5); ctx.closePath();
+    ctx.fillStyle=st.solid?'#f1f4f8':'rgba(47,143,224,0.28)'; ctx.fill(); ctx.strokeStyle=st.solid?COL.mid:COL.blue; ctx.lineWidth=1.8; ctx.beginPath(); ctx.moveTo(x-pw,top+1.5); ctx.lineTo(x+pw,top+1.5); ctx.stroke(); ctx.restore(); }
+  (st.drips||[]).forEach(d=>{ ctx.save(); ctx.fillStyle=d.solid<1?mixCol('#dcebfa','#ffffff',d.solid):'#fff'; ctx.strokeStyle=mixCol(COL.blue,COL.ink,d.solid); ctx.lineWidth=2;
+    const sx=x+d.side*w/2; ctx.beginPath(); ctx.moveTo(sx,top+2); ctx.quadraticCurveTo(sx+d.side*d.wid,top+d.len*0.5,sx+d.side*d.wid*0.7,top+d.len); ctx.arc(sx+d.side*d.wid*0.35,top+d.len,d.wid*0.38,0,Math.PI); ctx.lineTo(sx,top+d.len*0.7); ctx.fill(); ctx.stroke(); ctx.restore(); });
+  const wh=st.wickH===undefined?18:st.wickH, bx=x, by=top+dip*1.2, lean=st.lean||0;
+  const tip={x:bx+lean*6+Math.sin((st.t||0)*1.3)*0.6, y:by-wh};
+  ctx.strokeStyle=COL.ink; ctx.lineWidth=3; ctx.beginPath(); ctx.moveTo(bx,by+4); ctx.quadraticCurveTo(bx,by-wh*0.6,tip.x,tip.y); ctx.stroke();
+  if(st.glow>0.02) circ(ctx,tip.x,tip.y,2.2,COL.red,COL.red,1);
+  ctx.restore();
+  if(st.lit && st.f>0.02){ const f=st.f, fh=(st.fh||58)*f, fw=(st.fw||20)*Math.sqrt(f);
+    ctx.save(); ctx.translate(tip.x,tip.y+4); ctx.rotate(lean*0.5); flameOne(ctx,0,0,fw,fh,st.t||0,COL.yellow,COL.blue); ctx.restore(); }
+  return {tip, top, dip};
+}
+/* smoke wisp particles */
+function smokeAdd(sm,x,y,col){ sm.push({x,y,vx:(Math.random()-0.5)*14,vy:-40-Math.random()*25,r:3,t:0,col:col||COL.mid}); }
+function smokeStep(sm,dt,life,ceil){ sm.forEach(s=>{ s.t+=dt; s.vx+=(Math.random()-0.5)*60*dt; s.x+=s.vx*dt; s.y+=s.vy*dt; s.r+=9*dt; if(ceil!==undefined && s.y<ceil(s.x)+s.r){ s.y=ceil(s.x)+s.r; s.vy=0; s.vx+=(s.x>0?1:-1)*0; } });
+  for(let i=sm.length-1;i>=0;i--) if(sm[i].t>(life||2.4)) sm.splice(i,1); }
+function smokeDraw(ctx,sm,life){ ctx.save(); sm.forEach(s=>{ ctx.globalAlpha=0.55*(1-s.t/(life||2.4)); circ(ctx,s.x,s.y,s.r,s.col,null,1.4); }); ctx.restore(); }
+function sunDraw(ctx,x,y,r,t,a){ ctx.save(); ctx.globalAlpha=a===undefined?1:a; glow(ctx,x,y,r*2.4,COL.yellow,0.35); circ(ctx,x,y,r,COL.yellow,'#fff8dc',3);
+  ctx.strokeStyle=COL.yellow; ctx.lineWidth=2.6; ctx.lineCap='round'; for(let i=0;i<12;i++){ const an=i/12*Math.PI*2+t*0.15; ctx.beginPath(); ctx.moveTo(x+Math.cos(an)*(r+7),y+Math.sin(an)*(r+7)); ctx.lineTo(x+Math.cos(an)*(r+17+3*Math.sin(t*3+i)),y+Math.sin(an)*(r+17+3*Math.sin(t*3+i))); ctx.stroke(); } ctx.restore(); }
+function spiritLamp(ctx,x,y,t,on){
+  ctx.save(); ctx.lineJoin='round'; ctx.lineWidth=2.4; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff';
+  ctx.beginPath(); ctx.moveTo(x-46,y); ctx.quadraticCurveTo(x-56,y-44,x-20,y-56); ctx.lineTo(x+20,y-56); ctx.quadraticCurveTo(x+56,y-44,x+46,y); ctx.closePath(); ctx.fill(); ctx.stroke();
+  ctx.save(); ctx.beginPath(); ctx.moveTo(x-46,y); ctx.quadraticCurveTo(x-56,y-44,x-20,y-56); ctx.lineTo(x+20,y-56); ctx.quadraticCurveTo(x+56,y-44,x+46,y); ctx.closePath(); ctx.clip();
+  ctx.fillStyle='rgba(47,143,224,0.14)'; ctx.fillRect(x-60,y-26,120,26); line(ctx,x-50,y-26,x+50,y-26,COL.blue,1.4); ctx.restore();
+  rrect(ctx,x-12,y-70,24,15,3); ctx.fill(); ctx.stroke();
+  line(ctx,x,y-70,x,y-80,COL.ink,3.4);
+  ctx.restore();
+  if(on) flameOne(ctx,x,y-80,20,62,t,COL.yellow,COL.blue);
+  return {x, y:y-80-40};
+}
+/* pair of tongs: jaw tip at (x,y), handles run back along angle `ang` (radians, from tip toward the hinge) */
+
+/* ---------------------------------------------------------------------
+   0d. CHAPTER-7 HELPERS — temperature colour, lab thermometer, magnifying
+       lens, tripod, beaker, bowl, wavy heat arrows, sounds, small tables
+   --------------------------------------------------------------------- */
+const T_RAMP=[[15,'#2f8fe0'],[32,'#8aa9c8'],[60,'#d9a017'],[150,'#d9432b'],[450,'#8a1c0c']];
+function tempCol(T){ return rampCol(T_RAMP,T); }
+/* vertical lab thermometer; T in °C; returns the bulb centre */
+function labThermo(ctx,x,top,bot,T,lo,hi,o){ o=o||{}; const r=o.r||9, tw=o.w||12;
+  ctx.save(); ctx.lineWidth=2; ctx.strokeStyle=COL.ink; ctx.fillStyle='#fff';
+  rrect(ctx,x-tw/2,top,tw,bot-top+4,tw/2); ctx.fill(); ctx.stroke();
+  const f=clamp((T-lo)/(hi-lo),0,1), ly=bot-(bot-top-8)*f;
+  ctx.fillStyle=COL.red; ctx.fillRect(x-2.4,ly,4.8,bot-ly+6);
+  circ(ctx,x,bot+r,r,COL.ink,'#fff',2); circ(ctx,x,bot+r,r-3,COL.red,COL.red,1);
+  const step=o.step||10;
+  for(let v=Math.ceil(lo/step)*step; v<=hi; v+=step){ const y=bot-(bot-top-8)*(v-lo)/(hi-lo); const big=(v%(step*2)===0);
+    line(ctx,x+tw/2,y,x+tw/2+(big?7:4),y,COL.ink,1.1); if(big&&o.labels!==false) textAt(ctx,String(v),x+tw/2+10,y+4,{size:o.fs||10,weight:600,color:COL.muted}); }
+  ctx.restore(); return {x,y:bot+r,ly};
+}
+/* magnifying lens: small ring at (sx,sy) on the object, big view at (cx,cy) */
+function lensView(ctx,cx,cy,R,sx,sy,draw,o){ o=o||{};
+  const d=Math.hypot(cx-sx,cy-sy)||1, a=Math.atan2(cy-sy,cx-sx), s=Math.asin(clamp((R-8)/d,-1,1));
+  ctx.save(); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.2; ctx.setLineDash([4,4]);
+  [1,-1].forEach(k=>{ const b=a+k*(Math.PI/2+s); ctx.beginPath(); ctx.moveTo(sx+Math.cos(b)*8,sy+Math.sin(b)*8); ctx.lineTo(cx+Math.cos(b)*R,cy+Math.sin(b)*R); ctx.stroke(); });
+  ctx.restore(); circ(ctx,sx,sy,8,COL.ink,null,2);
+  ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill(); ctx.clip(); draw(); ctx.restore();
+  circ(ctx,cx,cy,R,COL.ink,null,3.2); circ(ctx,cx,cy,R+4,COL.mid,null,1);
+  if(o.label) tag(ctx,o.label,cx,cy+R+16,o.col||COL.ink,{size:11});
+}
+function tripod(ctx,cx,top,baseY,w){ ctx.save(); ctx.lineCap='round';
+  line(ctx,cx-w/2-6,top,cx+w/2+6,top,COL.ink,4);
+  line(ctx,cx-w/2,top,cx-w/2-22,baseY,COL.ink,3.4); line(ctx,cx+w/2,top,cx+w/2+22,baseY,COL.ink,3.4); line(ctx,cx,top+3,cx,baseY,COL.mid,2.6);
+  ctx.restore(); }
+function gauze(ctx,cx,y,w){ ctx.save(); rect(ctx,cx-w/2,y-3,w,6,COL.ink,'#fff',1.8); for(let x=cx-w/2+4;x<cx+w/2;x+=6) line(ctx,x,y-3,x+3,y+3,COL.mid,1); ctx.restore(); }
+/* straight-walled beaker; returns inner box */
+function beakerDraw(ctx,cx,top,bot,w,o){ o=o||{}; const x0=cx-w/2, x1=cx+w/2;
+  ctx.save(); ctx.lineJoin='round'; ctx.lineWidth=3; ctx.strokeStyle=COL.ink;
+  ctx.beginPath(); ctx.moveTo(x0-8,top-4); ctx.lineTo(x0,top+8); ctx.lineTo(x0,bot-10); ctx.quadraticCurveTo(x0,bot,x0+10,bot); ctx.lineTo(x1-10,bot); ctx.quadraticCurveTo(x1,bot,x1,bot-10); ctx.lineTo(x1,top); ctx.lineTo(x1+4,top-4); ctx.stroke();
+  if(o.grad){ for(let i=1;i<=o.grad.n;i++){ const y=bot-(bot-top)*i/(o.grad.n+1); line(ctx,x0+6,y,x0+(i%2?16:24),y,COL.mid,1.3); if(o.grad.lab&&i%2===0) textAt(ctx,o.grad.lab(i),x0+28,y+4,{size:9.5,color:COL.mid,weight:600}); } }
+  ctx.restore(); return {x0,x1,top,bot};
+}
+/* round bowl: rim y, half-width w, depth d; returns the inner half-width at y */
+function bowlHalfW(w,d,rim,y){ const u=clamp((y-rim)/d,0,1); return w*Math.sqrt(Math.max(0,1-u*u)); }
+function bowlPath(ctx,cx,rim,w,d){ ctx.beginPath(); ctx.moveTo(cx-w,rim); ctx.ellipse(cx,rim,w,d,0,Math.PI,0,true); }
+function bowlDraw(ctx,cx,rim,w,d){ ctx.save(); ctx.lineWidth=3; ctx.strokeStyle=COL.ink; bowlPath(ctx,cx,rim,w,d); ctx.stroke(); line(ctx,cx-w-8,rim,cx-w+6,rim,COL.ink,3); line(ctx,cx+w-6,rim,cx+w+8,rim,COL.ink,3);
+  line(ctx,cx-w*0.35,rim+d+2,cx+w*0.35,rim+d+2,COL.ink,3); ctx.restore(); }
+/* a wavy arrow: heat leaving / arriving, travelling phase t */
+function heatWave(ctx,x,y,len,ang,col,t,a,amp){ if(a<=0.02) return; amp=amp||4; ctx.save(); ctx.globalAlpha=clamp(a,0,1); ctx.translate(x,y); ctx.rotate(ang);
+  ctx.strokeStyle=col; ctx.lineWidth=2.2; ctx.lineCap='round'; ctx.beginPath();
+  for(let s=0;s<=len-6;s+=2){ const yy=Math.sin(s*0.35-t*9)*amp; s?ctx.lineTo(s,yy):ctx.moveTo(s,yy); } ctx.stroke(); arrowHead(ctx,len,0,0,col,7); ctx.restore(); }
+function wavyUp(ctx,x,y0,y1,col,t,a,amp){ heatWave(ctx,x,y0,y0-y1,-Math.PI/2,col,t,a,amp); }
+/* sounds */
+function tink(freq,gain,dur){ const a=sfxCtx(); if(!a) return; try{ const o=a.createOscillator(), g=a.createGain(); o.type='sine'; o.frequency.value=freq||2600;
+  g.gain.setValueAtTime(gain||0.12,a.currentTime); g.gain.exponentialRampToValueAtTime(0.0001,a.currentTime+(dur||0.35)); o.connect(g); g.connect(a.destination); o.start(); o.stop(a.currentTime+(dur||0.35)+0.02); }catch(e){} }
+function drip(){ tink(900+Math.random()*500,0.05,0.12); }
+/* small result table in the side panel */
+function logTable(heads,rows){ return `<table class="log"><tr>${heads.map(h=>`<th>${h}</th>`).join('')}</tr>${rows.map(r=>`<tr>${r.map(c=>typeof c==='object'?`<td class="${c.c||''}">${c.v}</td>`:`<td>${c}</td>`).join('')}</tr>`).join('')}</table>`; }
+function chipsWire(root,sel,cb){ const bs=[...root.querySelectorAll(sel)]; bs.forEach(b=>b.onclick=()=>{ bs.forEach(x=>x.classList.remove('active')); b.classList.add('active'); cb(b); }); return bs; }
+function setBtn(b,txt,cls){ if(b.textContent!==txt) b.textContent=txt; if(cls!==undefined) b.className='toggle-btn '+cls; }
+function pathNew(pts){ const L=[0]; for(let i=1;i<pts.length;i++) L.push(L[i-1]+Math.hypot(pts[i].x-pts[i-1].x,pts[i].y-pts[i-1].y)); return {pts,L,len:L[L.length-1]}; }
+function pathAt(P,s){ s=clamp(s,0,P.len); let i=1; while(i<P.L.length-1 && P.L[i]<s) i++;
+  const a=P.pts[i-1], b=P.pts[i], seg=(P.L[i]-P.L[i-1])||1, u=(s-P.L[i-1])/seg; return {x:a.x+(b.x-a.x)*u, y:a.y+(b.y-a.y)*u, a:Math.atan2(b.y-a.y,b.x-a.x)}; }
+function lumpPoly(seed,R,n,flat){ const r=rng(seed), out=[]; for(let i=0;i<n;i++){ const a=i/n*Math.PI*2, rr=R*(0.75+0.35*r()); out.push({x:Math.cos(a)*rr*1.25, y:Math.sin(a)*rr*(flat||0.7)}); } return out; }
+function polyPath(ctx,pts,x,y){ ctx.beginPath(); pts.forEach((q,i)=>i?ctx.lineTo(x+q.x,y+q.y):ctx.moveTo(x+q.x,y+q.y)); ctx.closePath(); }
+
+/* ---- sequencer (scripted multi-step lab actions) ---- */
+function seqNew(){ return {list:[],cur:null,t:0}; }
+function seqRun(q,dt){ let guard=0; while(guard++<20){ if(!q.cur){ q.cur=q.list.shift(); if(!q.cur) return; q.t=0; if(q.cur.start) q.cur.start(); }
+    q.t+=dt; dt=0; const c=q.cur, u=c.d>0?Math.min(1,q.t/c.d):1; c.f(u); if(u<1) return; dt=q.t-c.d; q.cur=null; } }
+function seqBusy(q){ return !!q.cur||q.list.length>0; }
+function mv(S,to,d,extra){ let from; return {d, start(){ from={}; for(const k in to) from[k]=S[k]; }, f(u){ const e=ease(u); for(const k in to) S[k]=lerp(from[k],to[k],e); if(extra) extra(u); }}; }
+function wt(d,f){ return {d, f:f||(()=>{})}; }
+function act(f){ return {d:0, start:f, f(){}}; }
+
+/* ---------------------------------------------------------------------
+   0d. A JOINTED LINE-DRAWN TEENAGER
+   Body proportions follow real growth: the head is ≈ 1/6 of height in a
+   child and ≈ 1/7.5 in an adult; boys' shoulders broaden (≈ 0.20 → 0.25 H),
+   girls' hips widen a little (≈ 0.15 → 0.19 H). m = how far through
+   puberty (0 … 1). Pose angles are measured from straight down,
+   positive = toward screen-right. Returns the joint positions for props.
+   --------------------------------------------------------------------- */
+const POSE0={sL:-0.1,eL:0.08,sR:0.1,eR:-0.08,hL:-0.05,kL:0,hR:0.05,kR:0,lean:0,tilt:0};
+function poseMix(a,b,t){ const o={}; for(const k in POSE0) o[k]=lerp(a[k]===undefined?POSE0[k]:a[k],b[k]===undefined?POSE0[k]:b[k],t); return o; }
+function limb(ctx,pts,wd,col){ ctx.save(); ctx.lineCap='round'; ctx.lineJoin='round';
+  ctx.beginPath(); pts.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y)); ctx.strokeStyle=col||COL.ink; ctx.lineWidth=wd; ctx.stroke();
+  ctx.strokeStyle='#fff'; ctx.lineWidth=Math.max(1,wd-4.4); ctx.stroke(); ctx.restore(); }
+function teen(ctx,x,footY,H,o){
+  o=o||{}; const m=clamp(o.m||0,0,1), boy=o.sex==='b', p=Object.assign({},POSE0,o.pose||{}), mood=clamp(o.mood||0,-1.2,1.2);
+  const r=H/(12+3*m), neck=0.035*H, th=0.228*H, sh=0.228*H, torso=0.509*H-2*r;
+  const dir=a=>({x:Math.sin(a),y:Math.cos(a)});
+  const legEnd=(h,k)=>{ const a=dir(h), b=dir(h+k); return {kx:a.x*th,ky:a.y*th,fx:a.x*th+b.x*sh,fy:a.y*th+b.y*sh}; };
+  const LL=legEnd(p.hL,p.kL), LR=legEnd(p.hR,p.kR);
+  const hipY=footY-Math.max(LL.fy,LR.fy)-(o.lift||0);
+  const hw=H*(boy?0.15:lerp(0.15,0.19,m)), sw=H*(boy?lerp(0.2,0.255,m):lerp(0.2,0.215,m));
+  const lean=p.lean, up=dir(Math.PI+lean);                              // torso axis, hip → shoulder
+  const sc={x:x+up.x*torso,y:hipY+up.y*torso}, px={x:Math.cos(lean),y:Math.sin(lean)};
+  const shL={x:sc.x-px.x*sw/2,y:sc.y-px.y*sw/2}, shR={x:sc.x+px.x*sw/2,y:sc.y+px.y*sw/2};
+  const hc={x:sc.x+up.x*(neck+r)+Math.sin(p.tilt)*r*0.3,y:sc.y+up.y*(neck+r)};
+  const col=o.col||COL.ink, wd=Math.max(4,H*0.046);
+  const hipL={x:x-hw*0.26,y:hipY}, hipR={x:x+hw*0.26,y:hipY};
+  const arm=(s,a,e)=>{ const u=dir(a+lean), v=dir(a+e+lean); const el={x:s.x+u.x*0.19*H,y:s.y+u.y*0.19*H}; return {el,ha:{x:el.x+v.x*0.17*H,y:el.y+v.y*0.17*H}}; };
+  const AL=arm(shL,p.sL,p.eL), AR=arm(shR,p.sR,p.eR);
+  ctx.save(); ctx.lineJoin='round'; ctx.lineCap='round';
+  // long hair sits behind everything
+  if(!boy){ ctx.save(); ctx.fillStyle='#fff'; ctx.strokeStyle=col; ctx.lineWidth=2.2; ctx.beginPath();
+    ctx.moveTo(hc.x-r*1.05,hc.y-r*0.1); ctx.quadraticCurveTo(hc.x-r*1.25,hc.y+r*1.6,hc.x-r*0.7,hc.y+r*2.0); ctx.lineTo(hc.x+r*0.7,hc.y+r*2.0);
+    ctx.quadraticCurveTo(hc.x+r*1.25,hc.y+r*1.6,hc.x+r*1.05,hc.y-r*0.1); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore(); }
+  // legs
+  limb(ctx,[hipL,{x:hipL.x+LL.kx,y:hipY+LL.ky},{x:hipL.x+LL.fx,y:hipY+LL.fy}],wd*1.12,col);
+  limb(ctx,[hipR,{x:hipR.x+LR.kx,y:hipY+LR.ky},{x:hipR.x+LR.fx,y:hipY+LR.fy}],wd*1.12,col);
+  const foot=(hx,L,s)=>{ ctx.save(); ctx.strokeStyle=col; ctx.lineWidth=2; ctx.fillStyle='#fff'; ctx.beginPath(); ctx.ellipse(hx+L.fx+s*H*0.022,hipY+L.fy-wd*0.3,H*0.04,wd*0.42,0,0,Math.PI*2); ctx.fill(); ctx.stroke(); ctx.restore(); };
+  foot(hipL.x,LL,-1); foot(hipR.x,LR,1);
+  // torso: shoulders → waist → hips
+  const wst=Math.min(sw,hw)*0.46+H*0.02, mid={x:x+up.x*torso*0.45,y:hipY+up.y*torso*0.45};
+  const nk=r*0.5, dn=wd*0.9;
+  ctx.beginPath(); ctx.moveTo(sc.x-px.x*nk,sc.y-px.y*nk-2); ctx.quadraticCurveTo(shL.x-up.x*0,shL.y-2,shL.x-px.x*wd*0.3+(-up.x)*dn,shL.y+(-up.y)*dn);
+  ctx.quadraticCurveTo(mid.x-px.x*wst*1.05,mid.y-px.y*wst*1.05,x-hw/2,hipY); ctx.lineTo(x+hw/2,hipY);
+  ctx.quadraticCurveTo(mid.x+px.x*wst*1.05,mid.y+px.y*wst*1.05,shR.x+px.x*wd*0.3+(-up.x)*dn,shR.y+(-up.y)*dn); ctx.quadraticCurveTo(shR.x,shR.y-2,sc.x+px.x*nk,sc.y+px.y*nk-2); ctx.closePath();
+  ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=col; ctx.lineWidth=2.4; ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(sc.x-px.x*r*0.45,sc.y-px.y*r*0.45); ctx.quadraticCurveTo(sc.x+up.x*-r*0.35,sc.y-up.y*-r*0.35+2,sc.x+px.x*r*0.45,sc.y+px.y*r*0.45); ctx.lineWidth=1.6; ctx.stroke();
+  // arms
+  limb(ctx,[shL,AL.el,AL.ha],wd,col); limb(ctx,[shR,AR.el,AR.ha],wd,col);
+  circ(ctx,AL.ha.x,AL.ha.y,wd*0.62,col,'#fff',2); circ(ctx,AR.ha.x,AR.ha.y,wd*0.62,col,'#fff',2);
+  // neck (+ Adam's apple in boys)
+  limb(ctx,[{x:sc.x,y:sc.y},{x:hc.x,y:hc.y+r*0.8}],r*0.62,col);
+  const aa=boy?smooth01(0.45,0.85,m):0; if(aa>0.02){ ctx.save(); ctx.strokeStyle=col; ctx.lineWidth=1.6; ctx.globalAlpha=aa; ctx.beginPath(); ctx.arc(hc.x,hc.y+r*1.18,r*0.13,-0.3,Math.PI+0.3); ctx.stroke(); ctx.restore(); }
+  // ears (both views), then head: o.back = seen from behind (hair only), else a face
+  [-1,1].forEach(s=>{ ctx.save(); ctx.beginPath(); ctx.ellipse(hc.x+s*r*0.98,hc.y+r*0.08,r*0.2,r*0.3,0,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=col; ctx.lineWidth=2; ctx.stroke(); ctx.restore(); });
+  circ(ctx,hc.x,hc.y,r,col,'#fff',2.4);
+  if(o.back){ ctx.save(); ctx.beginPath(); ctx.arc(hc.x,hc.y,r,Math.PI*0.9,Math.PI*2.1); ctx.quadraticCurveTo(hc.x,hc.y+r*(boy?0.75:1.1),hc.x-r*Math.cos(Math.PI*0.1),hc.y+r*Math.sin(Math.PI*0.1)); ctx.closePath();
+    ctx.fillStyle='#e9eef5'; ctx.fill(); ctx.strokeStyle=col; ctx.lineWidth=2.2; ctx.stroke();
+    ctx.lineWidth=1.2; for(let i=-3;i<=3;i++){ ctx.beginPath(); ctx.moveTo(hc.x+i*r*0.12,hc.y-r*0.95); ctx.quadraticCurveTo(hc.x+i*r*0.28,hc.y-r*0.1,hc.x+i*r*0.26,hc.y+r*(boy?0.5:0.8)); ctx.stroke(); } ctx.restore(); }
+  else {
+    ctx.save(); ctx.strokeStyle=col; ctx.lineWidth=2.2; ctx.beginPath();
+    if(boy){ ctx.arc(hc.x,hc.y,r,Math.PI*1.02,Math.PI*1.98); ctx.quadraticCurveTo(hc.x+r*0.2,hc.y-r*0.45,hc.x-r*0.95,hc.y-r*0.25); }
+    else { ctx.arc(hc.x,hc.y,r*1.04,Math.PI*0.95,Math.PI*2.05); ctx.quadraticCurveTo(hc.x+r*0.1,hc.y-r*0.62,hc.x-r*1.02,hc.y+r*0.05); }
+    ctx.fillStyle='#e9eef5'; ctx.fill(); ctx.stroke(); ctx.restore();
+    const ey=hc.y+r*0.05, mx=hc.x, my=hc.y+r*0.48, mw=r*0.36;
+    circ(ctx,hc.x-r*0.34,ey,Math.max(1.4,r*0.07),col,col,1); circ(ctx,hc.x+r*0.34,ey,Math.max(1.4,r*0.07),col,col,1);
+    line(ctx,hc.x-r*0.5,ey-r*0.26,hc.x-r*0.2,ey-r*0.28,col,1.6); line(ctx,hc.x+r*0.2,ey-r*0.28,hc.x+r*0.5,ey-r*0.26,col,1.6);
+    ctx.save(); ctx.strokeStyle=col; ctx.lineWidth=1.8; ctx.beginPath(); ctx.moveTo(mx-mw,my-mood*r*0.05); ctx.quadraticCurveTo(mx,my+mood*r*0.34,mx+mw,my-mood*r*0.05); ctx.stroke(); ctx.restore(); }
+  ctx.restore();
+  return {head:hc,r,hand:[AL.ha,AR.ha],el:[AL.el,AR.el],sh:[shL,shR],hip:{x,y:hipY},ear:[{x:hc.x-r*0.98,y:hc.y+r*0.08},{x:hc.x+r*0.98,y:hc.y+r*0.08}],top:hc.y-r};
+}
+
+/* ---------------------------------------------------------------------
+   0h. CHAPTER-11 HELPERS — light. A torch, screens on stands, an eye,
+       mirrors with a silvered back, travelling-dash light rays, ray–mirror
+       geometry (law of reflection), rulers, small photon swarms.
+   --------------------------------------------------------------------- */
+const WARM='#fff4c4', DARKROOM='#1d2a3c', SHADE='#3a4658';
+/* torch pointing along angle ang; (x,y) = centre of the glass; s = scale.
+   br 0…1 = how bright. Returns the glass centre and half-height. */
+function torchDraw(ctx,x,y,ang,br,s){
+  s=s||1; ctx.save(); ctx.translate(x,y); ctx.rotate(ang); ctx.scale(s,s); ctx.lineJoin='round';
+  ctx.fillStyle='#fff'; ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4;
+  ctx.beginPath(); ctx.moveTo(0,-24); ctx.lineTo(-34,-15); ctx.lineTo(-120,-15); ctx.quadraticCurveTo(-128,-15,-128,-7); ctx.lineTo(-128,7); ctx.quadraticCurveTo(-128,15,-120,15); ctx.lineTo(-34,15); ctx.lineTo(0,24); ctx.closePath(); ctx.fill(); ctx.stroke();
+  for(let k=0;k<5;k++) line(ctx,-108+k*9,-15,-108+k*9,15,COL.mid,1.2);
+  rrect(ctx,-70,-21,16,7,3); ctx.fillStyle=br>0.05?COL.yellow:'#fff'; ctx.fill(); ctx.stroke();       // switch
+  line(ctx,-34,-15,-34,15,COL.ink,1.6);
+  ctx.beginPath(); ctx.moveTo(-3,-22); ctx.quadraticCurveTo(-26,0,-3,22); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.4; ctx.stroke();   // reflector
+  circ(ctx,-14,0,4.5,COL.ink,br>0.05?mixCol('#ffffff',COL.yellow,0.6):'#fff',1.6);                      // bulb
+  line(ctx,0,-24,0,24,br>0.05?COL.yellow:COL.ink,3.4);                                                // glass
+  ctx.restore();
+  if(br>0.02) glow(ctx,x,y,34*s,COL.yellow,0.55*br);
+  return {x,y,R:22*s};
+}
+/* a card screen standing on a foot (side view); x = its face */
+function screenSide(ctx,x,top,bot,o){ o=o||{}; ctx.save(); ctx.lineJoin='round';
+  rect(ctx,x,top,7,bot-top,COL.ink,'#fff',2.2); line(ctx,x+3.5,bot,x+3.5,bot+(o.leg||14),COL.ink,3); line(ctx,x-18,bot+(o.leg||14),x+26,bot+(o.leg||14),COL.ink,3.2);
+  if(o.label) textAt(ctx,o.label,x+3,top-10,{align:'center',size:12,weight:700,color:o.col||COL.green});
+  ctx.restore(); }
+/* a line-drawn eye looking along ang (side view) */
+function eyeSide(ctx,x,y,ang,s,col){ s=s||1; ctx.save(); ctx.translate(x,y); ctx.rotate(ang); ctx.scale(s,Math.cos(ang)<-0.01?-s:s); ctx.lineJoin='round';
+  ctx.beginPath(); ctx.moveTo(-16,0); ctx.quadraticCurveTo(-2,-14,12,-3); ctx.quadraticCurveTo(14,0,12,3); ctx.quadraticCurveTo(-2,14,-16,0); ctx.closePath();
+  ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=col||COL.ink; ctx.lineWidth=2.2; ctx.stroke();
+  circ(ctx,5,0,5.2,col||COL.green,'#fff',2); circ(ctx,7,0,2.4,COL.ink,COL.ink,1);
+  ctx.beginPath(); ctx.moveTo(-18,-6); ctx.quadraticCurveTo(-4,-20,12,-9); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.4; ctx.stroke(); ctx.restore(); }
+/* a plane mirror from a→b; the silvered back (hatched) is on the side of `back` (±1 along the normal) */
+function mirrorSeg(ctx,ax,ay,bx,by,back,o){ o=o||{}; const L=Math.hypot(bx-ax,by-ay)||1, tx=(bx-ax)/L, ty=(by-ay)/L, nx=-ty*back, ny=tx*back, th=o.th||6;
+  ctx.save(); ctx.lineCap='round';
+  ctx.beginPath(); ctx.moveTo(ax,ay); ctx.lineTo(bx,by); ctx.lineTo(bx+nx*th,by+ny*th); ctx.lineTo(ax+nx*th,ay+ny*th); ctx.closePath(); ctx.fillStyle=o.steel?'#eef2f7':'#e3f0fb'; ctx.fill();
+  ctx.strokeStyle=COL.ink; ctx.lineWidth=1.6; ctx.stroke();
+  ctx.save(); ctx.clip(); ctx.strokeStyle=COL.mid; ctx.lineWidth=1; for(let s=-th;s<L+th;s+=7){ ctx.beginPath(); ctx.moveTo(ax+tx*s,ay+ty*s); ctx.lineTo(ax+tx*(s+th)+nx*th,ay+ty*(s+th)+ny*th); ctx.stroke(); } ctx.restore();
+  line(ctx,ax,ay,bx,by,o.col||COL.blue,o.w||3.4); ctx.restore(); }
+/* reflect direction d about unit normal n */
+function reflect(dx,dy,nx,ny){ const k=2*(dx*nx+dy*ny); return {x:dx-k*nx, y:dy-k*ny}; }
+/* ray (px,py)+t(dx,dy) against segment a–b → {t,u} or null */
+function raySeg(px,py,dx,dy,ax,ay,bx,by){ const ex=bx-ax, ey=by-ay, den=dx*ey-dy*ex; if(Math.abs(den)<1e-9) return null;
+  const t=((ax-px)*ey-(ay-py)*ex)/den, u=((ax-px)*dy-(ay-py)*dx)/den; return (t>1e-6&&u>=0&&u<=1)?{t,u}:null; }
+/* a light ray along a polyline: solid thin core + travelling dashes + one arrow per segment */
+function rayPath(ctx,pts,col,t,a,w,o){ if(a<=0.02||pts.length<2) return; o=o||{}; ctx.save(); ctx.globalAlpha=clamp(a,0,1); ctx.lineCap='round'; ctx.lineJoin='round';
+  ctx.beginPath(); pts.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y)); ctx.strokeStyle=rgba(col,0.35); ctx.lineWidth=(w||2)+3; ctx.stroke();
+  if(o.dash!==false){ ctx.setLineDash(o.dashes||[10,8]); ctx.lineDashOffset=-t*(o.speed||60); } ctx.strokeStyle=col; ctx.lineWidth=w||2; ctx.stroke(); ctx.setLineDash([]);
+  if(o.arrows!==false) for(let i=1;i<pts.length;i++){ const A=pts[i-1],B=pts[i], L=Math.hypot(B.x-A.x,B.y-A.y); if(L<40) continue; const f=o.at||0.55; arrowHead(ctx,A.x+(B.x-A.x)*f,A.y+(B.y-A.y)*f,Math.atan2(B.y-A.y,B.x-A.x),col,8); }
+  ctx.restore(); }
+function fillPoly(ctx,pts,fill,stroke,lw){ ctx.save(); ctx.beginPath(); pts.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y)); ctx.closePath(); if(fill){ ctx.fillStyle=fill; ctx.fill(); } if(stroke){ ctx.strokeStyle=stroke; ctx.lineWidth=lw||1.5; ctx.stroke(); } ctx.restore(); }
+/* horizontal ruler with ticks every `step` units, px per unit k */
+function rulerH(ctx,x0,y,len,k,step,lab,col){ ctx.save(); rect(ctx,x0,y,len*k,16,col||COL.ink,'#fff',1.6);
+  for(let v=0;v<=len+1e-9;v+=step/2){ const X=x0+v*k, big=Math.abs(v/step-Math.round(v/step))<1e-6; line(ctx,X,y,X,y+(big?9:5),col||COL.ink,1.1); if(big&&lab) textAt(ctx,lab(v),X,y+15,{align:'center',size:9,weight:600,color:COL.muted}); }
+  ctx.restore(); }
+/* dimension line with arrows at both ends and a label in the middle */
+function dimH(ctx,x0,x1,y,txt,col){ if(Math.abs(x1-x0)<4) return; line(ctx,x0,y,x1,y,col,1.6); const s=Math.sign(x1-x0); arrowHead(ctx,x0,y,s>0?Math.PI:0,col,6); arrowHead(ctx,x1,y,s>0?0:Math.PI,col,6);
+  line(ctx,x0,y-6,x0,y+6,col,1.4); line(ctx,x1,y-6,x1,y+6,col,1.4); if(txt) tag(ctx,txt,(x0+x1)/2,y-12,col,{size:11}); }
+function dimV(ctx,x,y0,y1,txt,col,side){ if(Math.abs(y1-y0)<4) return; line(ctx,x,y0,x,y1,col,1.6); const s=Math.sign(y1-y0); arrowHead(ctx,x,y0,s>0?-Math.PI/2:Math.PI/2,col,6); arrowHead(ctx,x,y1,s>0?Math.PI/2:-Math.PI/2,col,6);
+  if(txt) tag(ctx,txt,x+(side||1)*30,(y0+y1)/2,col,{size:11}); }
+/* a clamp stand holding a thin card / object at height y, standing on floor fy */
+function standPost(ctx,x,y,fy){ ctx.save(); line(ctx,x,y,x,fy,COL.ink,3); line(ctx,x-20,fy,x+20,fy,COL.ink,3.4); ctx.restore(); }
+/* a panel frame with a title strip */
+function panelFrame(ctx,x,y,w,h,title,col,dark){ ctx.save(); rrect(ctx,x,y,w,h,10); ctx.fillStyle=dark?DARKROOM:'#fff'; ctx.fill(); ctx.strokeStyle=col||COL.ink; ctx.lineWidth=2; ctx.stroke();
+  if(title) tag(ctx,title,x+w/2,y,col||COL.ink,{size:11}); ctx.restore(); }
+/* spring helper for a whole object of named fields */
+function sprStep(S,T,k,c,dt){ for(const key in T){ const v=S['v_'+key]||0, a=(T[key]-S[key])*k-v*c; S['v_'+key]=v+a*dt; S[key]+=S['v_'+key]*dt; } }
+function sprRest(S,T,eps){ for(const key in T){ if(Math.abs(T[key]-S[key])>(eps||0.01)||Math.abs(S['v_'+key]||0)>(eps||0.01)*4) return false; } return true; }
+/* a small candle on the table (flame via lab.js) */
+function candleSmall(ctx,x,base,h,t,lit,lean){ return candleDraw(ctx,x,base,24,h,{lit,f:lit?1:0,t,lean:lean||0,fh:46,fw:17,wickH:10}); }
+
+/* =====================================================================
+   11.1 LET US INVESTIGATE — light through three holes in a line
+   Real geometry in millimetres (all straight lines): torch glass = disc of radius 10 mm at
+   x = 0, matchbox holes (radius 2.2 mm) at x = 150, 300, 450 mm, screen at
+   x = 600 mm. Straight lines are sampled through random points of hole 1 and hole 2
+   (equal measure each), kept only if they start on the torch glass and
+   clear hole 3. Spot brightness = kept lines ÷ kept lines when all three
+   holes are exactly in line. Drawn rays run glass → hole 1 and stop on the
+   first box face they hit outside a hole. Boxes slide on a spring (k 40, c 7).
+   Drawn in a cabinet projection: x along the bench, z (sideways) recedes
+   up-left, transverse sizes ×2.6 so a 2 mm shift is visible.
+   ===================================================================== */
+function buildA1(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML=`
+    <div class="control-group"><label>Move a matchbox</label>
+      <div class="toggle-group"><button class="toggle-btn" id="b0">Box 1</button><button class="toggle-btn active" id="b1">Box 2</button><button class="toggle-btn" id="b2">Box 3</button></div>
+      <label style="margin-top:9px">Up / down <span class="val" id="dyv">0 mm</span></label><input type="range" id="dy" min="-6" max="6" step="0.5" value="0">
+      <label style="margin-top:6px">Sideways <span class="val" id="dzv">0 mm</span></label><input type="range" id="dz" min="-6" max="6" step="0.5" value="0">
+      <div class="toggle-group"><button class="toggle-btn" id="line">↔ Put all holes in line</button><button class="toggle-btn" id="nudge">✋ Nudge a box</button></div></div>
+    <div class="control-group"><div class="result-cards">${card('k1','Spot on screen',COL.green)}${card('k2','Worst hole off the line',COL.red)}${card('k3','Box 1 · 2 · 3 height',COL.red)}${card('k4','Box 1 · 2 · 3 sideways',COL.red)}</div>
+      <div class="fb" id="obs"></div></div>
+    <div class="control-group"><div class="toggle-group"><button class="toggle-btn" id="torch">🔦 Torch off</button></div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const XB=[150,300,450], XS=600, RH=2.2, RS=10, N=2400, kx=0.85, kt=2.6, OX=205, OY=352;
+  const B=[{y:0,z:0,vy:0,vz:0},{y:5,z:0,vy:0,vz:0},{y:0,z:0,vy:0,vz:0}], T=[{y:0,z:0},{y:5,z:0},{y:0,z:0}];
+  let sel=1, t=0, on=true, bright=0, frac=0, hits=[], ends=[];
+  // fixed sample set: (source point, point in hole 1) as unit-disc offsets
+  const R=rng(11), S=[]; const disc=()=>{ let a,b; do{ a=R()*2-1; b=R()*2-1; }while(a*a+b*b>1); return [a,b]; };
+  for(let i=0;i<N;i++){ const s=disc(), h=disc(); S.push([s[0]*RS,s[1]*RS,h[0]*RH,h[1]*RH]); }
+  // visual lines: torch glass → hole 1, followed until they stop
+  function trace(P){ const out=[];
+    for(let i=0;i<N;i+=40){ const q=S[i], sy=q[0], sz=q[1], hy=P[0].y+q[2], hz=P[0].z+q[3];
+      const my=(hy-sy)/XB[0], mz=(hz-sz)/XB[0]; let stop=-1;
+      for(let k=1;k<3;k++){ const y=sy+my*XB[k], z=sz+mz*XB[k]; const dy=y-P[k].y, dz=z-P[k].z; if(dy*dy+dz*dz>RH*RH && Math.abs(dy)<18 && Math.abs(dz)<26){ stop=k; break; } }
+      const X=stop<0?XS:XB[stop]; out.push({x:X,stop,hy,hz,sy,sz}); }
+    // brightness: every straight line through hole 1 and hole 2 (equal measure), kept if it comes from the glass and clears hole 3
+    let pass=0; const hs=[];
+    for(let i=0;i<N;i++){ const q=S[i], ay=P[0].y+q[2], az=P[0].z+q[3], by=P[1].y+q[0]*RH/RS, bz=P[1].z+q[1]*RH/RS;
+      const my=(by-ay)/(XB[1]-XB[0]), mz=(bz-az)/(XB[1]-XB[0]), y0=ay-my*XB[0], z0=az-mz*XB[0]; if(y0*y0+z0*z0>RS*RS) continue;
+      const y3=ay+my*(XB[2]-XB[0])-P[2].y, z3=az+mz*(XB[2]-XB[0])-P[2].z; if(y3*y3+z3*z3>RH*RH) continue;
+      pass++; hs.push([ay+my*(XS-XB[0]),az+mz*(XS-XB[0])]); }
+    return {pass,hs,out}; }
+  const full=trace([{y:0,z:0},{y:0,z:0},{y:0,z:0}]).pass;
+  const pj=(x,y,z)=>({x:OX+x*kx-z*kt*0.5, y:OY-y*kt+z*kt*0.3});
+  function setSel(i){ sel=i; ['#b0','#b1','#b2'].forEach((q,j)=>$(q).classList.toggle('active',j===i)); $('#dy').value=T[i].y; $('#dz').value=T[i].z; showV(); }
+  function showV(){ $('#dyv').textContent=fmt(T[sel].y,1)+' mm'; $('#dzv').textContent=fmt(T[sel].z,1)+' mm'; }
+  ['#b0','#b1','#b2'].forEach((q,j)=>$(q).onclick=()=>setSel(j));
+  $('#dy').oninput=e=>{ T[sel].y=+e.target.value; showV(); }; $('#dz').oninput=e=>{ T[sel].z=+e.target.value; showV(); };
+  $('#line').onclick=()=>{ T.forEach(q=>{ q.y=0; q.z=0; }); setSel(sel); };
+  $('#nudge').onclick=()=>{ const i=Math.floor(Math.random()*3), a=Math.random()*Math.PI*2; T[i].y=Math.round(Math.sin(a)*8)/2; T[i].z=Math.round(Math.cos(a)*8)/2; setSel(i); };
+  $('#torch').onclick=()=>{ on=!on; $('#torch').textContent=on?'🔦 Torch off':'🔦 Torch on'; };
+  setSel(1);
+
+  function faceQuad(x,y0,y1,z0,z1){ return [pj(x,y0,z0),pj(x,y1,z0),pj(x,y1,z1),pj(x,y0,z1)]; }
+  function drawBox(k){ const b=B[k], x=XB[k], D=16, y0=b.y-18, y1=b.y+18, z0=b.z-26, z1=b.z+26;
+    // paper stack under the box (keeps it at this height)
+    const sb=-40, st=y0; if(st-sb>0.5){ const q=[pj(x+2,sb,z0+8),pj(x+2,st,z0+8),pj(x+D-2,st,z0+8),pj(x+D-2,sb,z0+8)]; fillPoly(ctx,q,'#f4f6fa',COL.mid,1.2);
+      fillPoly(ctx,[pj(x+2,sb,z0+8),pj(x+2,st,z0+8),pj(x+2,st,z1-8),pj(x+2,sb,z1-8)],'#eef2f7',COL.mid,1.2);
+      for(let yy=sb+1.5;yy<st;yy+=1.5){ const a=pj(x+2,yy,z1-8), c=pj(x+2,yy,z0+8); line(ctx,a.x,a.y,c.x,c.y,COL.mid,0.6); } }
+    fillPoly(ctx,[pj(x,y1,z0),pj(x+D,y1,z0),pj(x+D,y1,z1),pj(x,y1,z1)],'#fbeeea',COL.red,2);          // top (open tray: show the rim)
+    const inset=[pj(x+2.5,y1,z0+2.5),pj(x+D-2.5,y1,z0+2.5),pj(x+D-2.5,y1,z1-2.5),pj(x+2.5,y1,z1-2.5)]; fillPoly(ctx,inset,'#fff',COL.red,1);
+    fillPoly(ctx,[pj(x,y0,z0),pj(x,y1,z0),pj(x+D,y1,z0),pj(x+D,y0,z0)],'#fff',COL.red,2.2);          // front
+    fillPoly(ctx,faceQuad(x,y0,y1,z0,z1),'#fff',COL.red,2.4);                                       // face toward the torch
+    return {x,y0,y1,z0,z1};
+  }
+  function holeAt(k,fill){ const b=B[k]; ctx.save(); ctx.beginPath(); for(let i=0;i<=24;i++){ const a=i/24*Math.PI*2, p=pj(XB[k],b.y+Math.sin(a)*RH,b.z+Math.cos(a)*RH); i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y); }
+    ctx.closePath(); ctx.fillStyle=fill; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=1.4; ctx.stroke(); ctx.restore(); }
+  function patch(x,cy,cz,r,a){ if(a<=0.01) return; ctx.save(); ctx.globalAlpha=a; ctx.beginPath(); for(let i=0;i<=28;i++){ const an=i/28*Math.PI*2, p=pj(x,cy+Math.sin(an)*r,cz+Math.cos(an)*r); i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y); }
+    ctx.closePath(); ctx.fillStyle=rgba(COL.yellow,0.45); ctx.fill(); ctx.restore(); }
+  let ctx;
+
+  animLoop(dt=>{ t+=dt;
+    B.forEach((b,i)=>{ b.vy+=((T[i].y-b.y)*40-b.vy*7)*dt; b.vz+=((T[i].z-b.z)*40-b.vz*7)*dt; b.y+=b.vy*dt; b.z+=b.vz*dt; });
+    const tr=trace(B); frac=tr.pass/full; ends=tr.out; hits=tr.hs; bright=approach(bright,on?frac:0,12,dt);
+    const lamp=on?1:0;
+
+    // ---------- draw ----------
+    const f=fitCanvas(canvas); ctx=f.ctx; const {w,h}=f; ctx.fillStyle='#f3f5f9'; ctx.fillRect(0,0,w,h); ctx.save(); camFit(ctx,w,h,[0,0,800,500]);
+    // table
+    fillPoly(ctx,[pj(-150,-40,-70),pj(640,-40,-70),pj(640,-40,70),pj(-150,-40,70)],'#fff',COL.ink,2);
+    // screen (farthest) with the spot
+    const sc=[pj(XS,-40,-45),pj(XS,50,-45),pj(XS,50,45),pj(XS,-40,45)];
+    fillPoly(ctx,[pj(XS,-40,-45),pj(XS+6,-40,-45),pj(XS+6,50,-45),pj(XS,50,-45)],'#fff',COL.green,2);
+    fillPoly(ctx,sc,'#fff',COL.green,2.6);
+    if(bright>0.01){ ctx.save(); ctx.beginPath(); sc.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y)); ctx.clip();
+      const n=Math.min(hits.length,500); ctx.globalAlpha=Math.min(1,0.08+0.9*bright)*Math.min(1,40/Math.max(1,n)*3);
+      for(let i=0;i<n;i++){ const q=hits[i*Math.floor(hits.length/n)], p=pj(XS,q[0],q[1]); glow(ctx,p.x,p.y,7,COL.yellow,0.5); } ctx.restore(); }
+    textAt(ctx,'Screen',pj(XS,50,0).x,pj(XS,50,0).y-12,{align:'center',size:13,weight:700,color:COL.green});
+    // boxes back-to-front, with the light lines between them
+    const segs=k=>ends.forEach(e=>{ if(!on) return; const x0=XB[k], x1=Math.min(e.x,k<2?XB[k+1]:XS); if(e.stop>=0&&e.stop<=k) return;
+        const ya=e.sy+(e.hy-e.sy)*x0/XB[0], za=e.sz+(e.hz-e.sz)*x0/XB[0], yb=e.sy+(e.hy-e.sy)*x1/XB[0], zb=e.sz+(e.hz-e.sz)*x1/XB[0];
+        const a=pj(x0,ya,za), b=pj(x1,yb,zb); rayPath(ctx,[a,b],COL.yellow,t,0.35,1.1,{arrows:false,dashes:[6,10],speed:90});
+        if(e.stop===k+1){ glow(ctx,b.x,b.y,6,COL.yellow,0.9); } });
+    for(let k=2;k>=0;k--){ segs(k); drawBox(k);
+      if(on&&k===0) patch(XB[0],0,0,RS+XB[0]*0.05,0.9);
+      holeAt(k, on && (k===0 || ends.some(e=>e.stop<0||e.stop>k)) ? '#fff3b8' : '#2b3a4f');
+      const lp=pj(XB[k]+8,B[k].y+30,B[k].z); textAt(ctx,String(k+1),lp.x,lp.y,{align:'center',size:14,weight:800,color:COL.red});
+    }
+    // torch cone to box 1
+    if(on){ const tip=pj(0,0,0), e1=pj(XB[0],RS+XB[0]*0.05,0), e2=pj(XB[0],-(RS+XB[0]*0.05),0); fillPoly(ctx,[pj(0,RS,0),e1,e2,pj(0,-RS,0)],rgba(COL.yellow,0.18));
+      rayPath(ctx,[tip,pj(XB[0],0,0)],COL.yellow,t,0.8,1.6,{arrows:false,dashes:[6,10],speed:90}); }
+    const tp=pj(0,0,0); line(ctx,tp.x-60,pj(0,-40,0).y,tp.x-60,tp.y+16,COL.ink,3); rect(ctx,tp.x-110,pj(0,-40,0).y-2,100,4,COL.ink,COL.ink,1);
+    torchDraw(ctx,tp.x,tp.y,0,lamp,1.05);
+    // selected box marker
+    const sb=pj(XB[sel]+8,B[sel].y-26,B[sel].z-26); tag(ctx,'moving',sb.x,sb.y+18,COL.red,{size:10.5});
+
+    // ---------- inset 1: looking along the line of holes ----------
+    panelFrame(ctx,20,24,170,170,'Look along the holes',COL.ink); const cx=105, cy=110, sc2=15;
+    ctx.save(); rrect(ctx,20,24,170,170,10); ctx.clip();
+    ctx.fillStyle=DARKROOM; ctx.fillRect(20,24,170,170);
+    // intersection of the three holes = the only straight path
+    ctx.save(); B.forEach(b=>{ ctx.beginPath(); ctx.arc(cx-b.z*sc2,cy-b.y*sc2,RH*sc2,0,Math.PI*2); ctx.clip(); }); ctx.fillStyle=on?'#ffe58a':'#556'; ctx.fillRect(20,24,170,170); ctx.restore();
+    B.forEach((b,i)=>{ ctx.save(); ctx.setLineDash(i===0?[]:i===1?[6,4]:[2,4]); circ(ctx,cx-b.z*sc2,cy-b.y*sc2,RH*sc2,i===sel?'#ffffff':'#ffb4a6',null,2); ctx.restore();
+      textAt(ctx,String(i+1),cx-b.z*sc2+RH*sc2*0.8,cy-b.y*sc2-RH*sc2*0.8,{size:11,weight:800,color:'#ffb4a6'}); });
+    ctx.restore();
+    // ---------- inset 2: the screen, face on ----------
+    panelFrame(ctx,610,24,170,170,'Screen',COL.green); ctx.save(); rrect(ctx,610,24,170,170,10); ctx.clip(); ctx.fillStyle='#e9edf3'; ctx.fillRect(610,24,170,170);
+    if(bright>0.005){ const n=Math.min(hits.length,700); ctx.globalCompositeOperation='source-over';
+      for(let i=0;i<n;i++){ const q=hits[Math.floor(i*hits.length/n)]; glow(ctx,695-q[1]*4.2,109-q[0]*4.2,9,COL.yellow,Math.min(0.9,bright*12/Math.sqrt(n+1))); } }
+    ctx.restore();
+    ctx.restore();
+
+    // ---------- side ----------
+    setv($,'k1',on?(frac>0.02?Math.round(frac*100)+' % bright':'no spot'):'torch off'); setc($,'k1',frac>0.02&&on?COL.green:COL.red);
+    setv($,'k2',fmt(Math.max(...B.map(b=>Math.hypot(b.y,b.z))),1)+' mm');
+    setv($,'k3',B.map(b=>fmt(b.y,1)).join(' · ')+' mm'); setv($,'k4',B.map(b=>fmt(b.z,1)).join(' · ')+' mm');
+    const o=$('#obs'), msg=!on?['warn','Switch the torch on.']:frac>0.6?['ok','All three holes in one straight line → a bright spot on the screen.']:frac>0.02?['warn','Holes only partly in line → a dim spot. Only straight lines that pass all three holes reach the screen.']:['bad','A hole is out of line → no spot. Light stops on the face of the box — it cannot bend round to the next hole.'];
+    if(o.textContent!==msg[1]){ o.textContent=msg[1]; o.className='fb '+msg[0]; }
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   11.2 LET US EXPLORE — candle flame through a straight and a bent pipe
+   The flexible pipe keeps its length (440 px): straight part 180, a bend
+   of radius 90 through angle β, then the rest. Its inner radius is 12 px.
+   Light = straight lines from random points of the flame into the mouth
+   of the pipe. Each line is marched through the pipe; a line whose
+   distance from the pipe's centre line exceeds the inner radius has hit
+   the dull inside wall and is absorbed. "Light reaching the eye" = lines
+   that leave the far end and enter the pupil ÷ the same for a straight
+   pipe. β moves on a spring (k 30, c 6), so the pipe flexes and settles.
+   Photons are drawn slowed down enormously so the path can be followed.
+   ===================================================================== */
+function buildA2(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML=`
+    <div class="control-group"><label>Bend the pipe <span class="val" id="bv">0°</span></label><input type="range" id="bend" min="0" max="90" step="1" value="0">
+      <div class="toggle-group"><button class="toggle-btn active" id="st">Straight pipe (a)</button><button class="toggle-btn" id="bt">Bent pipe (b)</button></div></div>
+    <div class="control-group"><div class="result-cards">${card('k1','Light reaching your eye',COL.green)}${card('k2','Can you see the flame?',COL.green)}${card('k3','Bend angle',COL.red)}${card('k4','Stopped by the wall',COL.yellow)}</div>
+      <div class="fb" id="obs"></div></div>
+    <div class="control-group"><label>Show</label><div class="toggle-group"><button class="toggle-btn active" id="sl">Sight line</button><button class="toggle-btn active" id="ph">Light particles</button></div>
+      <div class="hint">⚠ Light the candle only with an adult.</div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const X0=210, Y0=292, L1=180, RB=90, LP=440, RI=12, TY=430, FX=120, FY=292;
+  let t=0, beta={x:0,v:0}, bT=0, showSight=true, showPh=true, eyeFrac=1, full=1, lastB=-1, stopped=0, ph=[], acc=0;
+  $('#bend').oninput=e=>{ bT=+e.target.value*Math.PI/180; $('#bv').textContent=e.target.value+'°'; $('#st').classList.toggle('active',bT<0.01); $('#bt').classList.toggle('active',bT>=0.01); };
+  $('#st').onclick=()=>{ $('#bend').value=0; $('#bend').oninput({target:$('#bend')}); };
+  $('#bt').onclick=()=>{ $('#bend').value=60; $('#bend').oninput({target:$('#bend')}); };
+  $('#sl').onclick=()=>{ showSight=!showSight; $('#sl').classList.toggle('active',showSight); };
+  $('#ph').onclick=()=>{ showPh=!showPh; $('#ph').classList.toggle('active',showPh); };
+  // centre line: straight → arc (bending upward) → straight
+  function geom(b){ const arc=RB*b, L2=LP-L1-arc, cx=X0+L1, cy=Y0-RB;              // arc centre above the pipe
+    const ex={x:cx+RB*Math.sin(b), y:cy+RB*Math.cos(b)}, u={x:Math.cos(b), y:-Math.sin(b)};
+    return {b,cx,cy,L2,ex,u,end:{x:ex.x+u.x*L2,y:ex.y+u.y*L2}}; }
+  function at(G,s){ if(s<=L1) return {x:X0+s,y:Y0,a:0}; const arc=RB*G.b; if(s<=L1+arc){ const f=(s-L1)/RB; return {x:G.cx+RB*Math.sin(f),y:G.cy+RB*Math.cos(f),a:-f}; }
+    const q=s-L1-arc; return {x:G.ex.x+G.u.x*q,y:G.ex.y+G.u.y*q,a:-G.b}; }
+  function dist(G,x,y){ // distance to the centre line and whether we are past the far end
+    let d=Infinity;
+    if(x<=X0+L1) d=Math.abs(y-Y0); else d=Math.hypot(x-(X0+L1),y-Y0);
+    const ang=Math.atan2(x-G.cx,y-G.cy); if(ang>=0&&ang<=G.b) d=Math.min(d,Math.abs(Math.hypot(x-G.cx,y-G.cy)-RB));
+    const px=x-G.ex.x, py=y-G.ex.y, s=px*G.u.x+py*G.u.y; if(s>=0&&s<=G.L2) d=Math.min(d,Math.abs(px*G.u.y-py*G.u.x)); else if(s>G.L2) return {d,past:true};
+    return {d,past:false}; }
+  function eyePos(G){ return {x:G.end.x+G.u.x*46,y:G.end.y+G.u.y*46}; }
+  // straight lines from the flame into the mouth; how many reach the pupil?
+  const R=rng(5), LS=[]; for(let i=0;i<700;i++) LS.push([ (R()-0.5)*14, -R()*38, (R()*2-1)*RI ]);
+  function flameLines(G){ let ok=0; const E=eyePos(G);
+    for(const q of LS){ const sx=FX+q[0], sy=FY+q[1], ey=Y0+q[2], dx=X0-sx, dy=ey-sy, L=Math.hypot(dx,dy), ux=dx/L, uy=dy/L;
+      let x=X0, y=ey, hit=false, out=false; for(let k=0;k<260;k++){ x+=ux*3; y+=uy*3; const D=dist(G,x,y); if(D.past){ out=true; break; } if(D.d>RI){ hit=true; break; } }
+      if(out&&!hit){ const px=E.x-x, py=E.y-y; if(Math.abs(px*uy-py*ux)<10&&px*ux+py*uy>0) ok++; } }
+    return ok; }
+  full=flameLines(geom(0));
+
+  animLoop(dt=>{ t+=dt;
+    beta.v+=((bT-beta.x)*30-beta.v*6)*dt; beta.x+=beta.v*dt; const G=geom(Math.max(0,beta.x));
+    if(Math.abs(G.b-lastB)>0.003){ eyeFrac=flameLines(G)/full; lastB=G.b; }
+    // photons (slowed down) — straight lines from the flame
+    acc+=dt*70; while(acc>=1){ acc-=1; const sx=FX+(Math.random()-0.5)*14, sy=FY-Math.random()*38, into=Math.random()<0.75;
+      const tx=into?X0:FX+Math.cos(Math.random()*6.28)*300, ty=into?Y0+(Math.random()*2-1)*RI:FY+Math.sin(Math.random()*6.28)*300, L=Math.hypot(tx-sx,ty-sy);
+      ph.push({x:sx,y:sy,vx:(tx-sx)/L*330,vy:(ty-sy)/L*330,life:0,dead:0,inP:false}); }
+    ph.forEach(p=>{ if(p.dead){ p.dead+=dt; return; } p.life+=dt; p.x+=p.vx*dt; p.y+=p.vy*dt;
+      if(p.x>=X0){ const D=dist(G,p.x,p.y);
+        if(D.past) p.inP=false;
+        else if(p.inP){ if(D.d>RI){ p.dead=0.001; stopped++; } }
+        else if(D.d<=RI&&p.x<X0+8) p.inP=true;
+        else if(D.d<=RI+6) p.dead=0.001; } });
+    ph=ph.filter(p=>p.dead<0.5&&p.life<3&&p.x<820&&p.x>-20&&p.y>-20&&p.y<520);
+
+    // ---------- draw ----------
+    const {ctx,w,h}=fitCanvas(canvas); ctx.fillStyle='#f3f5f9'; ctx.fillRect(0,0,w,h); ctx.save(); camFit(ctx,w,h,[0,20,800,500]);
+    tableTop(ctx,20,780,TY,0);
+    const cd=candleSmall(ctx,FX,TY,96,t,true,0);
+    // pipe: outer skin + inner channel
+    const n=80, P=[]; for(let i=0;i<=n;i++) P.push(at(G,LP*i/n));
+    // stands
+    const s1=at(G,60); standPost(ctx,s1.x,s1.y+RI+6,TY); const s2=at(G,LP-40); line(ctx,s2.x,s2.y+RI+6,s2.x,TY,COL.ink,3); line(ctx,s2.x-20,TY,s2.x+20,TY,COL.ink,3.4);
+    const side=(off)=>P.map(p=>({x:p.x-Math.sin(p.a)*off, y:p.y+Math.cos(p.a)*off}));
+    const oT=side(-RI-6), oB=side(RI+6), iT=side(-RI), iB=side(RI);
+    fillPoly(ctx,oT.concat(oB.slice().reverse()),'#dfe5ee'); fillPoly(ctx,iT.concat(iB.slice().reverse()),'#fbfcfe');
+    [oT,oB].forEach(S=>{ ctx.save(); ctx.beginPath(); S.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y)); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.6; ctx.stroke(); ctx.restore(); });
+    [iT,iB].forEach(S=>{ ctx.save(); ctx.beginPath(); S.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y)); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.2; ctx.stroke(); ctx.restore(); });
+    [0,LP].forEach(s=>{ const p=at(G,s); line(ctx,p.x-Math.sin(p.a)*(-RI-6),p.y+Math.cos(p.a)*(-RI-6),p.x-Math.sin(p.a)*(RI+6),p.y+Math.cos(p.a)*(RI+6),COL.ink,2.6); });
+    // ribs so the flex is visible
+    for(let s=20;s<LP;s+=20){ const p=at(G,s); line(ctx,p.x-Math.sin(p.a)*(-RI-6),p.y+Math.cos(p.a)*(-RI-6),p.x-Math.sin(p.a)*(-RI),p.y+Math.cos(p.a)*(-RI),COL.mid,1); line(ctx,p.x-Math.sin(p.a)*(RI),p.y+Math.cos(p.a)*(RI),p.x-Math.sin(p.a)*(RI+6),p.y+Math.cos(p.a)*(RI+6),COL.mid,1); }
+    // photons
+    if(showPh) ph.forEach(p=>{ const a=p.dead?1-p.dead*2:1; if(a<=0) return; if(p.dead){ circ(ctx,p.x,p.y,2.4+p.dead*8,COL.red,null,1.4); } else { ctx.save(); ctx.globalAlpha=a; line(ctx,p.x-p.vx*0.02,p.y-p.vy*0.02,p.x,p.y,COL.yellow,2.4); circ(ctx,p.x,p.y,2.2,COL.yellow,COL.yellow,1); ctx.restore(); } });
+    // eye at the far end + sight line straight back
+    const E=eyePos(G);
+    if(showSight){ let x=G.end.x, y=G.end.y, hit=null; const ux=-G.u.x, uy=-G.u.y; for(let k=0;k<200;k++){ x+=ux*3; y+=uy*3; const D=dist(G,x,y); if(x<X0){ break; } if(D.d>RI){ hit={x,y}; break; } }
+      const endP=hit||{x:FX,y:FY-18}; ctx.save(); ctx.setLineDash([7,6]); line(ctx,E.x,E.y,endP.x,endP.y,COL.green,2); ctx.restore(); if(hit){ mark(ctx,hit.x,hit.y-14,false,1); } }
+    eyeSide(ctx,E.x,E.y,Math.atan2(-G.u.y,-G.u.x),1.4,COL.ink);
+    if(eyeFrac>0.05) glow(ctx,E.x,E.y,26,COL.yellow,eyeFrac*0.5);
+    // inset: what the eye sees
+    const ix=110, iy=110, IR=68; panelFrame(ctx,ix-IR-12,iy-IR-18,IR*2+24,IR*2+36,'What your eye sees',COL.green,true);
+    ctx.save(); ctx.beginPath(); ctx.arc(ix,iy+6,IR,0,Math.PI*2); ctx.clip(); ctx.fillStyle='#0d1522'; ctx.fillRect(ix-IR,iy-IR,IR*2,IR*2+12);
+    for(let k=5;k>=1;k--){ const off=G.b*k*9; circ(ctx,ix+0,iy+6-off*0.2,IR*k/5,'#3c4a5e',k===5?'#232f40':null,1.5); }
+    const fa=clamp(eyeFrac,0,1); if(fa>0.01){ ctx.save(); ctx.globalAlpha=fa; circ(ctx,ix,iy+6,IR*0.24,'#5a4a20','#2a2410',1.5); flameOne(ctx,ix,iy+22,12,34,t,COL.yellow,COL.blue); ctx.restore(); }
+    ctx.restore();
+    ctx.restore();
+
+    // ---------- side ----------
+    setv($,'k1',Math.round(eyeFrac*100)+' %'); setc($,'k1',eyeFrac>0.05?COL.green:COL.red);
+    setv($,'k2',eyeFrac>0.2?'Yes':eyeFrac>0.02?'Barely':'No'); setc($,'k2',eyeFrac>0.2?COL.green:COL.red);
+    setv($,'k3',Math.round(Math.max(0,beta.x)*180/Math.PI)+'°'); setv($,'k4',String(stopped));
+    const o=$('#obs'), m=eyeFrac>0.2?['ok','Straight pipe: straight lines from the flame run all the way through to your eye.']:eyeFrac>0.02?['warn','Only the very few straight lines that still fit through reach your eye.']:['bad','Bent pipe: every straight line from the flame hits the inside wall (red rings). Light does not follow the bend.'];
+    if(o.textContent!==m[1]){ o.textContent=m[1]; o.className='fb '+m[0]; }
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   11.3 LET US EXPERIMENT — transparent, translucent, opaque (Table 11.1)
+   Each material splits the light that falls on it into three parts:
+   passes straight through (Td), passes but is scattered (Ts) and is
+   absorbed or reflected (the rest). Approximate values for a thin sheet:
+     glass 0.90 / 0.02 · clear plastic 0.85 / 0.05 · tracing paper 0.04 / 0.55
+     notebook paper 0 / 0.25 · thick cloth 0 / 0.015 · cardboard 0 / 0
+     steel plate 0 / 0 (but reflects 0.6 back)
+   Screen picture = sharp spot × Td + a wide glow (Gaussian, σ = half the
+   sheet-to-screen distance, same energy) × Ts, shown through an exposure
+   curve 1 − e^(−3I). "Passes fully" if Td + Ts ≥ 0.7, "partially" if
+   ≥ 0.05, else "not at all". Photons (slowed down) take each path at
+   random with those same odds. The sheet is lowered on a spring.
+   ===================================================================== */
+function buildA3(){
+  const MAT=[
+    {n:'Glass',td:0.90,ts:0.02,rf:0.06,col:'#8cc6ee',look:'glass'},
+    {n:'Clear plastic',td:0.85,ts:0.05,rf:0.05,col:'#9ad0f0',look:'glass'},
+    {n:'Tracing paper',td:0.04,ts:0.55,rf:0.2,col:'#d9dde6',look:'paper'},
+    {n:'Notebook paper',td:0,ts:0.25,rf:0.5,col:'#eef0f4',look:'paper'},
+    {n:'Thick cloth',td:0,ts:0.015,rf:0.2,col:'#b04a3a',look:'cloth'},
+    {n:'Cardboard',td:0,ts:0,rf:0.3,col:'#c9a26b',look:'card'},
+    {n:'Steel plate',td:0,ts:0,rf:0.6,col:'#aab4c2',look:'steel',mirror:true}];
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML=`
+    <div class="control-group"><label>1 · Pick an object</label><div class="chip-wrap" id="mats">${MAT.map((m,i)=>`<button class="chip-btn${i?'':' active'}" data-i="${i}">${m.n}</button>`).join('')}</div></div>
+    <div class="control-group"><label>2 · Predict: light will pass…</label><div class="toggle-group" id="pred"><button class="toggle-btn small" data-p="2">Fully</button><button class="toggle-btn small" data-p="1">Partially</button><button class="toggle-btn small" data-p="0">Not at all</button></div>
+      <div class="toggle-group"><button class="toggle-btn play" id="place">3 · Place it in the beam</button></div></div>
+    <div class="control-group"><div class="result-cards">${card('k1','Light getting through',COL.green)}${card('k2','Passes',COL.green)}</div><div class="fb" id="obs" style="display:none"></div></div>
+    <div class="control-group"><label>Table 11.1</label><div id="tab"></div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const TX=96, TY=262, SX=560, HX=330, TABLE=430, HALF=Math.tan(7*Math.PI/180);
+  let t=0, mi=0, cur=0, pred=-1, drop={x:0,v:0}, want=0, ph=[], acc=0, meas=0, settle=0, rows=[], logged=false;
+  const face=document.createElement('canvas'); face.width=100; face.height=100; const fctx=face.getContext('2d'), img=fctx.createImageData(100,100);
+  wrap.querySelectorAll('#mats .chip-btn').forEach(b=>b.onclick=()=>{ wrap.querySelectorAll('#mats .chip-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); mi=+b.dataset.i; pred=-1; paintPred(); want=0; logged=false; });
+  wrap.querySelectorAll('#pred .toggle-btn').forEach(b=>b.onclick=()=>{ pred=+b.dataset.p; paintPred(); });
+  function paintPred(){ wrap.querySelectorAll('#pred .toggle-btn').forEach(b=>b.classList.toggle('active',+b.dataset.p===pred)); }
+  $('#place').onclick=()=>{ if(want&&cur===mi){ want=0; return; } want=1; logged=false; };
+  const cls=v=>v>=0.7?2:v>=0.05?1:0, WORD=['Not at all','Partially','Fully'], TYPE=['Opaque','Translucent','Transparent'];
+  function paintTab(){ $('#tab').innerHTML=rows.length?logTable(['Material','Predicted','Observed','Type'],rows.map(r=>[r.n,r.p<0?'—':WORD[r.p],{v:WORD[r.o],c:r.p<0?'':r.p===r.o?'r-ok':'r-bad'},TYPE[r.o]])):'<div class="hint">Predict, then place each object. Rows appear here.</div>'; }
+  paintTab();
+  const beamR=x=>22+(x-TX)*HALF;
+
+  animLoop(dt=>{ t+=dt;
+    // swap the sheet only while it is up out of the beam
+    const tgt=(want&&cur===mi)?1:0; if(drop.x<0.03&&cur!==mi) cur=mi;
+    drop.v+=((tgt-drop.x)*26-drop.v*5)*dt; drop.x+=drop.v*dt;
+    const M=MAT[cur], inB=clamp(drop.x,0,1.2), cover=smooth01(0.55,0.98,inB);          // how much of the beam the sheet covers
+    const td=lerp(1,M.td,cover), ts=M.ts*cover, rf=M.rf*cover;
+    meas=approach(meas,td+ts,10,dt);
+    if(want&&cur===mi&&Math.abs(drop.x-1)<0.02&&Math.abs(drop.v)<0.05){ settle+=dt; if(settle>0.5&&!logged){ logged=true; const o=cls(M.td+M.ts);
+        rows=rows.filter(r=>r.n!==M.n); rows.push({n:M.n,p:pred,o}); paintTab(); const ob=$('#obs'); ob.style.display='';
+        ob.textContent=M.n+': light passes '+WORD[o].toLowerCase()+' → '+TYPE[o].toLowerCase()+'.'+(pred<0?'':pred===o?' Your prediction was right.':' Different from your prediction.'); ob.className='fb '+(pred<0||pred===o?'ok':'warn'); } } else settle=0;
+    // photons
+    acc+=dt*120; while(acc>=1){ acc-=1; const a=(Math.random()*2-1)*7*Math.PI/180, y0=TY+(Math.random()*2-1)*18; ph.push({x:TX,y:y0,vx:Math.cos(a)*430,vy:Math.sin(a)*430,st:0,d:0}); }
+    const sy0=TY-86+(1-inB)*-300, sy1=TY+86+(1-inB)*-300;       // sheet top / bottom
+    ph.forEach(p=>{ if(p.d){ p.d+=dt; return; } const nx=p.x+p.vx*dt;
+      if(p.st===0&&p.x<HX&&nx>=HX&&p.y>sy0&&p.y<sy1){ const r=Math.random();
+        if(r<M.td) p.st=1; else if(r<M.td+M.ts){ p.st=2; const a=gauss()*0.45, sp=430; p.vx=Math.cos(a)*sp; p.vy=Math.sin(a)*sp; }
+        else if(M.mirror||r<M.td+M.ts+M.rf*0.3){ p.st=3; p.vx=-p.vx; }
+        else { p.d=0.001; p.x=HX; return; } }
+      p.x=nx; p.y+=p.vy*dt; if(p.x>=SX&&p.vx>0){ p.x=SX; p.d=0.001; } });
+    ph=ph.filter(p=>p.d<0.35&&p.x>-40&&p.y>60&&p.y<TABLE);
+
+    // ---------- draw ----------
+    const {ctx,w,h}=fitCanvas(canvas); ctx.fillStyle='#f3f5f9'; ctx.fillRect(0,0,w,h); ctx.save(); camFit(ctx,w,h,[-40,60,800,470]);
+    tableTop(ctx,-30,600,TABLE,0);
+    // beam: torch → sheet, then what gets through
+    fillPoly(ctx,[{x:TX,y:TY-22},{x:HX,y:TY-beamR(HX)},{x:HX,y:TY+beamR(HX)},{x:TX,y:TY+22}],rgba(COL.yellow,0.16));
+    const R2=beamR(SX); if(td>0.01) fillPoly(ctx,[{x:HX,y:TY-beamR(HX)},{x:SX,y:TY-R2},{x:SX,y:TY+R2},{x:HX,y:TY+beamR(HX)}],rgba(COL.yellow,0.16*td));
+    if(ts>0.01){ ctx.save(); const g=ctx.createRadialGradient(HX,TY,4,HX,TY,SX-HX); g.addColorStop(0,rgba(COL.yellow,0.5*ts)); g.addColorStop(1,rgba(COL.yellow,0)); ctx.fillStyle=g; ctx.beginPath(); ctx.moveTo(HX,TY); ctx.arc(HX,TY,SX-HX,-0.9,0.9); ctx.closePath(); ctx.fill(); ctx.restore(); }
+    if(M.mirror&&cover>0.1){ fillPoly(ctx,[{x:HX,y:TY-beamR(HX)},{x:TX-80,y:TY-beamR(HX)-(HX-TX+80)*HALF},{x:TX-80,y:TY+beamR(HX)+(HX-TX+80)*HALF},{x:HX,y:TY+beamR(HX)}],rgba(COL.blue,0.1*cover)); }
+    // screen (side)
+    screenSide(ctx,SX,TY-150,TABLE-14,{label:'Screen',leg:14});
+    const scrLit=clamp(meas,0,1); if(scrLit>0.02) line(ctx,SX,TY-R2*(td>0.3?1:1.6),SX,TY+R2*(td>0.3?1:1.6),COL.yellow,4*scrLit+0.5);
+    // holder + sheet (lowered from above)
+    const off=(1-inB)*-300; standPost(ctx,HX+26,TY+100+Math.min(0,off)*0,TABLE); line(ctx,HX+26,TY-110+off,HX+26,TY+100,COL.ink,3);
+    line(ctx,HX+26,TY-110+off,HX+6,TY-110+off,COL.ink,3); rect(ctx,HX-6,TY-118+off,14,14,COL.ink,'#fff',2);                         // clip
+    ctx.save(); const sh=[HX-4,TY-86+off,8,172]; rrect(ctx,...sh,2); ctx.fillStyle=M.look==='glass'?rgba(M.col,0.35):M.col; ctx.fill(); ctx.strokeStyle=M.look==='glass'?COL.blue:COL.red; ctx.lineWidth=2.2; ctx.stroke();
+    if(M.look==='cloth'){ ctx.clip(); for(let y=sh[1];y<sh[1]+172;y+=5) line(ctx,sh[0],y,sh[0]+8,y+3,'#7a2e24',1); }
+    if(M.look==='steel'){ line(ctx,HX-4,sh[1]+2,HX-4,sh[1]+170,COL.blue,2.6); }
+    ctx.restore();
+    if(ts>0.05&&cover>0.5) glow(ctx,HX,TY,40,COL.yellow,ts*0.9);                                        // translucent sheet glows
+    textAt(ctx,M.n,HX,TY-128+off,{align:'center',size:13,weight:700,color:COL.red});
+    // photons
+    ph.forEach(p=>{ const a=p.d?1-p.d/0.35:1; ctx.save(); ctx.globalAlpha=a*0.9; const c=p.st===3?COL.blue:COL.yellow;
+      if(p.d) circ(ctx,p.x,p.y,1.5+p.d*10,p.x>=SX-1?COL.yellow:COL.red,null,1.2); else { line(ctx,p.x-p.vx*0.018,p.y-p.vy*0.018,p.x,p.y,c,2.2); } ctx.restore(); });
+    // torch on a block
+    rect(ctx,TX-120,TY+18,96,TABLE-TY-18,COL.ink,'#fff',2); torchDraw(ctx,TX,TY,0,1,0.85);
+    // ---------- screen face: what you see in the dark room ----------
+    const d=img.data, Rf=R2/(beamR(SX)*1.9)*50*0.9, sig=Math.max(20,(SX-HX)*0.5)/(beamR(SX)*1.9)*50;
+    for(let j=0;j<100;j++) for(let i=0;i<100;i++){ const r=Math.hypot(i-50,j-50), spot=smooth01(Rf+3,Rf-3,r)*(1-0.25*(r/Rf)**2);
+      const I=td*spot+ts*(Rf*Rf/(2*sig*sig))*Math.exp(-r*r/(2*sig*sig)), v=1-Math.exp(-3*I), k=(j*100+i)*4;
+      d[k]=lerp(29,255,v); d[k+1]=lerp(42,244,v); d[k+2]=lerp(60,196,v); d[k+3]=255; }
+    fctx.putImageData(img,0,0);
+    panelFrame(ctx,612,128,178,178,'The screen (dark room)',COL.green,true);
+    ctx.save(); rrect(ctx,618,134,166,166,8); ctx.clip(); ctx.imageSmoothingEnabled=true; ctx.drawImage(face,618,134,166,166); ctx.restore();
+    const L=clamp(meas,0,1); meterV(ctx,700-8,330,16,70,L,COL.green,''); textAt(ctx,'light getting through '+Math.round(L*100)+' %',700,420,{align:'center',size:11.5,weight:700,color:COL.green});
+    ctx.restore();
+
+    setv($,'k1',Math.round(meas*100)+' %'); const o=cls(meas); setv($,'k2',drop.x>0.9?WORD[o]:'—'); setc($,'k2',[COL.red,COL.yellow,COL.green][o]);
+    setBtn($('#place'),(want&&cur===mi)?'↑ Take it out of the beam':'3 · Place it in the beam', (want&&cur===mi)?'':'play');
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   11.4 LET US EXPLORE — shadows (Table 11.2)
+   3-D model in mm: torch glass = disc, radius 14 mm, at x = 0; screen at
+   x = 600 mm; object on a rod at distance d. Every pixel of the screen
+   (72 × 72, 5 mm each) asks: of 37 points spread over the torch glass, how many can I see past the object? That fraction × the torch's beam
+   pattern is the brightness — so the dark core (umbra) and the grey rim
+   (penumbra) come out on their own. Cards tilt about a horizontal axis
+   (real ray–plane intersection); a ball is a true sphere. Side view shows
+   the same thing in section: edge rays from the top and bottom of the
+   glass past the object's edges. d, tilt, lift and screen position all
+   move on springs.
+   ===================================================================== */
+function buildA4(){
+  const SH={ ball:{n:'Ball'}, square:{n:'Square card'}, star:{n:'Star cut-out'}, tri:{n:'Triangle card'} };
+  const CL={red:COL.red,blue:COL.blue,green:COL.green,yellow:COL.yellow};
+  const ROWS=['The screen is removed.','The object is removed.','The torch is switched off.','The colour of the object is changed.','Object moved closer to the screen.','Object moved closer to the torch.','The object is tilted.'];
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML=`
+    <div class="control-group"><label>Object</label><div class="chip-wrap" id="shp">${Object.keys(SH).map((k,i)=>`<button class="chip-btn${i===1?' active':''}" data-k="${k}">${SH[k].n}</button>`).join('')}</div>
+      <div class="var-row"><span class="vname">Colour</span><div class="toggle-group" id="clr">${Object.keys(CL).map((k,i)=>`<button class="toggle-btn small${i?'':' active'}" data-c="${k}" style="color:${CL[k]}">●</button>`).join('')}</div></div></div>
+    <div class="control-group"><label>Object position <span class="val" id="dv">300 mm from torch</span></label><input type="range" id="d" min="120" max="540" step="5" value="300">
+      <div class="hint" style="display:flex;justify-content:space-between;margin-top:2px"><span>← closer to torch</span><span>closer to screen →</span></div>
+      <label style="margin-top:6px">Tilt the object <span class="val" id="tv">0°</span></label><input type="range" id="tilt" min="0" max="70" step="1" value="0"></div>
+    <div class="control-group"><div class="toggle-group"><button class="toggle-btn active" id="tOn">🔦 Torch on</button><button class="toggle-btn active" id="sIn">Screen in</button><button class="toggle-btn active" id="oIn">Object in</button></div></div>
+    <div class="control-group"><div class="result-cards">${card('k1','Shadow height',COL.green)}${card('k2','Object height',COL.red)}${card('k3','Blurred rim',COL.green)}${card('k4','Shadow colour',COL.green)}</div></div>
+    <div class="control-group"><label>Table 11.2</label><div id="tab"></div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const RS=14, L=600, G=72, PX=5, K=0.9, X0=30, Y0=235, FLOOR=440;
+  const SRC=[[0,0]]; [6,12,18].forEach((n,ri)=>{ const r=RS*[0.33,0.64,0.92][ri]; for(let i=0;i<n;i++){ const a=i/n*Math.PI*2+ri*0.26; SRC.push([Math.cos(a)*r,Math.sin(a)*r]); } });
+  const star=[]; for(let i=0;i<10;i++){ const a=-Math.PI/2+i*Math.PI/5, r=i%2?21:52; star.push([Math.cos(a)*r,-Math.sin(a)*r]); }
+  const tri=[[0,48],[-46,-34],[46,-34]];
+  const inPoly=(P,u,v)=>{ let c=false; for(let i=0,j=P.length-1;i<P.length;j=i++){ const a=P[i],b=P[j]; if((a[1]>v)!==(b[1]>v)&&u<(b[0]-a[0])*(v-a[1])/(b[1]-a[1])+a[0]) c=!c; } return c; };
+  const inShape=(k,u,v)=>k==='square'?(Math.abs(u)<40&&Math.abs(v)<40):k==='star'?inPoly(star,u,v):inPoly(tri,u,v);
+  const vRange={square:[-40,40],star:[-42,52],tri:[-34,48],ball:[-40,40]};
+  let t=0, shape='square', colr='red', S={d:300,tilt:0,lift:0,sz:0,br:1}, T={d:300,tilt:0,lift:0,sz:0,br:1}, key='', res={}, done={}, d0=300, col0='red';
+  const face=document.createElement('canvas'); face.width=G; face.height=G; const fctx=face.getContext('2d'), img=fctx.createImageData(G,G);
+  wrap.querySelectorAll('#shp .chip-btn').forEach(b=>b.onclick=()=>{ wrap.querySelectorAll('#shp .chip-btn').forEach(x=>x.classList.remove('active')); b.classList.add('active'); shape=b.dataset.k; });
+  chipsWire(wrap,'#clr .toggle-btn',b=>{ colr=b.dataset.c; if(colr!==col0&&S.lift<5&&S.br>0.5) log(3,'Still a dark grey shadow — the colour of the object does not colour the shadow.'); });
+  $('#d').oninput=e=>{ T.d=+e.target.value; $('#dv').textContent=e.target.value+' mm from torch'; };
+  $('#tilt').oninput=e=>{ T.tilt=+e.target.value*Math.PI/180; $('#tv').textContent=e.target.value+'°'; };
+  const tg=(id,on,a,b)=>{ const x=$(id); x.classList.toggle('active',on); x.textContent=on?a:b; };
+  $('#tOn').onclick=()=>{ T.br=T.br>0.5?0:1; tg('#tOn',T.br>0.5,'🔦 Torch on','🔦 Torch off'); };
+  $('#sIn').onclick=()=>{ T.sz=T.sz>1?0:420; tg('#sIn',T.sz<1,'Screen in','Screen out'); };
+  $('#oIn').onclick=()=>{ T.lift=T.lift>1?0:320; tg('#oIn',T.lift<1,'Object in','Object out'); };
+  function log(i,txt){ done[i]=txt; paintTab(); }
+  function paintTab(){ $('#tab').innerHTML=logTable(['Action','Shadow'],ROWS.map((r,i)=>[r,done[i]?{v:done[i],c:'r-ok'}:'—'])); }
+  paintTab();
+  // one straight line from a torch point to a screen point: is it blocked?
+  function blocked(sy,sz,py,pz){ const ox=S.d, oy=S.lift, th=S.tilt;
+    if(shape==='ball'){ const dx=L, dy=py-sy, dz=pz-sz, cx=ox, cy=oy-sy, cz=-sz, tt=(cx*dx+cy*dy+cz*dz)/(dx*dx+dy*dy+dz*dz);
+      const ex=cx-tt*dx, ey=cy-tt*dy, ez=cz-tt*dz; return ex*ex+ey*ey+ez*ez<1600; }
+    const nx=Math.cos(th), ny=Math.sin(th); const dx=L, dy=py-sy, dz=pz-sz, den=nx*dx+ny*dy; if(Math.abs(den)<1e-6) return false;
+    const tt=(nx*ox+ny*(oy-sy))/den; if(tt<=0||tt>=1) return false; const X=tt*dx, Y=sy+tt*dy-oy, Z=sz+tt*dz; const rx=X-ox;
+    const v=-rx*Math.sin(th)+Y*Math.cos(th); return inShape(shape,Z,v); }
+  function shade(){ const d=img.data, n=SRC.length;
+    for(let j=0;j<G;j++){ const py=(G/2-j-0.5)*PX; for(let i=0;i<G;i++){ const pz=(i-G/2+0.5)*PX, k=(j*G+i)*4;
+      const onScr=Math.abs(pz-S.sz)<180&&Math.abs(py)<180; if(!onScr){ d[k]=10; d[k+1]=15; d[k+2]=24; d[k+3]=255; continue; }
+      const r=Math.hypot(py,pz), beam=smooth01(185,135,r)*S.br; let lit=0;
+      if(beam>0.004){ for(let s=0;s<n;s++) if(!blocked(SRC[s][0],SRC[s][1],py,pz)) lit++; }
+      const v=1-Math.exp(-2.6*beam*lit/n); d[k]=lerp(38,255,v); d[k+1]=lerp(48,244,v); d[k+2]=lerp(64,196,v); d[k+3]=255; } }
+    fctx.putImageData(img,0,0); }
+  const px=x=>X0+x*K, py=y=>Y0-y*K;
+  // section geometry in the plane z = 0
+  function edges(){ const vr=vRange[shape], th=shape==='ball'?0:S.tilt;
+    const Tp={x:S.d-vr[1]*Math.sin(th),y:S.lift+vr[1]*Math.cos(th)}, Bp={x:S.d-vr[0]*Math.sin(th),y:S.lift+vr[0]*Math.cos(th)};
+    const at=(sy,P)=>sy+(P.y-sy)*L/P.x; return {Tp,Bp,uTop:at(RS,Tp),uBot:at(-RS,Bp),pTop:at(-RS,Tp),pBot:at(RS,Bp)}; }
+
+  animLoop(dt=>{ t+=dt;
+    sprStep(S,{d:T.d,tilt:T.tilt,lift:T.lift,sz:T.sz},22,6.5,dt); S.br=approach(S.br,T.br,8,dt);
+    const k2=[shape,colr,S.d.toFixed(1),S.tilt.toFixed(3),S.lift.toFixed(1),S.sz.toFixed(1),S.br.toFixed(3)].join('|'); if(k2!==key){ key=k2; shade(); }
+    const E=edges(); const shH=((E.pTop+E.uTop)/2-(E.pBot+E.uBot)/2), rim=Math.max(0,E.pTop-E.uTop), obH=vRange[shape][1]-vRange[shape][0];
+    // table 11.2 observations, once the object has settled
+    const still=Math.abs(S.v_d||0)<3&&Math.abs(S.v_tilt||0)<0.05;
+    if(S.sz>380) log(0,'No shadow — there is nothing for it to fall on.');
+    if(S.lift>280) log(1,'No shadow — light reaches the whole screen.');
+    if(S.br<0.05) log(2,'No shadow — no light at all.');
+    if(still&&S.lift<5&&S.br>0.9&&S.sz<5){ if(S.d-d0>=60){ log(4,'Smaller ('+Math.round(shH)+' mm) and sharper edge.'); d0=S.d; } else if(d0-S.d>=60){ log(5,'Bigger ('+Math.round(shH)+' mm) and more blurred edge.'); d0=S.d; }
+      if(S.tilt>0.4) log(6,shape==='ball'?'A ball looks the same from every side — still round.':'Shape changes — squashed to '+Math.round(Math.cos(S.tilt)*100)+' % of its height.'); }
+    col0=colr;
+
+    // ---------- draw ----------
+    const {ctx,w,h}=fitCanvas(canvas); ctx.fillStyle='#f3f5f9'; ctx.fillRect(0,0,w,h); ctx.save(); camFit(ctx,w,h,[-120,30,800,470]);
+    line(ctx,-120,FLOOR,590,FLOOR,COL.ink,2.4);
+    const b=S.br, sA=clamp(1-S.sz/420,0,1);
+    // beam and shadow in section
+    const beamY=x=>RS+x*0.26;
+    if(b>0.02){ fillPoly(ctx,[{x:px(0),y:py(RS)},{x:px(L),y:py(beamY(L))},{x:px(L),y:py(-beamY(L))},{x:px(0),y:py(-RS)}],rgba(COL.yellow,0.18*b));
+      if(S.lift<200){ const X=px(L); const P1=[{x:px(E.Tp.x),y:py(E.Tp.y)},{x:X,y:py(E.pTop)},{x:X,y:py(E.pBot)},{x:px(E.Bp.x),y:py(E.Bp.y)}]; ctx.save(); ctx.globalAlpha=sA; fillPoly(ctx,P1,'rgba(90,104,124,0.28)');
+        // umbra (may close before the screen)
+        const top=E.uTop, bot=E.uBot; if(top>bot){ fillPoly(ctx,[{x:px(E.Tp.x),y:py(E.Tp.y)},{x:X,y:py(top)},{x:X,y:py(bot)},{x:px(E.Bp.x),y:py(E.Bp.y)}],'rgba(40,52,70,0.5)'); }
+        else { const m1=(E.Tp.y-RS)/E.Tp.x, m2=(E.Bp.y+RS)/E.Bp.x, xc=(-RS-RS)/(m1-m2); fillPoly(ctx,[{x:px(E.Tp.x),y:py(E.Tp.y)},{x:px(xc),y:py(RS+m1*xc)},{x:px(E.Bp.x),y:py(E.Bp.y)}],'rgba(40,52,70,0.5)'); }
+        // edge rays
+        [[RS,E.Tp,E.uTop],[-RS,E.Tp,E.pTop],[-RS,E.Bp,E.uBot],[RS,E.Bp,E.pBot]].forEach(q=>rayPath(ctx,[{x:px(0),y:py(q[0])},{x:px(L),y:py(q[2])}],COL.yellow,t,0.7*b,1.3,{arrows:false,dashes:[8,8]}));
+        ctx.restore(); } }
+    // screen (slides sideways out of the beam when removed)
+    ctx.save(); ctx.globalAlpha=0.15+0.85*sA; screenSide(ctx,px(L),py(180),py(-180),{label:'Screen',leg:FLOOR-py(-180)}); ctx.restore();
+    // object on its rod
+    const oc=CL[colr], ox=px(S.d), oy=py(S.lift); line(ctx,ox,oy+40,ox,FLOOR,COL.ink,2.6); line(ctx,ox-18,FLOOR,ox+18,FLOOR,COL.ink,3.2);
+    if(shape==='ball'){ circ(ctx,ox,oy,40*K,oc,rgba(oc,0.35),3); }
+    else { const vr=vRange[shape], th=S.tilt; ctx.save(); ctx.lineCap='round'; ctx.strokeStyle=oc; ctx.lineWidth=7;
+      ctx.beginPath(); ctx.moveTo(px(S.d-vr[0]*Math.sin(th)),py(S.lift+vr[0]*Math.cos(th))); ctx.lineTo(px(S.d-vr[1]*Math.sin(th)),py(S.lift+vr[1]*Math.cos(th))); ctx.stroke(); ctx.restore();
+      circ(ctx,ox,oy,3.5,COL.ink,'#fff',1.6); }
+    textAt(ctx,SH[shape].n,ox,py(S.lift+62),{align:'center',size:12.5,weight:700,color:oc});
+    // torch on its stand
+    line(ctx,px(0)-50,py(-RS),px(0)-50,FLOOR,COL.ink,3); line(ctx,px(0)-74,FLOOR,px(0)-26,FLOOR,COL.ink,3.2); torchDraw(ctx,px(0),py(0),0,b,0.9);
+    // dimensions
+    if(b>0.3&&S.lift<5&&sA>0.9){ dimV(ctx,px(L)-16,py((E.pTop+E.uTop)/2),py((E.pBot+E.uBot)/2),Math.round(shH)+' mm',COL.green,-1.4); }
+    // ---------- screen face ----------
+    panelFrame(ctx,600,70,196,196,'On the screen',COL.green,true);
+    ctx.save(); rrect(ctx,604,74,188,188,8); ctx.clip(); ctx.imageSmoothingEnabled=true; ctx.drawImage(face,604,74,188,188); ctx.restore();
+    if(sA<0.1) textAt(ctx,'no screen here',698,172,{align:'center',size:12,weight:600,color:'#9fb0c6'});
+    // colour swatch: object colour vs shadow colour
+    const sx=620, sy=300; textAt(ctx,'object',sx+22,sy+42,{align:'center',size:11,weight:600,color:COL.muted}); circ(ctx,sx+22,sy+14,16,oc,oc,2);
+    textAt(ctx,'shadow',sx+82,sy+42,{align:'center',size:11,weight:600,color:COL.muted}); circ(ctx,sx+82,sy+14,16,COL.ink,'#2d3a4d',2);
+    ctx.restore();
+
+    setv($,'k1',b>0.3&&S.lift<200&&sA>0.5?Math.round(shH)+' mm':'no shadow'); setv($,'k2',Math.round(obH*(shape==='ball'?1:Math.cos(S.tilt)))+' mm');
+    setv($,'k3',b>0.3&&S.lift<200?Math.round(rim)+' mm wide':'—'); setv($,'k4','dark grey');
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   11.5 LET US INVESTIGATE — send sunlight onto a wall the Sun can't reach
+   Sunlight = parallel rays at the Sun's height α. The mirror (15 cm,
+   drawn 60 px) is a line at angle ψ in the hand; each ray reflects with
+   r = d − 2(d·n)n (angle of incidence = angle of reflection) and is
+   followed to the first thing it meets: the back wall of the verandah,
+   the roof, the ground, or the sky. Turning sideways by β moves the spot
+   sideways by (distance to wall)·tan 2β. Steel reflects ≈ 55 % and
+   slightly unevenly (spot a little blurred); cardboard reflects in all
+   directions, so no spot forms. The hand is never perfectly still: the
+   mirror angle is a spring (k 18, c 5) with a small tremor, so the spot
+   quivers and overshoots the way a real one does.
+   ===================================================================== */
+function buildA5(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML=`
+    <div class="control-group"><label>Tilt the mirror up / down <span class="val" id="pv">0°</span></label><input type="range" id="psi" min="-85" max="30" step="1" value="-20">
+      <label style="margin-top:6px">Turn it left / right <span class="val" id="yv">0°</span></label><input type="range" id="yaw" min="-15" max="15" step="1" value="6">
+      <label style="margin-top:6px">Height of the Sun <span class="val" id="av">45°</span></label><input type="range" id="alpha" min="25" max="70" step="1" value="45"></div>
+    <div class="control-group"><label>Held in the hand</label><div class="toggle-group" id="mat"><button class="toggle-btn small active" data-m="0">Plane mirror</button><button class="toggle-btn small" data-m="1">Steel plate</button><button class="toggle-btn small" data-m="2">Cardboard</button></div>
+      <div class="toggle-group"><button class="toggle-btn" id="steady">✋ Steady hand</button></div></div>
+    <div class="control-group"><div class="result-cards">${card('k1','Spot lands on',COL.blue)}${card('k2','Calendar lit?',COL.green)}${card('k3','Mirror tilt',COL.blue)}${card('k4','Spot brightness',COL.yellow)}</div>
+      <div class="fb" id="obs"></div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const GY=440, RX0=470, RY=172, WX=760, MLEN=62;
+  let t=0, psi={x:-10*Math.PI/180,v:0}, psiT=-20*Math.PI/180, yaw={x:0,v:0}, yawT=6*Math.PI/180, alpha=45*Math.PI/180, mat=0, steady=false, spot=null, bright=0, hitC=0;
+  const pin=(id,v,f)=>{ $('#'+id).oninput=e=>{ f(+e.target.value); $('#'+v).textContent=e.target.value+'°'; }; $('#'+id).oninput({target:$('#'+id)}); };
+  pin('psi','pv',v=>psiT=v*Math.PI/180); pin('yaw','yv',v=>yawT=v*Math.PI/180); pin('alpha','av',v=>alpha=v*Math.PI/180);
+  chipsWire(wrap,'#mat .toggle-btn',b=>mat=+b.dataset.m);
+  $('#steady').onclick=()=>{ steady=!steady; $('#steady').classList.toggle('active',steady); };
+  function firstHit(px,py,rx,ry){ let best={s:1e9,what:'sky'}; const tryS=(s,what,ok)=>{ if(s>0.5&&s<best.s&&ok) best={s,what}; };
+    if(rx>0){ const s=(WX-px)/rx, y=py+s*ry; tryS(s,'wall',y>=RY&&y<=GY); }
+    if(ry<0){ const s=(RY-py)/ry, x=px+s*rx; tryS(s,'roof',x>=RX0&&x<=WX); const s2=(RY-12-py)/ry, x2=px+s2*rx; tryS(s2,'roof top',x2>=RX0&&x2<=WX+30); }
+    if(ry>0){ const s=(GY-py)/ry; tryS(s,'ground',true); }
+    return {x:px+best.s*rx,y:py+best.s*ry,what:best.what,s:best.s}; }
+
+  animLoop(dt=>{ t+=dt;
+    const tremor=steady?0:(Math.sin(t*7.1)*0.6+Math.sin(t*11.3+1)*0.4)*0.004;
+    psi.v+=((psiT+tremor-psi.x)*18-psi.v*5)*dt; psi.x+=psi.v*dt; yaw.v+=((yawT+tremor*0.7-yaw.x)*18-yaw.v*5)*dt; yaw.x+=yaw.v*dt;
+    const d={x:Math.cos(alpha),y:Math.sin(alpha)};                       // sunlight direction (down-right)
+
+    // ---------- draw ----------
+    const {ctx,w,h}=fitCanvas(canvas); ctx.fillStyle='#f3f5f9'; ctx.fillRect(0,0,w,h); ctx.save(); camFit(ctx,w,h,[0,0,800,470]);
+    ctx.fillStyle='#eef6fd'; ctx.fillRect(0,0,800,GY);
+    // Sun and general sunlight
+    const sun={x:300-Math.cos(alpha)*330,y:300-Math.sin(alpha)*330}; sunDraw(ctx,clamp(sun.x,34,700),clamp(sun.y,34,400),22,t,1);
+    // verandah shade: where the roof blocks the Sun
+    const sg=(GY-RY)/d.y, xg=RX0+sg*d.x;
+    fillPoly(ctx,xg<=WX?[{x:RX0,y:RY},{x:xg,y:GY},{x:WX,y:GY},{x:WX,y:RY}]:[{x:RX0,y:RY},{x:WX,y:RY+(WX-RX0)*d.y/d.x},{x:WX,y:RY}],'rgba(58,70,88,0.16)');
+    for(let k=0;k<7;k++){ const x0=-60+k*110, y0=0; rayPath(ctx,[{x:x0,y:y0},{x:x0+d.x*140,y:y0+d.y*140}],COL.yellow,t,0.35,1.4,{dashes:[8,10]}); }
+    // ground, house
+    line(ctx,0,GY,800,GY,COL.ink,2.6); for(let x=6;x<800;x+=18) line(ctx,x,GY,x-8,GY+10,COL.mid,1);
+    rect(ctx,WX,RY-12,40,GY-RY+12,COL.ink,'#fff',2.6); rect(ctx,RX0-10,RY-14,WX-RX0+50,14,COL.ink,'#fff',2.6);
+    line(ctx,RX0+6,RY,RX0+6,GY,COL.ink,4); textAt(ctx,'verandah (in shade)',RX0+140,RY+24,{align:'center',size:12,weight:600,color:COL.muted});
+    // calendar on the wall (side view: a thin board)
+    rect(ctx,WX-5,262,5,70,COL.green,'#fff',2);
+    // the student and the mirror
+    const px=250, T=teen(ctx,px,GY,190,{sex:'g',m:0.6,pose:{sR:1.35,eR:-0.25,sL:-0.15,eL:0.1},mood:0.6});
+    const Hn=T.hand[1]; const M={x:Hn.x+16,y:Hn.y-4}, ang=Math.PI/2+psi.x, mx=Math.cos(ang)*MLEN/2, my=Math.sin(ang)*MLEN/2;
+    const A={x:M.x-mx,y:M.y-my}, B={x:M.x+mx,y:M.y+my};
+    let n={x:Math.sin(ang),y:-Math.cos(ang)}; if(n.x*d.x+n.y*d.y>0) n={x:-n.x,y:-n.y};               // face that meets the Sun
+    const r=reflect(d.x,d.y,n.x,n.y), refl=[1,0.55,0][mat], faces=(n.x*d.x+n.y*d.y)<-0.02;
+    // incoming and reflected rays across the mirror
+    const hits=[]; for(let k=0;k<5;k++){ const u=(k+0.5)/5, P={x:lerp(A.x,B.x,u),y:lerp(A.y,B.y,u)};
+      rayPath(ctx,[{x:P.x-d.x*260,y:P.y-d.y*260},P],COL.yellow,t,0.85,1.8,{at:0.7});
+      if(faces&&refl>0){ const Hh=firstHit(P.x,P.y,r.x,r.y); hits.push(Hh); rayPath(ctx,[P,Hh],COL.blue,t,refl*0.9,1.8,{at:0.35}); }
+      else if(mat===2&&faces){ for(let q=0;q<3;q++){ const a=Math.atan2(n.y,n.x)+(q-1)*0.7; line(ctx,P.x,P.y,P.x+Math.cos(a)*26,P.y+Math.sin(a)*26,rgba(COL.blue,0.5),1.2); } } }
+    mirrorSeg(ctx,A.x,A.y,B.x,B.y,(n.x*Math.sin(ang)-n.y*Math.cos(ang))>0?1:-1,{steel:mat===1,col:mat===2?'#c9a26b':COL.blue,w:mat===2?5:3.4});
+    if(faces&&refl>0) line(ctx,M.x,M.y,M.x+n.x*44,M.y+n.y*44,COL.green,1.4,[5,4]);
+    // the spot where the reflected beam lands
+    let what='—'; spot=null; if(hits.length){ what=hits[2].what; const h0=hits[0], h4=hits[4]; spot={what,y0:Math.min(h0.y,h4.y),y1:Math.max(h0.y,h4.y),x0:Math.min(h0.x,h4.x),x1:Math.max(h0.x,h4.x),dist:hits[2].s};
+      if(what==='wall'){ line(ctx,WX,spot.y0,WX,spot.y1,COL.yellow,6); glow(ctx,WX,(spot.y0+spot.y1)/2,40,COL.yellow,0.6*refl); }
+      else if(what==='ground'){ line(ctx,spot.x0,GY,spot.x1,GY,COL.yellow,6); }
+      else if(what==='roof'){ line(ctx,spot.x0,RY,spot.x1,RY,COL.yellow,6); } }
+    bright=approach(bright,hits.length?refl:0,6,dt);
+    // ---------- the wall, seen from the front ----------
+    const ix=560, iy=22, iw=226, ih=126; panelFrame(ctx,ix,iy,iw,ih,'The shaded wall, face on',COL.green);
+    ctx.save(); rrect(ctx,ix,iy,iw,ih,10); ctx.clip(); ctx.fillStyle='#dfe3ea'; ctx.fillRect(ix,iy,iw,ih);
+    const k=ih/(GY-RY), wy=y=>iy+(y-RY)*k, cx=ix+iw/2;
+    rect(ctx,cx-26,wy(262),52,70*k,COL.green,'#fff',2); for(let q=0;q<3;q++) line(ctx,cx-18,wy(262)+10+q*9,cx+18,wy(262)+10+q*9,COL.mid,1); textAt(ctx,'CALENDAR',cx,wy(262)+8,{align:'center',size:7.5,weight:700,color:COL.green});
+    let lit=false;
+    if(spot&&what==='wall'){ const sx=cx+Math.tan(2*yaw.x)*spot.dist*k*1.0, sy=wy((spot.y0+spot.y1)/2), rw=MLEN*0.5*k*1.1, rh=Math.max(4,(spot.y1-spot.y0)/2*k);
+      ctx.save(); if(mat===1) ctx.filter='blur(2px)'; ctx.beginPath(); ctx.ellipse(sx,sy,rw,rh,0,0,Math.PI*2); ctx.fillStyle=rgba('#ffe066',0.35+0.6*bright); ctx.fill(); ctx.restore();
+      ctx.save(); ctx.beginPath(); ctx.ellipse(sx,sy,rw,rh,0,0,Math.PI*2); ctx.strokeStyle=COL.yellow; ctx.lineWidth=1.5; ctx.stroke(); ctx.restore();
+      lit=Math.abs(sx-cx)<26+rw*0.5&&sy>wy(262)&&sy<wy(332); }
+    ctx.restore();
+    hitC=approach(hitC,lit?1:0,5,dt); if(hitC>0.5) mark(ctx,ix+iw-22,iy+ih-20,true,hitC);
+    ctx.restore();
+
+    // ---------- side ----------
+    setv($,'k1',!faces?'— (back of mirror)':mat===2?'nowhere — scattered':what); setv($,'k2',lit?'Yes ✓':'No'); setc($,'k2',lit?COL.green:COL.red);
+    setv($,'k3',Math.round(psi.x*180/Math.PI)+'°'); setv($,'k4',Math.round(bright*100)+' %');
+    const o=$('#obs'), m=mat===2?['bad','Cardboard sends light every way — no spot on the wall. Only a shiny surface redirects it.']:lit?['ok','The mirror changed the direction of the sunlight — the calendar in the shade is lit!']:what==='wall'?['warn','The spot is on the wall. Turn left/right or tilt to move it onto the calendar.']:['warn','Tilt the mirror: the spot moves twice as fast as you turn it.'];
+    if(o.textContent!==m[1]){ o.textContent=m[1]; o.className='fb '+m[0]; }
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   11.6 LET US EXPERIMENT — a thin beam through one slit of a comb
+   Top view of the white sheet. The torch's glowing part is 5 px wide; the
+   comb slits are 4 px wide, 190 px in front of it, so each beam spreads a
+   little: its edges are the straight lines from one side of the glow
+   through the opposite side of the slit. Every edge / centre line is
+   traced as a straight line; when it meets the mirror it turns with
+   r = d − 2(d·n)n, i.e. angle of incidence = angle of reflection, both
+   measured from the normal. The mirror slides in on a spring and its
+   angle and the torch's aim are springs too, so the beam swings smoothly.
+   ===================================================================== */
+function buildA6(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML=`
+    <div class="control-group"><label>Comb</label><div class="toggle-group" id="mode"><button class="toggle-btn small active" data-m="1">One slit open</button><button class="toggle-btn small" data-m="3">Three slits</button><button class="toggle-btn small" data-m="0">No black paper</button></div>
+      <label style="margin-top:8px">Aim the torch <span class="val" id="av">0°</span></label><input type="range" id="aim" min="-12" max="12" step="1" value="-4"></div>
+    <div class="control-group"><div class="toggle-group"><button class="toggle-btn play" id="put">Place the mirror in the beam</button></div>
+      <label style="margin-top:8px">Turn the mirror <span class="val" id="mv">30°</span></label><input type="range" id="mang" min="-55" max="55" step="1" value="30">
+      <div class="toggle-group"><button class="toggle-btn active" id="nrm">Show normal & angles</button></div></div>
+    <div class="control-group"><div class="result-cards">${card('k1','Angle of incidence',COL.yellow)}${card('k2','Angle of reflection',COL.blue)}${card('k3','Beam turned by',COL.green)}${card('k4','Beams on the paper',COL.yellow)}</div>
+      <div class="fb" id="obs"></div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const PX0=40, PX1=770, PY0=40, PY1=470, CX=250, CY=262, SRC=2.5, SLIT=2, MX=560, MLEN=190;
+  let t=0, mode=1, aim={x:-4*Math.PI/180,v:0}, aimT=-4*Math.PI/180, mang={x:30*Math.PI/180,v:0}, mangT=30*Math.PI/180, my={x:560,v:0}, myT=560, put=false, showN=true, info=null;
+  chipsWire(wrap,'#mode .toggle-btn',b=>mode=+b.dataset.m);
+  $('#aim').oninput=e=>{ aimT=+e.target.value*Math.PI/180; $('#av').textContent=e.target.value+'°'; };
+  $('#mang').oninput=e=>{ mangT=+e.target.value*Math.PI/180; $('#mv').textContent=e.target.value+'°'; };
+  $('#put').onclick=()=>{ put=!put; myT=put?CY:560; };
+  $('#nrm').onclick=()=>{ showN=!showN; $('#nrm').classList.toggle('active',showN); };
+  const TX=60;
+  function slits(){ const all=[]; for(let k=-7;k<=7;k++) all.push(k); return mode===0?all:mode===1?[0]:[-3,0,3]; }
+  function mirror(){ const a=Math.PI/2+mang.x, c={x:MX,y:my.x}; return {a,c,A:{x:c.x-Math.cos(a)*MLEN/2,y:c.y-Math.sin(a)*MLEN/2},B:{x:c.x+Math.cos(a)*MLEN/2,y:c.y+Math.sin(a)*MLEN/2}}; }
+  function toEdge(p,d){ let s=1e9; if(d.x>0) s=Math.min(s,(PX1-p.x)/d.x); if(d.x<0) s=Math.min(s,(PX0-p.x)/d.x); if(d.y>0) s=Math.min(s,(PY1-p.y)/d.y); if(d.y<0) s=Math.min(s,(PY0-p.y)/d.y); return {x:p.x+d.x*s,y:p.y+d.y*s}; }
+  function trace(p,d,M){ const pts=[p]; let hit=null;
+    if(M){ const q=raySeg(p.x,p.y,d.x,d.y,M.A.x,M.A.y,M.B.x,M.B.y); if(q){ const P={x:p.x+d.x*q.t,y:p.y+d.y*q.t}; let n={x:Math.sin(M.a),y:-Math.cos(M.a)}; if(n.x*d.x+n.y*d.y>0) n={x:-n.x,y:-n.y};
+        const r=reflect(d.x,d.y,n.x,n.y); pts.push(P); pts.push(toEdge(P,r)); hit={P,n,d,r}; return {pts,hit}; } }
+    pts.push(toEdge(p,d)); return {pts,hit}; }
+
+  animLoop(dt=>{ t+=dt;
+    aim.v+=((aimT-aim.x)*20-aim.v*6)*dt; aim.x+=aim.v*dt; mang.v+=((mangT-mang.x)*20-mang.v*6)*dt; mang.x+=mang.v*dt; my.v+=((myT-my.x)*16-my.v*5.5)*dt; my.x+=my.v*dt;
+    const T={x:TX,y:CY}, ax={x:Math.cos(aim.x),y:Math.sin(aim.x)}, pp={x:-ax.y,y:ax.x};
+    const M=mirror(), onPaper=my.x<PY1+40;
+
+    // ---------- draw ----------
+    const {ctx,w,h}=fitCanvas(canvas); ctx.fillStyle='#dfe4ec'; ctx.fillRect(0,0,w,h); ctx.save(); camFit(ctx,w,h,[-60,20,800,490]);
+    ctx.save(); ctx.shadowColor='rgba(19,42,68,0.18)'; ctx.shadowBlur=10; rect(ctx,PX0,PY0,PX1-PX0,PY1-PY0,COL.mid,'#fff',1.2); ctx.restore();
+    textAt(ctx,'white sheet of paper (top view)',PX1-8,PY1-10,{align:'right',size:11,weight:600,color:COL.mid});
+    // torch light falling on the comb (a soft cone)
+    const cone=20*Math.PI/180; fillPoly(ctx,[{x:T.x+pp.x*12,y:T.y+pp.y*12},{x:CX,y:T.y+(CX-T.x)*Math.tan(aim.x+cone)},{x:CX,y:T.y+(CX-T.x)*Math.tan(aim.x-cone)},{x:T.x-pp.x*12,y:T.y-pp.y*12}],rgba(COL.yellow,0.12));
+    // beams through each open slit
+    let nb=0; info=null; const ks=slits();
+    ks.forEach(k=>{ const ys=CY+k*14, sl={x:CX,y:ys}; const dc={x:sl.x-T.x,y:sl.y-T.y}, Lc=Math.hypot(dc.x,dc.y); const off=Math.abs(Math.atan2(dc.y,dc.x)-aim.x); if(off>cone) return; const I=1-off/cone*0.6; nb++;
+      const edge=(sy,ey)=>{ const a={x:T.x+pp.x*sy,y:T.y+pp.y*sy}, b={x:CX,y:ys+ey}, L=Math.hypot(b.x-a.x,b.y-a.y); return trace(b,{x:(b.x-a.x)/L,y:(b.y-a.y)/L},onPaper?M:null); };
+      const e1=edge(SRC,-SLIT), e2=edge(-SRC,SLIT), c=trace(sl,{x:dc.x/Lc,y:dc.y/Lc},onPaper?M:null);
+      // light on the paper
+      if(e1.pts.length===e2.pts.length){ for(let s=1;s<e1.pts.length;s++){ fillPoly(ctx,[e1.pts[s-1],e1.pts[s],e2.pts[s],e2.pts[s-1]],rgba(s===1?COL.yellow:COL.blue,0.28*I)); } }
+      rayPath(ctx,c.pts,COL.yellow,t,0.9*I,1.6,{at:0.4});
+      if(c.hit){ rayPath(ctx,[c.hit.P,c.pts[2]],COL.blue,t,0.95*I,1.8,{at:0.45}); if(k===0||(!info&&ks.length===1)) info=c.hit; }
+      line(ctx,T.x,T.y,CX,ys,rgba(COL.yellow,0.25*I),1); });
+    // comb (standing on the paper, seen from above) + black paper
+    rect(ctx,CX-3,CY-112,10,224,COL.ink,'#fff',2);
+    for(let k=-8;k<=8;k++){ const y=CY+k*14; if(k<8) rect(ctx,CX-2,y+SLIT,8,14-2*SLIT,COL.ink,'#5c6b80',1); }
+    if(mode!==0){ const open=slits();
+      // black paper strips taped over the closed slits
+      ctx.save(); ctx.fillStyle='#1b2433'; let k0=-8; for(let k=-8;k<=8;k++){ if(open.includes(k)||k===8){ const y0=CY+k0*14-SLIT, y1=CY+k*14-SLIT; if(y1>y0) ctx.fillRect(CX-10,y0,6,y1-y0); k0=k+1; } } ctx.restore(); }
+    textAt(ctx,'comb',CX+8,CY-122,{align:'center',size:12,weight:700,color:COL.ink});
+    // torch
+    torchDraw(ctx,T.x,T.y,aim.x,1,0.62);
+    // mirror on its stand
+    ctx.save(); ctx.translate(M.c.x,M.c.y); ctx.rotate(M.a); rect(ctx,-MLEN/2+12,-26,MLEN-24,18,COL.mid,'#f1f4f8',1.5); ctx.restore();
+    mirrorSeg(ctx,M.A.x,M.A.y,M.B.x,M.B.y,-1,{th:7});
+    // normal and angles
+    if(info&&showN){ const P=info.P, n=info.n, L=110; ctx.save(); ctx.setLineDash([6,5]); line(ctx,P.x-n.x*30,P.y-n.y*30,P.x+n.x*L,P.y+n.y*L,COL.green,1.8); ctx.restore();
+      textAt(ctx,'normal',P.x+n.x*(L+10),P.y+n.y*(L+10)+4,{align:'center',size:11,weight:700,color:COL.green});
+      const an=Math.atan2(n.y,n.x), ai=Math.atan2(-info.d.y,-info.d.x), ar=Math.atan2(info.r.y,info.r.x), R=46;
+      const arc=(a0,a1,col,lab)=>{ let da=angDiff(a1,a0); ctx.save(); ctx.strokeStyle=col; ctx.lineWidth=2.4; ctx.beginPath(); ctx.arc(P.x,P.y,R,a0,a0+da,da<0); ctx.stroke(); ctx.restore();
+        const am=a0+da/2; tag(ctx,lab,P.x+Math.cos(am)*(R+30),P.y+Math.sin(am)*(R+30),col,{size:11}); };
+      const i=Math.abs(angDiff(ai,an)), r=Math.abs(angDiff(ar,an));
+      arc(an,ai,COL.yellow,'i = '+Math.round(i*180/Math.PI)+'°'); arc(an,ar,COL.blue,'r = '+Math.round(r*180/Math.PI)+'°');
+      info.i=i; info.r2=r; }
+    ctx.restore();
+
+    // ---------- side ----------
+    setBtn($('#put'),put?'Take the mirror away':'Place the mirror in the beam',put?'':'play');
+    if(info&&info.i!==undefined){ setv($,'k1',Math.round(info.i*180/Math.PI)+'°'); setv($,'k2',Math.round(info.r2*180/Math.PI)+'°'); setv($,'k3',Math.round(180-2*info.i*180/Math.PI)+'°'); }
+    else { setv($,'k1','—'); setv($,'k2','—'); setv($,'k3','0° (straight)'); }
+    setv($,'k4',String(nb));
+    const o=$('#obs'), m=!info?['warn',put?'Turn the mirror or aim the torch so the beam falls on the mirror.':'A thin straight beam runs across the paper. Now put the mirror in its path.']:['ok','The beam changes direction at the mirror — reflection. The two angles with the normal are equal.'];
+    if(o.textContent!==m[1]){ o.textContent=m[1]; o.className='fb '+m[0]; }
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   11.7 LET US EXPERIMENT — the image of a pen in a plane mirror
+   Side view, 10 px = 1 cm. The pen stands in a lump of clay. Every point
+   of the pen sends light to the mirror; the ray that reaches the eye
+   leaves the mirror as if it came from the point's mirror twin, the same
+   distance behind the glass (x → 2·x_mirror − x). So the image is the
+   same size and the same way up (erect), and it is only where the
+   reflected rays *seem* to come from — no light really goes behind the
+   mirror, so a screen there stays dark.
+   Moving the pen: the clay base follows a spring (k 14, c 5.5); the pen
+   itself is a stiff inverted pendulum in the clay (ω² = 60, damping 5)
+   pushed by the base's acceleration, so it rocks and settles.
+   ===================================================================== */
+function buildA7(){
+  const PENS={pen:{n:'Pen',L:13},pencil:{n:'Pencil',L:17},crayon:{n:'Crayon',L:8}};
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML=`
+    <div class="control-group"><label>Object</label><div class="toggle-group" id="pk">${Object.keys(PENS).map((k,i)=>`<button class="toggle-btn small${i?'':' active'}" data-k="${k}">${PENS[k].n}</button>`).join('')}</div>
+      <label style="margin-top:8px">Distance from the mirror <span class="val" id="dv">15 cm</span></label><input type="range" id="d" min="4" max="30" step="1" value="15">
+      <label style="margin-top:6px">Lean the pen <span class="val" id="lv">0°</span></label><input type="range" id="lean" min="-35" max="35" step="1" value="0">
+      <label style="margin-top:6px">Your eye height <span class="val" id="ev">24 cm</span></label><input type="range" id="eye" min="4" max="26" step="1" value="22"></div>
+    <div class="control-group"><label>Try to catch the image on a screen</label><div class="toggle-group" id="scr"><button class="toggle-btn small active" data-s="0">No screen</button><button class="toggle-btn small" data-s="1">Behind the mirror</button><button class="toggle-btn small" data-s="2">In front</button></div></div>
+    <div class="control-group"><div class="result-cards">${card('k1','Object height',COL.red)}${card('k2','Image height',COL.red)}${card('k3','Object → mirror',COL.green)}${card('k4','Mirror → image',COL.green)}${card('k5','Tip on top?',COL.green)}${card('k6','Image on screen?',COL.green)}</div>
+      <div class="fb" id="obs"></div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const K=10, MX=420, TY=400, MTOP=130;
+  let t=0, pk='pen', dT=15, leanT=0, eyeH=22, scr=0, base={x:MX-150,v:0,a:0}, th={x:0,v:0}, scrX={x:900,v:0}, len=13*K;
+  chipsWire(wrap,'#pk .toggle-btn',b=>pk=b.dataset.k);
+  $('#d').oninput=e=>{ dT=+e.target.value; $('#dv').textContent=dT+' cm'; };
+  $('#lean').oninput=e=>{ leanT=+e.target.value*Math.PI/180; $('#lv').textContent=e.target.value+'°'; };
+  $('#eye').oninput=e=>{ eyeH=+e.target.value; $('#ev').textContent=eyeH+' cm'; }; $('#eye').oninput({target:$('#eye')});
+  chipsWire(wrap,'#scr .toggle-btn',b=>scr=+b.dataset.s);
+  function penDraw(ctx,bx,by,ang,L,virt){ const ux=Math.sin(ang), uy=-Math.cos(ang), tip={x:bx+ux*L,y:by+uy*L}, px=-uy, py=ux;
+    ctx.save(); if(virt){ ctx.globalAlpha=0.75; ctx.setLineDash([6,4]); } ctx.lineJoin='round'; ctx.strokeStyle=COL.red; ctx.lineWidth=2.4; ctx.fillStyle=virt?'rgba(217,67,43,0.06)':'#fff';
+    const w=6, q=(s,o)=>({x:bx+ux*s+px*o,y:by+uy*s+py*o});
+    const body=[q(0,-w),q(L-16,-w),q(L-2,-1.2),q(L-2,1.2),q(L-16,w),q(0,w)]; ctx.beginPath(); body.forEach((p,i)=>i?ctx.lineTo(p.x,p.y):ctx.moveTo(p.x,p.y)); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); const a=q(L-16,-w), b=q(L-16,w); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+    const sg=virt?-1:1, c0=q(L*0.35,sg*w), c1=q(L*0.62,sg*(w+3)); ctx.beginPath(); ctx.moveTo(c0.x,c0.y); ctx.lineTo(c1.x,c1.y); ctx.stroke();       // clip on one side (shows left–right)
+    ctx.restore(); circ(ctx,tip.x,tip.y,2.6,COL.red,COL.red,1); return tip; }
+  function clay(ctx,x,y,virt){ ctx.save(); if(virt){ ctx.globalAlpha=0.6; ctx.setLineDash([5,4]); } ctx.beginPath(); ctx.moveTo(x-16,y); ctx.quadraticCurveTo(x-14,y-14,x,y-15); ctx.quadraticCurveTo(x+14,y-14,x+16,y); ctx.closePath();
+    ctx.fillStyle='#e9e2d4'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke(); ctx.restore(); }
+
+  animLoop(dt=>{ t+=dt; len=approach(len,PENS[pk].L*K,6,dt);
+    const tx=MX-dT*K, a=(tx-base.x)*14-base.v*5.5; base.v+=a*dt; base.x+=base.v*dt;
+    th.v+=(-(th.x-leanT)*60-th.v*5-a/len*1.2)*dt; th.x+=th.v*dt;
+    const d=(MX-base.x)/K, bx=base.x, by=TY-12, E={x:36,y:TY-eyeH*K};
+    const tgtS=scr===1?MX+d*K:scr===2?MX-d*K-70:900; scrX.v+=((tgtS-scrX.x)*14-scrX.v*5.5)*dt; scrX.x+=scrX.v*dt;
+
+    // ---------- draw ----------
+    const {ctx,w,h}=fitCanvas(canvas); ctx.fillStyle='#f3f5f9'; ctx.fillRect(0,0,w,h); ctx.save(); camFit(ctx,w,h,[0,40,800,470]);
+    // mirror world (behind the glass)
+    ctx.save(); ctx.fillStyle='rgba(47,143,224,0.06)'; ctx.fillRect(MX,MTOP,800-MX,TY-MTOP); ctx.restore();
+    textAt(ctx,'behind the mirror',MX+95,MTOP+18,{align:'center',size:11.5,weight:600,color:COL.blue});
+    tableTop(ctx,0,MX-4,TY,0); ctx.save(); ctx.globalAlpha=0.35; ctx.setLineDash([6,5]); line(ctx,MX+4,TY,800,TY,COL.ink,2); ctx.restore();
+    // object pen and its image
+    clay(ctx,bx,TY,false); const tip=penDraw(ctx,bx,by,th.x,len,false);
+    const ix=2*MX-bx; clay(ctx,ix,TY,true); const itip=penDraw(ctx,ix,by,-th.x,len,true);
+    // rays: tip → mirror → eye, and the base
+    const rays=[[tip,itip,1],[{x:bx,y:by-4},{x:ix,y:by-4},0.55]]; let seen=true;
+    rays.forEach(([P,I,al])=>{ const s=(MX-E.x)/(I.x-E.x), yM=E.y+(I.y-E.y)*s; if(yM<MTOP||yM>TY){ seen=false; return; } const Mp={x:MX,y:yM};
+      rayPath(ctx,[P,Mp],COL.yellow,t,al,1.7,{at:0.5}); rayPath(ctx,[Mp,E],COL.blue,t,al,1.7,{at:0.5});
+      ctx.save(); ctx.globalAlpha=al; ctx.setLineDash([4,5]); line(ctx,Mp.x,Mp.y,I.x,I.y,COL.red,1.3); ctx.restore(); });
+    // mirror on its stand
+    mirrorSeg(ctx,MX,MTOP,MX,TY,-1,{th:8}); line(ctx,MX+4,TY,MX+40,TY,COL.ink,3); line(ctx,MX+8,TY,MX+24,TY-40,COL.ink,2.4);
+    eyeSide(ctx,E.x,E.y,Math.atan2(MTOP+80-E.y,MX-E.x)*0.3,1.3,COL.ink);
+    // screen
+    if(scrX.x<840){ const sx=scrX.x; screenSide(ctx,sx,TY-150,TY-14,{label:'Screen',leg:14}); }
+    // measurements
+    const oh=Math.round(len/K), ytop=Math.min(tip.y,by)-4;
+    dimH(ctx,bx,MX,TY+34,Math.round(d)+' cm',COL.green); dimH(ctx,MX,ix,TY+34,Math.round(d)+' cm',COL.green);
+    dimV(ctx,Math.min(bx,tip.x)-26,by,tip.y,'',COL.green); dimV(ctx,Math.max(ix,itip.x)+26,by,itip.y,'',COL.green);
+    // what the screen shows
+    if(scr){ ctx.save(); ctx.translate(590,0); panelFrame(ctx,24,58,170,120,'On the screen',COL.green,scr===1); ctx.save(); rrect(ctx,28,62,162,112,8); ctx.clip();
+        if(scr===1){ ctx.fillStyle='#141c28'; ctx.fillRect(28,62,162,112); textAt(ctx,'dark — no light gets',109,112,{align:'center',size:11.5,weight:600,color:'#9fb0c6'}); textAt(ctx,'behind the mirror',109,128,{align:'center',size:11.5,weight:600,color:'#9fb0c6'}); }
+        else { const g=ctx.createRadialGradient(109,118,5,109,118,110); g.addColorStop(0,'#fffbe8'); g.addColorStop(1,'#e8e6dc'); ctx.fillStyle=g; ctx.fillRect(28,62,162,112); textAt(ctx,'evenly lit — no picture',109,122,{align:'center',size:11.5,weight:600,color:COL.muted}); }
+        ctx.restore(); ctx.restore(); }
+    ctx.restore();
+
+    // ---------- side ----------
+    setv($,'k1',oh+' cm'); setv($,'k2',oh+' cm'); setv($,'k3',Math.round(d)+' cm'); setv($,'k4',Math.round(d)+' cm');
+    setv($,'k5','Yes — erect'); setv($,'k6',scr?'No':'—');
+    const o=$('#obs'), m=!seen?['warn','Raise or lower your eye: the reflected rays miss it, so you can’t see the whole image.']:scr===1?['bad','The screen behind the mirror stays dark. The image is only where the light seems to come from.']:scr===2?['bad','In front, the screen is just lit evenly — no image forms on it.']:['ok','Same size, same way up (erect), and as far behind the mirror as the pen is in front.'];
+    if(o.textContent!==m[1]){ o.textContent=m[1]; o.className='fb '+m[0]; }
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   11.8 LET US EXPERIMENT — you and your image
+   A real perspective view (camera 4.6 m from the mirror, 1.3 m high,
+   1.45 m to the right of you, focal length 360 px) looking over your shoulder.
+   The mirror is the plane z = 0: your image stands at z = +d when you
+   stand at z = −d, and every point keeps its height and its left–right
+   position (x → x). So the image is as far behind as you are in front,
+   and the hand on YOUR left is on the image's right: lateral inversion.
+   You walk at up to 0.9 m/s with a bobbing step; arms move on springs.
+   The strip at the bottom is the same room seen from above.
+   ===================================================================== */
+function buildA8(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML=`
+    <div class="control-group"><label>Your distance from the mirror <span class="val" id="dv">1.5 m</span></label><input type="range" id="d" min="0.5" max="2.2" step="0.1" value="1.5">
+      <div class="toggle-group"><button class="toggle-btn" id="closer">👣 Step closer</button><button class="toggle-btn" id="back">👣 Step back</button></div></div>
+    <div class="control-group"><label>Do this</label><div class="toggle-group" id="act"><button class="toggle-btn small" data-a="left">✋ Raise LEFT arm</button><button class="toggle-btn small" data-a="ear">👂 Touch RIGHT ear</button></div>
+      <div class="toggle-group" id="card"><button class="toggle-btn small" data-c="1">Hold card: SCIENCE</button><button class="toggle-btn small" data-c="2">Hold card written like an ambulance</button></div></div>
+    <div class="control-group"><div class="result-cards">${card('k1','You → mirror',COL.green)}${card('k2','Mirror → image',COL.green)}${card('k3','Your hand',COL.red)}${card('k4','Image’s hand',COL.red)}</div>
+      <div class="fb" id="obs"></div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const CX=1.0, CY=1.3, CZ=-4.6, F=360, OX=400, OY=190, PXW=-0.45, H=1.5;
+  let t=0, dT=1.5, z={x:-1.5,v:0}, ph=0, action='', cardK=0, P={sL:-0.1,eL:0.08,sR:0.1,eR:-0.08}, cardA=0;
+  const pj=(x,y,zz)=>{ const D=zz-CZ; return {x:OX+F*(x-CX)/D, y:OY-F*(y-CY)/D, s:F/D}; };
+  $('#d').oninput=e=>{ dT=+e.target.value; $('#dv').textContent=dT.toFixed(1)+' m'; };
+  const setD=v=>{ $('#d').value=clamp(v,0.5,2.2); $('#d').oninput({target:$('#d')}); };
+  $('#closer').onclick=()=>setD(dT-0.5); $('#back').onclick=()=>setD(dT+0.5);
+  wrap.querySelectorAll('#act .toggle-btn').forEach(b=>b.onclick=()=>{ action=action===b.dataset.a?'':b.dataset.a; if(action) cardK=0; paint(); });
+  wrap.querySelectorAll('#card .toggle-btn').forEach(b=>b.onclick=()=>{ cardK=cardK===+b.dataset.c?0:+b.dataset.c; if(cardK) action=''; paint(); });
+  function paint(){ wrap.querySelectorAll('#act .toggle-btn').forEach(b=>b.classList.toggle('active',b.dataset.a===action)); wrap.querySelectorAll('#card .toggle-btn').forEach(b=>b.classList.toggle('active',+b.dataset.c===cardK)); }
+  function poseT(){ if(action==='left') return {sL:-2.75,eL:-0.15,sR:0.12,eR:-0.08}; if(action==='ear') return {sL:-0.1,eL:0.08,sR:2.45,eR:1.95};
+    if(cardK) return {sL:-0.4,eL:1.95,sR:0.4,eR:-1.95}; return {sL:-0.1,eL:0.08,sR:0.1,eR:-0.08}; }
+  function floorGrid(ctx,z0,z1){ ctx.save(); ctx.strokeStyle='#c9d3e0'; ctx.lineWidth=1;
+    for(let x=-2.5;x<=2.51;x+=0.5){ const a=pj(x,0,z0), b=pj(x,0,z1); ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); }
+    for(let zz=z0;zz<=z1+1e-6;zz+=0.5){ const a=pj(-2.5,0,zz), b=pj(2.5,0,zz); ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke(); } ctx.restore(); }
+  function cardAt(ctx,T,s,front,k){ // card held at the chest, 0.42 m wide
+    const cx=(T.hand[0].x+T.hand[1].x)/2, cy=Math.min(T.hand[0].y,T.hand[1].y)+2, w=0.42*s, h=0.17*s;
+    ctx.save(); rrect(ctx,cx-w/2,cy-h/2,w,h,3); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.red; ctx.lineWidth=2; ctx.stroke();
+    if(front){ const txt=k===1?'SCIENCE':'AMBULANCE'; ctx.translate(cx,cy); if(k===1) ctx.scale(-1,1); ctx.font='800 '+Math.max(7,h*0.52)+'px Poppins, sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      let fs=h*0.52; while(fs>6&&ctx.measureText(txt).width>w*0.9){ fs-=0.5; ctx.font='800 '+fs+'px Poppins, sans-serif'; } ctx.fillStyle=COL.red; ctx.fillText(txt,0,1); }
+    ctx.restore(); }
+
+  animLoop(dt=>{ t+=dt;
+    const tz=-dT, dz=tz-z.x, vmax=0.9; z.v=approach(z.v,clamp(dz*3,-vmax,vmax),6,dt); z.x+=z.v*dt; ph+=Math.abs(z.v)*dt*8;
+    const PT=poseT(); for(const k in PT) P[k]=approach(P[k],PT[k],7,dt); cardA=approach(cardA,cardK?1:0,6,dt);
+    const d=-z.x, walking=Math.abs(z.v)>0.05, bob=walking?Math.abs(Math.sin(ph))*0.025:0, sway=walking?Math.sin(ph)*0.06:0;
+    const pose=Object.assign({},P,{hL:-0.05-sway,hR:0.05-sway,lean:sway*0.3});
+
+    // ---------- draw ----------
+    const {ctx,w,h}=fitCanvas(canvas); ctx.fillStyle='#f3f5f9'; ctx.fillRect(0,0,w,h); ctx.save(); camFit(ctx,w,h,[100,118,700,492]);
+    // wall + floor
+    const wl=pj(-2.5,2.6,0), wr=pj(2.5,0,0); ctx.fillStyle='#f7f4ee'; ctx.fillRect(wl.x,wl.y,wr.x-wl.x,wr.y-wl.y);
+    const f0=pj(-2.5,0,0), f1=pj(2.5,0,0), f2=pj(2.5,0,-4.2), f3=pj(-2.5,0,-4.2); fillPoly(ctx,[f0,f1,f2,f3],'#ffffff'); floorGrid(ctx,-4,0);
+    line(ctx,f0.x,f0.y,f1.x,f1.y,COL.ink,2);
+    // mirror frame and the world inside it
+    const m0=pj(-0.6,1.95,0), m1=pj(0.6,0.05,0); ctx.save(); rrect(ctx,m0.x,m0.y,m1.x-m0.x,m1.y-m0.y,3); ctx.clip();
+    ctx.fillStyle='#eef5fb'; ctx.fillRect(m0.x,m0.y,m1.x-m0.x,m1.y-m0.y); fillPoly(ctx,[pj(-2.5,0,0),pj(2.5,0,0),pj(2.5,0,6),pj(-2.5,0,6)],'#f8fbfe');
+    floorGrid(ctx,0,6);
+    const ib=pj(PXW,0,d), IT=teen(ctx,ib.x,ib.y,H*ib.s,{sex:'b',m:0.55,pose,mood:0.5,lift:bob*ib.s});
+    if(cardA>0.05){ ctx.save(); ctx.globalAlpha=cardA; cardAt(ctx,IT,ib.s,true,cardK||1); ctx.restore(); }
+    ctx.restore();
+    ctx.save(); ctx.lineWidth=4; ctx.strokeStyle=COL.blue; rrect(ctx,m0.x,m0.y,m1.x-m0.x,m1.y-m0.y,3); ctx.stroke(); ctx.restore();
+    textAt(ctx,'mirror',(m0.x+m1.x)/2,m0.y-8,{align:'center',size:12,weight:700,color:COL.blue});
+    // you (seen from behind)
+    const yb=pj(PXW,0,z.x); ctx.save(); ctx.globalAlpha=0.78; const YT=teen(ctx,yb.x,yb.y,H*yb.s,{sex:'b',m:0.55,pose,back:true,lift:bob*yb.s}); ctx.restore();
+    if(cardA>0.05){ ctx.save(); ctx.globalAlpha=cardA; cardAt(ctx,YT,yb.s,false,cardK); ctx.restore(); }
+    if(cardA>0.3&&cardK){ const cx=(IT.hand[0].x+IT.hand[1].x)/2, cy=Math.min(IT.hand[0].y,IT.hand[1].y)+2; ctx.save(); ctx.globalAlpha=cardA;
+      lensView(ctx,610,190,62,cx,cy,()=>{ const txt=cardK===1?'SCIENCE':'AMBULANCE'; rrect(ctx,556,168,108,44,4); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.red; ctx.lineWidth=2; ctx.stroke();
+        ctx.save(); ctx.translate(610,191); if(cardK===1) ctx.scale(-1,1); const fs=fitFont(ctx,txt,96,20,800); ctx.fillStyle=COL.red; ctx.textAlign='center'; ctx.textBaseline='middle'; ctx.fillText(txt,0,1); ctx.restore(); },{label:'card in the mirror',col:COL.red});
+      ctx.restore(); }
+    // labels for the hands
+    if(action==='left'){ tag(ctx,'your LEFT hand',YT.hand[0].x-10,YT.hand[0].y-14,COL.red,{size:11,align:'right'}); tag(ctx,'image’s RIGHT hand',IT.hand[0].x+8,IT.hand[0].y-18,COL.red,{size:10.5,align:'left'}); }
+    if(action==='ear'){ tag(ctx,'your RIGHT ear',YT.head.x+YT.r*2.4,YT.head.y+YT.r*2.4,COL.red,{size:11,align:'left'}); tag(ctx,'image’s LEFT ear',IT.hand[1].x+12,IT.hand[1].y-30,COL.red,{size:10.5,align:'left'}); }
+    // ---------- top view ----------
+    const ty=440, kx=110, mx0=400; rect(ctx,108,ty-40,584,78,COL.border||COL.mid,'#fff',1.2);
+    line(ctx,mx0,ty-34,mx0,ty+32,COL.blue,4); textAt(ctx,'mirror',mx0,ty-44+2,{align:'center',size:10.5,weight:700,color:COL.blue});
+    const yx=mx0-d*kx, ix=mx0+d*kx; circ(ctx,yx,ty,11,COL.red,'#fff',2.4); textAt(ctx,'you',yx,ty+4,{align:'center',size:9.5,weight:700,color:COL.red});
+    ctx.save(); ctx.setLineDash([4,3]); circ(ctx,ix,ty,11,COL.red,'#fff',2); ctx.restore(); textAt(ctx,'image',ix,ty+4,{align:'center',size:8.5,weight:700,color:COL.red});
+    dimH(ctx,yx+13,mx0-3,ty+24,d.toFixed(1)+' m',COL.green); dimH(ctx,mx0+3,ix-13,ty+24,d.toFixed(1)+' m',COL.green);
+    textAt(ctx,'seen from above',116,ty-26,{size:10.5,weight:600,color:COL.muted});
+    ctx.restore();
+
+    // ---------- side ----------
+    setv($,'k1',d.toFixed(2)+' m'); setv($,'k2',d.toFixed(2)+' m');
+    setv($,'k3',action==='left'?'left':action==='ear'?'right (on right ear)':'—'); setv($,'k4',action==='left'?'right':action==='ear'?'left (on left ear)':'—');
+    const o=$('#obs'), m=cardK===1?['warn','SCIENCE reads backwards in the mirror — left and right are swapped (lateral inversion).']:cardK===2?['ok','Written backwards on the card, it reads AMBULANCE in the mirror — that’s why ambulances are lettered this way.']:action?['ok','Your left appears as the image’s right — lateral inversion.']:walking?['warn','Watch: the image moves toward the mirror as you do.']:['ok','The image is as far behind the mirror as you are in front of it.'];
+    if(o.textContent!==m[1]){ o.textContent=m[1]; o.className='fb '+m[0]; }
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   11.9 LET US EXPLORE — a candle flame through a pinhole
+   Side view, 8 px = 1 cm. Light from each point of the flame goes in a
+   straight line through the hole, so a point at height y above the hole
+   lands at −y·v/u on the screen: the image is upside down and v/u times
+   the flame's size. A hole of diameter a turns each point into a small
+   disc of diameter a·(u + v)/u (blur), and the image brightness goes as
+   (a / v)². Screen picture = the live flame shape (it flickers and sways
+   with a noise + spring model; "blow" gives it a push) drawn rotated by
+   180°, scaled by v/u, blurred by that disc and dimmed by (a/v)².
+   ===================================================================== */
+function buildA9(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML=`
+    <div class="control-group"><label>Candle → cardboard (u) <span class="val" id="uv">15 cm</span></label><input type="range" id="u" min="8" max="40" step="1" value="15">
+      <label style="margin-top:6px">Cardboard → screen (v) <span class="val" id="vv">20 cm</span></label><input type="range" id="v" min="5" max="40" step="1" value="20">
+      <label style="margin-top:6px">Size of the hole <span class="val" id="av">2 mm</span></label><input type="range" id="a" min="1" max="14" step="0.5" value="2"></div>
+    <div class="control-group"><div class="toggle-group"><button class="toggle-btn" id="blow">💨 Blow gently on the flame</button></div>
+      <div class="toggle-group"><button class="toggle-btn active" id="dim">Dimly lit room</button></div>
+      <div class="hint">⚠ Use a lighted candle only with an adult.</div></div>
+    <div class="control-group"><div class="result-cards">${card('k1','Image height',COL.red)}${card('k2','Upright or inverted?',COL.red)}${card('k3','Blur (each point →)',COL.green)}${card('k4','Brightness',COL.yellow)}</div>
+      <div class="fb" id="obs"></div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const K=8, HX=400, TY=462, AXIS=318, FLAME=3.4;                 // flame height in cm
+  let t=0, u=15, v=20, a=2, dim=true, U={x:15,v:0}, V={x:20,v:0}, sway={x:0,v:0}, gust=0;
+  const pin=(id,lab,f,unit)=>{ $('#'+id).oninput=e=>{ f(+e.target.value); $('#'+lab).textContent=e.target.value+unit; }; };
+  pin('u','uv',x=>u=x,' cm'); pin('v','vv',x=>v=x,' cm'); pin('a','av',x=>a=x,' mm');
+  $('#blow').onclick=()=>{ gust=1.2; }; $('#dim').onclick=()=>{ dim=!dim; $('#dim').classList.toggle('active',dim); $('#dim').textContent=dim?'Dimly lit room':'Bright room'; };
+  const face=document.createElement('canvas'); face.width=220; face.height=220; const fctx=face.getContext('2d');
+  // a flame outline in cm, base at (0,0), pointing up (y up), leaning by `ln`
+  function flamePath(c,s,ln,tt){ const H=FLAME*(1+0.07*Math.sin(tt*17)+0.04*Math.sin(tt*29+1)), W=1.05; c.beginPath();
+    c.moveTo(-W/2*s,0); c.bezierCurveTo(-W*0.62*s,-H*0.45*s,(ln*H*0.5-W*0.1)*s,-H*0.78*s,ln*H*s,-H*s); c.bezierCurveTo((ln*H*0.5+W*0.1)*s,-H*0.78*s,W*0.62*s,-H*0.45*s,W/2*s,0); c.quadraticCurveTo(0,W*0.3*s,-W/2*s,0); c.closePath(); }
+
+  animLoop(dt=>{ t+=dt;
+    U.v+=((u-U.x)*20-U.v*6.5)*dt; U.x+=U.v*dt; V.v+=((v-V.x)*20-V.v*6.5)*dt; V.x+=V.v*dt;
+    gust=Math.max(0,gust-dt*0.9); const noise=Math.sin(t*2.3)*0.05+Math.sin(t*5.1+1)*0.03;
+    sway.v+=((noise+gust*0.45-sway.x)*30-sway.v*3.2)*dt; sway.x+=sway.v*dt;
+    const uu=U.x, vv=V.x, m=vv/uu, blur=a/10*(uu+vv)/uu, B=clamp(Math.pow(a/vv,2)*70,0,1.4), amb=dim?0.06:0.5;
+    const cx=HX-uu*K, sx=HX+vv*K, candleH=(TY-AXIS)-FLAME*K*0.45-10;          // flame's middle on the hole's axis
+
+    // ---------- draw ----------
+    const {ctx,w,h}=fitCanvas(canvas); ctx.fillStyle=dim?'#e6e9ef':'#f3f5f9'; ctx.fillRect(0,0,w,h); ctx.save(); camFit(ctx,w,h,[20,6,790,506]);
+    tableTop(ctx,30,780,TY,0);
+    // candle; its flame (lean follows the sway)
+    const cd=candleDraw(ctx,cx,TY,26,candleH,{lit:false,t,wickH:10});
+    const fb={x:cd.tip.x,y:cd.tip.y+4};
+    ctx.save(); ctx.translate(fb.x,fb.y); glow(ctx,sway.x*14,-FLAME*K*0.5,FLAME*K*1.6,COL.yellow,0.35);
+    flamePath(ctx,K,sway.x,t); ctx.fillStyle=rgba(COL.yellow,0.25); ctx.fill(); ctx.strokeStyle=COL.yellow; ctx.lineWidth=2.4; ctx.stroke(); ctx.restore();
+    const fTip={x:fb.x+sway.x*FLAME*K,y:fb.y-FLAME*K}, hole={x:HX,y:AXIS};
+    // rays: tip and base, each through the two edges of the hole
+    const ah=Math.max(1.2,a/10*K/2);
+    const through=(P,dy,col,al)=>{ const Hy=hole.y+dy, k=(sx-P.x)/(HX-P.x), y=P.y+(Hy-P.y)*k; rayPath(ctx,[P,{x:HX,y:Hy},{x:sx,y}],col,t,al,1.4,{at:0.5,dashes:[8,7]}); return y; };
+    const yt1=through(fTip,-ah,COL.yellow,0.8), yt2=through(fTip,ah,COL.yellow,0.8), yb1=through(fb,-ah,COL.yellow,0.5), yb2=through(fb,ah,COL.yellow,0.5);
+    fillPoly(ctx,[fTip,{x:HX,y:AXIS-ah},{x:sx,y:yt1},{x:sx,y:yt2},{x:HX,y:AXIS+ah}],rgba(COL.yellow,0.1));
+    // cardboard with the hole
+    rect(ctx,HX-3,AXIS-130,6,130-ah,COL.ink,'#d9c09a',2); rect(ctx,HX-3,AXIS+ah,6,TY-AXIS-ah-24,COL.ink,'#d9c09a',2); line(ctx,HX,TY-24,HX,TY,COL.ink,3); line(ctx,HX-20,TY,HX+20,TY,COL.ink,3.2);
+    textAt(ctx,'cardboard',HX,AXIS-140,{align:'center',size:12,weight:700,color:COL.ink});
+    // screen + the inverted image on its edge
+    screenSide(ctx,sx,AXIS-130,TY-14,{label:'Screen',leg:14});
+    const yi0=(yb1+yb2)/2, yi1=(yt1+yt2)/2; line(ctx,sx-2,yi0,sx-2,yi1,COL.red,4); arrowHead(ctx,sx-2,yi1,Math.PI/2*Math.sign(yi1-yi0||1),COL.red,8);
+    dimH(ctx,cx,HX-4,TY+26,Math.round(uu)+' cm',COL.green); dimH(ctx,HX+4,sx,TY+26,Math.round(vv)+' cm',COL.green);
+    // ---------- what the screen shows (face on) ----------
+    const P=220, pxcm=P/16;                                    // panel shows 16 cm × 16 cm
+    fctx.setTransform(1,0,0,1,0,0); fctx.filter='none'; fctx.globalAlpha=1; fctx.fillStyle=mixCol('#141c28','#c9cfd8',amb); fctx.fillRect(0,0,P,P);
+    fctx.save(); fctx.translate(P/2,P/2); fctx.scale(-1,-1);                           // rotated through 180°
+    const bpx=blur*pxcm; fctx.filter=bpx>1?'blur('+(bpx*0.28).toFixed(1)+'px)':'none';
+    fctx.translate(0,FLAME*0.5*m*pxcm);                                       // flame's middle sits on the axis
+    fctx.globalAlpha=Math.sqrt(clamp(B,0,1))*(1-amb*0.8); flamePath(fctx,m*pxcm,sway.x,t); const g=fctx.createLinearGradient(0,0,0,-FLAME*m*pxcm); g.addColorStop(0,'#ffe7a0'); g.addColorStop(1,'#ffb347');
+    fctx.fillStyle=g; fctx.fill(); fctx.globalAlpha=Math.sqrt(clamp(B,0,1))*0.6*(1-amb*0.8); fctx.lineWidth=Math.max(1,m*pxcm*0.08); fctx.strokeStyle='#ff8c3a'; fctx.stroke();
+    fctx.restore(); fctx.filter='none';
+    const px0=30, py0=22; panelFrame(ctx,px0,py0,P,P,'On the screen',COL.green,true); ctx.save(); rrect(ctx,px0+3,py0+3,P-6,P-6,8); ctx.clip(); ctx.drawImage(face,px0,py0); ctx.restore();
+    line(ctx,px0+P/2,py0+P-10,px0+P/2,py0+P-4,'#9fb0c6',1); textAt(ctx,'image of the flame',px0+P/2,py0+P+18,{align:'center',size:11.5,weight:700,color:COL.red});
+    ctx.restore();
+
+    // ---------- side ----------
+    setv($,'k1',fmt(FLAME*m,1)+' cm'); setv($,'k2','upside down'); setv($,'k3',fmt(blur*10,1)+' mm disc'); setv($,'k4',Math.round(clamp(B,0,1)*100)+' %');
+    const o=$('#obs'), msg=a>8?['warn','A big hole: bright but only a blur — each flame point spreads into a '+fmt(blur*10,0)+' mm disc.']:!dim?['warn','In a bright room the faint image is washed out. Dim the room.']:gust>0.2?['ok','The flame leans one way — its image leans the other way and stays upside down.']:['ok','Light from the top of the flame goes down through the hole; light from the bottom goes up — so the image is inverted.'];
+    if(o.textContent!==msg[1]){ o.textContent=msg[1]; o.className='fb '+msg[0]; }
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   11.10 LET US CONSTRUCT — a sliding pinhole camera
+   Outdoors, a friend (1.5 m tall, 6 m away), a tree (7 m, 20 m away) and
+   a building (15 m, 50 m away); the camera's pinhole is 1.3 m above the
+   ground. A point seen at angle θ from the pinhole lands at −v·θ on the
+   tracing paper (v = pinhole-to-paper distance), so the picture is
+   turned through 180° and grows with v. The side view keeps every
+   object's true angular size, so rays drawn through the pinhole are real.
+   Blur on the paper = √[(a(1 + v/u))² + (2.44 λ v / a)²] (hole shadow +
+   diffraction, λ = 550 nm); brightness ∝ (a / v)². Without the dark
+   cloth, daylight on the tracing paper washes the faint picture out.
+   The tree sways, clouds drift and a bird flies — their images move the
+   opposite way. The inner box slides on a spring.
+   ===================================================================== */
+function buildA10(){
+  const OBJ={friend:{n:'Friend',d:6,h:1.5,x:-0.3,col:COL.red},tree:{n:'Tree',d:20,h:7,x:2.4,col:COL.green},house:{n:'Building',d:50,h:15,x:-7.5,col:COL.yellow}};
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML=`
+    <div class="control-group"><label>Slide the inner box (v) <span class="val" id="vv">8 cm</span></label><input type="range" id="v" min="5" max="24" step="0.5" value="8">
+      <label style="margin-top:6px">Pinhole size <span class="val" id="av">1 mm</span></label><input type="range" id="a" min="0.3" max="6" step="0.1" value="1"></div>
+    <div class="control-group"><label>Trace rays from</label><div class="toggle-group" id="obj">${Object.keys(OBJ).map((k,i)=>`<button class="toggle-btn small${i===1?' active':''}" data-k="${k}">${OBJ[k].n}</button>`).join('')}</div>
+      <div class="toggle-group"><button class="toggle-btn active" id="cloth">🧥 Dark cloth over head</button></div></div>
+    <div class="control-group"><div class="result-cards">${card('k1','Image height',COL.red)}${card('k2','Fits on the paper?',COL.green)}${card('k3','Way up',COL.red)}${card('k4','Brightness',COL.yellow)}</div>
+      <div class="fb" id="obs"></div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const PX=432, AY=368, KC=5, PAPER=5.5, CAMH=1.3, LP={friend:100,tree:190,house:272};
+  let t=0, v=8, a=1, sel='tree', cloth=true, V={x:8,v:0}, bird=-0.7;
+  $('#v').oninput=e=>{ v=+e.target.value; $('#vv').textContent=v+' cm'; };
+  $('#a').oninput=e=>{ a=+e.target.value; $('#av').textContent=fmt(a,1)+' mm'; };
+  chipsWire(wrap,'#obj .toggle-btn',b=>sel=b.dataset.k);
+  $('#cloth').onclick=()=>{ cloth=!cloth; $('#cloth').classList.toggle('active',cloth); };
+  const P=224, pxcm=P/PAPER, face=document.createElement('canvas'); face.width=P; face.height=P; const fctx=face.getContext('2d');
+  // the whole outdoor scene in ANGLE space (radians; x right, y up → canvas y = −θy)
+  function scene(c,px,tt){ const lw=1.6/px;
+    c.fillStyle='#bfe0f7'; c.fillRect(-2,-2,4,2); c.fillStyle='#cfe3b4'; c.fillRect(-2,0,4,2);
+    // clouds + bird
+    [[-0.35,0.3],[0.2,0.38],[0.55,0.26]].forEach((q,i)=>{ const x=q[0]+((tt*0.006+i*0.3)%1.4)-0.5; c.fillStyle='#fff'; c.beginPath(); c.ellipse(x,-q[1],0.07,0.025,0,0,Math.PI*2); c.ellipse(x+0.05,-q[1]-0.015,0.05,0.022,0,0,Math.PI*2); c.fill(); });
+    c.strokeStyle='#223'; c.lineWidth=lw*1.3; const fl=Math.sin(tt*9)*0.012; c.beginPath(); c.moveTo(bird-0.025,-0.19+fl); c.quadraticCurveTo(bird-0.012,-0.2,bird,-0.19); c.quadraticCurveTo(bird+0.012,-0.2,bird+0.025,-0.19+fl); c.stroke();
+    // building (50 m)
+    { const o=OBJ.house, b=-CAMH/o.d, x0=(o.x-10)/o.d, x1=(o.x+10)/o.d, top=b+o.h/o.d; c.fillStyle='#f3dc8a'; c.fillRect(x0,-top,x1-x0,top-b); c.strokeStyle='#8a6a10'; c.lineWidth=lw; c.strokeRect(x0,-top,x1-x0,top-b);
+      c.fillStyle='#6d8fb3'; for(let r=0;r<4;r++) for(let k=0;k<5;k++) c.fillRect(x0+(k+0.5)*(x1-x0)/5-0.012,-top+(r+0.5)*(top-b)/4.5-0.012,0.024,0.026); }
+    // tree (20 m) — its crown sways
+    { const o=OBJ.tree, b=-CAMH/o.d, x=o.x/o.d, s=1/o.d, sw=Math.sin(tt*1.3)*0.012+Math.sin(tt*3.1)*0.004; c.fillStyle='#8a5a36'; c.fillRect(x-0.25*s,-(b+3.2*s),0.5*s,3.2*s);
+      c.fillStyle='#3e9b4f'; c.strokeStyle='#1f5e2c'; c.lineWidth=lw; [[0,4.9,2.3],[-1.2,4.2,1.6],[1.2,4.3,1.6],[0,6.1,1.5]].forEach(q=>{ c.beginPath(); c.arc(x+q[0]*s+sw*q[1]/6,-(b+q[1]*s),q[2]*s,0,Math.PI*2); c.fill(); c.stroke(); });
+      c.fillStyle=COL.red; [[0.6,4.4],[-0.7,5.3],[0.2,6.0]].forEach(q=>{ c.beginPath(); c.arc(x+q[0]*s+sw*q[1]/6,-(b+q[1]*s),0.18*s,0,Math.PI*2); c.fill(); }); }
+    // friend (6 m) in a red shirt, waving
+    { const o=OBJ.friend, b=-CAMH/o.d, x=o.x/o.d, s=1/o.d; c.lineCap='round'; c.strokeStyle='#223'; c.lineWidth=0.09*s;
+      c.beginPath(); c.moveTo(x-0.1*s,-b); c.lineTo(x,-(b+0.75*s)); c.lineTo(x+0.1*s,-b); c.stroke();
+      c.fillStyle=COL.red; c.fillRect(x-0.18*s,-(b+1.28*s),0.36*s,0.55*s); c.fillStyle='#f1c9a5'; c.beginPath(); c.arc(x,-(b+1.4*s),0.11*s,0,Math.PI*2); c.fill();
+      const wv=Math.sin(tt*6)*0.5; c.strokeStyle=COL.red; c.lineWidth=0.08*s; c.beginPath(); c.moveTo(x+0.17*s,-(b+1.2*s)); c.lineTo(x+(0.17+0.4*Math.sin(1.2+wv))*s,-(b+(1.2+0.4*Math.cos(1.2+wv))*s)); c.stroke(); }
+  }
+  function sideObj(ctx,k,tt){ const o=OBJ[k], L=LP[k], s=L/o.d, x=PX-L, base=AY+CAMH*s, top=base-o.h*s;
+    if(k==='house'){ rect(ctx,x-6*s,top,12*s,o.h*s,COL.ink,'#fdf3cf',2); for(let r=0;r<4;r++) line(ctx,x-5*s,top+(r+0.6)*o.h*s/4.5,x+5*s,top+(r+0.6)*o.h*s/4.5,COL.mid,1); }
+    if(k==='tree'){ const sw=Math.sin(tt*1.3)*4; line(ctx,x,base,x,base-3.2*s,'#8a5a36',4); circ(ctx,x+sw,base-4.9*s,2.2*s,COL.green,'#e3f3e6',2.4); circ(ctx,x-1.1*s+sw*0.8,base-4.2*s,1.5*s,COL.green,'#e3f3e6',2); circ(ctx,x+1.1*s+sw*0.8,base-4.3*s,1.5*s,COL.green,'#e3f3e6',2); }
+    if(k==='friend'){ ctx.save(); teen(ctx,x,base,o.h*s,{sex:'b',m:0.3,pose:{sR:2.4+Math.sin(tt*6)*0.4,eR:0.3},mood:0.8}); ctx.restore(); }
+    textAt(ctx,o.n+' · '+o.d+' m',x,base+16,{align:'center',size:10.5,weight:700,color:o.col});
+    return {x,top,base}; }
+
+  animLoop(dt=>{ t+=dt; bird+=dt*0.05; if(bird>0.8) bird=-0.8;
+    V.v+=((v-V.x)*18-V.v*6)*dt; V.x+=V.v*dt; const vv=V.x;
+    const acm=a/10, u=OBJ[sel].d*100, lam=5.5e-5, blur=Math.hypot(acm*(1+vv/u),2.44*lam*vv/acm), B=clamp(Math.pow(a/vv,2)*80,0,1.5), amb=cloth?0.04:0.55;
+    const O=OBJ[sel], imgH=O.h/O.d*vv;
+
+    // ---------- tracing paper (face on) ----------
+    fctx.setTransform(1,0,0,1,0,0); fctx.filter='none'; fctx.globalAlpha=1; fctx.fillStyle='#0e141d'; fctx.fillRect(0,0,P,P);
+    fctx.save(); fctx.filter=blur*pxcm>1?'blur('+(blur*pxcm*0.28).toFixed(1)+'px)':'none'; fctx.globalAlpha=1-Math.exp(-2.2*B);
+    fctx.translate(P/2,P/2); fctx.scale(-vv*pxcm,-vv*pxcm); scene(fctx,vv*pxcm,t); fctx.restore(); fctx.filter='none';
+    fctx.fillStyle=`rgba(236,232,220,${amb})`; fctx.fillRect(0,0,P,P);
+
+    // ---------- draw ----------
+    const {ctx,w,h}=fitCanvas(canvas); ctx.fillStyle='#f3f5f9'; ctx.fillRect(0,0,w,h); ctx.save(); camFit(ctx,w,h,[0,0,800,500]);
+    ctx.save(); ctx.translate(402,352); ctx.scale(1.25,1.25); ctx.translate(-PX,-AY);          // side view, enlarged about the pinhole
+    // sky + ground in angle space for the side view
+    ctx.fillStyle='#eef6fd'; ctx.fillRect(PX-LP.house-20,AY-110,LP.house+20,110);
+    // ground: bases of objects at every distance lie at angle −1.3/d → a curve rising to the horizon
+    ctx.save(); ctx.beginPath(); const gpts=[[PX-8,AY+40],[PX-LP.friend,AY+CAMH*LP.friend/6],[PX-LP.tree,AY+CAMH*LP.tree/20],[PX-LP.house,AY+CAMH*LP.house/50],[PX-LP.house-16,AY+7]];
+    ctx.moveTo(gpts[0][0],gpts[0][1]); gpts.slice(1).forEach(p=>ctx.lineTo(p[0],p[1])); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke(); ctx.restore();
+    line(ctx,PX-LP.house-16,AY,PX,AY,COL.mid,1,[3,5]); textAt(ctx,'horizon',PX-LP.house-12,AY-4,{size:10,weight:600,color:COL.mid});
+    const S={}; ['house','tree','friend'].forEach(k=>S[k]=sideObj(ctx,k,t));
+    sunDraw(ctx,PX-LP.tree-40,AY-92,11,t,0.9);
+    // the camera (cut open): outer box with pinhole, inner box with tracing paper
+    const scrX=PX+vv*KC, oL=130, iL=110;
+    rect(ctx,PX,AY-40,oL,80,COL.ink,'#f7f1e6',2.6); rect(ctx,scrX,AY-33,iL,66,COL.ink,'#fbf8f1',2.2);
+    line(ctx,scrX,AY-33,scrX,AY+33,COL.green,4); textAt(ctx,'tracing paper',scrX,AY+52,{align:'center',size:10.5,weight:700,color:COL.green});
+    ctx.save(); ctx.fillStyle='#fff'; ctx.fillRect(PX-3,AY-2,6,4); ctx.restore(); textAt(ctx,'pinhole',PX,AY-48,{align:'center',size:10.5,weight:700,color:COL.ink});
+    if(!cloth) textAt(ctx,'open side',scrX+iL-4,AY-40,{align:'right',size:10,weight:600,color:COL.muted});
+    // rays from the chosen object's top and base, through the pinhole, onto the paper
+    const o=S[sel], topY=o.top, baseY=o.base, ox=o.x;
+    [[topY,COL.yellow],[baseY,COL.yellow]].forEach(([y,c])=>{ const k=(scrX-PX)/(PX-ox), yi=AY+(AY-y)*k; rayPath(ctx,[{x:ox,y},{x:PX,y:AY},{x:scrX,y:yi}],c,t,0.8,1.5,{dashes:[8,7],at:0.45}); });
+    const yiT=AY+(AY-topY)*(scrX-PX)/(PX-ox), yiB=AY+(AY-baseY)*(scrX-PX)/(PX-ox); line(ctx,scrX+3,yiB,scrX+3,yiT,COL.red,4); arrowHead(ctx,scrX+3,yiT,Math.PI/2,COL.red,8);
+    // you, looking in at the open side, under a dark cloth
+    const ex=scrX+iL+24; eyeSide(ctx,ex,AY-6,Math.PI,1.4,COL.ink); circ(ctx,ex+26,AY-2,34,COL.ink,null,2.2);
+    if(cloth){ fillPoly(ctx,[{x:scrX+iL-40,y:AY-40},{x:ex+10,y:AY-60},{x:ex+60,y:AY-40},{x:ex+74,y:AY+40},{x:ex+20,y:AY+64},{x:scrX+iL-40,y:AY+40}],'rgba(22,30,44,0.78)',COL.ink,2); textAt(ctx,'dark cloth',ex+30,AY+84,{align:'center',size:10.5,weight:700,color:COL.ink}); }
+    ctx.restore();
+    // ---------- the picture on the tracing paper ----------
+    const fx=566, fy=12; panelFrame(ctx,fx-4,fy,P+8,P+8,'On the tracing paper',COL.green,true); ctx.save(); rrect(ctx,fx,fy+4,P,P,6); ctx.clip(); ctx.drawImage(face,fx,fy+4); ctx.restore();
+    textAt(ctx,'5.5 cm × 5.5 cm window',fx+P/2,fy+P+28,{align:'center',size:10.5,weight:600,color:COL.muted});
+    ctx.restore();
+
+    // ---------- side ----------
+    const fits=imgH<=PAPER*0.95; setv($,'k1',O.n+' '+fmt(imgH,1)+' cm'); setv($,'k2',fits?'Yes':'Too big — slide in'); setc($,'k2',fits?COL.green:COL.red);
+    setv($,'k3','upside down'); setv($,'k4',Math.round(clamp(B,0,1)*100)+' %');
+    const m=!cloth?['warn','Without the cloth, daylight falls on the tracing paper and the faint picture is washed out.']:a>3.5?['warn','A big pinhole: brighter, but every point spreads into a '+fmt(blur*10,1)+' mm blur.']:a<0.5?['warn','A very tiny hole: sharp-ish but very dim (and light starts to spread out).']:!fits?['warn','The '+O.n.toLowerCase()+'’s image is taller than the paper — slide the inner box forward.']:['ok','Full colour, but upside down and left–right swapped. Watch the bird fly the “wrong” way.'];
+    const ob=$('#obs'); if(ob.textContent!==m[1]){ ob.textContent=m[1]; ob.className='fb '+m[0]; }
+  });
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   1. ACTIVITIES + ROUTER
+   --------------------------------------------------------------------- */
+const activities = [
+  { num:'11.1', title:'Light Through Three Holes', desc:'Three matchboxes in a line · torch · screen', build: buildA1 },
+  { num:'11.2', title:'Candle Through a Pipe', desc:'Look at a flame through a straight, then a bent pipe', build: buildA2 },
+  { num:'11.3', title:'Transparent, Translucent, Opaque', desc:'Predict, then place each material in the torch beam · Table 11.1', build: buildA3 },
+  { num:'11.4', title:'Making Shadows', desc:'Torch · opaque object · screen · Table 11.2', build: buildA4 },
+  { num:'11.5', title:'Sunlight onto a Shaded Wall', desc:'Turn a mirror or steel plate to send sunlight where it doesn’t reach', build: buildA5 },
+  { num:'11.6', title:'A Beam Through a Comb Slit', desc:'Thin beam on white paper · put a mirror in its path', build: buildA6 },
+  { num:'11.7', title:'Image of a Pen', desc:'Size, erect or not, and can a screen catch it?', build: buildA7 },
+  { num:'11.8', title:'You in the Mirror', desc:'Your distance vs the image’s distance · lateral inversion', build: buildA8 },
+  { num:'11.9', title:'Candle Through a Pinhole', desc:'Cardboard with a small hole · screen · image of the flame', build: buildA9 },
+  { num:'11.10', title:'Sliding Pinhole Camera', desc:'Two sliding boxes · pinhole · tracing-paper screen', build: buildA10 },
+];
+let currentIndex = 0;
+
+function buildNav(){
+  const nav = document.getElementById('sideNav');
+  nav.innerHTML='';
+  activities.forEach((a,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'nav-item'+(i===currentIndex?' active':'');
+    btn.innerHTML = `<span class="n-num">${a.num}</span><span class="n-title">${a.title}</span>`;
+    btn.onclick = ()=>{ currentIndex=i; render(); };
+    nav.appendChild(btn);
+  });
+}
+function render(){
+  stopAllLoops();
+  buildNav();
+  const a = activities[currentIndex];
+  document.getElementById('panelBadge').textContent = a.num;
+  document.getElementById('panelTitle').textContent = a.title;
+  document.getElementById('panelDesc').textContent = a.desc||'';
+  const body = document.getElementById('panelBody');
+  body.innerHTML='';
+  body.appendChild(a.build());
+}
+function labShell(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `<div class="lab-canvas-wrap"><canvas></canvas></div><div class="lab-side"></div>`;
+  return wrap;
+}
+
+/* ---------------------------------------------------------------------
+   INIT
+   --------------------------------------------------------------------- */
+render();
+</script>
+<script src="../../tracking/activity-tracker.js"></script>
+<script src="../../nav/back-button.js"></script>
+</body>
+</html>

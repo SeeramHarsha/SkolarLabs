@@ -1,0 +1,1678 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grade 8 · Chapter 10 — Light: Mirrors and Lenses | Botclub Labs</title>
+<link href="../../vendor/fonts/fonts.css" rel="stylesheet">
+<style>
+:root{
+  --navy-1:#0f2640; --navy-2:#1a3a5c; --navy-3:#234a73;
+  --accent:#2f8fe0; --accent-2:#5cc8ff;
+  --bg:#eef2f8; --surface-0:#ffffff; --surface-1:#f6f9fc; --surface-2:#eef2f8;
+  --border:#dbe4f0; --border-strong:#c2d1e5;
+  --text-1:#132a44; --text-2:#4c6178; --text-3:#8195ab;
+  --f-red:#d9432b; --f-blue:#2f8fe0; --f-green:#1f9d55; --f-yellow:#d9a017;
+  --radius:14px; --radius-sm:9px;
+  --fs-xs:clamp(10px,0.62vw,12px); --fs-sm:clamp(11px,0.72vw,13.5px);
+  --fs-md:clamp(12.5px,0.85vw,15px); --fs-lg:clamp(15px,1.15vw,19px);
+  --fs-xl:clamp(18px,1.5vw,25px);
+  --sp-1:4px; --sp-2:8px; --sp-3:12px; --sp-4:16px; --sp-5:22px; --sp-6:30px;
+}
+*{box-sizing:border-box; margin:0; padding:0;}
+html,body{height:100%;}
+body{ font-family:'Poppins',system-ui,sans-serif; background:var(--bg); color:var(--text-1); overflow:hidden; }
+button, input, select{font-family:inherit;}
+
+.app{height:100vh; display:flex; flex-direction:column; min-height:0;}
+.topbar{
+  flex:0 0 auto; background:linear-gradient(120deg, var(--navy-1) 0%, var(--navy-2) 55%, var(--navy-3) 100%);
+  color:#fff; padding:clamp(9px,1vh,16px) clamp(14px,1.6vw,28px);
+  display:flex; align-items:center; gap:var(--sp-4); box-shadow:0 2px 10px rgba(15,38,64,0.25); z-index:5;
+}
+.topbar .brand-badge{
+  width:clamp(32px,2.4vw,40px); height:clamp(32px,2.4vw,40px); border-radius:10px; background:rgba(255,255,255,0.12);
+  border:1px solid rgba(255,255,255,0.25); display:flex; align-items:center; justify-content:center;
+  font-size:clamp(15px,1.3vw,20px); flex:0 0 auto;
+}
+.topbar .chip{
+  display:inline-block; background:rgba(255,255,255,0.14); border:1px solid rgba(255,255,255,0.28);
+  border-radius:6px; padding:2px 9px; font-size:var(--fs-xs); letter-spacing:0.06em; text-transform:uppercase; font-weight:600; margin-bottom:3px;
+}
+.topbar h1{font-size:var(--fs-lg); font-weight:600; line-height:1.2; white-space:nowrap;}
+.topbar .spacer{flex:1;}
+.topbar .legend{display:flex; gap:14px; font-size:var(--fs-xs); color:rgba(255,255,255,0.85); align-items:center;}
+.topbar .legend span{display:inline-flex; align-items:center; gap:5px;}
+.topbar .legend i{width:12px; height:4px; border-radius:2px; display:inline-block;}
+
+.body-wrap{flex:1; display:flex; min-height:0; overflow:hidden;}
+.sidenav{
+  flex:0 0 clamp(170px,13.5vw,230px); background:var(--surface-0); border-right:1px solid var(--border);
+  overflow-y:auto; padding:var(--sp-2); display:flex; flex-direction:column; gap:4px;
+}
+.nav-item{
+  display:flex; align-items:center; gap:8px; text-align:left; width:100%;
+  border:1px solid var(--border); background:var(--surface-1); border-radius:var(--radius-sm); padding:7px 10px; cursor:pointer; transition:all .15s ease;
+}
+.nav-item:hover{background:var(--surface-2); border-color:var(--border-strong);}
+.nav-item.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.nav-item .n-num{font-size:var(--fs-xs); font-weight:700; color:var(--accent); flex:0 0 auto; min-width:26px;}
+.nav-item.active .n-num{color:var(--accent-2);}
+.nav-item .n-title{font-size:var(--fs-sm); font-weight:600; line-height:1.25;}
+
+.content{flex:1; min-width:0; display:flex; flex-direction:column; overflow:hidden;}
+.panel-head{flex:0 0 auto; padding:var(--sp-3) var(--sp-5); border-bottom:1px solid var(--border); background:var(--surface-0); display:flex; align-items:baseline; gap:12px;}
+.panel-badge{background:var(--navy-2); color:#fff; font-size:var(--fs-xs); font-weight:700; padding:3px 10px; border-radius:6px;}
+.panel-head h2{font-size:var(--fs-lg); font-weight:600; color:var(--text-1);}
+.panel-head p{font-size:var(--fs-sm); color:var(--text-2); flex:1; text-align:right;}
+.panel-body{flex:1; min-height:0; overflow:hidden; padding:var(--sp-3) var(--sp-5); display:flex;}
+
+.lab-view{flex:1; display:flex; gap:var(--sp-4); min-height:0; min-width:0;}
+.lab-canvas-wrap{flex:7 1 0; min-width:0; min-height:0; background:#fff; border:1px solid var(--border); border-radius:var(--radius); position:relative; overflow:hidden;}
+.lab-canvas-wrap canvas{width:100%; height:100%; display:block;}
+.lab-side{flex:3 1 0; min-width:230px; display:flex; flex-direction:column; gap:var(--sp-3); min-height:0; overflow-y:auto; padding-right:2px;}
+.side-sub{display:flex; flex-direction:column; gap:var(--sp-3);}
+
+.control-group{background:var(--surface-0); border:1px solid var(--border); border-radius:var(--radius-sm); padding:10px 12px;}
+.control-group label{font-size:var(--fs-sm); font-weight:600; color:var(--text-1); display:flex; justify-content:space-between;}
+.control-group label .val{color:var(--accent); font-weight:700;}
+.control-group input[type=range]{width:100%; margin-top:7px; accent-color:var(--navy-2); cursor:pointer;}
+.toggle-group{display:flex; gap:6px; margin-top:7px; flex-wrap:wrap;}
+.toggle-btn{flex:1; min-width:56px; padding:7px 5px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:600; cursor:pointer; text-align:center; color:var(--text-2);}
+.toggle-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.toggle-btn.small{font-size:10.5px; padding:6px 3px;}
+.toggle-btn.play{background:var(--f-green); border-color:var(--f-green); color:#fff;}
+.toggle-btn.navy{background:var(--navy-2); border-color:var(--navy-2); color:#fff; width:100%; margin-top:9px;}
+.toggle-btn:disabled{opacity:.5; cursor:not-allowed;}
+.chip-btn{display:inline-flex; align-items:center; gap:5px; padding:6px 11px; margin:3px 3px 0 0; border:1px solid var(--border-strong); background:var(--surface-1); border-radius:18px; cursor:pointer; font-size:var(--fs-sm); font-weight:600; color:var(--text-2);}
+.chip-btn.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.chip-btn.ok{border-color:var(--f-green);} .chip-btn.bad{border-color:var(--f-red);}
+.chip-wrap{display:flex; flex-wrap:wrap; margin-top:3px;}
+
+.role-row{display:flex; align-items:center; gap:8px; margin-top:7px; font-size:var(--fs-sm); font-weight:600;}
+.role-row .rdot{width:10px; height:10px; border-radius:50%; flex:0 0 auto; display:inline-block;}
+.role-row .rname{width:70px; flex:0 0 auto; color:var(--text-2);}
+.role-row select{flex:1; min-width:0; padding:6px 7px; border:1px solid var(--border-strong); border-radius:7px; font-size:var(--fs-sm); background:var(--surface-1); color:var(--text-1); cursor:pointer;}
+
+.step-row{display:flex; gap:5px;}
+.step-pill{flex:1; padding:6px 4px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:10.5px; font-weight:700; color:var(--text-3); cursor:pointer;}
+.step-pill.active{background:var(--navy-2); border-color:var(--navy-2); color:#fff;}
+.step-pill.done{border-color:var(--f-green); color:var(--f-green);}
+.step-pill.active.done{color:#fff;}
+.opt-btn{display:block; width:100%; text-align:left; margin-top:6px; padding:7px 9px; border-radius:8px; border:1px solid var(--border-strong); background:var(--surface-1); font-size:var(--fs-sm); font-weight:500; color:var(--text-1); cursor:pointer; line-height:1.3;}
+.opt-btn.active{border-color:var(--navy-2); background:#e3ecf7; font-weight:600;}
+.var-row{display:flex; align-items:center; gap:6px; margin-top:7px;}
+.var-row .vname{flex:0 0 88px; font-size:var(--fs-sm); font-weight:600;}
+.var-row .toggle-group{margin-top:0; flex:1;}
+
+.result-cards{display:grid; grid-template-columns:1fr 1fr; gap:6px;}
+.result-cards.three{grid-template-columns:1fr 1fr 1fr;}
+.rcard{background:var(--surface-0); border:1px solid var(--border); border-radius:9px; padding:7px 9px;}
+.rcard .rlabel{font-size:9.5px; text-transform:uppercase; letter-spacing:.04em; color:var(--text-3); font-weight:600;}
+.rcard .rval{font-size:var(--fs-md); font-weight:700; color:var(--text-1); margin-top:1px;}
+.rcard.wide{grid-column:1/-1;}
+.hint{font-size:var(--fs-xs); color:var(--text-3); margin-top:6px; line-height:1.4;}
+.fb{font-size:var(--fs-xs); font-weight:600; margin-top:6px; padding:5px 8px; border-radius:7px;}
+.fb.ok{background:#e4f7ec; color:#1f6b3d;}
+.fb.bad{background:#fdece7; color:#a4331c;}
+.fb.warn{background:#fdf4dc; color:#8a6410;}
+.log{width:100%; border-collapse:collapse; font-size:10.5px; margin-top:4px;}
+.log th{text-align:left; color:var(--text-3); font-weight:600; text-transform:uppercase; font-size:9px; letter-spacing:.04em; padding:3px 4px; border-bottom:1px solid var(--border);}
+.log td{padding:4px; border-bottom:1px solid var(--surface-2); color:var(--text-2);}
+.log td.r-ok{color:var(--f-green); font-weight:700;} .log td.r-bad{color:var(--f-red); font-weight:700;} .log td.r-warn{color:var(--f-yellow); font-weight:700;}
+.hidden{display:none !important;}
+
+@media (max-width:1000px) and (orientation:portrait), (max-width:1000px) and (min-height:601px){
+  .body-wrap{flex-direction:column;}
+  .sidenav{flex:0 0 auto; width:100%; height:auto; flex-direction:row; overflow-x:auto; overflow-y:hidden; border-right:none; border-bottom:1px solid var(--border); padding:6px;}
+  .nav-item{flex:0 0 auto; width:150px;}
+  .panel-body{overflow-y:auto;}
+  .lab-view{flex-direction:column;}
+  .lab-canvas-wrap{min-height:320px;}
+  .lab-side{min-width:0;}
+  .content{overflow-y:auto;}
+  .topbar .legend{display:none;}
+  .topbar h1{white-space:normal;}
+}
+::-webkit-scrollbar{width:7px; height:7px;}
+::-webkit-scrollbar-thumb{background:var(--border-strong); border-radius:8px;}
+::-webkit-scrollbar-track{background:transparent;}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="topbar">
+    <div class="brand-badge">◐</div>
+    <div>
+      <div class="chip">Grade 8 · Ch 10</div>
+      <h1>Light: Mirrors and Lenses</h1>
+    </div>
+    <div class="spacer"></div>
+    <div class="legend">
+      <span><i style="background:var(--f-yellow)"></i>Light going in</span>
+      <span><i style="background:var(--f-blue)"></i>Light coming out</span>
+      <span><i style="background:var(--f-red)"></i>Object · image</span>
+      <span><i style="background:var(--f-green)"></i>Normal · focus · eye line</span>
+    </div>
+  </div>
+  <div class="body-wrap">
+    <nav class="sidenav" id="sideNav"></nav>
+    <main class="content">
+      <div class="panel-head">
+        <div class="panel-badge" id="panelBadge">10.1</div>
+        <h2 id="panelTitle">Select an activity</h2>
+        <p id="panelDesc"></p>
+      </div>
+      <div class="panel-body" id="panelBody"></div>
+    </main>
+  </div>
+</div>
+
+<script>
+/* =========================================================================
+   GRADE 8 — CHAPTER 10: LIGHT: MIRRORS AND LENSES
+   Every activity runs a continuous animation loop: sliders/buttons set a
+   TARGET; objects glide there on a spring-damper. Light is never faked —
+   every ray is traced exactly: the law of reflection at mirrors, Snell's
+   law (n = 1.5 glass, 1.33 water) at every lens face. Images come from the
+   same traced rays (1/v + 1/u = 1/f emerges; it is not assumed), a marble
+   rolls on the real curved surface (ω² = 5g/7R), and paper at the focus
+   heats by an energy balance with sunlight S = 1000 W/m².
+   ========================================================================= */
+const COL = {red:'#d9432b', blue:'#2f8fe0', green:'#1f9d55', yellow:'#d9a017', ink:'#132a44', muted:'#4c6178', mid:'#8195ab'};
+
+/* ---------------------------------------------------------------------
+   0. CANVAS HELPERS
+   --------------------------------------------------------------------- */
+function fitCanvas(canvas){
+  const dpr = Math.max(1, window.devicePixelRatio || 1);
+  const r = canvas.parentElement.getBoundingClientRect();
+  const w = Math.max(200, r.width), h = Math.max(160, r.height);
+  if(canvas._w!==w || canvas._h!==h || canvas._dpr!==dpr){
+    canvas.width = Math.round(w*dpr); canvas.height = Math.round(h*dpr);
+    canvas.style.width = w+'px'; canvas.style.height = h+'px';
+    canvas._w=w; canvas._h=h; canvas._dpr=dpr;
+  }
+  const ctx = canvas.getContext('2d');
+  ctx.setTransform(dpr,0,0,dpr,0,0);
+  return {ctx, w, h};
+}
+function line(ctx,x1,y1,x2,y2,color,width,dash){
+  ctx.save(); ctx.strokeStyle=color; ctx.lineWidth=width||2;
+  if(dash) ctx.setLineDash(dash); else ctx.setLineDash([]);
+  ctx.beginPath(); ctx.moveTo(x1,y1); ctx.lineTo(x2,y2); ctx.stroke(); ctx.restore();
+}
+function arrowHead(ctx,x,y,ang,color,size){
+  size=size||7; ctx.save(); ctx.fillStyle=color; ctx.translate(x,y); ctx.rotate(ang);
+  ctx.beginPath(); ctx.moveTo(0,0); ctx.lineTo(-size,size*0.42); ctx.lineTo(-size,-size*0.42); ctx.closePath(); ctx.fill(); ctx.restore();
+}
+function vec(ctx,x1,y1,x2,y2,color,width){ line(ctx,x1,y1,x2,y2,color,width||2.6); arrowHead(ctx,x2,y2,Math.atan2(y2-y1,x2-x1),color,7); }
+function dimArrow(ctx,x,y1,y2,color){ line(ctx,x,y1,x,y2,color,1.6); arrowHead(ctx,x,y1,-Math.PI/2,color,5); arrowHead(ctx,x,y2,Math.PI/2,color,5); }
+function textAt(ctx,txt,x,y,opts){
+  opts=opts||{}; ctx.save();
+  ctx.font=(opts.weight||500)+' '+(opts.size||12)+'px Poppins, sans-serif';
+  ctx.fillStyle=opts.color||COL.ink; ctx.textAlign=opts.align||'left'; ctx.textBaseline=opts.baseline||'alphabetic';
+  if(opts.alpha!==undefined) ctx.globalAlpha=opts.alpha;
+  ctx.fillText(txt,x,y); ctx.restore();
+}
+function rect(ctx,x,y,w,h,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw===undefined?2.2:lw; if(fill){ctx.fillStyle=fill; ctx.fillRect(x,y,w,h);} if(lw!==0){ctx.strokeStyle=stroke; ctx.strokeRect(x,y,w,h);} ctx.restore(); }
+function circ(ctx,x,y,r,stroke,fill,lw){ ctx.save(); ctx.lineWidth=lw||2.2; ctx.beginPath(); ctx.arc(x,y,Math.max(0.1,r),0,Math.PI*2); if(fill){ctx.fillStyle=fill; ctx.fill();} ctx.strokeStyle=stroke; ctx.stroke(); ctx.restore(); }
+function rrect(ctx,x,y,w,h,r){ r=Math.min(r,w/2,h/2); ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r); ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath(); }
+function clamp(x,a,b){return Math.max(a,Math.min(b,x));}
+function lerp(a,b,t){return a+(b-a)*t;}
+function fmt(x,d){ if(!isFinite(x)) return '—'; d=d===undefined?2:d; return Number(x.toFixed(d)).toString(); }
+function gauss(){ return (Math.random()+Math.random()+Math.random()+Math.random()-2)*1.2247; }
+function hexRgb(h){ const n=parseInt(h.slice(1),16); return [n>>16&255, n>>8&255, n&255]; }
+function mixCol(a,b,t){ const A=hexRgb(a),B=hexRgb(b); t=clamp(t,0,1); return 'rgb('+A.map((v,i)=>Math.round(lerp(v,B[i],t))).join(',')+')'; }
+function rampCol(stops,x){ // stops: [[pos,hex],...]
+  if(x<=stops[0][0]) return mixCol(stops[0][1],stops[0][1],0);
+  for(let i=1;i<stops.length;i++){ if(x<=stops[i][0]){ const a=stops[i-1],b=stops[i]; return mixCol(a[1],b[1],(x-a[0])/(b[0]-a[0])); } }
+  const l=stops[stops.length-1][1]; return mixCol(l,l,0);
+}
+function thermo(ctx,x,top,bot,frac,outline,liquid){
+  const br=8;
+  ctx.save(); ctx.lineWidth=2; ctx.strokeStyle=outline; ctx.fillStyle='#fff';
+  rrect(ctx,x-5,top,10,bot-top+2,5); ctx.fill(); ctx.stroke(); ctx.restore();
+  const lh=(bot-top-5)*clamp(frac,0,1);
+  ctx.save(); ctx.fillStyle=liquid; ctx.fillRect(x-2.2,bot-lh,4.4,lh+6); ctx.restore();
+  circ(ctx,x,bot+br,br,outline,'#fff',2); circ(ctx,x,bot+br,br-3.2,liquid,liquid,1);
+  for(let i=0;i<=4;i++){ const yy=top+5+(bot-top-5)*i/4; line(ctx,x+5,yy,x+9,yy,outline,1.1); }
+}
+function flame(ctx,cx,baseY,width,inten,t){
+  const n=5;
+  for(let i=0;i<n;i++){
+    const fx=cx-width/2+width*(i+0.5)/n;
+    const hh=(6+inten*32)*(0.78+0.22*Math.sin(t*13+i*1.7));
+    const sway=Math.sin(t*9+i*2.1)*3;
+    ctx.save(); ctx.lineJoin='round';
+    ctx.strokeStyle=COL.red; ctx.lineWidth=2;
+    ctx.beginPath(); ctx.moveTo(fx-7,baseY); ctx.quadraticCurveTo(fx-7,baseY-hh*0.55,fx+sway,baseY-hh); ctx.quadraticCurveTo(fx+7,baseY-hh*0.55,fx+7,baseY); ctx.stroke();
+    ctx.strokeStyle=COL.yellow; ctx.lineWidth=1.6;
+    ctx.beginPath(); ctx.moveTo(fx-3.5,baseY); ctx.quadraticCurveTo(fx-3,baseY-hh*0.35,fx+sway*0.5,baseY-hh*0.55); ctx.quadraticCurveTo(fx+3,baseY-hh*0.35,fx+3.5,baseY); ctx.stroke();
+    ctx.restore();
+  }
+}
+
+/* ---------------------------------------------------------------------
+   0b. ANIMATION ENGINE
+   --------------------------------------------------------------------- */
+let activeStops = [];
+function stopAllLoops(){ activeStops.forEach(s=>{ try{ s(); }catch(e){} }); activeStops=[]; }
+function animLoop(tick){
+  let last = performance.now();
+  let raf;
+  function frame(now){
+    const dt = Math.max(0, Math.min(0.04, (now-last)/1000));
+    last = now;
+    tick(dt);
+    raf = requestAnimationFrame(frame);
+  }
+  raf = requestAnimationFrame(frame);
+  const stop = ()=>cancelAnimationFrame(raf);
+  activeStops.push(stop);
+  return stop;
+}
+/** Exponential ease — frame-rate independent, always smooth. */
+function approach(cur,tgt,rate,dt){ return cur + (tgt-cur)*(1-Math.exp(-rate*dt)); }
+/** Spring-damper — gives natural overshoot and settle. */
+function springTo(state,target,k,damping,dt){
+  const acc = (target-state.x)*k - state.v*damping;
+  state.v += acc*dt;
+  state.x += state.v*dt;
+  return state.x;
+}
+function toggleWire(btns,cb){
+  btns.forEach(b=>b.onclick=()=>{ btns.forEach(x=>x.classList.remove('active')); b.classList.add('active'); cb(b); });
+}
+
+/* ---------------------------------------------------------------------
+   0c. CHAPTER-10 HELPERS — hands, magnifier, ground, particles
+   --------------------------------------------------------------------- */
+const G = 10;                       // N/kg — textbook value
+function smooth01(a,b,x){ const t=clamp((x-a)/(b-a),0,1); return t*t*(3-2*t); }
+function angDiff(a,b){ return Math.atan2(Math.sin(a-b),Math.cos(a-b)); }
+function rng(seed){ let s=(seed>>>0)||1; return ()=>{ s=(Math.imul(s,1664525)+1013904223)>>>0; return s/4294967296; }; }
+function sgn(x){ return x>0?1:x<0?-1:0; }
+
+/* labelled force arrow; skipped when tiny */
+function force(ctx,x,y,dx,dy,col,label,side){
+  const L=Math.hypot(dx,dy); if(L<4) return;
+  vec(ctx,x,y,x+dx,y+dy,col,3);
+  if(label && side==='b'){ textAt(ctx,label,x+dx/2,y+dy+18,{size:12,weight:700,color:col,align:'center'}); return; }
+  if(label){ const ox=side==='l'?-8:8; textAt(ctx,label,x+dx+(Math.abs(dx)>Math.abs(dy)?0:ox),y+dy+(Math.abs(dx)>Math.abs(dy)?-9:(dy>0?14:-4)),{size:12,weight:700,color:col,align:Math.abs(dx)>Math.abs(dy)?'center':(side==='l'?'right':'left')}); }
+}
+function ground(ctx,x0,x1,y){
+  line(ctx,x0,y,x1,y,COL.ink,2.4);
+  ctx.save(); ctx.strokeStyle='#c2d1e5'; ctx.lineWidth=1.1; ctx.beginPath();
+  for(let x=x0+8;x<x1;x+=14){ ctx.moveTo(x,y+2); ctx.lineTo(x-8,y+10); } ctx.stroke(); ctx.restore();
+}
+function coil(ctx,x,y1,y2,n,wd,col,lwd){
+  const L=y2-y1, lead=Math.min(12,Math.abs(L)*0.1), body=L-2*lead, N=n*24;
+  ctx.save(); ctx.strokeStyle=col; ctx.lineWidth=lwd||2; ctx.lineJoin='round'; ctx.beginPath();
+  ctx.moveTo(x,y1); ctx.lineTo(x,y1+lead);
+  const pitch=body/n;
+  for(let i=0;i<=N;i++){ const u=i/N, a=u*n*Math.PI*2;
+    ctx.lineTo(x+Math.sin(a)*wd/2, y1+lead+body*u - Math.cos(a)*Math.min(pitch*0.35,wd*0.18) + Math.min(pitch*0.35,wd*0.18)); }
+  ctx.lineTo(x,y2); ctx.stroke(); ctx.restore();
+}
+/* hand seen from the side: palm facing `dir` (±1), fingertips at (x,y) */
+function hand(ctx,x,y,dir,armLen,armAng){
+  const a=armAng===undefined?(dir>0?Math.PI:0):armAng;
+  const bx=x-dir*18, by=y;
+  ctx.save(); ctx.lineCap='round'; ctx.lineJoin='round';
+  line(ctx,bx,by,bx+Math.cos(a)*armLen,by+Math.sin(a)*armLen,COL.ink,9);
+  line(ctx,bx,by,bx+Math.cos(a)*armLen,by+Math.sin(a)*armLen,'#fff',5);
+  ctx.beginPath(); ctx.moveTo(bx,by-10); ctx.lineTo(x-dir*2,by-9); ctx.quadraticCurveTo(x+dir*2,by-8,x+dir*1,by); ctx.quadraticCurveTo(x+dir*2,by+8,x-dir*2,by+9); ctx.lineTo(bx,by+10); ctx.closePath();
+  ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke();
+  ctx.restore();
+}
+/* hand pressing downward: fingertip at (x,y) */
+function handDown(ctx,x,y,armLen){
+  ctx.save(); ctx.lineCap='round';
+  line(ctx,x,y-16,x+armLen*0.25,y-16-armLen,COL.ink,10); line(ctx,x,y-16,x+armLen*0.25,y-16-armLen,'#fff',6);
+  ctx.beginPath(); rrect(ctx,x-12,y-22,24,22,8); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke();
+  line(ctx,x-5,y-8,x-5,y-1,COL.mid,1.2); line(ctx,x+3,y-8,x+3,y-1,COL.mid,1.2);
+  ctx.restore();
+}
+function magnifier(ctx,cx,cy,R,draw,label){
+  ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,R,0,Math.PI*2); ctx.fillStyle='#fbfdff'; ctx.fill(); ctx.clip(); draw(); ctx.restore();
+  circ(ctx,cx,cy,R,COL.ink,null,3);
+  if(label) textAt(ctx,label,cx,cy+R+16,{align:'center',size:11,weight:600,color:COL.muted});
+}
+/* jagged surface profile (friction close-up) */
+function roughProfile(seed,rough,n){ const R=rng(seed), a=[]; for(let i=0;i<n;i++) a.push((R()-0.5)*2*rough*(0.6+0.4*R())); return a; }
+/* ---- polygons (world units, y up) ---- */
+function polyArea(p){ let a=0; for(let i=0;i<p.length;i++){ const q=p[i], r=p[(i+1)%p.length]; a+=q[0]*r[1]-r[0]*q[1]; } return Math.abs(a)/2; }
+/* keep the part of polygon p with y <= Y */
+function clipBelow(p,Y){
+  const out=[];
+  for(let i=0;i<p.length;i++){
+    const a=p[i], b=p[(i+1)%p.length], ia=a[1]<=Y, ib=b[1]<=Y;
+    if(ia) out.push(a);
+    if(ia!==ib){ const u=(Y-a[1])/(b[1]-a[1]); out.push([a[0]+(b[0]-a[0])*u, Y]); }
+  }
+  return out;
+}
+function xform(p,ox,oy,ang){ const c=Math.cos(ang), s=Math.sin(ang); return p.map(q=>[ox+q[0]*c-q[1]*s, oy+q[0]*s+q[1]*c]); }
+function polyPath(ctx,p,X,Y){ ctx.beginPath(); p.forEach((q,i)=>ctx[i?'lineTo':'moveTo'](X(q[0]),Y(q[1]))); ctx.closePath(); }
+/* water surface Y so that the part of polygon p below it has area A (bisection) */
+function levelFor(p,A){
+  let lo=Math.min(...p.map(q=>q[1])), hi=Math.max(...p.map(q=>q[1]));
+  if(A<=0) return lo;
+  for(let k=0;k<40;k++){ const m=(lo+hi)/2; if(polyArea(clipBelow(p,m))<A) lo=m; else hi=m; }
+  return (lo+hi)/2;
+}
+/* width of polygon p along the horizontal line y=Y */
+function widthAt(p,Y){ const xs=[]; for(let i=0;i<p.length;i++){ const a=p[i], b=p[(i+1)%p.length]; if((a[1]-Y)*(b[1]-Y)<=0 && a[1]!==b[1]) xs.push(a[0]+(b[0]-a[0])*(Y-a[1])/(b[1]-a[1])); } return xs.length<2?0:Math.max(...xs)-Math.min(...xs); }
+
+const WFILL = 'rgba(47,143,224,0.14)', WFILL2 = 'rgba(47,143,224,0.28)';
+function dot(ctx,x,y,r,stroke,fill,lw){ ctx.beginPath(); ctx.arc(x,y,Math.max(0.3,r),0,Math.PI*2); if(fill){ctx.fillStyle=fill; ctx.fill();} if(stroke){ctx.strokeStyle=stroke; ctx.lineWidth=lw||1.4; ctx.stroke();} }
+const FARADAY = 96485, VM = 24.0;   // C/mol · L/mol of gas at room temperature
+function fmtClock(s){ if(s<60) return Math.round(s)+' s'; if(s<3600) return Math.floor(s/60)+' min '+String(Math.floor(s%60)).padStart(2,'0')+' s'; return Math.floor(s/3600)+' h '+String(Math.floor(s%3600/60)).padStart(2,'0')+' min'; }
+
+/* ---- lab-ware line drawings (pixel coords) ---- */
+/* test tube: open end at yOpen, round end at yEnd (either may be on top) */
+function tubePath(ctx,cx,yOpen,yEnd,r){
+  const s=yEnd>yOpen?1:-1, yb=yEnd-s*r;
+  ctx.beginPath(); ctx.moveTo(cx-r,yOpen); ctx.lineTo(cx-r,yb); ctx.arc(cx,yb,r,Math.PI,0,s>0); ctx.lineTo(cx+r,yOpen);
+}
+function tube(ctx,cx,yOpen,yEnd,r,lw){
+  ctx.save(); tubePath(ctx,cx,yOpen,yEnd,r); ctx.strokeStyle=COL.ink; ctx.lineWidth=lw||2.4; ctx.lineJoin='round'; ctx.stroke(); ctx.restore();
+  line(ctx,cx-r-3,yOpen,cx-r,yOpen,COL.ink,lw||2.4); line(ctx,cx+r,yOpen,cx+r+3,yOpen,COL.ink,lw||2.4);
+}
+/* fill the part of a tube between two heights */
+function tubeFill(ctx,cx,yOpen,yEnd,r,ya,yb,fill){
+  ctx.save(); tubePath(ctx,cx,yOpen,yEnd,r); ctx.closePath(); ctx.clip();
+  ctx.fillStyle=fill; ctx.fillRect(cx-r-2,Math.min(ya,yb),2*r+4,Math.abs(yb-ya)); ctx.restore();
+}
+/* teardrop flame */
+function flameShape(ctx,x,y,h,wd,t,col,inner,seed){
+  const sw=Math.sin(t*11+(seed||0))*wd*0.12, hh=h*(0.9+0.1*Math.sin(t*17+(seed||0)*2));
+  ctx.save(); ctx.lineJoin='round'; ctx.strokeStyle=col||COL.red; ctx.lineWidth=2;
+  ctx.beginPath(); ctx.moveTo(x,y); ctx.bezierCurveTo(x-wd,y-hh*0.1,x-wd*0.55,y-hh*0.65,x+sw,y-hh); ctx.bezierCurveTo(x+wd*0.55,y-hh*0.65,x+wd,y-hh*0.1,x,y); ctx.stroke();
+  ctx.strokeStyle=inner||COL.yellow; ctx.lineWidth=1.6; const h2=hh*0.5, w2=wd*0.45;
+  ctx.beginPath(); ctx.moveTo(x,y-2); ctx.bezierCurveTo(x-w2,y-h2*0.15,x-w2*0.5,y-h2*0.7,x+sw*0.5,y-h2); ctx.bezierCurveTo(x+w2*0.5,y-h2*0.7,x+w2,y-h2*0.15,x,y-2); ctx.stroke();
+  ctx.restore();
+}
+/* candle standing at (x,yBase); bright > 1 = flame flares up */
+function candle(ctx,x,yBase,u,t,bright,lit){
+  const W=1.1*u, H=4.2*u, b=bright||1;
+  rect(ctx,x-W/2,yBase-H,W,H,COL.ink,'#fff',2.2);
+  line(ctx,x,yBase-H,x,yBase-H-0.35*u,COL.ink,1.8);
+  if(lit===false) return;
+  flameShape(ctx,x,yBase-H-0.2*u,(1.5+1.3*(b-1))*u,(0.42+0.2*(b-1))*u,t,COL.red,COL.yellow);
+  if(b>1.15){ ctx.save(); ctx.globalAlpha=clamp((b-1.15)*1.6,0,0.9); for(let k=0;k<10;k++){ const a=k/10*Math.PI*2+t*0.8, cy=yBase-H-1.0*u*b, r0=(0.9+0.5*b)*u; line(ctx,x+Math.cos(a)*r0,cy+Math.sin(a)*r0,x+Math.cos(a)*r0*1.35,cy+Math.sin(a)*r0*1.35,COL.yellow,1.6); } ctx.restore(); }
+}
+/* spirit lamp: base centre (x,yBase); inten 0..1 flame size */
+function spiritLamp(ctx,x,yBase,u,inten,t){
+  ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.fillStyle='#fff'; ctx.lineJoin='round';
+  ctx.beginPath(); ctx.moveTo(x-2.4*u,yBase); ctx.lineTo(x+2.4*u,yBase); ctx.quadraticCurveTo(x+2.8*u,yBase-1.8*u,x+0.7*u,yBase-2.6*u); ctx.lineTo(x+0.55*u,yBase-3.2*u); ctx.lineTo(x-0.55*u,yBase-3.2*u); ctx.lineTo(x-0.7*u,yBase-2.6*u); ctx.quadraticCurveTo(x-2.8*u,yBase-1.8*u,x-2.4*u,yBase); ctx.closePath(); ctx.fill(); ctx.stroke();
+  ctx.restore();
+  ctx.save(); ctx.fillStyle=WFILL; ctx.fillRect(x-2.2*u,yBase-1.1*u,4.4*u,1.0*u); ctx.restore();
+  line(ctx,x,yBase-3.2*u,x,yBase-3.7*u,COL.ink,2.4);
+  if(inten>0.02) for(let k=0;k<3;k++) flameShape(ctx,x+(k-1)*0.25*u*inten,yBase-3.7*u,(1.2+3.8*inten)*u*(k===1?1:0.72),(0.5+0.6*inten)*u*(k===1?1:0.6),t,COL.red,COL.yellow,k*1.7);
+}
+function bubble(ctx,x,y,r,alpha){ ctx.save(); if(alpha!==undefined) ctx.globalAlpha=alpha; dot(ctx,x,y,r,COL.green,'#fff',1.3); ctx.restore(); }
+/* "pop": expanding rings + word */
+function popBurst(ctx,x,y,u,age,word){
+  if(age<0||age>1.2) return; const a=1-age/1.2;
+  ctx.save(); ctx.globalAlpha=a;
+  for(let k=0;k<3;k++){ const r=(0.6+age*4+k*0.7)*u; circ(ctx,x,y,r,k%2?COL.yellow:COL.red,null,2.4-k*0.5); }
+  for(let k=0;k<10;k++){ const an=k/10*Math.PI*2, r1=(1+age*3)*u, r2=r1+1.2*u; line(ctx,x+Math.cos(an)*r1,y+Math.sin(an)*r1,x+Math.cos(an)*r2,y+Math.sin(an)*r2,COL.red,2); }
+  ctx.restore();
+  if(word) textAt(ctx,word,x,y-(2.2+age*3)*u,{align:'center',size:18+age*6,weight:700,color:COL.red,alpha:a});
+}
+/* wavy smell lines travelling from (x0,y0) to (x1,y1) */
+function smellWaves(ctx,x0,y0,x1,y1,t,col,alpha){
+  const L=Math.hypot(x1-x0,y1-y0)||1, ux=(x1-x0)/L, uy=(y1-y0)/L;
+  ctx.save(); ctx.globalAlpha=alpha===undefined?1:alpha; ctx.strokeStyle=col; ctx.lineWidth=1.8;
+  for(let k=-1;k<=1;k++){ ctx.beginPath(); for(let q=0;q<=40;q++){ const s=q/40*L, wv=Math.sin(s*0.12-t*6+k)*5; const px=x0+ux*s-uy*(wv+k*9), py=y0+uy*s+ux*(wv+k*9); ctx[q?'lineTo':'moveTo'](px,py); } ctx.stroke(); }
+  ctx.restore();
+}
+/* head in profile, nose tip at (x,y) facing dir (±1) */
+function face(ctx,x,y,u,dir,mood){
+  const cx=x-dir*1.7*u;
+  circ(ctx,cx,y,1.6*u,COL.ink,'#fff',2.2);
+  ctx.save(); ctx.fillStyle='#fff'; ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.lineJoin='round'; ctx.beginPath(); ctx.moveTo(cx+dir*1.45*u,y-0.6*u); ctx.lineTo(x,y+0.2*u); ctx.lineTo(cx+dir*1.5*u,y+0.35*u); ctx.fill(); ctx.stroke(); ctx.restore();
+  dot(ctx,cx+dir*0.7*u,y-0.5*u,1.8,null,COL.ink);
+  const my=y+0.85*u; ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.beginPath();
+  if(mood==='bad'){ ctx.moveTo(cx+dir*0.3*u,my+0.15*u); ctx.quadraticCurveTo(cx+dir*0.8*u,my-0.35*u,cx+dir*1.25*u,my+0.15*u); }
+  else { ctx.moveTo(cx+dir*0.4*u,my); ctx.lineTo(cx+dir*1.15*u,my); }
+  ctx.stroke(); ctx.restore();
+}
+/* round "magnified view" frame with a pointer ring on the object being viewed */
+function zoomFrame(ctx,cx,cy,R,tx,ty,label,draw){
+  if(tx!==null){
+    const d=Math.hypot(cx-tx,cy-ty)||1, ux=(cx-tx)/d, uy=(cy-ty)/d, a=Math.asin(clamp(R/d,0,1));
+    ctx.save(); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.1; ctx.setLineDash([4,4]);
+    [a,-a].forEach(s=>{ const c=Math.cos(s), sn=Math.sin(s), vx=ux*c-uy*sn, vy=ux*sn+uy*c, L=Math.sqrt(Math.max(0,d*d-R*R)); ctx.beginPath(); ctx.moveTo(tx,ty); ctx.lineTo(tx+vx*L,ty+vy*L); ctx.stroke(); });
+    ctx.restore(); circ(ctx,tx,ty,7,COL.ink,null,1.8);
+  }
+  magnifier(ctx,cx,cy,R,draw,label);
+}
+
+/* step pills: onPick(i) fires for pills that are unlocked */
+function stepPills(el,names,onPick){
+  el.innerHTML=names.map((n,i)=>`<button class="step-pill" data-i="${i}">${i+1} · ${n}</button>`).join('');
+  const bs=[...el.querySelectorAll('.step-pill')]; let unl=0;
+  bs.forEach(b=>b.onclick=()=>{ const i=+b.dataset.i; if(i<=unl) onPick(i); });
+  return { set(active,unlocked,done){ unl=unlocked; bs.forEach((b,i)=>{ b.classList.toggle('active',i===active); b.classList.toggle('done',!!(done&&done[i])); b.style.opacity=i<=unlocked?1:0.45; }); } };
+}
+function glassRod(ctx,x1,y1,x2,y2,wd){
+  ctx.save(); ctx.lineCap='round'; line(ctx,x1,y1,x2,y2,COL.ink,wd+2.4); line(ctx,x1,y1,x2,y2,'#fff',wd); ctx.restore();
+}
+/* eye in profile looking along +dir (±1) — sight point at (x,y) */
+function eyeIcon(ctx,x,y,u,dir){
+  const xa=x-dir*1.7*u;
+  ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.fillStyle='#fff'; ctx.lineJoin='round';
+  ctx.beginPath(); ctx.moveTo(xa,y); ctx.quadraticCurveTo(x-dir*0.8*u,y-0.9*u,x,y); ctx.quadraticCurveTo(x-dir*0.8*u,y+0.9*u,xa,y); ctx.closePath(); ctx.fill(); ctx.stroke();
+  dot(ctx,x-dir*0.55*u,y,0.3*u,COL.ink,COL.ink,1);
+  ctx.beginPath(); ctx.moveTo(xa,y-0.75*u); ctx.quadraticCurveTo(x-dir*0.9*u,y-1.35*u,x-dir*0.1*u,y-0.85*u); ctx.stroke();
+  ctx.restore();
+}
+/* LCD read-out box */
+function lcd(ctx,x,y,w,h,txt,on,unit){
+  ctx.save(); rrect(ctx,x,y,w,h,5); ctx.fillStyle=on?'#eaf4ec':'#e7ecf2'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.stroke();
+  if(on){ ctx.font='700 '+Math.round(h*0.5)+'px "Courier New", monospace'; ctx.fillStyle=COL.ink; ctx.textAlign='right'; ctx.textBaseline='middle'; ctx.fillText(txt,x+w-(unit?h*0.9:h*0.25),y+h*0.54);
+    if(unit){ ctx.font='600 '+Math.round(h*0.34)+'px Poppins, sans-serif'; ctx.fillText(unit,x+w-h*0.15,y+h*0.58); } }
+  ctx.restore();
+}
+/* tripod stand with wire gauze: top centre (cx,yTop), legs down to yFloor */
+function tripodGauze(ctx,cx,yTop,yFloor,W){
+  ctx.save(); ctx.lineCap='round';
+  line(ctx,cx-W/2-6,yTop,cx+W/2+6,yTop,COL.ink,3);
+  line(ctx,cx-W/2,yTop+3,cx-W/2-10,yFloor,COL.ink,2.4); line(ctx,cx+W/2,yTop+3,cx+W/2+10,yFloor,COL.ink,2.4); line(ctx,cx,yTop+3,cx,yFloor-6,COL.mid,1.6);
+  ctx.restore();
+  ctx.save(); ctx.strokeStyle=COL.mid; ctx.lineWidth=1; ctx.beginPath(); for(let x=cx-W/2;x<=cx+W/2;x+=5){ ctx.moveTo(x,yTop-2); ctx.lineTo(x+2.5,yTop+2); } ctx.stroke(); ctx.restore();
+}
+/* gentle water surface ripple (x0..x1 at y) */
+function ripple(ctx,x0,x1,y,amp,t,col){
+  ctx.save(); ctx.strokeStyle=col||COL.blue; ctx.lineWidth=1.8; ctx.beginPath();
+  for(let i=0;i<=30;i++){ const x=lerp(x0,x1,i/30); ctx[i?'lineTo':'moveTo'](x,y+Math.sin(i*0.9+t*5)*amp); } ctx.stroke(); ctx.restore();
+}
+/* bisection solve f(x)=target on [a,b] for increasing f */
+function solveUp(f,target,a,b){ for(let i=0;i<40;i++){ const m=(a+b)/2; if(f(m)<target) a=m; else b=m; } return (a+b)/2; }
+function htmlIfChanged(el,html){ if(el._h!==html){ el._h=html; el.innerHTML=html; } }
+
+
+/* ---------------------------------------------------------------------
+   0d. OPTICS ENGINE — exact 2-D ray tracing (local frame: optical axis = +x, cm)
+   Every surface is a spherical cap, or a plane when c = 0:
+     {x: vertex, c: curvature 1/R (centre of curvature at x + 1/c), h: half-aperture,
+      yc: aperture centre (default 0), kind: 'mirror' | 'glass' | 'stop',
+      nL, nR: refractive index on the −x / +x side (glass only)}
+   Reflection   d' = d − 2(d·n)n          → angle of incidence = angle of reflection
+   Refraction   n₁ sin i = n₂ sin r       (vector form of Snell's law)
+   Images are found the same way the eye finds them: trace two nearly-axial
+   rays and see where they (or their backward extensions) cross.
+   --------------------------------------------------------------------- */
+function sag(c,y){ const q=1-c*c*y*y; return q<=0 ? 1/c : c*y*y/(1+Math.sqrt(q)); }
+function hitSurf(p,d,s){
+  const yc=s.yc||0;
+  if(Math.abs(s.c)<1e-7){
+    if(Math.abs(d[0])<1e-12) return null; const t=(s.x-p[0])/d[0]; if(t<1e-6) return null;
+    const y=p[1]+d[1]*t; if(Math.abs(y-yc)>s.h) return null; return {t,pt:[s.x,y],n:[1,0]};
+  }
+  const R=1/s.c, cx=s.x+R, ox=p[0]-cx, oy=p[1], b=ox*d[0]+oy*d[1], cc=ox*ox+oy*oy-R*R, disc=b*b-cc;
+  if(disc<0) return null; const sq=Math.sqrt(disc); let best=null;
+  for(const t of [-b-sq,-b+sq]){ if(t<1e-6) continue; const x=p[0]+d[0]*t, y=p[1]+d[1]*t;
+    if(Math.abs(y-yc)>s.h || (x-cx)*(s.x-cx)<0) continue; if(!best||t<best.t) best={t,pt:[x,y]}; }
+  if(best) best.n=[(best.pt[0]-cx)/Math.abs(R), best.pt[1]/Math.abs(R)];
+  return best;
+}
+/* returns {pts, d, meds (index of each segment), hitN (normal at each hit), stopped} */
+function traceRay(p,d,surfs,opt){
+  opt=opt||{}; let n0=1; const L=Math.hypot(d[0],d[1]); d=[d[0]/L,d[1]/L]; p=p.slice();
+  const pts=[p.slice()], meds=[], hits=[]; let last=-1;
+  for(let k=0;k<(opt.max||10);k++){
+    let best=null, bi=-1;
+    surfs.forEach((s,i)=>{ const h=hitSurf(p,d,s); if(h&&!(i===last&&h.t<1e-4)&&(!best||h.t<best.t)){ best=h; bi=i; } });
+    if(!best) break;
+    meds.push(n0); p=best.pt; pts.push(p.slice()); last=bi; const s=surfs[bi];
+    let nn=best.n; if(d[0]*nn[0]+d[1]*nn[1]>0) nn=[-nn[0],-nn[1]];
+    const ci=-(d[0]*nn[0]+d[1]*nn[1]); hits.push({pt:p.slice(),n:nn,i:bi});
+    if(s.kind==='stop') return {pts,d,meds,hits,stopped:bi};
+    if(s.kind==='mirror'){ d=[d[0]+2*ci*nn[0], d[1]+2*ci*nn[1]]; continue; }
+    const n2=d[0]>0?s.nR:s.nL, eta=n0/n2, kk=1-eta*eta*(1-ci*ci);
+    if(kk<0){ d=[d[0]+2*ci*nn[0], d[1]+2*ci*nn[1]]; continue; }
+    const a=eta*ci-Math.sqrt(kk); d=[eta*d[0]+a*nn[0], eta*d[1]+a*nn[1]]; n0=n2;
+  }
+  meds.push(n0); const far=opt.far||300; pts.push([p[0]+d[0]*far,p[1]+d[1]*far]);
+  return {pts,d,meds,hits};
+}
+/* paraxial image of a point on the axis at xo (object height ho): {x, m, real} */
+function imageOf(xo,surfs,xAim){
+  const e=1e-3;
+  const A=traceRay([xo,0],[xAim-xo,e],surfs), B=traceRay([xo,e],[1*Math.sign(xAim-xo),0],surfs);
+  const pa=A.pts[A.pts.length-2], da=A.d, pb=B.pts[B.pts.length-2], db=B.d;
+  if(Math.abs(da[1])<1e-12) return {x:Infinity,m:Infinity,real:false};
+  const xi=pa[0]-pa[1]*da[0]/da[1];
+  const yi=pb[1]+db[1]*(xi-pb[0])/db[0];
+  return {x:xi,m:yi/e,real:(xi-pa[0])*da[0]>0};
+}
+/* focal point for light arriving parallel from the −x side */
+function focusOf(surfs,xStart){
+  const r=traceRay([xStart,1e-3],[1,0],surfs), p=r.pts[r.pts.length-2], d=r.d;
+  return p[0]-p[1]*d[0]/d[1];
+}
+/* surface outline (local points) */
+function surfPts(s,N){ const a=[], yc=s.yc||0; N=N||40; for(let i=0;i<=N;i++){ const y=yc-s.h+2*s.h*i/N; a.push([s.x+sag(s.c,y),y]); } return a; }
+/* mirror: silvered line + hatching on the non-reflecting side (side = ±1 along local x) */
+function drawMirrorSurf(ctx,s,M,side,lw){
+  const P=surfPts(s,48).map(M);
+  ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=lw||3.2; ctx.lineJoin='round'; ctx.lineCap='round'; ctx.beginPath(); P.forEach((q,i)=>ctx[i?'lineTo':'moveTo'](q[0],q[1])); ctx.stroke();
+  ctx.lineWidth=1.3; ctx.strokeStyle=COL.muted;
+  for(let i=1;i<=16;i++){ const y=(s.yc||0)-s.h+2*s.h*(i-0.5)/16, x=s.x+sag(s.c,y), a=M([x,y]), b=M([x+side*0.01,y]);
+    let ux=b[0]-a[0], uy=b[1]-a[1]; const l=Math.hypot(ux,uy)||1; ux/=l; uy/=l;
+    ctx.beginPath(); ctx.moveTo(a[0]+ux*2,a[1]+uy*2); ctx.lineTo(a[0]+ux*9-uy*6,a[1]+uy*9+ux*6); ctx.stroke(); }
+  ctx.restore();
+}
+/* lens between two spherical faces: centre xc, curvatures c1 (front) c2 (back), half-aperture h */
+function lensGeom(xc,c1,c2,h,tMin){
+  tMin=tMin||0.25; const t=Math.max(tMin, tMin+sag(c1,h)-sag(c2,h));
+  return {x1:xc-t/2, x2:xc+t/2, c1, c2, h, t};
+}
+function lensSurfs(g,n){ return [{x:g.x1,c:g.c1,h:g.h,kind:'glass',nL:1,nR:n},{x:g.x2,c:g.c2,h:g.h,kind:'glass',nL:n,nR:1}]; }
+function lensPoly(g){ const a=[]; for(let i=0;i<=30;i++){ const y=-g.h+2*g.h*i/30; a.push([g.x1+sag(g.c1,y),y]); } for(let i=30;i>=0;i--){ const y=-g.h+2*g.h*i/30; a.push([g.x2+sag(g.c2,y),y]); } return a; }
+function drawLens(ctx,g,M,fill){
+  const P=lensPoly(g).map(M);
+  ctx.save(); ctx.beginPath(); P.forEach((q,i)=>ctx[i?'lineTo':'moveTo'](q[0],q[1])); ctx.closePath();
+  ctx.fillStyle=fill||'rgba(47,143,224,0.10)'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4; ctx.lineJoin='round'; ctx.stroke(); ctx.restore();
+}
+/* travelling light: faint track + dashes that move along the path at `sp` px/s.
+   cols[i] colours segment i (the last colour repeats). */
+function lightPath(ctx,P,t,cols,opt){
+  opt=opt||{}; const sp=opt.speed||80, w=opt.w||2, al=opt.alpha===undefined?1:opt.alpha; let L0=0;
+  for(let i=0;i<P.length-1;i++){
+    const a=P[i], b=P[i+1], col=cols[Math.min(i,cols.length-1)], len=Math.hypot(b[0]-a[0],b[1]-a[1]);
+    if(len<0.5){ continue; }
+    ctx.save(); ctx.strokeStyle=col; ctx.lineCap='butt';
+    ctx.globalAlpha=al*0.42; ctx.lineWidth=w; if(opt.dashed) ctx.setLineDash([5,5]);
+    ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); ctx.stroke();
+    if(!opt.dashed){ ctx.globalAlpha=al; ctx.lineWidth=w+0.8; ctx.setLineDash([10,14]); ctx.lineDashOffset=L0-sp*t;
+      ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); ctx.stroke(); }
+    ctx.restore();
+    if(opt.arrows!==false&&len>60&&!opt.dashed){ const u=i===0?0.55:0.5; ctx.save(); ctx.globalAlpha=al; arrowHead(ctx,lerp(a[0],b[0],u),lerp(a[1],b[1],u),Math.atan2(b[1]-a[1],b[0]-a[0]),col,7); ctx.restore(); }
+    L0+=len;
+  }
+}
+/* angle arc at (x,y) from angle a0 to a1 (screen radians) with label */
+function angleArc(ctx,x,y,r,a0,a1,col,label,lw){
+  let d=angDiff(a1,a0); if(Math.abs(d)<0.005) return;
+  ctx.save(); ctx.strokeStyle=col; ctx.lineWidth=lw||2; ctx.beginPath(); ctx.arc(x,y,r,a0,a0+d,d<0); ctx.stroke(); ctx.restore();
+  if(label){ const am=a0+d/2; textAt(ctx,label,x+Math.cos(am)*(r+13),y+Math.sin(am)*(r+13)+4,{align:'center',size:12,weight:700,color:col}); }
+}
+/* the "toy": pole + ball + flag — lopsided in both directions so inversion
+   and lateral inversion are both obvious. foot at (x,y), height H px, sx/sy scale (±) */
+function drawToy(ctx,x,y,H,sx,sy,col,lw){
+  col=col||COL.red; const P=(u,v)=>[x+u*H*sx, y-v*H*sy];
+  ctx.save(); ctx.lineCap='round'; ctx.lineJoin='round'; ctx.strokeStyle=col; ctx.lineWidth=lw||Math.max(1.4,Math.min(4,H*0.045));
+  let a=P(-0.22,0), b=P(0.22,0); ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); ctx.stroke();
+  a=P(0,0); b=P(0,0.9); ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); ctx.stroke();
+  const f=[P(0,0.88),P(0.5,0.74),P(0,0.6)]; ctx.beginPath(); f.forEach((q,i)=>ctx[i?'lineTo':'moveTo'](q[0],q[1])); ctx.closePath(); ctx.fillStyle='rgba(217,67,43,0.18)'; ctx.fill(); ctx.stroke();
+  const c=P(0,0.97); ctx.beginPath(); ctx.arc(c[0],c[1],Math.max(1,H*0.07*Math.min(Math.abs(sx),Math.abs(sy))),0,Math.PI*2); ctx.fillStyle=col; ctx.fill();
+  ctx.restore();
+}
+/* sun: rotating rays */
+function sunIcon(ctx,x,y,r,t){
+  circ(ctx,x,y,r,COL.yellow,'#fff6da',2.4);
+  for(let k=0;k<12;k++){ const a=k/12*Math.PI*2+t*0.3; line(ctx,x+Math.cos(a)*(r+4),y+Math.sin(a)*(r+4),x+Math.cos(a)*(r+10+2*Math.sin(t*3+k)),y+Math.sin(a)*(r+10+2*Math.sin(t*3+k)),COL.yellow,2); }
+}
+/* torch pointing along angle ang, lens end at (x,y); comb with `slits` openings of pitch `pitch` px across the beam */
+function torch(ctx,x,y,ang,u,slits,pitch,on){
+  ctx.save(); ctx.translate(x,y); ctx.rotate(ang); ctx.lineJoin='round';
+  ctx.fillStyle='#fff'; ctx.strokeStyle=COL.ink; ctx.lineWidth=2.4;
+  ctx.beginPath(); ctx.moveTo(0,-1.1*u); ctx.lineTo(-1.3*u,-0.7*u); ctx.lineTo(-5*u,-0.7*u); ctx.lineTo(-5*u,0.7*u); ctx.lineTo(-1.3*u,0.7*u); ctx.lineTo(0,1.1*u); ctx.closePath(); ctx.fill(); ctx.stroke();
+  line(ctx,-3.6*u,-0.7*u,-3.6*u,-1.0*u,COL.ink,2.4); line(ctx,-3.1*u,-0.7*u,-3.1*u,-1.0*u,COL.ink,2.4);
+  if(on){ ctx.save(); ctx.globalAlpha=0.35; ctx.fillStyle=COL.yellow; ctx.fillRect(-0.25*u,-1.0*u,0.25*u,2*u); ctx.restore(); }
+  ctx.restore();
+  if(slits!==undefined){ // comb (black paper covering all but `slits` gaps), just in front of the torch
+    const cx=x+Math.cos(ang)*0.9*u, cy=y+Math.sin(ang)*0.9*u, nx=-Math.sin(ang), ny=Math.cos(ang), half=1.5*u;
+    ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=3.4; ctx.lineCap='butt';
+    const open=[]; for(let k=0;k<slits;k++) open.push((k-(slits-1)/2)*pitch);
+    let s=-half; const segs=[]; open.forEach(o=>{ segs.push([s,o-1.5]); s=o+1.5; }); segs.push([s,half]);
+    segs.forEach(([a,b])=>{ if(b>a){ ctx.beginPath(); ctx.moveTo(cx+nx*a,cy+ny*a); ctx.lineTo(cx+nx*b,cy+ny*b); ctx.stroke(); } });
+    ctx.restore();
+    return open.map(o=>[cx+nx*o,cy+ny*o]);
+  }
+}
+
+/* ---------------------------------------------------------------------
+   0e. SUNLIGHT ON PAPER — energy balance of the lit spot
+   Areal heat capacity of newsprint 45 g/m² × 1.3 kJ/kg·K ≈ 60 J/m²·K.
+     Cₐ dT/dt = α·C·S − 2h(T − T₀) − 2εσ(T⁴ − T₀⁴)
+   S = 1000 W/m² (clear midday sun), C = concentration (collected area ÷
+   spot area), h = 12 W/m²·K per face, ε = 0.9. The spot is at least the
+   image of the Sun (Sun's disc is 0.53° wide → radius ≈ 0.0047 × distance).
+   Paper chars by pyrolysis, rate k = 1.6·10⁴ e^(−7660/T) s⁻¹: it smokes
+   within seconds above ≈ 300 °C, never ignites below ≈ 200 °C, and bursts
+   into flame when the char fraction reaches 1 (≈ 233 °C and up).
+   --------------------------------------------------------------------- */
+const SUN_S = 1000, SUN_HALF = 0.00465, SIGMA = 5.67e-8;
+function burnNew(){ return {T:303, pyro:0, fire:0, hole:0, smoke:[], ash:[]}; }
+function burnStep(b,C,alpha,dt){
+  const T0=303, q=alpha*C*SUN_S*(b.hole>0?0:1);
+  for(let k=0;k<8;k++){ const h=dt/8; const loss=24*(b.T-T0)+2*0.9*SIGMA*(Math.pow(b.T,4)-Math.pow(T0,4)); b.T+=(q-loss)/60*h; b.T=Math.max(T0,Math.min(b.T,1400)); }
+  b.pyro+=1.6e4*Math.exp(-7660/b.T)*dt;
+  if(b.pyro>=1&&b.fire===0) b.fire=0.001;
+  if(b.fire>0){ b.fire+=dt; b.hole+=dt*(0.18+0.06*Math.sin(b.fire*3)); }  // flame front ≈ 2 mm/s
+  if(b.T>470&&Math.random()<dt*Math.min(30,(b.T-470)*0.15)) b.smoke.push({a:0,x:(Math.random()-0.5),s:0.6+Math.random()*0.8});
+  if(b.fire>0&&Math.random()<dt*14) b.smoke.push({a:0,x:(Math.random()-0.5)*2,s:1+Math.random()});
+  b.smoke.forEach(s=>s.a+=dt); b.smoke=b.smoke.filter(s=>s.a<2.6);
+  return b;
+}
+/* smoke wisps rising from (x,y) — sc = px per unit rise */
+function drawSmoke(ctx,b,x,y,sc,t){
+  b.smoke.forEach(s=>{ const up=s.a*sc*1.4, al=Math.max(0,0.75*(1-s.a/2.6));
+    ctx.save(); ctx.globalAlpha=al; ctx.strokeStyle=COL.mid; ctx.lineWidth=1.6; ctx.beginPath();
+    for(let q=0;q<=12;q++){ const f=q/12, yy=y-up*f-4, xx=x+s.x*sc*0.4+Math.sin(f*5+t*3+s.s*4)*sc*0.12*(0.3+f)*s.s; ctx[q?'lineTo':'moveTo'](xx,yy); }
+    ctx.stroke(); ctx.restore(); });
+}
+function paperTemp(b){ return b.T-273; }
+
+/* ---------------------------------------------------------------------
+   1. ACTIVITIES + ROUTER
+   --------------------------------------------------------------------- */
+const activities = [
+  { num:"10.1", title:"A Spoon as a Mirror", desc:"Inner side vs outer side — move it away slowly", build: buildA1 },
+  { num:"10.2", title:"Concave or Convex?", desc:"Lower your eye to table level to see the curve", build: buildA2 },
+  { num:"10.3", title:"Images in Curved Mirrors", desc:"Move the toy away from the mirrors", build: buildA3 },
+  { num:"10.4", title:"Angle of Incidence = Angle of Reflection", desc:"Swing the torch, draw the normal, measure i and r", build: buildA4 },
+  { num:"10.5", title:"All in One Plane", desc:"Bend the paper — where does the reflected beam go?", build: buildA5 },
+  { num:"10.6", title:"Parallel Beams on Mirrors", desc:"Plane keeps them parallel, concave converges, convex diverges", build: buildA6 },
+  { num:"10.7", title:"Concave Mirror & Sunlight", desc:"Find the bright spot — hold it steady", build: buildA7 },
+  { num:"10.8", title:"A Water-Drop Lens", desc:"Look at the letters through a drop of water", build: buildA8 },
+  { num:"10.9", title:"Looking Through Lenses", desc:"Move the object away behind each lens", build: buildA9 },
+  { num:"10.10", title:"Parallel Beams through Lenses", desc:"Glass plate, convex lens, concave lens", build: buildA10 },
+  { num:"10.11", title:"Convex Lens & Sunlight", desc:"Bring the sunlight to a point on paper", build: buildA11 },
+];
+let currentIndex = 0;
+
+function buildNav(){
+  const nav = document.getElementById('sideNav');
+  nav.innerHTML='';
+  activities.forEach((a,i)=>{
+    const btn = document.createElement('button');
+    btn.className = 'nav-item'+(i===currentIndex?' active':'');
+    btn.innerHTML = `<span class="n-num">${a.num}</span><span class="n-title">${a.title}</span>`;
+    btn.onclick = ()=>{ currentIndex=i; render(); };
+    nav.appendChild(btn);
+  });
+}
+function render(){
+  stopAllLoops();
+  buildNav();
+  const a = activities[currentIndex];
+  document.getElementById('panelBadge').textContent = a.num;
+  document.getElementById('panelTitle').textContent = a.title;
+  document.getElementById('panelDesc').textContent = a.desc||'';
+  const body = document.getElementById('panelBody');
+  body.innerHTML='';
+  body.appendChild(a.build());
+}
+function labShell(){
+  const wrap=document.createElement('div'); wrap.className='lab-view';
+  wrap.innerHTML = `<div class="lab-canvas-wrap"><canvas></canvas></div><div class="lab-side"></div>`;
+  return wrap;
+}
+/* heap of resting grains: sorted by radius, laid onto a 2-D cone with an
+
+/* =====================================================================
+   10.1 A SHINY SPOON AS A MIRROR
+   Bowl of a tablespoon: radius of curvature ≈ 5 cm → f = ±2.5 cm
+   (inner side concave +, outer side convex −). Face 18 cm tall.
+     1/v + 1/u = 1/f,  m = −v/u
+   What the eye sees is the image's ANGULAR size compared with the bowl's:
+     image angle = |m|·H / |u − v|  (eye is at the face, distance u)
+     bowl angle  = 6.4 cm / u
+   → fraction of the bowl the face fills = |f|·H / (6.4·|u − 2f|)
+   The eye cannot focus closer than ≈ 12 cm, so an image that forms near
+   the eye (u ≈ 2f on the inner side) is a blur.
+   ===================================================================== */
+function faceFront(ctx,cx,cy,S,sx,sy,blink){
+  ctx.save(); ctx.translate(cx,cy); ctx.scale(S*sx,-S*sy);
+  const lw=2.2/S/Math.max(0.2,Math.min(Math.abs(sx),Math.abs(sy)));
+  ctx.lineJoin='round'; ctx.lineCap='round'; ctx.strokeStyle=COL.red; ctx.lineWidth=lw;
+  ctx.beginPath(); ctx.ellipse(0,0,0.31,0.4,0,0,Math.PI*2); ctx.fillStyle='#fff'; ctx.fill(); ctx.stroke();
+  // cap with its peak sticking out on one side
+  ctx.beginPath(); ctx.moveTo(-0.33,0.16); ctx.quadraticCurveTo(-0.3,0.52,0,0.53); ctx.quadraticCurveTo(0.3,0.52,0.33,0.16); ctx.closePath(); ctx.fillStyle='#f7c9bf'; ctx.fill(); ctx.stroke();
+  ctx.beginPath(); ctx.moveTo(0.3,0.19); ctx.lineTo(0.56,0.13); ctx.lineTo(0.32,0.1); ctx.closePath(); ctx.fillStyle=COL.red; ctx.fill(); ctx.stroke();
+  // ears, eyes, nose, smile
+  ctx.beginPath(); ctx.arc(-0.33,0,0.06,Math.PI*0.5,Math.PI*1.5); ctx.stroke(); ctx.beginPath(); ctx.arc(0.33,0,0.06,-Math.PI*0.5,Math.PI*0.5); ctx.stroke();
+  [-0.12,0.12].forEach(ex=>{ if(blink){ ctx.beginPath(); ctx.moveTo(ex-0.045,0.05); ctx.lineTo(ex+0.045,0.05); ctx.stroke(); } else { ctx.beginPath(); ctx.arc(ex,0.05,0.035,0,Math.PI*2); ctx.fillStyle=COL.red; ctx.fill(); }
+    ctx.beginPath(); ctx.moveTo(ex-0.06,0.12); ctx.lineTo(ex+0.06,0.13); ctx.stroke(); });
+  ctx.beginPath(); ctx.moveTo(0,0.02); ctx.lineTo(-0.04,-0.1); ctx.lineTo(0.02,-0.11); ctx.stroke();
+  ctx.beginPath(); ctx.arc(0,-0.12,0.12,-Math.PI*0.2,-Math.PI*0.8,true); ctx.stroke();
+  ctx.restore();
+}
+function buildA1(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML=`
+    <div class="control-group"><label>Side facing you</label><div class="toggle-group"><button class="toggle-btn active" data-s="1">Inner (curved in)</button><button class="toggle-btn" data-s="-1">Outer (bulging)</button></div></div>
+    <div class="control-group"><label>Spoon from your face <span class="val" id="vU"></span></label><input type="range" id="uS" min="1" max="40" step="0.5" value="20">
+      <button class="toggle-btn navy" id="sweep">▶ Slowly move it away</button></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Acts like</div><div class="rval" id="rk">—</div></div>
+      <div class="rcard"><div class="rlabel">Your image</div><div class="rval" id="ro">—</div></div>
+      <div class="rcard"><div class="rlabel">Face fills</div><div class="rval" id="rf">—</div></div>
+      <div class="rcard"><div class="rlabel">Looks</div><div class="rval" id="rc">—</div></div></div>
+      <div class="fb" id="fb"></div><div class="hint">Spoon bowl: f = ±2.5 cm</div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const F=2.5, H=18, BL=6.4;
+  let side=1, uT=20, sweep=-1, t=0; const U={x:20,v:0}, PH={x:0,v:0};
+  toggleWire([...wrap.querySelectorAll('[data-s]')],b=>{ side=+b.dataset.s; });
+  $('#uS').oninput=e=>{ uT=+e.target.value; sweep=-1; $('#sweep').textContent='▶ Slowly move it away'; };
+  $('#sweep').onclick=()=>{ if(sweep>=0){ sweep=-1; $('#sweep').textContent='▶ Slowly move it away'; return; } sweep=0; $('#sweep').textContent='■ Stop'; };
+
+  animLoop(dt=>{
+    t+=dt;
+    if(sweep>=0){ sweep+=dt; uT=lerp(1.5,40,smooth01(0,10,sweep)); $('#uS').value=uT; if(sweep>10.5){ sweep=-1; $('#sweep').textContent='▶ Slowly move it away'; } }
+    const u=Math.max(0.8,springTo(U,uT+0.12*Math.sin(t*2.1),30,9,dt));        // small hand tremor
+    const ph=springTo(PH,side>0?0:Math.PI,26,7,dt), cs=Math.cos(ph);            // flip about the handle
+    const f=cs>=0?F:-F;
+    const v=u*f/(u-f), m=-v/u, dEye=Math.abs(u-v);
+    const fill=Math.min(3.2,Math.abs(f)*H/(BL*Math.abs(u-2*f)));
+    const blur=Math.min(12,Math.max(0,(12/Math.max(dEye,0.3)-1)*2.2));
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const sideW=w*0.42, ps=Math.min((sideW-40)/50,h/42), ay=h*0.45;
+    const noseX=14+3.4*5.6*ps;
+
+    // ---------- side view: face, spoon, sight line, image in the air
+    textAt(ctx,'side view',14,20,{size:11,weight:600,color:COL.muted});
+    face(ctx,noseX,ay-0.5*ps,5.6*ps,1,'ok');
+    const sx=noseX+u*ps, half=3.2*ps, bulge=1.1*ps*cs;
+    ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=3; ctx.lineCap='round'; ctx.beginPath(); ctx.moveTo(sx,ay-half); ctx.quadraticCurveTo(sx+2*bulge,ay,sx,ay+half); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(sx,ay+half); ctx.quadraticCurveTo(sx+0.3*ps,ay+half+4*ps,sx+1.2*ps,ay+half+11*ps); ctx.lineWidth=3.4; ctx.stroke(); ctx.restore();
+    const eyeX=noseX-0.9*5.6*ps, eyeY=ay-0.5*ps-0.5*5.6*ps;
+    line(ctx,eyeX,eyeY,sx+bulge,ay,COL.green,1.6,[5,4]);
+    dimArrow2(ctx,noseX,sx+bulge*0.3,ay+half+14*ps,fmt(u,1)+' cm');
+    // two rays from the top of the head: in yellow, out blue; they meet (or seem to meet) at the image
+    if(Math.abs(cs)>0.25&&isFinite(v)){
+      const oy=ay-9*ps, ox=noseX-2.2*ps, ix=sx-v*ps, iy=ay-m*9*ps;
+      ctx.save(); ctx.beginPath(); ctx.rect(0,0,sideW-2,h); ctx.clip();
+      [-0.6,0.6].forEach(k=>{ const py=ay+k*half, px=sx+bulge*2*(1-k*k)*0.5;
+        let P;
+        if(v>0){ const dx=ix-px, dy=iy-py, L=Math.hypot(dx,dy)||1, ext=Math.max(L+30,(px-8)); P=[[ox,oy],[px,py],[px+dx/L*ext,py+dy/L*ext]]; }
+        else { const dx=px-ix, dy=py-iy, L=Math.hypot(dx,dy)||1; P=[[ox,oy],[px,py],[px-dx/L*(px-10),py-dy/L*(px-10)]]; line(ctx,px,py,ix,iy,COL.blue,1.3,[4,4]); }
+        lightPath(ctx,P,t,[COL.yellow,COL.blue],{w:1.6,speed:60,arrows:false}); });
+      if(Math.abs(v)<60){ const len=clamp(m*9*ps,-30*ps,30*ps);
+        line(ctx,ix,ay+len,ix,ay-len,COL.red,2.4,v<0?[5,4]:null); arrowHead(ctx,ix,ay-len,len>0?-Math.PI/2:Math.PI/2,COL.red,7);
+        textAt(ctx,'image',ix+(v<0?8:-8),ay+Math.abs(len)+14,{align:v<0?'left':'right',size:10,weight:600,color:COL.red}); }
+      ctx.restore();
+    }
+    line(ctx,sideW,16,sideW,h-16,COL.mid,1,[3,5]);
+
+    // ---------- front view: the spoon you are looking into
+    const fx=sideW+(w-sideW)/2, fy=h*0.42, RY=Math.min(h*0.36,(w-sideW)*0.46/0.69), RX=RY*0.69, ex=Math.max(0.04,Math.abs(cs));
+    // handle
+    ctx.save(); ctx.fillStyle='#f3f6fa'; ctx.strokeStyle=COL.ink; ctx.lineWidth=2.6; ctx.lineJoin='round';
+    ctx.beginPath(); ctx.moveTo(fx-RX*0.16*ex-2,fy+RY*0.96); ctx.quadraticCurveTo(fx-RX*0.1*ex-2,fy+RY*1.35,fx-RX*0.3*ex-4,h-6); ctx.lineTo(fx+RX*0.3*ex+4,h-6); ctx.quadraticCurveTo(fx+RX*0.1*ex+2,fy+RY*1.35,fx+RX*0.16*ex+2,fy+RY*0.96); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore();
+    // bowl
+    ctx.save(); ctx.beginPath(); ctx.ellipse(fx,fy,RX*ex,RY,0,0,Math.PI*2); ctx.fillStyle=cs>=0?'#eef3f9':'#f6f9fc'; ctx.fill(); ctx.clip();
+    if(ex>0.2){
+      const S=fill*2*RY*0.8, a=clamp((ex-0.2)/0.3,0,1);
+      ctx.globalAlpha=a; if(blur>0.3) ctx.filter='blur('+blur.toFixed(1)+'px)';
+      const sg=m>=0?1:-1;
+      faceFront(ctx,fx,fy+(sg>0?0.02:-0.02)*S,S,-sg*ex,sg,(t%3.4)<0.13);
+      ctx.filter='none'; ctx.globalAlpha=1;
+      // metal sheen: crescent inside a hollow, bright spot on a bump
+      ctx.globalAlpha=0.9*a;
+      if(cs>=0){ ctx.beginPath(); ctx.ellipse(fx,fy,RX*ex*0.84,RY*0.9,0,Math.PI*0.15,Math.PI*0.55); ctx.strokeStyle='#fff'; ctx.lineWidth=6; ctx.stroke(); }
+      else { ctx.beginPath(); ctx.ellipse(fx-RX*ex*0.35,fy-RY*0.45,RX*ex*0.14,RY*0.08,-0.5,0,Math.PI*2); ctx.fillStyle='rgba(255,255,255,0.85)'; ctx.fill(); }
+    }
+    ctx.restore();
+    ctx.save(); ctx.beginPath(); ctx.ellipse(fx,fy,RX*ex,RY,0,0,Math.PI*2); ctx.strokeStyle=COL.ink; ctx.lineWidth=3; ctx.stroke(); ctx.restore();
+    if(ex>0.2) textAt(ctx,cs>=0?'inner side':'outer side',fx,fy-RY-10,{align:'center',size:12,weight:700,color:COL.muted});
+
+    // ---------- read-outs
+    $('#vU').textContent=fmt(uT,1)+' cm';
+    $('#rk').textContent=cs>=0?'Concave':'Convex';
+    const erect=m>0; $('#ro').textContent=erect?'Erect':'Upside down'; $('#ro').style.color=erect?COL.green:COL.red;
+    $('#rf').textContent=fill>=3.1?'> 3 bowls':Math.round(fill*100)+'% of bowl';
+    $('#rc').textContent=blur>2.5?'Blurry':(fill>0.9?'Very large':'Clear');
+    const fb=$('#fb');
+    if(Math.abs(cs)<0.5){ fb.className='fb warn'; fb.textContent='Flipping the spoon…'; }
+    else if(cs>0&&u<F){ fb.className='fb ok'; fb.textContent='Very close: erect and enlarged.'; }
+    else if(cs>0){ fb.className='fb bad'; fb.textContent='Inner side: your face is upside down.'+(blur>2.5?' Too close to see clearly.':''); }
+    else { fb.className='fb ok'; fb.textContent='Outer side: always erect and smaller.'; }
+  });
+  return wrap;
+}
+/* horizontal distance marker with a centred label */
+function dimArrow2(ctx,x1,x2,y,label){
+  if(Math.abs(x2-x1)<6) return;
+  line(ctx,x1,y,x2,y,COL.muted,1.3); arrowHead(ctx,x1,y,Math.PI,COL.muted,5); arrowHead(ctx,x2,y,0,COL.muted,5);
+  textAt(ctx,label,(x1+x2)/2,y-5,{align:'center',size:10.5,weight:600,color:COL.muted});
+}
+
+/* =====================================================================
+   10.2 CONCAVE OR CONVEX? — look from the side
+   Each mirror is a curved glass shell: rim radius 5 cm, surface radius
+   R = 9 cm (sag 1.5 cm), glass 0.5 cm thick. Seen from above, both are
+   just circles; at eye level the concave one curves in (◡), the convex one
+   bulges out (◠). Projection: screen-up = z·cos φ + y·sin φ (φ = eye
+   elevation), with hidden parts of the surface removed ray by ray.
+   Marble test (rolling ball, radius 0.6 cm):
+     inside the bowl   θ'' = −(5g / 7(R − r))·sin θ  → rocks, T ≈ 0.7 s
+     on the dome       θ'' = +(5g / 7(R + r))·sin θ  → runs away and rolls off
+   ===================================================================== */
+function buildA2(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML=`
+    <div class="control-group"><label>Your eye <span class="val" id="vP"></span></label><input type="range" id="pS" min="0" max="90" step="1" value="72">
+      <div class="hint" style="display:flex;justify-content:space-between;margin-top:2px"><span>table level</span><span>straight above</span></div></div>
+    <div class="control-group"><button class="toggle-btn play" id="drop" style="width:100%;padding:9px;">● Drop a marble on each</button>
+      <div class="toggle-group"><button class="toggle-btn" id="slow">Slow motion ×¼</button><button class="toggle-btn" id="shuf">⇄ Shuffle</button></div></div>
+    <div class="control-group"><label>Which one is concave?</label><div class="toggle-group"><button class="toggle-btn" data-g="0">A</button><button class="toggle-btn" data-g="1">B</button></div>
+      <div class="fb" id="fb"></div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const A=5, R=9, TH=0.5, RB=0.6, GC=981, SLOT=8, TW=19, TD=8;
+  const H0=TH+(R-TH)-Math.sqrt((R-TH)*(R-TH)-A*A);                   // convex shell: rim bottom on the table
+  // top (reflecting) and bottom surfaces, as heights above the table at radius r
+  const zTop=(k,r)=> k>0 ? TH+(R-Math.sqrt(R*R-r*r)) : H0-(R-Math.sqrt(R*R-r*r));
+  const zBot=(k,r)=> k>0 ? (R+TH)-Math.sqrt((R+TH)*(R+TH)-r*r) : H0-TH-((R-TH)-Math.sqrt((R-TH)*(R-TH)-r*r));
+  let phiT=72, slow=false, t=0, concaveIs=Math.random()<0.5?0:1, guess=-1, shuf=-1;
+  const P={x:72,v:0};
+  // mirrors: label 0 = A, 1 = B. kind +1 concave, −1 convex. x position animated
+  let mir=[{lab:'A',k:concaveIs===0?1:-1,x:-SLOT,x0:-SLOT,x1:-SLOT},{lab:'B',k:concaveIs===1?1:-1,x:SLOT,x0:SLOT,x1:SLOT}];
+  let balls=[];
+  $('#pS').oninput=e=>{ phiT=+e.target.value; };
+  $('#slow').onclick=()=>{ slow=!slow; $('#slow').classList.toggle('active',slow); };
+  $('#drop').onclick=()=>{ balls=mir.map((m,i)=>({m:i,ph:'air',x:1.2*Math.sign(m.x)+0.1*(Math.random()-0.5),z:3,vx:0,vz:0,th:0,w:0,spin:0})); };
+  $('#shuf').onclick=()=>{ if(shuf>=0) return; balls=[]; guess=-1; wrap.querySelectorAll('[data-g]').forEach(b=>b.classList.remove('active'));
+    const swap=Math.random()<0.5; mir.forEach((m,i)=>{ m.x0=m.x; m.x1=swap?-m.x:m.x; }); if(swap) concaveIs=1-concaveIs; shuf=0; };
+  wrap.querySelectorAll('[data-g]').forEach(b=>b.onclick=()=>{ if(shuf>=0) return; wrap.querySelectorAll('[data-g]').forEach(x=>x.classList.remove('active')); b.classList.add('active'); guess=+b.dataset.g; });
+
+  function stepBall(b,dt){
+    const m=mir[b.m], k=m.k;
+    if(b.ph==='air'||b.ph==='fly'){
+      b.vz-=GC*dt; b.x+=b.vx*dt; b.z+=b.vz*dt;
+      const r=Math.abs(b.x);
+      if(r<A&&b.ph==='air'){ // land on the shell
+        const zs=zTop(k,r)+RB; if(b.z<=zs){ b.z=zs; b.ph='on';
+          const Rc=k>0?R-RB:R+RB; b.th=Math.asin(clamp(b.x/Rc,-1,1)); b.w=b.vx*Math.cos(b.th)/Rc; } }
+      else if(b.z<=RB){ b.z=RB; if(Math.abs(b.vz)>25){ b.vz=-b.vz*0.35; } else { b.vz=0; b.ph='roll'; } }
+      return;
+    }
+    if(b.ph==='on'){
+      const Rc=k>0?R-RB:R+RB, sgn=k>0?-1:1;
+      b.w+=(sgn*5*GC/(7*Rc)*Math.sin(b.th)-(k>0?0.9:0.2)*b.w)*dt; b.th+=b.w*dt;
+      b.x=Rc*Math.sin(b.th);
+      b.z=k>0 ? TH+R-Rc*Math.cos(b.th) : (H0-R)+Rc*Math.cos(b.th);
+      b.spin+=b.w*Rc/RB*dt;
+      if(Math.abs(b.x)>A-0.05){ b.ph='fly'; const v=b.w*Rc; b.vx=v*Math.cos(b.th); b.vz=(k>0?1:-1)*v*Math.sin(b.th); }
+      return;
+    }
+    // rolling on the table (world x = mirror x + b.x), rolling resistance ≈ 0.02 g, walls of the tray at ±24
+    const wx=m.x+b.x; b.vx-=Math.sign(b.vx)*Math.min(Math.abs(b.vx),20*dt); b.x+=b.vx*dt; b.spin+=b.vx/RB*dt;
+    if(Math.abs(wx)>TW-1.1&&Math.sign(wx)===Math.sign(b.vx)) b.vx=-b.vx*0.5;
+    mir.forEach(o=>{ const d=wx-o.x; if(Math.abs(d)<A+RB&&Math.sign(d)!==Math.sign(b.vx)&&Math.abs(d)>A-1) b.vx=-b.vx*0.5; });
+  }
+
+  animLoop(dt0=>{
+    t+=dt0; const dt=slow?dt0/4:dt0;
+    if(shuf>=0){ shuf+=dt0; const e=smooth01(0,1.3,shuf); mir.forEach((m,i)=>{ m.x=lerp(m.x0,m.x1,e); }); if(shuf>1.4){ shuf=-1; mir.forEach(m=>{ m.x=m.x1; }); } }
+    for(let s=0;s<4;s++) balls.forEach(b=>stepBall(b,dt/4));
+    const phi=springTo(P,phiT,20,8,dt0)*Math.PI/180, cp=Math.cos(phi), sp=Math.sin(phi);
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const ps=Math.min(w/42,h/(18*sp+6*cp+10)), cx=w/2, cy=h*(0.5+0.2*(1-sp));
+    const PX=(x,y,z)=>[cx+x*ps, cy-(z*cp+y*sp)*ps];
+
+    // ---- table top (and tray walls)
+    ctx.save(); ctx.beginPath(); [[-TW,-TD],[TW,-TD],[TW,TD],[-TW,TD]].forEach((q,i)=>{ const p=PX(q[0],q[1],0); ctx[i?'lineTo':'moveTo'](p[0],p[1]); }); ctx.closePath();
+    ctx.fillStyle='#f8fafc'; ctx.fill(); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.4; ctx.stroke(); ctx.restore();
+    [-1,1].forEach(s=>{ const a=PX(s*TW,-TD,0), b=PX(s*TW,TD,0), c=PX(s*TW,TD,1.2), d=PX(s*TW,-TD,1.2); ctx.save(); ctx.beginPath(); ctx.moveTo(a[0],a[1]); ctx.lineTo(b[0],b[1]); ctx.lineTo(c[0],c[1]); ctx.lineTo(d[0],d[1]); ctx.closePath(); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.mid; ctx.stroke(); ctx.restore(); });
+    { const a=PX(-TW,-TD,0), b=PX(TW,-TD,0); line(ctx,a[0],a[1],b[0],b[1],COL.ink,2.4); }
+
+    const drawAll=(PXf,sc,labels)=>{
+    // ---- mirrors
+    mir.forEach(m=>{
+      const k=m.k, X=(x,y,z)=>PXf(m.x+x,y,z);
+      // outline = envelope of every point of the shell, column by column
+      const N=60, up=[], dn=[];
+      for(let i=0;i<=N;i++){ const x=-A+2*A*i/N, ym=Math.sqrt(Math.max(0,A*A-x*x)); let top=Infinity, bot=-Infinity;
+        for(let j=0;j<=12;j++){ const y=-ym+2*ym*j/12, r=Math.hypot(x,y); const a=X(x,y,zTop(k,r))[1], b=X(x,y,zBot(k,r))[1]; top=Math.min(top,a,b); bot=Math.max(bot,a,b); }
+        up.push([X(x,0,0)[0],top]); dn.push([X(x,0,0)[0],bot]); }
+      ctx.save(); ctx.beginPath(); up.forEach((q,i)=>ctx[i?'lineTo':'moveTo'](q[0],q[1])); for(let i=dn.length-1;i>=0;i--) ctx.lineTo(dn[i][0],dn[i][1]); ctx.closePath();
+      ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.6; ctx.lineJoin='round'; ctx.stroke(); ctx.restore();
+      // reflecting surface: grid lines, hidden where the shell itself is in front
+      const view=[0,-cp,sp];
+      const vis=(x,y)=>{ const r0=Math.hypot(x,y), z0=zTop(k,r0)+0.02; for(let s=0.25;s<14;s+=0.25){ const px=x, py=y+view[1]*s, pz=z0+view[2]*s, r=Math.hypot(px,py); if(r>A) return true; if(pz<zTop(k,r)) return false; } return true; };
+      ctx.save(); ctx.strokeStyle=COL.blue; ctx.lineWidth=1.1; ctx.globalAlpha=0.55;
+      for(let g=-4;g<=4;g++){ const c=g*A/5;
+        [[1,0],[0,1]].forEach(([ax,ay])=>{ const ym=Math.sqrt(Math.max(0,A*A-c*c)); let prev=null;
+          for(let i=0;i<=24;i++){ const s=-ym+2*ym*i/24, x=ax?s:c, y=ax?c:s, r=Math.hypot(x,y), v=vis(x,y), p=X(x,y,zTop(k,r));
+            if(prev&&v&&prev.v){ ctx.beginPath(); ctx.moveTo(prev.p[0],prev.p[1]); ctx.lineTo(p[0],p[1]); ctx.stroke(); } prev={p,v}; } }); }
+      ctx.restore();
+      // rim
+      ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2; ctx.beginPath(); for(let i=0;i<=60;i++){ const a=i/60*Math.PI*2, p=X(A*Math.cos(a),A*Math.sin(a),zTop(k,A)); ctx[i?'lineTo':'moveTo'](p[0],p[1]); } ctx.stroke(); ctx.restore();
+      if(labels){ const lp=X(0,-TD,0); textAt(ctx,m.lab,lp[0],lp[1]+22,{align:'center',size:16,weight:700,color:COL.ink});
+      if(guess>=0&&shuf<0){  const lp2=X(0,-TD,0); textAt(ctx,m.k>0?'concave':'convex',lp2[0],lp2[1]+40,{align:'center',size:12,weight:600,color:COL.muted}); } }
+    });
+
+    // ---- marbles
+    balls.forEach(b=>{ const m=mir[b.m], p=PXf(m.x+b.x,0,b.z), r=RB*sc;
+      circ(ctx,p[0],p[1],r,COL.red,'#fff',2.2);
+      line(ctx,p[0],p[1],p[0]+Math.sin(b.spin)*r*0.85,p[1]-Math.cos(b.spin)*r*0.85*cp,COL.red,1.6); });
+
+    };
+    drawAll(PX,ps,true);
+    // magnified side views fade in as the eye comes down to the table
+    const zA=clamp((32-phiT)/14,0,1);
+    if(zA>0.01&&shuf<0){ ctx.save(); ctx.globalAlpha=zA;
+      mir.forEach(m=>{ const Rz=Math.min(h*0.2,w*0.16), zc=PX(m.x,0,0), zx=zc[0], zy=Math.max(Rz+12,zc[1]-Rz-60*zA-30), Z=Rz*0.85/A;
+        const PXz=(x,y,z)=>[zx+(x-m.x)*Z, zy+Rz*0.25-(z*cp+y*sp)*Z];
+        zoomFrame(ctx,zx,zy,Rz,zc[0],zc[1]-4,'magnified side view',()=>{ line(ctx,zx-Rz,zy+Rz*0.25,zx+Rz,zy+Rz*0.25,COL.mid,1.4); drawAll(PXz,Z,false); }); });
+      ctx.restore(); }
+
+    // ---- eye-height gauge (corner): where your eye is, looking at the table
+    { const gx=w-86, gy=h-26, gr=Math.min(62,h*0.13);
+      line(ctx,gx-8,gy,gx+gr+10,gy,COL.ink,2); ctx.save(); ctx.strokeStyle=COL.mid; ctx.setLineDash([3,4]); ctx.beginPath(); ctx.arc(gx,gy,gr,-Math.PI/2,0); ctx.stroke(); ctx.restore();
+      const ex=gx+gr*Math.cos(phi), ey=gy-gr*Math.sin(phi);
+      line(ctx,ex,ey,gx,gy,COL.green,1.8,[5,4]);
+      ctx.save(); ctx.translate(ex,ey); ctx.rotate(Math.PI-phi); eyeIcon(ctx,0,0,7,1); ctx.restore();
+      textAt(ctx,'your eye',gx+gr*0.5,gy+16,{align:'center',size:10,weight:600,color:COL.muted}); }
+
+    // ---- read-outs
+    $('#vP').textContent=Math.round(phiT)+'°';
+    const fb=$('#fb');
+    if(guess<0){ fb.className='fb warn'; fb.textContent=phiT>35?'From above both look the same. Lower your eye.':'Which one curves inward?'; }
+    else if(mir[guess].k>0){ fb.className='fb ok'; fb.textContent='Yes — '+mir[guess].lab+' curves inward. Shuffle and try again.'; }
+    else { fb.className='fb bad'; fb.textContent='No — '+mir[guess].lab+' bulges outward: convex.'; }
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   OPTICAL BENCH (used by 10.3 mirrors and 10.9 lenses)
+   Top: what you see in / through each element. Bottom: the side view of
+   the chosen element with three rays traced exactly from the tip of the
+   toy. The image is where those rays (or their backward extensions)
+   meet — found by tracing, so 1/v + 1/u = 1/f comes out, not in.
+   The camera follows the rays: it widens when the image runs far away.
+   ===================================================================== */
+function buildBench(o){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML=`
+    <div class="control-group"><label>${o.distLabel} <span class="val" id="vU"></span></label><input type="range" id="uS" min="${o.uMin}" max="${o.uMax}" step="0.5" value="${o.u0}">
+      <button class="toggle-btn navy" id="sweep">▶ Move it slowly away</button></div>
+    <div class="control-group"><label>Rays for</label><div class="toggle-group">${o.elems.map((e,i)=>`<button class="toggle-btn${i===0?' active':''}" data-e="${i}">${e.name}</button>`).join('')}</div></div>
+    <div class="control-group"><table class="log"><thead><tr><th></th><th>Image</th><th>Size</th></tr></thead><tbody id="now"></tbody></table>
+      <button class="toggle-btn" id="note" style="width:100%;margin-top:8px">📝 Note it</button></div>
+    <div class="control-group"><label>Notebook</label><table class="log"><thead><tr><th>${o.uShort}</th>${o.elems.map(e=>`<th>${e.name}</th>`).join('')}</tr></thead><tbody id="tb"><tr><td colspan="${o.elems.length+1}">—</td></tr></tbody></table>
+      <div class="hint">${o.hint}</div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const HO=2.5;                                   // toy height, cm
+  let uT=o.u0, sel=0, sweep=-1, t=0, notes=[];
+  const U={x:o.u0,v:0}, cam={L:30,R:20};
+  o.elems.forEach(e=>{ const f=focusOf(e.surfs,-90); e.flat=!(isFinite(f)&&Math.abs(f)<1e3); e.F=e.flat?Infinity:f; });
+  toggleWire([...wrap.querySelectorAll('[data-e]')],b=>{ sel=+b.dataset.e; });
+  $('#uS').oninput=e=>{ uT=+e.target.value; sweep=-1; $('#sweep').textContent='▶ Move it slowly away'; };
+  $('#sweep').onclick=()=>{ if(sweep>=0){ sweep=-1; $('#sweep').textContent='▶ Move it slowly away'; return; } sweep=0; $('#sweep').textContent='■ Stop'; };
+  const describe=im=>{ const m=im.m; if(!isFinite(m)||Math.abs(m)>60) return ['Too blurred','—','r-warn'];
+    const er=m>0?'Erect':'Inverted', sz=Math.abs(Math.abs(m)-1)<0.04?'Same':(Math.abs(m)>1?'Enlarged':'Diminished'); return [er,sz,m>0?'r-ok':'r-bad']; };
+  $('#note').onclick=()=>{ const u=U.x; notes.push([fmt(u,0)+' cm',...o.elems.map(e=>{ const d=describe(imageOf(-u,e.surfs,0)); return d[0]==='Too blurred'?'blur':d[0].toLowerCase()+', '+d[1].toLowerCase(); })]); if(notes.length>7) notes.shift();
+    htmlIfChanged($('#tb'),notes.map(r=>'<tr>'+r.map(c=>`<td>${c}</td>`).join('')+'</tr>').join('')); };
+
+  animLoop(dt=>{
+    t+=dt;
+    if(sweep>=0){ sweep+=dt; uT=lerp(o.uMin,o.uMax,smooth01(0,14,sweep)); $('#uS').value=uT; if(sweep>14.3){ sweep=-1; $('#sweep').textContent='▶ Move it slowly away'; } }
+    const u=springTo(U,uT,24,8.5,dt);
+    const ims=o.elems.map(e=>imageOf(-u,e.surfs,0));
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const topH=h*0.44, n=o.elems.length;
+
+    // ---------- what you see: one window per element
+    const Rw=Math.min(topH*0.36,(w-60)/(n*2.5));
+    textAt(ctx,'what you see',14,20,{size:11,weight:600,color:COL.muted});
+    { const ty=topH*0.62; textAt(ctx,'the toy',30,ty+18,{align:'center',size:10,weight:600,color:COL.muted}); drawToy(ctx,30,ty,Rw*0.36,1,1); }
+    o.elems.forEach((e,i)=>{
+      const cx=70+(w-80)*(i+0.5)/n, cy=topH*0.44, im=ims[i], m=clamp(im.m,-9,9), sg=m>=0?1:-1;
+      o.frame(ctx,cx,cy,Rw,e);
+      ctx.save(); ctx.beginPath(); ctx.arc(cx,cy,Rw-2,0,Math.PI*2); ctx.clip();
+      const blur=Math.min(10,Math.max(0,(Math.abs(im.m)-3.2)*1.6));
+      if(blur>0.3) ctx.filter='blur('+blur.toFixed(1)+'px)';
+      const lat=o.isMirror?-1:1;
+      drawToy(ctx,cx,cy,Rw*0.36*Math.abs(m),lat*sg,sg);
+      ctx.filter='none'; ctx.restore();
+      if(i===sel) { ctx.save(); ctx.strokeStyle=COL.green; ctx.lineWidth=2; ctx.setLineDash([4,4]); ctx.beginPath(); ctx.arc(cx,cy,Rw+7,0,Math.PI*2); ctx.stroke(); ctx.restore(); }
+      textAt(ctx,e.name+' '+o.noun,cx,cy+Rw*1.22+18,{align:'center',size:12,weight:700,color:COL.ink});
+    });
+    line(ctx,14,topH,w-14,topH,'#dbe4f0',1.2);
+
+    // ---------- side view of the chosen element, camera following the image
+    const e=o.elems[sel], im=ims[sel], F=e.flat?12:Math.abs(e.F);
+    const vx=isFinite(im.x)?im.x:0, far=Math.abs(vx)<4*o.uMax;
+    const Lw=Math.max(u+6,2.2*F+4,(far&&vx<0)?-vx+4:0), Rw2=Math.max(o.isMirror?8:2.2*F+6,(far&&vx>0)?vx+6:0);
+    cam.L=approach(cam.L,Math.min(Lw,3.2*o.uMax),3,dt); cam.R=approach(cam.R,Math.min(Rw2,3.2*o.uMax),3,dt);
+    const dTop=topH+14, dH=h-dTop-10, ay=dTop+dH*0.5;
+    const ps=Math.min((w-40)/(cam.L+cam.R),dH*0.42/Math.max(HO*Math.min(Math.abs(im.m),4),6.5));
+    const ex=20+cam.L*ps, M=p=>[ex+p[0]*ps, ay-p[1]*ps];
+    ctx.save(); ctx.beginPath(); ctx.rect(0,dTop,w,h-dTop); ctx.clip();
+    line(ctx,6,ay,w-6,ay,COL.mid,1.1,[6,5]);
+    // focal points (green); C for mirrors
+    const marks=e.flat?[]:[[e.F,'F']]; if(o.isMirror&&!e.flat) marks.push([2*e.F,'C']); if(!o.isMirror&&!e.flat) marks.push([-e.F,'F']);
+    marks.forEach(([x,l])=>{ const p=M([x,0]); if(p[0]<0||p[0]>w) return; dot(ctx,p[0],p[1],3.6,null,COL.green); textAt(ctx,l,p[0],p[1]+17,{align:'center',size:11,weight:700,color:COL.green}); });
+    // rays from the tip of the toy
+    const O=[-u,HO];
+    const through=(Q)=>{ let d=[Q[0]-O[0],Q[1]-O[1]]; if(d[0]<=0) d=[-d[0],-d[1]]; return d; };
+    const rays=[[1,0], through([0,0]), through(e.flat?[0,-3]:(o.isMirror?(e.F<0&&u<F+0.3?[2*e.F,0]:[e.F,0]):[-e.F,0]))];
+    rays.forEach((d,k)=>{
+      const r=traceRay(O,d,e.surfs,{far:400}); if(r.pts.length<3) return;
+      const P=r.pts.map(M);
+      lightPath(ctx,P,t+k*0.3,[COL.yellow,o.isMirror?COL.blue:'#7fb6e6',COL.blue],{w:1.8,speed:70});
+      if(!im.real&&isFinite(im.x)){ const q=r.pts[r.pts.length-2], dd=r.d, s=(im.x-q[0])/dd[0]; if(s<0&&s>-500){ const a=M(q), b=M([q[0]+dd[0]*s,q[1]+dd[1]*s]); line(ctx,a[0],a[1],b[0],b[1],COL.blue,1.3,[4,4]); } }
+    });
+    // element
+    o.drawSide(ctx,e,M);
+    // toy (object) and its image
+    const op=M([-u,0]); line(ctx,op[0],op[1],op[0],op[1]-HO*ps,COL.red,3); arrowHead(ctx,op[0],op[1]-HO*ps,-Math.PI/2,COL.red,8);
+    textAt(ctx,'toy',op[0],op[1]+16,{align:'center',size:11,weight:600,color:COL.red});
+    if(isFinite(im.x)&&Math.abs(im.x)<4*o.uMax){ const ip=M([im.x,0]), L=clamp(im.m,-30,30)*HO*ps;
+      line(ctx,ip[0],ip[1],ip[0],ip[1]-L,COL.red,2.6,im.real?null:[5,4]); arrowHead(ctx,ip[0],ip[1]-L,L>0?-Math.PI/2:Math.PI/2,COL.red,8);
+      textAt(ctx,'image',ip[0],L>0?ip[1]-L-10:ip[1]-L+18,{align:'center',size:11,weight:600,color:COL.red}); }
+    // eye
+    const eyeP=o.isMirror?M([-u*0.45-3, HO*2.4]):M([Math.min(cam.R-3,2.4*F+2),HO*1.6]);
+    ctx.save(); ctx.translate(eyeP[0],eyeP[1]); eyeIcon(ctx,0,0,9,o.isMirror?1:-1); ctx.restore();
+    const ec=M([o.isMirror?0:e.surfs[0].x,0]); line(ctx,eyeP[0]+(o.isMirror?4:-4),eyeP[1],ec[0],ec[1]-4,COL.green,1.3,[3,5]);
+    ctx.restore();
+    textAt(ctx,'side view · '+e.name.toLowerCase()+' '+o.noun,14,dTop+14,{size:11,weight:600,color:COL.muted});
+
+    // ---------- read-outs
+    $('#vU').textContent=fmt(uT,1)+' cm';
+    htmlIfChanged($('#now'),o.elems.map((e,i)=>{ const d=describe(ims[i]); return `<tr><td><b>${e.name}</b></td><td class="${d[2]}">${d[0]}</td><td>${d[1]}</td></tr>`; }).join(''));
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   10.3 IMAGES IN CONCAVE, CONVEX AND PLANE MIRRORS
+   Mirrors: aperture 12 cm, radius of curvature 24 cm → f = ±12 cm.
+   Toy starts 3–4 cm away (as in the book) and walks back to 60 cm.
+   ===================================================================== */
+function buildA3(){
+  const S=(c)=>[{x:0,c,h:6,kind:'mirror'}];
+  return buildBench({
+    isMirror:true, noun:'mirror', distLabel:'Toy from the mirrors', uShort:'Toy at', uMin:2, uMax:60, u0:3.5,
+    hint:'f = ±12 cm · every mirror shows lateral inversion',
+    elems:[{name:'Concave',surfs:S(-1/24)},{name:'Convex',surfs:S(1/24)},{name:'Plane',surfs:S(0)}],
+    frame(ctx,cx,cy,R,e){
+      rect(ctx,cx-R*0.35,cy+R+2,R*0.7,R*0.22,COL.ink,'#fff',2);
+      circ(ctx,cx,cy,R,COL.ink,e.name==='Concave'?'#eaf1f8':(e.name==='Convex'?'#f4f7fb':'#f0f4f8'),3);
+      ctx.save(); ctx.globalAlpha=0.9; ctx.strokeStyle='#fff'; ctx.lineWidth=4;
+      if(e.name==='Concave'){ ctx.beginPath(); ctx.arc(cx,cy,R*0.82,Math.PI*0.2,Math.PI*0.45); ctx.stroke(); }
+      else if(e.name==='Convex'){ ctx.beginPath(); ctx.arc(cx-R*0.35,cy-R*0.4,R*0.12,0,Math.PI*2); ctx.stroke(); }
+      else { line(ctx,cx+R*0.3,cy-R*0.6,cx+R*0.6,cy-R*0.3,'#fff',4); }
+      ctx.restore();
+    },
+    drawSide(ctx,e,M){ drawMirrorSurf(ctx,e.surfs[0],M,1); }
+  });
+}
+
+/* =====================================================================
+   10.4 LAW OF REFLECTION — seen from above, on the sheet of paper
+   The torch swings on a spring-damper around O. The reflected beam is
+   computed from the vector law  r̂ = d̂ − 2(d̂·n̂)n̂  (never from "r = i"),
+   so the equality of the angles is a result the student measures.
+   Hand-drawn lines on paper wobble by ≈ ±1°, as they do in the notebook.
+   ===================================================================== */
+function buildA4(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML=`
+    <div class="control-group"><label>Swing the torch <span class="val" id="vI"></span></label><input type="range" id="iS" min="-75" max="75" step="1" value="35">
+      <button class="toggle-btn" id="zero" style="width:100%;margin-top:8px">Shine along the normal</button></div>
+    <div class="control-group"><div class="toggle-group"><button class="toggle-btn" id="nrm">✎ Draw the normal</button><button class="toggle-btn" id="pro">◠ Protractor</button></div>
+      <button class="toggle-btn play" id="rec" style="width:100%;margin-top:8px;padding:8px">📝 Trace & record</button></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Angle of incidence i</div><div class="rval" id="ri" style="color:var(--f-yellow)">—</div></div>
+      <div class="rcard"><div class="rlabel">Angle of reflection r</div><div class="rval" id="rr" style="color:var(--f-blue)">—</div></div></div><div class="fb" id="fb"></div></div>
+    <div class="control-group"><label>Table 10.1 <button class="chip-btn" id="clr" style="padding:2px 8px">clear</button></label><table class="log"><thead><tr><th>No.</th><th>i</th><th>r</th></tr></thead><tbody id="tb"><tr><td colspan="3">—</td></tr></tbody></table></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  let iT=35, showN=false, showP=false, t=0, nGrow=0, pGrow=0, rows=[], traces=[];
+  const A={x:35,v:0};
+  $('#iS').oninput=e=>{ iT=+e.target.value; };
+  $('#zero').onclick=()=>{ iT=0; $('#iS').value=0; };
+  $('#nrm').onclick=()=>{ showN=!showN; $('#nrm').classList.toggle('active',showN); };
+  $('#pro').onclick=()=>{ showP=!showP; $('#pro').classList.toggle('active',showP); };
+  $('#clr').onclick=()=>{ rows=[]; traces=[]; };
+  $('#rec').onclick=()=>{ if(rows.length>=8) rows.shift(), traces.shift();
+    const e1=gauss()*0.6, e2=gauss()*0.6; const ia=Math.abs(A.x);
+    rows.push([Math.round(ia+e1),Math.round(ia+e2)]); traces.push({a:A.x+e1*Math.sign(A.x||1),b:A.x+e2*Math.sign(A.x||1),n:rows.length,k:(traces.length?traces[traces.length-1].k:0)+1}); if(!showN){ showN=true; $('#nrm').classList.add('active'); } };
+
+  animLoop(dt=>{
+    t+=dt;
+    const ang=springTo(A,iT,22,6.5,dt), ai=ang*Math.PI/180;
+    nGrow=approach(nGrow,showN?1:0,5,dt); pGrow=approach(pGrow,showP?1:0,6,dt);
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const Ox=w/2, Oy=h*0.2, Rt=Math.min(h*0.64,w*0.42), Lr=Math.min(Rt*1.05,Math.hypot(w/2,h));
+    // paper sheet
+    ctx.save(); ctx.fillStyle='#fdfdfb'; ctx.strokeStyle=COL.mid; ctx.lineWidth=1.2; ctx.fillRect(w*0.05,Oy-6,w*0.9,h*0.78); ctx.strokeRect(w*0.05,Oy-6,w*0.9,h*0.78); ctx.restore();
+    // earlier pencil traces
+    traces.forEach(tr=>{ const a=tr.a*Math.PI/180, b=tr.b*Math.PI/180, L=Rt*0.95;
+      line(ctx,Ox,Oy,Ox+Math.sin(a)*L,Oy+Math.cos(a)*L,'#9aa7b6',1.2); line(ctx,Ox,Oy,Ox-Math.sin(b)*L,Oy+Math.cos(b)*L,'#9aa7b6',1.2);
+      textAt(ctx,String(tr.k),Ox+Math.sin(a)*(L+10),Oy+Math.cos(a)*(L+10)+4,{align:'center',size:10,weight:600,color:'#9aa7b6'});
+      textAt(ctx,String(tr.k),Ox-Math.sin(b)*(L+10),Oy+Math.cos(b)*(L+10)+4,{align:'center',size:10,weight:600,color:'#9aa7b6'}); });
+    // protractor (slides in)
+    if(pGrow>0.02){ const Rp=Rt*0.42*pGrow; ctx.save(); ctx.globalAlpha=pGrow;
+      ctx.beginPath(); ctx.arc(Ox,Oy,Rp,0,Math.PI); ctx.closePath(); ctx.fillStyle='rgba(47,143,224,0.06)'; ctx.fill(); ctx.strokeStyle=COL.muted; ctx.lineWidth=1.4; ctx.stroke();
+      for(let d=0;d<=180;d+=5){ const a=d*Math.PI/180, L=d%10===0?9:5; line(ctx,Ox+Math.cos(a)*Rp,Oy+Math.sin(a)*Rp,Ox+Math.cos(a)*(Rp-L),Oy+Math.sin(a)*(Rp-L),COL.muted,1);
+        if(d%30===0&&Rp>60) textAt(ctx,String(Math.abs(90-d)),Ox+Math.cos(a)*(Rp-20),Oy+Math.sin(a)*(Rp-20)+4,{align:'center',size:9.5,weight:600,color:COL.muted}); }
+      ctx.restore(); }
+    // mirror (seen from above) with its stand; back is hatched
+    const mw=w*0.36; line(ctx,Ox-mw,Oy,Ox+mw,Oy,COL.ink,4);
+    ctx.save(); ctx.strokeStyle=COL.muted; ctx.lineWidth=1.2; for(let x=Ox-mw+6;x<Ox+mw;x+=11){ ctx.beginPath(); ctx.moveTo(x,Oy-2); ctx.lineTo(x+7,Oy-10); ctx.stroke(); } ctx.restore();
+    rect(ctx,Ox-mw*0.3,Oy-26,mw*0.6,12,COL.ink,'#fff',2);
+    textAt(ctx,'plane mirror',Ox+mw,Oy-12,{align:'right',size:11,weight:600,color:COL.muted});
+    // normal, drawn like a pencil line growing from O
+    if(nGrow>0.01){ const L=Rt*0.98*nGrow; line(ctx,Ox,Oy,Ox,Oy+L,COL.green,2,[7,5]); if(nGrow>0.8) textAt(ctx,'normal',Ox+6,Oy+L-4,{size:11,weight:700,color:COL.green}); }
+    // torch + slit
+    const tx=Ox+Math.sin(ai)*Rt, ty=Oy+Math.cos(ai)*Rt, ta=Math.atan2(Oy-ty,Ox-tx);
+    const sl=torch(ctx,tx,ty,ta,Math.max(9,Rt*0.05),1,0,true)[0];
+    // incident and reflected beams (vector law of reflection)
+    const d=[Ox-sl[0],Oy-sl[1]], dl=Math.hypot(d[0],d[1]); const dh=[d[0]/dl,d[1]/dl], n=[0,1], dn=dh[0]*n[0]+dh[1]*n[1];
+    const rd=[dh[0]-2*dn*n[0], dh[1]-2*dn*n[1]];
+    lightPath(ctx,[sl,[Ox,Oy],[Ox+rd[0]*Lr,Oy+rd[1]*Lr]],t,[COL.yellow,COL.blue],{w:3,speed:110});
+    dot(ctx,Ox,Oy,4,null,COL.ink); textAt(ctx,'O',Ox-12,Oy+16,{size:12,weight:700,color:COL.ink});
+    // angles (between the normal and each ray)
+    const iMeas=Math.abs(ang), rMeas=Math.abs(Math.atan2(rd[0],rd[1])*180/Math.PI);
+    if(nGrow>0.6&&Math.abs(ang)>1.5){ const ra=Rt*0.22, na=Math.PI/2, ia2=Math.atan2(sl[1]-Oy,sl[0]-Ox), ra2=Math.atan2(rd[1],rd[0]);
+      angleArc(ctx,Ox,Oy,ra,na,ia2,COL.yellow,'i',2.4); angleArc(ctx,Ox,Oy,ra*0.82,na,ra2,COL.blue,'r',2.4); }
+
+    // read-outs
+    $('#vI').textContent=Math.round(Math.abs(iT))+'°'+(iT<0?' (left)':iT>0?' (right)':'');
+    $('#ri').textContent=fmt(iMeas,0)+'°'; $('#rr').textContent=fmt(rMeas,0)+'°';
+    const fb=$('#fb');
+    if(Math.abs(ang)<0.8){ fb.className='fb ok'; fb.textContent='Along the normal: i = r = 0°. The beam comes straight back.'; }
+    else if(!showN){ fb.className='fb warn'; fb.textContent='Draw the normal at O to measure the angles.'; }
+    else { fb.className='fb ok'; fb.textContent='i = r'; }
+    htmlIfChanged($('#tb'),rows.length?rows.map((r,k)=>`<tr><td>${traces[k].k}</td><td>${r[0]}°</td><td>${r[1]}°</td></tr>`).join(''):'<tr><td colspan="3">—</td></tr>');
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   10.5 INCIDENT RAY, NORMAL AND REFLECTED RAY LIE IN ONE PLANE
+   3-D scene (cm): table top z = 0 for x ≤ 6, chart paper overhanging the
+   edge to x = 26. The beam skims the paper 3 mm above it and only shows up
+   where paper lies under it. Bending the flap by β lowers the paper under
+   the beam by (x − 6)·tan β, so the streak survives only for
+   x − 6 < 2 mm / tan β — the beam itself goes on, unseen, in the old plane.
+   ===================================================================== */
+function buildA5(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML=`
+    <div class="control-group"><label>Bend the paper down <span class="val" id="vB"></span></label><input type="range" id="bS" min="0" max="90" step="1" value="0">
+      <div class="toggle-group"><button class="toggle-btn" id="bend">⤵ Bend</button><button class="toggle-btn" id="flat">⟶ Flatten</button></div></div>
+    <div class="control-group"><label>Angle of incidence <span class="val" id="vI"></span></label><input type="range" id="iS" min="10" max="35" step="1" value="24"></div>
+    <div class="control-group"><label>Walk around the table <span class="val" id="vA"></span></label><input type="range" id="aS" min="-70" max="20" step="1" value="-28"></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard wide"><div class="rlabel">Reflected beam on the bent part</div><div class="rval" id="rv">—</div></div></div><div class="fb" id="fb"></div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const XE=6, XF=26, YA=-12, YB=26, XM=-10, ZB=0.3;
+  let bT=0, iT=24, aT=-28, t=0; const B={x:0,v:0}, I={x:24,v:0}, AZ={x:-28,v:0};
+  $('#bS').oninput=e=>{ bT=+e.target.value; };
+  $('#iS').oninput=e=>{ iT=+e.target.value; };
+  $('#aS').oninput=e=>{ aT=+e.target.value; };
+  $('#bend').onclick=()=>{ bT=80; $('#bS').value=80; };
+  $('#flat').onclick=()=>{ bT=0; $('#bS').value=0; };
+
+  animLoop(dt=>{
+    t+=dt;
+    const be=clamp(springTo(B,bT,18,5,dt),-4,95)*Math.PI/180, ia=springTo(I,iT,20,7,dt)*Math.PI/180, az=springTo(AZ,aT,12,6,dt)*Math.PI/180, el=0.62;
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const ca=Math.cos(az), sa=Math.sin(az), ce=Math.cos(el), se=Math.sin(el);
+    const ps=Math.min(w/60,h/40), cx=w*0.5, cy=h*0.5, X0=4, Y0=6;
+    const P=(x,y,z)=>{ x-=X0; y-=Y0; const x1=x*ca-y*sa, y1=x*sa+y*ca; return [cx+x1*ps, cy-(z*ce+y1*se)*ps]; };
+    const poly=(pts,stroke,fill,lw)=>{ ctx.save(); ctx.beginPath(); pts.forEach((q,i)=>{ const p=P(...q); ctx[i?'lineTo':'moveTo'](p[0],p[1]); }); ctx.closePath(); if(fill){ ctx.fillStyle=fill; ctx.fill(); } if(stroke){ ctx.strokeStyle=stroke; ctx.lineWidth=lw||1.6; ctx.lineJoin='round'; ctx.stroke(); } ctx.restore(); };
+    const flapPt=(s,y)=>[XE+s*Math.cos(be),y,-s*Math.sin(be)];
+
+    // table (top + visible side faces)
+    const TX0=-16, TY0=-16, TY1=30, TZ=-3.2;
+    poly([[XE,TY0,0],[XE,TY1,0],[XE,TY1,TZ],[XE,TY0,TZ]],COL.ink,'#eef2f8',2);
+    poly([[TX0,TY0,0],[XE,TY0,0],[XE,TY0,TZ],[TX0,TY0,TZ]],COL.ink,'#f3f6fa',2);
+    poly([[TX0,TY0,0],[XE,TY0,0],[XE,TY1,0],[TX0,TY1,0]],COL.ink,'#f8fafc',2);
+    // chart paper: flat part and the flap
+    poly([[-14,YA,0.02],[XE,YA,0.02],[XE,YB,0.02],[-14,YB,0.02]],COL.mid,'#fffef8',1.4);
+    poly([flapPt(0,YA),flapPt(XF-XE,YA),flapPt(XF-XE,YB),flapPt(0,YB)],COL.mid,be>0.03?'#fbf8ee':'#fffef8',1.6);
+    // mirror standing upright at x = −10, facing +x (back hatched)
+    poly([[XM-0.6,-7,0],[XM-0.6,7,0],[XM-0.6,7,6.5],[XM-0.6,-7,6.5]],COL.muted,'#e9eef5',1.4);
+    poly([[XM,-7,0],[XM,7,0],[XM,7,6.5],[XM,-7,6.5]],COL.ink,'rgba(234,241,248,0.92)',2.6);
+    poly([[XM-3,-2,0],[XM-0.6,-2,0],[XM-0.6,-2,2.5],[XM-3,-2,0]],COL.ink,'#fff',1.6);
+    poly([[XM-3,2,0],[XM-0.6,2,0],[XM-0.6,2,2.5],[XM-3,2,0]],COL.ink,'#fff',1.6);
+    // normal at O (green, on the paper)
+    const O=[XM,0];
+    { const a=P(XM,0,0.05), b=P(XM+13,0,0.05); line(ctx,a[0],a[1],b[0],b[1],COL.green,2,[7,5]); textAt(ctx,'normal',b[0]+6,b[1]+4,{size:11,weight:700,color:COL.green}); }
+
+    // beams: torch → O (yellow), O → edge (blue), then on the flap only while paper is under the beam
+    const T=[XM+15*Math.cos(ia),-15*Math.sin(ia)], rdir=[Math.cos(ia),Math.sin(ia)];
+    const sEdge=(XE-XM)/rdir[0], E=[XM+rdir[0]*sEdge,rdir[1]*sEdge], sEnd=(XF-XM)/rdir[0];
+    const seenS=be<0.005?Infinity:0.2/Math.tan(be);              // how far past the edge the streak is still on paper
+    const sFlapEnd=Math.min(sEnd-sEdge, seenS*1/rdir[0]);
+    const streak=[P(T[0],T[1],0.05),P(XM,0,0.05),P(E[0],E[1],0.05)];
+    for(let k=1;k<=10;k++){ const s=sFlapEnd*k/10, x=E[0]+rdir[0]*s, y=E[1]+rdir[1]*s; streak.push(P(...flapPt(x-XE,y))); if(y>YB) break; }
+    lightPath(ctx,streak,t,[COL.yellow,COL.blue],{w:3,speed:95});
+    // the beam that is no longer on paper: still there, but invisible
+    if(sFlapEnd<sEnd-sEdge-0.3){ const a=[E[0]+rdir[0]*sFlapEnd,E[1]+rdir[1]*sFlapEnd], b=[XM+rdir[0]*sEnd*1.05,rdir[1]*sEnd*1.05];
+      const pa=P(a[0],a[1],ZB), pb=P(b[0],b[1],ZB); line(ctx,pa[0],pa[1],pb[0],pb[1],COL.blue,1.6,[3,6]);
+      textAt(ctx,'beam in the air — nothing to show it',pb[0]-4,pb[1]-10,{align:'right',size:10.5,weight:600,color:COL.blue}); }
+    // torch
+    { const pt=P(T[0],T[1],0.4), pd=P(T[0]-Math.cos(ia),T[1]+Math.sin(ia),0.4); const ang=Math.atan2(pd[1]-pt[1],pd[0]-pt[0]); torch(ctx,pt[0],pt[1],ang,Math.max(6,ps*0.9),1,0,true); }
+    { const p=P(XM,0,0); dot(ctx,p[0],p[1],3.5,null,COL.ink); textAt(ctx,'O',p[0]-14,p[1]+4,{size:12,weight:700}); }
+    { const p=P(XE,YB+1,0); textAt(ctx,'table edge',p[0],p[1]-6,{align:'center',size:10.5,weight:600,color:COL.muted}); }
+
+    // read-outs
+    const vis=sFlapEnd>(sEnd-sEdge)*0.95, part=sFlapEnd>0.5;
+    $('#vB').textContent=Math.round(bT)+'°'; $('#vI').textContent=Math.round(iT)+'°'; $('#vA').textContent=aT<-5?'left':(aT>5?'right':'front');
+    $('#rv').textContent=vis?'Seen':(part?'Only near the edge':'Not seen'); $('#rv').style.color=vis?COL.green:COL.red;
+    const fb=$('#fb');
+    if(vis){ fb.className='fb ok'; fb.textContent='Incident ray, normal and reflected ray all lie on the paper — one plane.'; }
+    else { fb.className='fb bad'; fb.textContent='The bent paper is a new plane. The reflected ray stays in the old one.'; }
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   PARALLEL BEAMS (used by 10.6 mirrors and 10.10 lenses)
+   Torch + comb on white paper (seen from above). Each opening lets through
+   one beam; each beam is traced exactly (reflection / Snell's law, glass
+   n = 1.5). Switching the element bends it through flat on a spring, so
+   the beams swing continuously from parallel to converging to diverging.
+   Edge beams cross the axis a little early — real spherical aberration.
+   ===================================================================== */
+function buildParallel(o){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML=`
+    <div class="control-group"><label>${o.pick}</label><div class="toggle-group">${o.types.map((ty,i)=>`<button class="toggle-btn${i===o.t0?' active':''}" data-k="${i}">${ty.name}</button>`).join('')}</div></div>
+    <div class="control-group"><label>How curved <span class="val" id="vR"></span></label><input type="range" id="rS" min="${o.rMin}" max="${o.rMax}" step="1" value="${o.r0}">
+      <div class="hint" style="display:flex;justify-content:space-between;margin-top:2px"><span>more curved</span><span>flatter</span></div></div>
+    <div class="control-group"><label>Openings in the comb <span class="val" id="vN"></span></label><input type="range" id="nS" min="1" max="9" step="1" value="7"></div>
+    <div class="control-group"><label>Tilt the torch <span class="val" id="vT"></span></label><input type="range" id="tS" min="-15" max="15" step="1" value="0">
+      <div class="toggle-group"><button class="toggle-btn" id="nrm">Show normals</button></div></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Beams come out</div><div class="rval" id="rk">—</div></div>
+      <div class="rcard"><div class="rlabel">Focal length</div><div class="rval" id="rf">—</div></div></div><div class="fb" id="fb"></div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  let kT=o.t0, R=o.r0, N=7, tilt=0, showN=false, t=0;
+  const K={x:o.types[o.t0].s/o.r0,v:0}, TL={x:0,v:0};
+  toggleWire([...wrap.querySelectorAll('[data-k]')],b=>{ kT=+b.dataset.k; });
+  $('#rS').oninput=e=>{ R=+e.target.value; };
+  $('#nS').oninput=e=>{ N=+e.target.value; };
+  $('#tS').oninput=e=>{ tilt=+e.target.value; };
+  $('#nrm').onclick=()=>{ showN=!showN; $('#nrm').classList.toggle('active',showN); };
+
+  animLoop(dt=>{
+    t+=dt;
+    const k=springTo(K,o.types[kT].s/R,90,11,dt), th=springTo(TL,tilt,30,9,dt)*Math.PI/180;
+    const el=o.element(k), surfs=el.surfs;
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const ps=Math.min((w-30)/(o.xR-o.xL),h/(2*o.hh+10)), ox=15-o.xL*ps, oy=h/2;
+    const M=p=>[ox+p[0]*ps, oy-p[1]*ps];
+    // paper + axis
+    ctx.save(); ctx.fillStyle='#fdfdfb'; ctx.fillRect(8,8,w-16,h-16); ctx.strokeStyle=COL.mid; ctx.lineWidth=1.2; ctx.strokeRect(8,8,w-16,h-16); ctx.restore();
+    line(ctx,M([o.xL,0])[0],oy,M([o.xR,0])[0],oy,COL.mid,1,[6,6]);
+    o.extras&&o.extras(ctx,M,ps);
+    // comb openings (world), pivoting with the torch about (xc, 0)
+    const spread=o.hh*0.78, pitch=N>1?2*spread/(N-1):0, cs=Math.cos(th), sn=Math.sin(th);
+    const opens=[]; for(let i=0;i<N;i++){ const y=N>1?-spread+pitch*i:0; opens.push([o.xc-y*sn, y*cs]); }
+    // trace
+    const stops=o.isMirror?[{x:o.xc-0.6,c:0,h:50,kind:'stop'}]:[];
+    const F=focusOf(surfs,o.xc), flat=!(isFinite(F)&&Math.abs(F)<400);
+    const outs=[];
+    opens.forEach((p,i)=>{
+      const r=traceRay(p,[cs,sn],surfs.concat(stops),{far:200});
+      const P=r.pts.map(M);
+      const cols=o.isMirror?[COL.yellow,COL.blue]:(r.pts.length>3?[COL.yellow,'#7fb6e6',COL.blue]:[COL.yellow]);
+      lightPath(ctx,P,t+i*0.07,cols,{w:2.2,speed:90,arrows:i===0||i===N-1});
+      outs.push(r);
+      if(showN) r.hits.forEach(hh=>{ if(hh.i>=surfs.length) return; const a=M(hh.pt), L=o.isMirror&&!flat?Math.abs(1/k):6;
+        const b=M([hh.pt[0]+hh.n[0]*L,hh.pt[1]+hh.n[1]*L]); line(ctx,a[0],a[1],b[0],b[1],COL.green,1.2,[4,4]); });
+      // diverging: trace the outgoing beam backwards (it seems to come from F)
+      if(!flat&&o.diverges(k)&&r.pts.length>=3){ const q=r.pts[r.pts.length-2], d=r.d, s=(F-q[0])/d[0]; if(s<0&&s>-200){ const a=M(q), b=M([q[0]+d[0]*s*1.02,q[1]+d[1]*s*1.02]); line(ctx,a[0],a[1],b[0],b[1],COL.blue,1.1,[3,5]); } }
+    });
+    o.drawEl(ctx,el,M);
+    // torch + comb
+    { const c=M([o.xc,0]), ang=-th, u=(spread+1.2)*ps/1.5;
+      const tp=[c[0]-Math.cos(ang)*0.9*u, c[1]-Math.sin(ang)*0.9*u]; torch(ctx,tp[0],tp[1],ang,u,N,pitch*ps,true); }
+    // F (and C for mirrors)
+    if(!flat){ const fp=M([F,0]); dot(ctx,fp[0],fp[1],4.5,null,COL.green); textAt(ctx,'F',fp[0],fp[1]+18,{align:'center',size:12,weight:700,color:COL.green});
+      if(o.isMirror&&showN){ const cp=M([2*F,0]); if(cp[0]>10&&cp[0]<w-10){ dot(ctx,cp[0],cp[1],4,null,COL.green); textAt(ctx,'C',cp[0],cp[1]+18,{align:'center',size:12,weight:700,color:COL.green}); } } }
+    // read-outs
+    $('#vR').textContent=R+' cm'; $('#vN').textContent=N; $('#vT').textContent=Math.round(tilt)+'°';
+    const kind=flat||Math.abs(k)<1e-3?'Parallel':(o.diverges(k)?'Diverging':'Converging');
+    $('#rk').textContent=kind; $('#rk').style.color=kind==='Parallel'?COL.ink:(kind==='Diverging'?COL.red:COL.green);
+    $('#rf').textContent=flat?'—':fmt(Math.abs(F-(o.isMirror?0:0)),1)+' cm';
+    const fb=$('#fb'); fb.className='fb ok'; fb.textContent=o.say[kind];
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   10.6 PARALLEL BEAMS ON PLANE, CONCAVE AND CONVEX MIRRORS
+   Radius of curvature R → focal length f = R/2 for near-axis beams.
+   ===================================================================== */
+function buildA6(){
+  return buildParallel({
+    isMirror:true, pick:'Mirror', t0:1, rMin:16, rMax:60, r0:30, xL:-52, xR:8, xc:-34, hh:9,
+    types:[{name:'Plane',s:0},{name:'Concave',s:-1},{name:'Convex',s:1}],
+    element:k=>({surfs:[{x:0,c:k,h:9,kind:'mirror'}]}),
+    diverges:k=>k>1e-4,
+    drawEl(ctx,el,M){ drawMirrorSurf(ctx,el.surfs[0],M,1); },
+    say:{Parallel:'Plane mirror: parallel beams stay parallel.',Converging:'Concave mirror: the beams converge towards F.',Diverging:'Convex mirror: the beams diverge — they seem to come from F behind it.'}
+  });
+}
+
+/* =====================================================================
+   SUNLIGHT ON PAPER (used by 10.7 concave mirror and 10.11 convex lens)
+   Local frame: sunlight travels +x (straight down the screen).
+   81 rays are traced across the aperture every frame; where they land on
+   the paper gives the spot radius (a cone of radius a·|1 − d/f| for a
+   perfect lens) — combined with the Sun's own image, radius ≈ 0.0047·d.
+     concentration C = efficiency × collected area ÷ spot area
+   and the paper follows the energy balance of section 0e.
+   ===================================================================== */
+function buildBurn(o){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML=`
+    <div class="control-group"><label>${o.dLabel} <span class="val" id="vD"></span></label><input type="range" id="dS" min="3" max="40" step="0.5" value="${o.d0}"></div>
+    <div class="control-group"><label>Paper</label><div class="toggle-group"><button class="toggle-btn" data-p="0.25">White</button><button class="toggle-btn active" data-p="0.4">Newspaper</button><button class="toggle-btn" data-p="0.9">Black</button></div>
+      <div class="toggle-group"><button class="toggle-btn" id="cloud">☁ Cloud passes</button><button class="toggle-btn" id="fresh">↺ New sheet</button></div></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Bright spot</div><div class="rval" id="rs">—</div></div>
+      <div class="rcard"><div class="rlabel">Sunlight ×</div><div class="rval" id="rc">—</div></div>
+      <div class="rcard"><div class="rlabel">Paper</div><div class="rval" id="rt">—</div></div>
+      <div class="rcard"><div class="rlabel">State</div><div class="rval" id="rk">—</div></div></div>
+      <div class="fb" id="fb"></div><div class="hint">${o.hint}</div></div>
+    <div class="control-group" style="border-color:var(--f-red)"><div class="hint" style="margin-top:0;color:var(--f-red);font-weight:600">⚠ Never look at the Sun or into the focused light. Do this only with a teacher.</div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  let dT=o.d0, alpha=0.4, cloud=false, t=0, b=burnNew(), Sk=1;
+  const D={x:o.d0,v:0};
+  $('#dS').oninput=e=>{ dT=+e.target.value; };
+  toggleWire([...wrap.querySelectorAll('[data-p]')],x=>{ alpha=+x.dataset.p; });
+  $('#cloud').onclick=()=>{ cloud=!cloud; $('#cloud').classList.toggle('active',cloud); };
+  $('#fresh').onclick=()=>{ b=burnNew(); };
+
+  animLoop(dt=>{
+    t+=dt;
+    const d=springTo(D,dT+0.08*Math.sin(t*1.7)+0.05*Math.sin(t*4.3),10,5.5,dt);     // a hand is never perfectly still
+    Sk=approach(Sk,cloud?0.12:1,1.5,dt);
+    const sc=o.scene(d);                          // {surfs, paper:{x,h}, a, eff, xTop}
+    // ---- spot from 81 traced rays
+    let sw=0, s2=0;
+    for(let i=0;i<=80;i++){ const y0=-sc.a+2*sc.a*i/80; if(Math.abs(y0)<1e-6) continue;
+      if(Math.abs(y0)<sc.block) continue;                     // in the paper's own shadow
+      const r=traceRay([sc.xTop,y0],[1,0],sc.optic,{far:50}); if(!r.hits.length) continue;
+      const q=r.pts[r.pts.length-2], dd=r.d, s=(sc.paper.x-q[0])/dd[0]; if(!(s>0)) continue;
+      const yh=q[1]+dd[1]*s; sw+=Math.abs(y0); s2+=Math.abs(y0)*yh*yh; }
+    const rGeo=sw>0?Math.sqrt(2*s2/sw):sc.a, rSpot=Math.sqrt(rGeo*rGeo+Math.pow(SUN_HALF*d,2)+0.04*0.04);
+    const Ccol=sc.eff*(sc.a*sc.a-sc.block*sc.block)/(rSpot*rSpot)*Sk;
+    burnStep(b,Math.max(Sk,Ccol),alpha,dt);
+    const Tc=paperTemp(b);
+
+    // ---------------- draw
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    const sideW=w*0.62, ps=Math.min((h-40)/(40+14),(sideW-40)/(2*sc.a+16)), cx=sideW*0.5;
+    const M=p=>[cx+p[1]*ps, o.y0(h,ps,d)+p[0]*ps];
+    // sun + faint general sunlight
+    sunIcon(ctx,32,32,14,t);
+    ctx.save(); ctx.globalAlpha=0.25*Sk; for(let y=-sc.a-6;y<=sc.a+6;y+=1.5){ if(Math.abs(y)<sc.a) continue; const a=M([sc.xTop,y]); line(ctx,a[0],Math.max(a[1],0),a[0],h-18,COL.yellow,1.2); } ctx.restore();
+    if(cloud||Sk<0.9){ const cx2=lerp(-80,90,clamp((1-Sk)/0.88,0,1)); ctx.save(); ctx.globalAlpha=clamp((1-Sk)*1.2,0,0.95); ctx.fillStyle='#fff'; ctx.strokeStyle=COL.mid; ctx.lineWidth=2;
+      ctx.beginPath(); [[0,0,16],[20,-8,20],[42,0,15],[20,6,16]].forEach(([x,y,r])=>{ ctx.moveTo(cx2+x+r,30+y); ctx.arc(cx2+x,30+y,r,0,Math.PI*2); }); ctx.fill(); ctx.stroke(); ctx.restore(); }
+    // traced sunlight
+    for(let i=0;i<=16;i++){ const y0=-sc.a*0.97+2*sc.a*0.97*i/16; const r=traceRay([sc.xTop,y0],[1,0],sc.surfs,{far:60});
+      lightPath(ctx,r.pts.map(M),t+i*0.05,o.cols,{w:1.7,speed:70,alpha:0.35+0.65*Sk,arrows:false}); }
+    o.drawScene(ctx,M,ps,d,b,t,h);
+    // smoke and flame at the spot
+    const sp=M([sc.paper.x,0]);
+    drawSmoke(ctx,b,sp[0],sp[1]+(o.flameUp?-3:-3),ps*1.4,t);
+    if(b.fire>0){ const fl=Math.min(1,b.fire*1.5); flameShape(ctx,sp[0],sp[1]-2,(1.2+2.4*fl)*ps,(0.5+0.6*fl)*ps,t,COL.red,COL.yellow,1); }
+
+    // ---------------- magnified view of the paper, face on
+    const Rz=Math.min((w-sideW)*0.44,h*0.26), zx=sideW+(w-sideW)/2, zy=Rz+30, zs=Rz/2.2;      // shows a 4.4 cm wide patch
+    zoomFrame(ctx,zx,zy,Rz,sp[0],sp[1],'the paper, close up',()=>{
+      ctx.fillStyle=alpha>0.8?'#3a4452':(alpha>0.3?'#ece7da':'#fbfbf8'); ctx.fillRect(zx-Rz,zy-Rz,2*Rz,2*Rz);
+      if(alpha>0.3&&alpha<0.8){ ctx.save(); ctx.strokeStyle='#b9b2a2'; ctx.lineWidth=1.2; for(let yy=zy-Rz+8;yy<zy+Rz;yy+=9){ const r2=rng(Math.floor(yy)); let x=zx-Rz+6; while(x<zx+Rz){ const L=6+r2()*18; line(ctx,x,yy,Math.min(x+L,zx+Rz),yy,'#b9b2a2',2); x+=L+4; } } ctx.restore(); }
+      const scorch=clamp(b.pyro,0,1), cr=(rSpot*1.3+0.1)*zs;
+      if(scorch>0.02){ const g=ctx.createRadialGradient(zx,zy,0,zx,zy,cr*(1+scorch)); g.addColorStop(0,'rgba(90,50,20,'+(0.9*scorch)+')'); g.addColorStop(1,'rgba(120,80,30,0)'); ctx.fillStyle=g; ctx.beginPath(); ctx.arc(zx,zy,cr*(1+scorch),0,Math.PI*2); ctx.fill(); }
+      if(b.hole>0){ const hr=b.hole*zs; ctx.save(); ctx.beginPath(); for(let k=0;k<=30;k++){ const a=k/30*Math.PI*2, rr=hr*(0.85+0.15*Math.sin(k*2.7+b.fire*2)); ctx[k?'lineTo':'moveTo'](zx+Math.cos(a)*rr,zy+Math.sin(a)*rr); } ctx.closePath(); ctx.fillStyle='#fff'; ctx.fill(); ctx.strokeStyle=COL.red; ctx.lineWidth=3; ctx.stroke(); ctx.restore(); }
+      const sr=Math.max(1.5,rSpot*zs), ga=Sk*clamp(0.2+0.27*Math.log10(Math.max(1,Ccol)),0.2,1), gl=ctx.createRadialGradient(zx,zy,0,zx,zy,sr); gl.addColorStop(0,'rgba(255,248,200,'+ga+')'); gl.addColorStop(0.7,'rgba(255,220,80,'+(0.75*ga)+')'); gl.addColorStop(1,'rgba(217,160,23,0)');
+      if(b.hole===0){ ctx.fillStyle=gl; ctx.beginPath(); ctx.arc(zx,zy,sr,0,Math.PI*2); ctx.fill(); circ(ctx,zx,zy,sr,COL.yellow,null,1.6); }
+      if(b.fire>0){ for(let k=0;k<6;k++){ const a=k/6*Math.PI*2+t*0.4, rr=b.hole*zs+4; flameShape(ctx,zx+Math.cos(a)*rr,zy+Math.sin(a)*rr,Rz*0.28,Rz*0.08,t,COL.red,COL.yellow,k); } }
+    });
+    // temperature gauge
+    { const gx=zx-Rz*0.6, g0=zy+Rz+60, gw=Rz*1.2, gh=12, fx=v=>gx+gw*clamp(v/400,0,1);
+      textAt(ctx,'paper temperature',gx,g0-8,{size:10.5,weight:600,color:COL.muted});
+      rect(ctx,gx,g0,gw,gh,COL.ink,'#fff',1.6); ctx.save(); ctx.fillStyle=Tc>233?COL.red:COL.yellow; ctx.fillRect(gx+1,g0+1,Math.max(0,fx(Tc)-gx-2),gh-2); ctx.restore();
+      line(ctx,fx(233),g0-4,fx(233),g0+gh+4,COL.red,2); textAt(ctx,'233 °C paper ignites',fx(233),g0+gh+16,{align:'center',size:10,weight:700,color:COL.red});
+      [0,100,200,300,400].forEach(v=>textAt(ctx,String(v),fx(v),g0+gh+30,{align:'center',size:9.5,color:COL.muted})); }
+
+    // ---------------- read-outs
+    $('#vD').textContent=fmt(dT,1)+' cm';
+    $('#rs').textContent=rSpot*20<1?'< 1 mm':fmt(rSpot*20,rSpot*20<10?1:0)+' mm';
+    $('#rc').textContent=fmt(Ccol,Ccol<10?1:0)+'×';
+    $('#rt').textContent=Math.round(Tc)+' °C'; $('#rt').style.color=Tc>233?COL.red:(Tc>120?COL.yellow:COL.ink);
+    const st=b.fire>0?['Burning!',COL.red]:(b.T>470?['Smoking',COL.yellow]:(Tc>60?['Warm',COL.yellow]:['Cool',COL.ink]));
+    $('#rk').textContent=st[0]; $('#rk').style.color=st[1];
+    const fb=$('#fb'), near=Math.abs(d-sc.f)<1.2;
+    if(b.fire>0){ fb.className='fb bad'; fb.textContent='The paper caught fire at the bright spot. Press "New sheet".'; }
+    else if(Sk<0.5){ fb.className='fb warn'; fb.textContent='Cloud: too little sunlight — the paper cools.'; }
+    else if(near){ fb.className='fb ok'; fb.textContent='Sharpest, brightest spot — hold it steady…'; }
+    else { fb.className='fb warn'; fb.textContent=d<sc.f?'Spot too big — move the paper farther.':'Spot too big — move the paper closer.'; }
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   10.7 CONCAVE MIRROR CONCENTRATES SUNLIGHT
+   Mirror aperture 12 cm, R = 30 cm → f = 15 cm, 85 % reflecting.
+   The paper strip (3 cm wide) blocks some sunlight — its shadow is traced.
+   ===================================================================== */
+function buildA7(){
+  const A=6, RR=30, PW=1.5;
+  return buildBurn({
+    dLabel:'Paper above the mirror', d0:24, hint:'f = 15 cm · Sun 1000 W/m²', cols:[COL.yellow,COL.blue],
+    y0:(h,ps,d)=>h-40,
+    scene:d=>({surfs:[{x:-d,c:0,h:PW,kind:'stop'},{x:0,c:-1/RR,h:A,kind:'mirror'}], optic:[{x:0,c:-1/RR,h:A,kind:'mirror'}], paper:{x:-d}, a:A, eff:0.85, block:PW, f:RR/2, xTop:-60}),
+    drawScene(ctx,M,ps,d,b,t,h){
+      const m={x:0,c:-1/RR,h:A}; drawMirrorSurf(ctx,m,M,1);
+      const s=M([2,0]); rect(ctx,s[0]-1.2*ps,s[1],2.4*ps,h-40-s[1]+2,COL.ink,'#fff',2); line(ctx,s[0]-5*ps,h-38,s[0]+5*ps,h-38,COL.ink,2.4);
+      // paper strip held by a hand from the right
+      const p0=M([-d,-PW]), pe=M([-d,PW]), p1=M([-d,A+3]); line(ctx,p0[0],p0[1],pe[0],pe[1],COL.ink,3.4); line(ctx,pe[0],pe[1],p1[0],p1[1],COL.mid,1.4);
+      if(b.hole>0){ const hc=M([-d,0]); line(ctx,hc[0]-Math.min(PW,b.hole)*ps,hc[1],hc[0]+Math.min(PW,b.hole)*ps,hc[1],'#fff',4); }
+      hand(ctx,p1[0]+12,p1[1],-1,40,0);
+      textAt(ctx,'paper',p0[0]-6,p0[1]+4,{align:'right',size:11,weight:600,color:COL.muted});
+      const f=M([-RR/2,0]); dot(ctx,f[0],f[1],3,null,COL.green); textAt(ctx,'F',f[0]-8,f[1]+4,{align:'right',size:11,weight:700,color:COL.green});
+    }
+  });
+}
+
+/* =====================================================================
+   10.8 A DROP OF WATER AS A LENS
+   The drop is a spherical cap of volume V and contact angle θ
+   (oiled glass ≈ 90°, clean glass ≈ 30°):
+     R = [3V / π(2 − 3cos θ + cos³θ)]^⅓,  base radius a = R sin θ,
+     height = R(1 − cos θ)
+   Water n = 1.33, glass strip n = 1.5, 2 mm thick. Rays from a letter are
+   traced up through glass and drop; the image is where they seem to come
+   from. A 20 µL drop on oiled glass: R ≈ 2.1 mm, f ≈ R/(n − 1) ≈ 6 mm,
+   letters look ≈ 2× bigger. The landing is shown in slow motion (×1/10):
+   the drop overshoots its resting shape and wobbles before it settles.
+   ===================================================================== */
+function buildA8(){
+  const wrap=labShell();
+  wrap.querySelector('.lab-side').innerHTML=`
+    <div class="control-group"><label>Glass strip</label><div class="toggle-group"><button class="toggle-btn active" data-c="90">Oiled</button><button class="toggle-btn" data-c="30">Clean</button></div></div>
+    <div class="control-group"><label>Drop size <span class="val" id="vV"></span></label><input type="range" id="vS" min="5" max="40" step="1" value="20">
+      <div class="toggle-group"><button class="toggle-btn play" id="put">💧 Put a drop</button><button class="toggle-btn" id="wipe">Wipe off</button></div></div>
+    <div class="control-group"><label>Lift the strip above the text <span class="val" id="vG"></span></label><input type="range" id="gS" min="0" max="12" step="0.5" value="0"></div>
+    <div class="control-group"><div class="result-cards">
+      <div class="rcard"><div class="rlabel">Drop surface</div><div class="rval" id="rs">—</div></div>
+      <div class="rcard"><div class="rlabel">Letters look</div><div class="rval" id="rm">—</div></div></div>
+      <div class="fb" id="fb"></div></div>`;
+  const $=s=>wrap.querySelector(s), canvas=$('canvas');
+  const TG=0.2, NW=1.33, NG=1.5, W=1.6;
+  let thT=90, V=20, gT=0, t=0, has=false, fall=-1, slow=0;
+  const TH={x:90,v:0}, GP={x:0,v:0};
+  const cap=(Vul,th)=>{ const v=Vul*1e-3, c=Math.cos(th*Math.PI/180), R=Math.cbrt(3*v/(Math.PI*(2-3*c+c*c*c))); return {R,a:R*Math.sin(th*Math.PI/180),hd:R*(1-c)}; };
+  toggleWire([...wrap.querySelectorAll('[data-c]')],b=>{ thT=+b.dataset.c; });
+  $('#vS').oninput=e=>{ V=+e.target.value; };
+  $('#gS').oninput=e=>{ gT=+e.target.value/10; };
+  $('#put').onclick=()=>{ has=false; fall=0; };
+  $('#wipe').onclick=()=>{ has=false; fall=-1; };
+  fall=0;                                           // start with a drop being placed
+
+  animLoop(dt0=>{
+    t+=dt0; slow=approach(slow,fall>=0?1:0,8,dt0);
+    const dt=dt0*(1-0.9*slow);                       // slow motion around the landing
+    const gap=springTo(GP,gT,30,9,dt0);
+    const r0=Math.cbrt(3*V*1e-3/(4*Math.PI));
+    let dropY=null;                                  // height of the falling drop's centre above the strip top (cm)
+    if(fall>=0){ fall+=dt; const z=1.4-0.5*981*fall*fall; dropY=z; if(z<=r0){ fall=-1; has=true; TH.x=165; TH.v=-40; } }
+    let th=has?clamp(springTo(TH,thT,900,9,dt),8,175):thT;
+    const cp=cap(V,th), top=gap+TG;
+    // optics: paper at x = 0, glass strip [gap, gap+0.2], drop cap above
+    const surfs=[{x:gap,c:0,h:W,kind:'glass',nL:1,nR:NG}];
+    if(has){ surfs.push({x:top,c:0,h:cp.a,kind:'glass',nL:NG,nR:NW},{x:top,c:0,h:(W-cp.a)/2,yc:(W+cp.a)/2,kind:'glass',nL:NG,nR:1},{x:top,c:0,h:(W-cp.a)/2,yc:-(W+cp.a)/2,kind:'glass',nL:NG,nR:1});
+      surfs.push({x:top+cp.hd,c:-1/cp.R,h:cp.a*0.999,kind:'glass',nL:NW,nR:1}); }
+    else surfs.push({x:top,c:0,h:W,kind:'glass',nL:NG,nR:1});
+    const im=has?imageOf(0,surfs,top+1):{x:0,m:1,real:false};
+    const m=clamp(im.m,-8,8);
+
+    const {ctx,w,h}=fitCanvas(canvas); ctx.clearRect(0,0,w,h);
+    // ---------------- side view (cross-section, magnified)
+    const sideW=w*0.46, ps=Math.min(sideW/1.7,(h-60)/3.1), cx=sideW/2, by=h-30-0.9*ps;
+    const M=p=>[cx+p[1]*ps, by-p[0]*ps];
+    textAt(ctx,'side view (magnified)',14,20,{size:11,weight:600,color:COL.muted});
+    ctx.save(); ctx.beginPath(); ctx.rect(0,0,sideW-2,h); ctx.clip();
+    // paper with a letter
+    { const a=M([0,-W]), b=M([0,W]); line(ctx,a[0],a[1],b[0],b[1],COL.ink,2.2); const l=M([0,0]); line(ctx,l[0]-0.08*ps,l[1]+2,l[0]+0.08*ps,l[1]+2,COL.red,4); textAt(ctx,'letter',l[0]+0.12*ps,l[1]+16,{size:10.5,weight:600,color:COL.red}); textAt(ctx,'paper with text',cx-0.8*ps+8,a[1]+16,{size:10.5,weight:600,color:COL.muted}); }
+    // glass strip
+    { const a=M([top,-W]), b=M([gap,W]); rect(ctx,a[0],a[1],b[0]-a[0],b[1]-a[1],COL.ink,'rgba(47,143,224,0.08)',2); textAt(ctx,'glass strip',cx+0.8*ps-10,a[1]-6,{align:'right',size:10.5,weight:600,color:COL.muted}); }
+    // rays from the top of the letter, traced up through glass and drop
+    const yo=0.08;
+    for(let k=-3;k<=3;k++){ const aim=has?cp.a*0.85*k/3:0.15*k/3; const r=traceRay([0,yo],[top-0,aim-yo],surfs,{far:3});
+      if(r.pts.length>6) continue; const P=r.pts.map(M); lightPath(ctx,P,t+k*0.1,[COL.yellow,'#7fb6e6','#7fb6e6',COL.blue],{w:1.6,speed:40,arrows:false});
+      if(has&&!im.real){ const q=r.pts[r.pts.length-2], d=r.d, s=(im.x-q[0])/d[0]; if(s<0&&s>-20){ const a=M(q), b=M([q[0]+d[0]*s,q[1]+d[1]*s]); line(ctx,a[0],a[1],b[0],b[1],COL.blue,1,[3,4]); } } }
+    // image of the letter (dashed, where the rays seem to come from)
+    if(has&&isFinite(im.x)&&Math.abs(im.x)<4&&Math.abs(m)<7){ const p=M([im.x,0]); line(ctx,p[0]-0.08*ps*Math.abs(m),p[1],p[0]+0.08*ps*Math.abs(m),p[1],COL.red,3,[5,4]); textAt(ctx,'image of the letter',p[0]-0.08*ps*Math.abs(m)-6,p[1]+4,{align:'right',size:10.5,weight:600,color:COL.red}); }
+    // the drop (settled or wobbling) and the falling drop
+    if(has){ ctx.save(); ctx.beginPath(); const c0=M([top+cp.hd-cp.R,0]); const a0=Math.PI/2-th*Math.PI/180;
+      ctx.moveTo(M([top,-cp.a])[0],M([top,0])[1]); ctx.arc(c0[0],c0[1],cp.R*ps,Math.PI+a0,-a0); ctx.closePath(); ctx.fillStyle='rgba(47,143,224,0.22)'; ctx.fill(); ctx.strokeStyle=COL.blue; ctx.lineWidth=2.4; ctx.stroke(); ctx.restore(); }
+    if(dropY!==null){ const p=M([top+dropY,0]); circ(ctx,p[0],p[1],r0*ps,COL.blue,'rgba(47,143,224,0.22)',2.2); }
+    // dropper
+    { const tip=M([top+1.5+(fall>=0?0:0.4*slow),0]); ctx.save(); ctx.strokeStyle=COL.ink; ctx.lineWidth=2.2; ctx.fillStyle='#fff'; ctx.beginPath(); ctx.moveTo(tip[0]-4,tip[1]); ctx.lineTo(tip[0]-0.14*ps,tip[1]-0.5*ps); ctx.lineTo(tip[0]-0.14*ps,tip[1]-1.3*ps); ctx.lineTo(tip[0]+0.14*ps,tip[1]-1.3*ps); ctx.lineTo(tip[0]+0.14*ps,tip[1]-0.5*ps); ctx.lineTo(tip[0]+4,tip[1]); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore(); }
+    ctx.restore();
+    if(slow>0.3) textAt(ctx,'slow motion ×1/10',sideW-10,20,{align:'right',size:11,weight:700,color:COL.green,alpha:slow});
+    line(ctx,sideW,16,sideW,h-16,COL.mid,1,[3,5]);
+
+    // ---------------- what you see from above
+    const vx=sideW+(w-sideW)/2, vy=h*0.47, VR=Math.min((w-sideW)*0.46,h*0.42), vs=VR/0.9;   // shows 1.8 cm across
+    textAt(ctx,'looking down through the drop',sideW+14,20,{size:11,weight:600,color:COL.muted});
+    const words=['LIGHT MIRRORS LENSES','A LENS IS A PIECE OF','TRANSPARENT MATERIAL','WITH CURVED SURFACES','CONVEX AND CONCAVE'];
+    const drawText=(sc,sx)=>{ ctx.save(); ctx.translate(vx,vy); ctx.scale(sc*sx,sc); ctx.fillStyle=COL.ink; ctx.font='600 '+(0.14*vs)+'px Poppins, sans-serif'; ctx.textAlign='center'; ctx.textBaseline='middle';
+      words.forEach((s,i)=>ctx.fillText(s,0,(i-2)*0.24*vs)); ctx.restore(); };
+    ctx.save(); ctx.beginPath(); ctx.arc(vx,vy,VR,0,Math.PI*2); ctx.fillStyle='#fdfdfb'; ctx.fill(); ctx.clip(); drawText(1,1);
+    if(has){ const ar=cp.a*vs; ctx.beginPath(); ctx.arc(vx,vy,ar,0,Math.PI*2); ctx.fillStyle='#fdfdfb'; ctx.fill(); ctx.save(); ctx.clip();
+      const bl=Math.min(8,Math.max(0,(Math.abs(m)-3)*1.5)+(m<0?2:0)); if(bl>0.3) ctx.filter='blur('+bl.toFixed(1)+'px)';
+      drawText(Math.abs(m),Math.sign(m)); ctx.filter='none'; ctx.restore();
+      ctx.save(); ctx.globalAlpha=0.9; ctx.beginPath(); ctx.arc(vx,vy,ar,0,Math.PI*2); ctx.strokeStyle=COL.blue; ctx.lineWidth=3; ctx.stroke();
+      ctx.beginPath(); ctx.arc(vx-ar*0.35,vy-ar*0.4,ar*0.12,0,Math.PI*2); ctx.fillStyle='rgba(255,255,255,0.9)'; ctx.fill(); ctx.restore(); }
+    if(dropY!==null){ const rr=r0*vs; ctx.save(); ctx.globalAlpha=0.6; circ(ctx,vx,vy,rr*(1+dropY*0.4),COL.blue,null,2); ctx.restore(); }
+    ctx.restore(); circ(ctx,vx,vy,VR,COL.ink,null,3);
+    // 1 cm scale bar
+    line(ctx,vx-vs/2,vy+VR+22,vx+vs/2,vy+VR+22,COL.ink,2); textAt(ctx,'1 cm',vx,vy+VR+38,{align:'center',size:10.5,weight:600,color:COL.muted});
+
+    // ---------------- read-outs
+    $('#vV').textContent=V+' µL'; $('#vG').textContent=fmt(gT*10,1)+' mm';
+    $('#rs').textContent=has?'Curved outward':'—';
+    $('#rm').textContent=has?(Math.abs(m)>7.5?'Blurred':(m<0?'Upside down ':'')+fmt(Math.abs(m),1)+'× bigger'):'—';
+    const fb=$('#fb');
+    if(!has){ fb.className='fb warn'; fb.textContent=fall>=0?'Drop falling…':'Put a drop on the strip.'; }
+    else if(m<0){ fb.className='fb bad'; fb.textContent='Too high above the text: the letters flip and blur.'; }
+    else if(thT<60){ fb.className='fb warn'; fb.textContent='On clean glass the drop spreads flat — it hardly magnifies.'; }
+    else { fb.className='fb ok'; fb.textContent='The curved drop acts like a convex lens: letters look bigger.'; }
+  });
+  return wrap;
+}
+
+/* =====================================================================
+   10.9 LOOKING AT AN OBJECT THROUGH A CONVEX AND A CONCAVE LENS
+   Symmetric glass lenses (n = 1.5), faces of radius 11.5 cm, 10 cm across
+   → traced focal length ≈ ±12 cm. The object sits behind the lens; you look
+   through from the other side. No lateral inversion through a lens —
+   an inverted image is simply turned upside down (rotated 180°).
+   ===================================================================== */
+function buildA9(){
+  const L=(s)=>{ const g=lensGeom(0,s/11.5,-s/11.5,5,0.25); return {g,surfs:lensSurfs(g,1.5)}; };
+  const cv=L(1), cc=L(-1);
+  return buildBench({
+    isMirror:false, noun:'lens', distLabel:'Object behind the lens', uShort:'Object at', uMin:2, uMax:60, u0:4,
+    hint:'f ≈ ±12 cm · you look from the other side',
+    elems:[{name:'Convex',surfs:cv.surfs,g:cv.g},{name:'Concave',surfs:cc.surfs,g:cc.g}],
+    frame(ctx,cx,cy,R,e){
+      rect(ctx,cx-4,cy+R,8,R*0.25,COL.ink,'#fff',2); rect(ctx,cx-R*0.35,cy+R*1.25,R*0.7,6,COL.ink,'#fff',2);
+      circ(ctx,cx,cy,R,COL.ink,'rgba(47,143,224,0.07)',3);
+      circ(ctx,cx,cy,R-5,e.name==='Convex'?'#9cc5ea':'#c9dbee',null,1.2);
+    },
+    drawSide(ctx,e,M){ drawLens(ctx,e.g,M); }
+  });
+}
+
+/* =====================================================================
+   10.10 PARALLEL BEAMS THROUGH A GLASS PLATE, A CONVEX AND A CONCAVE LENS
+   Symmetric lens, both faces of radius R, glass n = 1.5, aperture 12 cm.
+   Thin-lens estimate 1/f = (n − 1)(2/R) → f ≈ R; the traced value is a
+   little different because the real lens is thick.
+   The plate shifts each beam sideways inside the glass but does not turn it.
+   ===================================================================== */
+function buildA10(){
+  return buildParallel({
+    isMirror:false, pick:'Put in the stand', t0:1, rMin:9, rMax:40, r0:16, xL:-36, xR:44, xc:-22, hh:7,
+    types:[{name:'Glass plate',s:0},{name:'Convex',s:1},{name:'Concave',s:-1}],
+    element:k=>{ const g=lensGeom(0,k,-k,6,0.6); return {g,surfs:lensSurfs(g,1.5)}; },
+    diverges:k=>k<-1e-4,
+    extras(ctx,M){ // two books with paper on them, the lens stands in the gap
+      [[-15,-0.9],[0.9,15]].forEach(([a,b])=>{ const p=M([a,11]), q=M([b,-11]); rect(ctx,p[0],p[1],q[0]-p[0],q[1]-p[1],COL.mid,'#f7f9fc',1.2); });
+      const p=M([-15,11]); textAt(ctx,'books',p[0]+4,p[1]-6,{size:10.5,weight:600,color:COL.muted}); },
+    drawEl(ctx,el,M){ drawLens(ctx,el.g,M); },
+    say:{Parallel:'Glass plate: the beams pass through as they are.',Converging:'Convex lens: converging lens — the beams meet near F.',Diverging:'Concave lens: diverging lens — the beams spread as if from F.'}
+  });
+}
+
+/* =====================================================================
+   10.11 CONVEX LENS CONCENTRATES SUNLIGHT
+   Magnifying glass: 8 cm across, both faces R = 15 cm, n = 1.5 → f ≈ 15 cm,
+   92 % of the light gets through. Paper lies on the ground; you raise or
+   lower the lens.
+   ===================================================================== */
+function buildA11(){
+  const A=4, RL=15, g=lensGeom(0,1/RL,-1/RL,A,0.2), LS=lensSurfs(g,1.5), F=focusOf(LS,-40);
+  return buildBurn({
+    dLabel:'Lens above the paper', d0:24, hint:'f ≈ '+fmt(F,1)+' cm · Sun 1000 W/m²', cols:[COL.yellow,'#7fb6e6',COL.blue],
+    y0:(h,ps,d)=>h-40-d*ps,
+    scene:d=>({surfs:LS.concat([{x:d,c:0,h:12,kind:'stop'}]), optic:LS, paper:{x:d}, a:A, eff:0.92, block:0, f:F, xTop:-60}),
+    drawScene(ctx,M,ps,d,b,t,h){
+      const gp=M([d,0]); line(ctx,gp[0]-14*ps,h-38,gp[0]+14*ps,h-38,COL.ink,2.4);
+      rect(ctx,gp[0]-10*ps,h-41,20*ps,3,COL.mid,'#fffef8',1.2);
+      if(b.hole>0) line(ctx,gp[0]-b.hole*ps,h-40,gp[0]+b.hole*ps,h-40,'#fff',4);
+      textAt(ctx,'paper on the ground',gp[0]+10*ps,h-18,{align:'right',size:11,weight:600,color:COL.muted});
+      drawLens(ctx,g,M);
+      const r0=M([0,A]), r1=M([0,A+5]); ctx.save(); ctx.lineCap='round'; line(ctx,r0[0],r0[1],r1[0],r1[1],COL.ink,7); line(ctx,r0[0],r0[1],r1[0],r1[1],'#fff',3.5); ctx.restore();
+      hand(ctx,r1[0]+12,r1[1],-1,40,0);
+      const f=M([F,0]); dot(ctx,f[0],f[1],3,null,COL.green); textAt(ctx,'F',f[0]-8,f[1]+4,{align:'right',size:11,weight:700,color:COL.green});
+    }
+  });
+}
+
+/* ---------------------------------------------------------------------
+   INIT
+   --------------------------------------------------------------------- */
+render();
+</script>
+<script src="../../tracking/activity-tracker.js"></script>
+<script src="../../nav/back-button.js"></script>
+</body>
+</html>

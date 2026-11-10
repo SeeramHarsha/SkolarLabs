@@ -232,16 +232,19 @@
         kpi('Avg per screen per day', String(k.avgMinutesPerScreenPerDay), 'active minutes', COLORS.orange, 'min'),
         kpi('Access ends', k.accessEnds || '—', 'latest end date of its screens', COLORS.red)));
 
-      // curriculum progress: one bar per class for the WHOLE school
-      var used = d.byClass.reduce(function (a, c) { return a + c.chaptersUsed; }, 0), total = d.byClass.reduce(function (a, c) { return a + c.chaptersTotal; }, 0);
-      var bars = d.byClass.map(function (c) {
-        var pc = c.chaptersTotal ? Math.round((c.chaptersUsed / c.chaptersTotal) * 100) : 0;
-        return h('div', { class: 'prog' }, h('div', { class: 'pl', text: 'Class ' + c.cls }),
-          h('div', { class: 'pt', title: pc + '%' }, h('i', { style: 'width:' + pc + '%' })),
-          h('div', { class: 'pv' }, h('b', { text: c.chaptersUsed + ' / ' + c.chaptersTotal }), ' chapters'),
-          h('div', { class: 'pm', text: fmtHours(c.hours) + ' · ' + fmtInt(c.sessions) + ' sessions' }));
+      // this school's classes, each with its sections (only classes this school has used or has sessions for)
+      var secBy = {}; d.classSections.forEach(function (x) { (secBy[x.cls] = secBy[x.cls] || []).push(x); });
+      var mine = d.byClass.filter(function (c) { return c.hours > 0 || c.chaptersUsed > 0 || c.sessions > 0 || secBy[c.cls]; });
+      var cards = mine.map(function (c) {
+        var pc = c.chaptersTotal ? Math.round((c.chaptersUsed / c.chaptersTotal) * 100) : 0, secs = secBy[c.cls] || [];
+        return h('div', { class: 'cls-card' },
+          h('div', { class: 'cls-head' }, h('b', { text: 'Class ' + c.cls }), h('span', { class: 'cls-meta', text: fmtHours(c.hours) + ' · ' + fmtInt(c.sessions) + ' sessions · ' + fmtInt(c.screens) + ' screens' })),
+          h('div', { class: 'prog' }, h('div', { class: 'pt', title: pc + '%' }, h('i', { style: 'width:' + pc + '%' })), h('div', { class: 'pv' }, h('b', { text: c.chaptersUsed + ' / ' + c.chaptersTotal }), ' chapters opened')),
+          secs.length ? h('div', { class: 'secs' }, secs.map(function (x) {
+            return h('div', { class: 'sec' }, h('span', { class: 'sn', text: x.section ? 'Section ' + x.section : 'No section chosen' }), h('span', { class: 'sm', text: fmtInt(x.sessions) + ' sessions · ' + fmtHours(x.minutes / 60) }), h('span', { class: 'sl', text: x.last ? 'last ' + ago(x.last) : '' }));
+          })) : h('div', { class: 'micro', text: 'No section was chosen on the screens for this class.' }));
       });
-      main.appendChild(box('Curriculum progress', 'Chapters this school has opened at least once (all time): ' + used + ' of ' + total + ' (' + (total ? Math.round(used / total * 100) : 0) + '%). Time and sessions are for the period above.', h('div', { class: 'progs' }, bars)));
+      main.appendChild(box('Classes and sections', 'Only the classes and sections of ' + d.school + '. Chapters opened is all time; time and sessions are for the period above.', cards.length ? h('div', { class: 'cls-cards' }, cards) : h('div', { class: 'loading', text: 'This school has not used any class in this period.' })));
 
       var c1 = canvasBox();
       main.appendChild(box('Daily usage', 'Hours of lesson time (area) and screens in use (line), all screens combined', c1.wrap));
@@ -249,13 +252,6 @@
         { label: 'Lesson hours', data: d.daily.map(function (x) { return x.lessonHours; }), borderColor: COLORS.cyan, backgroundColor: 'rgba(92,200,255,.18)', fill: true, tension: .3, pointRadius: 0, yAxisID: 'y' },
         { label: 'Screens in use', data: d.daily.map(function (x) { return x.screens; }), borderColor: COLORS.yellow, tension: .3, pointRadius: 0, borderDash: [5, 4], yAxisID: 'y1' }] },
         options: { interaction: { mode: 'index', intersect: false }, scales: { y: { beginAtZero: true, title: { display: true, text: 'hours' } }, y1: { beginAtZero: true, position: 'right', grid: { drawOnChartArea: false }, ticks: { precision: 0 }, title: { display: true, text: 'screens' } }, x: { ticks: { maxTicksLimit: 12 } } } } });
-
-      main.appendChild(box('Class and section', 'From the "who is learning" choice on this school\'s screens: how many learning sessions each class and section started, and for how long (this period).', d.classSections.length ? table([
-        { h: 'Class', v: function (r) { return r.cls; }, r: function (r) { return h('button', { class: 'link', text: 'Class ' + r.cls, onclick: function () { location.hash = '#/class/' + r.cls; } }); } },
-        { h: 'Section', v: function (r) { return r.section; }, r: function (r) { return r.section || '—'; } },
-        { h: 'Sessions', num: true, v: function (r) { return r.sessions; }, r: function (r) { return fmtInt(r.sessions); } },
-        { h: 'Time', num: true, v: function (r) { return r.minutes; }, r: function (r) { return fmtHours(r.minutes / 60); } },
-        { h: 'Last session', v: function (r) { return r.last ? new Date(r.last).getTime() : 0; }, r: function (r) { return ago(r.last); } }], d.classSections, 'sch-cs') : h('div', { class: 'loading', text: 'No class or section sessions in this period.' })));
 
       var maxCh = d.chapters.reduce(function (m, x) { return Math.max(m, x.hours); }, 1);
       main.appendChild(box('Chapters used by this school', 'Time in this period, all screens combined', table([

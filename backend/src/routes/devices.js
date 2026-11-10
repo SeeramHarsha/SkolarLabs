@@ -39,11 +39,7 @@ function cleanMeta(m) {
   };
 }
 
-/** If a school with the same name (ignoring capital letters) already exists, use its spelling, so one school never splits in two. */
-async function canonicalSchool(name) {
-  const hit = await db.get().collection('devices').findOne({ school: name }, { projection: { school: 1 }, collation: { locale: 'en', strength: 2 }, sort: { registeredAt: 1 } });
-  return hit ? hit.school : name;
-}
+const canonicalSchool = (name) => require('../schools').canonical(name);
 
 const registerLimit = rateLimit({ windowMs: 60 * 60 * 1000, limit: 60, standardHeaders: true, legacyHeaders: false, message: { error: 'Too many registrations. Try again later.' } });
 const ingestLimit = rateLimit({ windowMs: 60 * 1000, limit: 30, standardHeaders: true, legacyHeaders: false, keyGenerator: (req) => (req.headers.authorization || req.ip).slice(0, 80), message: { error: 'Slow down.' } });

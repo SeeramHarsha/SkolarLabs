@@ -177,8 +177,10 @@ const CHAPTER_COUNTS = { 6: 12, 7: 12, 8: 13, 9: 11, 10: 13 };
 async function schoolDetail(user, name, q) {
   const f = filters(user, { ...q, school: name }), d = db.get();
   if (f.impossible) return null;
-  const caseless = { collation: { locale: 'en', strength: 2 } };
-  const devs = await d.collection('devices').find({ school: String(name).slice(0, 80) }, { projection: { tokenHash: 0 }, ...caseless }).toArray();
+  const sch = require('./schools');
+  const wanted = sch.key(name);
+  const names = (await d.collection('devices').distinct('school')).filter((n) => sch.key(n) === wanted);
+  const devs = names.length ? await d.collection('devices').find({ school: { $in: names } }, { projection: { tokenHash: 0 } }).toArray() : [];
   if (!devs.length) return null;
   const school = devs[0].school;                       // the stored spelling
   const m = { school, date: { $gte: f.from, $lte: f.to }, ...(f.cls ? { cls: f.cls } : {}), ...(f.platform ? { platform: f.platform } : {}) };

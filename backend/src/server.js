@@ -73,6 +73,7 @@ async function connectLoop() {
     try {
       await db.connect(config.mongoUri, config.dbName);
       await auth.bootstrapAdmin();
+      try { const m = await require('./schools').mergeAll(); m.forEach((x) => console.log('Joined school names into "' + x.main + '": ' + x.joined.map((n) => '"' + n + '"').join(', '))); } catch (e) { console.error('Could not join school names:', e.message); }
       state.ready = true; state.dbError = null;
       console.log('Database connected.');
       if (config.production && !config.frontendOrigins.length) console.warn('FRONTEND_ORIGINS is not set: browsers will not be able to use the dashboard API.');

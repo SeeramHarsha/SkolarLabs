@@ -179,3 +179,20 @@ test('registering the same screen twice (same clientId + secret) never creates a
   const H = { authorization: 'Bearer ' + first.json.deviceId + '.' + token };                           // the app's own secret is the device token
   assert.equal((await call('/api/v1/ingest', { method: 'POST', headers: H, auth: false, body: payload(30) })).status, 200);
 });
+
+test('the same school typed with different spaces, capitals or punctuation is ONE school, new and already stored', async () => {
+  const reg = (school, label) => call('/api/v1/devices/register', { method: 'POST', headers: { 'x-enroll-key': 'enroll-secret' }, auth: false, body: { ...payload(1).device, school, label, classes: [6] } });
+  for (const [n, name] of ['Moon Valley School', 'moon  valley school ', 'MOON-VALLEY SCHOOL', 'MoonValleySchool'].entries()) assert.equal((await reg(name, 'Screen ' + n)).status, 201);
+  const list = (await call('/api/schools')).json.schools.filter((x) => /moon/i.test(x.school));
+  assert.equal(list.length, 1); assert.equal(list[0].school, 'Moon Valley School'); assert.equal(list[0].devices, 4);
+  // data that was stored split before this fix is joined when the server starts (mergeAll)
+  const db = require('../src/db').get();
+  await db.collection('devices').insertOne({ _id: 'old-1', school: 'Star  Public  School', label: 'a', platform: 'windows', classes: [8], registeredAt: new Date('2026-01-01'), lastSeen: new Date(), revoked: false, tokenHash: 'x' });
+  await db.collection('devices').insertOne({ _id: 'old-2', school: 'star public school', label: 'b', platform: 'windows', classes: [8], registeredAt: new Date('2026-02-01'), lastSeen: new Date(), revoked: false, tokenHash: 'x' });
+  await db.collection('usage_daily').insertOne({ _id: 'old-2|' + today + '|8/1', deviceId: 'old-2', school: 'star public school', platform: 'windows', date: today, page: '8/1', cls: 8, chapter: 1, sec: 600 });
+  const merged = await require('../src/schools').mergeAll();
+  assert.ok(merged.some((m) => m.main === 'Star Public School' && m.joined.length === 2));
+  const star = (await call('/api/schools')).json.schools.filter((x) => /star/i.test(x.school));
+  assert.equal(star.length, 1); assert.equal(star[0].devices, 2);
+  assert.equal((await call('/api/schools/' + encodeURIComponent('STAR-public-school'))).json.school, 'Star Public School');     // any spelling opens the same school
+});

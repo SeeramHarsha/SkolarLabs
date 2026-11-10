@@ -194,6 +194,8 @@ async function schoolDetail(user, name, q) {
     byPlatform: [{ $group: { _id: '$platform', sec: { $sum: '$sec' } } }, { $sort: { sec: -1 } }],
   } }]).toArray();
 
+  const classSections = await d.collection('sessions').aggregate([{ $match: { school, start: { $gte: f.from + 'T00:00:00', $lte: f.to + 'T23:59:59.999Z' }, ...(f.cls ? { cls: f.cls } : {}) } },
+    { $group: { _id: { cls: '$cls', section: '$section' }, n: { $sum: 1 }, sec: { $sum: '$sec' }, last: { $max: '$start' } } }, { $sort: { '_id.cls': 1, '_id.section': 1 } }]).toArray();
   const [sessions, covered, opens] = await Promise.all([
     d.collection('sessions').aggregate([{ $match: { school, start: { $gte: f.from + 'T00:00:00', $lte: f.to + 'T23:59:59.999Z' }, ...(f.cls ? { cls: f.cls } : {}) } },
       { $group: { _id: '$cls', n: { $sum: 1 } } }]).toArray(),
@@ -224,6 +226,7 @@ async function schoolDetail(user, name, q) {
       cls: c, hours: r ? hours(r.sec) : 0, screens: r ? r.devices.length : 0, sessions: sessBy.get(c) || 0,
       chaptersUsed: cv ? cv.pages.length : 0, chaptersTotal: CHAPTER_COUNTS[c], allTimeHours: cv ? hours(cv.sec) : 0 }; }),
     byPlatform: agg.byPlatform.map((x) => ({ platform: x._id, hours: hours(x.sec) })),
+    classSections: classSections.map((x) => ({ cls: x._id.cls, section: x._id.section || '', sessions: x.n, minutes: Math.round(x.sec / 6) / 10, last: x.last })),
     chapters: agg.byChapter.slice(0, 40).map((r) => ({ page: r._id, cls: r.cls, chapter: r.chapter, hours: hours(r.sec), screens: r.devices.length, opens: opensBy.get(r._id) || 0 })),
     screens: devs.map((x) => { const u = perDev.get(x._id); return { id: x._id, label: x.label, platform: x.platform, kind: x.kind, section: x.section, classes: x.classes,
       status: statusOf(x), lastSeen: x.lastSeen, expiry: x.expiry, hours: u ? hours(u.sec) : 0, lessonHours: u ? hours(u.lesson) : 0, activeDays: u ? u.days.length : 0 }; })
@@ -231,4 +234,46 @@ async function schoolDetail(user, name, q) {
   };
 }
 
-module.exports = { overview, schools, schoolDetail, devices, deviceDetail, chapters, exportRows, filters, today, addDays, CHAPTER_COUNTS };
+/** CLASS-WISE: every class (6 to 10) across all schools - time, schools, screens, and how much of the class's curriculum has been opened. */
+async function classes(user, q) {
+  const f = filters(user, { ...q, cls: '' }), d = db.get();
+  if (f.impossible) return { range: { from: f.from, to: f.to }, classes: [] };
+  const base = { date: { $gte: f.from, $lte: f.to }, page: { $ne: 'dash' }, ...schoolMatch(f), ...(f.platform ? { platform: f.platform } : {}) };
+  const [use, cov, sess] = await Promise.all([
+    d.collection('usage_daily').aggregate([{ $match: base }, { $group: { _id: '$cls', sec: { $sum: '$sec' }, devices: { $addToSet: '$deviceId' }, schools: { $addToSet: '$school' }, days: { $addToSet: '$date' } } }]).toArray(),
+    d.collection('chapters').aggregate([{ $match: { sec: { $gt: 0 }, ...schoolMatch(f) } }, { $group: { _id: '$cls', pages: { $addToSet: '$page' } } }]).toArray(),
+    d.collection('sessions').aggregate([{ $match: { start: { $gte: f.from + 'T00:00:00', $lte: f.to + 'T23:59:59.999Z' }, ...schoolMatch(f) } }, { $group: { _id: '$cls', n: { $sum: 1 } } }]).toArray(),
+  ]);
+  return { range: { from: f.from, to: f.to }, classes: [6, 7, 8, 9, 10].map((c) => {
+    const u = use.find((x) => x._id === c), v = cov.find((x) => x._id === c), s = sess.find((x) => x._id === c);
+    return { cls: c, hours: u ? hours(u.sec) : 0, schools: u ? u.schools.length : 0, screens: u ? u.devices.length : 0, activeDays: u ? u.days.length : 0, sessions: s ? s.n : 0,
+      chaptersUsed: v ? v.pages.length : 0, chaptersTotal: CHAPTER_COUNTS[c] };
+  }) };
+}
+
+/** One class: which schools use it (and how far each has got), which sections, and which chapters. */
+async function classDetail(user, cls, q) {
+  const c = Number(cls); if (![6, 7, 8, 9, 10].includes(c)) return null;
+  const f = filters(user, q), d = db.get();
+  if (f.impossible) return null;
+  const m = { date: { $gte: f.from, $lte: f.to }, cls: c, page: { $ne: 'dash' }, ...schoolMatch(f), ...(f.platform ? { platform: f.platform } : {}) };
+  const range = { $gte: f.from + 'T00:00:00', $lte: f.to + 'T23:59:59.999Z' };
+  const [perSchool, perChapter, perDay, covered, opens, sections] = await Promise.all([
+    d.collection('usage_daily').aggregate([{ $match: m }, { $group: { _id: '$school', sec: { $sum: '$sec' }, devices: { $addToSet: '$deviceId' }, days: { $addToSet: '$date' } } }, { $sort: { sec: -1 } }]).toArray(),
+    d.collection('usage_daily').aggregate([{ $match: m }, { $group: { _id: '$page', sec: { $sum: '$sec' }, devices: { $addToSet: '$deviceId' }, schools: { $addToSet: '$school' }, chapter: { $first: '$chapter' } } }, { $sort: { sec: -1 } }]).toArray(),
+    d.collection('usage_daily').aggregate([{ $match: m }, { $group: { _id: '$date', sec: { $sum: '$sec' }, devices: { $addToSet: '$deviceId' } } }]).toArray(),
+    d.collection('chapters').aggregate([{ $match: { cls: c, sec: { $gt: 0 }, ...schoolMatch(f) } }, { $group: { _id: '$school', pages: { $addToSet: '$page' } } }]).toArray(),
+    d.collection('chapters').aggregate([{ $match: { cls: c, ...schoolMatch(f) } }, { $group: { _id: '$page', opens: { $sum: '$opens' } } }]).toArray(),
+    d.collection('sessions').aggregate([{ $match: { cls: c, start: range, ...schoolMatch(f) } }, { $group: { _id: { school: '$school', section: '$section' }, n: { $sum: 1 }, sec: { $sum: '$sec' } } }, { $sort: { sec: -1 } }]).toArray(),
+  ]);
+  const cv = new Map(covered.map((x) => [x._id, x.pages.length])), op = new Map(opens.map((x) => [x._id, x.opens]));
+  return {
+    cls: c, range: { from: f.from, to: f.to }, chaptersTotal: CHAPTER_COUNTS[c],
+    daily: series(f.from, f.to, perDay, (r) => ({ hours: r ? hours(r.sec) : 0, screens: r ? r.devices.length : 0 })),
+    schools: perSchool.map((r) => ({ school: r._id, hours: hours(r.sec), screens: r.devices.length, activeDays: r.days.length, chaptersUsed: cv.get(r._id) || 0, chaptersTotal: CHAPTER_COUNTS[c] })),
+    chapters: perChapter.map((r) => ({ page: r._id, cls: c, chapter: r.chapter, hours: hours(r.sec), screens: r.devices.length, schools: r.schools.length, opens: op.get(r._id) || 0 })).sort((a, b) => a.chapter - b.chapter),
+    sections: sections.map((r) => ({ school: r._id.school, section: r._id.section || '', sessions: r.n, minutes: Math.round(r.sec / 6) / 10 })),
+  };
+}
+
+module.exports = { classes, classDetail, overview, schools, schoolDetail, devices, deviceDetail, chapters, exportRows, filters, today, addDays, CHAPTER_COUNTS };

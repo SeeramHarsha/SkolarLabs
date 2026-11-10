@@ -24,7 +24,7 @@
   function add(el, c) { if (c == null || c === false) return; if (Array.isArray(c)) c.forEach(function (x) { add(el, x); }); else el.appendChild(c.nodeType ? c : document.createTextNode(String(c))); }
   var ICON = {
     overview: 'M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z', schools: 'M12 3 1 9l11 6 9-4.9V17h2V9L12 3zM5 13.2v4L12 21l7-3.8v-4L12 17l-7-3.8z',
-    devices: 'M4 6h16v10H4V6zm-2 12h20v2H2v-2z', chapters: 'M4 4h11a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3V4zm2 2v11a1 1 0 0 0 1 1h9V7a1 1 0 0 0-1-1H6z', users: 'M16 11a4 4 0 1 0-4-4 4 4 0 0 0 4 4zM8 12a3 3 0 1 0-3-3 3 3 0 0 0 3 3zm8 2c-2.7 0-8 1.3-8 4v2h16v-2c0-2.7-5.3-4-8-4zM8 14c-.3 0-.6 0-1 .1C5.2 14.5 2 15.6 2 18v2h5v-2c0-1.2.5-2.3 1.4-3.1A7 7 0 0 0 8 14z' };
+    classes: 'M5 3h14a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2zm1 4v2h12V7H6zm0 4v2h12v-2H6zm0 4v2h8v-2H6z', devices: 'M4 6h16v10H4V6zm-2 12h20v2H2v-2z', chapters: 'M4 4h11a3 3 0 0 1 3 3v13H7a3 3 0 0 1-3-3V4zm2 2v11a1 1 0 0 0 1 1h9V7a1 1 0 0 0-1-1H6z', users: 'M16 11a4 4 0 1 0-4-4 4 4 0 0 0 4 4zM8 12a3 3 0 1 0-3-3 3 3 0 0 0 3 3zm8 2c-2.7 0-8 1.3-8 4v2h16v-2c0-2.7-5.3-4-8-4zM8 14c-.3 0-.6 0-1 .1C5.2 14.5 2 15.6 2 18v2h5v-2c0-1.2.5-2.3 1.4-3.1A7 7 0 0 0 8 14z' };
   function icon(n) { var s = document.createElementNS('http://www.w3.org/2000/svg', 'svg'); s.setAttribute('viewBox', '0 0 24 24'); s.setAttribute('fill', 'currentColor'); var p = document.createElementNS('http://www.w3.org/2000/svg', 'path'); p.setAttribute('d', ICON[n]); s.appendChild(p); return s; }
 
   function fmtHours(x) { x = Number(x) || 0; if (x < 1 && x > 0) return Math.max(1, Math.round(x * 60)) + ' min'; return (x >= 100 ? Math.round(x) : Math.round(x * 10) / 10) + ' h'; }
@@ -93,7 +93,7 @@
   }
 
   // ------------------------------------------------------------------ shell + filters
-  var NAV = [['#/', 'overview', 'Overview'], ['#/schools', 'schools', 'Schools'], ['#/devices', 'devices', 'Screens'], ['#/chapters', 'chapters', 'Chapters']];
+  var NAV = [['#/', 'overview', 'Overview'], ['#/schools', 'schools', 'Schools'], ['#/classes', 'classes', 'Classes'], ['#/devices', 'devices', 'Screens'], ['#/chapters', 'chapters', 'Chapters']];
   function shell(active, title, subtitle, withFilters) {
     killCharts();
     var side = h('aside', { class: 'side' },
@@ -126,7 +126,7 @@
       bar.appendChild(h('input', { type: 'date', value: f.to, 'aria-label': 'To', onchange: function (e) { f.to = e.target.value; route(); } }));
     }
     if (!opt.noSchool) bar.appendChild(sel([['', 'All schools']].concat(S.schools.map(function (s) { return [s, s]; })), f.school, function (v) { set('school', v); }, 'School'));
-    bar.appendChild(sel([['', 'All classes'], ['6', 'Class 6'], ['7', 'Class 7'], ['8', 'Class 8'], ['9', 'Class 9'], ['10', 'Class 10']], f.cls, function (v) { set('cls', v); }, 'Class'));
+    if (!opt.noClass) bar.appendChild(sel([['', 'All classes'], ['6', 'Class 6'], ['7', 'Class 7'], ['8', 'Class 8'], ['9', 'Class 9'], ['10', 'Class 10']], f.cls, function (v) { set('cls', v); }, 'Class'));
     bar.appendChild(sel([['', 'All platforms'], ['windows', 'Windows'], ['android', 'Android'], ['linux', 'Linux']], f.platform, function (v) { set('platform', v); }, 'Platform'));
     bar.appendChild(h('span', { class: 'grow' }));
     bar.appendChild(h('button', { class: 'btn ghost small', text: '⬇ Export CSV', onclick: function (e) {
@@ -250,6 +250,13 @@
         { label: 'Screens in use', data: d.daily.map(function (x) { return x.screens; }), borderColor: COLORS.yellow, tension: .3, pointRadius: 0, borderDash: [5, 4], yAxisID: 'y1' }] },
         options: { interaction: { mode: 'index', intersect: false }, scales: { y: { beginAtZero: true, title: { display: true, text: 'hours' } }, y1: { beginAtZero: true, position: 'right', grid: { drawOnChartArea: false }, ticks: { precision: 0 }, title: { display: true, text: 'screens' } }, x: { ticks: { maxTicksLimit: 12 } } } } });
 
+      main.appendChild(box('Class and section', 'From the "who is learning" choice on this school\'s screens: how many learning sessions each class and section started, and for how long (this period).', d.classSections.length ? table([
+        { h: 'Class', v: function (r) { return r.cls; }, r: function (r) { return h('button', { class: 'link', text: 'Class ' + r.cls, onclick: function () { location.hash = '#/class/' + r.cls; } }); } },
+        { h: 'Section', v: function (r) { return r.section; }, r: function (r) { return r.section || '—'; } },
+        { h: 'Sessions', num: true, v: function (r) { return r.sessions; }, r: function (r) { return fmtInt(r.sessions); } },
+        { h: 'Time', num: true, v: function (r) { return r.minutes; }, r: function (r) { return fmtHours(r.minutes / 60); } },
+        { h: 'Last session', v: function (r) { return r.last ? new Date(r.last).getTime() : 0; }, r: function (r) { return ago(r.last); } }], d.classSections, 'sch-cs') : h('div', { class: 'loading', text: 'No class or section sessions in this period.' })));
+
       var maxCh = d.chapters.reduce(function (m, x) { return Math.max(m, x.hours); }, 1);
       main.appendChild(box('Chapters used by this school', 'Time in this period, all screens combined', table([
         { h: 'Chapter', v: function (r) { return r.cls * 100 + r.chapter; }, wrap: true, r: function (r) { return chapterName(r.cls, r.chapter); } },
@@ -335,6 +342,63 @@
     }).catch(function (e) { failed(main, e); });
   }
 
+  function viewClasses() {
+    var main = shell('classes', 'Classes', 'Class 6 to 10 across all schools: time, schools and curriculum covered', true); loading(main);
+    api('/classes' + qs()).then(function (d) {
+      main.querySelector('.loading').remove();
+      var bars = d.classes.map(function (c) {
+        var pc = c.chaptersTotal ? Math.round((c.chaptersUsed / c.chaptersTotal) * 100) : 0;
+        return h('div', { class: 'prog' }, h('div', { class: 'pl' }, h('button', { class: 'link', text: 'Class ' + c.cls, onclick: function () { location.hash = '#/class/' + c.cls; } })),
+          h('div', { class: 'pt', title: pc + '%' }, h('i', { style: 'width:' + pc + '%' })),
+          h('div', { class: 'pv' }, h('b', { text: c.chaptersUsed + ' / ' + c.chaptersTotal }), ' chapters'),
+          h('div', { class: 'pm', text: fmtHours(c.hours) + ' · ' + fmtInt(c.schools) + ' schools · ' + fmtInt(c.sessions) + ' sessions' }));
+      });
+      main.appendChild(box('Curriculum covered by class', 'Chapters of each class opened at least once by any school (all time). Time, schools and sessions are for the period above.', h('div', { class: 'progs' }, bars)));
+      var max = d.classes.reduce(function (m, x) { return Math.max(m, x.hours); }, 1);
+      main.appendChild(box('Classes', d.range.from + ' to ' + d.range.to, table([
+        { h: 'Class', v: function (r) { return r.cls; }, r: function (r) { return h('button', { class: 'link', text: 'Class ' + r.cls, onclick: function () { location.hash = '#/class/' + r.cls; } }); } },
+        { h: 'Time', num: true, v: function (r) { return r.hours; }, r: function (r) { return [fmtHours(r.hours), meter(r.hours, max)]; } },
+        { h: 'Schools', num: true, v: function (r) { return r.schools; }, r: function (r) { return fmtInt(r.schools); } },
+        { h: 'Screens', num: true, v: function (r) { return r.screens; }, r: function (r) { return fmtInt(r.screens); } },
+        { h: 'Days used', num: true, v: function (r) { return r.activeDays; }, r: function (r) { return fmtInt(r.activeDays); } },
+        { h: 'Sessions', num: true, v: function (r) { return r.sessions; }, r: function (r) { return fmtInt(r.sessions); } },
+        { h: 'Chapters opened', num: true, v: function (r) { return r.chaptersUsed; }, r: function (r) { return r.chaptersUsed + ' / ' + r.chaptersTotal; } }], d.classes, 'classes')));
+    }).catch(function (e) { failed(main, e); });
+  }
+
+  function viewClass(n) {
+    var main = shell('classes', 'Class ' + n, 'Every school using this class', { noClass: true }); loading(main);
+    api('/classes/' + n + qs()).then(function (d) {
+      main.querySelector('.loading').remove();
+      main.insertBefore(h('div', { class: 'back' }, h('a', { href: '#/classes', text: '← All classes' })), main.querySelector('.top'));
+      var c1 = canvasBox();
+      main.appendChild(box('Daily usage', 'Hours of lesson time for Class ' + d.cls + ' and screens in use, all schools combined', c1.wrap));
+      chart(c1.canvas, { type: 'line', data: { labels: d.daily.map(function (x) { return x.date.slice(5); }), datasets: [
+        { label: 'Hours', data: d.daily.map(function (x) { return x.hours; }), borderColor: COLORS.cyan, backgroundColor: 'rgba(92,200,255,.18)', fill: true, tension: .3, pointRadius: 0, yAxisID: 'y' },
+        { label: 'Screens in use', data: d.daily.map(function (x) { return x.screens; }), borderColor: COLORS.yellow, tension: .3, pointRadius: 0, borderDash: [5, 4], yAxisID: 'y1' }] },
+        options: { interaction: { mode: 'index', intersect: false }, scales: { y: { beginAtZero: true, title: { display: true, text: 'hours' } }, y1: { beginAtZero: true, position: 'right', grid: { drawOnChartArea: false }, ticks: { precision: 0 }, title: { display: true, text: 'screens' } }, x: { ticks: { maxTicksLimit: 12 } } } } });
+      var max = d.schools.reduce(function (m, x) { return Math.max(m, x.hours); }, 1);
+      main.appendChild(box('Schools using Class ' + d.cls, fmtInt(d.schools.length) + ' schools in this period', d.schools.length ? table([
+        { h: 'School', v: function (r) { return r.school; }, wrap: true, r: function (r) { return h('button', { class: 'link', text: r.school, onclick: function () { location.hash = '#/school/' + encodeURIComponent(r.school); } }); } },
+        { h: 'Time', num: true, v: function (r) { return r.hours; }, r: function (r) { return [fmtHours(r.hours), meter(r.hours, max)]; } },
+        { h: 'Screens', num: true, v: function (r) { return r.screens; }, r: function (r) { return fmtInt(r.screens); } },
+        { h: 'Days used', num: true, v: function (r) { return r.activeDays; }, r: function (r) { return fmtInt(r.activeDays); } },
+        { h: 'Chapters opened', num: true, v: function (r) { return r.chaptersUsed; }, r: function (r) { return r.chaptersUsed + ' / ' + r.chaptersTotal; } }], d.schools, 'cls-sch') : h('div', { class: 'loading', text: 'No school used this class in this period.' })));
+      main.appendChild(box('Sections', 'Learning sessions per school and section for Class ' + d.cls, d.sections.length ? table([
+        { h: 'School', v: function (r) { return r.school; }, wrap: true, r: function (r) { return h('button', { class: 'link', text: r.school, onclick: function () { location.hash = '#/school/' + encodeURIComponent(r.school); } }); } },
+        { h: 'Section', v: function (r) { return r.section; }, r: function (r) { return r.section || '—'; } },
+        { h: 'Sessions', num: true, v: function (r) { return r.sessions; }, r: function (r) { return fmtInt(r.sessions); } },
+        { h: 'Time', num: true, v: function (r) { return r.minutes; }, r: function (r) { return fmtHours(r.minutes / 60); } }], d.sections, 'cls-sec') : h('div', { class: 'loading', text: 'No sections recorded in this period.' })));
+      var maxCh = d.chapters.reduce(function (m, x) { return Math.max(m, x.hours); }, 1);
+      main.appendChild(box('Chapters of Class ' + d.cls, 'Time in this period, all schools combined', d.chapters.length ? table([
+        { h: 'Chapter', v: function (r) { return r.chapter; }, wrap: true, r: function (r) { return chapterName(r.cls, r.chapter); } },
+        { h: 'Time', num: true, v: function (r) { return r.hours; }, r: function (r) { return [fmtHours(r.hours), meter(r.hours, maxCh)]; } },
+        { h: 'Schools', num: true, v: function (r) { return r.schools; }, r: function (r) { return fmtInt(r.schools); } },
+        { h: 'Screens', num: true, v: function (r) { return r.screens; }, r: function (r) { return fmtInt(r.screens); } },
+        { h: 'Opens (all time)', num: true, v: function (r) { return r.opens; }, r: function (r) { return fmtInt(r.opens); } }], d.chapters, 'cls-ch') : h('div', { class: 'loading', text: 'No chapter of this class was used in this period.' })));
+    }).catch(function (e) { failed(main, e); });
+  }
+
   function viewChapters() {
     var main = shell('chapters', 'Chapters', 'Which lessons get used the most', true); loading(main);
     api('/chapters' + qs()).then(function (d) {
@@ -383,9 +447,11 @@
     if (!S.user) return renderLogin();
     var hash = location.hash || '#/', m = /^#\/device\/([0-9a-f-]{36})$/.exec(hash);
     if (m) return viewDevice(m[1]);
+    var cm = /^#\/class\/(6|7|8|9|10)$/.exec(hash);
+    if (cm) return viewClass(Number(cm[1]));
     var sm = /^#\/school\/(.+)$/.exec(hash);
     if (sm) { var nm; try { nm = decodeURIComponent(sm[1]); } catch (e) { nm = ''; } if (nm) return viewSchool(nm); }
-    ({ '#/': viewOverview, '#/schools': viewSchools, '#/devices': viewDevices, '#/chapters': viewChapters, '#/users': viewUsers }[hash] || viewOverview)();
+    ({ '#/': viewOverview, '#/schools': viewSchools, '#/classes': viewClasses, '#/devices': viewDevices, '#/chapters': viewChapters, '#/users': viewUsers }[hash] || viewOverview)();
   }
   window.addEventListener('hashchange', function () { if (S.user) route(); });
 

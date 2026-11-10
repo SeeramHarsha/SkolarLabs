@@ -29,6 +29,12 @@ router.get('/schools/:name', wrap(async (req, res) => {
   if (!r) return res.status(404).json({ error: 'School not found.' });
   res.json(r);
 }));
+router.get('/classes', wrap(async (req, res) => res.json(await Q.classes(req.user, req.query))));
+router.get('/classes/:cls', wrap(async (req, res) => {
+  const out = await Q.classDetail(req.user, req.params.cls, req.query);
+  if (!out) return res.status(404).json({ error: 'Class not found.' });
+  res.json(out);
+}));
 router.get('/devices', wrap(async (req, res) => res.json(await Q.devices(req.user, req.query))));
 router.get('/devices/:id', wrap(async (req, res) => {
   const r = await Q.deviceDetail(req.user, req.params.id, req.query);

@@ -74,6 +74,10 @@ test('numbers for schools, screens, chapters and CSV', async () => {
   const det = await call(`/api/devices/${d.id}`); assert.equal(det.status, 200); assert.equal(det.json.sessions.length, 1);
   assert.equal((await call('/api/devices/not-a-real-id')).status, 404);
   assert.equal((await call('/api/chapters')).json.chapters[0].page, '8/2');
+  const cw = (await call('/api/classes')).json.classes.find((c) => c.cls === 8); assert.equal(cw.schools, 1); assert.ok(cw.hours > 0); assert.equal(cw.chaptersTotal, 13);
+  const cd = await call('/api/classes/8'); assert.equal(cd.status, 200); assert.equal(cd.json.schools[0].school, 'Test School'); assert.equal(cd.json.sections[0].section, 'B');
+  assert.equal((await call('/api/classes/3')).status, 404);
+  assert.equal((await call('/api/schools/Test%20School')).json.classSections[0].section, 'B');
   const csv = await call('/api/export.csv'); assert.equal(csv.status, 200); assert.match(csv.text, /date,school,screen/);
 });
 
